@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import HomePage from './HomePage';
-import NotFound from '../components/ErrorPages/NotFound';
+import HomePage from './components/Pages/HomePage';
+import NotFound from './components/ErrorPages/NotFound';
+
+import ExamplePage from './components/ExamplePages/ExamplePage'
+import OtherPage from './components/ExamplePages/OtherPage';
 
 class AppRouter extends Component {
     render(){
