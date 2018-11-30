@@ -13,6 +13,7 @@ const styles = theme => ({
     },
     paper: {
       ...theme.mixins.gutters(),
+      margin: theme.spacing.unit * 2,
       paddingTop: theme.spacing.unit * 2,
       paddingBottom: theme.spacing.unit * 2,
     },
@@ -23,6 +24,8 @@ const styles = theme => ({
 
 class HomePage extends Component {
     
+
+
     btnOnClick = () => {
         this.props.exampleAction();
     }
@@ -35,7 +38,7 @@ class HomePage extends Component {
                 <div className={classes.root}>
                     <Grid container spacing={24}>
                         <Grid item xs={12}>
-                            <Paper className={classes.paper} elevation={1}>
+                            <Paper className={classes.paper} elevation={5}>
                                 <Typography variant="h5" component="h3">
                                     Welcome to the Home Page
                                 </Typography>
@@ -74,13 +77,18 @@ class HomePage extends Component {
                         </Grid>
                     </Grid>
                 </div>
+                <Paper className={classes.paper} elevation={1}>
+                    <Typography variant="subtitle1">
+                        {this.props.example.foo ? "Click Hello World and wait 2 seconds" : "You just called a Redux Action!"}
+                    </Typography>
+                </Paper>
             </React.Fragment>
         )
     }
 }
 
 const mapStateToProps = state => ({
-    example: state.user
+    example: state.example
 });
 
 const mapActionsToProps = {

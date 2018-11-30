@@ -2,7 +2,7 @@ import { exampleTypes } from '../actions/types';
 
 const initialState = {
     data: {},
-    foo: false
+    foo: true
 };
 
 export default (state = initialState, action) => {
@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
     case exampleTypes.CHANGE_THE_STATE:
         return {
             ...state,
-            foo: true,
+            foo: false,
             data: action.payload.data
         };
     default:
