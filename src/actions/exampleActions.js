@@ -19,20 +19,15 @@ const exampleActionFetch = () => {
         sleep(2000)
             .then(() => {
                 resolve({
-                    type: exampleTypes.CHANGE_THE_STATE,
-                    payload: {
-                        data: {
-                            foo: "bar"
-                        }
-                    }
+                    foo: "bar"
                 })
             })
     });
 };
 
-export const exampleAction = () => async dispatch => {
-    
-    const example = await exampleActionFetch();
-    dispatch(example);
-        
-};
+export const exampleAction = () => dispatch => {
+    dispatch({
+        type: exampleTypes.CHANGE_THE_STATE,
+        payload: exampleActionFetch()
+    })
+}

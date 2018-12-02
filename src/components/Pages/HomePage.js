@@ -79,7 +79,16 @@ class HomePage extends Component {
                 </div>
                 <Paper className={classes.paper} elevation={1}>
                     <Typography variant="subtitle1">
-                        {this.props.example.foo ? "Click Hello World and wait 2 seconds" : "You just called a Redux Action!"}
+                        {this.props.example.foo ?
+                            (this.props.example.waiting ?
+                                "Wait for it..."
+                            :
+                                "Click Hello World and wait 2 seconds"
+                            )
+                        :
+                            "You just called a Redux Action!"
+                        }
+
                     </Typography>
                 </Paper>
             </React.Fragment>
