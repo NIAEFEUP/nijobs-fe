@@ -1,4 +1,5 @@
 import { exampleTypes } from '../actions/types';
+import typeToReducer from 'type-to-reducer';
 
 const initialState = {
     data: {},
@@ -6,22 +7,20 @@ const initialState = {
     waiting: false
 };
 
-export default (state = initialState, action) => {
-    switch(action.type){
-    case `${exampleTypes.CHANGE_THE_STATE}_PENDING`:
-        return {
-            ...state,
-            waiting: true,
-            data: action.payload
-        };
-    case `${exampleTypes.CHANGE_THE_STATE}_FULFILLED`:
-        return {
-            ...state,
-            foo: false,
-            waiting: false,
-            data: action.payload
-        };
-    default:
-        return state; 
+export default typeToReducer({
+    [ exampleTypes.CHANGE_THE_STATE ]: {
+      PENDING: () => ({
+        ...initialState,
+        waiting: true
+      }),
+      REJECTED: (state, action) => ({
+        ...initialState,
+        error: action.payload,
+      }),
+      FULFILLED: (state, action) => ({
+        ...initialState,
+        foo: false,
+        data: action.payload,
+      })
     }
-};
+  }, initialState);
