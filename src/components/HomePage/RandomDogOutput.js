@@ -18,16 +18,15 @@ class RandomDogOutput extends Component {
         return (
             <Paper className={styles.paper} elevation={1}>
                 <Typography variant="subtitle1">
-                    {this.props.dog.image_url ?
-                        <this.displayDoggo />
+                    {this.props.dog.loading ?
+                        "Loading cute doggo..."
                         :
-                        (this.props.dog.loading ?
-                            "Loading cute doggo..."
+                        (this.props.dog.image_url ?
+                            <this.displayDoggo />
                             :
                             "No random doggo currently loaded :("
                         )
                     }
-
                 </Typography>
             </Paper>
         );

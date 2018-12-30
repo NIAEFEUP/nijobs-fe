@@ -2,7 +2,16 @@ import { dogTypes } from './types';
 
 const fetchRandomDog = () => {
     return new Promise((resolve, reject) => {
-        return resolve("https://images.dog.ceo/breeds/stbernard/n02109525_14999.jpg");
+        fetch("https://dog.ceo/api/breeds/image/random")
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    return resolve(data.message);
+                } else {
+                    return reject("Dog API fetching unsuccessful");
+                }
+            })
+            .catch(_err => reject("API fetching unsuccessful"));
     });
 };
 
