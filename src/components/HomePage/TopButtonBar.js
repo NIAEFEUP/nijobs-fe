@@ -50,9 +50,7 @@ class TopButtonBar extends Component {
 };
 
 
-const mapStateToProps = state => ({
-    example: state.example
-});
+const mapStateToProps = state => ({});
 
 const mapActionsToProps = {
     exampleAction
