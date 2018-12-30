@@ -2,7 +2,7 @@ import { dogTypes } from './types';
 
 const fetchRandomDog = () => {
     return new Promise((resolve, reject) => {
-        return resolve("woof");
+        return resolve("https://images.dog.ceo/breeds/stbernard/n02109525_14999.jpg");
     });
 };
 

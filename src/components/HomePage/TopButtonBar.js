@@ -14,7 +14,7 @@ class TopButtonBar extends Component {
 
     render() {
         return (
-            <React.Fragment>
+            <Grid container item xs={12} spacing={24}>
                 <Grid item xs={4} className={styles.button}>
                     <Button
                         variant="contained"
@@ -44,13 +44,12 @@ class TopButtonBar extends Component {
                         Example Link with URL Params
                     </Button>
                 </Grid>
-            </React.Fragment>
+            </Grid>
         )
     }
 };
 
-
-const mapStateToProps = state => ({});
+const mapStateToProps = () => ({});
 
 const mapActionsToProps = {
     exampleAction
