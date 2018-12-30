@@ -1,3 +1,8 @@
 export const exampleTypes = {
-    CHANGE_THE_STATE: 'CHANGE_THE_STATE',
-}
+    SLEEPY: 'SLEEPY',
+};
+
+export const dogTypes = {
+    GET_RANDOM_DOG: 'GET_RANDOM_DOG',
+    RESET_RANDOM_DOG: 'RESET_RANDOM_DOG',
+};

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import HomePage from './components/Pages/HomePage';
-import NotFound from './components/ErrorPages/NotFound';
+import HomePage from './pages/HomePage';
+import ExamplePage from './pages/ExamplePage'
+import OtherPage from './pages/OtherPage';
+import NotFound from './pages/NotFound';
 
-import ExamplePage from './components/ExamplePages/ExamplePage'
-import OtherPage from './components/ExamplePages/OtherPage';
 
 class AppRouter extends Component {
     render(){
