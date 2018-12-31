@@ -1,7 +1,7 @@
 # niJobs - FrontEnd
 
 
-[![Build Status](https://img.shields.io/travis/NIAEFEUP/nijobs-fe/develop.svg?style=for-the-badge))](https://travis-ci.org/NIAEFEUP/nijobs-fe)
+[![Build Status](https://img.shields.io/travis/NIAEFEUP/nijobs-fe/develop.svg?style=for-the-badge)](https://travis-ci.org/NIAEFEUP/nijobs-fe)
 [![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/api-sigarra.svg?style=for-the-badge)](https://github.com/NIAEFEUP/api-sigarra/issues)
 [![GitHub license](https://img.shields.io/github/license/NIAEFEUP/api-sigarra.svg?style=for-the-badge)](https://github.com/NIAEFEUP/api-sigarra/blob/develop/LICENSE)
 
