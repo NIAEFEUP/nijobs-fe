@@ -2,8 +2,8 @@
 
 
 [![Build Status](https://img.shields.io/travis/NIAEFEUP/nijobs-fe/develop.svg?style=for-the-badge)](https://travis-ci.org/NIAEFEUP/nijobs-fe)
-[![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/api-sigarra.svg?style=for-the-badge)](https://github.com/NIAEFEUP/api-sigarra/issues)
-[![GitHub license](https://img.shields.io/github/license/NIAEFEUP/api-sigarra.svg?style=for-the-badge)](https://github.com/NIAEFEUP/api-sigarra/blob/develop/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/issues)
+[![GitHub license](https://img.shields.io/github/license/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/blob/develop/LICENSE)
 
 
 A platform for companies to advertise their job opportunities to the students
@@ -32,7 +32,7 @@ The best approach to install `docker-compose` is to follow the offical guide [he
 ## Usage
 
 ### Development
-To start developing, you must create a file `.env` with environment variables, which are explained in more detail [below](#env-file).
+To start developing, you must create a file `.env` with environment variables, which are explained in more detail [below](#env-file-specification).
 
 After creating the `.env` file, you must build a dev server. 
 
@@ -46,11 +46,11 @@ If you have already built the images/containers before you can simply run:
 
 > The `dev.sh` file is available in the project's root folder
 
-This will create a development server with hot reloading which will listen on http://localhost:<PORT>.
+This will create a development server with hot reloading which will listen on `http://localhost:<HOST_PORT>`.
 
-### [Env-File-Specification][env-file]
+### Env File Specification
 
-- `HOST_PORT`= The port where you will access the dev server in your machine (http://localhost:<HOST_PORT>)
+- `HOST_PORT`= The port where you will access the dev server in your machine (`http://localhost:<HOST_PORT>`)
 
 ## Project Details
 
@@ -78,9 +78,9 @@ The NIAEFEUP nijobs-fe dev-team:
 - [`Duarte Oliveira`](https://github.com/DuarteOliveira8);
 - [`Miguel Duarte`](http://github.com/miguelpduarte);
 - [`Nuno Ramos`](https://github.com/NunoRamos);
+- [`Pedro Fernandes`](https://github.com/MrZephyr17);
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
 [license]: LICENSE
-[env-file]: Env-File-Specification
