@@ -1,4 +1,5 @@
 import { exampleTypes } from './types';
+import { addSnackbar } from './notificationActions';
 
 /**
  * THIS IS JUST FOR TESTING ASYNC WITHOUT FETCHING A REAL API
@@ -20,8 +21,21 @@ const exampleActionFetch = () => {
 };
 
 export const exampleAction = () => dispatch => {
-    dispatch({
+    const first = dispatch({
         type: exampleTypes.SLEEPY,
         payload: exampleActionFetch(),
     });
+
+    first.then(() => {
+        dispatch(addSnackbar({
+            message: "Hello!",
+            options: {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            }
+        }))
+    })
 }
