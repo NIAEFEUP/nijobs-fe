@@ -3,7 +3,7 @@
 
 [![Build Status](https://img.shields.io/travis/NIAEFEUP/nijobs-fe/develop.svg?style=for-the-badge)](https://travis-ci.org/NIAEFEUP/nijobs-fe)
 [![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/issues)
-[![GitHub license](https://img.shields.io/github/license/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/blob/develop/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/blob/master/LICENSE)
 
 
 A platform for companies to advertise their job opportunities to the students
@@ -37,14 +37,14 @@ To start developing, you must create a file `.env` with environment variables, w
 After creating the `.env` file, you must build a dev server. 
 
 ```bash
-./dev.sh --build 
+docker-compose build
 ```
 If you have already built the images/containers before you can simply run:
 ```bash
-./dev.sh 
+docker-compose up
 ```
 
-> The `dev.sh` file is available in the project's root folder
+> A `dev.sh` file is available in the project's root folder to run these commands on linux environments (simply run `./dev.sh [--build]`)
 
 This will create a development server with hot reloading which will listen on `http://localhost:<HOST_PORT>`.
 
@@ -71,16 +71,5 @@ This project uses [`React.js`](https://reactjs.org/) with [`Redux`](https://redu
 ```
 
 
-### Authors
-The NIAEFEUP nijobs-fe dev-team:
-- [`Ângelo Teixeira`](http://github.com/imnotteixeira);
-- [`António Cruz`](https://github.com/AntoniooCruz);
-- [`Duarte Oliveira`](https://github.com/DuarteOliveira8);
-- [`Miguel Duarte`](http://github.com/miguelpduarte);
-- [`Nuno Ramos`](https://github.com/NunoRamos);
-- [`Pedro Fernandes`](https://github.com/MrZephyr17);
-
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
-
-[license]: LICENSE
+[GNU General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
