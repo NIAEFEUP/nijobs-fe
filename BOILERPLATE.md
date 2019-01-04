@@ -134,6 +134,14 @@ export default typeToReducer({
 ```
 > From `/src/reducers/dogReducer.js`
 
+One important thing to retain, is that the state changing functions must be pure, meaning that they don't actually mutate the state, but rather create a new object, hence the use of the spread operator `...state`, to clone the previous version of the state.
+
+This is one of the three main principles of Redux (https://redux.js.org/introduction/three-principles)
+
+As you can see, each action type has an associated arrow function that receives the current state, and an action, working like a switch case of action types. Each action will have a single effect on the state, defined in its reducer.
+
+It's also important to remember that, while the example has PENDING, REJECTED AND FULFILLED variations, it is due to the fact that this comes from an async action. For simpler actions, one can simply define the reducer like it is done with the `RESET_RANDOM_DOG` which simply resets the state, not doing any `fetch`: 
+
 There's a known "bug" where links would break if the component was connected to the redux store (i.e. the page would not change when clicking the link, because the `shouldComponentUpdate()`  method is overrided when using `connect()` to get redux state updates that trigger re-renders. To overcome this, one must encapsulate the `connect()` with `withRouter()` like done in `/src/components/HomePage/TopButtonBar.js`)
 
 
