@@ -8,6 +8,8 @@ This is an explanation of the various parts of the application as demonstrated i
 * [Pages / Routing](#pages--routing)
 * [Redux Store](#redux-store)
 * [CSS Modules](#css-modules)
+* [Material UI](#material-ui)
+* [Snackbars](#snackbars)
 
 ## General Structure
 
@@ -17,7 +19,7 @@ More: https://reactfaq.site/components/component-types/
 
 Component Patterns Video: https://www.youtube.com/watch?v=YaZg8wg39QQ
 
-The components should all be placed under the `/src/components` directory, with some exceptions like the root component (`App.js`), the Router (`AppRouter.js`) or the pages components which will be in `src/pages`
+The components should all be placed under the `/src/components` directory, with some exceptions like the root component (`App.js`), the Router (`AppRouter.js`) or the pages components which will be in `src/pages`.
 
 ## Pages / Routing
 
@@ -97,11 +99,11 @@ export const exampleAction = () => dispatch => {
 
 When `dispatch()` is called, the action is taken to the reducers to affect the state, however, as this is an 'async' action, the payload is not ready at the first moment, so a framework is used to handle Promise payloads. (See: https://github.com/pburtchaell/redux-promise-middleware).
 
-In this special example, we want to execute an action, and **after** that action is done, we want to execute a second one (`addSnackbar` in this example), so we can treat the first dispatch as a Promise, which will resolve when the action is finished, and then we dispatch another action. This is all possible due to the redux-promise-middleware package, together with redux-thunk (https://github.com/reduxjs/redux-thunk)
+In this special example, we want to execute an action, and **after** that action is done, we want to execute a second one (`addSnackbar` in this example), so we can treat the first dispatch as a Promise, which will resolve when the action is finished, and then we dispatch another action. This is all possible due to the redux-promise-middleware package, together with redux-thunk (https://github.com/reduxjs/redux-thunk).
 
-Due to the actions being actual Promises, the framework converts the action to 3 different actions (`ACTION_PENDING` - Promise not resolved yet, `ACTION_FULFILLED` - Promise resolved, `ACTION_REJECTED` - Promise rejected)
+Due to the actions being actual Promises, the framework converts the action to 3 different actions (`ACTION_PENDING` - Promise not resolved yet, `ACTION_FULFILLED` - Promise resolved, `ACTION_REJECTED` - Promise rejected).
 
-To allow for a cleaner definition of the reducers, we use `type-to-reducer` (https://github.com/tomatau/type-to-reducer)
+To allow for a cleaner definition of the reducers, we use `type-to-reducer` (https://github.com/tomatau/type-to-reducer).
 
 A standard definition of a reducer is:
 
@@ -136,13 +138,13 @@ export default typeToReducer({
 
 One important thing to retain, is that the state changing functions must be pure, meaning that they don't actually mutate the state, but rather create a new object, hence the use of the spread operator `...state`, to clone the previous version of the state.
 
-This is one of the three main principles of Redux (https://redux.js.org/introduction/three-principles)
+This is one of the three main principles of Redux (https://redux.js.org/introduction/three-principles).
 
 As you can see, each action type has an associated arrow function that receives the current state, and an action, working like a switch case of action types. Each action will have a single effect on the state, defined in its reducer.
 
 It's also important to remember that, while the example has PENDING, REJECTED AND FULFILLED variations, it is due to the fact that this comes from an async action. For simpler actions, one can simply define the reducer like it is done with the `RESET_RANDOM_DOG` which simply resets the state, not doing any `fetch`: 
 
-There's a known "bug" where links would break if the component was connected to the redux store (i.e. the page would not change when clicking the link, because the `shouldComponentUpdate()`  method is overrided when using `connect()` to get redux state updates that trigger re-renders. To overcome this, one must encapsulate the `connect()` with `withRouter()` like done in `/src/components/HomePage/TopButtonBar.js`)
+There's a known "bug" where links would break if the component was connected to the redux store (i.e. the page would not change when clicking the link, because the `shouldComponentUpdate()`  method is overrided when using `connect()` to get redux state updates that trigger re-renders. To overcome this, one must encapsulate the `connect()` with `withRouter()` like done in `/src/components/HomePage/TopButtonBar.js`).
 
 
 ```js
@@ -154,3 +156,76 @@ export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonB
 ## CSS Modules
 
 TODO
+
+## Material UI
+
+The Visual components used in this project come from `material-ui` framework, which provides many web elements and utilities to allow an easier and more responsive development of an UI/UX with Material Design styles.
+
+The list of available components can be found in the docs:
+https://material-ui.com/getting-started/usage/
+
+An example of material UI usage in the boilerplate code can be found in `/src/components/HomePage/BottomButtonBar.js` where `<Grid>` and `<Button>` are used.
+
+To import a material UI component, simply do:
+
+```js
+
+import { <AComponentYouWant>, <AnotherComponentYouWant> } from '@material-ui/core';
+
+```
+
+Then you can use those components in `render()`.
+
+## Snackbars
+
+Snackbars was the last feature added to the boilerplate. Snackbars are essentially a message that is shown to the user in a notification-like way. As the material design guide states that only one snackbar should be shown to the user at any given moment, the material ui implementation doesn't control the position of snackbars when two or more are added at the same time, resulting in hidden snackbars.
+
+To work around this, `notistack` is used, which allows having `n` snackbars, by regulating its poisition (i.e. when a snackbar is added to the corner and there's already a snackbar there, the newly added will stack on top/bottom (depending on the corner) of the existing ones).
+
+To add a snackbar, a function `addSnackbar()` is already provided at `/src/actions/notificationActions.js`.
+
+The added snackbars will show on any rendered page, as the `<Notifier>` - component responsible for the snackbar rendering - is rendered at the root of the App, along with the `<AppRouter>`.
+
+One example of snackbars addition is after `SLEEPY_ACTION` is done, where a notification is shown to alert that the action has finished.
+
+```js
+
+export const exampleAction = () => dispatch => {
+    const first = dispatch({
+        type: exampleTypes.SLEEPY,
+        payload: exampleActionFetch(),
+    });
+
+    first.then(() => {
+        dispatch(addSnackbar({
+            message: "Hello!",
+            options: {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            }
+        }))
+    })
+}
+
+```
+> From `/src/actions/sleepyActions.js`
+
+The `addSnackbar()` function can be called as the argument of a `dispatch()` function, or given to the `addSnackbar()` as the second level of arguments like so:
+
+```js
+
+addSnackbar({
+    message: "Hello!",
+    options: {
+        variant: 'info',
+        anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+        },
+    }
+})(dispatch)
+
+```
