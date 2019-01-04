@@ -2,6 +2,12 @@
 
 This is an explanation of the various parts of the application as demonstrated in the boilerplate
 
+# Table of Contents
+
+* [General Structure](#general-structure)
+* [Pages / Routing](#pages--routing)
+* [Redux Store](#redux-store)
+
 # General Structure
 
 The Application is divided into _components_, which can be stateful or not, and there are some patterns you should look up.
