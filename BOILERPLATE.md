@@ -7,8 +7,9 @@ This is an explanation of the various parts of the application as demonstrated i
 * [General Structure](#general-structure)
 * [Pages / Routing](#pages--routing)
 * [Redux Store](#redux-store)
+* [CSS Modules](#css-modules)
 
-# General Structure
+## General Structure
 
 The Application is divided into _components_, which can be stateful or not, and there are some patterns you should look up.
 
@@ -18,13 +19,13 @@ Component Patterns Video: https://www.youtube.com/watch?v=YaZg8wg39QQ
 
 The components should all be placed under the `/src/components` directory, with some exceptions like the root component (`App.js`), the Router (`AppRouter.js`) or the pages components which will be in `src/pages`
 
-# Pages / Routing
+## Pages / Routing
 
 To match a URL to a specific page (i.e. you want to add a contacts page), you must go to the `AppRouter.js` and add a `<Route>` in the `<Switch>` component. Some example Routes are already there to show most of the use cases. For more help, check out the docs for React Router package.
 
 React Router Docs : https://reacttraining.com/react-router/web/guides/quick-start
 
-# Redux Store
+## Redux Store
 
 The Redux store is the way app information is stored and served to all components that need it (and subscribe to it)
 
@@ -141,3 +142,7 @@ export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonB
 ```
 
 > From `/src/components/HomePage/TopButtonBar.js`
+
+## CSS Modules
+
+TODO
