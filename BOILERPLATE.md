@@ -155,7 +155,68 @@ export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonB
 
 ## CSS Modules
 
-TODO
+### Why?
+
+In order to better encapsulate and organize the application CSS, CSS Modules are being used ([this link goes into some detail as to why they are useful](https://css-tricks.com/css-modules-part-1-need/)).
+
+This allows us to define style modules, that can be imported into each component, and that are tightly coupled to the respective import statement.
+
+A common problem in CSS is one of its main features: the "global" scope. If a `.big` class is used, the selector that changes its properties will change it for every ocurrence of that class. When developing big applications, this can result in legacy CSS code not being removed due to "it might break something", for example.
+
+CSS Modules solves this by ensuring that a CSS Module file (.module.css) is treated in its own local scope, by prepending a randomly generated string to the used classes. As such, if two "fonts.module.css" and "spacings.module.css" files define selectors for the `.big` class, they can still be treated separately, despite selecting the same class. To use either one a user could just import the files in their code and use the exported object to retrieve the processed class names, that have the randomly generated string prepended to them.
+
+### How? (Usage examples)
+
+To define CSS in a CSS Module file, vanilla CSS code can be written as usual. However, these files must be saved with a `.module.css` extension instead of a `.css` extension.
+
+In order to use the created CSS Modules, one must first import the CSS Module and then use the object that the file exports to access the processed `className`s:
+
+```js
+import styles from "./HomePage.module.css";
+```
+
+> From `/src/components/HomePage/TopButtonBar.js`
+
+The `styles` object now holds the class names of the selectors specified in HomePage.module.css. Note that this variable can be aliased to any other name (by changing the name after the `import` keyword), such as to clarify the purpose of a style import/usage or to have several imports of different CSS Modules.
+
+In order to use the imported styles, the `className` property of React Components should be used:
+
+```jsx
+render() {
+        return (
+            <Grid container item xs={12} spacing={24}>
+                <Grid item xs={4} className={styles.button}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={this.sleepyClick}
+                    >
+                        Sleepy Action
+                    </Button>
+                </Grid>
+                {/* ... */}
+            </Grid>
+        );
+    }
+```
+
+> From `/src/components/HomePage/TopButtonBar.js`
+
+In this example, the innermost `Grid` component is having the `HomePage.module.css`'s `.button` selector applied to it, thus changing its `text-align` property:
+
+```css
+.button {
+    text-align: center;
+}
+```
+
+> From `/src/components/HomePage/HomePage.module.css`
+
+### Where? (Organization and structuring)
+
+CSS Modules that are used directly in components and will only have that utilization (very specific ones) should be placed in the same directory as the respective component and have the name of the component that uses the module or of the folder in which the components that use it are placed.
+
+CSS Modules that will be of general use to the application should be placed inside the `css` folder, inside `src` (thus `/src/css/`). None exist yet at the time of writing this.
 
 ## Material UI
 
