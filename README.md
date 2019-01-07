@@ -1,7 +1,7 @@
 # niJobs - FrontEnd
 
 
-[![Build Status](https://img.shields.io/travis/NIAEFEUP/nijobs-fe/develop.svg?style=for-the-badge)](https://travis-ci.org/NIAEFEUP/nijobs-fe)
+[![Build Preview](https://img.shields.io/badge/Build%20Preview-Develop-brightgreen.svg?style=for-the-badge)](https://develop--nijobs.netlify.com/)
 [![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/issues)
 [![GitHub license](https://img.shields.io/github/license/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/blob/master/LICENSE)
 
