@@ -12,6 +12,6 @@ class ButtonBar extends Component {
             </Grid>
         );
     }
-};
+}
 
 export default ButtonBar;

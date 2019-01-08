@@ -8,7 +8,8 @@ class RandomDogOutput extends Component {
     displayDoggo = () => {
         return (
             <React.Fragment>
-                "Doggo ready!"<br/>
+                "Doggo ready!"
+                <br/>
                 <img src={this.props.dog.image_url} alt="random cute doggo" />
             </React.Fragment>
         );
@@ -31,7 +32,7 @@ class RandomDogOutput extends Component {
             </Paper>
         );
     }
-};
+}
 
 const mapStateToProps = state => ({
     dog: state.dog

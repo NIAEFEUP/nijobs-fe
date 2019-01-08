@@ -17,6 +17,6 @@ class Banner extends Component {
             </Grid>
         )
     }
-};
+}
 
 export default Banner;

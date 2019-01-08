@@ -39,7 +39,7 @@ class BottomButtonBar extends Component {
             </Grid>
         )
     }
-};
+}
 
 const mapStateToProps = () => ({});
 

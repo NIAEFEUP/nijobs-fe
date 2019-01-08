@@ -47,7 +47,7 @@ class TopButtonBar extends Component {
             </Grid>
         )
     }
-};
+}
 
 const mapStateToProps = () => ({});
 

@@ -18,12 +18,6 @@
         "brace-style": ["error", "1tbs"],
         "camelcase": "error",
         "eqeqeq": ["error", "always"],
-        "react/jsx-no-comment-textnodes": "error",
-        "react/jsx-no-duplicate-props": "error",
-        "react/jsx-no-target-blank": "error",
-        "react/jsx-no-undef": "error",
-        "react/jsx-uses-react": "error",
-        "react/jsx-uses-vars": "error",
         "react/no-children-prop": "error",
         "react/no-deprecated": "error",
         "react/no-direct-mutation-state": "error",
@@ -40,12 +34,15 @@
         "react/jsx-equals-spacing": "error",
         "react/jsx-indent": "error",
         "react/jsx-indent-props": "error",
-        "react/jsx-max-props-per-line": [2, {
-            "maximum": 1
-        }],
-        "react/jsx-one-expression-per-line": [2, {
+        "react/jsx-one-expression-per-line": ["error", {
             "allow": "none"
         }],
+        "react/jsx-no-comment-textnodes": "error",
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-no-target-blank": "error",
+        "react/jsx-no-undef": "error",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
         "react/jsx-pascal-case": "error"
     }
 }
