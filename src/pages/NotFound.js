@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class NotFound extends Component {
    
@@ -7,7 +7,7 @@ class NotFound extends Component {
             <div>
                 Oh no! Someone took this page away!
             </div>
-        )
+        );
     }
 }
 

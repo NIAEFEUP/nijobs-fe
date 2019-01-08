@@ -37,7 +37,7 @@ class BottomButtonBar extends Component {
                     </Button>
                 </Grid>
             </Grid>
-        )
+        );
     }
 }
 

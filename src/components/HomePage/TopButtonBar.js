@@ -45,7 +45,7 @@ class TopButtonBar extends Component {
                     </Button>
                 </Grid>
             </Grid>
-        )
+        );
     }
 }
 

@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Paper, Typography } from '@material-ui/core';
 import styles from "./HomePage.module.css";
 
@@ -20,7 +20,7 @@ class SleepyActionOutput extends Component {
 
                 </Typography>
             </Paper>
-        )
+        );
     }
 }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import ExamplePage from './pages/ExamplePage'
+import ExamplePage from './pages/ExamplePage';
 import OtherPage from './pages/OtherPage';
 import NotFound from './pages/NotFound';
 

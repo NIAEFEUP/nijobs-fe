@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class OtherPage extends Component {
     render() {
@@ -8,7 +8,7 @@ class OtherPage extends Component {
                 {' '}
                 {this.props.match.params.id}
             </div>
-        )
+        );
     }
 }
 

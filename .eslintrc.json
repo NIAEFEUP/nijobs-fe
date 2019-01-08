@@ -18,6 +18,7 @@
         "brace-style": ["error", "1tbs"],
         "camelcase": "error",
         "eqeqeq": ["error", "always"],
+        "semi": ["error", "always"],
         "react/no-children-prop": "error",
         "react/no-deprecated": "error",
         "react/no-direct-mutation-state": "error",
