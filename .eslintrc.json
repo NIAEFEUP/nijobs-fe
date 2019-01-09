@@ -4,6 +4,11 @@
     "plugins": [
         "react"
     ],
+    "settings": {
+        "react": {
+          "version": "detect"
+        }
+    },
     "env": {
         "es6": true,
         "browser": true

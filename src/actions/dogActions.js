@@ -11,7 +11,7 @@ const fetchRandomDog = () => {
                     return reject("Dog API fetching unsuccessful");
                 }
             })
-            .catch(_err => reject("API fetching unsuccessful"));
+            .catch(() => reject("API fetching unsuccessful"));
     });
 };
 

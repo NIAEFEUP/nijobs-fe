@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Paper, Typography } from '@material-ui/core';
 import styles from "./HomePage.module.css";
@@ -8,9 +9,9 @@ class RandomDogOutput extends Component {
     displayDoggo = () => {
         return (
             <React.Fragment>
-                "Doggo ready!"
+                Doggo ready!
                 <br/>
-                <img src={this.props.dog.image_url} alt="random cute doggo" />
+                <img src={this.props.dog.imageUrl} alt="random cute doggo" />
             </React.Fragment>
         );
     }
@@ -22,7 +23,7 @@ class RandomDogOutput extends Component {
                     {this.props.dog.loading ?
                         "Loading cute doggo..."
                         :
-                        (this.props.dog.image_url ?
+                        (this.props.dog.imageUrl ?
                             <this.displayDoggo />
                             :
                             "No random doggo currently loaded :("
@@ -33,6 +34,10 @@ class RandomDogOutput extends Component {
         );
     }
 }
+
+RandomDogOutput.propTypes = {
+    dog: PropTypes.object
+};
 
 const mapStateToProps = state => ({
     dog: state.dog

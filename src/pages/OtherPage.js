@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class OtherPage extends Component {
     render() {
@@ -11,5 +12,9 @@ class OtherPage extends Component {
         );
     }
 }
+
+OtherPage.propTypes = {
+    match: PropTypes.object
+};
 
 export default OtherPage;
