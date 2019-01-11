@@ -23,7 +23,7 @@
     "lint": "eslint \"**/*.js\" --fix"
   },
   "husky": {
-    "hooks": {  
+    "hooks": {
       "pre-commit": "npm run lint"
     }
   },
@@ -40,5 +40,4 @@
     "eslint-plugin-react": "^7.12.3",
     "husky": "^1.1.4"
   }
-
 }
