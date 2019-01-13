@@ -7,12 +7,12 @@ export const addSnackbar = notification => dispatch => {
             key: new Date().getTime() + Math.random(),
             ...notification,
         },
-    })
+    });
 };
 
 export const removeSnackbar = key => dispatch => {
     dispatch({
         type: notificationTypes.REMOVE_SNACKBAR,
         key,
-    })
+    });
 };

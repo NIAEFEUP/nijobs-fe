@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class ExamplePage extends Component {
     render() {
@@ -6,7 +6,7 @@ class ExamplePage extends Component {
             <div>
                 This is an Example Page
             </div>
-        )
+        );
     }
 }
 

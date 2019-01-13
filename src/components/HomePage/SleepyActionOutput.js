@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Paper, Typography } from '@material-ui/core';
 import styles from "./HomePage.module.css";
 
@@ -20,9 +21,13 @@ class SleepyActionOutput extends Component {
 
                 </Typography>
             </Paper>
-        )
+        );
     }
 }
+
+SleepyActionOutput.propTypes = {
+    sleepyState: PropTypes.object
+};
 
 const mapStateToProps = state => ({
     sleepyState: state.sleepy

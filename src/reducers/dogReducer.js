@@ -2,7 +2,7 @@ import { dogTypes } from '../actions/types';
 import typeToReducer from 'type-to-reducer';
 
 const initialState = {
-    image_url: "",
+    imageUrl: "",
     loading: false,
     error: null,
 };
@@ -20,12 +20,12 @@ export default typeToReducer({
         FULFILLED: (state, action) => ({
             ...state,
             loading: false,
-            image_url: action.payload,
+            imageUrl: action.payload,
         })
     },
 
     
-    [dogTypes.RESET_RANDOM_DOG]: (state, action) => ({
+    [dogTypes.RESET_RANDOM_DOG]: () => ({
         ...initialState,
     }),
 

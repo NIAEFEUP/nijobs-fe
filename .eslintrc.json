@@ -1,0 +1,59 @@
+{
+    "extends": "eslint:recommended",
+    "parser": "babel-eslint",
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+        "react": {
+          "version": "detect"
+        }
+    },
+    "env": {
+        "es6": true,
+        "browser": true,
+        "jest": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "indent": ["error", 4],
+        "brace-style": ["error", "1tbs"],
+        "camelcase": "error",
+        "eqeqeq": ["error", "always"],
+        "semi": ["error", "always"],
+        "react/no-children-prop": "error",
+        "react/no-deprecated": "error",
+        "react/no-direct-mutation-state": "error",
+        "react/no-unescaped-entities": "error",
+        "react/no-unknown-property": "error",
+        "react/require-render-return": "error",
+        "react/prop-types": "error",
+        "react/no-unused-prop-types": "error",
+        "react/no-unused-state": "error",
+        "react/self-closing-comp": "error",
+        "react/void-dom-elements-no-children": "error",
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-closing-bracket-location": "error",
+        "react/jsx-equals-spacing": "error",
+        "react/jsx-indent": "error",
+        "react/jsx-indent-props": "error",
+        "react/jsx-one-expression-per-line": ["error", {
+            "allow": "none"
+        }],
+        "react/jsx-max-props-per-line": [1, { 
+            "when": "always" 
+        }],
+        "react/jsx-first-prop-new-line": ["error", "multiline"],
+        "react/jsx-no-comment-textnodes": "error",
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-no-target-blank": "error",
+        "react/jsx-no-undef": "error",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "react/jsx-pascal-case": "error"
+    }
+}

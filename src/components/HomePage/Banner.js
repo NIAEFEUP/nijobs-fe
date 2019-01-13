@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { Paper, Grid, Typography } from '@material-ui/core';
 import styles from "./HomePage.module.css";
 
@@ -15,8 +15,8 @@ class Banner extends Component {
                     </Paper>
                 </Grid>
             </Grid>
-        )
+        );
     }
-};
+}
 
 export default Banner;

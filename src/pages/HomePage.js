@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 import Banner from '../components/HomePage/Banner';
 import ButtonBar from '../components/HomePage/ButtonBar';
@@ -14,7 +14,7 @@ class HomePage extends Component {
                 <SleepyActionOutput />
                 <RandomDogOutput />
             </React.Fragment>
-        )
+        );
     }
 }
 

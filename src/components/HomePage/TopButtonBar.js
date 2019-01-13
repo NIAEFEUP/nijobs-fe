@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Button, Grid } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
@@ -45,8 +46,12 @@ class TopButtonBar extends Component {
                     </Button>
                 </Grid>
             </Grid>
-        )
+        );
     }
+}
+
+TopButtonBar.propTypes = {
+    exampleAction: PropTypes.func
 };
 
 const mapStateToProps = () => ({});

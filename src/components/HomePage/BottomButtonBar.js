@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import { Button, Grid } from '@material-ui/core';
 
@@ -37,8 +38,13 @@ class BottomButtonBar extends Component {
                     </Button>
                 </Grid>
             </Grid>
-        )
+        );
     }
+}
+
+BottomButtonBar.propTypes = {
+    getRandomDog: PropTypes.func,
+    resetRandomDog: PropTypes.func
 };
 
 const mapStateToProps = () => ({});

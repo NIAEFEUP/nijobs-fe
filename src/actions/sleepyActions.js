@@ -36,6 +36,6 @@ export const exampleAction = () => dispatch => {
                     horizontal: 'right',
                 },
             }
-        }))
-    })
-}
+        }));
+    });
+};

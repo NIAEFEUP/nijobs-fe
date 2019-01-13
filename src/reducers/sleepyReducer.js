@@ -18,7 +18,7 @@ export default typeToReducer({
             waiting: false,
             error: action.payload,
         }),
-        FULFILLED: (state, action) => ({
+        FULFILLED: (state) => ({
             ...state,
             done: true,
             waiting: false,
