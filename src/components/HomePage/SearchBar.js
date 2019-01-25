@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 
-import { TextField } from '@material-ui/core';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
 import searchAreaStyle from "./SearchArea.module.css";
+
 
 
 class SearchBar extends Component {
@@ -19,17 +23,48 @@ class SearchBar extends Component {
         });
     };
 
-    render() {
+    submitSearch = e => {
+        e.preventDefault();
+        console.log(`Search for: ${this.state.searchQuery}`);
+    }
+
+    submitSearchButton = () => {
         return (
-            <TextField
-                id="outlined-name"
-                label="Search"
-                className={searchAreaStyle.searchBar}
-                value={this.state.searchQuery}
-                onChange={this.handleChange('searchQuery')}
-                margin="normal"
-                variant="outlined"
-            />
+            <InputAdornment position="end">
+                <IconButton onClick={this.submitSearch}>
+                    <Icon>
+                        search
+                    </Icon>
+
+                </IconButton>
+            </InputAdornment>
+        );
+    }
+
+    render() {
+
+        
+        return (
+            <React.Fragment>
+                <form
+                    onSubmit={this.submitSearch}
+                    autoComplete="off"
+                >
+                    <TextField
+                        id="outlined-name"
+                        label="Search"
+                        className={searchAreaStyle.searchBar}
+                        value={this.state.searchQuery}
+                        onChange={this.handleChange('searchQuery')}
+                        margin="normal"
+                        variant="outlined"
+                        InputProps={{
+                            endAdornment: this.submitSearchButton(),
+                        }}
+                    />
+                </form>
+                
+            </React.Fragment>
                 
             
         );
