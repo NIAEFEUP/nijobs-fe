@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import SearchArea from "../components/HomePage/SearchArea";
+import MainView from "../components/HomePage/MainView";
 
 class HomePage extends Component {
 
     render() {
         return (
             <React.Fragment>
-                <SearchArea />
+                <MainView />
             </React.Fragment>
         );
     }
