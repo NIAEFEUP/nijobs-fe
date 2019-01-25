@@ -6,7 +6,10 @@ import BottomButtonBar from './BottomButtonBar';
 class ButtonBar extends Component {
     render() {
         return (
-            <Grid container spacing={40}>
+            <Grid
+                container
+                spacing={40}
+            >
                 <TopButtonBar />
                 <BottomButtonBar />
             </Grid>
