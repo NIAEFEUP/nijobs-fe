@@ -1,18 +1,12 @@
 import React, { Component } from 'react';
-
-import Banner from '../components/HomePage/Banner';
-import ButtonBar from '../components/HomePage/ButtonBar';
-import SleepyActionOutput from '../components/HomePage/SleepyActionOutput';
-import RandomDogOutput from '../components/HomePage/RandomDogOutput';
+import SearchArea from "../components/HomePage/SearchArea";
 
 class HomePage extends Component {
+
     render() {
         return (
             <React.Fragment>
-                <Banner />
-                <ButtonBar />
-                <SleepyActionOutput />
-                <RandomDogOutput />
+                <SearchArea />
             </React.Fragment>
         );
     }

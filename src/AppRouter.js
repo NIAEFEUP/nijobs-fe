@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import HomePageBoilerplate from './pages/HomePageBoilerplate';
 import HomePage from './pages/HomePage';
 import ExamplePage from './pages/ExamplePage';
 import OtherPage from './pages/OtherPage';
@@ -16,6 +17,11 @@ class AppRouter extends Component {
                             exact
                             path='/'
                             component={HomePage}
+                        />
+                        <Route
+                            exact
+                            path='/demo'
+                            component={HomePageBoilerplate}
                         />
                         <Route
                             exact
