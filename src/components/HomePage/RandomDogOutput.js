@@ -11,14 +11,20 @@ class RandomDogOutput extends Component {
             <React.Fragment>
                 Doggo ready!
                 <br/>
-                <img src={this.props.dog.imageUrl} alt="random cute doggo" />
+                <img
+                    src={this.props.dog.imageUrl}
+                    alt="random cute doggo"
+                />
             </React.Fragment>
         );
     }
 
     render() {
         return (
-            <Paper className={styles.paper} elevation={1}>
+            <Paper
+                className={styles.paper}
+                elevation={1}
+            >
                 <Typography variant="subtitle1">
                     {this.props.dog.loading ?
                         "Loading cute doggo..."

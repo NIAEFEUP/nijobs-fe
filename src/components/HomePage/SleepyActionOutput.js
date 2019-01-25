@@ -7,7 +7,10 @@ import styles from "./HomePage.module.css";
 class SleepyActionOutput extends Component {
     render() {
         return (
-            <Paper className={styles.paper} elevation={1}>
+            <Paper
+                className={styles.paper}
+                elevation={1}
+            >
                 <Typography variant="subtitle1">
                     {this.props.sleepyState.done ?
                         "You just called a Redux (Sleepy) Action!"

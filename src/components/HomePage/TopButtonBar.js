@@ -15,8 +15,17 @@ class TopButtonBar extends Component {
 
     render() {
         return (
-            <Grid container item xs={12} spacing={24}>
-                <Grid item xs={4} className={styles.button}>
+            <Grid
+                container
+                item
+                xs={12}
+                spacing={24}
+            >
+                <Grid
+                    item
+                    xs={4}
+                    className={styles.button}
+                >
                     <Button
                         variant="contained"
                         color="primary"
@@ -25,7 +34,11 @@ class TopButtonBar extends Component {
                         Sleepy Action
                     </Button>
                 </Grid>
-                <Grid item xs={4} className={styles.button}>
+                <Grid
+                    item
+                    xs={4}
+                    className={styles.button}
+                >
                     <Button
                         variant="text"
                         color="secondary"
@@ -35,7 +48,11 @@ class TopButtonBar extends Component {
                         Example Link
                     </Button>
                 </Grid>
-                <Grid item xs={4} className={styles.button}>
+                <Grid
+                    item
+                    xs={4}
+                    className={styles.button}
+                >
                     <Button
                         variant="text"
                         color="secondary"

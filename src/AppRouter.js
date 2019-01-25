@@ -12,9 +12,21 @@ class AppRouter extends Component {
             <React.Fragment>
                 <BrowserRouter>
                     <Switch>
-                        <Route exact path='/' component={HomePage}/>
-                        <Route exact path='/example' component={ExamplePage}/>
-                        <Route exact path='/other/:id(\d+)' component={OtherPage}/>
+                        <Route
+                            exact
+                            path='/'
+                            component={HomePage}
+                        />
+                        <Route
+                            exact
+                            path='/example'
+                            component={ExamplePage}
+                        />
+                        <Route
+                            exact
+                            path='/other/:id(\d+)'
+                            component={OtherPage}
+                        />
                         <Route component={NotFound} />
                     </Switch>
                 </BrowserRouter>

@@ -18,8 +18,17 @@ class BottomButtonBar extends Component {
 
     render() {
         return (
-            <Grid container item xs={12} spacing={24}>
-                <Grid item xs={6} className={styles.button}>
+            <Grid
+                container
+                item
+                xs={12}
+                spacing={24}
+            >
+                <Grid
+                    item
+                    xs={6}
+                    className={styles.button}
+                >
                     <Button
                         variant="contained"
                         color="primary"
@@ -28,7 +37,11 @@ class BottomButtonBar extends Component {
                         Get a random dog!
                     </Button>
                 </Grid>
-                <Grid item xs={6} className={styles.button}>
+                <Grid
+                    item
+                    xs={6}
+                    className={styles.button}
+                >
                     <Button
                         variant="contained"
                         color="primary"
