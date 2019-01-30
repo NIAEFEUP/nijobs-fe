@@ -9,7 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
-import colors from "../../colors.module.css";
+import { withStyles } from '@material-ui/core/styles';
+import searchBarTheme from './SearchBarTheme.js';
 import searchAreaStyle from "./SearchArea.module.css";
 
 
@@ -18,7 +19,8 @@ import searchAreaStyle from "./SearchArea.module.css";
 class SearchBar extends Component {
 
     static propTypes = {
-        addSnackbar: PropTypes.func.isRequired
+        addSnackbar: PropTypes.func.isRequired,
+        classes: PropTypes.object.isRequired
     }
 
     constructor(props) {
@@ -48,11 +50,15 @@ class SearchBar extends Component {
         });
     }
 
-    submitSearchButton = () => {
+    submitSearchButton = classes => {
         return (
             <InputAdornment position="end">
                 <IconButton onClick={this.submitSearch}>
-                    <Icon className={colors.white}>
+                    <Icon
+                        classes={{
+                            root: classes.searchButton
+                        }}
+                    >
                         search
                     </Icon>
 
@@ -63,6 +69,7 @@ class SearchBar extends Component {
 
     render() {
 
+        const {classes} = this.props;
         
         return (
             <React.Fragment>
@@ -80,17 +87,18 @@ class SearchBar extends Component {
                         margin="normal"
                         variant="outlined"
                         InputProps={{
-                            endAdornment: this.submitSearchButton(),
+                            endAdornment: this.submitSearchButton(classes),
                             classes: {
-                                root: searchAreaStyle.cssOutlinedInput,
-                                focused: searchAreaStyle.cssFocused,
-                                notchedOutline: searchAreaStyle.notchedOutline,
+                                root: classes.cssOutlinedInput,
+                                focused: classes.cssFocused,
+                                notchedOutline: classes.notchedOutline,
                             },
                         }}
                         InputLabelProps={{
                             classes: {
-                                root: searchAreaStyle.cssLabel,
-                                focused: searchAreaStyle.cssFocused,
+                                root: classes.cssLabel,
+                                focused: classes.cssFocused,
+                                shrink: classes.cssLabelShrink,
                             },
                         }}
                     />
@@ -101,6 +109,7 @@ class SearchBar extends Component {
             
         );
     }
+
 }
 
 const mapStateToProps = () => ({
@@ -108,4 +117,4 @@ const mapStateToProps = () => ({
 
 const mapActionsToProps = {addSnackbar};
 
-export default connect(mapStateToProps, mapActionsToProps)(SearchBar);
+export default connect(mapStateToProps, mapActionsToProps)(withStyles(searchBarTheme)(SearchBar));

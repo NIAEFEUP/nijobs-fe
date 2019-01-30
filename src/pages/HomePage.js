@@ -7,6 +7,9 @@ class HomePage extends Component {
         return (
             <React.Fragment>
                 <MainView />
+                <div style={{height: 500}}>
+                    asd
+                </div>
             </React.Fragment>
         );
     }
