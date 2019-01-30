@@ -12,67 +12,44 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Icon from '@material-ui/core/Icon';
 
+import OfferCardTheme from './OfferCardTheme';
+import OfferCardStyle from './OfferCard.module.css';
+
 const logo = require('./ni.png');
 
 class OfferCard extends Component {
 
-    static styles = {
-        card: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center'
-        },
-        details: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%'
-        },
-        logo: {
-            height: 100,
-            width: 100,
-            margin: '0 1em'
-        },
-        subheader: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: '1em',
-            paddingBottom: '0.5em',
-            borderBottom: '1px solid #dfe1e5'
-        },
-        jobInfo: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'flex-end',
-            flex: 1
-        },
-        content: {
-            paddingTop: 0
-        }
-    }
-
     static propTypes = {
-        classes: PropTypes.object.isRequired
+        classes: PropTypes.object.isRequired,
+        children: PropTypes.shape({
+            position: PropTypes.string.isRequired,
+            company: PropTypes.string.isRequired,
+            location: PropTypes.string.isRequired,
+            date: PropTypes.string.isRequired,
+            description: PropTypes.string.isRequired,
+        }).isRequired
     }
 
     render() {
 
         const { classes } = this.props;
 
+        const { position, company, location, date, description } = this.props.children;
+
         const subheader = (
             <React.Fragment>
-                <div className={classes.jobInfo}>
+                <div className={OfferCardStyle.jobInfo}>
                     <Icon>
                         location_city
                     </Icon>
-                    NIAEFEUP
+                    {company}
                     <Icon>
                         place
                     </Icon>
-                    Porto, Portugal
+                    {location}
                 </div>
                 <span>
-                    2 days ago
+                    {date}
                 </span>
             </React.Fragment>
         );
@@ -82,7 +59,7 @@ class OfferCard extends Component {
                 <CardMedia 
                     className={classes.logo}
                     image={logo}
-                    title="Paella dish"
+                    title={`${company} logo`}
                 />
                 <div className={classes.details}>
                     <CardHeader
@@ -90,7 +67,7 @@ class OfferCard extends Component {
                             root: classes.header,
                             subheader: classes.subheader
                         }}
-                        title="Front-end developer"
+                        title={position}
                         titleTypographyProps={{variant: 'h4'}}
                         subheader={subheader}
                     />
@@ -99,12 +76,12 @@ class OfferCard extends Component {
                             variant="h6"
                             gutterBottom
                         >
-                        Description
+                            Description
                         </Typography>
                         <Typography 
                             variant="body1"
                         >
-                        We are looking for shit
+                            {description}
                         </Typography>
                     </CardContent>
                 </div>
@@ -113,4 +90,4 @@ class OfferCard extends Component {
     }
 }
 
-export default withStyles(OfferCard.styles)(OfferCard);
+export default withStyles(OfferCardTheme)(OfferCard);

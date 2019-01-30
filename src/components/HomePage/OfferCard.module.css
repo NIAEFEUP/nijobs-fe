@@ -1,0 +1,6 @@
+.jobInfo {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	flex: 1;
+}

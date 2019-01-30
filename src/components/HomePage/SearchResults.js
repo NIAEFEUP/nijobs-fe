@@ -7,7 +7,15 @@ class SearchResults extends Component {
     render() {
         return (
             <div className={homePageStyles.searchResults}>
-                <OfferCard/>
+                <OfferCard>
+                    {{
+                        position: 'Senior Front-End developer',
+                        location: 'Porto, Portugal',
+                        company: 'NIAEFEUP',
+                        date: '3 days ago',
+                        description: 'jçaksfjjklsjadkfljklfjklsdajflkçs'
+                    }}
+                </OfferCard>
             </div>
         );
     }
