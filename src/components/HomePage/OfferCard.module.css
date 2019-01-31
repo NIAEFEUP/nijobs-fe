@@ -4,3 +4,7 @@
 	align-items: flex-end;
 	flex: 1;
 }
+
+.jobInfo > span.subheaderLabel {
+	margin: 0 1em 0 0.1em;
+}

@@ -14,6 +14,9 @@ export default {
         width: 100,
         margin: '0 1em'
     },
+    title: {
+        fontWeight: 500
+    },
     subheader: {
         display: 'flex',
         flexDirection: 'row',

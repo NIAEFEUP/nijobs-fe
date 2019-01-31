@@ -17,42 +17,53 @@ import OfferCardStyle from './OfferCard.module.css';
 
 const logo = require('./ni.png');
 
+const SubHeader = (props) => {
+    const { company, location, date } = props;
+    return (
+        <React.Fragment>
+            <div className={OfferCardStyle.jobInfo}>
+                <Icon>
+                location_city
+                </Icon>
+                <span className={OfferCardStyle.subheaderLabel}>
+                    {company}
+                </span>
+                <Icon>
+                place
+                </Icon>
+                <span className={OfferCardStyle.subheaderLabel}>
+                    {location}
+                </span>
+            </div>
+            <span>
+                {date}
+            </span>
+        </React.Fragment>
+    );
+};
+
+SubHeader.propTypes = {
+    company: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+};
+
 class OfferCard extends Component {
 
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        children: PropTypes.shape({
-            position: PropTypes.string.isRequired,
-            company: PropTypes.string.isRequired,
-            location: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
-            description: PropTypes.string.isRequired,
-        }).isRequired
+        position: PropTypes.string.isRequired,
+        company: PropTypes.string.isRequired,
+        location: PropTypes.string.isRequired,
+        date: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
     }
 
     render() {
 
         const { classes } = this.props;
 
-        const { position, company, location, date, description } = this.props.children;
-
-        const subheader = (
-            <React.Fragment>
-                <div className={OfferCardStyle.jobInfo}>
-                    <Icon>
-                        location_city
-                    </Icon>
-                    {company}
-                    <Icon>
-                        place
-                    </Icon>
-                    {location}
-                </div>
-                <span>
-                    {date}
-                </span>
-            </React.Fragment>
-        );
+        const { position, company, location, date, description } = this.props;
 
         return (
             <Card className={classes.card}>
@@ -65,11 +76,19 @@ class OfferCard extends Component {
                     <CardHeader
                         classes={{
                             root: classes.header,
+                            title: classes.title,
                             subheader: classes.subheader
                         }}
                         title={position}
-                        titleTypographyProps={{variant: 'h4'}}
-                        subheader={subheader}
+                        titleTypographyProps={{variant: 'h5'}}
+                        subheader={
+                            <SubHeader 
+                                company={company}
+                                location={location}
+                                date={date}
+                            />
+                        }
+                        subheaderTypographyProps={{variant: 'caption'}}
                     />
                     <CardContent className={classes.content}>
                         <Typography 
