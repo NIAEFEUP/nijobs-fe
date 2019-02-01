@@ -1,24 +1,36 @@
+import { darkTextColor, } from '../../AppTheme';
+
 export default ({
    
+    root: {
+        width: 200,
+    },
+
     cssLabel: {
-        color: '#ffffff',
+        color: darkTextColor,
     },
     cssLabelShrink: {
         '&$cssFocused': {
-            color: '#ffffff',
+            color: darkTextColor,
         },
     },
     cssFocused: {},
     cssOutlinedInput: {
+        
+        '&$adornedEnd $notchedOutline': {
+            borderColor: darkTextColor,
+        },
+
         '&$cssFocused $notchedOutline': {
-            borderColor: '#ffffff',
+            borderColor: darkTextColor,
         },
     },
     notchedOutline: {},
+    adornedEnd: {},
     
 
     searchButton: {
-        color: '#ffffff',
+        color: darkTextColor,
     },
 });
   

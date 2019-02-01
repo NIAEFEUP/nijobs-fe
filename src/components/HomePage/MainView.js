@@ -27,7 +27,7 @@ class MainView extends Component {
                 </div>
                 <SearchArea />
                 <InfoBox
-                    info='Your next oportunity is out there. Use the search to find it!'
+                    info='Your next oportunity is out there. Use the search bar to find it!'
                 />
                 <ShowMoreButton btnClass={homePageStyles.showMoreBtn}/>
             </div>

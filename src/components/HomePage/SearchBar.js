@@ -1,120 +1,105 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import { connect } from 'react-redux';
-import { addSnackbar } from '../../actions/notificationActions';
-
 import InputAdornment from '@material-ui/core/InputAdornment';
-import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
 import { withStyles } from '@material-ui/core/styles';
 import searchBarTheme from './SearchBarTheme.js';
-import searchAreaStyle from "./SearchArea.module.css";
 
 
+const submitSearchButton = (classes, submitSearch) => {
+    return (
+        <InputAdornment position="end">
+            <IconButton onClick={submitSearch}>
+                <Icon
+                    classes={{
+                        root: classes.searchButton
+                    }}
+                >
+                    search
+                </Icon>
 
+            </IconButton>
+        </InputAdornment>
+    );
+};
 
 class SearchBar extends Component {
 
     static propTypes = {
-        addSnackbar: PropTypes.func.isRequired,
-        classes: PropTypes.object.isRequired
+        classes: PropTypes.object.isRequired,
+        submitSearchForm: PropTypes.func.isRequired,
+        
+        searchValue: PropTypes.string.isRequired,
+        updateSearchValue: PropTypes.func.isRequired,
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            searchQuery: "", 
+            labelWidth: 0,
         };
     }
 
-    handleChange = name => event => {
+    componentDidMount() {
         this.setState({
-            [name]: event.target.value,
+            labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
         });
+    }
+
+    handleChange = e => {
+        this.props.updateSearchValue(e.target.value);
     };
-
-    submitSearch = e => {
-        e.preventDefault();
-        this.props.addSnackbar({
-            message: `Search for: ${this.state.searchQuery}`,
-            options: {
-                variant: 'info',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                },
-            }
-        });
-    }
-
-    submitSearchButton = classes => {
-        return (
-            <InputAdornment position="end">
-                <IconButton onClick={this.submitSearch}>
-                    <Icon
-                        classes={{
-                            root: classes.searchButton
-                        }}
-                    >
-                        search
-                    </Icon>
-
-                </IconButton>
-            </InputAdornment>
-        );
-    }
 
     render() {
 
-        const {classes} = this.props;
+        const { classes, searchValue } = this.props;
         
         return (
-            <React.Fragment>
-                <form
-                    onSubmit={this.submitSearch}
-                    autoComplete="off"
+            <FormControl
+                variant="outlined"
+                className={classes.input}
+                value={searchValue}
+                onChange={this.handleChange}
+            >
+                <InputLabel
+                    ref={ref => {
+                        this.InputLabelRef = ref;
+                    }}
+                    htmlFor="search-bar"
+                    classes={{
+                        root: classes.cssLabel,
+                        focused: classes.cssFocused,
+                        shrink: classes.cssLabelShrink,
+                    }}
                 >
-                    <TextField
-                        id="search-bar"
-                        label="Search"
-                        className={searchAreaStyle.searchBar}
-                        
-                        value={this.state.searchQuery}
-                        onChange={this.handleChange('searchQuery')}
-                        margin="normal"
-                        variant="outlined"
-                        InputProps={{
-                            endAdornment: this.submitSearchButton(classes),
-                            classes: {
-                                root: classes.cssOutlinedInput,
-                                focused: classes.cssFocused,
-                                notchedOutline: classes.notchedOutline,
-                            },
-                        }}
-                        InputLabelProps={{
-                            classes: {
-                                root: classes.cssLabel,
-                                focused: classes.cssFocused,
-                                shrink: classes.cssLabelShrink,
-                            },
-                        }}
-                    />
-                </form>
-                
-            </React.Fragment>
-                
-            
+                    Search
+                </InputLabel>
+                <OutlinedInput
+                    labelWidth={this.state.labelWidth}
+                    name="search"
+                    id="search-bar"
+                    endAdornment={submitSearchButton(classes, this.props.submitSearchForm)}
+                    classes={{
+                        root: classes.cssOutlinedInput,
+                        focused: classes.cssFocused,
+                        notchedOutline: classes.notchedOutline,
+                        adornedEnd: classes.adornedEnd,
+                    }}
+                />
+
+            </FormControl>        
         );
     }
 
 }
 
-const mapStateToProps = () => ({
-});
 
-const mapActionsToProps = {addSnackbar};
+export default (withStyles(searchBarTheme)(SearchBar));
 
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(searchBarTheme)(SearchBar));
