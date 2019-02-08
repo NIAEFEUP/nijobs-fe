@@ -13,6 +13,7 @@ import OutlinedSelector from '../utils/OutlinedSelector';
 // import TagSelector from './TagSelector';
 
 import JOB_TYPES from './jobTypes';
+import AutoComplete from './AutoComplete';
 
 class SearchArea extends Component {
 
@@ -32,7 +33,7 @@ class SearchArea extends Component {
             // tags: []
         };
     }
-
+    
     render() {
         return (
             <div className={searchAreaStyle.searchArea}>
@@ -44,6 +45,9 @@ class SearchArea extends Component {
                         submitSearchForm={this.submitForm}
                         searchValue={this.state.searchValue}
                         updateSearchValue={this.updateSearchValue}
+                    />
+                    <AutoComplete
+                        label='Tags'
                     />
 
                     <LabeledSwitch
@@ -69,14 +73,6 @@ class SearchArea extends Component {
                         label='Job Duration (Months)'
                         handleChange={this.updateSlider('jobDuration')}
                     />
-
-                    {/* <TagSelector 
-                        label='Tags'
-                        name='tags'
-                        value={this.state.tags}
-                        options={JOB_TYPES}
-                        handleChange={this.updateMultipleSelector('tags')}
-                    /> */}
                     
                 </form>
             </div>

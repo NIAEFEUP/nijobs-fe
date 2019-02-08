@@ -19,6 +19,7 @@ export default ({
             'Roboto',
             'sans-serif',
         ].join(','),
+        useNextVariants: true,
     },
 });
 
