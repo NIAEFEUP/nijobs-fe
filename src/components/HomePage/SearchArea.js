@@ -10,10 +10,52 @@ import StepSlider from '../utils/StepSlider';
 
 import SearchBar from "./SearchBar";
 import OutlinedSelector from '../utils/OutlinedSelector';
-// import TagSelector from './TagSelector';
 
 import JOB_TYPES from './jobTypes';
 import AutoComplete from './AutoComplete';
+
+
+//just for testing -> In the future get option list from api in <CDM>
+const suggestions = [
+    { label: 'Afghanistan' },
+    { label: 'Aland Islands' },
+    { label: 'Albania' },
+    { label: 'Algeria' },
+    { label: 'American Samoa' },
+    { label: 'Andorra' },
+    { label: 'Angola' },
+    { label: 'Anguilla' },
+    { label: 'Antarctica' },
+    { label: 'Antigua and Barbuda' },
+    { label: 'Argentina' },
+    { label: 'Armenia' },
+    { label: 'Aruba' },
+    { label: 'Australia' },
+    { label: 'Austria' },
+    { label: 'Azerbaijan' },
+    { label: 'Bahamas' },
+    { label: 'Bahrain' },
+    { label: 'Bangladesh' },
+    { label: 'Barbados' },
+    { label: 'Belarus' },
+    { label: 'Belgium' },
+    { label: 'Belize' },
+    { label: 'Benin' },
+    { label: 'Bermuda' },
+    { label: 'Bhutan' },
+    { label: 'Bolivia, Plurinational State of' },
+    { label: 'Bonaire, Sint Eustatius and Saba' },
+    { label: 'Bosnia and Herzegovina' },
+    { label: 'Botswana' },
+    { label: 'Bouvet Island' },
+    { label: 'Brazil' },
+    { label: 'British Indian Ocean Territory' },
+    { label: 'Brunei Darussalam' },
+].map(suggestion => ({
+    value: suggestion.label,
+    label: suggestion.label,
+}));
+
 
 class SearchArea extends Component {
 
@@ -30,7 +72,7 @@ class SearchArea extends Component {
             advancedSearch: false,
             jobType: "",
             jobDuration: 1,
-            // tags: []
+            tags: []
         };
     }
     
@@ -46,8 +88,13 @@ class SearchArea extends Component {
                         searchValue={this.state.searchValue}
                         updateSearchValue={this.updateSearchValue}
                     />
+
                     <AutoComplete
                         label='Tags'
+                        name='tags'
+                        value={this.state.tags}
+                        handleChange={this.updateMultipleSelector('tags')}
+                        suggestions={suggestions}
                     />
 
                     <LabeledSwitch
@@ -77,6 +124,25 @@ class SearchArea extends Component {
                 </form>
             </div>
         );
+    }
+
+    submitForm = e => {
+        e.preventDefault();
+        
+        const { searchValue, jobType, jobDuration, tags} = this.state;
+
+        const tagsList = tags.map(tag => tag.value);
+
+        this.props.addSnackbar({
+            message: `Search for: ${searchValue} :: Job type: ${jobType} :: Job Duration: ${jobDuration} :: Tags: ${tagsList.join(', ')}`,
+            options: {
+                variant: 'info',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right',
+                },
+            }
+        });
     }
 
     updateSearchValue = newVal => {
@@ -113,21 +179,7 @@ class SearchArea extends Component {
         });
     }
 
-    submitForm = e => {
-        e.preventDefault();
-
-        const { searchValue, jobType, jobDuration} = this.state;
-        this.props.addSnackbar({
-            message: `Search for: ${searchValue} :: Job type: ${jobType} :: Job Duration: ${jobDuration}`,
-            options: {
-                variant: 'info',
-                anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
-                },
-            }
-        });
-    }
+    
 }
 
 const mapStateToProps = () => ({
