@@ -32,28 +32,8 @@ export const styles = theme => ({
             display: 'none'
         }
     },
-    placeholder: {
-        position: 'absolute',
-        left: `${theme.spacing.unit * 2}px`,
-        fontSize: 16,
-        width: '60%',
-        overflowX: 'auto',
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none'
-        },
-        overflowY: 'hidden',
-    },
     chip: {
         margin: `0 ${theme.spacing.unit / 4}px`,
-    },
-    menu: {
-        zIndex: 10,
-        position: 'absolute',
-        backgroundColor: 'white',
-        borderWidth: '1px',
-        boxShadow: '0px 2px 10px 2px rgba(0,0,0,0.50)',
-        borderRadius: '5px'
     },
     clearIndicator: {
         fontSize: '12px',
@@ -64,6 +44,12 @@ export const styles = theme => ({
     },
     cssLabel: {
         color: darkTextColor,
+    },
+    cssLabelHidden: {
+        opacity: 0,
+        '&$cssFocused': {
+            opacity: 1
+        } 
     },
     cssFocused: {},
     cssOutlinedInput: {
@@ -89,6 +75,7 @@ inputComponent.propTypes = {
   
 export const Control = ({ selectProps, innerRef, children, innerProps }) => {
 
+    const showLabel = selectProps.value.length === 0;
     return (
         <TextField
             fullWidth
@@ -109,7 +96,7 @@ export const Control = ({ selectProps, innerRef, children, innerProps }) => {
             }}
             InputLabelProps={{
                 classes:{
-                    root: selectProps.classes.cssLabel,
+                    root: showLabel ? selectProps.classes.cssLabel : selectProps.classes.cssLabelHidden,
                     focused: selectProps.classes.cssFocused,
                     shrink: selectProps.classes.cssLabelShrink,
                 }
