@@ -35,7 +35,7 @@ class SearchBar extends Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
         submitSearchForm: PropTypes.func.isRequired,
-        
+        className: PropTypes.string,
         searchValue: PropTypes.string.isRequired,
         updateSearchValue: PropTypes.func.isRequired,
     }
@@ -59,12 +59,12 @@ class SearchBar extends Component {
 
     render() {
 
-        const { classes, searchValue } = this.props;
+        const { classes, searchValue, className } = this.props;
         
         return (
             <FormControl
                 variant="outlined"
-                className={classes.input}
+                className={`${classes.input} ${className}`}
                 value={searchValue}
                 onChange={this.handleChange}
             >
@@ -94,7 +94,7 @@ class SearchBar extends Component {
                     }}
                 />
 
-            </FormControl>        
+            </FormControl>
         );
     }
 

@@ -8,17 +8,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 
+import { darkTextColor } from '../../AppTheme';
+
 export const styles = theme => ({
     input: {
         display: 'flex',
         minWidth: 200,
         maxWidth: 400,
         padding: '10px 0',
-    },
-    inputFocused: {
-        '& $placeholder': {
-            display: 'none'
-        }
+        borderColor: darkTextColor
     },
     noOptionsMessage: {
         padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
@@ -63,7 +61,18 @@ export const styles = theme => ({
     },
     dropdownIndicator: {
         padding: '6px'
-    }
+    },
+    cssLabel: {
+        color: darkTextColor,
+    },
+    cssFocused: {},
+    cssOutlinedInput: {
+        
+        '& $notchedOutline': {
+            borderColor: darkTextColor,
+        },
+    },
+    notchedOutline: {},
 });
 
 
@@ -93,7 +102,16 @@ export const Control = ({ selectProps, innerRef, children, innerProps }) => {
                     ...innerProps,
                 },
                 classes: {
-                    focused: selectProps.classes.inputFocused,
+                    root: selectProps.classes.cssOutlinedInput,
+                    focused: selectProps.classes.cssFocused,
+                    notchedOutline: selectProps.classes.notchedOutline,
+                }
+            }}
+            InputLabelProps={{
+                classes:{
+                    root: selectProps.classes.cssLabel,
+                    focused: selectProps.classes.cssFocused,
+                    shrink: selectProps.classes.cssLabelShrink,
                 }
             }}
             
@@ -187,24 +205,6 @@ Option.propTypes = {
     isSelected: PropTypes.bool.isRequired,
     children: PropTypes.string.isRequired,
     innerProps: PropTypes.object.isRequired,
-};
-
-export const Placeholder = ({selectProps, innerProps, children}) => {
-    return (
-        <Typography
-            color="textSecondary"
-            className={selectProps.classes.placeholder}
-            {...innerProps}
-        >
-            {children}
-        </Typography>
-    );
-};
-
-Placeholder.propTypes = {
-    selectProps: PropTypes.object.isRequired,
-    children: PropTypes.string.isRequired,
-    innerProps: PropTypes.object,
 };
 
 export const ValueContainer = ({selectProps, children}) => {

@@ -12,7 +12,7 @@ import SearchBar from "./SearchBar";
 import OutlinedSelector from '../utils/OutlinedSelector';
 
 import JOB_TYPES from './jobTypes';
-import AutoComplete from './AutoComplete';
+import AutoComplete from '../utils/AutoComplete';
 
 
 //just for testing -> In the future get option list from api in <CDM>
@@ -83,13 +83,15 @@ class SearchArea extends Component {
                     onSubmit={this.submitForm}
                     autoComplete="off"
                 >
-                    <SearchBar 
+                    <SearchBar
+                        className={searchAreaStyle.searchBar}
                         submitSearchForm={this.submitForm}
                         searchValue={this.state.searchValue}
                         updateSearchValue={this.updateSearchValue}
                     />
 
                     <AutoComplete
+                        className={searchAreaStyle.tagSelector}
                         label='Tags'
                         name='tags'
                         value={this.state.tags}

@@ -28,15 +28,16 @@ class StepSlider extends Component {
         label: PropTypes.string.isRequired,
         value: PropTypes.number.isRequired,
         handleChange: PropTypes.func.isRequired,
-        classes: PropTypes.object.isRequired
+        classes: PropTypes.object.isRequired,
+        className: PropTypes.string,
     }
 
     render() {
-        const { value, name, label, min, max, step, handleChange, classes } = this.props;
+        const { value, name, label, min, max, step, handleChange, classes, className } = this.props;
         return (
             <React.Fragment>
                 <FormControlLabel
-                    className={classes.root}
+                    className={`${classes.root}, ${className}`}
                     labelPlacement='start'
                     control={
 

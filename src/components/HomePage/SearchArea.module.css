@@ -17,3 +17,7 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.tagSelector {
+    margin: 0 1em;
+}

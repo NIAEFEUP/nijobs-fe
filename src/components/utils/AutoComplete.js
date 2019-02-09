@@ -11,7 +11,6 @@ import {
     Option,
     ValueContainer,
     MultiValue,
-    Placeholder,
     ClearIndicator,
     DropdownIndicator,
 } from './AutoCompleteUtils';
@@ -22,7 +21,6 @@ const components = {
     Option,
     ValueContainer,
     MultiValue,
-    Placeholder,
     ClearIndicator,
     DropdownIndicator
 };
@@ -34,7 +32,7 @@ class AutoComplete extends Component {
     };
 
     render() {
-        const { classes, theme, label, name, value, suggestions } = this.props;
+        const { classes, theme, label, name, value, suggestions, className } = this.props;
 
         const selectStyles = {
             input: base => ({
@@ -51,7 +49,7 @@ class AutoComplete extends Component {
         };
 
         return (
-            <div className={classes.root}>
+            <div className={className}>
                 <NoSsr>
                     <Select
                         classes={classes}
@@ -60,9 +58,12 @@ class AutoComplete extends Component {
                         components={components}
                         value={value}
                         onChange={this.handleChange}
-                        placeholder={label}
+                        placeholder=''
                         name={name}
                         isMulti
+                        textFieldProps={{
+                            label
+                        }}
                     />
                 </NoSsr>
             </div>
@@ -72,6 +73,7 @@ class AutoComplete extends Component {
 
 AutoComplete.propTypes = {
     classes: PropTypes.object.isRequired,
+    className: PropTypes.string,
     theme: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,

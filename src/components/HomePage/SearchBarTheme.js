@@ -1,4 +1,4 @@
-import { darkTextColor, } from '../../AppTheme';
+import AppTheme, { darkTextColor } from '../../AppTheme';
 
 export default ({
    
@@ -9,11 +9,7 @@ export default ({
     cssLabel: {
         color: darkTextColor,
     },
-    cssLabelShrink: {
-        '&$cssFocused': {
-            color: darkTextColor,
-        },
-    },
+    cssLabelShrink: {},
     cssFocused: {},
     cssOutlinedInput: {
         
@@ -22,7 +18,7 @@ export default ({
         },
 
         '&$cssFocused $notchedOutline': {
-            borderColor: darkTextColor,
+            borderColor: AppTheme.palette.primary.main,
         },
     },
     notchedOutline: {},

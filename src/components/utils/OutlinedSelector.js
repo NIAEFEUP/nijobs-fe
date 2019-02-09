@@ -29,7 +29,8 @@ class OutlinedSelector extends Component {
                 label: PropTypes.string,
             })
         ).isRequired,
-        handleChange: PropTypes.func.isRequired
+        handleChange: PropTypes.func.isRequired,
+        className: PropTypes.string,
     }
 
     constructor(props) {
@@ -50,12 +51,13 @@ class OutlinedSelector extends Component {
     render() {
 
         
-        const { label, name, value, options, handleChange, classes } = this.props;
+        const { label, name, value, options, handleChange, classes, className } = this.props;
 
         return (
+            
             <FormControl
                 variant="outlined"
-                className={classes.formControl}
+                className={`${classes.formControl} ${className}`}
             >
                 <InputLabel
                     ref={ref => {
