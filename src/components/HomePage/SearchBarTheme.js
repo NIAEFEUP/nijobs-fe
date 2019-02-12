@@ -4,6 +4,7 @@ export default ({
    
     root: {
         width: 200,
+        
     },
 
     cssLabel: {
@@ -13,7 +14,7 @@ export default ({
     cssFocused: {},
     cssOutlinedInput: {
         
-        '&$adornedEnd $notchedOutline': {
+        '& $notchedOutline': {
             borderColor: darkTextColor,
         },
 
@@ -22,7 +23,7 @@ export default ({
         },
     },
     notchedOutline: {},
-    adornedEnd: {},
+    formControl: {},
     
 
     searchButton: {

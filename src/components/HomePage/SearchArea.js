@@ -15,6 +15,10 @@ import JOB_TYPES from './jobTypes';
 import AutoComplete from '../utils/AutoComplete';
 
 
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+
+
 //just for testing -> In the future get option list from api in <CDM>
 const suggestions = [
     { label: 'Afghanistan' },
@@ -56,6 +60,23 @@ const suggestions = [
     label: suggestion.label,
 }));
 
+const SubmitSearchButton = ({submitSearch}) => {
+    return (
+        <FormControl>
+            <Button
+                variant="outlined"
+                color="primary"
+                onClick={submitSearch}
+            >
+                Search
+            </Button>
+        </FormControl>
+    );
+};
+
+SubmitSearchButton.propTypes = {
+    submitSearch: PropTypes.func.isRequired
+};
 
 class SearchArea extends Component {
 
@@ -99,6 +120,8 @@ class SearchArea extends Component {
                         suggestions={suggestions}
                     />
 
+
+
                     <LabeledSwitch
                         label='Advanced Search'
                         name='advancedSearch'
@@ -119,9 +142,11 @@ class SearchArea extends Component {
                         min={1}
                         max={12}
                         step={1}
-                        label='Job Duration (Months)'
+                        label='Duration (Months)'
                         handleChange={this.updateSlider('jobDuration')}
                     />
+
+                    <SubmitSearchButton submitSearch={this.submitForm}/>
                     
                 </form>
             </div>

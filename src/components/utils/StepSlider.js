@@ -2,21 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import Typography from '@material-ui/core/Typography';
 
 import Slider from '@material-ui/lab/Slider';
 
+import stepSliderStyle from "./StepSlider.module.css";
+
+
 import { withStyles } from '@material-ui/core/styles';
+import AppTheme from '../../AppTheme';
 
 
 const style = {
     root: {
-        width: '200px',
+        padding: `0 ${AppTheme.spacing.unit*2}px`
     },
     slider: {
         padding: '22px 0px',
         marginLeft: '10px'
     },
+    valueDisplay: {
+        marginRight: AppTheme.spacing.unit*3,
+    }
 };
 
 class StepSlider extends Component {
@@ -35,30 +42,41 @@ class StepSlider extends Component {
     render() {
         const { value, name, label, min, max, step, handleChange, classes, className } = this.props;
         return (
-            <React.Fragment>
+            <div className={stepSliderStyle.stepSlider}>
                 <FormControlLabel
-                    className={`${classes.root}, ${className}`}
+                    className={className}
                     labelPlacement='start'
                     control={
-
-                        <Slider
-                            classes={{
-                                container: classes.slider
-                            }}
-                            value={value}
-                            name={name}
-                            min={min}
-                            max={max}
-                            step={step}
-                            onChange={handleChange}
-                        />
+                        <React.Fragment>
+                            <Typography 
+                                id="value-display"
+                                classes={{
+                                    root: classes.valueDisplay
+                                }}
+                                style={{
+                                    width: `${Math.floor(Math.log10(max)) + 1}ch`
+                                }}
+                            >
+                                {value}
+                            </Typography>
+                            <Slider
+                                classes={{
+                                    root: classes.root,
+                                    container: classes.slider
+                                }}
+                                value={value}
+                                name={name}
+                                min={min}
+                                max={max}
+                                step={step}
+                                onChange={handleChange}
+                                aria-labelledby="value-display"
+                            />
+                        </React.Fragment>
                     }
                     label={label}
                 />
-                <FormHelperText>
-                    {value}
-                </FormHelperText>
-            </React.Fragment>
+            </div>
                 
         );
     }

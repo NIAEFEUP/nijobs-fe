@@ -16,6 +16,7 @@
 .searchArea > form {
     display: flex;
     flex-wrap: wrap;
+    align-items: center
 }
 
 .tagSelector {

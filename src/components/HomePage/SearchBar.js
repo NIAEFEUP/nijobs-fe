@@ -2,39 +2,20 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
-import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import Icon from '@material-ui/core/Icon';
-import IconButton from '@material-ui/core/IconButton';
 
 import { withStyles } from '@material-ui/core/styles';
 import searchBarTheme from './SearchBarTheme.js';
 
 
-const submitSearchButton = (classes, submitSearch) => {
-    return (
-        <InputAdornment position="end">
-            <IconButton onClick={submitSearch}>
-                <Icon
-                    classes={{
-                        root: classes.searchButton
-                    }}
-                >
-                    search
-                </Icon>
 
-            </IconButton>
-        </InputAdornment>
-    );
-};
 
 class SearchBar extends Component {
 
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        submitSearchForm: PropTypes.func.isRequired,
         className: PropTypes.string,
         searchValue: PropTypes.string.isRequired,
         updateSearchValue: PropTypes.func.isRequired,
@@ -85,12 +66,13 @@ class SearchBar extends Component {
                     labelWidth={this.state.labelWidth}
                     name="search"
                     id="search-bar"
-                    endAdornment={submitSearchButton(classes, this.props.submitSearchForm)}
+                    // endAdornment={submitSearchButton(classes, this.props.submitSearchForm)}
                     classes={{
                         root: classes.cssOutlinedInput,
                         focused: classes.cssFocused,
                         notchedOutline: classes.notchedOutline,
-                        adornedEnd: classes.adornedEnd,
+                        // formControl: classes.formControl,
+                        // adornedEnd: classes.adornedEnd,
                     }}
                 />
 

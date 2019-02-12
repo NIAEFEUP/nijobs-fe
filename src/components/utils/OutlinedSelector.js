@@ -57,7 +57,10 @@ class OutlinedSelector extends Component {
             
             <FormControl
                 variant="outlined"
-                className={`${classes.formControl} ${className}`}
+                className={className}
+                classes={{
+                    root:classes.formControl
+                }}
             >
                 <InputLabel
                     ref={ref => {

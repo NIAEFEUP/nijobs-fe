@@ -8,14 +8,17 @@ import IconButton from '@material-ui/core/IconButton';
 
 class ShowMoreButton extends Component {
     static propTypes = {
-        btnClass: PropTypes.string
+        btnClass: PropTypes.string,
+        onClick: PropTypes.func.isRequired
     }
     
     render() {
-        const { btnClass } = this.props;
+        const { btnClass, onClick } = this.props;
         return (
             <div className={btnClass}>
-                <IconButton>
+                <IconButton
+                    onClick={onClick}
+                >
                     <Icon
                         color="primary"
                         fontSize="large"

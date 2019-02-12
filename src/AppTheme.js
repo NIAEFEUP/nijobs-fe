@@ -1,4 +1,6 @@
-export default ({
+import { createMuiTheme } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
     palette: {
         primary: {
             main: '#C03736'
@@ -21,7 +23,8 @@ export default ({
         ].join(','),
         useNextVariants: true,
     },
-});
+}); 
+export default theme;
 
 export const primaryColor = '#C03736';
 export const secondaryColor = '#4F1315';
