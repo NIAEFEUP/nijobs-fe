@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import SearchArea from "./SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
@@ -13,6 +14,10 @@ class MainView extends Component {
     /* TODO:
     scroll to search results div when ShowMoreButton is clicked
     scrollToSearch = () => window.scrollTo(0, the_next_div); */
+
+    static propTypes = {
+        scrollToProductDescription: PropTypes.func.isRequired
+    }
 
     render() {
         return (
@@ -29,10 +34,18 @@ class MainView extends Component {
                 <InfoBox
                     info='Your next oportunity is out there. Use the search bar to find it!'
                 />
-                <ShowMoreButton btnClass={homePageStyles.showMoreBtn}/>
+                <ShowMoreButton 
+                    btnClass={homePageStyles.showMoreBtn} 
+                    onClick={this.props.scrollToProductDescription}
+                />
+                
             </div>
         );
     }
+
+    
+
+    
 }
 
 export default MainView;
