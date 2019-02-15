@@ -1,3 +1,5 @@
+import AppTheme from '../../AppTheme';
+
 export default {
     card: {
         display: 'flex',
@@ -12,7 +14,8 @@ export default {
     logo: {
         height: 100,
         width: 100,
-        margin: '0 1em'
+        marginLeft: AppTheme.spacing.unit * 3,
+        backgroundSize: 'contain'
     },
     title: {
         fontWeight: 500

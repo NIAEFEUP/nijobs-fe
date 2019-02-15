@@ -16,13 +16,13 @@ const theme = createMuiTheme({
         danger: 'orange',
     },
     typography: {
-        // Use the system font instead of the default Roboto font.
         fontFamily: [
             'Roboto',
             'sans-serif',
         ].join(','),
         useNextVariants: true,
     },
+
 }); 
 export default theme;
 
