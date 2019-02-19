@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
+import Paper from '@material-ui/core/Paper';
 import style from "./ProfileCard.module.css";
 
 const niLogo = require('./logo_2018.png');
@@ -16,9 +16,9 @@ class ProfileCard extends Component {
                     item
                     xs={10}
                 >
-                    <Card 
-                        raised="true"
+                    <Paper 
                         className={style.profileCard}
+                        elevation="9"
                     >
                         <Grid 
                             container
@@ -33,7 +33,7 @@ class ProfileCard extends Component {
                                 />
                             </Grid>
                         </Grid>
-                    </Card>
+                    </Paper>
                 </Grid>
             </Grid>
         );

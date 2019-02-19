@@ -4,7 +4,7 @@
 
 .bannerBackground {
     background-color: rgb(220, 79, 71);
-    height: 40vh;
+    height: 250px;
     /* clip-path: polygon(50% 90%, 50% 90%, 50% 90%, 100% 70%, 100% 0%, 0% 0%, 0 70%); */
     clip-path: polygon(20% 90%, 50% 90%, 80% 90%, 100% 80%, 100% 0%, 0% 0%, 0 80%);
 }
