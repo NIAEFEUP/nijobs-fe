@@ -1,0 +1,20 @@
+.profileCard {
+    height: 400px;
+    position: relative;
+    top: -50px;
+    overflow: visible !important;
+}
+
+.logoContainer {
+    position: relative;
+    top: -80px;
+    z-index: 10000;
+}
+
+.logoContainer .companyLogo {
+    background-color: #fff;
+    border-radius: 50%;
+    border: 5px solid rgb(220, 79, 71);
+    width: 150px;
+    height: auto;
+}

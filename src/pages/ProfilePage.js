@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import Banner from "../components/ProfilePage/Banner";
+import ProfileCard from "../components/ProfilePage/ProfileCard";
 
 class ProfilePage extends Component {
     render() {
         return (
             <div>
-                This profile page belongs to
-                {' '}
-                {this.props.match.params.name}
+                <Banner />
+                <ProfileCard />
             </div>
         );
     }
 }
-
-ProfilePage.propTypes = {
-    match: PropTypes.object
-};
 
 export default ProfilePage;
