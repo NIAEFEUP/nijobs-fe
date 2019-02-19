@@ -17,3 +17,8 @@
     width: 150px;
     height: auto;
 }
+
+.companyName {
+    position: relative;
+    top: -40px;
+}

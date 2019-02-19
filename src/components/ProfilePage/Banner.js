@@ -8,12 +8,12 @@ const logo = require('./nijobs.png');
 class Banner extends Component {
     render() {
         return (
-            <Grid 
+            <Grid
                 container
                 justify="center"
                 className={style.bannerContainer}
             >
-                <Grid 
+                <Grid
                     item
                     className={`${style.nijobsCompany} ${style.bannerBackground}`}
                     xs={12}
@@ -26,9 +26,9 @@ class Banner extends Component {
                         <Grid
                             item
                         >
-                            <img 
+                            <img
                                 src={logo}
-                                alt="nijobs logo" 
+                                alt="nijobs logo"
                                 className={style.nijobsLogo}
                             />
                         </Grid>
