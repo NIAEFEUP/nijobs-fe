@@ -1,47 +1,43 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Icon from '@material-ui/core/Icon';
-import style from "./Banner.module.css";
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import style from "./NavBar.module.css";
+
 
 class NavBar extends Component {
     state = {
-        value: 'contacts',
+        value: 0,
     };
 
     handleChange = (event, value) => {
         this.setState({ value });
     };
 
+    handleChangeIndex = index => {
+        this.setState({ value: index });
+    };
+
     render() {
-        const { value } = this.state;
         return (
-            <Grid
-                container
-                justify="center"
-            >
-                <Grid
-                    item
-                    xs={10}
-                >
-                    <Paper className={style.navPaper}
-                        elevation="9">
-                        <BottomNavigation value={value} onChange={this.handleChange} className={style.navBar}>
-                            <BottomNavigationAction label="Posts" value="posts" icon={<Icon>view_list</Icon>} />
-                            <BottomNavigationAction label="Contacts" value="contacts" icon={<Icon>contacts</Icon>} />
-                        </BottomNavigation>
-                    </Paper>
-                </Grid>
-            </Grid>
+            <div className={style.navBar}>
+                <AppBar position="static" color="default">
+                    <Tabs
+                        value={this.state.value}
+                        onChange={this.handleChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        variant="fullWidth"
+                        centered
+                    >
+                        <Tab label="Posts" icon={<Icon>view_list</Icon>} />
+                        <Tab label="Contacts" icon={<Icon>contacts</Icon>} />
+                    </Tabs>
+                </AppBar>
+            </div>
         );
     }
 }
-
-NavBar.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default NavBar;
