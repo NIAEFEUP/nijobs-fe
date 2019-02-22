@@ -56,7 +56,8 @@ class ProfileCard extends Component {
                             justify="center"
                         >
                             <Grid
-                                item xs={6}
+                                item
+                                xs={6}
                             >
                                 <Typography
                                     variant="body1"

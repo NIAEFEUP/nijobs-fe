@@ -22,7 +22,10 @@ class NavBar extends Component {
     render() {
         return (
             <div className={style.navBar}>
-                <AppBar position="static" color="default">
+                <AppBar
+                    position="static"
+                    color="default"
+                >
                     <Tabs
                         value={this.state.value}
                         onChange={this.handleChange}
@@ -31,8 +34,22 @@ class NavBar extends Component {
                         variant="fullWidth"
                         centered
                     >
-                        <Tab label="Posts" icon={<Icon>view_list</Icon>} />
-                        <Tab label="Contacts" icon={<Icon>contacts</Icon>} />
+                        <Tab
+                            label="Posts"
+                            icon={
+                                <Icon>
+                                    view_list
+                                </Icon>
+                            }
+                        />
+                        <Tab
+                            label="Contacts"
+                            icon={
+                                <Icon>
+                                    contacts
+                                </Icon>
+                            }
+                        />
                     </Tabs>
                 </AppBar>
             </div>
