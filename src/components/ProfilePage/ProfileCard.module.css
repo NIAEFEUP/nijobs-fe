@@ -22,3 +22,10 @@
     position: relative;
     top: -40px;
 }
+
+.descriptionSeparator {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}

@@ -43,11 +43,41 @@ class ProfileCard extends Component {
                                 item
                             >
                                 <Typography
-                                    variant="h6"
+                                    variant="h5"
                                     className={style.companyName}
                                 >
                                     NIAEFEUP
                                 </Typography>
+                            </Grid>
+                        </Grid>
+                        <Grid
+                            container
+                            className={`${style.descriptionSeparator} ${style.companyName}`}
+                            justify="center"
+                        >
+                            <Grid
+                                item
+                                xs={4}
+                            >
+                                <hr/>
+                            </Grid>
+                            <Grid
+                                item
+                                xs={2}
+                                className={style.descriptionTitle}
+                            >
+                                <Typography
+                                    variant="h6"
+                                    className={style.companyDescription}
+                                >
+                                    Description
+                                </Typography>
+                            </Grid>
+                            <Grid
+                                item
+                                xs={4}
+                            >
+                                <hr/>
                             </Grid>
                         </Grid>
                         <Grid
