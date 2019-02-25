@@ -4,6 +4,8 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Icon from '@material-ui/core/Icon';
 import style from "./NavBar.module.css";
+import PostsContainer from "./PostsContainer";
+import ContactsContainer from "./ContactsContainer";
 
 
 class NavBar extends Component {
@@ -52,6 +54,12 @@ class NavBar extends Component {
                         />
                     </Tabs>
                 </AppBar>
+                {this.state.value === 0 &&
+                    <PostsContainer />
+                }
+                {this.state.value === 1 &&
+                    <ContactsContainer />
+                }
             </div>
         );
     }
