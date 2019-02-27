@@ -35,7 +35,7 @@ class MainView extends Component {
                     info='Your next oportunity is out there. Use the search bar to find it!'
                 />
                 <ShowMoreButton 
-                    btnClass={homePageStyles.showMoreBtn} 
+                    className={homePageStyles.showMoreBtn} 
                     onClick={this.props.scrollToProductDescription}
                 />
                 

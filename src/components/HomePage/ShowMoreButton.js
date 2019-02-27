@@ -8,19 +8,18 @@ import IconButton from '@material-ui/core/IconButton';
 
 class ShowMoreButton extends Component {
     static propTypes = {
-        btnClass: PropTypes.string,
+        className: PropTypes.string,
         onClick: PropTypes.func.isRequired
     }
     
     render() {
-        const { btnClass, onClick } = this.props;
+        const { className, onClick } = this.props;
         return (
-            <div className={btnClass}>
+            <div className={className}>
                 <IconButton
                     onClick={onClick}
                 >
                     <Icon
-                        color="primary"
                         fontSize="large"
                     >
                         keyboard_arrow_down

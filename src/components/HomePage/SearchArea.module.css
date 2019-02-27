@@ -19,6 +19,26 @@
     align-items: center
 }
 
+.searchBar {
+    flex-grow: 2;
+}
+
 .tagSelector {
     margin: 0 1em;
+    flex-grow: 1.5;
+    max-width: 30%;
+}
+
+.advancedSearchBtn {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    bottom: -30px;
+    left: 0;
+    /* background-color: red; */
+}
+
+.advancedSearchBtn >  button {
+    background-color: white
 }

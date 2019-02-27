@@ -45,7 +45,7 @@ class SearchBar extends Component {
         return (
             <FormControl
                 variant="outlined"
-                className={`${classes.input} ${className}`}
+                className={className}
                 value={searchValue}
                 onChange={this.handleChange}
             >

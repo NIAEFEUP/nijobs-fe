@@ -14,7 +14,6 @@ export const styles = theme => ({
     input: {
         display: 'flex',
         minWidth: 200,
-        maxWidth: 400,
         padding: '10px 0',
         borderColor: darkTextColor
     },
