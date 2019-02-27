@@ -1,16 +1,9 @@
 .searchArea {
-    background-color: white;
-    padding: 2em;
-    border-radius: 5px;
+    padding: 3em;
     width: 60%;
-
     margin: 0 auto;
     position: relative;
     bottom: 8em;
-
-    -webkit-box-shadow: 0px 0px 70px 2px rgba(0,0,0,0.50);
-    -moz-box-shadow: 0px 0px 70px 2px rgba(0,0,0,0.50);
-    box-shadow: 0px 0px 70px 2px rgba(0,0,0,0.50);
 }
 
 .searchArea > form {
@@ -29,16 +22,11 @@
     max-width: 30%;
 }
 
-.advancedSearchBtn {
+.advancedSearchBtnWrapper {
     position: absolute;
     display: flex;
     justify-content: center;
     width: 100%;
     bottom: -30px;
     left: 0;
-    /* background-color: red; */
-}
-
-.advancedSearchBtn >  button {
-    background-color: white
 }

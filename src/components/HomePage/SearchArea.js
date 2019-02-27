@@ -17,7 +17,9 @@ import AutoComplete from '../utils/AutoComplete';
 
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
-import ShowMoreButton from './ShowMoreButton';
+import Fab from '@material-ui/core/Fab';
+import Icon from '@material-ui/core/Icon';
+import Paper from '@material-ui/core/Paper';
 
 
 //just for testing -> In the future get option list from api in <CDM>
@@ -82,6 +84,28 @@ SubmitSearchButton.propTypes = {
     className: PropTypes.string
 };
 
+const ShowAdvancedOptions = ({onClick}) => {
+    return (
+        <div className={searchAreaStyle.advancedSearchBtnWrapper}>
+            <Fab
+                color="primary"
+                aria-label="Show More Options"
+                onClick={onClick}
+            >
+                <Icon
+                    fontSize="large"
+                >
+                        keyboard_arrow_down
+                </Icon>
+            </Fab>
+        </div>
+    );
+};
+
+ShowAdvancedOptions.propTypes = {
+    onClick: PropTypes.func.isRequired
+};
+
 class SearchArea extends Component {
 
     static propTypes = {
@@ -109,7 +133,10 @@ class SearchArea extends Component {
 
     render() {
         return (
-            <div className={searchAreaStyle.searchArea}>
+            <Paper 
+                className={searchAreaStyle.searchArea}
+                elevation={8}
+            >
                 <form
                     onSubmit={this.submitForm}
                     autoComplete="off"
@@ -166,18 +193,12 @@ class SearchArea extends Component {
                         </React.Fragment>
                         : null
                     }
-                    
-
-                    
-
-                    
+         
                     
                 </form>
-                <ShowMoreButton 
-                    onClick={this.toggleAdvancedOptions}
-                    className={searchAreaStyle.advancedSearchBtn}
-                />
-            </div>
+                <ShowAdvancedOptions onClick={this.toggleAdvancedOptions}/>
+                
+            </Paper>
         );
     }
 
