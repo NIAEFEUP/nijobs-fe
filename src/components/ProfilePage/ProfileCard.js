@@ -19,7 +19,7 @@ class ProfileCard extends Component {
                 >
                     <Paper
                         className={style.profileCard}
-                        elevation="9"
+                        elevation={9}
                     >
                         <Grid
                             container

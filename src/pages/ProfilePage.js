@@ -1,16 +1,41 @@
 import React, { Component } from 'react';
 import Banner from "../components/ProfilePage/Banner";
 import ProfileCard from "../components/ProfilePage/ProfileCard";
-import NavBar from "../components/ProfilePage/NavBar";
+import TabController from "../components/ProfilePage/TabController";
+import PostsContainer from "../components/ProfilePage/PostsContainer";
+import ContactsContainer from "../components/ProfilePage/ContactsContainer";
+import { TABS } from "../components/ProfilePage/TabController";
 
 class ProfilePage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentTab: TABS.POSTS
+        };
+    }
+
+    modifyView = view => {
+        this.setState({
+            currentTab: view
+        });
+    }
+
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <Banner />
                 <ProfileCard />
-                <NavBar />
-            </div>
+                {this.state.currentTab === TABS.POSTS &&
+                    <PostsContainer />
+                }
+                {this.state.currentTab === TABS.CONTACTS &&
+                    <ContactsContainer />
+                }
+                <TabController
+                    modifyView={this.modifyView} 
+                    value={this.state.currentTab} 
+                />
+            </React.Fragment>
         );
     }
 }
