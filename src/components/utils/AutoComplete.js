@@ -32,7 +32,9 @@ class AutoComplete extends Component {
     };
 
     render() {
-        const { classes, theme, label, name, value, suggestions, className } = this.props;
+        const { classes, theme, label, name, value, suggestions, className, isMulti } = this.props;
+
+        const multi = !!isMulti;
 
         const selectStyles = {
             input: base => ({
@@ -60,7 +62,7 @@ class AutoComplete extends Component {
                         onChange={this.handleChange}
                         placeholder=''
                         name={name}
-                        isMulti
+                        isMulti={multi}
                         textFieldProps={{
                             label
                         }}
@@ -69,6 +71,7 @@ class AutoComplete extends Component {
             </div>
         );
     }
+
 }
 
 AutoComplete.propTypes = {
@@ -77,9 +80,16 @@ AutoComplete.propTypes = {
     theme: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    value: PropTypes.array.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.array,
+        PropTypes.shape({
+            label: PropTypes.string
+        })
+    ]),
     suggestions: PropTypes.array.isRequired,
     handleChange: PropTypes.func.isRequired,
+    isMulti: PropTypes.bool,
 };
 
 export default withStyles(styles, { withTheme: true })(AutoComplete);

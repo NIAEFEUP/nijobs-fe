@@ -13,6 +13,16 @@ import { withStyles } from '@material-ui/core/styles';
 const style = {
     formControl: {
         minWidth: 120
+    },
+    iconStyle: {
+        position: 'absolute',
+        top: '0',
+        right: '0',
+        display: 'inline-block',
+        color: '#c0c0c0',
+        // width: '24px',
+        // height: '24px',
+        pointerEvents: 'none'
     }
 };
 

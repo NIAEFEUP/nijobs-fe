@@ -4,6 +4,7 @@
     margin: 0 auto;
     position: relative;
     bottom: 8em;
+    
 }
 
 .searchArea > form {
@@ -18,12 +19,8 @@
     grid-column: 1 / span 2;
 }
 
-
-.durationSlider {
-    grid-column: 1 / span 2;
-}
 .jobTypeSelector {
-    grid-column: 3;
+    grid-column: 1 / span 2;
 }
 
 .advancedSearchBtnWrapper {

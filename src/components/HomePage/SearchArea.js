@@ -9,7 +9,6 @@ import { addSnackbar } from '../../actions/notificationActions';
 import StepSlider from '../utils/StepSlider';
 
 import SearchBar from "./SearchBar";
-import OutlinedSelector from '../utils/OutlinedSelector';
 
 import JOB_TYPES from './jobTypes';
 import AutoComplete from '../utils/AutoComplete';
@@ -154,6 +153,7 @@ class SearchArea extends Component {
                         name='tags'
                         value={this.state.tags}
                         handleChange={this.updateMultipleSelector('tags')}
+                        isMulti
                         suggestions={suggestions}
                     />
 
@@ -172,6 +172,14 @@ class SearchArea extends Component {
                                 handleChange={this.updateSwitch('advancedSearch')}
                             /> */}
 
+                            <AutoComplete 
+                                className={searchAreaStyle.jobTypeSelector}
+                                label='Job Type'
+                                name='jobType'
+                                value={this.state.jobType}
+                                suggestions={JOB_TYPES}
+                                handleChange={this.updateSelector('jobType')}
+                            />
                             <StepSlider 
                                 className={searchAreaStyle.durationSlider}
                                 value={this.state.jobDuration}
@@ -181,14 +189,6 @@ class SearchArea extends Component {
                                 step={1}
                                 label='Duration (Months)'
                                 handleChange={this.updateSlider('jobDuration')}
-                            />
-                            <OutlinedSelector 
-                                className={searchAreaStyle.jobTypeSelector}
-                                label='Job Type'
-                                name='jobType'
-                                value={this.state.jobType}
-                                options={JOB_TYPES}
-                                handleChange={this.updateSelector('jobType')}
                             />
                         </React.Fragment>
                         : null
@@ -210,7 +210,9 @@ class SearchArea extends Component {
         const tagsList = tags.map(tag => tag.value);
 
         this.props.addSnackbar({
-            message: `Search for: ${searchValue} :: Job type: ${jobType} :: Job Duration: ${jobDuration} :: Tags: ${tagsList.join(', ')}`,
+            //mind the jobType.value || '' when passing value to api,
+            //because for simple search, the initial jobType value will be an empty string, which has no atrribute .value
+            message: `Search for: ${searchValue} :: Job type: ${jobType.value || ''} :: Job Duration: ${jobDuration} :: Tags: ${tagsList.join(', ')}`,
             options: {
                 variant: 'info',
                 anchorOrigin: {
@@ -234,13 +236,13 @@ class SearchArea extends Component {
         });
     }
     
-    updateSelector = name => event => {
+    updateSelector = name => value => {
         
         this.setState({
-            [name]: event.target.value
+            [name]: value
         });
     }
-    
+
     updateMultipleSelector = name => newValues => {
         
         this.setState({
