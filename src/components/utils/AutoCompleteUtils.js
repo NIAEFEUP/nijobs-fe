@@ -13,7 +13,6 @@ import { darkTextColor } from '../../AppTheme';
 export const styles = theme => ({
     input: {
         display: 'flex',
-        minWidth: 200,
         padding: '10px 0',
         borderColor: darkTextColor
     },

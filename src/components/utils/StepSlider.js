@@ -23,6 +23,9 @@ const style = {
     },
     valueDisplay: {
         marginRight: AppTheme.spacing.unit*3,
+    },
+    labelPlacementStart: {
+        marginLeft: 0,
     }
 };
 
@@ -42,9 +45,11 @@ class StepSlider extends Component {
     render() {
         const { value, name, label, min, max, step, handleChange, classes, className } = this.props;
         return (
-            <div className={stepSliderStyle.stepSlider}>
+            <div className={`${stepSliderStyle.stepSlider} ${className}`}>
                 <FormControlLabel
-                    className={className}
+                    classes={{
+                        labelPlacementStart: classes.labelPlacementStart
+                    }}
                     labelPlacement='start'
                     control={
                         <React.Fragment>

@@ -7,19 +7,23 @@
 }
 
 .searchArea > form {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center
+    display: grid;
+    grid-template-columns: 100px auto  minmax(20%, 30%) 100px;
+    grid-template-rows: 1fr auto;
+    align-items: center;
+    grid-gap: 1em;
 }
 
 .searchBar {
-    flex-grow: 2;
+    grid-column: 1 / span 2;
 }
 
-.tagSelector {
-    margin: 0 1em;
-    flex-grow: 1.5;
-    max-width: 30%;
+
+.durationSlider {
+    grid-column: 1 / span 2;
+}
+.jobTypeSelector {
+    grid-column: 3;
 }
 
 .advancedSearchBtnWrapper {

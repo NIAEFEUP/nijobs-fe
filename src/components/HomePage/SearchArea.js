@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addSnackbar } from '../../actions/notificationActions';
 
-import LabeledSwitch from '../utils/LabeledSwitch';
+// import LabeledSwitch from '../utils/LabeledSwitch';
 import StepSlider from '../utils/StepSlider';
 
 import SearchBar from "./SearchBar";
@@ -162,26 +162,18 @@ class SearchArea extends Component {
                         className={searchAreaStyle.submitBtn}
                     />
 
-                    
-
 
                     {this.state.advancedSearch ? 
                         <React.Fragment>
-                            <LabeledSwitch
+                            {/* <LabeledSwitch
                                 label='Advanced'
                                 name='advancedSearch'
                                 value={this.state.advancedSearch}
                                 handleChange={this.updateSwitch('advancedSearch')}
-                            />
+                            /> */}
 
-                            <OutlinedSelector 
-                                label='Job Type'
-                                name='jobType'
-                                value={this.state.jobType}
-                                options={JOB_TYPES}
-                                handleChange={this.updateSelector('jobType')}
-                            />
                             <StepSlider 
+                                className={searchAreaStyle.durationSlider}
                                 value={this.state.jobDuration}
                                 name='jobDuration'
                                 min={1}
@@ -189,6 +181,14 @@ class SearchArea extends Component {
                                 step={1}
                                 label='Duration (Months)'
                                 handleChange={this.updateSlider('jobDuration')}
+                            />
+                            <OutlinedSelector 
+                                className={searchAreaStyle.jobTypeSelector}
+                                label='Job Type'
+                                name='jobType'
+                                value={this.state.jobType}
+                                options={JOB_TYPES}
+                                handleChange={this.updateSelector('jobType')}
                             />
                         </React.Fragment>
                         : null
