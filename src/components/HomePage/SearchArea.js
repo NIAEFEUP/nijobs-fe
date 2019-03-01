@@ -83,7 +83,7 @@ SubmitSearchButton.propTypes = {
     className: PropTypes.string
 };
 
-const ShowAdvancedOptions = ({onClick}) => {
+const ShowAdvancedOptions = ({open, onClick}) => {
     return (
         <div className={searchAreaStyle.advancedSearchBtnWrapper}>
             <Fab
@@ -94,7 +94,7 @@ const ShowAdvancedOptions = ({onClick}) => {
                 <Icon
                     fontSize="large"
                 >
-                        keyboard_arrow_down
+                    {open ? "keyboard_arrow_up" : "keyboard_arrow_down"}
                 </Icon>
             </Fab>
         </div>
@@ -102,7 +102,8 @@ const ShowAdvancedOptions = ({onClick}) => {
 };
 
 ShowAdvancedOptions.propTypes = {
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    open: PropTypes.bool.isRequired
 };
 
 class SearchArea extends Component {
@@ -196,7 +197,10 @@ class SearchArea extends Component {
          
                     
                 </form>
-                <ShowAdvancedOptions onClick={this.toggleAdvancedOptions}/>
+                <ShowAdvancedOptions
+                    onClick={this.toggleAdvancedOptions}
+                    open={this.state.advancedSearch}
+                />
                 
             </Paper>
         );
