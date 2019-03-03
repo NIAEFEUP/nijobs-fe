@@ -20,6 +20,8 @@ import Fab from '@material-ui/core/Fab';
 import Icon from '@material-ui/core/Icon';
 import Paper from '@material-ui/core/Paper';
 
+const INITIAL_JOB_TYPE = "";
+const INITIAL_JOB_DURATION = 1;
 
 //just for testing -> In the future get option list from api in <CDM>
 const suggestions = [
@@ -119,16 +121,29 @@ class SearchArea extends Component {
         this.state = {
             searchValue: "",
             advancedSearch: false,
-            jobType: "",
-            jobDuration: 1,
+            jobType: INITIAL_JOB_TYPE,
+            jobDuration: INITIAL_JOB_DURATION,
             tags: []
         };
     }
+
     
     toggleAdvancedOptions = () => {
+
+        if(this.state.advancedSearch) {
+            this.resetAdvancedFields();
+        }
+
         this.setState(prevState => ({
             advancedSearch: !prevState.advancedSearch
         }));
+    }
+
+    resetAdvancedFields = () => {
+        this.setState({
+            jobType: INITIAL_JOB_TYPE,
+            jobDuration: INITIAL_JOB_DURATION,
+        });
     }
 
     render() {
