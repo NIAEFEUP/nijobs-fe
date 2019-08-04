@@ -30,10 +30,10 @@ class MainView extends Component {
                         />
                     </div>
                 </div>
-                <SearchArea />
                 <InfoBox
                     info='Your next oportunity is out there. Use the search bar to find it!'
                 />
+                <SearchArea />
                 <ShowMoreButton 
                     className={homePageStyles.showMoreBtn} 
                     onClick={this.props.scrollToProductDescription}

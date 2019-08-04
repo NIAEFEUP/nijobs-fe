@@ -26,10 +26,16 @@
 
 .mainLogo {
     text-align: center;
+    padding-bottom: 8em;
 }
 
 .mainLogo img {
     width: 40%;
+}
+
+.infoBox {
+    position: relative;
+    top: 11em;
 }
 
 .searchResults {

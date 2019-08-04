@@ -1,26 +1,37 @@
 .searchArea {
-    padding: 3em;
+    padding: 1em 3em 3em 3em;
     width: 60%;
     margin: 0 auto;
     position: relative;
-    bottom: 8em;
-    
+    bottom: 6em;
 }
 
 .searchArea > form {
     display: grid;
-    grid-template-columns: 100px auto  minmax(20%, 30%) 100px;
+    grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
     align-items: center;
     grid-gap: 1em;
 }
 
 .searchBar {
-    grid-column: 1 / span 2;
+    grid-column: 1;
+}
+
+.advancedSearchContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    grid-gap: 1em;
 }
 
 .jobTypeSelector {
-    grid-column: 1 / span 2;
+    grid-column: 1;
+}
+
+.durationSelector {
+    grid-column: 2;
 }
 
 .advancedSearchBtnWrapper {

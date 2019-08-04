@@ -6,7 +6,6 @@ import ExamplePage from './pages/ExamplePage';
 import OtherPage from './pages/OtherPage';
 import NotFound from './pages/NotFound';
 
-
 class AppRouter extends Component {
     render(){
         return (

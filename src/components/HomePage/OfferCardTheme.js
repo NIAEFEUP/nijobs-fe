@@ -14,7 +14,7 @@ export default {
     logo: {
         height: 100,
         width: 100,
-        marginLeft: AppTheme.spacing.unit * 3,
+        marginLeft: AppTheme.spacing(3),
         backgroundSize: 'contain'
     },
     title: {

@@ -1,87 +1,54 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import PropTypes from 'prop-types';
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import Search from '@material-ui/icons/Search';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
+function SearchBar(props) {
 
-import { withStyles } from '@material-ui/core/styles';
-import searchBarTheme from './SearchBarTheme.js';
-
-
-
-
-class SearchBar extends Component {
-
-    static propTypes = {
-        classes: PropTypes.object.isRequired,
-        className: PropTypes.string,
-        searchValue: PropTypes.string.isRequired,
-        updateSearchValue: PropTypes.func.isRequired,
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            labelWidth: 0,
-        };
-    }
-
-    componentDidMount() {
-        this.setState({
-            labelWidth: ReactDOM.findDOMNode(this.InputLabelRef).offsetWidth,
-        });
-    }
-
-    handleChange = e => {
-        this.props.updateSearchValue(e.target.value);
+    const {searchValue, updateSearchValue, className, submitSearchForm} = props;
+    
+    const handleChange = e => {
+        updateSearchValue(e.target.value);
     };
 
-    render() {
+    const handleButtonClick = e => {
+        e.preventDefault();
+        submitSearchForm(e);
+    };
 
-        const { classes, searchValue, className } = this.props;
-        
-        return (
-            <FormControl
-                variant="outlined"
-                className={className}
-                value={searchValue}
-                onChange={this.handleChange}
-            >
-                <InputLabel
-                    ref={ref => {
-                        this.InputLabelRef = ref;
-                    }}
-                    htmlFor="search-bar"
-                    classes={{
-                        root: classes.cssLabel,
-                        focused: classes.cssFocused,
-                        shrink: classes.cssLabelShrink,
-                    }}
-                >
-                    Search
-                </InputLabel>
-                <OutlinedInput
-                    labelWidth={this.state.labelWidth}
-                    name="search"
-                    id="search-bar"
-                    // endAdornment={submitSearchButton(classes, this.props.submitSearchForm)}
-                    classes={{
-                        root: classes.cssOutlinedInput,
-                        focused: classes.cssFocused,
-                        notchedOutline: classes.notchedOutline,
-                        // formControl: classes.formControl,
-                        // adornedEnd: classes.adornedEnd,
-                    }}
-                />
-
-            </FormControl>
-        );
-    }
-
+    return (
+        <TextField
+            label="Search"
+            name="search"
+            margin="dense"
+            value={searchValue}
+            onChange={handleChange}
+            className={className}
+            InputProps={{
+                "endAdornment": 
+    <InputAdornment position="end">
+        <IconButton
+            aria-label="search"
+            onClick={handleButtonClick}
+            color="secondary"
+        >
+            <Search />
+        </IconButton>
+    </InputAdornment>
+                  
+            }}
+        />
+    );
 }
 
+SearchBar.propTypes = {
+    searchValue: PropTypes.string.isRequired,
+    updateSearchValue: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    submitSearchForm: PropTypes.func.isRequired
+};
 
-export default (withStyles(searchBarTheme)(SearchBar));
+export default SearchBar;
 
