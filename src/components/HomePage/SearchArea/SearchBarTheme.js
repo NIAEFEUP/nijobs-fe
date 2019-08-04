@@ -1,4 +1,4 @@
-import AppTheme, { darkTextColor } from '../../AppTheme';
+import AppTheme, { darkTextColor } from '../../../AppTheme';
 
 export default ({
    

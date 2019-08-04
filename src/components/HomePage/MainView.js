@@ -1,51 +1,47 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-import SearchArea from "./SearchArea";
+import logo from './nijobs.png';
+
+import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
-import InfoBox from "./InfoBox";
+import InfoBox from "./QuickInfoArea/InfoBox";
 
 import homePageStyles from './HomePage.module.css';
 
-const logo = require('./nijobs.png');
+const MainView = props => {
 
-class MainView extends Component {
+    const {
+        scrollToProductDescription, 
+        scrollToSearchResults
+    } = props;
 
-    /* TODO:
-    scroll to search results div when ShowMoreButton is clicked
-    scrollToSearch = () => window.scrollTo(0, the_next_div); */
-
-    static propTypes = {
-        scrollToProductDescription: PropTypes.func.isRequired
-    }
-
-    render() {
-        return (
-            <div className={homePageStyles.mainView}>
-                <div className={homePageStyles.mainMask}>
-                    <div className={homePageStyles.mainLogo}>
-                        <img
-                            src={logo}
-                            alt="nijobs Logo"
-                        />
-                    </div>
+    return (
+        <div className={homePageStyles.mainView}>
+            <div className={homePageStyles.mainMask}>
+                <div className={homePageStyles.mainLogo}>
+                    <img
+                        src={logo}
+                        alt="nijobs Logo"
+                    />
                 </div>
-                <InfoBox
-                    info='Your next oportunity is out there. Use the search bar to find it!'
-                />
-                <SearchArea />
-                <ShowMoreButton 
-                    className={homePageStyles.showMoreBtn} 
-                    onClick={this.props.scrollToProductDescription}
-                />
-                
             </div>
-        );
-    }
+            <InfoBox
+                info='Your next oportunity is out there. Use the search bar to find it!'
+            />
+            <SearchArea onSubmit={scrollToSearchResults}/>
+            <ShowMoreButton 
+                className={homePageStyles.showMoreBtn} 
+                onClick={scrollToProductDescription}
+            />
+            
+        </div>
+    );
+};
 
-    
-
-    
-}
+MainView.propTypes = {
+    scrollToProductDescription: PropTypes.func.isRequired,
+    scrollToSearchResults: PropTypes.func.isRequired
+};
 
 export default MainView;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import homePageStyles from './HomePage.module.css';
+import homePageStyles from '../HomePage.module.css';
 
 import Typography from '@material-ui/core/Typography';
 

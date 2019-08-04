@@ -1,33 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-
-import Icon from '@material-ui/core/Icon';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
 import IconButton from '@material-ui/core/IconButton';
 
-
-class ShowMoreButton extends Component {
-    static propTypes = {
-        className: PropTypes.string,
-        onClick: PropTypes.func.isRequired
-    }
+const ShowMoreButton = props => {
     
-    render() {
-        const { className, onClick } = this.props;
-        return (
-            <div className={className}>
-                <IconButton
-                    onClick={onClick}
-                >
-                    <Icon
-                        fontSize="large"
-                    >
-                        keyboard_arrow_down
-                    </Icon>
+    const { className, onClick } = props;
+    return (
+        <div className={className}>
+            <IconButton
+                onClick={onClick}
+            >
+                <KeyboardArrowDownIcon
+                    fontSize="large"
+                />
+            </IconButton>
+        </div>
+    );
+};
 
-                </IconButton>
-            </div>
-        );
-    }
-}
+ShowMoreButton.propTypes = {
+    className: PropTypes.string,
+    onClick: PropTypes.func.isRequired
+};
+
 export default ShowMoreButton;

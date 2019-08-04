@@ -1,4 +1,4 @@
-import AppTheme from '../../AppTheme';
+import AppTheme from '../../../AppTheme';
 
 export default {
     card: {
