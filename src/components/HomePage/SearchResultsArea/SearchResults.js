@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-import OfferCard from './OfferCard';
+import OfferCard from './Offer/OfferCard';
 import homePageStyles from '../HomePage.module.css';
 
 const SearchResults = props => {
@@ -16,6 +16,7 @@ const SearchResults = props => {
             ref={ref}
             className={homePageStyles.searchResults}
         >
+            <OfferCard loading/>
             <OfferCard
                 position="Senior Front-End developer"
                 location="Porto Portugal"

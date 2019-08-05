@@ -1,4 +1,4 @@
-import AppTheme from '../../../AppTheme';
+import AppTheme from '../../../../AppTheme';
 
 export default {
     card: {
@@ -26,7 +26,12 @@ export default {
         alignItems: 'center',
         marginTop: '1em',
         paddingBottom: '0.5em',
-        borderBottom: '1px solid #dfe1e5'
+        borderBottom: '1px solid #f3f3f3'
+    },
+    skeletonSubheader: {
+        marginTop: '1em',
+        paddingBottom: '0.5em',
+        borderBottom: '1px solid #f3f3f3'
     },
     content: {
         paddingTop: 0

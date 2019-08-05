@@ -4,7 +4,6 @@ export default ({
    
     root: {
         width: 200,
-        
     },
 
     cssLabel: {
