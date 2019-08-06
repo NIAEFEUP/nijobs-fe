@@ -20,16 +20,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint \"**/*.js\" --fix"
+    "lint-fix": "npm run lint -- --fix",
+    "lint": "eslint src --max-warnings 0"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint",
-      "pre-push": "CI=true npm run test"
+      "pre-commit": "npm run lint-fix",
+      "pre-push": "CI=true npm run lint-fix && npm run test"
     }
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
