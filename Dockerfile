@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10.16.0-alpine
 
 RUN mkdir -p /usr/src/nijobs-fe
 WORKDIR /usr/src/nijobs-fe
