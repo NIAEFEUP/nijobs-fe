@@ -1,9 +1,11 @@
 import React from 'react';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/styles';
+import {
+    Card,
+    CardHeader,
+    CardContent
+} from '@material-ui/core';
 
 import OfferCardTheme from './OfferCardTheme';
 import SubheaderSkeleton from './OfferSkeleton/SubheaderSkeleton';

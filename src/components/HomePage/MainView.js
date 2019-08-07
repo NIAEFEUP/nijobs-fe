@@ -9,13 +9,8 @@ import InfoBox from "./QuickInfoArea/InfoBox";
 
 import homePageStyles from './HomePage.module.css';
 
-const MainView = props => {
-
-    const {
-        scrollToProductDescription, 
-        scrollToSearchResults
-    } = props;
-
+const MainView = ({scrollToProductDescription, scrollToSearchResults}) => {
+    
     return (
         <div className={homePageStyles.mainView}>
             <div className={homePageStyles.mainMask}>
@@ -33,8 +28,7 @@ const MainView = props => {
             <ShowMoreButton 
                 className={homePageStyles.showMoreBtn} 
                 onClick={scrollToProductDescription}
-            />
-            
+            /> 
         </div>
     );
 };

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Tooltip from '@material-ui/core/Tooltip';
+import {Tooltip} from '@material-ui/core';
 
-const SliderValueTooltip = props => {
-    const { children, open, value } = props;
+const SliderValueTooltip = ({children, open, value}) => {
   
     const popperRef = React.useRef(null);
     React.useEffect(() => {

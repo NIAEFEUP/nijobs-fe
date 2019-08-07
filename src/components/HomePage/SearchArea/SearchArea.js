@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { addSnackbar } from '../../../actions/notificationActions';
 
+import useToggle from '../../../hooks/useToggle';
+
 import JOB_TYPES from './jobTypes';
 
-import FormControl from '@material-ui/core/FormControl';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Slider from '@material-ui/core/Slider';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import Collapse from '@material-ui/core/Collapse';
+import {
+    FormControl,
+    Typography,
+    Paper,
+    Slider,
+    TextField,
+    MenuItem,
+    Collapse
+} from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/styles';
 import searchAreaStyle from "./SearchArea.module.css";
@@ -40,16 +44,16 @@ function SearchArea(props) {
     const classes = useStyles();
     
     // Set initial form values
-    const [searchValue, setSearchValue] = React.useState("");
-    const [advancedSearch, setAdvancedSearch] = React.useState(false);
-    const [jobType, setJobType] = React.useState(INITIAL_JOB_TYPE);
-    const [jobDuration, setJobDuration] = React.useState(INITIAL_JOB_DURATION);
+    const [searchValue, setSearchValue] = useState("");
+    const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
+    const [jobType, setJobType] = useState(INITIAL_JOB_TYPE);
+    const [jobDuration, setJobDuration] = useState(INITIAL_JOB_DURATION);
     
-    const toggleAdvancedOptions = () => {
-        if(advancedSearch) {
+    const handleAdvancedOptionsButtonClick = () => {
+        if(advancedOptions) {
             resetAdvancedFields();
         }
-        setAdvancedSearch(!advancedSearch);
+        toggleAdvancedOptions();
     };
 
     const resetAdvancedFields = () => {
@@ -75,10 +79,6 @@ function SearchArea(props) {
 
         onSubmit();
     };
-
-    const updateSearchValue = newVal => {
-        setSearchValue(newVal);
-    };
     
     const updateJobDuration = (_, val) => {
         setJobDuration(val);
@@ -101,10 +101,10 @@ function SearchArea(props) {
                     className={searchAreaStyle.searchBar}
                     submitSearchForm={submitForm}
                     searchValue={searchValue}
-                    updateSearchValue={updateSearchValue}
+                    setSearchValue={setSearchValue}
                 />
                 <Collapse 
-                    in={advancedSearch}
+                    in={advancedOptions}
                     classes={{
                         wrapperInner: classes.wrapperInner
                     }}    
@@ -150,8 +150,8 @@ function SearchArea(props) {
                 </Collapse>
             </form>
             <ShowAdvancedOptionsButton
-                onClick={toggleAdvancedOptions}
-                open={advancedSearch}
+                onClick={handleAdvancedOptionsButtonClick}
+                isOpen={advancedOptions}
             />
         </Paper>
     );

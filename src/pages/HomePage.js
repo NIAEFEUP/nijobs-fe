@@ -4,7 +4,7 @@ import MainView from "../components/HomePage/MainView";
 import SearchResults from "../components/HomePage/SearchResultsArea/SearchResults";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 
-function HomePage() {
+const HomePage = () => {
     
     let [productDescriptionRef, setProductDescriptionRef] = React.useState(null);
     let [searchResultsRef, setSearchResultsRef] = React.useState(null);
@@ -33,6 +33,6 @@ function HomePage() {
         </React.Fragment>
     );
     
-}
+};
 
 export default HomePage;

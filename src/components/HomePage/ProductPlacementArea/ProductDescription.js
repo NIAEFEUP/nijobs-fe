@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import productDescriptionStyle from './ProductDescription.module.css';
 
-const ProductDescription = props => {
+const ProductDescription = ({setRef}) => {
 
-    const {setRef} = props;
-    const ref = React.useRef(null);
+    const ref = useRef(null);
     setRef(ref);
     
     return (

@@ -1,34 +1,27 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import homePageStyles from '../HomePage.module.css';
 
-import Typography from '@material-ui/core/Typography';
+import {Typography} from '@material-ui/core';
 
-class InfoBox extends Component {
+const InfoBox = ({info}) => {
 
-    static propTypes = {
-        info: PropTypes.string
-    }
-
-    render() {
-
-        const {info} = this.props;
-
-        return (
-            <div 
-                className={homePageStyles.infoBox}
+    return (
+        <div className={homePageStyles.infoBox}>
+            <Typography
+                align='center'
+                variant="body1"
+                gutterBottom
+                color='secondary'
             >
-                <Typography
-                    align='center'
-                    variant="body1"
-                    gutterBottom
-                    color='secondary'
-                >
-                    {info} 
-                </Typography>
-            </div>
-        );
-    }
-}
+                {info} 
+            </Typography>
+        </div>
+    );
+};
+
+InfoBox.propTypes = {
+    info: PropTypes.string
+};
 
 export default InfoBox;

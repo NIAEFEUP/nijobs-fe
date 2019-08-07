@@ -13,12 +13,11 @@ class Notifier extends Component {
 
     shouldComponentUpdate({ notifications: newSnacks = [] }) {
         const { notifications: currentSnacks } = this.props;
-        let notExists = false;
         for (let i = 0; i < newSnacks.length; i += 1) {
-            if (notExists) continue;
-            notExists = notExists || !currentSnacks.filter(({ key }) => newSnacks[i].key === key).length;
+            if (!currentSnacks.filter(({ key }) => newSnacks[i].key === key).length) 
+                return true;
         }
-        return notExists;
+        return false;
     }
 
     componentDidUpdate() {

@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDownRounded';
-import IconButton from '@material-ui/core/IconButton';
+import {IconButton} from '@material-ui/core';
+import {KeyboardArrowDownRounded} from '@material-ui/icons';
 
-const ShowMoreButton = props => {
-    
-    const { className, onClick } = props;
+const ShowMoreButton = ({className, onClick}) => {
     return (
         <div className={className}>
             <IconButton
                 onClick={onClick}
             >
-                <KeyboardArrowDownIcon
+                <KeyboardArrowDownRounded
                     fontSize="large"
                 />
             </IconButton>
