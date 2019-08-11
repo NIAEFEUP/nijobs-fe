@@ -1,0 +1,79 @@
+version: 2
+# Aliases to keep the configuration DRY (Don't Repeat Yourself)
+# '&' captures an alias and '*' expands it
+# '<<:' is used when you need to expand a level of block mapping, basically
+aliases:
+    - &docker_image
+        docker:
+            - image: node:10.16.0-alpine
+    - run: &setup_certificates 
+            # This is necessary to be able to restore from and save to CircleCI's cache and workspace
+            name: Install CA certificates
+            command: apk add ca-certificates
+    - &attach_workspace
+        attach_workspace: 
+            at: .
+jobs:
+    build:
+        <<: *docker_image
+        steps:
+            - run: *setup_certificates
+            - checkout
+            - restore_cache:
+                name: Restore node dependencies from cache
+                keys:
+                    - nijobs-fe-{{ checksum "package-lock.json" }}
+                    # Fallback to use the latest cache if no exact match is found
+                    - nijobs-fe-
+            - run:
+                name: Install dependencies
+                command: npm install
+            - save_cache:
+                name: Save node dependencies to cache
+                key: nijobs-fe-{{ checksum "package-lock.json" }}
+                paths:
+                    - ./node_modules
+            - persist_to_workspace:
+                root: .
+                paths:
+                    - .
+    audit:
+        <<: *docker_image
+        steps:
+            - run: *setup_certificates
+            - *attach_workspace
+            - attach_workspace:
+                at: .
+            - run:
+                name: Audit dependencies
+                command: npm audit --audit-level=high
+    lint:
+        <<: *docker_image
+        steps:
+            - run: *setup_certificates
+            - *attach_workspace
+            - run:
+                name: Lint Source Code
+                command: npm run lint
+    test:
+        <<: *docker_image
+        steps:
+            - run: *setup_certificates
+            - *attach_workspace
+            - run:
+                name: Run tests
+                command: CI=true npm test
+workflows:
+    version: 2
+    build_and_test:
+        jobs:
+            - build
+            - audit:
+                requires:
+                    - build
+            - lint:
+                requires:
+                    - build
+            - test:
+                requires:
+                    - build
