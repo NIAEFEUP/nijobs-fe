@@ -12,7 +12,13 @@
     "env": {
         "es6": true,
         "browser": true,
-        "jest": true
+        "jest": true,
+        "node": true
+    },
+    "globals": {
+        "shallow": true,
+        "render": true,
+        "mount": true
     },
     "parserOptions": {
         "ecmaFeatures": {

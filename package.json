@@ -42,6 +42,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "eslint-plugin-react": "^7.12.3",
     "husky": "^1.1.4"
   }
