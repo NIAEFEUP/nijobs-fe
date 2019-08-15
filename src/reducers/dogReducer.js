@@ -1,5 +1,5 @@
-import { dogTypes } from '../actions/types';
-import typeToReducer from 'type-to-reducer';
+import { dogTypes } from "../actions/types";
+import typeToReducer from "type-to-reducer";
 
 const initialState = {
     imageUrl: "",
@@ -11,7 +11,7 @@ export default typeToReducer({
     [dogTypes.GET_RANDOM_DOG]: {
         PENDING: (state) => ({
             ...state,
-            loading: true
+            loading: true,
         }),
         REJECTED: (state, action) => ({
             ...state,
@@ -21,10 +21,10 @@ export default typeToReducer({
             ...state,
             loading: false,
             imageUrl: action.payload,
-        })
+        }),
     },
 
-    
+
     [dogTypes.RESET_RANDOM_DOG]: () => ({
         ...initialState,
     }),
