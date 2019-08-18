@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Paper, Grid, Typography } from '@material-ui/core';
+import React, { Component } from "react";
+import { Paper, Grid, Typography } from "@material-ui/core";
 import styles from "./HomePage.module.css";
 
 

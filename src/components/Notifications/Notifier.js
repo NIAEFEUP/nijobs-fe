@@ -1,8 +1,8 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withSnackbar } from 'notistack';
-import { removeSnackbar } from '../../actions/notificationActions';
+import { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withSnackbar } from "notistack";
+import { removeSnackbar } from "../../actions/notificationActions";
 
 class Notifier extends Component {
     state = {
@@ -43,12 +43,12 @@ Notifier.propTypes = {
     removeSnackbar: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    notifications: state.messages.notifications
+const mapStateToProps = (state) => ({
+    notifications: state.messages.notifications,
 });
 
 const mapActionsToProps = {
-    removeSnackbar
+    removeSnackbar,
 };
 
 export default connect(

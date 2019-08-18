@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
-import AppRouter from './AppRouter';
-import store from './store';
-import Notifier from './components/Notifications/Notifier';
+import React, { Component } from "react";
+import { Provider } from "react-redux";
+import AppRouter from "./AppRouter";
+import store from "./store";
+import Notifier from "./components/Notifications/Notifier";
 
 // import './App.css';
 

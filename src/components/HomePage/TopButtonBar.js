@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Button, Grid } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
+import { Button, Grid } from "@material-ui/core";
+import { Link, withRouter } from "react-router-dom";
 
 import { exampleAction } from "../../actions/sleepyActions";
 
@@ -68,13 +68,13 @@ class TopButtonBar extends Component {
 }
 
 TopButtonBar.propTypes = {
-    exampleAction: PropTypes.func
+    exampleAction: PropTypes.func,
 };
 
 const mapStateToProps = () => ({});
 
 const mapActionsToProps = {
-    exampleAction
+    exampleAction,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonBar));

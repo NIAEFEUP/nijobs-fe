@@ -1,26 +1,22 @@
-import { exampleTypes } from './types';
-import { addSnackbar } from './notificationActions';
+import { exampleTypes } from "./types";
+import { addSnackbar } from "./notificationActions";
 
 /**
  * THIS IS JUST FOR TESTING ASYNC WITHOUT FETCHING A REAL API
  * @param {*} time time to sleep in milliseconds
  */
-const sleep = (time) => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve();
-        }, time);
-    });
+const sleep = (time) => new Promise((resolve) => {
+    setTimeout(() => {
+        resolve();
+    }, time);
+});
+
+const exampleActionFetch = async () => {
+    await sleep(2000);
+    return;
 };
 
-const exampleActionFetch = () => {
-    return new Promise(async (resolve) => {
-        await sleep(2000);
-        return resolve();
-    });
-};
-
-export const exampleAction = () => dispatch => {
+export const exampleAction = () => (dispatch) => {
     const first = dispatch({
         type: exampleTypes.SLEEPY,
         payload: exampleActionFetch(),
@@ -30,12 +26,12 @@ export const exampleAction = () => dispatch => {
         dispatch(addSnackbar({
             message: "Hello!",
             options: {
-                variant: 'info',
+                variant: "info",
                 anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: "top",
+                    horizontal: "right",
                 },
-            }
+            },
         }));
     });
 };
