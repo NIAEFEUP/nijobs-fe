@@ -1,5 +1,5 @@
-import { exampleTypes } from '../actions/types';
-import typeToReducer from 'type-to-reducer';
+import { exampleTypes } from "../actions/types";
+import typeToReducer from "type-to-reducer";
 
 const initialState = {
     done: false,
@@ -11,7 +11,7 @@ export default typeToReducer({
     [exampleTypes.SLEEPY]: {
         PENDING: () => ({
             ...initialState,
-            waiting: true
+            waiting: true,
         }),
         REJECTED: (state, action) => ({
             ...state,
@@ -22,6 +22,6 @@ export default typeToReducer({
             ...state,
             done: true,
             waiting: false,
-        })
-    }
+        }),
+    },
 }, initialState);

@@ -1,15 +1,15 @@
-import React, { useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { useRef } from "react";
+import PropTypes from "prop-types";
 
-import productDescriptionStyle from './ProductDescription.module.css';
+import productDescriptionStyle from "./ProductDescription.module.css";
 
-const ProductDescription = ({setRef}) => {
+const ProductDescription = ({ setRef }) => {
 
     const ref = useRef(null);
     setRef(ref);
-    
+
     return (
-        <div 
+        <div
             ref={ref}
             className={productDescriptionStyle.container}
         >
@@ -19,7 +19,7 @@ const ProductDescription = ({setRef}) => {
 };
 
 ProductDescription.propTypes = {
-    setRef: PropTypes.func.isRequired
+    setRef: PropTypes.func.isRequired,
 };
 
 export default ProductDescription;

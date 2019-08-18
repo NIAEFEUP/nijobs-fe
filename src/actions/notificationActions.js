@@ -1,6 +1,6 @@
-import { notificationTypes } from './types';
+import { notificationTypes } from "./types";
 
-export const addSnackbar = notification => dispatch => {
+export const addSnackbar = (notification) => (dispatch) => {
     dispatch({
         type: notificationTypes.ADD_SNACKBAR,
         notification: {
@@ -10,7 +10,7 @@ export const addSnackbar = notification => dispatch => {
     });
 };
 
-export const removeSnackbar = key => dispatch => {
+export const removeSnackbar = (key) => (dispatch) => {
     dispatch({
         type: notificationTypes.REMOVE_SNACKBAR,
         key,

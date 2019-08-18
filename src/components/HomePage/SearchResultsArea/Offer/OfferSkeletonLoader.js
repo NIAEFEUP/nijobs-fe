@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from "@material-ui/styles";
 import {
     Card,
     CardHeader,
-    CardContent
-} from '@material-ui/core';
+    CardContent,
+} from "@material-ui/core";
 
-import OfferCardTheme from './OfferCardTheme';
-import SubheaderSkeleton from './OfferSkeleton/SubheaderSkeleton';
-import ContentSkeleton from './OfferSkeleton/ContentSkeleton';
-import LogoSkeleton from './OfferSkeleton/LogoSkeleton';
+import OfferCardTheme from "./OfferCardTheme";
+import SubheaderSkeleton from "./OfferSkeleton/SubheaderSkeleton";
+import ContentSkeleton from "./OfferSkeleton/ContentSkeleton";
+import LogoSkeleton from "./OfferSkeleton/LogoSkeleton";
 
 const useStyles = makeStyles(OfferCardTheme);
 
@@ -28,7 +28,7 @@ const OfferSkeletonLoader = () => {
                     classes={{
                         root: classes.header,
                         title: classes.title,
-                        subheader: classes.skeletonSubheader
+                        subheader: classes.skeletonSubheader,
                     }}
                     subheader={<SubheaderSkeleton />}
                 />

@@ -1,23 +1,23 @@
 const JOB_TYPES = Object.freeze([
     {
         value: "ANY",
-        label: "Any"
+        label: "Any",
     },
     {
         value: "SUMMER_INTERNSHIP",
-        label: "Summer Internship"
+        label: "Summer Internship",
     },
     {
         value: "CURRICULAR_INTERNSHIP",
-        label: "Curricular Internship"
+        label: "Curricular Internship",
     },
     {
         value: "PART_TIME",
-        label: "Part-Time"
+        label: "Part-Time",
     },
     {
         value: "FULL_TIME",
-        label: "Full-Time"
+        label: "Full-Time",
     },
 
 ]);

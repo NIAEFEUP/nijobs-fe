@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import {Icon} from '@material-ui/core';
+import { Icon } from "@material-ui/core";
 
-import OfferCardStyle from './OfferCard.module.css';
+import OfferCardStyle from "./OfferCard.module.css";
 
 const OfferSubHeader = (props) => {
-    
+
     const { company, location, date } = props;
 
     return (

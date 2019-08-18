@@ -1,5 +1,5 @@
-import { notificationTypes } from '../actions/types';
-import typeToReducer from 'type-to-reducer';
+import { notificationTypes } from "../actions/types";
+import typeToReducer from "type-to-reducer";
 
 const initialState = {
     notifications: [],
@@ -14,13 +14,13 @@ export default typeToReducer({
                 ...action.notification,
             },
         ],
-        
+
     }),
 
     [notificationTypes.REMOVE_SNACKBAR]: (state, action) => ({
         ...state,
         notifications: state.notifications.filter(
-            notification => notification.key !== action.key,
+            (notification) => notification.key !== action.key,
         ),
     }),
 

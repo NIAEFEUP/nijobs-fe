@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid } from "@material-ui/core";
 
 import { getRandomDog, resetRandomDog } from "../../actions/dogActions";
 
@@ -57,13 +57,13 @@ class BottomButtonBar extends Component {
 
 BottomButtonBar.propTypes = {
     getRandomDog: PropTypes.func,
-    resetRandomDog: PropTypes.func
+    resetRandomDog: PropTypes.func,
 };
 
 const mapStateToProps = () => ({});
 
 const mapActionsToProps = {
-    getRandomDog, resetRandomDog
+    getRandomDog, resetRandomDog,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(BottomButtonBar);

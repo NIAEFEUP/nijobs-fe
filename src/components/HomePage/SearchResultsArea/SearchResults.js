@@ -1,16 +1,16 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import OfferCard from './Offer/OfferCard';
-import homePageStyles from '../HomePage.module.css';
+import OfferCard from "./Offer/OfferCard";
+import homePageStyles from "../HomePage.module.css";
 
-const SearchResults = props => {
+const SearchResults = (props) => {
 
-    const {setRef} = props;
-    
+    const { setRef } = props;
+
     const ref = React.useRef(null);
     setRef(ref);
-    
+
     return (
         <div
             ref={ref}
@@ -26,11 +26,11 @@ const SearchResults = props => {
             />
         </div>
     );
-    
+
 };
 
-SearchResults.propTypes ={
-    setRef: PropTypes.func.isRequired
-}; 
+SearchResults.propTypes = {
+    setRef: PropTypes.func.isRequired,
+};
 
 export default SearchResults;

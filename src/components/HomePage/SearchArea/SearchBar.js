@@ -1,23 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 import {
     TextField,
     InputAdornment,
     IconButton,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
-import {Search} from '@material-ui/icons';
+import { Search } from "@material-ui/icons";
 
 function SearchBar(props) {
 
-    const {searchValue, setSearchValue, className, submitSearchForm} = props;
-    
-    const handleChange = e => {
+    const { searchValue, setSearchValue, className, submitSearchForm } = props;
+
+    const handleChange = (e) => {
         setSearchValue(e.target.value);
     };
 
-    const handleButtonClick = e => {
+    const handleButtonClick = (e) => {
         e.preventDefault();
         submitSearchForm(e);
     };
@@ -31,7 +31,7 @@ function SearchBar(props) {
             onChange={handleChange}
             className={className}
             InputProps={{
-                "endAdornment": 
+                "endAdornment":
     <InputAdornment position="end">
         <IconButton
             aria-label="search"
@@ -40,8 +40,8 @@ function SearchBar(props) {
         >
             <Search />
         </IconButton>
-    </InputAdornment>
-                  
+    </InputAdornment>,
+
             }}
         />
     );
@@ -51,8 +51,7 @@ SearchBar.propTypes = {
     searchValue: PropTypes.string.isRequired,
     setSearchValue: PropTypes.func.isRequired,
     className: PropTypes.string,
-    submitSearchForm: PropTypes.func.isRequired
+    submitSearchForm: PropTypes.func.isRequired,
 };
 
 export default SearchBar;
-

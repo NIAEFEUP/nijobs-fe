@@ -1,0 +1,7 @@
+extraction:
+  javascript:
+    index:
+      filters:
+        - exclude: "config/*"
+        - exclude: "scripts/*"
+        - exclude: "public/*"

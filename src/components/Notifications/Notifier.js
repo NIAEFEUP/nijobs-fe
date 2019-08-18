@@ -1,8 +1,8 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { withSnackbar } from 'notistack';
-import { removeSnackbar } from '../../actions/notificationActions';
+import { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { withSnackbar } from "notistack";
+import { removeSnackbar } from "../../actions/notificationActions";
 
 class Notifier extends Component {
     displayed = [];
@@ -14,7 +14,7 @@ class Notifier extends Component {
     shouldComponentUpdate({ notifications: newSnacks = [] }) {
         const { notifications: currentSnacks } = this.props;
         for (let i = 0; i < newSnacks.length; i += 1) {
-            if (!currentSnacks.filter(({ key }) => newSnacks[i].key === key).length) 
+            if (!currentSnacks.filter(({ key }) => newSnacks[i].key === key).length)
                 return true;
         }
         return false;
@@ -46,12 +46,12 @@ Notifier.propTypes = {
     removeSnackbar: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    notifications: state.messages.notifications
+const mapStateToProps = (state) => ({
+    notifications: state.messages.notifications,
 });
 
 const mapActionsToProps = {
-    removeSnackbar
+    removeSnackbar,
 };
 
 export default connect(

@@ -1,22 +1,18 @@
-import React from 'react';
-import { Provider } from 'react-redux';
-import AppRouter from './AppRouter';
-import store from './store';
-import Notifier from './components/Notifications/Notifier';
+import React from "react";
+import { Provider } from "react-redux";
+import AppRouter from "./AppRouter";
+import store from "./store";
+import Notifier from "./components/Notifications/Notifier";
 
-const App = () => {
+const App = () => (
+    <Provider store={store}>
+        <React.Fragment>
+            {/* <AppNavbar/> */}
+            <Notifier />
+            <AppRouter/>
+        </React.Fragment>
 
-    return (
-        <Provider store={store}>
-            <React.Fragment>
-                {/* <AppNavbar/> */}
-                <Notifier />
-                <AppRouter/>
-            </React.Fragment>
-
-        </Provider>
-    );
-    
-};
+    </Provider>
+);
 
 export default App;

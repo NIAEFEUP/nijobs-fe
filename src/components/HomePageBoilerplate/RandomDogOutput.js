@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Paper, Typography } from '@material-ui/core';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Paper, Typography } from "@material-ui/core";
 import styles from "./HomePage.module.css";
 
 class RandomDogOutput extends Component {
     // Functional component: Use to increase the code readability and modularity
-    displayDoggo = () => {
-        return (
+    displayDoggo = (imageUrl) => (
+
+        (imageUrl ?
             <React.Fragment>
                 Doggo ready!
                 <br/>
@@ -16,8 +17,11 @@ class RandomDogOutput extends Component {
                     alt="random cute doggo"
                 />
             </React.Fragment>
-        );
-    }
+            :
+            "No random doggo currently loaded :("
+        )
+
+    )
 
     render() {
         return (
@@ -29,11 +33,7 @@ class RandomDogOutput extends Component {
                     {this.props.dog.loading ?
                         "Loading cute doggo..."
                         :
-                        (this.props.dog.imageUrl ?
-                            <this.displayDoggo />
-                            :
-                            "No random doggo currently loaded :("
-                        )
+                        this.displayDoggo(this.props.dog.imageUrl)
                     }
                 </Typography>
             </Paper>
@@ -42,11 +42,11 @@ class RandomDogOutput extends Component {
 }
 
 RandomDogOutput.propTypes = {
-    dog: PropTypes.object
+    dog: PropTypes.object,
 };
 
-const mapStateToProps = state => ({
-    dog: state.dog
+const mapStateToProps = (state) => ({
+    dog: state.dog,
 });
 
 const mapActionsToProps = {};

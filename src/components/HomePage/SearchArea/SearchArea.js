@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-import { connect } from 'react-redux';
-import { addSnackbar } from '../../../actions/notificationActions';
+import { connect } from "react-redux";
+import { addSnackbar } from "../../../actions/notificationActions";
 
-import useToggle from '../../../hooks/useToggle';
+import useToggle from "../../../hooks/useToggle";
 
-import JOB_TYPES from './jobTypes';
+import JOB_TYPES from "./jobTypes";
 
 import {
     FormControl,
@@ -15,15 +15,15 @@ import {
     Slider,
     TextField,
     MenuItem,
-    Collapse
-} from '@material-ui/core';
+    Collapse,
+} from "@material-ui/core";
 
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from "@material-ui/styles";
 import searchAreaStyle from "./SearchArea.module.css";
 
 import SearchBar from "./SearchBar";
-import ShowAdvancedOptionsButton from './ShowAdvancedOptionsButton';
-import SliderValueTooltip from './SliderValueTooltip';
+import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
+import SliderValueTooltip from "./SliderValueTooltip";
 
 const INITIAL_JOB_TYPE = "";
 const INITIAL_JOB_DURATION = 1;
@@ -35,22 +35,22 @@ const useStyles = makeStyles({
         "grid-template-rows": "1fr",
         "align-items": "center",
         "grid-gap": "1em",
-    }
+    },
 });
 
 function SearchArea(props) {
 
-    const {addSnackbar, onSubmit} = props;
+    const { addSnackbar, onSubmit } = props;
     const classes = useStyles();
-    
+
     // Set initial form values
     const [searchValue, setSearchValue] = useState("");
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
     const [jobType, setJobType] = useState(INITIAL_JOB_TYPE);
     const [jobDuration, setJobDuration] = useState(INITIAL_JOB_DURATION);
-    
+
     const handleAdvancedOptionsButtonClick = () => {
-        if(advancedOptions) {
+        if (advancedOptions) {
             resetAdvancedFields();
         }
         toggleAdvancedOptions();
@@ -61,35 +61,35 @@ function SearchArea(props) {
         setJobDuration(INITIAL_JOB_DURATION);
     };
 
-    const submitForm = e => {
+    const submitForm = (e) => {
         e.preventDefault();
 
         addSnackbar({
-            //mind the jobType.value || '' when passing value to api,
-            //because for simple search, the initial jobType value will be an empty string, which has no atrribute .value
-            message: `Search for: ${searchValue} :: Job type: ${jobType || ''} :: Job Duration: ${jobDuration}`,
+            // mind the jobType.value || '' when passing value to api,
+            // because for simple search, the initial jobType value will be an empty string, which has no atrribute .value
+            message: `Search for: ${searchValue} :: Job type: ${jobType || ""} :: Job Duration: ${jobDuration}`,
             options: {
-                variant: 'info',
+                variant: "info",
                 anchorOrigin: {
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: "top",
+                    horizontal: "right",
                 },
-            }
+            },
         });
 
         onSubmit();
     };
-    
+
     const updateJobDuration = (_, val) => {
         setJobDuration(val);
     };
 
-    const updateJobType = value => {
+    const updateJobType = (value) => {
         setJobType(value.target.value);
     };
-    
+
     return (
-        <Paper 
+        <Paper
             className={searchAreaStyle.searchArea}
             elevation={8}
         >
@@ -103,11 +103,11 @@ function SearchArea(props) {
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
-                <Collapse 
+                <Collapse
                     in={advancedOptions}
                     classes={{
-                        wrapperInner: classes.wrapperInner
-                    }}    
+                        wrapperInner: classes.wrapperInner,
+                    }}
                 >
                     <TextField
                         id="job_type"
@@ -118,7 +118,7 @@ function SearchArea(props) {
                         onChange={updateJobType}
                         helperText="Please select your job type"
                     >
-                        {JOB_TYPES.map(({value, label}) => (
+                        {JOB_TYPES.map(({ value, label }) => (
                             <MenuItem
                                 key={value}
                                 value={value}
@@ -127,10 +127,10 @@ function SearchArea(props) {
                             </MenuItem>
                         ))}
                     </TextField>
-                    <FormControl 
+                    <FormControl
                         className={searchAreaStyle.durationSlider}
                     >
-                        <Typography 
+                        <Typography
                             id="duration-label"
                             variant="body2"
                         >
@@ -140,7 +140,7 @@ function SearchArea(props) {
                             valueLabelDisplay="auto"
                             value={jobDuration}
                             ValueLabelComponent={SliderValueTooltip}
-                            name='jobDuration'
+                            name="jobDuration"
                             min={1}
                             max={12}
                             step={1}
@@ -159,12 +159,12 @@ function SearchArea(props) {
 
 SearchArea.propTypes = {
     addSnackbar: PropTypes.func,
-    onSubmit: PropTypes.func.isRequired
+    onSubmit: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = () => ({
 });
 
-const mapActionsToProps = {addSnackbar};
+const mapActionsToProps = { addSnackbar };
 
 export default connect(mapStateToProps, mapActionsToProps)(SearchArea);
