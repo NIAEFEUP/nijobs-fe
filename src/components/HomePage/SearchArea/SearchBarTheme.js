@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import AppTheme, { darkTextColor } from "../../../AppTheme";
 
 export default ({

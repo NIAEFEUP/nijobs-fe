@@ -1,10 +1,13 @@
 import { notificationTypes } from "./types";
 
 export const addSnackbar = (notification) => (dispatch) => {
+
+    if (!(typeof notification.message === "string") || !notification.message.length === 0) return;
+
     dispatch({
         type: notificationTypes.ADD_SNACKBAR,
         notification: {
-            key: new Date().getTime() + Math.random(),
+            key: Date.now() + Math.random(),
             ...notification,
         },
     });

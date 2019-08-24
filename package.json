@@ -79,7 +79,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --watchAll=false",
+    "test": "jest --coverage --verbose",
+    "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
     "lint": "eslint src --max-warnings 0"
   },
@@ -110,8 +111,23 @@
     ],
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
+      "!src/**/*.d.ts",
+      "!src/index.js"
     ],
+    "cache": false,
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
     "setupFiles": [
       "react-app-polyfill/jsdom",
       "<rootDir>/src/setupTests.js"

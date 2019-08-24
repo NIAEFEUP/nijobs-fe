@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import AppTheme from "../../../../AppTheme";
 
 export default {

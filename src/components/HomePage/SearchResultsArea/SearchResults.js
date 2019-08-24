@@ -4,10 +4,7 @@ import PropTypes from "prop-types";
 import OfferCard from "./Offer/OfferCard";
 import homePageStyles from "../HomePage.module.css";
 
-const SearchResults = (props) => {
-
-    const { setRef } = props;
-
+const SearchResults = ({ setRef, offers }) => {
     const ref = React.useRef(null);
     setRef(ref);
 
@@ -16,14 +13,17 @@ const SearchResults = (props) => {
             ref={ref}
             className={homePageStyles.searchResults}
         >
-            <OfferCard loading/>
-            <OfferCard
-                position="Senior Front-End developer"
-                location="Porto Portugal"
-                company="NIAEFEUP"
-                date="3 days ago"
-                description="jçaksfjjklsjadkfljklfjklsdajflkçs"
-            />
+            {offers.map(({ loading, position, location, company, date, description }, key) => (
+                <OfferCard
+                    key={key}
+                    loading={loading}
+                    position={position}
+                    location={location}
+                    company={company}
+                    date={date}
+                    description={description}
+                />
+            ))}
         </div>
     );
 
@@ -31,6 +31,7 @@ const SearchResults = (props) => {
 
 SearchResults.propTypes = {
     setRef: PropTypes.func.isRequired,
+    offers: PropTypes.array,
 };
 
 export default SearchResults;

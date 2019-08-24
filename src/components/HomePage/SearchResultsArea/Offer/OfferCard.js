@@ -73,11 +73,11 @@ const OfferCard = (props) => {
 };
 
 OfferCard.propTypes = {
-    position: PropTypes.string.isRequired,
-    company: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    position: PropTypes.string,
+    company: PropTypes.string,
+    location: PropTypes.string,
+    date: PropTypes.string,
+    description: PropTypes.string,
     loading: PropTypes.bool,
 };
 

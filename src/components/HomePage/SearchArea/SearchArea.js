@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     },
 });
 
-function SearchArea(props) {
+export const SearchArea = (props) => {
 
     const { addSnackbar, onSubmit } = props;
     const classes = useStyles();
@@ -96,6 +96,7 @@ function SearchArea(props) {
             <form
                 onSubmit={submitForm}
                 autoComplete="off"
+                id={"search_form"}
             >
                 <SearchBar
                     className={searchAreaStyle.searchBar}
@@ -155,16 +156,16 @@ function SearchArea(props) {
             />
         </Paper>
     );
-}
+};
 
 SearchArea.propTypes = {
     addSnackbar: PropTypes.func,
     onSubmit: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = () => ({
+export const mapStateToProps = () => ({
 });
 
-const mapActionsToProps = { addSnackbar };
+export const mapActionsToProps = { addSnackbar };
 
 export default connect(mapStateToProps, mapActionsToProps)(SearchArea);

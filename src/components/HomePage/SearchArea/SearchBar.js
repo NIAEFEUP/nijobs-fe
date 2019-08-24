@@ -9,7 +9,7 @@ import {
 
 import { Search } from "@material-ui/icons";
 
-function SearchBar(props) {
+const SearchBar = (props) => {
 
     const { searchValue, setSearchValue, className, submitSearchForm } = props;
 
@@ -41,11 +41,10 @@ function SearchBar(props) {
             <Search />
         </IconButton>
     </InputAdornment>,
-
             }}
         />
     );
-}
+};
 
 SearchBar.propTypes = {
     searchValue: PropTypes.string.isRequired,
