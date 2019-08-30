@@ -3,14 +3,16 @@ import PropTypes from "prop-types";
 
 import { Tooltip } from "@material-ui/core";
 
+export const updateRef = (popperRef) => {
+    if (popperRef.current) {
+        popperRef.current.update();
+    }
+};
+
 const SliderValueTooltip = ({ children, open, value }) => {
 
     const popperRef = React.useRef(null);
-    React.useEffect(() => {
-        if (popperRef.current) {
-            popperRef.current.update();
-        }
-    });
+    React.useEffect(updateRef.bind(null, popperRef));
 
     return (
         <Tooltip

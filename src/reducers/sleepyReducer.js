@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { exampleTypes } from "../actions/types";
 import typeToReducer from "type-to-reducer";
 

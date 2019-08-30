@@ -87,7 +87,23 @@ describe("SearchArea", () => {
         });
 
         it("should mapActionsToProps", () => {
-            expect(mapActionsToProps).toEqual({ addSnackbar });
+
+            const RANDOM_VALUE = 0.5;
+            const DATE_NOW = 1;
+
+            const mockMath = Object.create(global.Math);
+            mockMath.random = () => RANDOM_VALUE;
+            global.Math = mockMath;
+            Date.now = jest.fn().mockReturnValue(DATE_NOW);
+            // asserts that the addSnackbar in props is mapped to addSnackbar from notification actions
+
+            const dispatch = jest.fn();
+            const props = mapActionsToProps(dispatch);
+            props.addSnackbar({ message: "message" });
+            expect(dispatch).toHaveBeenCalledWith(addSnackbar({
+                message: "message",
+                key: DATE_NOW + RANDOM_VALUE,
+            }));
         });
     });
 });

@@ -112,9 +112,9 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts",
-      "!src/index.js"
+      "!src/index.js",
+      "!src/components/HomePageBoilerplate/*"
     ],
-    "cache": false,
     "collectCoverage": true,
     "coverageReporters": [
       "text",

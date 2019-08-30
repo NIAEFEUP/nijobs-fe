@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { Button, Grid } from "@material-ui/core";
 import { Link, withRouter } from "react-router-dom";
 
-import { exampleAction } from "../../actions/sleepyActions";
+import { exampleServiceCall } from "../../actions/sleepyService";
 
 import styles from "./HomePage.module.css";
 
 class TopButtonBar extends Component {
     sleepyClick = () => {
-        this.props.exampleAction();
+        this.props.exampleServiceCall();
     }
 
     render() {
@@ -68,13 +68,13 @@ class TopButtonBar extends Component {
 }
 
 TopButtonBar.propTypes = {
-    exampleAction: PropTypes.func,
+    exampleServiceCall: PropTypes.func,
 };
 
 const mapStateToProps = () => ({});
 
 const mapActionsToProps = {
-    exampleAction,
+    exampleServiceCall,
 };
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonBar));

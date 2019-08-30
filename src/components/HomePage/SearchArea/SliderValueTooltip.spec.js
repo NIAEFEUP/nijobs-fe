@@ -1,5 +1,5 @@
 import React from "react";
-import SliderValueTooltip from "./SliderValueTooltip";
+import SliderValueTooltip, { updateRef } from "./SliderValueTooltip";
 import { Tooltip } from "@material-ui/core";
 
 describe("SliderValueTooltip", () => {
@@ -10,5 +10,20 @@ describe("SliderValueTooltip", () => {
                 open={false}
             />).find(Tooltip).first().prop("title")
         ).toBe("test");
+    });
+
+    it("should update the popper ref", () => {
+        const updateMock = jest.fn();
+        const popperRefMock = {
+            current: {
+                update: updateMock,
+            },
+        };
+
+        const popperRefMock2 = {};
+
+        updateRef(popperRefMock);
+        updateRef(popperRefMock2);
+        expect(updateMock).toHaveBeenCalledTimes(1);
     });
 });

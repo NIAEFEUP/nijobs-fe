@@ -19,8 +19,11 @@ const logo = require("./ni.png");
 
 const useStyles = makeStyles(OfferCardTheme);
 
+// THIS NEEDS RE-THINKING - POSSIBLE RE-DESIGN PENDING
+
 const OfferCard = (props) => {
 
+    // REFACTOR THIS INTO an Offer Object which could be easily extended and more testable
     const { loading, position, company, location, date, description } = props;
     const classes = useStyles();
 
@@ -69,7 +72,6 @@ const OfferCard = (props) => {
             </div>
         </Card>
     );
-
 };
 
 OfferCard.propTypes = {

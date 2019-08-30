@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { Component } from "react";
 
 import Banner from "../components/HomePageBoilerplate/Banner";

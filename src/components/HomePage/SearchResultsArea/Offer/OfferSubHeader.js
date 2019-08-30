@@ -25,7 +25,7 @@ const OfferSubHeader = (props) => {
                     {location}
                 </span>
             </div>
-            <span>
+            <span className={"date-label"}>
                 {date}
             </span>
         </React.Fragment>

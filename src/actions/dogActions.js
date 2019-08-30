@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { dogTypes } from "./types";
 
 const fetchRandomDog = () => new Promise((resolve, reject) => {

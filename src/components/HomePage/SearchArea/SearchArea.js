@@ -166,6 +166,8 @@ SearchArea.propTypes = {
 export const mapStateToProps = () => ({
 });
 
-export const mapActionsToProps = { addSnackbar };
+export const mapActionsToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
 
 export default connect(mapStateToProps, mapActionsToProps)(SearchArea);

@@ -23,20 +23,16 @@ describe("Notification actions", () => {
             },
         };
 
-        const dispatch = (action) => {
-            expect(action).toEqual(expectedAction);
-        };
-        actions.addSnackbar(submittedNotification)(dispatch);
+        expect(actions.addSnackbar(submittedNotification)).toEqual(expectedAction);
     });
 
     it("should not return addSnackbar action if notification doesn't have message", () => {
 
         const notification = {};
+        expect(() => {
+            actions.addSnackbar(notification);
+        }).toThrow("Notification must have a message field");
 
-        const dispatch = jest.fn();
-        actions.addSnackbar(notification)(dispatch);
-
-        expect(dispatch).toHaveBeenCalledTimes(0);
     });
 
     it("should return removeSnackbar action", () => {
@@ -44,7 +40,7 @@ describe("Notification actions", () => {
         const dispatch = (action) => {
             expect(action).toEqual({ type: notificationTypes.REMOVE_SNACKBAR, key });
         };
-        actions.removeSnackbar(key)(dispatch);
+        dispatch(actions.removeSnackbar(key));
     });
 
 });

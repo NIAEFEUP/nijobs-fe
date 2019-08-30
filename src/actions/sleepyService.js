@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { exampleTypes } from "./types";
 import { addSnackbar } from "./notificationActions";
 
@@ -11,15 +12,15 @@ const sleep = (time) => new Promise((resolve) => {
     }, time);
 });
 
-const exampleActionFetch = async () => {
+const exampleFetch = async () => {
     await sleep(2000);
     return;
 };
 
-export const exampleAction = () => (dispatch) => {
+export const exampleServiceCall = () => (dispatch) => {
     const first = dispatch({
         type: exampleTypes.SLEEPY,
-        payload: exampleActionFetch(),
+        payload: exampleFetch(),
     });
 
     first.then(() => {
