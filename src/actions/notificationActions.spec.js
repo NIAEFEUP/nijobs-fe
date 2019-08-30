@@ -35,6 +35,15 @@ describe("Notification actions", () => {
 
     });
 
+    it("should not return addSnackbar action if notification has empty message", () => {
+
+        const notification = { message: "" };
+        expect(() => {
+            actions.addSnackbar(notification);
+        }).toThrow("Notification must have a message field");
+
+    });
+
     it("should return removeSnackbar action", () => {
         const key = "key";
         const dispatch = (action) => {

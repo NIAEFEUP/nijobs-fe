@@ -2,7 +2,7 @@ import { notificationTypes } from "./types";
 
 export const addSnackbar = (notification) => {
 
-    if (!(typeof notification.message === "string") || !notification.message.length === 0) {
+    if (typeof notification.message !== "string" || notification.message.length === 0) {
         throw new Error("Notification must have a message field");
     }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 /**
  * Custom hook for state variables that have a special boolean state only
@@ -7,9 +7,9 @@ import { useState } from "react";
 const useToggle = (initialValue) => {
     const [state, setState] = useState(initialValue);
 
-    const toggleState = () => {
-        setState(!state);
-    };
+    const toggleState = useCallback(() => {
+        setState((state) => !state);
+    }, []);
 
     return [state, toggleState];
 };
