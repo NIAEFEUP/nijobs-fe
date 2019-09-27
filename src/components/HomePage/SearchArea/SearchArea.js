@@ -18,7 +18,7 @@ import {
     Collapse,
 } from "@material-ui/core";
 
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import searchAreaStyle from "./SearchArea.module.css";
 
 import SearchBar from "./SearchBar";

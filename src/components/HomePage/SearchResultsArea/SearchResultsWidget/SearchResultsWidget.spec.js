@@ -1,7 +1,7 @@
 import React from "react";
-import SearchResults, { SkeletonResults } from "./SearchResults";
-import OfferCard from "./Offer/OfferCard";
-import Offer from "./Offer/Offer";
+import SearchResultsWidget, { SkeletonResults } from "./SearchResultsWidget";
+import OfferCard from "../Offer/OfferCard";
+import Offer from "../Offer/Offer";
 
 describe("SearchResults", () => {
     it("should display offers", () => {
@@ -25,7 +25,7 @@ describe("SearchResults", () => {
             ),
         ];
         const wrapper = shallow(
-            <SearchResults
+            <SearchResultsWidget
                 setRef={setRef}
                 offers={offers}
             />
@@ -46,16 +46,10 @@ describe("SearchResults", () => {
     it("should display skeleton when no offers exist", () => {
         const setRef = () => {};
         expect(shallow(
-            <SearchResults
+            <SearchResultsWidget
                 offers={[]}
                 setRef={setRef}
             />).find(SkeletonResults).exists()
         ).toBe(true);
-    });
-});
-
-describe("SkeletonResults", () => {
-    it("should render the skeleton results", () => {
-        expect(shallow(<SkeletonResults/>).find("div").exists()).toBe(true);
     });
 });

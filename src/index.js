@@ -7,6 +7,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppTheme from "./AppTheme.js";
 
+import "./index.css";
 import App from "./App";
 
 ReactDOM.render(
