@@ -7,7 +7,6 @@ import Notifier from "./components/Notifications/Notifier";
 const App = () => (
     <Provider store={store}>
         <React.Fragment>
-            {/* <AppNavbar/> */}
             <Notifier />
             <AppRouter/>
         </React.Fragment>

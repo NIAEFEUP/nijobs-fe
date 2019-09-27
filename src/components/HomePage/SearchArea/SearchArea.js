@@ -25,7 +25,7 @@ import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
 import SliderValueTooltip from "./SliderValueTooltip";
 
-const INITIAL_JOB_TYPE = "";
+const INITIAL_JOB_TYPE = undefined;
 const INITIAL_JOB_DURATION = 1;
 
 const useStyles = makeStyles({
@@ -62,11 +62,12 @@ export const SearchArea = (props) => {
     };
 
     const submitForm = (e) => {
+        // mind the jobType value when passing value to api,
+        // because for simple search, the initial jobType value will be undefined,
+        // and should be treated as a filter, not a required field, just like jobDuration
         e.preventDefault();
 
         addSnackbar({
-            // mind the jobType.value || '' when passing value to api,
-            // because for simple search, the initial jobType value will be an empty string, which has no atrribute .value
             message: `Search for: ${searchValue} :: Job type: ${jobType || ""} :: Job Duration: ${jobDuration}`,
             options: {
                 variant: "info",
@@ -166,8 +167,8 @@ SearchArea.propTypes = {
 export const mapStateToProps = () => ({
 });
 
-export const mapActionsToProps = (dispatch) => ({
+export const mapDispatchToProps = (dispatch) => ({
     addSnackbar: (notification) => dispatch(addSnackbar(notification)),
 });
 
-export default connect(mapStateToProps, mapActionsToProps)(SearchArea);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchArea);

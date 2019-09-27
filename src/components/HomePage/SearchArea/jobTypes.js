@@ -1,6 +1,6 @@
 const JOB_TYPES = Object.freeze([
     {
-        value: "ANY",
+        value: null,
         label: "Any",
     },
     {

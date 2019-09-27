@@ -14,7 +14,6 @@ const ShowAdvancedOptionsButton = ({ isOpen, onClick }) => (
             onClick={onClick}
         >
             {isOpen ? <Close /> : <MoreHoriz fontSize="large"/>}
-
         </Fab>
     </div>
 );

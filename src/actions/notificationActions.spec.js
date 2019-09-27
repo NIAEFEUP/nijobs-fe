@@ -1,15 +1,14 @@
 import * as actions from "./notificationActions";
 import { notificationTypes } from "./types";
+import { mockRandomMath, mockDateNow } from "../../testUtils";
 
 describe("Notification actions", () => {
     it("should return addSnackbar action if notification has message", () => {
         const RANDOM_VALUE = 0.5;
         const DATE_NOW = 1;
 
-        const mockMath = Object.create(global.Math);
-        mockMath.random = () => RANDOM_VALUE;
-        global.Math = mockMath;
-        Date.now = jest.fn().mockReturnValue(DATE_NOW);
+        const originalMathObj = mockRandomMath(RANDOM_VALUE);
+        const originalDateNowFn = mockDateNow(DATE_NOW);
 
         const submittedNotification = {
             message: "message",
@@ -24,6 +23,9 @@ describe("Notification actions", () => {
         };
 
         expect(actions.addSnackbar(submittedNotification)).toEqual(expectedAction);
+
+        global.Math = originalMathObj;
+        Date.now = originalDateNowFn;
     });
 
     it("should not return addSnackbar action if notification doesn't have message", () => {

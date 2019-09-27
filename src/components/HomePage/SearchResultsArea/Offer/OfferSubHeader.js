@@ -5,32 +5,27 @@ import { Icon } from "@material-ui/core";
 
 import OfferCardStyle from "./OfferCard.module.css";
 
-const OfferSubHeader = (props) => {
-
-    const { company, location, date } = props;
-
-    return (
-        <React.Fragment>
-            <div className={OfferCardStyle.jobInfo}>
-                <Icon>
+const OfferSubHeader = ({ company, location, date }) => (
+    <React.Fragment>
+        <div className={OfferCardStyle.jobInfo}>
+            <Icon>
                 location_city
-                </Icon>
-                <span className={OfferCardStyle.subheaderLabel}>
-                    {company}
-                </span>
-                <Icon>
-                place
-                </Icon>
-                <span className={OfferCardStyle.subheaderLabel}>
-                    {location}
-                </span>
-            </div>
-            <span className={"date-label"}>
-                {date}
+            </Icon>
+            <span className={OfferCardStyle.subheaderLabel}>
+                {company}
             </span>
-        </React.Fragment>
-    );
-};
+            <Icon>
+                place
+            </Icon>
+            <span className={OfferCardStyle.subheaderLabel}>
+                {location}
+            </span>
+        </div>
+        <span className={"date-label"}>
+            {date}
+        </span>
+    </React.Fragment>
+);
 
 OfferSubHeader.propTypes = {
     company: PropTypes.string.isRequired,

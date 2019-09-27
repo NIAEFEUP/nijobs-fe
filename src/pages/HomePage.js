@@ -1,55 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import MainView from "../components/HomePage/MainView";
 import SearchResults from "../components/HomePage/SearchResultsArea/SearchResults";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
-
-export const scrollToProductDescription = (productDescriptionRef) => {
-    productDescriptionRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-    });
-};
-export const scrollToSearchResults = (searchResultsRef) => {
-    searchResultsRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-    });
-};
+import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
+import { smoothScrollToRef } from "../utils";
 
 const HomePage = () => {
 
-    const [productDescriptionRef, setProductDescriptionRef] = React.useState(null);
-    const [searchResultsRef, setSearchResultsRef] = React.useState(null);
+    const [productDescriptionRef, setProductDescriptionRef] = useState(null);
+    const [searchResultsRef, setSearchResultsRef] = useState(null);
+    const [showSearchResults, setShowSearchResults] = useState(false);
 
-    // Setting the offers, probably needs re-thinking
-    // Maybe use React.useEffect for offer loading
-    const [offers] = React.useState([
-        {
-            loading: true,
-        },
-        {
-            loading: false,
-            position: "Full-Stack Developer",
-            location: "Porto",
-            company: "Reddit",
-            date: "2019-06",
-            description: "This is a description",
-        },
+    useEffect(() => {
+        if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
+    }, [searchResultsRef, showSearchResults]);
+
+    // Setting the offers. In the future they should come from the redux store and loaded when the respective service+action is called
+    const [offers] = useState([
+        new Offer(
+            "random uuid",
+            "Full-Stack Developer",
+            "Porto",
+            "Reddit",
+            "2019-06",
+            "This is a description",
+        ),
     ]);
 
 
     return (
         <React.Fragment>
             <MainView
-                scrollToProductDescription={scrollToProductDescription.bind(null, productDescriptionRef)}
-                scrollToSearchResults={scrollToSearchResults.bind(null, searchResultsRef)}
+                scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef)}
+                showSearchResults={() => setShowSearchResults(true)}
             />
             <ProductDescription setRef={setProductDescriptionRef}/>
-            <SearchResults
-                setRef={setSearchResultsRef}
-                offers={offers}
-            />
+            {showSearchResults ?
+                <SearchResults
+                    setRef={setSearchResultsRef}
+                    offers={offers}
+                /> : ""}
+
         </React.Fragment>
     );
 

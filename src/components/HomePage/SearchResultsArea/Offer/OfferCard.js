@@ -14,17 +14,15 @@ import OfferSubHeader from "./OfferSubHeader";
 import OfferSkeletonLoader from "./OfferSkeletonLoader";
 
 import OfferCardTheme from "./OfferCardTheme";
+import Offer from "./Offer";
 
 const logo = require("./ni.png");
 
 const useStyles = makeStyles(OfferCardTheme);
 
-// THIS NEEDS RE-THINKING - POSSIBLE RE-DESIGN PENDING
-
 const OfferCard = (props) => {
 
-    // REFACTOR THIS INTO an Offer Object which could be easily extended and more testable
-    const { loading, position, company, location, date, description } = props;
+    const { offer, loading } = props;
     const classes = useStyles();
 
     if (loading) {
@@ -36,7 +34,7 @@ const OfferCard = (props) => {
             <CardMedia
                 className={classes.logo}
                 image={logo}
-                title={`${company} logo`}
+                title={`${offer.company} logo`}
             />
             <div className={classes.details}>
                 <CardHeader
@@ -45,13 +43,13 @@ const OfferCard = (props) => {
                         title: classes.title,
                         subheader: classes.subheader,
                     }}
-                    title={position}
+                    title={offer.position}
                     titleTypographyProps={{ variant: "h5" }}
                     subheader={
                         <OfferSubHeader
-                            company={company}
-                            location={location}
-                            date={date}
+                            company={offer.company}
+                            location={offer.location}
+                            date={offer.date}
                         />
                     }
                     subheaderTypographyProps={{ variant: "caption" }}
@@ -66,7 +64,7 @@ const OfferCard = (props) => {
                     <Typography
                         variant="body1"
                     >
-                        {description}
+                        {offer.description}
                     </Typography>
                 </CardContent>
             </div>
@@ -75,11 +73,7 @@ const OfferCard = (props) => {
 };
 
 OfferCard.propTypes = {
-    position: PropTypes.string,
-    company: PropTypes.string,
-    location: PropTypes.string,
-    date: PropTypes.string,
-    description: PropTypes.string,
+    offer: PropTypes.instanceOf(Offer),
     loading: PropTypes.bool,
 };
 

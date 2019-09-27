@@ -1,7 +1,7 @@
 /* istanbul ignore file */
-import AppTheme, { darkTextColor } from "../../../AppTheme";
+import { darkTextColor } from "../../../AppTheme";
 
-export default ({
+export default (theme) => ({
 
     root: {
         width: 200,
@@ -19,7 +19,7 @@ export default ({
         },
 
         "&$cssFocused $notchedOutline": {
-            borderColor: AppTheme.palette.primary.main,
+            borderColor: theme.palette.primary.main,
         },
     },
     notchedOutline: {},

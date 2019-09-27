@@ -1,5 +1,5 @@
 import React from "react";
-import { SearchArea, mapActionsToProps, mapStateToProps } from "./SearchArea";
+import { SearchArea, mapDispatchToProps, mapStateToProps } from "./SearchArea";
 import { addSnackbar } from "../../../actions/notificationActions";
 import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
@@ -11,6 +11,7 @@ import {
     TextField,
     Collapse,
 } from "@material-ui/core";
+import { mockDateNow, mockRandomMath } from "../../../../testUtils";
 
 describe("SearchArea", () => {
     let onSubmit;
@@ -79,6 +80,16 @@ describe("SearchArea", () => {
             expect(searchArea.find(Collapse).first().prop("in")).toBe(true);
 
         });
+
+        it("should toggle advanced options when clicking ShowAdvancedOptionsButton", () => {
+            const searchArea = shallow(<SearchArea onSubmit={onSubmit}/>);
+            const button = searchArea.find(ShowAdvancedOptionsButton).first();
+
+            expect(searchArea.find(Collapse).first().prop("in")).toBe(false);
+            button.simulate("click");
+            expect(searchArea.find(Collapse).first().prop("in")).toBe(true);
+
+        });
     });
 
     describe("redux", () => {
@@ -91,19 +102,20 @@ describe("SearchArea", () => {
             const RANDOM_VALUE = 0.5;
             const DATE_NOW = 1;
 
-            const mockMath = Object.create(global.Math);
-            mockMath.random = () => RANDOM_VALUE;
-            global.Math = mockMath;
-            Date.now = jest.fn().mockReturnValue(DATE_NOW);
+            const originalMathObj = mockRandomMath(RANDOM_VALUE);
+            const originalDateNowFn = mockDateNow(DATE_NOW);
             // asserts that the addSnackbar in props is mapped to addSnackbar from notification actions
 
             const dispatch = jest.fn();
-            const props = mapActionsToProps(dispatch);
+            const props = mapDispatchToProps(dispatch);
             props.addSnackbar({ message: "message" });
             expect(dispatch).toHaveBeenCalledWith(addSnackbar({
                 message: "message",
                 key: DATE_NOW + RANDOM_VALUE,
             }));
+
+            global.Math = originalMathObj;
+            Date.now = originalDateNowFn;
         });
     });
 });

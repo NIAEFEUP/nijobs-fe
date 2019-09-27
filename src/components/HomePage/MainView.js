@@ -9,7 +9,7 @@ import InfoBox from "./QuickInfoArea/InfoBox";
 
 import homePageStyles from "./HomePage.module.css";
 
-const MainView = ({ scrollToProductDescription, scrollToSearchResults }) => (
+const MainView = ({ scrollToProductDescription, showSearchResults }) => (
     <div className={homePageStyles.mainView}>
         <div className={homePageStyles.mainMask}>
             <div className={homePageStyles.mainLogo}>
@@ -22,17 +22,23 @@ const MainView = ({ scrollToProductDescription, scrollToSearchResults }) => (
         <InfoBox
             info="Your next oportunity is out there. Use the search bar to find it!"
         />
-        <SearchArea onSubmit={scrollToSearchResults}/>
-        <ShowMoreButton
-            className={homePageStyles.showMoreBtn}
-            onClick={scrollToProductDescription}
+        <SearchArea
+            onSubmit={() => {
+                showSearchResults();
+            }}
         />
+        <div className={homePageStyles.showMoreBtn}>
+            <ShowMoreButton
+                onClick={scrollToProductDescription}
+            />
+
+        </div>
     </div>
 );
 
 MainView.propTypes = {
     scrollToProductDescription: PropTypes.func.isRequired,
-    scrollToSearchResults: PropTypes.func.isRequired,
+    showSearchResults: PropTypes.func.isRequired,
 };
 
 export default MainView;

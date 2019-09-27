@@ -1,7 +1,8 @@
 /* istanbul ignore file */
-import AppTheme from "../../../../AppTheme";
 
-export default {
+import { createStyles } from "@material-ui/core/styles";
+
+export default (theme) => createStyles({
     card: {
         display: "flex",
         flexDirection: "row",
@@ -15,7 +16,7 @@ export default {
     logo: {
         height: 100,
         width: 100,
-        marginLeft: AppTheme.spacing(3),
+        marginLeft: theme.spacing(3),
         backgroundSize: "contain",
     },
     title: {
@@ -37,4 +38,4 @@ export default {
     content: {
         paddingTop: 0,
     },
-};
+});

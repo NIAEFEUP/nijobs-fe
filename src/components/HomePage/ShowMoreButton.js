@@ -4,20 +4,19 @@ import PropTypes from "prop-types";
 import { IconButton } from "@material-ui/core";
 import { KeyboardArrowDownRounded } from "@material-ui/icons";
 
-const ShowMoreButton = ({ className, onClick }) => (
-    <div className={className}>
-        <IconButton
-            onClick={onClick}
-        >
-            <KeyboardArrowDownRounded
-                fontSize="large"
-            />
-        </IconButton>
-    </div>
+const ShowMoreButton = ({ onClick }) => (
+
+    <IconButton
+        onClick={onClick}
+    >
+        <KeyboardArrowDownRounded
+            fontSize="large"
+        />
+    </IconButton>
+
 );
 
 ShowMoreButton.propTypes = {
-    className: PropTypes.string,
     onClick: PropTypes.func.isRequired,
 };
 
