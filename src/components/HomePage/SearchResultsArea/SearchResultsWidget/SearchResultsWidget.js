@@ -1,64 +1,51 @@
 import React, { useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Grid, Paper, Divider } from "@material-ui/core";
+import { Grid, Paper, Divider, Typography } from "@material-ui/core";
 
 import OfferItemsContainer from "./OfferItemsContainer";
 import OfferContent from "../Offer/OfferContent";
+import { WorkOff } from "@material-ui/icons";
 
-import homePageStyles from "../../HomePage.module.css";
+import SearchArea from "../../SearchArea/SearchArea";
 
-const useStyles = makeStyles(() => ({
-    divider: {
-        margin: 0,
-    },
-    fullHeight: {
-        height: "100%",
-    },
+import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-}));
-
-const SearchResultsWidget = ({ setRef, offers }) => {
+const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError }) => {
     const ref = useRef(null);
     setRef(ref);
 
     const [selectedOffer, setSelectedOffer] = useState(null);
 
-    const classes = useStyles();
+    const classes = useSearchResultsWidgetStyles();
 
     return (
         <Paper elevation={2}>
-
             <Grid
                 ref={ref}
-                className={homePageStyles.searchResults}
+                className={classes.searchResults}
                 container
                 spacing={0}
             >
+                <Grid item lg={3}>
+                    <Grid container className={classes.fullHeight}>
+                        <Grid item lg={11}>
+                            {!offersSearchError ?
 
-                <Grid
-                    item
-                    lg={3}
-                >
-                    <Grid
-                        container
-                        className={classes.fullHeight}
-                    >
-                        <Grid
-                            item
-                            lg={11}
-                        >
-                            <OfferItemsContainer
-                                offers={offers}
-                                loading={offers.length === 0}
-                                setSelectedOffer={setSelectedOffer}
-                            />
+                                <OfferItemsContainer
+                                    offers={offers}
+                                    loading={offersLoading}
+                                    setSelectedOffer={setSelectedOffer}
+                                />
+                                :
+                                <div className={classes.noOffersColumn}>
+                                    <WorkOff className={classes.errorLoadingOffersIcon} />
+                                    <Typography>No offers available.</Typography>
+                                </div>
+                            }
                         </Grid>
-                        <Grid
-                            item
-                            lg={1}
-                        >
+                        <Grid item lg={1}>
                             <Divider
                                 className={`${classes.divider} ${classes.fullHeight}`}
                                 orientation="vertical"
@@ -67,25 +54,48 @@ const SearchResultsWidget = ({ setRef, offers }) => {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid
-                    item
-                    lg={9}
-                >
-                    <div style={{ height: "100%", paddingLeft: "2em" }}>
-                        <OfferContent offer={selectedOffer}/>
-                    </div>
+                <Grid item lg={9}>
+                    {!offersSearchError ?
+                        <div style={{ height: "100%", paddingLeft: "2em" }}>
+                            <OfferContent offer={selectedOffer}/>
+                        </div>
+                        :
+                        <div
+                            style={{
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center" }}
+                        >
+                            <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
+                                We could not fetch the offers you were looking for. Please revise your search criteria.
+                            </Typography>
+                            <div className={classes.searchArea}>
+                                <SearchArea />
+                            </div>
+                        </div>
+                    }
                 </Grid>
             </Grid>
+
         </Paper>
-
-
     );
-
 };
 
 SearchResultsWidget.propTypes = {
     setRef: PropTypes.func.isRequired,
     offers: PropTypes.array,
+    offersLoading: PropTypes.bool,
+    offersSearchError: PropTypes.object,
 };
 
-export default SearchResultsWidget;
+const mapStateToProps = (state) => ({
+    offers: state.offerSearch.offers,
+    offersLoading: state.offerSearch.loading,
+    offersSearchError: state.offerSearch.error,
+});
+
+const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchResultsWidget);

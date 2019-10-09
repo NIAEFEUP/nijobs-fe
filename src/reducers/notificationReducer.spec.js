@@ -8,18 +8,22 @@ describe("Notifications Reducer", () => {
     });
 
     it("should add notification when addSnackbar action is called", () => {
-        const state = notificationsState({
-            notifications: [],
-        },
-        addSnackbar({ message: "notification" }));
+        const state = notificationsState(
+            {
+                notifications: [],
+            },
+            addSnackbar({ message: "notification" })
+        );
 
         expect(state.notifications[0].message).toBe("notification");
     });
     it("should remove notification when removeSnackbar action is called", () => {
-        const state = notificationsState({
-            notifications: [{ message: "notification" }],
-        },
-        removeSnackbar());
+        const state = notificationsState(
+            {
+                notifications: [{ message: "notification" }],
+            },
+            removeSnackbar()
+        );
 
         expect(state.notifications.length).toBe(0);
     });

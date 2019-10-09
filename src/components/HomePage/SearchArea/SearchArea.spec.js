@@ -111,7 +111,6 @@ describe("SearchArea", () => {
             props.addSnackbar({ message: "message" });
             expect(dispatch).toHaveBeenCalledWith(addSnackbar({
                 message: "message",
-                key: DATE_NOW + RANDOM_VALUE,
             }));
 
             global.Math = originalMathObj;

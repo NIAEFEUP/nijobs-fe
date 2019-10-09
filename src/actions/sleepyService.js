@@ -1,12 +1,14 @@
 /* istanbul ignore file */
-import { exampleTypes } from "./types";
 import { addSnackbar } from "./notificationActions";
+export const exampleTypes = Object.freeze({
+    SLEEPY: "SLEEPY",
+});
 
 /**
  * THIS IS JUST FOR TESTING ASYNC WITHOUT FETCHING A REAL API
  * @param {*} time time to sleep in milliseconds
  */
-const sleep = (time) => new Promise((resolve) => {
+export const sleep = (time) => new Promise((resolve) => {
     setTimeout(() => {
         resolve();
     }, time);

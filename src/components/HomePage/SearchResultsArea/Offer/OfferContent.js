@@ -10,8 +10,6 @@ const useStyles = makeStyles((theme) => ({
     root: {
         padding: theme.spacing(3),
     },
-
-
 }));
 
 const OfferContent = ({ offer }) => {

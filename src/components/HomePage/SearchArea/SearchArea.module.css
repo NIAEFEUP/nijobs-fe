@@ -1,9 +1,6 @@
 .searchArea {
     padding: 1em 3em 3em 3em;
-    width: 60%;
-    margin: 0 auto;
     position: relative;
-    bottom: 6em;
 }
 
 .searchArea > form {

@@ -1,27 +1,30 @@
-import { notificationTypes } from "../actions/types";
-import typeToReducer from "type-to-reducer";
+import { notificationTypes } from "../actions/notificationActions";
 
 const initialState = {
     notifications: [],
 };
 
-export default typeToReducer({
-    [notificationTypes.ADD_SNACKBAR]: (state, action) => ({
-        ...state,
-        notifications: [
-            ...state.notifications,
-            {
-                ...action.notification,
-            },
-        ],
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case notificationTypes.ADD_SNACKBAR:
+            return {
+                ...state,
+                notifications: [
+                    ...state.notifications,
+                    {
+                        ...action.notification,
+                    },
+                ],
+            };
+        case notificationTypes.REMOVE_SNACKBAR:
+            return {
+                ...state,
+                notifications: state.notifications.filter(
+                    (notification) => notification.key !== action.key,
+                ),
+            };
 
-    }),
-
-    [notificationTypes.REMOVE_SNACKBAR]: (state, action) => ({
-        ...state,
-        notifications: state.notifications.filter(
-            (notification) => notification.key !== action.key,
-        ),
-    }),
-
-}, initialState);
+        default:
+            return state;
+    }
+};

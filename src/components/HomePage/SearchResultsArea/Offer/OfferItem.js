@@ -14,7 +14,6 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        // padding: 0,
         paddingLeft: theme.spacing(2),
         cursor: "pointer",
     },
@@ -22,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: "bold",
     },
     hoverMask: {
-        // height: "100px",
         backgroundColor: theme.palette.primary.main,
         width: 0,
         transition: "width 0.2s ease-in-out",

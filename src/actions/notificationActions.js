@@ -1,4 +1,7 @@
-import { notificationTypes } from "./types";
+export const notificationTypes = {
+    ADD_SNACKBAR: "ADD_SNACKBAR",
+    REMOVE_SNACKBAR: "REMOVE_SNACKBAR",
+};
 
 export const addSnackbar = (notification) => {
 

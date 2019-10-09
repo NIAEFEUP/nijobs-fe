@@ -1,5 +1,5 @@
 export default class Offer {
-    constructor(id, position, company, location, date, description) {
+    constructor({ id, position, company, location, date, description }) {
         this.id = id;
         this.position = position;
         this.company = company;

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
+import { searchOffers } from "../../../actions/nijobsService";
 
 import useToggle from "../../../hooks/useToggle";
 
@@ -38,9 +39,8 @@ const useStyles = makeStyles({
     },
 });
 
-export const SearchArea = (props) => {
+export const SearchArea = ({ addSnackbar, onSubmit, searchOffers }) => {
 
-    const { addSnackbar, onSubmit } = props;
     const classes = useStyles();
 
     // Set initial form values
@@ -67,6 +67,9 @@ export const SearchArea = (props) => {
         // and should be treated as a filter, not a required field, just like jobDuration
         e.preventDefault();
 
+        // TODO: Tinker filters later
+        searchOffers({ value: searchValue });
+
         addSnackbar({
             message: `Search for: ${searchValue} :: Job type: ${jobType || ""} :: Job Duration: ${jobDuration}`,
             options: {
@@ -78,7 +81,7 @@ export const SearchArea = (props) => {
             },
         });
 
-        onSubmit();
+        if (onSubmit) onSubmit();
     };
 
     const updateJobDuration = (_, val) => {
@@ -107,9 +110,7 @@ export const SearchArea = (props) => {
                 />
                 <Collapse
                     in={advancedOptions}
-                    classes={{
-                        wrapperInner: classes.wrapperInner,
-                    }}
+                    classes={{ wrapperInner: classes.wrapperInner }}
                 >
                     <TextField
                         id="job_type"
@@ -136,7 +137,7 @@ export const SearchArea = (props) => {
                             id="duration-label"
                             variant="body2"
                         >
-                            Job Duration
+                            {`Job Duration - ${jobDuration} month(s)`}
                         </Typography>
                         <Slider
                             valueLabelDisplay="auto"
@@ -161,7 +162,8 @@ export const SearchArea = (props) => {
 
 SearchArea.propTypes = {
     addSnackbar: PropTypes.func,
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
+    searchOffers: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = () => ({
@@ -169,6 +171,7 @@ export const mapStateToProps = () => ({
 
 export const mapDispatchToProps = (dispatch) => ({
     addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+    searchOffers: (filters) => dispatch(searchOffers(filters)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchArea);
