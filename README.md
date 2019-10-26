@@ -20,7 +20,7 @@ Made with ❤️ by NIAEFEUP.
 
 ### Installing Docker
 
-The best approach to install `docker` is to follow the offical guide [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository). 
+The best approach to install `docker` is to follow the official guide [here](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-using-the-repository). 
 
 Please follow the steps in `Install using the repository` section.
 
@@ -28,7 +28,7 @@ Next, follow [these](https://docs.docker.com/install/linux/linux-postinstall/) s
 
 ### Installing Docker Compose
 
-The best approach to install `docker-compose` is to follow the offical guide [here](https://docs.docker.com/compose/install/#install-compose). 
+The best approach to install `docker-compose` is to follow the official guide [here](https://docs.docker.com/compose/install/#install-compose). 
 
 ## Usage
 
@@ -55,7 +55,7 @@ This will create a development server with hot reloading which will listen on `h
 
 ## Project Details
 
-This project uses [`React.js`](https://reactjs.org/) with [`Redux`](https://redux.js.org/) for the state management. The visual framework used is [`MaterialUI`](https://material-ui.com/).
+This project uses [`React.js`](https://reactjs.org/) with [`Redux`](https://redux.js.org/) for state management. The visual framework used is [`MaterialUI`](https://material-ui.com/).
 
 ### Project Structure
 
