@@ -21,28 +21,16 @@ import {
     Collapse,
 } from "@material-ui/core";
 
-import { makeStyles } from "@material-ui/core/styles";
-import searchAreaStyle from "./SearchArea.module.css";
-
 import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
 import SliderValueTooltip from "./SliderValueTooltip";
 
-
-const useStyles = makeStyles({
-    wrapperInner: {
-        display: "grid",
-        "grid-template-columns": "1fr 1fr",
-        "grid-template-rows": "1fr",
-        "align-items": "center",
-        "grid-gap": "1em",
-    },
-});
+import useSearchAreaStyles from "./searchAreaStyle";
 
 export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, jobDuration, jobType,
     setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
 
-    const classes = useStyles();
+    const classes = useSearchAreaStyles();
 
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
 
@@ -81,7 +69,7 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, j
 
     return (
         <Paper
-            className={searchAreaStyle.searchArea}
+            className={classes.searchArea}
             elevation={8}
         >
             <form
@@ -90,20 +78,20 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, j
                 id={"search_form"}
             >
                 <SearchBar
-                    className={searchAreaStyle.searchBar}
+                    className={classes.searchBar}
                     submitSearchForm={submitForm}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
                 <Collapse
                     in={advancedOptions}
-                    classes={{ wrapperInner: classes.wrapperInner }}
+                    classes={{ wrapperInner: classes.advancedSearchContainer }}
                 >
                     <TextField
                         id="job_type"
                         select
                         label="Job Type"
-                        className={searchAreaStyle.jobTypeSelector}
+                        className={classes.jobTypeSelector}
                         value={jobType ? jobType : ""}
                         onChange={setJobType}
                         helperText="Please select your job type"
@@ -118,7 +106,7 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, j
                         ))}
                     </TextField>
                     <FormControl
-                        className={searchAreaStyle.durationSlider}
+                        className={classes.durationSlider}
                     >
                         <Typography
                             id="duration-label"

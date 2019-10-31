@@ -56,18 +56,11 @@ const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError 
                 </Grid>
                 <Grid item lg={9}>
                     {!offersSearchError ?
-                        <div style={{ height: "100%", paddingLeft: "2em" }}>
+                        <div className={classes.offerBodyContainer}>
                             <OfferContent offer={selectedOffer}/>
                         </div>
                         :
-                        <div
-                            style={{
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                justifyContent: "center" }}
-                        >
+                        <div className={classes.searchOfferErrorContainer}>
                             <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
                                 We could not fetch the offers you were looking for. Please revise your search criteria.
                             </Typography>
@@ -78,7 +71,6 @@ const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError 
                     }
                 </Grid>
             </Grid>
-
         </Paper>
     );
 };

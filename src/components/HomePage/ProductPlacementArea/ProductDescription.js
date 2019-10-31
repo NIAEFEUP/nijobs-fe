@@ -1,8 +1,6 @@
 import React, { useRef } from "react";
 import PropTypes from "prop-types";
 
-import productDescriptionStyle from "./ProductDescription.module.css";
-
 const ProductDescription = ({ setRef }) => {
 
     const ref = useRef(null);
@@ -11,7 +9,7 @@ const ProductDescription = ({ setRef }) => {
     return (
         <div
             ref={ref}
-            className={productDescriptionStyle.container}
+            style={{ height: "500px" }}
         >
                 Other content, like what is this for and cool vector and stock images with no copyright
         </div>

@@ -34,4 +34,15 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         justifyContent: "center",
     },
+    offerBodyContainer: {
+        height: "100%",
+        paddingLeft: "2em",
+    },
+    searchOfferErrorContainer: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+    },
 }));
