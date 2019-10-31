@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
 import { searchOffers } from "../../../actions/nijobsService";
+import { setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields } from "../../../actions/searchOffersActions";
+import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 
 import useToggle from "../../../hooks/useToggle";
 
@@ -26,8 +28,6 @@ import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
 import SliderValueTooltip from "./SliderValueTooltip";
 
-const INITIAL_JOB_TYPE = undefined;
-const INITIAL_JOB_DURATION = 1;
 
 const useStyles = makeStyles({
     wrapperInner: {
@@ -39,26 +39,21 @@ const useStyles = makeStyles({
     },
 });
 
-export const SearchArea = ({ addSnackbar, onSubmit, searchOffers }) => {
+export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, jobDuration, jobType,
+    setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
 
     const classes = useStyles();
 
-    // Set initial form values
-    const [searchValue, setSearchValue] = useState("");
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
-    const [jobType, setJobType] = useState(INITIAL_JOB_TYPE);
-    const [jobDuration, setJobDuration] = useState(INITIAL_JOB_DURATION);
+
+    if (!advancedOptions && (jobType !== INITIAL_JOB_TYPE || jobDuration !== INITIAL_JOB_DURATION))
+        toggleAdvancedOptions();
 
     const handleAdvancedOptionsButtonClick = () => {
         if (advancedOptions) {
-            resetAdvancedFields();
+            resetAdvancedSearchFields();
         }
         toggleAdvancedOptions();
-    };
-
-    const resetAdvancedFields = () => {
-        setJobType(INITIAL_JOB_TYPE);
-        setJobDuration(INITIAL_JOB_DURATION);
     };
 
     const submitForm = (e) => {
@@ -82,14 +77,6 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers }) => {
         });
 
         if (onSubmit) onSubmit();
-    };
-
-    const updateJobDuration = (_, val) => {
-        setJobDuration(val);
-    };
-
-    const updateJobType = (value) => {
-        setJobType(value.target.value);
     };
 
     return (
@@ -117,8 +104,8 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers }) => {
                         select
                         label="Job Type"
                         className={searchAreaStyle.jobTypeSelector}
-                        value={jobType}
-                        onChange={updateJobType}
+                        value={jobType ? jobType : ""}
+                        onChange={setJobType}
                         helperText="Please select your job type"
                     >
                         {JOB_TYPES.map(({ value, label }) => (
@@ -147,7 +134,7 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers }) => {
                             min={1}
                             max={12}
                             step={1}
-                            onChange={updateJobDuration}
+                            onChange={setJobDuration}
                         />
                     </FormControl>
                 </Collapse>
@@ -164,14 +151,28 @@ SearchArea.propTypes = {
     addSnackbar: PropTypes.func,
     onSubmit: PropTypes.func,
     searchOffers: PropTypes.func.isRequired,
+    searchValue: PropTypes.string.isRequired,
+    jobDuration: PropTypes.number,
+    jobType: PropTypes.object,
+    setSearchValue: PropTypes.func.isRequired,
+    setJobDuration: PropTypes.func.isRequired,
+    setJobType: PropTypes.func.isRequired,
+    resetAdvancedSearchFields: PropTypes.func.isRequired,
 };
 
-export const mapStateToProps = () => ({
+export const mapStateToProps = ({ offerSearch }) => ({
+    searchValue: offerSearch.searchValue,
+    jobType: offerSearch.jobType,
+    jobDuration: offerSearch.jobDuration,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
     addSnackbar: (notification) => dispatch(addSnackbar(notification)),
     searchOffers: (filters) => dispatch(searchOffers(filters)),
+    setSearchValue: (value) => dispatch(setSearchValue(value)),
+    setJobDuration: (_, value) => dispatch(setJobDuration(value)),
+    setJobType: (value) => dispatch(setJobType(value)),
+    resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchArea);

@@ -1,4 +1,4 @@
-import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "./offerActions";
+import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "./searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
@@ -69,6 +69,9 @@ export const searchOffers = (filters) => (dispatch) => {
         // }
         // const json = await res.json();
         // dispatch(fetchOffersSearch(json.offers.map((offerData) => new Offer(offerData))));
+
+        if (Math.random() !== -1)
+            throw Error("test");
 
         // TODO remove this
         dispatch(setSearchOffers(MOCK_OFFERS));

@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 
 const InfoBox = ({ info }) => (
-
     <Typography
         align="center"
         variant="body1"
@@ -13,7 +12,6 @@ const InfoBox = ({ info }) => (
     >
         {info}
     </Typography>
-
 );
 
 InfoBox.propTypes = {
