@@ -2,14 +2,13 @@ import React from "react";
 import { Close, MoreHoriz } from "@material-ui/icons";
 import { Fab } from "@material-ui/core";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
-import searchAreaStyle from "./SearchArea.module.css";
 
 describe("ShowAdvancedOptionsButton", () => {
     describe("render", () => {
-        it("should render correctly styled div", () => {
+        it("should render FAB component", () => {
             expect(
                 shallow(<ShowAdvancedOptionsButton isOpen={false} />)
-                    .find("div").first().hasClass(searchAreaStyle.advancedSearchBtnWrapper)
+                    .find(Fab).exists()
             ).toBe(true);
         });
         it("should render 'more' icon when isOpen = false", () => {

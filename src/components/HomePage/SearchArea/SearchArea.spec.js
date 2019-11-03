@@ -1,9 +1,9 @@
 import React from "react";
 import { SearchArea, mapDispatchToProps, mapStateToProps } from "./SearchArea";
 import { addSnackbar } from "../../../actions/notificationActions";
+import { setSearchValue, setJobDuration, setJobType } from "../../../actions/searchOffersActions";
 import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
-import searchAreaStyle from "./SearchArea.module.css";
 
 import {
     FormControl,
@@ -29,8 +29,9 @@ describe("SearchArea", () => {
         });
 
         it("should render a SearchBar", () => {
+
             const searchBar = shallow(<SearchArea onSubmit={onSubmit} />).find(SearchBar).first();
-            expect(searchBar.hasClass(searchAreaStyle.searchBar)).toBe(true);
+            expect(searchBar.exists()).toBe(true);
         });
 
         it("should render a Collapse", () => {
@@ -47,10 +48,10 @@ describe("SearchArea", () => {
             expect(shallow(<SearchArea onSubmit={onSubmit} />).find(TextField).first().prop("id")).toEqual("job_type");
         });
 
-        it("should contain a FormControl with correct style", () => {
+        it("should contain a FormControl", () => {
             expect(
                 shallow(<SearchArea onSubmit={onSubmit} />)
-                    .find(FormControl).first().hasClass(searchAreaStyle.durationSlider)
+                    .find(FormControl).exists()
             ).toBe(true);
         });
     });
@@ -58,10 +59,12 @@ describe("SearchArea", () => {
     describe("interaction", () => {
         it("should call onSubmit callback on form submit", () => {
             const addSnackbar = () => {};
+            const searchOffersMock = jest.fn();
             const form = shallow(
                 <SearchArea
                     onSubmit={onSubmit}
                     addSnackbar={addSnackbar}
+                    searchOffers={searchOffersMock}
                 />
             ).find("form#search_form").first();
 
@@ -69,6 +72,7 @@ describe("SearchArea", () => {
                 preventDefault: () => {},
             });
             expect(onSubmit).toHaveBeenCalledTimes(1);
+            expect(searchOffersMock).toHaveBeenCalledTimes(1);
         });
 
         it("should toggle advanced options when clicking ShowAdvancedOptionsButton", () => {
@@ -94,17 +98,27 @@ describe("SearchArea", () => {
 
     describe("redux", () => {
         it("should mapStateToProps", () => {
-            expect(mapStateToProps()).toEqual({});
+            const mockState = {
+                offerSearch: {
+                    searchValue: "searchValue",
+                    jobType: "jobType",
+                    jobDuration: "jobDuration",
+                },
+            };
+            expect(mapStateToProps(mockState)).toEqual({
+                searchValue: "searchValue",
+                jobType: "jobType",
+                jobDuration: "jobDuration",
+            });
         });
 
-        it("should mapActionsToProps", () => {
+        it("should mapDispatchToProps", () => {
 
             const RANDOM_VALUE = 0.5;
             const DATE_NOW = 1;
 
             const originalMathObj = mockRandomMath(RANDOM_VALUE);
             const originalDateNowFn = mockDateNow(DATE_NOW);
-            // asserts that the addSnackbar in props is mapped to addSnackbar from notification actions
 
             const dispatch = jest.fn();
             const props = mapDispatchToProps(dispatch);
@@ -115,6 +129,21 @@ describe("SearchArea", () => {
 
             global.Math = originalMathObj;
             Date.now = originalDateNowFn;
+
+            props.setSearchValue("searchValue");
+            expect(dispatch).toHaveBeenCalledWith(setSearchValue("searchValue"));
+
+            props.setJobDuration(null, 2);
+            expect(dispatch).toHaveBeenCalledWith(setJobDuration(2));
+
+            const jobType = {
+                target: {
+                    value: "jobType",
+                },
+            };
+
+            props.setJobType(jobType);
+            expect(dispatch).toHaveBeenCalledWith(setJobType("jobType"));
         });
     });
 });

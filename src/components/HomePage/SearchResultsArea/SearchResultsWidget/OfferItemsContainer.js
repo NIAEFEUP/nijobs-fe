@@ -18,23 +18,14 @@ const useStyles = makeStyles(() => ({
 
 const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
     const classes = useStyles();
-    if (loading) return "loading..";
+    if (loading) return "loading..."; // TODO: IMPLEMENT SKELETON LOADING
 
     return (
-        <div
-            className={classes.root}
-        >
-            <List
-                disablePadding
-            >
+        <div className={classes.root}>
+            <List disablePadding>
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
-                        {i !== 0 &&
-                        <Divider
-                            // variant="middle"
-                            component="li"
-                        />
-                        }
+                        {i !== 0 && <Divider component="li"/>}
                         <OfferItem
                             offer={offer}
                             setSelectedOffer={setSelectedOffer}

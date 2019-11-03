@@ -1,4 +1,4 @@
-const JOB_TYPES = Object.freeze([
+const JobTypes = Object.freeze([
     {
         value: null,
         label: "Any",
@@ -22,4 +22,4 @@ const JOB_TYPES = Object.freeze([
 
 ]);
 
-export default JOB_TYPES;
+export default JobTypes;

@@ -31,7 +31,7 @@ export default makeStyles(() => ({
         display: "flex",
         justifyContent: "center",
         width: "100%",
-        bottom: "-30px",
+        bottom: "-2em",
         left: 0,
     },
 }));

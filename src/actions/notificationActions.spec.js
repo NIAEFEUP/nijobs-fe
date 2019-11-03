@@ -1,5 +1,4 @@
-import * as actions from "./notificationActions";
-import { notificationTypes } from "./types";
+import { notificationTypes, addSnackbar, removeSnackbar } from "./notificationActions";
 import { mockRandomMath, mockDateNow } from "../../testUtils";
 
 describe("Notification actions", () => {
@@ -22,7 +21,7 @@ describe("Notification actions", () => {
             },
         };
 
-        expect(actions.addSnackbar(submittedNotification)).toEqual(expectedAction);
+        expect(addSnackbar(submittedNotification)).toEqual(expectedAction);
 
         global.Math = originalMathObj;
         Date.now = originalDateNowFn;
@@ -32,7 +31,7 @@ describe("Notification actions", () => {
 
         const notification = {};
         expect(() => {
-            actions.addSnackbar(notification);
+            addSnackbar(notification);
         }).toThrow("Notification must have a message field");
 
     });
@@ -41,7 +40,7 @@ describe("Notification actions", () => {
 
         const notification = { message: "" };
         expect(() => {
-            actions.addSnackbar(notification);
+            addSnackbar(notification);
         }).toThrow("Notification must have a message field");
 
     });
@@ -51,7 +50,7 @@ describe("Notification actions", () => {
         const dispatch = (action) => {
             expect(action).toEqual({ type: notificationTypes.REMOVE_SNACKBAR, key });
         };
-        dispatch(actions.removeSnackbar(key));
+        dispatch(removeSnackbar(key));
     });
 
 });

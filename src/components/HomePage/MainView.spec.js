@@ -1,11 +1,11 @@
 import React from "react";
 import { Provider } from "react-redux";
 import configureMockStore from "redux-mock-store";
+import thunk from "redux-thunk";
 import MainView from "./MainView";
 import InfoBox from "./QuickInfoArea/InfoBox";
 import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
-import homePageStyles from "./HomePage.module.css";
 
 describe("Main View", () => {
     let scrollToProductDescription, showSearchResults;
@@ -39,18 +39,6 @@ describe("Main View", () => {
                     showSearchResults={showSearchResults}
                 />).find(ShowMoreButton).exists()).toBe(true);
         });
-
-        it("should render correctly styled divs", () => {
-            expect(shallow(
-                <MainView
-                    scrollToProductDescription={scrollToProductDescription}
-                    showSearchResults={showSearchResults}
-                />)
-                .find(
-                    `div.${homePageStyles.mainView} > div.${homePageStyles.mainMask} > div.${homePageStyles.mainLogo}`
-                ).exists())
-                .toBe(true);
-        });
     });
 
 
@@ -65,8 +53,12 @@ describe("Main View", () => {
         });
 
         it("should call showSearchResults when search is submitted", () => {
-            const initialState = {};
-            const mockStore = configureMockStore();
+            const initialState = {
+                offerSearch: {
+                    searchValue: "searchValue",
+                },
+            };
+            const mockStore = configureMockStore([thunk]);
             const store = mockStore(initialState);
             mount(
                 <Provider store={store}>

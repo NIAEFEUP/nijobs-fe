@@ -9,7 +9,7 @@ import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/search
 
 import useToggle from "../../../hooks/useToggle";
 
-import JOB_TYPES from "./jobTypes";
+import JobTypes from "./JobTypes";
 
 import {
     FormControl,
@@ -27,7 +27,8 @@ import SliderValueTooltip from "./SliderValueTooltip";
 
 import useSearchAreaStyles from "./searchAreaStyle";
 
-export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, jobDuration, jobType,
+export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
+    jobDuration = INITIAL_JOB_DURATION, jobType = INITIAL_JOB_TYPE,
     setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
 
     const classes = useSearchAreaStyles();
@@ -96,7 +97,7 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue, j
                         onChange={setJobType}
                         helperText="Please select your job type"
                     >
-                        {JOB_TYPES.map(({ value, label }) => (
+                        {JobTypes.map(({ value, label }) => (
                             <MenuItem
                                 key={value}
                                 value={value}
@@ -141,7 +142,7 @@ SearchArea.propTypes = {
     searchOffers: PropTypes.func.isRequired,
     searchValue: PropTypes.string.isRequired,
     jobDuration: PropTypes.number,
-    jobType: PropTypes.object,
+    jobType: PropTypes.string,
     setSearchValue: PropTypes.func.isRequired,
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
@@ -159,7 +160,7 @@ export const mapDispatchToProps = (dispatch) => ({
     searchOffers: (filters) => dispatch(searchOffers(filters)),
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(value)),
-    setJobType: (value) => dispatch(setJobType(value)),
+    setJobType: (e) => dispatch(setJobType(e.target.value)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
 });
 

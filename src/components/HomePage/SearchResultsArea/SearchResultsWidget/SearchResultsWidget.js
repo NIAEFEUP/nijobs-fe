@@ -12,7 +12,7 @@ import SearchArea from "../../SearchArea/SearchArea";
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError }) => {
+export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError }) => {
     const ref = useRef(null);
     setRef(ref);
 
@@ -28,21 +28,20 @@ const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError 
                 container
                 spacing={0}
             >
-                <Grid item lg={3}>
+                <Grid item lg={3} id="offer_list">
                     <Grid container className={classes.fullHeight}>
                         <Grid item lg={11}>
-                            {!offersSearchError ?
-
+                            {(offersSearchError || (offers && offers.length === 0)) ?
+                                <div className={classes.noOffersColumn}>
+                                    <WorkOff className={classes.errorLoadingOffersIcon} />
+                                    <Typography>No offers available.</Typography>
+                                </div>
+                                :
                                 <OfferItemsContainer
                                     offers={offers}
                                     loading={offersLoading}
                                     setSelectedOffer={setSelectedOffer}
                                 />
-                                :
-                                <div className={classes.noOffersColumn}>
-                                    <WorkOff className={classes.errorLoadingOffersIcon} />
-                                    <Typography>No offers available.</Typography>
-                                </div>
                             }
                         </Grid>
                         <Grid item lg={1}>
@@ -54,12 +53,8 @@ const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError 
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item lg={9}>
-                    {!offersSearchError ?
-                        <div className={classes.offerBodyContainer}>
-                            <OfferContent offer={selectedOffer}/>
-                        </div>
-                        :
+                <Grid item lg={9} id="offer_content">
+                    {(offersSearchError || (offers && offers.length === 0)) ?
                         <div className={classes.searchOfferErrorContainer}>
                             <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
                                 We could not fetch the offers you were looking for. Please revise your search criteria.
@@ -67,6 +62,10 @@ const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError 
                             <div className={classes.searchArea}>
                                 <SearchArea />
                             </div>
+                        </div>
+                        :
+                        <div className={classes.offerBodyContainer}>
+                            <OfferContent offer={selectedOffer}/>
                         </div>
                     }
                 </Grid>
