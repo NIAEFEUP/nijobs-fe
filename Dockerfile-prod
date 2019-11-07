@@ -1,0 +1,29 @@
+#Based on the template from niployments (https://github.com/NIAEFEUP/niployments) for react applications
+
+# First, building the static files
+FROM node:10.17.0-alpine as build
+
+WORKDIR /usr/src/app
+COPY package.json package-lock.json ./
+
+# Because colors break logs
+ENV NPM_CONFIG_COLOR=false
+
+# Production or not doesn't really matter as this image will not be used other than for building
+RUN npm install
+
+# Necessary files for building the app
+COPY public/ public/
+COPY config/ config/
+COPY scripts/ scripts/
+COPY src/ src/
+
+# Building the image
+RUN npm run build
+
+# Then, use nginx to serve the built files
+# See https://hub.docker.com/_/nginx
+FROM nginx:alpine
+
+# Copying the built files into the nginx image, to the default served directory
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
