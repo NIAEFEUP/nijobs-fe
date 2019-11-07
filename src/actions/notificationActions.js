@@ -1,18 +1,24 @@
-import { notificationTypes } from "./types";
+export const notificationTypes = {
+    ADD_SNACKBAR: "ADD_SNACKBAR",
+    REMOVE_SNACKBAR: "REMOVE_SNACKBAR",
+};
 
-export const addSnackbar = (notification) => (dispatch) => {
-    dispatch({
+export const addSnackbar = (notification) => {
+
+    if (typeof notification.message !== "string" || notification.message.length === 0) {
+        throw new Error("Notification must have a message field");
+    }
+
+    return {
         type: notificationTypes.ADD_SNACKBAR,
         notification: {
-            key: new Date().getTime() + Math.random(),
+            key: Date.now() + Math.random(),
             ...notification,
         },
-    });
+    };
 };
 
-export const removeSnackbar = (key) => (dispatch) => {
-    dispatch({
-        type: notificationTypes.REMOVE_SNACKBAR,
-        key,
-    });
-};
+export const removeSnackbar = (key) => ({
+    type: notificationTypes.REMOVE_SNACKBAR,
+    key,
+});

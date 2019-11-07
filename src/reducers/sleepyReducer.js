@@ -1,5 +1,5 @@
-import { exampleTypes } from "../actions/types";
-import typeToReducer from "type-to-reducer";
+/* istanbul ignore file */
+import { exampleTypes } from "../actions/sleepyService";
 
 const initialState = {
     done: false,
@@ -7,21 +7,27 @@ const initialState = {
     error: null,
 };
 
-export default typeToReducer({
-    [exampleTypes.SLEEPY]: {
-        PENDING: () => ({
-            ...initialState,
-            waiting: true,
-        }),
-        REJECTED: (state, action) => ({
-            ...state,
-            waiting: false,
-            error: action.payload,
-        }),
-        FULFILLED: (state) => ({
-            ...state,
-            done: true,
-            waiting: false,
-        }),
-    },
-}, initialState);
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case exampleTypes.SLEEPY_PENDING:
+            return {
+                ...initialState,
+                waiting: true,
+            };
+        case exampleTypes.SLEEPY_REJECTED:
+            return {
+                ...state,
+                waiting: false,
+                error: action.payload,
+            };
+        case exampleTypes.SLEEPY_FULFILLED:
+            return {
+                ...state,
+                done: true,
+                waiting: false,
+            };
+
+        default:
+            return state;
+    }
+};

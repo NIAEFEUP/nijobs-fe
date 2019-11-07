@@ -8,6 +8,9 @@
 
     "globals": {
         "jsdom": true,
+        "shallow": true,
+        "render": true,
+        "mount": true
     },
 
     "parser": "babel-eslint",
@@ -132,10 +135,6 @@
         "react/jsx-indent-props": ["error", 4],
         "react/jsx-one-expression-per-line": ["error", {
             "allow": "literal"
-        }],
-        "react/jsx-max-props-per-line": ["error", {
-            "maximum": 1,
-            "when": "always" 
         }],
         "react/jsx-first-prop-new-line": ["error", "multiline"],
         "react/jsx-no-comment-textnodes": "error",

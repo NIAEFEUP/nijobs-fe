@@ -1,23 +1,19 @@
-import React, { Component } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import AppRouter from "./AppRouter";
 import store from "./store";
 import Notifier from "./components/Notifications/Notifier";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-// import './App.css';
+const App = () => (
+    <Provider store={store}>
+        <React.Fragment>
+            <CssBaseline />
+            <Notifier />
+            <AppRouter/>
+        </React.Fragment>
 
-class App extends Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <div>
-                    {/* <AppNavbar/> */}
-                    <Notifier />
-                    <AppRouter/>
-                </div>
-            </Provider>
-        );
-    }
-}
+    </Provider>
+);
 
 export default App;

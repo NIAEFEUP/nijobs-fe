@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { Component } from "react";
 
 class ExamplePage extends Component {

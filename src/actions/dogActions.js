@@ -1,4 +1,8 @@
-import { dogTypes } from "./types";
+/* istanbul ignore file */
+export const dogTypes = Object.freeze({
+    GET_RANDOM_DOG: "GET_RANDOM_DOG",
+    RESET_RANDOM_DOG: "RESET_RANDOM_DOG",
+});
 
 const fetchRandomDog = () => new Promise((resolve, reject) => {
     fetch("https://dog.ceo/api/breeds/image/random")

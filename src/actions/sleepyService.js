@@ -1,25 +1,28 @@
-import { exampleTypes } from "./types";
+/* istanbul ignore file */
 import { addSnackbar } from "./notificationActions";
+export const exampleTypes = Object.freeze({
+    SLEEPY: "SLEEPY",
+});
 
 /**
  * THIS IS JUST FOR TESTING ASYNC WITHOUT FETCHING A REAL API
  * @param {*} time time to sleep in milliseconds
  */
-const sleep = (time) => new Promise((resolve) => {
+export const sleep = (time) => new Promise((resolve) => {
     setTimeout(() => {
         resolve();
     }, time);
 });
 
-const exampleActionFetch = async () => {
+const exampleFetch = async () => {
     await sleep(2000);
     return;
 };
 
-export const exampleAction = () => (dispatch) => {
+export const exampleServiceCall = () => (dispatch) => {
     const first = dispatch({
         type: exampleTypes.SLEEPY,
-        payload: exampleActionFetch(),
+        payload: exampleFetch(),
     });
 
     first.then(() => {
