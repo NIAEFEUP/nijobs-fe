@@ -10,7 +10,7 @@ import {
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-const OfferItemsContainer = ({ offers, loading, showDetails }) => {
+const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
     const classes = useSearchResultsWidgetStyles();
 
     if (loading) return (
@@ -40,7 +40,7 @@ const OfferItemsContainer = ({ offers, loading, showDetails }) => {
                         {i !== 0 && <Divider component="li"/>}
                         <OfferItem
                             offer={offer}
-                            showDetails={showDetails}
+                            setSelectedOffer={setSelectedOffer}
                             loading={loading}
                         />
                     </React.Fragment>
@@ -53,7 +53,7 @@ const OfferItemsContainer = ({ offers, loading, showDetails }) => {
 OfferItemsContainer.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
-    showDetails: PropTypes.func.isRequired,
+    setSelectedOffer: PropTypes.func.isRequired,
 };
 
 export default OfferItemsContainer;

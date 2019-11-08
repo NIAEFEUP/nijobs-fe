@@ -44,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const OfferItem = ({ offer, showDetails, loading }) => {
+const OfferItem = ({ offer, setSelectedOffer, loading }) => {
     const classes = useStyles();
     return (
         <div className={classes.itemWrapper}>
             <ListItem
                 alignItems="flex-start"
-                onClick={() => !loading && showDetails(offer)}
+                onClick={() => !loading && setSelectedOffer(offer)}
                 className={classes.root}
             >
                 <ListItemAvatar>
@@ -66,12 +66,7 @@ const OfferItem = ({ offer, showDetails, loading }) => {
                     }
                 </ListItemAvatar>
                 <ListItemText
-                    primary={
-                        loading ?
-                            <Skeleton/>
-                            :
-                            offer.position
-                    }
+                    primary={loading ? <Skeleton/> : offer.position}
                     primaryTypographyProps={{
                         className: classes.offerTitle,
                     }}
@@ -94,7 +89,7 @@ const OfferItem = ({ offer, showDetails, loading }) => {
 
 OfferItem.propTypes = {
     offer: PropTypes.instanceOf(Offer),
-    showDetails: PropTypes.func,
+    setSelectedOffer: PropTypes.func,
     loading: PropTypes.bool,
 };
 
