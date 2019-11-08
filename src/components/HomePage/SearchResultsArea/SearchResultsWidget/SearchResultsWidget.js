@@ -31,7 +31,7 @@ export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearc
                 <Grid item lg={3} id="offer_list">
                     <Grid container className={classes.fullHeight}>
                         <Grid item lg={11}>
-                            {(offersSearchError || (offers && offers.length === 0)) ?
+                            {(offersSearchError || (!offersLoading && offers.length === 0)) ?
                                 <div className={classes.noOffersColumn}>
                                     <WorkOff className={classes.errorLoadingOffersIcon} />
                                     <Typography>No offers available.</Typography>
@@ -54,7 +54,7 @@ export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearc
                     </Grid>
                 </Grid>
                 <Grid item lg={9} id="offer_content">
-                    {(offersSearchError || (offers && offers.length === 0)) ?
+                    {(offersSearchError || (!offersLoading && offers.length === 0)) ?
                         <div className={classes.searchOfferErrorContainer}>
                             <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
                                 We could not fetch the offers you were looking for. Please revise your search criteria.

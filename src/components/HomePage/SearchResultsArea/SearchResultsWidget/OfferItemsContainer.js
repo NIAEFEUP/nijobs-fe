@@ -18,7 +18,24 @@ const useStyles = makeStyles(() => ({
 
 const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
     const classes = useStyles();
-    if (loading) return "loading..."; // TODO: IMPLEMENT SKELETON LOADING
+    if (loading) return (
+        <div className={classes.root}>
+            <List disablePadding>
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+            </List>
+        </div>
+    );
 
     return (
         <div className={classes.root}>
@@ -29,6 +46,7 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
                         <OfferItem
                             offer={offer}
                             setSelectedOffer={setSelectedOffer}
+                            loading={loading}
                         />
                     </React.Fragment>
                 ))}

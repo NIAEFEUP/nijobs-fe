@@ -11,6 +11,7 @@ import {
 import Offer from "./Offer";
 
 import { makeStyles } from "@material-ui/core/styles";
+import Skeleton from "react-loading-skeleton";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const OfferItem = ({ offer, setSelectedOffer }) => {
+const OfferItem = ({ offer, setSelectedOffer, loading }) => {
     const classes = useStyles();
     return (
         <div className={classes.itemWrapper}>
@@ -47,26 +48,33 @@ const OfferItem = ({ offer, setSelectedOffer }) => {
                 className={classes.root}
             >
                 <ListItemAvatar>
-                    <Avatar
-                        alt="company_logo"
-                        src={offer.company.logo}
-                    />
+                    {loading ?
+                        <Avatar variant="rounded" classes={{ colorDefault: "transparent" }}>
+                            <Skeleton circle width={100} height={100} />
+                        </Avatar>
+                        :
+                        <Avatar
+                            alt="company_logo"
+                            src={offer.company.logo}
+                        />
+                    }
                 </ListItemAvatar>
                 <ListItemText
-                    primary={offer.position}
+                    primary={loading ? <Skeleton/> : offer.position}
                     primaryTypographyProps={{
                         className: classes.offerTitle,
                     }}
-                    secondary={
+                    secondary={loading ?
+                        <Skeleton/> :
                         <Typography
                             component="p"
                             variant="body2"
                             color="textPrimary"
                         >
                             {offer.company.name}
-                        </Typography>
-                    }
+                        </Typography>}
                 />
+
             </ListItem>
             <div className={classes.hoverMask} />
         </div>
@@ -74,8 +82,9 @@ const OfferItem = ({ offer, setSelectedOffer }) => {
 };
 
 OfferItem.propTypes = {
-    offer: PropTypes.instanceOf(Offer).isRequired,
-    setSelectedOffer: PropTypes.func.isRequired,
+    offer: PropTypes.instanceOf(Offer),
+    setSelectedOffer: PropTypes.func,
+    loading: PropTypes.bool,
 };
 
 export default OfferItem;

@@ -48,9 +48,16 @@ const MOCK_OFFERS = [
     }),
 ];
 
+const sleep = (time) => new Promise((resolve) => {
+    setTimeout(() => {
+        resolve();
+    }, time);
+
+});
+
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
 // eslint-disable-next-line no-unused-vars
-export const searchOffers = (filters) => (dispatch) => {
+export const searchOffers = (filters) => async (dispatch) => {
 
     dispatch(setLoadingOffers(true));
 
@@ -70,8 +77,7 @@ export const searchOffers = (filters) => (dispatch) => {
         // const json = await res.json();
         // dispatch(fetchOffersSearch(json.offers.map((offerData) => new Offer(offerData))));
 
-        if (Math.random() !== -1)
-            throw Error("test");
+        await sleep(2000);
 
         // TODO remove this
         dispatch(setSearchOffers(MOCK_OFFERS));
