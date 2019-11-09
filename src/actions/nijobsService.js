@@ -77,7 +77,7 @@ export const searchOffers = (filters) => async (dispatch) => {
         // const json = await res.json();
         // dispatch(fetchOffersSearch(json.offers.map((offerData) => new Offer(offerData))));
 
-        await sleep(2000);
+        await sleep(500000);
 
         // TODO remove this
         dispatch(setSearchOffers(MOCK_OFFERS));

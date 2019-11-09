@@ -44,7 +44,7 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
         <div className={classes.itemWrapper}>
             <ListItem
                 alignItems="flex-start"
-                onClick={() => setSelectedOffer(offer)}
+                onClick={() => !loading && setSelectedOffer(offer)}
                 className={classes.root}
             >
                 <ListItemAvatar>

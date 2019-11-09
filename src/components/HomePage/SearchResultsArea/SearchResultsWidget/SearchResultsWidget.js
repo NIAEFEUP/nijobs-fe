@@ -65,7 +65,7 @@ export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearc
                         </div>
                         :
                         <div className={classes.offerBodyContainer}>
-                            <OfferContent offer={selectedOffer}/>
+                            <OfferContent offer={selectedOffer} loading={offersLoading}/>
                         </div>
                     }
                 </Grid>
