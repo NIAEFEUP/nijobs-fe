@@ -18,6 +18,9 @@ COPY config/ config/
 COPY scripts/ scripts/
 COPY src/ src/
 
+# Copy env files
+COPY .env* ./
+
 # Building the image
 RUN npm run build
 
