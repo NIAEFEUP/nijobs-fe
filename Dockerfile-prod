@@ -21,6 +21,9 @@ COPY src/ src/
 # Building the image
 RUN npm run build
 
+# Copy env files
+COPY .env* ./
+
 # Then, use nginx to serve the built files
 # See https://hub.docker.com/_/nginx
 FROM nginx:alpine
