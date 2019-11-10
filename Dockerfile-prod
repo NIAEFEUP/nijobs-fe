@@ -24,12 +24,10 @@ COPY .env* ./
 # Building the image
 RUN npm run build
 
-# Copy env files
-COPY .env* ./
-
 # Then, use nginx to serve the built files
 # See https://hub.docker.com/_/nginx
 FROM nginx:alpine
 
 # Copying the built files into the nginx image, to the default served directory
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
+COPY nginx.nijobs.conf /etc/nginx/conf.d/default.conf
