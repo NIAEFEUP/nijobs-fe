@@ -4,7 +4,7 @@ import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
 
 const AppRouter = () => (
-    <BrowserRouter>
+    <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
         <Switch>
             <Route
                 exact
