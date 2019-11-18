@@ -21,12 +21,14 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
                     />
                 </div>
             </div>
-            <div className={classes.searchArea}>
-                <SearchArea
-                    onSubmit={() => {
-                        showSearchResults();
-                    }}
-                />
+            <div className={classes.searchAreaWrapper}>
+                <div className={classes.searchArea}>
+                    <SearchArea
+                        onSubmit={() => {
+                            showSearchResults();
+                        }}
+                    />
+                </div>
             </div>
             <div className={classes.infoBox}>
                 <InfoBox

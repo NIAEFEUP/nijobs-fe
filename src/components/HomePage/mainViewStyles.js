@@ -25,10 +25,16 @@ export default makeStyles(() => ({
             width: "50%",
         },
     },
-    searchArea: {
-        width: "100%",
+    searchAreaWrapper: {
+        width: "100vw",
+        height: "100vh",
         position: "absolute",
-        top: "42.5vh",
+        top: 0,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+    },
+    searchArea: {
         "& > *:first-child": {
             width: "60%",
             margin: "0 auto",
