@@ -29,14 +29,6 @@ To match a URL to a specific page (i.e. you want to add a contacts page), you mu
 
 React Router Docs : https://reacttraining.com/react-router/web/guides/quick-start
 
-
-
-```js
-export default withRouter(connect(mapStateToProps, mapActionsToProps)(TopButtonBar));
-```
-
-> From `/src/components/HomePage/TopButtonBar.js`
-
 ## Material UI
 
 The Visual components used in this project come from `material-ui` framework, which provides many web elements and utilities to allow an easier and more responsive development of an UI/UX with Material Design styles.
