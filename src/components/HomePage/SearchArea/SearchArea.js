@@ -19,13 +19,17 @@ import {
     TextField,
     MenuItem,
     Collapse,
+    Dialog,
 } from "@material-ui/core";
 
 import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
 import SliderValueTooltip from "./SliderValueTooltip";
 
+import AdvancedSearchMobile from "./AdvancedSearchMobile";
+
 import useSearchAreaStyles from "./searchAreaStyle";
+import { useMobile } from "../../../utils/media-queries";
 
 export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
     jobDuration = INITIAL_JOB_DURATION, jobType = INITIAL_JOB_TYPE,
@@ -84,49 +88,61 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
-                <Collapse
-                    in={advancedOptions}
-                    classes={{ wrapperInner: classes.advancedSearchContainer }}
-                >
-                    <TextField
-                        id="job_type"
-                        select
-                        label="Job Type"
-                        className={classes.jobTypeSelector}
-                        value={jobType ? jobType : ""}
-                        onChange={setJobType}
-                        helperText="Please select your job type"
-                    >
-                        {JobTypes.map(({ value, label }) => (
-                            <MenuItem
-                                key={value}
-                                value={value}
-                            >
-                                {label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <FormControl
-                        className={classes.durationSlider}
-                    >
-                        <Typography
-                            id="duration-label"
-                            variant="body2"
-                        >
-                            {`Job Duration - ${jobDuration} month(s)`}
-                        </Typography>
-                        <Slider
-                            valueLabelDisplay="auto"
-                            value={jobDuration}
-                            ValueLabelComponent={SliderValueTooltip}
-                            name="jobDuration"
-                            min={1}
-                            max={12}
-                            step={1}
-                            onChange={setJobDuration}
+                {useMobile() ?
+                    <Dialog fullScreen open={advancedOptions}>
+                        <AdvancedSearchMobile
+                            submitSearchForm={(e) => {
+                                toggleAdvancedOptions();
+                                submitForm(e);
+                            }}
+                            close={toggleAdvancedOptions}
                         />
-                    </FormControl>
-                </Collapse>
+                    </Dialog>
+                    :
+                    <Collapse
+                        in={advancedOptions}
+                        classes={{ wrapperInner: classes.advancedSearchContainer }}
+                    >
+                        <TextField
+                            id="job_type"
+                            select
+                            label="Job Type"
+                            className={classes.jobTypeSelector}
+                            value={jobType ? jobType : ""}
+                            onChange={setJobType}
+                            helperText="Please select your job type"
+                        >
+                            {JobTypes.map(({ value, label }) => (
+                                <MenuItem
+                                    key={value}
+                                    value={value}
+                                >
+                                    {label}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <FormControl
+                            className={classes.durationSlider}
+                        >
+                            <Typography
+                                id="duration-label"
+                                variant="body2"
+                            >
+                                {`Job Duration - ${jobDuration} month(s)`}
+                            </Typography>
+                            <Slider
+                                valueLabelDisplay="auto"
+                                value={jobDuration}
+                                ValueLabelComponent={SliderValueTooltip}
+                                name="jobDuration"
+                                min={1}
+                                max={12}
+                                step={1}
+                                onChange={setJobDuration}
+                            />
+                        </FormControl>
+                    </Collapse>
+                }
             </form>
             <ShowAdvancedOptionsButton
                 onClick={handleAdvancedOptionsButtonClick}

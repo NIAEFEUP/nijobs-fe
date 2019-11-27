@@ -7,32 +7,38 @@ import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
+import { useMobile, NonMobileLayout } from "../../utils/media-queries";
+
 import useMainViewStyles from "./mainViewStyles.js";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
+
     const classes = useMainViewStyles();
     return (
         <div className={classes.mainView}>
-            <div className={classes.mainMask}>
-                <div className={classes.mainLogo}>
+            <div className={useMobile() ? classes.mainMaskMobile : classes.mainMask}>
+                <div className={useMobile() ? classes.mainLogoMobile : classes.mainLogo}>
                     <img
                         src={logo}
                         alt="nijobs Logo"
                     />
                 </div>
             </div>
-            <div className={classes.searchArea}>
+
+            <div className={useMobile() ? classes.searchAreaMobile : classes.searchArea}>
                 <SearchArea
                     onSubmit={() => {
                         showSearchResults();
                     }}
                 />
             </div>
-            <div className={classes.infoBox}>
-                <InfoBox
-                    info="Your next oportunity is out there. Use the search bar to find it!"
-                />
-            </div>
+            <NonMobileLayout>
+                <div className={classes.infoBox}>
+                    <InfoBox
+                        info="Your next oportunity is out there. Use the search bar to find it!"
+                    />
+                </div>
+            </NonMobileLayout>
             <div className={classes.showMoreBtn}>
                 <ShowMoreButton
                     onClick={scrollToProductDescription}
