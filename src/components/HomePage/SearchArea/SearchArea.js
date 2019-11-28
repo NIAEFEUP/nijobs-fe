@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { addSnackbar } from "../../../actions/notificationActions";
 import { searchOffers } from "../../../actions/nijobsService";
 import { setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields } from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
@@ -19,7 +18,6 @@ import {
     TextField,
     MenuItem,
     Collapse,
-    Dialog,
 } from "@material-ui/core";
 
 import SearchBar from "./SearchBar";
@@ -31,7 +29,7 @@ import AdvancedSearchMobile from "./AdvancedSearchMobile";
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
 
-export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
+export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     jobDuration = INITIAL_JOB_DURATION, jobType = INITIAL_JOB_TYPE,
     setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
 
@@ -39,7 +37,7 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
 
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
 
-    if (!advancedOptions && (jobType !== INITIAL_JOB_TYPE || jobDuration !== INITIAL_JOB_DURATION))
+    if (!useMobile() && !advancedOptions && (jobType !== INITIAL_JOB_TYPE || jobDuration !== INITIAL_JOB_DURATION))
         toggleAdvancedOptions();
 
     const handleAdvancedOptionsButtonClick = () => {
@@ -53,25 +51,16 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
         // mind the jobType value when passing value to api,
         // because for simple search, the initial jobType value will be undefined,
         // and should be treated as a filter, not a required field, just like jobDuration
-        e.preventDefault();
+        if (e) e.preventDefault();
 
         // TODO: Tinker filters later
         searchOffers({ value: searchValue });
 
-        addSnackbar({
-            message: `Search for: ${searchValue} :: Job type: ${jobType || ""} :: Job Duration: ${jobDuration}`,
-            options: {
-                variant: "info",
-                anchorOrigin: {
-                    vertical: "top",
-                    horizontal: "right",
-                },
-            },
-        });
-
         if (onSubmit) onSubmit();
     };
 
+
+    // TODO Make the advancedSearch button be gray, and primary/secondary, if there are changes (i.e. jobDuration !== INITIAL_JOB_DURATION)
     return (
         <Paper
             className={classes.searchArea}
@@ -89,15 +78,20 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
                     setSearchValue={setSearchValue}
                 />
                 {useMobile() ?
-                    <Dialog fullScreen open={advancedOptions}>
-                        <AdvancedSearchMobile
-                            submitSearchForm={(e) => {
-                                toggleAdvancedOptions();
-                                submitForm(e);
-                            }}
-                            close={toggleAdvancedOptions}
-                        />
-                    </Dialog>
+
+                    <AdvancedSearchMobile
+                        open={advancedOptions}
+                        close={toggleAdvancedOptions}
+                        submitForm={submitForm}
+                        searchValue={searchValue}
+                        jobDuration={jobDuration}
+                        jobType={jobType}
+                        setSearchValue={setSearchValue}
+                        setJobType={setJobType}
+                        setJobDuration={setJobDuration}
+                        resetAdvancedSearchFields={resetAdvancedSearchFields}
+                    />
+
                     :
                     <Collapse
                         in={advancedOptions}
@@ -153,7 +147,6 @@ export const SearchArea = ({ addSnackbar, onSubmit, searchOffers, searchValue,
 };
 
 SearchArea.propTypes = {
-    addSnackbar: PropTypes.func,
     onSubmit: PropTypes.func,
     searchOffers: PropTypes.func.isRequired,
     searchValue: PropTypes.string.isRequired,
@@ -172,7 +165,6 @@ export const mapStateToProps = ({ offerSearch }) => ({
 });
 
 export const mapDispatchToProps = (dispatch) => ({
-    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
     searchOffers: (filters) => dispatch(searchOffers(filters)),
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(value)),

@@ -9,9 +9,7 @@ import {
 
 import { Search } from "@material-ui/icons";
 
-const SearchBar = (props) => {
-
-    const { searchValue, setSearchValue, className, submitSearchForm } = props;
+const SearchBar = ({ searchValue, setSearchValue, className, submitSearchForm, hideInputAdornment, onEnterPress }) => {
 
     const handleChange = (e) => {
         setSearchValue(e.target.value);
@@ -22,6 +20,10 @@ const SearchBar = (props) => {
         submitSearchForm(e);
     };
 
+    const handleEnterPressSearchBar = (e) => {
+        if (e.key === "Enter") onEnterPress(e);
+    };
+
     return (
         <TextField
             label="Search"
@@ -30,17 +32,21 @@ const SearchBar = (props) => {
             value={searchValue}
             onChange={handleChange}
             className={className}
-            InputProps={{
+            InputProps={!hideInputAdornment ? ({
                 "endAdornment":
-    <InputAdornment position="end">
-        <IconButton
-            aria-label="search"
-            onClick={handleButtonClick}
-            color="secondary"
-        >
-            <Search />
-        </IconButton>
-    </InputAdornment>,
+                <InputAdornment position="end">
+                    <IconButton
+                        aria-label="search"
+                        onClick={handleButtonClick}
+                        color="secondary"
+                        size="small"
+                    >
+                        <Search />
+                    </IconButton>
+                </InputAdornment>,
+            }) : ({})}
+            inputProps={{
+                onKeyPress: handleEnterPressSearchBar,
             }}
         />
     );
@@ -50,7 +56,9 @@ SearchBar.propTypes = {
     searchValue: PropTypes.string.isRequired,
     setSearchValue: PropTypes.func.isRequired,
     className: PropTypes.string,
-    submitSearchForm: PropTypes.func.isRequired,
+    submitSearchForm: PropTypes.func,
+    onEnterPress: PropTypes.func,
+    hideInputAdornment: PropTypes.bool,
 };
 
 export default SearchBar;
