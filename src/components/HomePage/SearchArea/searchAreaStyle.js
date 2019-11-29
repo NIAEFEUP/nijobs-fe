@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
     searchArea: {
         padding: "1em 3em 3em 3em",
         position: "relative",
@@ -23,8 +23,12 @@ export default makeStyles(() => ({
         alignItems: "center",
         gridGap: "1em",
     },
-    jobTypeSelector: {
-        gridColumn: 1,
+    mobileAdvancedSearchJobDuration: {
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+    },
+    mobileAdvancedSearchActions: {
+        padding: theme.spacing(2),
     },
     advancedSearchBtnWrapper: {
         position: "absolute",

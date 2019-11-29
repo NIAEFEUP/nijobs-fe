@@ -33,7 +33,7 @@ const SearchBar = ({ searchValue, setSearchValue, className, submitSearchForm, h
             onChange={handleChange}
             className={className}
             InputProps={!hideInputAdornment ? ({
-                "endAdornment":
+                endAdornment:
                 <InputAdornment position="end">
                     <IconButton
                         aria-label="search"
@@ -45,9 +45,9 @@ const SearchBar = ({ searchValue, setSearchValue, className, submitSearchForm, h
                     </IconButton>
                 </InputAdornment>,
             }) : ({})}
-            inputProps={{
+            inputProps={onEnterPress ? ({
                 onKeyPress: handleEnterPressSearchBar,
-            }}
+            }) : ({})}
         />
     );
 };

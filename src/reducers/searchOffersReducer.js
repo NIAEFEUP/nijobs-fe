@@ -6,7 +6,7 @@ export const INITIAL_JOB_DURATION = 1;
 const initialState = {
     searchValue: "",
     jobType: INITIAL_JOB_TYPE,
-    jobDuration: INITIAL_JOB_DURATION,
+    jobDuration: [null, null],
     offers: [],
     loading: false,
     error: null,

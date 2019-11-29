@@ -29,9 +29,9 @@ export const setSearchValue = (value) => ({
     value,
 });
 
-export const setJobDuration = (jobDuration) => ({
+export const setJobDuration = (minJobDuration, maxJobDuration) => ({
     type: offerSearchTypes.SET_JOB_DURATION,
-    jobDuration,
+    jobDuration: [minJobDuration, maxJobDuration],
 });
 
 export const setJobType = (jobType) => ({
@@ -41,5 +41,5 @@ export const setJobType = (jobType) => ({
 
 export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setJobType(INITIAL_JOB_TYPE));
-    dispatch(setJobDuration(INITIAL_JOB_DURATION));
+    dispatch(setJobDuration(INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1));
 };

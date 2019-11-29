@@ -12,21 +12,27 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogActions } from "@material-ui/core";
+    DialogActions,
+    FormControlLabel,
+    Switch,
+    Collapse } from "@material-ui/core";
 import { ArrowBackIos } from "@material-ui/icons";
-import SearchBar from "./SearchBar";
+import SearchBar from "../SearchBar";
 
-import JobTypes from "./JobTypes";
-import useSearchAreaStyles from "./searchAreaStyle";
+import JobTypes from "../JobTypes";
+import useSearchAreaStyles from "../searchAreaStyle";
+import { INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
 
-const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
-    jobDuration, jobType, setSearchValue, setJobType, setJobDuration, resetAdvancedSearchFields }) => {
+const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDurationSlider, toggleShowJobDurationSlider,
+    jobDuration, jobType, setSearchValue, setJobType, setJobDuration, resetAdvancedSearch }) => {
 
     const [shouldSubmitForm, setShouldSubmitForm] = useState(true);
+    const [minJobDuration, maxJobDuration] = jobDuration;
 
     const handleResetClick = (e) => {
         e.preventDefault();
-        resetAdvancedSearchFields();
+        setSearchValue("");
+        resetAdvancedSearch();
     };
     const handleSearchClick = (e) => {
         e.preventDefault();
@@ -34,12 +40,13 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
     };
 
     const handleCloseClick = (e) => {
-        e.preventDefault();
         setShouldSubmitForm(false);
+        handleResetClick(e);
         close();
     };
 
     const classes = useSearchAreaStyles();
+
     return (
         <Dialog
             fullScreen open={open}
@@ -86,28 +93,47 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                             </MenuItem>
                         ))}
                     </TextField>
-                    <FormControl
-                        className={classes.durationSlider}
+                    <FormControlLabel
+                        control={
+                            <Switch checked={showJobDurationSlider} onChange={toggleShowJobDurationSlider} value="useJobDuration"/>
+                        }
+                        label="Filter Job Duration"
+                    />
+                    <Collapse
+                        in={showJobDurationSlider}
+                        classes={{ wrapperInner: classes.mobileAdvancedSearchJobDuration }}
+                        onEnter={() => {
+                            setJobDuration(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]);
+                        }}
                     >
-                        <Slider
-                            valueLabelDisplay="auto"
-                            value={jobDuration}
-                            name="jobDuration"
-                            min={1}
-                            max={12}
-                            step={1}
-                            onChange={setJobDuration}
-                        />
-                        <Typography
-                            id="duration-label"
-                            variant="caption"
+                        <FormControl
+                            fullWidth
+                            className={classes.durationSlider}
                         >
-                            {`Job Duration - ${jobDuration} month(s)`}
-                        </Typography>
-                    </FormControl>
+                            <Slider
+                                valueLabelDisplay="auto"
+                                value={jobDuration}
+                                name="jobDuration"
+                                min={1}
+                                max={12}
+                                step={1}
+                                onChange={setJobDuration}
+                            />
+                            <Typography
+                                id="duration-label"
+                                variant="caption"
+                            >
+                                {`Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`}
+                            </Typography>
+                        </FormControl>
+                    </Collapse>
                 </FormGroup>
             </DialogContent>
-            <DialogActions>
+            <DialogActions
+                classes={{
+                    root: classes.mobileAdvancedSearchActions,
+                }}
+            >
                 <Button color="secondary" onClick={handleResetClick}>Reset</Button>
                 <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
             </DialogActions>

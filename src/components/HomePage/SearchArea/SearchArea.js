@@ -8,41 +8,40 @@ import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/search
 
 import useToggle from "../../../hooks/useToggle";
 
-import JobTypes from "./JobTypes";
-
-import {
-    FormControl,
-    Typography,
-    Paper,
-    Slider,
-    TextField,
-    MenuItem,
-    Collapse,
-} from "@material-ui/core";
+import { Paper } from "@material-ui/core";
 
 import SearchBar from "./SearchBar";
 import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
-import SliderValueTooltip from "./SliderValueTooltip";
-
-import AdvancedSearchMobile from "./AdvancedSearchMobile";
+import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
+import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
-    jobDuration = INITIAL_JOB_DURATION, jobType = INITIAL_JOB_TYPE,
+    minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
     setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
 
     const classes = useSearchAreaStyles();
 
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
+    const [showJobDurationSlider, toggleShowJobDurationSlider] = useToggle(false);
 
-    if (!useMobile() && !advancedOptions && (jobType !== INITIAL_JOB_TYPE || jobDuration !== INITIAL_JOB_DURATION))
+    const advancedSettingsChanged = jobType !== INITIAL_JOB_TYPE
+        || minJobDuration !== INITIAL_JOB_DURATION
+        || maxJobDuration !== INITIAL_JOB_DURATION + 1;
+
+    if (!useMobile() && !advancedOptions && advancedSettingsChanged)
         toggleAdvancedOptions();
+
+    const resetAdvancedSearch = () => {
+        toggleShowJobDurationSlider();
+        resetAdvancedSearchFields();
+    };
 
     const handleAdvancedOptionsButtonClick = () => {
         if (advancedOptions) {
-            resetAdvancedSearchFields();
+            resetAdvancedSearch();
         }
         toggleAdvancedOptions();
     };
@@ -58,7 +57,6 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
 
         if (onSubmit) onSubmit();
     };
-
 
     // TODO Make the advancedSearch button be gray, and primary/secondary, if there are changes (i.e. jobDuration !== INITIAL_JOB_DURATION)
     return (
@@ -78,64 +76,30 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     setSearchValue={setSearchValue}
                 />
                 {useMobile() ?
-
                     <AdvancedSearchMobile
                         open={advancedOptions}
                         close={toggleAdvancedOptions}
                         submitForm={submitForm}
                         searchValue={searchValue}
-                        jobDuration={jobDuration}
+                        showJobDurationSlider={showJobDurationSlider}
+                        toggleShowJobDurationSlider={toggleShowJobDurationSlider}
+                        jobDuration={[minJobDuration, maxJobDuration]}
                         jobType={jobType}
                         setSearchValue={setSearchValue}
                         setJobType={setJobType}
                         setJobDuration={setJobDuration}
-                        resetAdvancedSearchFields={resetAdvancedSearchFields}
+                        resetAdvancedSearch={resetAdvancedSearch}
                     />
-
                     :
-                    <Collapse
-                        in={advancedOptions}
-                        classes={{ wrapperInner: classes.advancedSearchContainer }}
-                    >
-                        <TextField
-                            id="job_type"
-                            select
-                            label="Job Type"
-                            className={classes.jobTypeSelector}
-                            value={jobType ? jobType : ""}
-                            onChange={setJobType}
-                            helperText="Please select your job type"
-                        >
-                            {JobTypes.map(({ value, label }) => (
-                                <MenuItem
-                                    key={value}
-                                    value={value}
-                                >
-                                    {label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                        <FormControl
-                            className={classes.durationSlider}
-                        >
-                            <Typography
-                                id="duration-label"
-                                variant="body2"
-                            >
-                                {`Job Duration - ${jobDuration} month(s)`}
-                            </Typography>
-                            <Slider
-                                valueLabelDisplay="auto"
-                                value={jobDuration}
-                                ValueLabelComponent={SliderValueTooltip}
-                                name="jobDuration"
-                                min={1}
-                                max={12}
-                                step={1}
-                                onChange={setJobDuration}
-                            />
-                        </FormControl>
-                    </Collapse>
+                    <AdvancedSearch
+                        open={advancedOptions}
+                        showJobDurationSlider={showJobDurationSlider}
+                        toggleShowJobDurationSlider={toggleShowJobDurationSlider}
+                        jobDuration={[minJobDuration, maxJobDuration]}
+                        jobType={jobType}
+                        setJobDuration={setJobDuration}
+                        setJobType={setJobType}
+                    />
                 }
             </form>
             <ShowAdvancedOptionsButton
@@ -150,7 +114,8 @@ SearchArea.propTypes = {
     onSubmit: PropTypes.func,
     searchOffers: PropTypes.func.isRequired,
     searchValue: PropTypes.string.isRequired,
-    jobDuration: PropTypes.number,
+    minJobDuration: PropTypes.number,
+    maxJobDuration: PropTypes.number,
     jobType: PropTypes.string,
     setSearchValue: PropTypes.func.isRequired,
     setJobDuration: PropTypes.func.isRequired,
@@ -161,13 +126,14 @@ SearchArea.propTypes = {
 export const mapStateToProps = ({ offerSearch }) => ({
     searchValue: offerSearch.searchValue,
     jobType: offerSearch.jobType,
-    jobDuration: offerSearch.jobDuration,
+    minJobDuration: offerSearch.jobDuration[0],
+    maxJobDuration: offerSearch.jobDuration[1],
 });
 
 export const mapDispatchToProps = (dispatch) => ({
     searchOffers: (filters) => dispatch(searchOffers(filters)),
     setSearchValue: (value) => dispatch(setSearchValue(value)),
-    setJobDuration: (_, value) => dispatch(setJobDuration(value)),
+    setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
     setJobType: (e) => dispatch(setJobType(e.target.value)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
 });
