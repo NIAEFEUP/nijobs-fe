@@ -7,17 +7,13 @@ import {
     IconButton,
 } from "@material-ui/core";
 
-import { Search } from "@material-ui/icons";
+import { Close, MoreHoriz } from "@material-ui/icons";
 
-const SearchBar = ({ searchValue, setSearchValue, className, submitSearchForm, hideInputAdornment, onEnterPress }) => {
+const SearchBar = ({ searchValue, setSearchValue, className,
+    handleAdvancedOptionsButtonClick, advancedOptions, hideInputAdornment, onEnterPress }) => {
 
     const handleChange = (e) => {
         setSearchValue(e.target.value);
-    };
-
-    const handleButtonClick = (e) => {
-        e.preventDefault();
-        submitSearchForm(e);
     };
 
     const handleEnterPressSearchBar = (e) => {
@@ -33,15 +29,15 @@ const SearchBar = ({ searchValue, setSearchValue, className, submitSearchForm, h
             onChange={handleChange}
             className={className}
             InputProps={!hideInputAdornment ? ({
-                endAdornment:
+                "endAdornment":
                 <InputAdornment position="end">
                     <IconButton
-                        aria-label="search"
-                        onClick={handleButtonClick}
-                        color="secondary"
                         size="small"
+                        aria-label="Toggle Advanced Search"
+                        onClick={handleAdvancedOptionsButtonClick}
+                        color="secondary"
                     >
-                        <Search />
+                        {advancedOptions ? <Close fontSize="small"/> : <MoreHoriz/>}
                     </IconButton>
                 </InputAdornment>,
             }) : ({})}
@@ -56,7 +52,8 @@ SearchBar.propTypes = {
     searchValue: PropTypes.string.isRequired,
     setSearchValue: PropTypes.func.isRequired,
     className: PropTypes.string,
-    submitSearchForm: PropTypes.func,
+    handleAdvancedOptionsButtonClick: PropTypes.func.isRequired,
+    advancedOptions: PropTypes.bool.isRequired,
     onEnterPress: PropTypes.func,
     hideInputAdornment: PropTypes.bool,
 };

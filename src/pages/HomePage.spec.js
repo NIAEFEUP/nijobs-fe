@@ -29,6 +29,7 @@ describe("HomePage", () => {
                 offerSearch: {
                     searchValue: "searchValue",
                     offers: [],
+                    jobDuration: [1, 2],
                 },
             };
             const mockStore = configureMockStore([thunk]);

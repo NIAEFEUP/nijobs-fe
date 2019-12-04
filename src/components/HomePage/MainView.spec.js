@@ -56,6 +56,7 @@ describe("Main View", () => {
             const initialState = {
                 offerSearch: {
                     searchValue: "searchValue",
+                    jobDuration: [1, 2],
                 },
             };
             const mockStore = configureMockStore([thunk]);

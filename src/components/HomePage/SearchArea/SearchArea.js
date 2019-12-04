@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
@@ -11,12 +11,12 @@ import useToggle from "../../../hooks/useToggle";
 import { Paper } from "@material-ui/core";
 
 import SearchBar from "./SearchBar";
-import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
 import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
+import SubmitSearchButton from "./SubmitSearchButton";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
@@ -25,17 +25,17 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     const classes = useSearchAreaStyles();
 
     const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
-    const [showJobDurationSlider, toggleShowJobDurationSlider] = useToggle(false);
+    const [showJobDurationSlider, setShowJobDurationSlider] = useState(false);
+    const toggleShowJobDurationSlider = () => setShowJobDurationSlider(!showJobDurationSlider);
+    // const advancedSettingsChanged = jobType !== INITIAL_JOB_TYPE
+    //     || minJobDuration !== null
+    //     || maxJobDuration !== null;
 
-    const advancedSettingsChanged = jobType !== INITIAL_JOB_TYPE
-        || minJobDuration !== INITIAL_JOB_DURATION
-        || maxJobDuration !== INITIAL_JOB_DURATION + 1;
-
-    if (!useMobile() && !advancedOptions && advancedSettingsChanged)
-        toggleAdvancedOptions();
+    // if (!useMobile() && !advancedOptions && advancedSettingsChanged)
+    //     toggleAdvancedOptions();
 
     const resetAdvancedSearch = () => {
-        toggleShowJobDurationSlider();
+        setShowJobDurationSlider(false);
         resetAdvancedSearchFields();
     };
 
@@ -71,7 +71,8 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
             >
                 <SearchBar
                     className={classes.searchBar}
-                    submitSearchForm={submitForm}
+                    handleAdvancedOptionsButtonClick={handleAdvancedOptionsButtonClick}
+                    advancedOptions={advancedOptions}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
@@ -102,9 +103,8 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     />
                 }
             </form>
-            <ShowAdvancedOptionsButton
-                onClick={handleAdvancedOptionsButtonClick}
-                isOpen={advancedOptions}
+            <SubmitSearchButton
+                onClick={submitForm}
             />
         </Paper>
     );

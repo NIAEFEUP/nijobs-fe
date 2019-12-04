@@ -1,17 +1,17 @@
 import React from "react";
 import { SearchArea, mapDispatchToProps, mapStateToProps } from "./SearchArea";
-import { addSnackbar } from "../../../actions/notificationActions";
 import { setSearchValue, setJobDuration, setJobType } from "../../../actions/searchOffersActions";
 import SearchBar from "./SearchBar";
-import ShowAdvancedOptionsButton from "./ShowAdvancedOptionsButton";
+import SubmitSearchButton from "./SubmitSearchButton";
 
 import {
-    FormControl,
     Paper,
     TextField,
     Collapse,
+    Fab,
 } from "@material-ui/core";
-import { mockDateNow, mockRandomMath } from "../../../../testUtils";
+import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
+import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 
 describe("SearchArea", () => {
     let onSubmit;
@@ -34,25 +34,15 @@ describe("SearchArea", () => {
             expect(searchBar.exists()).toBe(true);
         });
 
-        it("should render a Collapse", () => {
-            expect(shallow(<SearchArea onSubmit={onSubmit} />).find(Collapse).first().prop("in")).toBe(false);
+        it("should render an Advanced Search Area", () => {
+            const wrapper = shallow(<SearchArea onSubmit={onSubmit} />);
+            expect(wrapper.find(AdvancedSearch).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
         });
 
-        it("should render a ShowAdvancedOptionsButton", () => {
+        it("should render a SearchButton", () => {
             const searchArea = shallow(<SearchArea onSubmit={onSubmit} />);
-            const button = searchArea.find(ShowAdvancedOptionsButton).first();
-            expect(button.prop("isOpen")).toBe(false);
-        });
-
-        it("should contain a TextField with 'job_type' id", () => {
-            expect(shallow(<SearchArea onSubmit={onSubmit} />).find(TextField).first().prop("id")).toEqual("job_type");
-        });
-
-        it("should contain a FormControl", () => {
-            expect(
-                shallow(<SearchArea onSubmit={onSubmit} />)
-                    .find(FormControl).exists()
-            ).toBe(true);
+            const button = searchArea.find(SubmitSearchButton).first();
+            expect(button.exists()).toBe(true);
         });
     });
 
@@ -75,24 +65,27 @@ describe("SearchArea", () => {
             expect(searchOffersMock).toHaveBeenCalledTimes(1);
         });
 
-        it("should toggle advanced options when clicking ShowAdvancedOptionsButton", () => {
-            const searchArea = shallow(<SearchArea onSubmit={onSubmit}/>);
-            const button = searchArea.find(ShowAdvancedOptionsButton).first();
+        it("should call searchOffers and onSubmit callback on search button click", () => {
+            const searchValue = "test";
+            const setSearchValue = () => {};
 
-            expect(searchArea.find(Collapse).first().prop("in")).toBe(false);
-            button.simulate("click");
-            expect(searchArea.find(Collapse).first().prop("in")).toBe(true);
+            const searchOffers = jest.fn();
+            const onSubmit = jest.fn();
+            const addSnackbar = () => {};
 
-        });
+            const wrapper = mount(
+                <SearchArea
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    searchOffers={searchOffers}
+                    addSnackbar={addSnackbar}
+                    onSubmit={onSubmit}
+                />
+            );
+            wrapper.find(Fab).first().simulate("click", { e: { preventDefault: () => {} } });
 
-        it("should toggle advanced options when clicking ShowAdvancedOptionsButton", () => {
-            const searchArea = shallow(<SearchArea onSubmit={onSubmit}/>);
-            const button = searchArea.find(ShowAdvancedOptionsButton).first();
-
-            expect(searchArea.find(Collapse).first().prop("in")).toBe(false);
-            button.simulate("click");
-            expect(searchArea.find(Collapse).first().prop("in")).toBe(true);
-
+            expect(searchOffers).toHaveBeenCalledTimes(1);
+            expect(onSubmit).toHaveBeenCalledTimes(1);
         });
     });
 
@@ -102,39 +95,26 @@ describe("SearchArea", () => {
                 offerSearch: {
                     searchValue: "searchValue",
                     jobType: "jobType",
-                    jobDuration: "jobDuration",
+                    jobDuration: [1, 2],
                 },
             };
             expect(mapStateToProps(mockState)).toEqual({
                 searchValue: "searchValue",
                 jobType: "jobType",
-                jobDuration: "jobDuration",
+                minJobDuration: 1,
+                maxJobDuration: 2,
             });
         });
 
         it("should mapDispatchToProps", () => {
-
-            const RANDOM_VALUE = 0.5;
-            const DATE_NOW = 1;
-
-            const originalMathObj = mockRandomMath(RANDOM_VALUE);
-            const originalDateNowFn = mockDateNow(DATE_NOW);
-
             const dispatch = jest.fn();
             const props = mapDispatchToProps(dispatch);
-            props.addSnackbar({ message: "message" });
-            expect(dispatch).toHaveBeenCalledWith(addSnackbar({
-                message: "message",
-            }));
-
-            global.Math = originalMathObj;
-            Date.now = originalDateNowFn;
 
             props.setSearchValue("searchValue");
             expect(dispatch).toHaveBeenCalledWith(setSearchValue("searchValue"));
 
-            props.setJobDuration(null, 2);
-            expect(dispatch).toHaveBeenCalledWith(setJobDuration(2));
+            props.setJobDuration(null, [1, 2]);
+            expect(dispatch).toHaveBeenCalledWith(setJobDuration(1, 2));
 
             const jobType = {
                 target: {

@@ -15,13 +15,26 @@ import {
     DialogActions,
     FormControlLabel,
     Switch,
-    Collapse } from "@material-ui/core";
+    Collapse,
+    Chip } from "@material-ui/core";
 import { ArrowBackIos } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
 
 import JobTypes from "../JobTypes";
 import useSearchAreaStyles from "../searchAreaStyle";
 import { INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
+
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
+
+// TODO Needs separating this into other fields component logic
+const fields = [
+    { label: "Back-End", value: "BACK_END" },
+    { label: "Front-End", value: "FRONT_END" },
+    { label: "Dev-Ops", value: "DEVOPS" },
+    { label: "Machine Learning", value: "ML" },
+    { label: "Computer Vision", value: "COMPUTER_VISION" },
+];
 
 const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDurationSlider, toggleShowJobDurationSlider,
     jobDuration, jobType, setSearchValue, setJobType, setJobDuration, resetAdvancedSearch }) => {
@@ -93,6 +106,33 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
                             </MenuItem>
                         ))}
                     </TextField>
+                    <Autocomplete
+                        multiple
+                        id="tags-filled"
+                        options={fields.map((option) => option.label)}
+                        freeSolo
+                        renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                                <Chip
+                                    style={{ marginBottom: "1em" }}
+                                    key={option}
+                                    variant="outlined"
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                variant="standard"
+                                label="Fields"
+                                placeholder="Fields"
+                                margin="none"
+                                fullWidth
+                            />
+                        )}
+                    />
                     <FormControlLabel
                         control={
                             <Switch checked={showJobDurationSlider} onChange={toggleShowJobDurationSlider} value="useJobDuration"/>

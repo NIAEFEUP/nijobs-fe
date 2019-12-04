@@ -1,4 +1,4 @@
-import searchOffersState, { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "./searchOffersReducer";
+import searchOffersState, { INITIAL_JOB_TYPE } from "./searchOffersReducer";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import {
     setSearchOffers,
@@ -14,7 +14,7 @@ describe("Search Offers Reducer", () => {
         const state = searchOffersState(undefined, {});
         expect(state).toEqual({ searchValue: "",
             jobType: INITIAL_JOB_TYPE,
-            jobDuration: INITIAL_JOB_DURATION,
+            jobDuration: [null, null],
             offers: [],
             loading: false,
             error: null });
@@ -67,12 +67,12 @@ describe("Search Offers Reducer", () => {
     it("should set job duration when setJobDuration action is called", () => {
         const state = searchOffersState(
             {
-                jobDuration: 2,
+                jobDuration: [1, 2],
             },
-            setJobDuration(5)
+            setJobDuration(2, 5)
         );
 
-        expect(state.jobDuration).toEqual(5);
+        expect(state.jobDuration).toEqual([2, 5]);
     });
     it("should set job type when setJobType action is called", () => {
         const state = searchOffersState(

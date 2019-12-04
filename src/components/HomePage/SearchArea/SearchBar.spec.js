@@ -2,6 +2,8 @@ import React from "react";
 import SearchBar from "./SearchBar";
 import { TextField, IconButton } from "@material-ui/core";
 
+import { Close, MoreHoriz } from "@material-ui/icons";
+
 describe("SearchBar", () => {
     describe("render", () => {
         it("should contain a TextField with the correct value", () => {
@@ -16,6 +18,32 @@ describe("SearchBar", () => {
                 />
             );
             expect(wrapper.find(TextField).first().prop("value")).toBe("test");
+        });
+
+        it("should render an Advanced Options Button with the correct icon", () => {
+            const searchValue = "test";
+            const setSearchValue = () => {};
+            const submitSearchForm = () => {};
+
+            const searchBarBasic = mount(
+                <SearchBar
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    submitSearchForm={submitSearchForm}
+                    advancedOptions={false}
+                />);
+            const buttonBasic = searchBarBasic.find(IconButton).first();
+            expect(buttonBasic.find(MoreHoriz).exists()).toBe(true);
+
+            const searchBarAdvanced = mount(
+                <SearchBar
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    submitSearchForm={submitSearchForm}
+                    advancedOptions={true}
+                />);
+            const buttonAdvanced = searchBarAdvanced.find(IconButton).first();
+            expect(buttonAdvanced.find(Close).exists()).toBe(true);
         });
     });
 
@@ -37,20 +65,20 @@ describe("SearchBar", () => {
             expect(setSearchValue).toHaveBeenCalledWith("new value");
         });
 
-        it("should call submitSearchForm callback on search button click", () => {
+        it("should call handleAdvancedOptionsButtonClick callback on advanced search button click", () => {
             const searchValue = "test";
             const setSearchValue = () => {};
-            const submitSearchForm = jest.fn();
+            const handleAdvancedOptionsButtonClick = jest.fn();
             const wrapper = mount(
                 <SearchBar
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
-                    submitSearchForm={submitSearchForm}
+                    handleAdvancedOptionsButtonClick={handleAdvancedOptionsButtonClick}
                 />
             );
             wrapper.find(IconButton).first().simulate("click", { e: { preventDefault: () => {} } });
 
-            expect(submitSearchForm).toHaveBeenCalledTimes(1);
+            expect(handleAdvancedOptionsButtonClick).toHaveBeenCalledTimes(1);
         });
     });
 

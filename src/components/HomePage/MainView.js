@@ -15,6 +15,7 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
     const classes = useMainViewStyles();
     return (
+
         <div className={classes.mainView}>
             <div className={useMobile() ? classes.mainMaskMobile : classes.mainMask}>
                 <div className={useMobile() ? classes.mainLogoMobile : classes.mainLogo}>
