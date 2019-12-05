@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -12,12 +12,9 @@ import SearchArea from "../../SearchArea/SearchArea";
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearchError }) => {
-    const ref = useRef(null);
-    setRef(ref);
+export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, offersSearchError }, ref) => {
 
     const [selectedOffer, setSelectedOffer] = useState(null);
-
     const classes = useSearchResultsWidgetStyles();
 
     return (
@@ -72,10 +69,11 @@ export const SearchResultsWidget = ({ setRef, offers, offersLoading, offersSearc
             </Grid>
         </Paper>
     );
-};
+});
 
+// Needed because of ForwardRef usage
+SearchResultsWidget.displayName = "SearchResultsWidget";
 SearchResultsWidget.propTypes = {
-    setRef: PropTypes.func.isRequired,
     offers: PropTypes.array,
     offersLoading: PropTypes.bool,
     offersSearchError: PropTypes.object,
@@ -89,4 +87,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = () => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchResultsWidget);
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(SearchResultsWidget);

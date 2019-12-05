@@ -1,23 +1,13 @@
-import React, { useRef } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 
-const ProductDescription = ({ setRef }) => {
+const ProductDescription = React.forwardRef((props, ref) => (
+    <div ref={ref} style={{ height: "500px" }}>
+        Other content, like what is this for and cool vector and stock images with no copyright
+    </div>
+));
 
-    const ref = useRef(null);
-    setRef(ref);
+// Needed because of ForwardRef usage
+ProductDescription.displayName = "ProductDescription";
 
-    return (
-        <div
-            ref={ref}
-            style={{ height: "500px" }}
-        >
-                Other content, like what is this for and cool vector and stock images with no copyright
-        </div>
-    );
-};
-
-ProductDescription.propTypes = {
-    setRef: PropTypes.func.isRequired,
-};
 
 export default ProductDescription;
