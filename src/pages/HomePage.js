@@ -5,7 +5,7 @@ import SearchResultsWidget from "../components/HomePage/SearchResultsArea/Search
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import { smoothScrollToRef } from "../utils";
 
-const HomePage = () => {
+export const HomePage = () => {
 
     const productDescriptionRef = useRef(null);
     const searchResultsRef = useRef(null);

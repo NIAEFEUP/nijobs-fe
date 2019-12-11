@@ -37,7 +37,7 @@ const SearchBar = ({ searchValue, setSearchValue, className,
                         onClick={handleAdvancedOptionsButtonClick}
                         color="secondary"
                     >
-                        {advancedOptions ? <Close fontSize="small"/> : <MoreHoriz/>}
+                        {advancedOptions ? <Close data-icon="Close" fontSize="small"/> : <MoreHoriz data-icon="MoreHoriz"/>}
                     </IconButton>
                 </InputAdornment>,
             }) : ({})}

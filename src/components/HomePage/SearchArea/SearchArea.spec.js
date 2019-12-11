@@ -9,38 +9,58 @@ import {
     TextField,
     Collapse,
     Fab,
+    createMuiTheme,
+    ThemeProvider,
 } from "@material-ui/core";
 import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
+import { mountWithStore, mountWithTheme } from "../../../test-utils";
 
 describe("SearchArea", () => {
     let onSubmit;
+    const theme = createMuiTheme();
     beforeEach(() => {
         onSubmit = jest.fn();
     });
 
     describe("render", () => {
         it("should render a paper", () => {
-            expect(shallow(<SearchArea onSubmit={onSubmit} />).find(Paper).exists()).toBe(true);
+            expect(
+                mountWithTheme(
+                    <SearchArea onSubmit={onSubmit} />,
+                    theme
+                ).find(Paper).exists()
+            ).toBe(true);
         });
 
         it("should render a form", () => {
-            expect(shallow(<SearchArea onSubmit={onSubmit} />).find("form").first().prop("id")).toEqual("search_form");
+            expect(mountWithTheme(
+                <SearchArea onSubmit={onSubmit} />,
+                theme
+            ).find("form").first().prop("id")).toEqual("search_form");
         });
 
         it("should render a SearchBar", () => {
-
-            const searchBar = shallow(<SearchArea onSubmit={onSubmit} />).find(SearchBar).first();
+            const searchBar = mountWithTheme(
+                <SearchArea onSubmit={onSubmit} />,
+                theme
+            ).find(SearchBar).first();
             expect(searchBar.exists()).toBe(true);
         });
 
         it("should render an Advanced Search Area", () => {
-            const wrapper = shallow(<SearchArea onSubmit={onSubmit} />);
+            const wrapper = mountWithTheme(
+                <SearchArea onSubmit={onSubmit} />,
+                theme
+            );
             expect(wrapper.find(AdvancedSearch).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
         });
 
         it("should render a SearchButton", () => {
-            const searchArea = shallow(<SearchArea onSubmit={onSubmit} />);
+            const searchArea = mountWithTheme(
+                <SearchArea onSubmit={onSubmit} />,
+                theme
+            );
             const button = searchArea.find(SubmitSearchButton).first();
             expect(button.exists()).toBe(true);
         });
@@ -50,12 +70,13 @@ describe("SearchArea", () => {
         it("should call onSubmit callback on form submit", () => {
             const addSnackbar = () => {};
             const searchOffersMock = jest.fn();
-            const form = shallow(
+            const form = mountWithTheme(
                 <SearchArea
                     onSubmit={onSubmit}
                     addSnackbar={addSnackbar}
                     searchOffers={searchOffersMock}
-                />
+                />,
+                theme
             ).find("form#search_form").first();
 
             form.simulate("submit", {
@@ -73,16 +94,17 @@ describe("SearchArea", () => {
             const onSubmit = jest.fn();
             const addSnackbar = () => {};
 
-            const wrapper = mount(
+            const wrapper = mountWithTheme(
                 <SearchArea
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                     searchOffers={searchOffers}
                     addSnackbar={addSnackbar}
                     onSubmit={onSubmit}
-                />
+                />,
+                theme
             );
-            wrapper.find(Fab).first().simulate("click", { e: { preventDefault: () => {} } });
+            wrapper.find(Fab).simulate("click", { e: { preventDefault: () => {} } });
 
             expect(searchOffers).toHaveBeenCalledTimes(1);
             expect(onSubmit).toHaveBeenCalledTimes(1);

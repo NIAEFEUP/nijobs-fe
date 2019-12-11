@@ -33,7 +33,7 @@ describe("SearchBar", () => {
                     advancedOptions={false}
                 />);
             const buttonBasic = searchBarBasic.find(IconButton).first();
-            expect(buttonBasic.find(MoreHoriz).exists()).toBe(true);
+            expect(buttonBasic.find("svg[data-icon=\"MoreHoriz\"]").exists()).toBe(true);
 
             const searchBarAdvanced = mount(
                 <SearchBar
@@ -43,7 +43,7 @@ describe("SearchBar", () => {
                     advancedOptions={true}
                 />);
             const buttonAdvanced = searchBarAdvanced.find(IconButton).first();
-            expect(buttonAdvanced.find(Close).exists()).toBe(true);
+            expect(buttonAdvanced.find("svg[data-icon=\"Close\"]").exists()).toBe(true);
         });
     });
 

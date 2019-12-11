@@ -1,9 +1,9 @@
-import { useMediaQuery } from "react-responsive";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
-export const useDesktop = () => useMediaQuery({ minWidth: 992 });
-export const useTablet = () => useMediaQuery({ minWidth: 768, maxWidth: 991 });
-export const useMobile = () => useMediaQuery({ maxWidth: 767 });
-export const useNotMobile = () => useMediaQuery({ minWidth: 768 });
+export const useDesktop = () => useMediaQuery((theme) => theme.breakpoints.up("md"));
+export const useTablet = () => useMediaQuery((theme) => theme.breakpoints.only("sm"));
+export const useMobile = () => useMediaQuery((theme) => theme.breakpoints.only("xs"));
+export const useNotMobile = () => useMediaQuery((theme) => theme.breakpoints.up("sm"));
 
 export const DesktopLayout = ({ children }) => useDesktop() ? children : null;
 export const TabletLayout = ({ children }) => useTablet() ? children : null;
