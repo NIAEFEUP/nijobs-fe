@@ -9,14 +9,13 @@ import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/search
 import useToggle from "../../../hooks/useToggle";
 
 import { Paper } from "@material-ui/core";
-
 import SearchBar from "./SearchBar";
+import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
+import SubmitSearchButton from "./SubmitSearchButton";
 
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
-import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
-import SubmitSearchButton from "./SubmitSearchButton";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,

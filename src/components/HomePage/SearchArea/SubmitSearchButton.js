@@ -9,7 +9,7 @@ import useSearchAreaStyle from "./searchAreaStyle";
 const ShowAdvancedOptionsButton = ({ onClick }) => {
     const classes = useSearchAreaStyle();
     return (
-        <div className={classes.advancedSearchBtnWrapper}>
+        <div className={classes.submitSearchButtonWrapper}>
             <Fab
                 color="primary"
                 aria-label="Search"

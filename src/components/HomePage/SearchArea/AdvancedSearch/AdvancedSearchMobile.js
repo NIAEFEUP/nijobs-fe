@@ -16,7 +16,8 @@ import {
     FormControlLabel,
     Switch,
     Collapse,
-    Chip } from "@material-ui/core";
+    Chip,
+} from "@material-ui/core";
 import { ArrowBackIos } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
 
@@ -42,6 +43,9 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
     const [shouldSubmitForm, setShouldSubmitForm] = useState(true);
     const [minJobDuration, maxJobDuration] = jobDuration;
 
+    // TODO Migrate to parent component
+    const [selectedFields, setFields] = useState(new Set());
+
     const handleResetClick = (e) => {
         e.preventDefault();
         setSearchValue("");
@@ -56,6 +60,17 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
         setShouldSubmitForm(false);
         handleResetClick(e);
         close();
+    };
+
+    const handleFieldsChange = (e, fields) => {
+        e.preventDefault();
+        setFields(fields);
+    };
+
+    const handleDeleteField = (field) => {
+        const newFields = new Set(selectedFields);
+        newFields.delete(field);
+        setFields(newFields);
     };
 
     const classes = useSearchAreaStyles();
@@ -89,13 +104,13 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
                         hideInputAdornment
                     />
                     <TextField
+                        margin="normal"
                         id="job_type"
                         select
                         label="Job Type"
                         className={classes.jobTypeSelector}
                         value={jobType ? jobType : ""}
                         onChange={setJobType}
-                        helperText="Please select your job type"
                     >
                         {JobTypes.map(({ value, label }) => (
                             <MenuItem
@@ -110,32 +125,39 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
                         multiple
                         id="tags-filled"
                         options={fields.map((option) => option.label)}
-                        freeSolo
-                        renderTags={(value, getTagProps) =>
-                            value.map((option, index) => (
-                                <Chip
-                                    style={{ marginBottom: "1em" }}
-                                    key={option}
-                                    variant="outlined"
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                />
-                            ))
-                        }
+                        onChange={handleFieldsChange}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
                                 variant="standard"
                                 label="Fields"
                                 placeholder="Fields"
-                                margin="none"
+                                margin="normal"
                                 fullWidth
                             />
                         )}
+                        renderTags={() => null}
                     />
+                    <div className={classes.chipListWrapper}>
+
+                        {/* Spreading the selectedFields here because it is a Set and needs to be an array */}
+                        {[...selectedFields].map((field) => (
+                            <Chip
+                                key={field}
+                                variant="outlined"
+                                label={field}
+                                onDelete={handleDeleteField.bind(this, field)}
+                            />
+                        ))}
+                    </div>
                     <FormControlLabel
                         control={
-                            <Switch checked={showJobDurationSlider} onChange={toggleShowJobDurationSlider} value="useJobDuration"/>
+                            <Switch
+                                margin="normal"
+                                checked={showJobDurationSlider}
+                                onChange={toggleShowJobDurationSlider}
+                                value="useJobDuration"
+                            />
                         }
                         label="Filter Job Duration"
                     />
@@ -151,6 +173,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
                             className={classes.durationSlider}
                         >
                             <Slider
+                                margin="normal"
                                 valueLabelDisplay="auto"
                                 value={jobDuration}
                                 name="jobDuration"

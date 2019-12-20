@@ -30,12 +30,22 @@ export default makeStyles((theme) => ({
     mobileAdvancedSearchActions: {
         padding: theme.spacing(2),
     },
-    advancedSearchBtnWrapper: {
+    submitSearchButtonWrapper: {
         position: "absolute",
         display: "flex",
         justifyContent: "center",
         width: "100%",
         bottom: "-2em",
         left: 0,
+    },
+    chipListWrapper: {
+        display: "flex",
+        flexWrap: "wrap",
+        maxWidth: "100%",
+        marginTop: theme.spacing(1),
+        "& > *": {
+            marginRight: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+        },
     },
 }));
