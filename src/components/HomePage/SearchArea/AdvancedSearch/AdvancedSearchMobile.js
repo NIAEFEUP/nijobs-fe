@@ -16,17 +16,15 @@ import {
     FormControlLabel,
     Switch,
     Collapse,
-    Chip,
 } from "@material-ui/core";
 import { ArrowBackIos } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
+import useAutocomplete from "@material-ui/lab/useAutocomplete";
+import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
 import JobTypes from "../JobTypes";
 import useSearchAreaStyles from "../searchAreaStyle";
 import { INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
-
-import Autocomplete from "@material-ui/lab/Autocomplete";
-
 
 // TODO Needs separating this into other fields component logic
 const fields = [
@@ -37,6 +35,19 @@ const fields = [
     { label: "Computer Vision", value: "COMPUTER_VISION" },
 ];
 
+// const MAX_FIELDS_CHIP = 3;
+
+const MultiOptionRenderInput = (params) => (
+    <TextField
+        {...params}
+        variant="standard"
+        label="Fields"
+        placeholder="Fields"
+        margin="normal"
+        fullWidth
+    />
+);
+
 const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDurationSlider, toggleShowJobDurationSlider,
     jobDuration, jobType, setSearchValue, setJobType, setJobDuration, resetAdvancedSearch }) => {
 
@@ -44,11 +55,22 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
     const [minJobDuration, maxJobDuration] = jobDuration;
 
     // TODO Migrate to parent component
-    const [selectedFields, setFields] = useState(new Set());
+    // eslint-disable-next-line no-unused-vars
+    const [selectedFields, setFields] = useState([]);
+
+    const MultiOptionAutocompleteProps = {
+        id: "fields-selector",
+        options: fields.map((option) => option.label),
+        multiple: true,
+        onChange: (e, fields) => setFields(fields),
+        renderInput: MultiOptionRenderInput,
+    };
+    const autocompleteProps = useAutocomplete({ ...MultiOptionAutocompleteProps });
 
     const handleResetClick = (e) => {
         e.preventDefault();
         setSearchValue("");
+        autocompleteProps.getClearProps().onClick(); // Clears the autocomplete and handles the internal state -- CONSISTENCY!!!
         resetAdvancedSearch();
     };
     const handleSearchClick = (e) => {
@@ -60,17 +82,6 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
         setShouldSubmitForm(false);
         handleResetClick(e);
         close();
-    };
-
-    const handleFieldsChange = (e, fields) => {
-        e.preventDefault();
-        setFields(fields);
-    };
-
-    const handleDeleteField = (field) => {
-        const newFields = new Set(selectedFields);
-        newFields.delete(field);
-        setFields(newFields);
     };
 
     const classes = useSearchAreaStyles();
@@ -121,35 +132,11 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, showJobDur
                             </MenuItem>
                         ))}
                     </TextField>
-                    <Autocomplete
-                        multiple
-                        id="tags-filled"
-                        options={fields.map((option) => option.label)}
-                        onChange={handleFieldsChange}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                variant="standard"
-                                label="Fields"
-                                placeholder="Fields"
-                                margin="normal"
-                                fullWidth
-                            />
-                        )}
-                        renderTags={() => null}
+                    <MultiOptionAutocomplete
+                        autocompleteProps={autocompleteProps}
+                        // threshold={MAX_FIELDS_CHIP}
+                        {...MultiOptionAutocompleteProps}
                     />
-                    <div className={classes.chipListWrapper}>
-
-                        {/* Spreading the selectedFields here because it is a Set and needs to be an array */}
-                        {[...selectedFields].map((field) => (
-                            <Chip
-                                key={field}
-                                variant="outlined"
-                                label={field}
-                                onDelete={handleDeleteField.bind(this, field)}
-                            />
-                        ))}
-                    </div>
                     <FormControlLabel
                         control={
                             <Switch

@@ -75,6 +75,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
+                {/* These components (mobile/nonMobile advanced search) should be loaded lazily via React.Lazy() when possible */}
                 {useMobile() ?
                     <AdvancedSearchMobile
                         open={advancedOptions}

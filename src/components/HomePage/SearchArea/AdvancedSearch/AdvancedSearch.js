@@ -16,6 +16,9 @@ import JobTypes from "../JobTypes";
 import useSearchAreaStyles from "../searchAreaStyle";
 import { INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
 
+// TODO tornar este componente generico e extende-lo para versao desktop e mobile,
+// que lhe passam funçoes de render cenas, este toma conta de business logic
+
 const AdvancedSearch = ({ open, showJobDurationSlider, toggleShowJobDurationSlider, jobDuration, jobType, setJobType, setJobDuration }) => {
 
     const classes = useSearchAreaStyles();
