@@ -1,42 +1,68 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { searchOffers } from "../../../actions/nijobsService";
-import { setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields } from "../../../actions/searchOffersActions";
+import {
+    setSearchValue,
+    setJobDuration,
+    setJobType,
+    resetAdvancedSearchFields,
+    setFields,
+    setShowJobDurationSlider,
+    setTechs,
+} from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
-
-import useToggle from "../../../hooks/useToggle";
 
 import { Paper } from "@material-ui/core";
 import SearchBar from "./SearchBar";
-import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
-import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
+// import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
+// import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 import SubmitSearchButton from "./SubmitSearchButton";
 
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
+import useAdvancedSearch from "./AdvancedSearch/useAdvancedSearch";
+import AbstractAdvancedSearch from "./AdvancedSearch/AbstractAdvancedSearch";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
-    setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields }) => {
+    fields, techs, showJobDurationSlider, setShowJobDurationSlider,
+    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields }) => {
 
     const classes = useSearchAreaStyles();
 
-    const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
-    const [showJobDurationSlider, setShowJobDurationSlider] = useState(false);
     const toggleShowJobDurationSlider = () => setShowJobDurationSlider(!showJobDurationSlider);
-    // const advancedSettingsChanged = jobType !== INITIAL_JOB_TYPE
-    //     || minJobDuration !== null
-    //     || maxJobDuration !== null;
-
-    // if (!useMobile() && !advancedOptions && advancedSettingsChanged)
-    //     toggleAdvancedOptions();
-
     const resetAdvancedSearch = () => {
         setShowJobDurationSlider(false);
         resetAdvancedSearchFields();
     };
+
+    // This is useless for now
+    const {
+        advancedOptions,
+        toggleAdvancedOptions,
+        JobTypeSelectorProps,
+        FieldsSelectorProps,
+        TechsSelectorProps,
+        JobDurationSwitchProps,
+        JobDurationCollapseProps,
+        JobDurationSwitchLabel,
+        JobDurationSliderProps,
+    } = useAdvancedSearch({
+        minJobDuration,
+        maxJobDuration,
+        setJobDuration,
+        showJobDurationSlider,
+        toggleShowJobDurationSlider,
+        jobType,
+        setJobType,
+        fields,
+        setFields,
+        techs,
+        setTechs,
+        resetAdvancedSearchFields,
+    });
 
     const handleAdvancedOptionsButtonClick = () => {
         if (advancedOptions) {
@@ -50,6 +76,9 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         // because for simple search, the initial jobType value will be undefined,
         // and should be treated as a filter, not a required field, just like jobDuration
         if (e) e.preventDefault();
+
+        // console.log("SEARCH SUBMITTED:");
+        // console.log(searchValue, minJobDuration, maxJobDuration, jobType, fields);
 
         // TODO: Tinker filters later
         searchOffers({ value: searchValue });
@@ -75,33 +104,31 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
-                {/* These components (mobile/nonMobile advanced search) should be loaded lazily via React.Lazy() when possible */}
-                {useMobile() ?
-                    <AdvancedSearchMobile
-                        open={advancedOptions}
-                        close={toggleAdvancedOptions}
-                        submitForm={submitForm}
-                        searchValue={searchValue}
-                        showJobDurationSlider={showJobDurationSlider}
-                        toggleShowJobDurationSlider={toggleShowJobDurationSlider}
-                        jobDuration={[minJobDuration, maxJobDuration]}
-                        jobType={jobType}
-                        setSearchValue={setSearchValue}
-                        setJobType={setJobType}
-                        setJobDuration={setJobDuration}
-                        resetAdvancedSearch={resetAdvancedSearch}
-                    />
-                    :
-                    <AdvancedSearch
-                        open={advancedOptions}
-                        showJobDurationSlider={showJobDurationSlider}
-                        toggleShowJobDurationSlider={toggleShowJobDurationSlider}
-                        jobDuration={[minJobDuration, maxJobDuration]}
-                        jobType={jobType}
-                        setJobDuration={setJobDuration}
-                        setJobType={setJobType}
-                    />
-                }
+                <AbstractAdvancedSearch
+                    mobile={useMobile()}
+                    open={advancedOptions}
+                    close={toggleAdvancedOptions}
+                    submitForm={submitForm}
+                    searchValue={searchValue}
+                    showJobDurationSlider={showJobDurationSlider}
+                    toggleShowJobDurationSlider={toggleShowJobDurationSlider}
+                    minJobDuration={minJobDuration}
+                    maxJobDuration={maxJobDuration}
+                    jobType={jobType}
+                    fields={fields}
+                    setSearchValue={setSearchValue}
+                    setJobType={setJobType}
+                    setJobDuration={setJobDuration}
+                    setFields={setFields}
+                    FieldsSelectorProps={FieldsSelectorProps}
+                    TechsSelectorProps={TechsSelectorProps}
+                    JobTypeSelectorProps={JobTypeSelectorProps}
+                    JobDurationSwitchProps={JobDurationSwitchProps}
+                    JobDurationCollapseProps={JobDurationCollapseProps}
+                    JobDurationSwitchLabel={JobDurationSwitchLabel}
+                    JobDurationSliderProps={JobDurationSliderProps}
+                    resetAdvancedSearch={resetAdvancedSearch}
+                />
             </form>
             <SubmitSearchButton
                 onClick={submitForm}
@@ -128,6 +155,9 @@ export const mapStateToProps = ({ offerSearch }) => ({
     jobType: offerSearch.jobType,
     minJobDuration: offerSearch.jobDuration[0],
     maxJobDuration: offerSearch.jobDuration[1],
+    fields: offerSearch.fields,
+    techs: offerSearch.techs,
+    showJobDurationSlider: offerSearch.filterJobDuration,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
@@ -135,6 +165,9 @@ export const mapDispatchToProps = (dispatch) => ({
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
     setJobType: (e) => dispatch(setJobType(e.target.value)),
+    setFields: (fields) => dispatch(setFields(fields)),
+    setTechs: (techs) => dispatch(setTechs(techs)),
+    setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
 });
 

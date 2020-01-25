@@ -27,10 +27,7 @@ export const HomePage = () => {
                 }}
             />
             <ProductDescription ref={productDescriptionRef}/>
-            {showSearchResults ?
-                <SearchResultsWidget ref={searchResultsRef}/>
-                : ""
-            }
+            {showSearchResults && <SearchResultsWidget ref={searchResultsRef}/>}
         </React.Fragment>
     );
 

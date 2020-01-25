@@ -19,7 +19,7 @@ export default makeStyles((theme) => ({
     advancedSearchContainer: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr",
+        gridTemplateRows: "1fr 1fr",
         alignItems: "center",
         gridGap: "1em",
     },
@@ -38,11 +38,26 @@ export default makeStyles((theme) => ({
         bottom: "-2em",
         left: 0,
     },
+    fieldsSelector: {
+        gridRowStart: 3,
+        gridColumnStart: 1,
+    },
+    techsSelector: {
+        gridRowStart: 3,
+        gridColumnStart: 2,
+    },
+    jobDurationSliderToggle: {
+        gridRowStart: 2,
+    },
+    jobDurationSliderCollapse: {
+        gridRowStart: 2,
+        gridColumnStart: 2,
+    },
     chipListWrapper: {
         display: "flex",
         flexWrap: "wrap",
         maxWidth: "100%",
-        marginTop: theme.spacing(1),
+        marginTop: 0,
         "& > *": {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(1),

@@ -12,7 +12,11 @@ const useToggle = (initialValue) => {
         setState((state) => !state);
     }, []);
 
-    return [state, toggleState];
+    const resetState = useCallback(() => {
+        setState(false);
+    }, []);
+
+    return [state, toggleState, resetState];
 };
 
 export default useToggle;

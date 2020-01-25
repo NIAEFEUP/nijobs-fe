@@ -6,7 +6,10 @@ export const INITIAL_JOB_DURATION = 1;
 const initialState = {
     searchValue: "",
     jobType: INITIAL_JOB_TYPE,
+    filterJobDuration: false,
     jobDuration: [null, null],
+    fields: [],
+    techs: [],
     offers: [],
     loading: false,
     error: null,
@@ -44,6 +47,21 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 jobType: action.jobType,
+            };
+        case offerSearchTypes.SET_JOB_FIELDS:
+            return {
+                ...state,
+                fields: action.fields,
+            };
+        case offerSearchTypes.SET_JOB_TECHS:
+            return {
+                ...state,
+                techs: action.techs,
+            };
+        case offerSearchTypes.SET_JOB_DURATION_TOGGLE:
+            return {
+                ...state,
+                filterJobDuration: action.filterJobDuration,
             };
         default:
             return state;

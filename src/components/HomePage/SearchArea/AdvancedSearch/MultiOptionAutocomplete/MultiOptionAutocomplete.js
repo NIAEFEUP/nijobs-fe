@@ -10,11 +10,12 @@ import { Close, ArrowDropDown } from "@material-ui/icons";
 import useMultiOptionAutocompleteStyles from "./MultiOptionAutocompleteStyles";
 import useSearchAreaStyles from "../../../SearchArea/searchAreaStyle";
 
-const MultiOptionDisplay = (props) => {
+const MultiOptionAutocomplete = (props) => {
 
     const {
         className,
         ChipProps,
+        chipWrapperProps,
         closeIcon = <Close fontSize="small" />,
         disableClearable = false,
         disabled = false,
@@ -180,7 +181,7 @@ const MultiOptionDisplay = (props) => {
                 </PopperComponent>
             ) : null}
 
-            <div className={searchAreaClasses.chipListWrapper}>
+            <div {...chipWrapperProps} className={searchAreaClasses.chipListWrapper}>
                 {value.map((option, index) => (
                     <Chip
                         key={getOptionLabel(option)}
@@ -195,9 +196,10 @@ const MultiOptionDisplay = (props) => {
     );
 };
 
-MultiOptionDisplay.propTypes = {
+MultiOptionAutocomplete.propTypes = {
     autocompleteProps: PropTypes.object.isRequired,
     ChipProps: PropTypes.object,
+    chipWrapperProps: PropTypes.object,
     classes: PropTypes.object,
     className: PropTypes.string,
     clearText: PropTypes.string,
@@ -226,4 +228,4 @@ MultiOptionDisplay.propTypes = {
     value: PropTypes.any,
 };
 
-export default MultiOptionDisplay;
+export default MultiOptionAutocomplete;

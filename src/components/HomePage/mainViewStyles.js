@@ -62,7 +62,7 @@ export default makeStyles(() => ({
     infoBox: {
         position: "absolute",
         margin: "0 auto",
-        bottom: "20vh",
+        bottom: "10vh",
         zIndex: -1,
         width: "100%",
     },

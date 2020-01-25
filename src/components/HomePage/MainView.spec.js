@@ -10,7 +10,7 @@ import { mountWithStore } from "../../test-utils";
 
 describe("Main View", () => {
     let scrollToProductDescription, showSearchResults, wrapper;
-    const theme = createMuiTheme({ asd: 42 });
+    const theme = createMuiTheme({});
     const initialState = {
         offerSearch: {
             searchValue: "searchValue",
