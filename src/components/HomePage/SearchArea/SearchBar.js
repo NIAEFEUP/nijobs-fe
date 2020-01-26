@@ -5,12 +5,13 @@ import {
     TextField,
     InputAdornment,
     IconButton,
+    Badge,
 } from "@material-ui/core";
 
 import { Close, MoreHoriz } from "@material-ui/icons";
 
 const SearchBar = ({ searchValue, setSearchValue, className,
-    handleAdvancedOptionsButtonClick, advancedOptions, hideInputAdornment, onEnterPress }) => {
+    handleAdvancedOptionsButtonClick, advancedOptions, advancedOptionsActive, hideInputAdornment, onEnterPress }) => {
 
     const handleChange = (e) => {
         setSearchValue(e.target.value);
@@ -37,7 +38,9 @@ const SearchBar = ({ searchValue, setSearchValue, className,
                         onClick={handleAdvancedOptionsButtonClick}
                         color="secondary"
                     >
-                        {advancedOptions ? <Close data-icon="Close" fontSize="small"/> : <MoreHoriz data-icon="MoreHoriz"/>}
+                        <Badge color="secondary" variant="dot" invisible={!advancedOptionsActive}>
+                            {advancedOptions ? <Close data-icon="Close" fontSize="small"/> : <MoreHoriz data-icon="MoreHoriz"/>}
+                        </Badge>
                     </IconButton>
                 </InputAdornment>,
             }) : ({})}

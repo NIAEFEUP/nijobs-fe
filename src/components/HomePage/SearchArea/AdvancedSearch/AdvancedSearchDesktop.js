@@ -9,8 +9,8 @@ import {
     Collapse,
     FormControlLabel,
     Switch,
-    // FormGroup,
     FormHelperText,
+    Button,
 } from "@material-ui/core";
 
 import JobTypes from "../JobTypes";
@@ -18,85 +18,85 @@ import useSearchAreaStyles from "../searchAreaStyle";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
 const AdvancedSearchDesktop = ({
-    open, minJobDuration, maxJobDuration,
-    FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-    JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+    open, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
+    JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
 
     const classes = useSearchAreaStyles();
 
     return (
-        <Collapse
-            in={open}
-            classes={{ wrapperInner: classes.advancedSearchContainer }}
-        >
-            <TextField
-                className={classes.jobTypeSelector}
-                {...JobTypeSelectorProps}
-            >
-                {JobTypes.map(({ value, label }) => (
-                    <MenuItem
-                        key={value}
-                        value={value}
-                    >
-                        {label}
-                    </MenuItem>
-                ))}
-            </TextField>
-            <FormControlLabel
-                className={classes.jobDurationSliderToggle}
-                control={
-                    <Switch
-                        {...JobDurationSwitchProps}
-                    />
-                }
-                label={JobDurationSwitchLabel}
-            />
+        <React.Fragment>
             <Collapse
-                {...JobDurationCollapseProps}
-                classes={{ wrapperInner: classes.mobileAdvancedSearchJobDuration }}
-                className={classes.jobDurationSliderCollapse}
+                in={open}
+                classes={{ wrapperInner: classes.advancedSearchContainer }}
             >
-                <FormControl
-                    fullWidth
-                    className={classes.durationSlider}
+                <TextField
+                    className={classes.jobTypeSelector}
+                    {...JobTypeSelectorProps}
                 >
-                    <Slider
-                        {...JobDurationSliderProps}
-                    />
-                    {/* <Typography
-                        id="duration-label"
-                        variant="caption"
+                    {JobTypes.map(({ value, label }) => (
+                        <MenuItem
+                            key={value}
+                            value={value}
+                        >
+                            {label}
+                        </MenuItem>
+                    ))}
+                </TextField>
+                <FormControlLabel
+                    className={classes.jobDurationSliderToggle}
+                    control={
+                        <Switch
+                            {...JobDurationSwitchProps}
+                        />
+                    }
+                    label={JobDurationSwitchLabel}
+                />
+                <Collapse
+                    {...JobDurationCollapseProps}
+                    classes={{ wrapperInner: classes.mobileAdvancedSearchJobDuration }}
+                    className={classes.jobDurationSliderCollapse}
+                >
+                    <FormControl
+                        fullWidth
+                        className={classes.durationSlider}
                     >
-                        {`Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`}
-                    </Typography> */}
-                    <FormHelperText>
-                        {`Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`}
-                    </FormHelperText>
-                </FormControl>
-            </Collapse>
-            <MultiOptionAutocomplete
-                {...FieldsSelectorProps}
-                className={classes.fieldsSelector}
-                chipWrapperProps={{
-                    style: {
-                        gridColumnStart: 1,
-                        gridRowStart: 4,
-                    },
-                }}
-            />
-            <MultiOptionAutocomplete
-                {...TechsSelectorProps}
-                className={classes.techsSelector}
-                chipWrapperProps={{
-                    style: {
-                        gridColumnStart: 2,
-                        gridRowStart: 4,
-                    },
-                }}
+                        <Slider
+                            {...JobDurationSliderProps}
+                        />
+                        <FormHelperText>
+                            {JobDurationSliderText}
+                        </FormHelperText>
+                    </FormControl>
+                </Collapse>
+                <MultiOptionAutocomplete
+                    {...FieldsSelectorProps}
+                    className={classes.fieldsSelector}
+                    chipWrapperProps={{
+                        style: {
+                            gridColumnStart: 1,
+                            gridRowStart: 4,
+                        },
+                    }}
+                />
+                <MultiOptionAutocomplete
+                    {...TechsSelectorProps}
+                    className={classes.techsSelector}
+                    chipWrapperProps={{
+                        style: {
+                            gridColumnStart: 2,
+                            gridRowStart: 4,
+                        },
+                    }}
                 // threshold={MAX_FIELDS_CHIP}
-            />
-        </Collapse>
+                />
+            </Collapse>
+            {open &&
+                <div className={classes.resetBtnWrapper}>
+                    <Button color="primary" onClick={resetAdvancedSearch}>Reset Advanced Fields</Button>
+                </div>
+            }
+        </React.Fragment>
     );
 };
 

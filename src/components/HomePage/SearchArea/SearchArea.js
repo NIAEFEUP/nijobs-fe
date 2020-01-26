@@ -33,15 +33,12 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     const classes = useSearchAreaStyles();
 
     const toggleShowJobDurationSlider = () => setShowJobDurationSlider(!showJobDurationSlider);
-    const resetAdvancedSearch = () => {
-        setShowJobDurationSlider(false);
-        resetAdvancedSearchFields();
-    };
 
-    // This is useless for now
     const {
         advancedOptions,
+        advancedOptionsActive,
         toggleAdvancedOptions,
+        resetAdvancedSearch,
         JobTypeSelectorProps,
         FieldsSelectorProps,
         TechsSelectorProps,
@@ -49,6 +46,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         JobDurationCollapseProps,
         JobDurationSwitchLabel,
         JobDurationSliderProps,
+        JobDurationSliderText,
     } = useAdvancedSearch({
         minJobDuration,
         maxJobDuration,
@@ -65,9 +63,9 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     });
 
     const handleAdvancedOptionsButtonClick = () => {
-        if (advancedOptions) {
-            resetAdvancedSearch();
-        }
+        // if (advancedOptions) {
+        //     resetAdvancedSearch();
+        // }
         toggleAdvancedOptions();
     };
 
@@ -101,6 +99,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     className={classes.searchBar}
                     handleAdvancedOptionsButtonClick={handleAdvancedOptionsButtonClick}
                     advancedOptions={advancedOptions}
+                    advancedOptionsActive={advancedOptionsActive}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
                 />
@@ -126,6 +125,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     JobDurationSwitchProps={JobDurationSwitchProps}
                     JobDurationCollapseProps={JobDurationCollapseProps}
                     JobDurationSwitchLabel={JobDurationSwitchLabel}
+                    JobDurationSliderText={JobDurationSliderText}
                     JobDurationSliderProps={JobDurationSliderProps}
                     resetAdvancedSearch={resetAdvancedSearch}
                 />

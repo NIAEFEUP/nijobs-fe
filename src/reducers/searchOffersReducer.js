@@ -1,6 +1,6 @@
 import { offerSearchTypes } from "../actions/searchOffersActions";
 
-export const INITIAL_JOB_TYPE = undefined;
+export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
 
 const initialState = {

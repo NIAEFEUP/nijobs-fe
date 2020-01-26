@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import useToggle from "../../../../hooks/useToggle";
 import useAutocomplete from "@material-ui/lab/useAutocomplete";
 import { TextField } from "@material-ui/core";
-import { INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
+import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 
 const FIELD_OPTIONS = [
     { label: "Back-End", value: "BACK_END" },
@@ -53,9 +53,12 @@ export default ({
     setFields,
     techs,
     setTechs,
+    resetAdvancedSearchFields,
 }) => {
 
     const jobDuration = [minJobDuration, maxJobDuration];
+
+    const JobDurationSliderText = `Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`;
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 
@@ -122,11 +125,25 @@ export default ({
         autocompleteProps: techsAutocompleteProps,
     };
 
+    const advancedOptionsActive = showJobDurationSlider
+        || (jobType !== INITIAL_JOB_TYPE)
+        || fields.length !== 0
+        || techs.length !== 0;
+
+    const resetAdvancedSearch = () => {
+
+        // Clears the autocomplete and handles the internal state -- CONSISTENCY!!!
+        FieldsSelectorProps.autocompleteProps.getClearProps().onClick();
+        TechsSelectorProps.autocompleteProps.getClearProps().onClick();
+
+        resetAdvancedSearchFields();
+    };
+
     return {
         advancedOptions,
+        advancedOptionsActive,
         toggleAdvancedOptions,
-        minJobDuration,
-        maxJobDuration,
+        resetAdvancedSearch,
         FieldsSelectorProps,
         TechsSelectorProps,
         JobTypeSelectorProps,
@@ -134,6 +151,6 @@ export default ({
         JobDurationCollapseProps,
         JobDurationSwitchLabel,
         JobDurationSliderProps,
-
+        JobDurationSliderText,
     };
 };

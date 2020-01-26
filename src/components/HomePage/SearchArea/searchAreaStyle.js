@@ -63,4 +63,10 @@ export default makeStyles((theme) => ({
             marginBottom: theme.spacing(1),
         },
     },
+    resetBtnWrapper: {
+        display: "flex",
+        "& > *": {
+            marginLeft: theme.spacing(-1),
+        },
+    },
 }));

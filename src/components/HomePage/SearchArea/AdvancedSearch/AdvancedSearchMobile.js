@@ -6,7 +6,6 @@ import {
     TextField,
     MenuItem,
     FormControl,
-    Typography,
     Slider,
     FormGroup,
     Dialog,
@@ -16,6 +15,7 @@ import {
     FormControlLabel,
     Switch,
     Collapse,
+    FormHelperText,
 } from "@material-ui/core";
 import { ArrowBackIos } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
@@ -29,7 +29,7 @@ import useSearchAreaStyles from "../searchAreaStyle";
 
 
 const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
-    minJobDuration, maxJobDuration, setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch,
+    setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText,
     JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
 
@@ -39,10 +39,6 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
         e.preventDefault();
         setSearchValue("");
 
-        // Clears the autocomplete and handles the internal state -- CONSISTENCY!!!
-        FieldsSelectorProps.autocompleteProps.getClearProps().onClick();
-        TechsSelectorProps.autocompleteProps.getClearProps().onClick();
-
         resetAdvancedSearch();
     };
     const handleSearchClick = (e) => {
@@ -50,9 +46,8 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
         close();
     };
 
-    const handleCloseClick = (e) => {
+    const handleCloseClick = () => {
         setShouldSubmitForm(false);
-        handleResetClick(e);
         close();
     };
 
@@ -127,12 +122,9 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                                 margin="normal"
                                 {...JobDurationSliderProps}
                             />
-                            <Typography
-                                id="duration-label"
-                                variant="caption"
-                            >
-                                {`Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`}
-                            </Typography>
+                            <FormHelperText>
+                                {JobDurationSliderText}
+                            </FormHelperText>
                         </FormControl>
                     </Collapse>
                 </FormGroup>

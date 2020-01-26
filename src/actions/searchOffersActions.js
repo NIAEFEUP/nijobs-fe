@@ -58,5 +58,8 @@ export const setShowJobDurationSlider = (filterJobDuration) => ({
 
 export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setJobType(INITIAL_JOB_TYPE));
+    dispatch(setShowJobDurationSlider(false));
     dispatch(setJobDuration(INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1));
+    dispatch(setFields([]));
+    dispatch(setTechs([]));
 };
