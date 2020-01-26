@@ -146,6 +146,17 @@ const MultiOptionAutocomplete = (props) => {
                         ...getInputProps(),
                     },
                 })}
+                <div {...chipWrapperProps} className={searchAreaClasses.chipListWrapper}>
+                    {value.map((option, index) => (
+                        <Chip
+                            key={getOptionLabel(option)}
+                            label={getOptionLabel(option)}
+                            size={size}
+                            {...getTagProps({ index })}
+                            {...ChipProps}
+                        />
+                    ))}
+                </div>
             </div>
             {popupOpen && anchorEl ? (
                 <PopperComponent
@@ -180,18 +191,6 @@ const MultiOptionAutocomplete = (props) => {
                     </PaperComponent>
                 </PopperComponent>
             ) : null}
-
-            <div {...chipWrapperProps} className={searchAreaClasses.chipListWrapper}>
-                {value.map((option, index) => (
-                    <Chip
-                        key={getOptionLabel(option)}
-                        label={getOptionLabel(option)}
-                        size={size}
-                        {...getTagProps({ index })}
-                        {...ChipProps}
-                    />
-                ))}
-            </div>
         </React.Fragment>
     );
 };

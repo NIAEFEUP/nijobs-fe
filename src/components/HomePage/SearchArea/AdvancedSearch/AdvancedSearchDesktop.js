@@ -54,7 +54,6 @@ const AdvancedSearchDesktop = ({
                 />
                 <Collapse
                     {...JobDurationCollapseProps}
-                    classes={{ wrapperInner: classes.mobileAdvancedSearchJobDuration }}
                     className={classes.jobDurationSliderCollapse}
                 >
                     <FormControl

@@ -10,7 +10,7 @@ export default makeStyles((theme) => ({
             gridTemplateColumns: "1fr",
             gridTemplateRows: "1fr auto",
             alignItems: "center",
-            gridGap: "1em",
+            gridGap: theme.spacing(1),
         },
     },
     searchBar: {
@@ -19,13 +19,13 @@ export default makeStyles((theme) => ({
     advancedSearchContainer: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr 1fr",
+        gridTemplateRows: "1fr 0.7fr auto",
         alignItems: "center",
         gridGap: "1em",
     },
-    mobileAdvancedSearchJobDuration: {
+    advancedSearchJobDuration: {
         paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        paddingRight: theme.spacing(0),
     },
     mobileAdvancedSearchActions: {
         padding: theme.spacing(2),
@@ -41,13 +41,22 @@ export default makeStyles((theme) => ({
     fieldsSelector: {
         gridRowStart: 3,
         gridColumnStart: 1,
+        alignSelf: "flex-start",
+        "& > div": {
+            marginTop: 0,
+        },
     },
     techsSelector: {
         gridRowStart: 3,
         gridColumnStart: 2,
+        alignSelf: "flex-start",
+        "& > div": {
+            marginTop: 0,
+        },
     },
     jobDurationSliderToggle: {
         gridRowStart: 2,
+        marginTop: theme.spacing(2),
     },
     jobDurationSliderCollapse: {
         gridRowStart: 2,
@@ -57,7 +66,7 @@ export default makeStyles((theme) => ({
         display: "flex",
         flexWrap: "wrap",
         maxWidth: "100%",
-        marginTop: 0,
+        marginTop: theme.spacing(1),
         "& > *": {
             marginRight: theme.spacing(1),
             marginBottom: theme.spacing(1),

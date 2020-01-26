@@ -72,6 +72,7 @@ export default makeStyles(() => ({
         justifyContent: "center",
         width: "100%",
         bottom: "1em",
+        zIndex: -1,
     },
 }))
 ;

@@ -111,7 +111,6 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                         label={JobDurationSwitchLabel}
                     />
                     <Collapse
-                        classes={{ wrapperInner: classes.mobileAdvancedSearchJobDuration }}
                         {...JobDurationCollapseProps}
                     >
                         <FormControl

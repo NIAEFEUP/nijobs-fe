@@ -3,6 +3,8 @@ import useToggle from "../../../../hooks/useToggle";
 import useAutocomplete from "@material-ui/lab/useAutocomplete";
 import { TextField } from "@material-ui/core";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
+import useSearchAreaStyles from "../searchAreaStyle";
+
 
 const FIELD_OPTIONS = [
     { label: "Back-End", value: "BACK_END" },
@@ -27,7 +29,6 @@ const FieldsRenderInput = (params) => (
         margin="normal"
         fullWidth
         label="Fields"
-        placeholder="Fields"
     />
 );
 const TechsRenderInput = (params) => (
@@ -37,7 +38,6 @@ const TechsRenderInput = (params) => (
         margin="normal"
         fullWidth
         label="Technologies"
-        placeholder="Technologies"
     />
 );
 
@@ -82,6 +82,8 @@ export default ({
     const JobDurationCollapseProps = {
         in: showJobDurationSlider,
         onEnter: useCallback(() => setJobDuration(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]), [setJobDuration]),
+        classes: { wrapperInner: useSearchAreaStyles().advancedSearchJobDuration },
+
     };
 
     const JobDurationSliderProps = {
