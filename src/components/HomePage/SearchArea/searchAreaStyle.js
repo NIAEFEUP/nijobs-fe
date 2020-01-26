@@ -54,6 +54,9 @@ export default makeStyles((theme) => ({
             marginTop: 0,
         },
     },
+    jobDurationSliderToggleMobile: {
+        marginTop: theme.spacing(2),
+    },
     jobDurationSliderToggle: {
         gridRowStart: 2,
         marginTop: theme.spacing(2),

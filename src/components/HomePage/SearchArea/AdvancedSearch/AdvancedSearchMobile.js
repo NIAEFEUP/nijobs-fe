@@ -102,6 +102,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                         // threshold={MAX_FIELDS_CHIP}
                     />
                     <FormControlLabel
+                        className={classes.jobDurationSliderToggleMobile}
                         control={
                             <Switch
                                 margin="normal"
