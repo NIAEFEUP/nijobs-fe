@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
     mainView: {
         height: "100vh",
         width: "100%",
@@ -60,11 +60,15 @@ export default makeStyles(() => ({
         },
     },
     infoBox: {
+        padding: theme.spacing(0, 1),
         position: "absolute",
         margin: "0 auto",
-        bottom: "10vh",
+        bottom: "25vh",
         zIndex: -1,
         width: "100%",
+    },
+    infoBoxMobile: {
+        bottom: "15vh",
     },
     showMoreBtn: {
         position: "absolute",

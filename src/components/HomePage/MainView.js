@@ -7,9 +7,10 @@ import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
-import { useMobile, NonMobileLayout } from "../../utils/media-queries";
+import { useMobile } from "../../utils/media-queries";
 
 import useMainViewStyles from "./mainViewStyles.js";
+import clsx from "clsx";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
@@ -32,13 +33,16 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
                     }}
                 />
             </div>
-            <NonMobileLayout>
-                <div className={classes.infoBox}>
-                    <InfoBox
-                        info="Your next oportunity is out there. Use the search bar to find it!"
-                    />
-                </div>
-            </NonMobileLayout>
+            <div
+                className={clsx(
+                    classes.infoBox,
+                    { [classes.infoBoxMobile]: useMobile() }
+                )}
+            >
+                <InfoBox size={useMobile() ? "small" : "normal"}>
+                    Your next oportunity is out there. Use the search bar to find it!
+                </InfoBox>
+            </div>
             <div className={classes.showMoreBtn}>
                 <ShowMoreButton
                     onClick={scrollToProductDescription}
