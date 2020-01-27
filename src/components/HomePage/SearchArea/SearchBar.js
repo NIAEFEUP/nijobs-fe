@@ -6,9 +6,14 @@ import {
     InputAdornment,
     IconButton,
     Badge,
+    Tooltip,
 } from "@material-ui/core";
 
-import { Close, MoreHoriz } from "@material-ui/icons";
+import { FilterList } from "@material-ui/icons";
+
+import useSearchAreaStyles from "./searchAreaStyle";
+import clsx from "clsx";
+
 
 const SearchBar = ({ searchValue, setSearchValue, className,
     handleAdvancedOptionsButtonClick, advancedOptions, advancedOptionsActive, hideInputAdornment, onEnterPress }) => {
@@ -21,6 +26,7 @@ const SearchBar = ({ searchValue, setSearchValue, className,
         if (e.key === "Enter") onEnterPress(e);
     };
 
+    const classes = useSearchAreaStyles();
     return (
         <TextField
             label="Search"
@@ -39,7 +45,29 @@ const SearchBar = ({ searchValue, setSearchValue, className,
                         color="secondary"
                     >
                         <Badge color="secondary" variant="dot" invisible={!advancedOptionsActive}>
-                            {advancedOptions ? <Close data-icon="Close" fontSize="small"/> : <MoreHoriz data-icon="MoreHoriz"/>}
+                            <Tooltip
+                                title={advancedOptions ? "Hide Advanced Search" : "Show Advanced Search" }
+                                placement="top"
+                            >
+                                <FilterList
+                                    className={clsx(
+                                        classes.advancedSearchToggle,
+                                        {
+                                            [classes.advancedSearchToggleOpen]: advancedOptions,
+                                        }
+                                    )}
+                                    data-icon="FilterList"
+                                />
+                            </Tooltip>
+                            {/* {advancedOptions ?
+                                <Tooltip title="Hide Advanced Search" placement="top">
+                                    <Close data-icon="Close" fontSize="small"/>
+                                </Tooltip>
+                                :
+                                <Tooltip title="Show Advanced Search" placement="top">
+                                    <FilterList data-icon="FilterList"/>
+                                </Tooltip>
+                            } */}
                         </Badge>
                     </IconButton>
                 </InputAdornment>,

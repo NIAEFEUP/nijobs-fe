@@ -23,6 +23,12 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         gridGap: "1em",
     },
+    advancedSearchToggle: {
+        transition: "transform 0.3s",
+    },
+    advancedSearchToggleOpen: {
+        transform: "rotate3d(1,0,0,180deg)",
+    },
     advancedSearchJobDuration: {
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(0),
@@ -78,6 +84,7 @@ export default makeStyles((theme) => ({
     resetBtnWrapper: {
         display: "flex",
         "& > *": {
+            marginTop: theme.spacing(2),
             marginLeft: theme.spacing(-1),
         },
     },
