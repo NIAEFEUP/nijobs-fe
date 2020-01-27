@@ -127,10 +127,15 @@ export default ({
         autocompleteProps: techsAutocompleteProps,
     };
 
+
     const advancedOptionsActive = showJobDurationSlider
-        || (jobType !== INITIAL_JOB_TYPE)
-        || fields.length !== 0
-        || techs.length !== 0;
+    || (jobType !== INITIAL_JOB_TYPE)
+    || fields.length !== 0
+    || techs.length !== 0;
+
+    const ResetButtonProps = {
+        disabled: !advancedOptionsActive,
+    };
 
     const resetAdvancedSearch = () => {
 
@@ -154,5 +159,6 @@ export default ({
         JobDurationSwitchLabel,
         JobDurationSliderProps,
         JobDurationSliderText,
+        ResetButtonProps,
     };
 };

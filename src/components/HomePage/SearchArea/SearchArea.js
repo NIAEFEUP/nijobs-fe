@@ -47,6 +47,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         JobDurationSwitchLabel,
         JobDurationSliderProps,
         JobDurationSliderText,
+        ResetButtonProps,
     } = useAdvancedSearch({
         minJobDuration,
         maxJobDuration,
@@ -127,6 +128,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     JobDurationSwitchLabel={JobDurationSwitchLabel}
                     JobDurationSliderText={JobDurationSliderText}
                     JobDurationSliderProps={JobDurationSliderProps}
+                    ResetButtonProps={ResetButtonProps}
                     resetAdvancedSearch={resetAdvancedSearch}
                 />
             </form>

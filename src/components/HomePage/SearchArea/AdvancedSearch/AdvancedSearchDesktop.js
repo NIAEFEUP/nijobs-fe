@@ -19,7 +19,7 @@ import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutoco
 
 const AdvancedSearchDesktop = ({
     open, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-    JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+    ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
 
     const classes = useSearchAreaStyles();
@@ -92,7 +92,13 @@ const AdvancedSearchDesktop = ({
             </Collapse>
             {open &&
                 <div className={classes.resetBtnWrapper}>
-                    <Button color="primary" onClick={resetAdvancedSearch}>Reset Advanced Fields</Button>
+                    <Button
+                        {...ResetButtonProps}
+                        color="primary"
+                        onClick={resetAdvancedSearch}
+                    >
+                        Reset Advanced Fields
+                    </Button>
                 </div>
             }
         </React.Fragment>

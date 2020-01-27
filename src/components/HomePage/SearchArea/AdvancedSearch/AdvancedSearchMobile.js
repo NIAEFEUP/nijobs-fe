@@ -29,7 +29,7 @@ import useSearchAreaStyles from "../searchAreaStyle";
 
 
 const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
-    setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText,
+    setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
     JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
 
@@ -134,7 +134,13 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     root: classes.mobileAdvancedSearchActions,
                 }}
             >
-                <Button color="secondary" onClick={handleResetClick}>Reset</Button>
+                <Button
+                    {...ResetButtonProps}
+                    color="secondary"
+                    onClick={handleResetClick}
+                >
+                    Reset
+                </Button>
                 <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
             </DialogActions>
         </Dialog>
