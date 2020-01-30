@@ -28,6 +28,7 @@ const AdvancedSearchDesktop = ({
         <React.Fragment>
             <Collapse
                 in={open}
+                className={classes.advancedSearchOuterWrapper}
                 classes={{ wrapperInner: classes.advancedSearchContainer }}
             >
                 <TextField

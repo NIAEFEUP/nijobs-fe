@@ -24,6 +24,7 @@ import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
 import useAdvancedSearch from "./AdvancedSearch/useAdvancedSearch";
 import AbstractAdvancedSearch from "./AdvancedSearch/AbstractAdvancedSearch";
+import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
@@ -63,13 +64,6 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         resetAdvancedSearchFields,
     });
 
-    const handleAdvancedOptionsButtonClick = () => {
-        // if (advancedOptions) {
-        //     resetAdvancedSearch();
-        // }
-        toggleAdvancedOptions();
-    };
-
     const submitForm = (e) => {
         // mind the jobType value when passing value to api,
         // because for simple search, the initial jobType value will be undefined,
@@ -85,7 +79,6 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         if (onSubmit) onSubmit();
     };
 
-    // TODO Make the advancedSearch button be gray, and primary/secondary, if there are changes (i.e. jobDuration !== INITIAL_JOB_DURATION)
     return (
         <Paper
             className={classes.searchArea}
@@ -98,11 +91,13 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
             >
                 <SearchBar
                     className={classes.searchBar}
-                    handleAdvancedOptionsButtonClick={handleAdvancedOptionsButtonClick}
-                    advancedOptions={advancedOptions}
-                    advancedOptionsActive={advancedOptionsActive}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
+                />
+                <AdvancedOptionsToggle
+                    advancedOptions={advancedOptions}
+                    advancedOptionsActive={advancedOptionsActive}
+                    handleAdvancedOptionsButtonClick={toggleAdvancedOptions}
                 />
                 <AbstractAdvancedSearch
                     mobile={useMobile()}

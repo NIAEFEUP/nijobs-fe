@@ -7,7 +7,7 @@ export default makeStyles((theme) => ({
         position: "relative",
         "& > form": {
             display: "grid",
-            gridTemplateColumns: "1fr",
+            gridTemplateColumns: `auto ${theme.spacing(6)}px`,
             gridTemplateRows: "1fr auto",
             alignItems: "center",
             gridGap: theme.spacing(1),
@@ -15,6 +15,10 @@ export default makeStyles((theme) => ({
     },
     searchBar: {
         gridColumn: 1,
+    },
+    advancedSearchOuterWrapper: {
+        gridColumn: "1 / span 2",
+
     },
     advancedSearchContainer: {
         display: "grid",
@@ -24,10 +28,7 @@ export default makeStyles((theme) => ({
         gridGap: "1em",
     },
     advancedSearchToggle: {
-        transition: "transform 0.3s",
-    },
-    advancedSearchToggleOpen: {
-        transform: "rotate3d(1,0,0,180deg)",
+        marginBottom: theme.spacing(-2),
     },
     advancedSearchJobDuration: {
         paddingLeft: theme.spacing(1),
