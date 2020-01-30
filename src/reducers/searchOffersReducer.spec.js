@@ -15,7 +15,10 @@ describe("Search Offers Reducer", () => {
         expect(state).toEqual({ searchValue: "",
             jobType: INITIAL_JOB_TYPE,
             jobDuration: [null, null],
+            filterJobDuration: false,
             offers: [],
+            fields: [],
+            techs: [],
             loading: false,
             error: null });
     });

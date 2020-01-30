@@ -6,15 +6,14 @@ import SubmitSearchButton from "./SubmitSearchButton";
 
 import {
     Paper,
-    TextField,
-    Collapse,
     Fab,
     createMuiTheme,
-    ThemeProvider,
+
 } from "@material-ui/core";
-import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
+import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
-import { mountWithStore, mountWithTheme } from "../../../test-utils";
+import { mountWithTheme } from "../../../test-utils";
+import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 
 describe("SearchArea", () => {
     let onSubmit;
@@ -27,7 +26,7 @@ describe("SearchArea", () => {
         it("should render a paper", () => {
             expect(
                 mountWithTheme(
-                    <SearchArea onSubmit={onSubmit} />,
+                    <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
                     theme
                 ).find(Paper).exists()
             ).toBe(true);
@@ -35,14 +34,14 @@ describe("SearchArea", () => {
 
         it("should render a form", () => {
             expect(mountWithTheme(
-                <SearchArea onSubmit={onSubmit} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
                 theme
             ).find("form").first().prop("id")).toEqual("search_form");
         });
 
         it("should render a SearchBar", () => {
             const searchBar = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
                 theme
             ).find(SearchBar).first();
             expect(searchBar.exists()).toBe(true);
@@ -50,19 +49,38 @@ describe("SearchArea", () => {
 
         it("should render an Advanced Search Area", () => {
             const wrapper = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
                 theme
             );
-            expect(wrapper.find(AdvancedSearch).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
+            expect(wrapper.find(AdvancedSearchDesktop).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
         });
 
         it("should render a SearchButton", () => {
             const searchArea = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
                 theme
             );
             const button = searchArea.find(SubmitSearchButton).first();
             expect(button.exists()).toBe(true);
+        });
+
+        it("should render an Advanced Options Button with the correct icon", () => {
+            const searchValue = "test";
+            const setSearchValue = () => {};
+            const submitSearchForm = () => {};
+
+            const wrapper = mountWithTheme(
+                <SearchArea
+                    searchValue={searchValue}
+                    setSearchValue={setSearchValue}
+                    submitSearchForm={submitSearchForm}
+                    advancedOptions={false}
+                    fields={[]}
+                    techs={[]}
+                />,
+                theme
+            );
+            expect(wrapper.find(AdvancedOptionsToggle).exists()).toBe(true);
         });
     });
 
@@ -75,6 +93,8 @@ describe("SearchArea", () => {
                     onSubmit={onSubmit}
                     addSnackbar={addSnackbar}
                     searchOffers={searchOffersMock}
+                    fields={[]}
+                    techs={[]}
                 />,
                 theme
             ).find("form#search_form").first();
@@ -101,6 +121,8 @@ describe("SearchArea", () => {
                     searchOffers={searchOffers}
                     addSnackbar={addSnackbar}
                     onSubmit={onSubmit}
+                    fields={[]}
+                    techs={[]}
                 />,
                 theme
             );
@@ -109,6 +131,7 @@ describe("SearchArea", () => {
             expect(searchOffers).toHaveBeenCalledTimes(1);
             expect(onSubmit).toHaveBeenCalledTimes(1);
         });
+
     });
 
     describe("redux", () => {

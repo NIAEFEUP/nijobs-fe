@@ -15,6 +15,8 @@ describe("Main View", () => {
         offerSearch: {
             searchValue: "searchValue",
             jobDuration: [1, 2],
+            fields: [],
+            techs: [],
         },
     };
 

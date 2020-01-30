@@ -145,6 +145,12 @@ SearchArea.propTypes = {
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
     resetAdvancedSearchFields: PropTypes.func.isRequired,
+    fields: PropTypes.array.isRequired,
+    techs: PropTypes.array.isRequired,
+    showJobDurationSlider: PropTypes.bool.isRequired,
+    setFields: PropTypes.func.isRequired,
+    setTechs: PropTypes.func.isRequired,
+    setShowJobDurationSlider: PropTypes.func.isRequired,
 };
 
 export const mapStateToProps = ({ offerSearch }) => ({
