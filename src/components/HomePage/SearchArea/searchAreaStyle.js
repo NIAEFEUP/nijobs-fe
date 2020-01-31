@@ -52,6 +52,10 @@ export default makeStyles((theme) => ({
         "& > div": {
             marginTop: 0,
         },
+        "& .chip-wrapper": {
+            gridColumnStart: 1,
+            gridRowStart: 4,
+        },
     },
     techsSelector: {
         gridRowStart: 3,
@@ -59,6 +63,10 @@ export default makeStyles((theme) => ({
         alignSelf: "flex-start",
         "& > div": {
             marginTop: 0,
+        },
+        "& .chip-wrapper": {
+            gridColumnStart: 2,
+            gridRowStart: 4,
         },
     },
     jobDurationSliderToggleMobile: {

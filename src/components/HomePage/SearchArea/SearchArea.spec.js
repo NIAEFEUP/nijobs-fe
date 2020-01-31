@@ -1,6 +1,13 @@
 import React from "react";
 import { SearchArea, mapDispatchToProps, mapStateToProps } from "./SearchArea";
-import { setSearchValue, setJobDuration, setJobType } from "../../../actions/searchOffersActions";
+import {
+    setSearchValue,
+    setJobDuration,
+    setJobType,
+    setFields,
+    setTechs,
+    setShowJobDurationSlider,
+} from "../../../actions/searchOffersActions";
 import SearchBar from "./SearchBar";
 import SubmitSearchButton from "./SubmitSearchButton";
 
@@ -126,7 +133,7 @@ describe("SearchArea", () => {
                 />,
                 theme
             );
-            wrapper.find(Fab).simulate("click", { e: { preventDefault: () => {} } });
+            wrapper.find(Fab).simulate("click", { preventDefault: () => {} });
 
             expect(searchOffers).toHaveBeenCalledTimes(1);
             expect(onSubmit).toHaveBeenCalledTimes(1);
@@ -141,6 +148,8 @@ describe("SearchArea", () => {
                     searchValue: "searchValue",
                     jobType: "jobType",
                     jobDuration: [1, 2],
+                    fields: ["field1", "field2"],
+                    techs: ["tech1", "tech2"],
                 },
             };
             expect(mapStateToProps(mockState)).toEqual({
@@ -148,6 +157,8 @@ describe("SearchArea", () => {
                 jobType: "jobType",
                 minJobDuration: 1,
                 maxJobDuration: 2,
+                fields: ["field1", "field2"],
+                techs: ["tech1", "tech2"],
             });
         });
 
@@ -169,6 +180,18 @@ describe("SearchArea", () => {
 
             props.setJobType(jobType);
             expect(dispatch).toHaveBeenCalledWith(setJobType("jobType"));
+
+            const fields = ["field1", "field2"];
+            props.setFields(fields);
+            expect(dispatch).toHaveBeenCalledWith(setFields(["field1", "field2"]));
+
+            const techs = ["tech1", "tech2"];
+            props.setTechs(techs);
+            expect(dispatch).toHaveBeenCalledWith(setTechs(["tech1", "tech2"]));
+
+            const filterJobDuration = false;
+            props.setShowJobDurationSlider(filterJobDuration);
+            expect(dispatch).toHaveBeenCalledWith(setShowJobDurationSlider(false));
         });
     });
 });

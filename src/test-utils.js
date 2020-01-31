@@ -27,3 +27,12 @@ export const mountWithTheme = (component, theme) => mount(
         {component}
     </ThemeProvider>
 );
+
+export const TestComponent = ({ callback }) => {
+    callback();
+    return null;
+};
+
+export const testHook = (callback) => {
+    mount(<TestComponent callback={callback} />);
+};

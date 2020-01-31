@@ -1,4 +1,11 @@
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import mediaQuery from "css-mediaquery";
+
+export const createMatchMedia = (width) => (query) => ({
+    matches: mediaQuery.match(query, { width }),
+    addListener: () => {},
+    removeListener: () => {},
+});
 
 export const useDesktop = () => useMediaQuery((theme) => theme.breakpoints.up("md"));
 export const useTablet = () => useMediaQuery((theme) => theme.breakpoints.only("sm"));

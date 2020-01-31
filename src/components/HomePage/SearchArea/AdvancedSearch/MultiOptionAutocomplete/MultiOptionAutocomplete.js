@@ -1,3 +1,6 @@
+/* istanbul ignore file */
+// Ignoring file because it was based on a material-ui component which is already tested there
+
 import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";

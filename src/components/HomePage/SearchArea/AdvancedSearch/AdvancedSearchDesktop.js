@@ -4,7 +4,6 @@ import {
     TextField,
     MenuItem,
     FormControl,
-    // Typography,
     Slider,
     Collapse,
     FormControlLabel,
@@ -71,22 +70,18 @@ const AdvancedSearchDesktop = ({
                 </Collapse>
                 <MultiOptionAutocomplete
                     {...FieldsSelectorProps}
+                    _id="fields_selector"
                     className={classes.fieldsSelector}
                     chipWrapperProps={{
-                        style: {
-                            gridColumnStart: 1,
-                            gridRowStart: 4,
-                        },
+                        className: "chip-wrapper",
                     }}
                 />
                 <MultiOptionAutocomplete
                     {...TechsSelectorProps}
+                    _id="techs_selector"
                     className={classes.techsSelector}
                     chipWrapperProps={{
-                        style: {
-                            gridColumnStart: 2,
-                            gridRowStart: 4,
-                        },
+                        className: "chip-wrapper",
                     }}
                 // threshold={MAX_FIELDS_CHIP}
                 />
@@ -95,6 +90,7 @@ const AdvancedSearchDesktop = ({
                 <div className={classes.resetBtnWrapper}>
                     <Button
                         {...ResetButtonProps}
+                        _id="reset_btn"
                         color="primary"
                         onClick={resetAdvancedSearch}
                     >

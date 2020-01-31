@@ -51,20 +51,20 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
         close();
     };
 
+    const handleExit = () => shouldSubmitForm && submitForm();
+
     const classes = useSearchAreaStyles();
 
     return (
         <Dialog
-            fullScreen open={open}
+            fullScreen
+            open={open}
             onEnter={() => setShouldSubmitForm(true)}
-            onExited={() => {
-                if (shouldSubmitForm)
-                    submitForm();
-            }}
+            onExited={handleExit}
         >
             <DialogTitle>
                 <IconButton
-                    aria-label="search"
+                    aria-label="back"
                     onClick={handleCloseClick}
                     color="secondary"
                 >
@@ -96,18 +96,17 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     </TextField>
                     <MultiOptionAutocomplete
                         {...FieldsSelectorProps}
+                        _id="fields_selector"
                     />
                     <MultiOptionAutocomplete
                         {...TechsSelectorProps}
+                        _id="techs_selector"
                         // threshold={MAX_FIELDS_CHIP}
                     />
                     <FormControlLabel
                         className={classes.jobDurationSliderToggleMobile}
                         control={
-                            <Switch
-                                margin="normal"
-                                {...JobDurationSwitchProps}
-                            />
+                            <Switch {...JobDurationSwitchProps}/>
                         }
                         label={JobDurationSwitchLabel}
                     />
@@ -118,10 +117,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                             fullWidth
                             className={classes.durationSlider}
                         >
-                            <Slider
-                                margin="normal"
-                                {...JobDurationSliderProps}
-                            />
+                            <Slider {...JobDurationSliderProps}/>
                             <FormHelperText>
                                 {JobDurationSliderText}
                             </FormHelperText>
@@ -129,19 +125,23 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     </Collapse>
                 </FormGroup>
             </DialogContent>
-            <DialogActions
-                classes={{
-                    root: classes.mobileAdvancedSearchActions,
-                }}
-            >
+            <DialogActions classes={{ root: classes.mobileAdvancedSearchActions  }}>
                 <Button
                     {...ResetButtonProps}
+                    _id="reset_btn"
                     color="secondary"
                     onClick={handleResetClick}
                 >
                     Reset
                 </Button>
-                <Button variant="contained" color="primary" onClick={handleSearchClick}>Search</Button>
+                <Button
+                    _id="search_btn"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSearchClick}
+                >
+                       Search
+                </Button>
             </DialogActions>
         </Dialog>
     );

@@ -16,8 +16,6 @@ import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/search
 
 import { Paper } from "@material-ui/core";
 import SearchBar from "./SearchBar";
-// import AdvancedSearch from "./AdvancedSearch/AdvancedSearch";
-// import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 import SubmitSearchButton from "./SubmitSearchButton";
 
 import useSearchAreaStyles from "./searchAreaStyle";

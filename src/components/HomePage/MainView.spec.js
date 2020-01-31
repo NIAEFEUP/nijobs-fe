@@ -5,7 +5,6 @@ import InfoBox from "./QuickInfoArea/InfoBox";
 import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
 import { createMuiTheme } from "@material-ui/core";
-import mediaQuery from "css-mediaquery";
 import { mountWithStore } from "../../test-utils";
 
 describe("Main View", () => {
@@ -34,16 +33,7 @@ describe("Main View", () => {
         );
     });
 
-    const createMatchMedia = (width) => (query) => ({
-        matches: mediaQuery.match(query, { width }),
-        addListener: () => {},
-        removeListener: () => {},
-    });
-
     describe("render", () => {
-        beforeAll(() => {
-            window.matchMedia = createMatchMedia(1200); // render desktop
-        });
 
         it("should contain an InfoBox", () => {
             expect(wrapper.find(InfoBox).exists()).toBe(true);

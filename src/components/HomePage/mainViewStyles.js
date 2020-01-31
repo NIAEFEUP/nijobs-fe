@@ -49,6 +49,7 @@ export default makeStyles((theme) => ({
             width: "60%",
             margin: "0 auto",
         },
+        zIndex: 10,
     },
     searchAreaMobile: {
         width: "100%",
@@ -76,7 +77,7 @@ export default makeStyles((theme) => ({
         justifyContent: "center",
         width: "100%",
         bottom: "1em",
-        zIndex: -1,
+        zIndex: 1,
     },
 }))
 ;

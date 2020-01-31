@@ -6,7 +6,7 @@ import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/sea
 import useSearchAreaStyles from "../searchAreaStyle";
 
 
-const FIELD_OPTIONS = [
+export const FIELD_OPTIONS = [
     { label: "Back-End", value: "BACK_END" },
     { label: "Front-End", value: "FRONT_END" },
     { label: "Dev-Ops", value: "DEVOPS" },
@@ -14,7 +14,7 @@ const FIELD_OPTIONS = [
     { label: "Computer Vision", value: "COMPUTER_VISION" },
 ];
 
-const TECH_OPTIONS = [
+export const TECH_OPTIONS = [
     { label: "React.js", value: "REACT_JS" },
     { label: "Node.js", value: "NODE_JS" },
     { label: "Python", value: "PYTHON" },
@@ -83,7 +83,6 @@ export default ({
         in: showJobDurationSlider,
         onEnter: useCallback(() => setJobDuration(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]), [setJobDuration]),
         classes: { wrapperInner: useSearchAreaStyles().advancedSearchJobDuration },
-
     };
 
     const JobDurationSliderProps = {

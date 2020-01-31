@@ -7,6 +7,9 @@ import {
     setSearchValue,
     setJobDuration,
     setJobType,
+    setFields,
+    setTechs,
+    setShowJobDurationSlider,
 } from "../actions/searchOffersActions";
 
 describe("Search Offers Reducer", () => {
@@ -86,5 +89,35 @@ describe("Search Offers Reducer", () => {
         );
 
         expect(state.jobType).toEqual("SUMMER_INTERNSHIP");
+    });
+    it("should set advanced search fields when setFields action is called", () => {
+        const state = searchOffersState(
+            {
+                fields: [],
+            },
+            setFields(["test1", "test2"])
+        );
+
+        expect(state.fields).toStrictEqual(["test1", "test2"]);
+    });
+    it("should set advanced search techs when setTechs action is called", () => {
+        const state = searchOffersState(
+            {
+                techs: [],
+            },
+            setTechs(["test1", "test2"])
+        );
+
+        expect(state.techs).toStrictEqual(["test1", "test2"]);
+    });
+    it("should set job duration toggle when setJobDurationToggle action is called", () => {
+        const state = searchOffersState(
+            {
+                filterJobDuration: false,
+            },
+            setShowJobDurationSlider(true)
+        );
+
+        expect(state.filterJobDuration).toBe(true);
     });
 });
