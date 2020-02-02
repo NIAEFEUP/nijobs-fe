@@ -28,6 +28,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --coverage --verbose",
+    "test1": "jest --coverage --verbose --clearCache",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
     "lint": "eslint src --max-warnings 0"
@@ -93,7 +94,7 @@
     "sass-loader": "7.2.0",
     "semver": "6.3.0",
     "style-loader": "1.0.0",
-    "terser-webpack-plugin": "1.4.1",
+    "terser-webpack-plugin": "^2.3.4",
     "ts-pnp": "1.1.2",
     "url-loader": "2.1.0",
     "webpack": "4.39.1",
