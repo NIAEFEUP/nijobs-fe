@@ -11,6 +11,7 @@ export default makeStyles((theme) => ({
             gridTemplateRows: "1fr auto",
             alignItems: "center",
             gridGap: theme.spacing(1),
+            gridColumnGap: 0,
         },
     },
     searchBar: {
