@@ -28,6 +28,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --coverage --verbose",
+    "test1": "jest --coverage --verbose --clearCache",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
     "lint": "eslint src --max-warnings 0"
