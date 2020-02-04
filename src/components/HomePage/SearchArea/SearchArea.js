@@ -91,6 +91,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     className={classes.searchBar}
                     searchValue={searchValue}
                     setSearchValue={setSearchValue}
+                    onEnterPress={submitForm}
                 />
                 <AdvancedOptionsToggle
                     advancedOptions={advancedOptions}
