@@ -39,39 +39,45 @@ const useStyles = makeStyles((theme) => ({
 
 const OfferContent = ({ offer, loading }) => {
     const classes = useStyles();
-    if (offer === null) {
+    if (loading) {
         return (
             <div className={classes.root}>
                 <div className={classes.unselectedOffer}>
-                    {loading ?
-                        <React.Fragment>
-                            <div className={classes.magnifyingGlassAnimationWrapper}>
-                                <LoadingMagnifyGlass duration={1.2}/>
-                            </div>
-                            <Typography variant="h6">
-                                {getRandomOngoingSearchMessage()}
-                            </Typography>
-                        </React.Fragment>
-                        :
-                        <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
-                            Please select an offer to view the details
+                    <React.Fragment>
+                        <div className={classes.magnifyingGlassAnimationWrapper}>
+                            <LoadingMagnifyGlass duration={1.2}/>
+                        </div>
+                        <Typography variant="h6">
+                            {getRandomOngoingSearchMessage()}
                         </Typography>
-                    }
+                    </React.Fragment>
+
                 </div>
             </div>
         );
     } else {
         return (
+
             <div className={classes.root}>
-                <Typography variant="h2" gutterBottom>
-                    {offer.position}
-                </Typography>
-                <Typography variant="h4" gutterBottom>
-                    {offer.company.name}
-                </Typography>
-                <Typography variant="body1">
-                    {offer.description}
-                </Typography>
+                {offer === null ?
+                    <div className={classes.unselectedOffer}>
+                        <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
+                            Please select an offer to view the details
+                        </Typography>
+                    </div>
+                    :
+                    <div className={classes.root}>
+                        <Typography variant="h2" gutterBottom>
+                            {offer.position}
+                        </Typography>
+                        <Typography variant="h4" gutterBottom>
+                            {offer.company.name}
+                        </Typography>
+                        <Typography variant="body1">
+                            {offer.description}
+                        </Typography>
+                    </div>
+                }
             </div>
         );
     }
