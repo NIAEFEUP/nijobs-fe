@@ -16,7 +16,9 @@ export const mountWithStore = (component, initialState, theme) => {
                     {component}
                 </ThemeProvider>
                 :
-                { component }
+                <>
+                    { component }
+                </>
             }
         </Provider>
     );

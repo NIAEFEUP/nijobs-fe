@@ -1,5 +1,7 @@
 import { testHook } from "../../../../test-utils";
-import useAdvancedSearch, { FIELD_OPTIONS, TECH_OPTIONS } from "./useAdvancedSearch";
+import useAdvancedSearch from "./useAdvancedSearch";
+import FIELD_OPTIONS from "./FieldOptions";
+import TECH_OPTIONS from "./TechOptions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
 
 describe("useAdvancedSearch", () => {

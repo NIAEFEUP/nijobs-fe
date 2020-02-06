@@ -66,7 +66,12 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
                     }
                 </ListItemAvatar>
                 <ListItemText
-                    primary={loading ? <Skeleton/> : offer.position}
+                    primary={
+                        loading ?
+                            <Skeleton/>
+                            :
+                            offer.position
+                    }
                     primaryTypographyProps={{
                         className: classes.offerTitle,
                     }}

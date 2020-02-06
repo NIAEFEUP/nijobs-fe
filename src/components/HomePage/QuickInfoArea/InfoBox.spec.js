@@ -11,4 +11,12 @@ describe("InfoBox", () => {
             </InfoBox>).find(Typography).first().prop("children"))
             .toEqual(info);
     });
+
+    it("should render a small variant when size small", () => {
+        expect(shallow(<InfoBox size="small">test</InfoBox>).find(Typography).first().prop("variant"))
+            .toEqual("body2");
+
+        expect(shallow(<InfoBox size="normal">test</InfoBox>).find(Typography).first().prop("variant"))
+            .toEqual("body1");
+    });
 });

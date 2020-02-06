@@ -21,7 +21,7 @@ const AdvancedOptionsToggle = ({ advancedOptions, advancedOptionsActive, handleA
             variant="contained"
         >
             <Tooltip
-                title={advancedOptions ? "Hide Advanced Search" : "Show Advanced Search" }
+                title={advancedOptions ? "Hide Advanced Search" : "Show Advanced Search"}
                 placement="top"
             >
                 <Badge color="secondary" variant="dot" invisible={!advancedOptionsActive}>

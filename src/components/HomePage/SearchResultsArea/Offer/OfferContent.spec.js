@@ -1,12 +1,32 @@
 import React from "react";
 import OfferContent from "./OfferContent";
 import Offer from "./Offer";
-import { Typography } from "@material-ui/core";
+import { mountWithTheme } from "../../../../test-utils";
+import { Typography, createMuiTheme } from "@material-ui/core";
+import LOADING_MESSAGES from "./offerLoadingMessages";
 
 describe("OfferContent", () => {
     describe("render", () => {
+        const theme = createMuiTheme();
         it("should render placeholder content when no offer selected", () => {
-            expect(shallow(<OfferContent offer={null}/>).find("div").text()).toEqual("Please select an offer to view the details");
+
+            const wrapper = mountWithTheme(
+                <OfferContent offer={null}/>,
+                theme
+            );
+
+            expect(wrapper.find("div#no_selected_offer_text").find(Typography).text())
+                .toEqual("Please select an offer to view the details");
+        });
+
+        it("should render a valid loading message", () => {
+            const wrapper = mountWithTheme(
+                <OfferContent loading/>,
+                theme
+            );
+
+            expect(LOADING_MESSAGES.includes(wrapper.find(Typography).text()))
+                .toBe(true);
         });
 
         describe("offer selected", () => {
@@ -22,7 +42,10 @@ describe("OfferContent", () => {
                 description: "description1",
             });
 
-            const wrapper = shallow(<OfferContent offer={offer}/>);
+            const wrapper = mountWithTheme(
+                <OfferContent offer={offer}/>,
+                theme
+            );
 
             it("should render offer title", () => {
                 expect(wrapper.find(Typography).at(0).prop("variant")).toBe("h2");

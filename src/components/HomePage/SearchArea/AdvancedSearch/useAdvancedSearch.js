@@ -5,39 +5,18 @@ import { TextField } from "@material-ui/core";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 import useSearchAreaStyles from "../searchAreaStyle";
 
+import FIELD_OPTIONS from "./FieldOptions";
+import TECH_OPTIONS from "./TechOptions";
 
-export const FIELD_OPTIONS = [
-    { label: "Back-End", value: "BACK_END" },
-    { label: "Front-End", value: "FRONT_END" },
-    { label: "Dev-Ops", value: "DEVOPS" },
-    { label: "Machine Learning", value: "ML" },
-    { label: "Computer Vision", value: "COMPUTER_VISION" },
-];
 
-export const TECH_OPTIONS = [
-    { label: "React.js", value: "REACT_JS" },
-    { label: "Node.js", value: "NODE_JS" },
-    { label: "Python", value: "PYTHON" },
-    { label: "Java", value: "JAVA" },
-    { label: "C++", value: "C++" },
-];
-
-const FieldsRenderInput = (params) => (
+// eslint-disable-next-line react/display-name
+const RenderInput = (label) => (params) => (
     <TextField
         {...params}
         variant="standard"
         margin="normal"
         fullWidth
-        label="Fields"
-    />
-);
-const TechsRenderInput = (params) => (
-    <TextField
-        {...params}
-        variant="standard"
-        margin="normal"
-        fullWidth
-        label="Technologies"
+        label={label}
     />
 );
 
@@ -97,7 +76,7 @@ export default ({
 
     const FieldsAutocompleteProps = {
         multiple: true,
-        renderInput: FieldsRenderInput,
+        renderInput: RenderInput("Fields"),
         options: FIELD_OPTIONS.map((option) => option.label),
         id: "fields-selector",
         onChange: useCallback((e, fields) => fields && setFields(fields), [setFields]),
@@ -112,7 +91,7 @@ export default ({
 
     const TechsAutocompleteProps = {
         multiple: true,
-        renderInput: TechsRenderInput,
+        renderInput: RenderInput("Technologies"),
         id: "techs-selector",
         options: TECH_OPTIONS.map((option) => option.label),
         onChange: useCallback((e, technologies) => technologies && setTechs(technologies), [setTechs]),

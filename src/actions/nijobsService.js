@@ -86,7 +86,10 @@ export const searchOffers = (filters) => async (dispatch) => {
         await sleep(2000);
 
         // TODO remove this
-        dispatch(setSearchOffers(MOCK_OFFERS));
+        // dispatch(setSearchOffers(MOCK_OFFERS));
+
+        // Simulate Error
+        dispatch(setSearchOffers(MOCK_OFFERS.filter(() => false)));
 
         // Simulate Error
         // dispatch(setSearchOffers(MOCK_OFFERS.filter(() => false)));

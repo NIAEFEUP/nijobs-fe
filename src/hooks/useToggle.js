@@ -13,8 +13,8 @@ const useToggle = (initialValue) => {
     }, []);
 
     const resetState = useCallback(() => {
-        setState(false);
-    }, []);
+        setState(initialValue);
+    }, [initialValue]);
 
     return [state, toggleState, resetState];
 };

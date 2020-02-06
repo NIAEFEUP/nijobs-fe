@@ -16,6 +16,27 @@ import JobTypes from "../JobTypes";
 import useSearchAreaStyles from "../searchAreaStyle";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
+const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
+    <Collapse
+        {...JobDurationCollapseProps}
+        className={className}
+    >
+        <FormControl fullWidth>
+            <Slider {...JobDurationSliderProps}/>
+            <FormHelperText>
+                {sliderText}
+            </FormHelperText>
+        </FormControl>
+    </Collapse>
+);
+
+JobDurationCollapse.propTypes = {
+    className: PropTypes.string,
+    JobDurationCollapseProps: PropTypes.object.isRequired,
+    JobDurationSliderProps: PropTypes.object.isRequired,
+    sliderText: PropTypes.string.isRequired,
+};
+
 const AdvancedSearchDesktop = ({
     open, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
     ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
@@ -45,29 +66,15 @@ const AdvancedSearchDesktop = ({
                 </TextField>
                 <FormControlLabel
                     className={classes.jobDurationSliderToggle}
-                    control={
-                        <Switch
-                            {...JobDurationSwitchProps}
-                        />
-                    }
+                    control={<Switch {...JobDurationSwitchProps}/>}
                     label={JobDurationSwitchLabel}
                 />
-                <Collapse
-                    {...JobDurationCollapseProps}
+                <JobDurationCollapse
                     className={classes.jobDurationSliderCollapse}
-                >
-                    <FormControl
-                        fullWidth
-                        className={classes.durationSlider}
-                    >
-                        <Slider
-                            {...JobDurationSliderProps}
-                        />
-                        <FormHelperText>
-                            {JobDurationSliderText}
-                        </FormHelperText>
-                    </FormControl>
-                </Collapse>
+                    JobDurationCollapseProps={JobDurationCollapseProps}
+                    JobDurationSliderProps={JobDurationSliderProps}
+                    sliderText={JobDurationSliderText}
+                />
                 <MultiOptionAutocomplete
                     {...FieldsSelectorProps}
                     _id="fields_selector"
@@ -83,7 +90,6 @@ const AdvancedSearchDesktop = ({
                     chipWrapperProps={{
                         className: "chip-wrapper",
                     }}
-                // threshold={MAX_FIELDS_CHIP}
                 />
             </Collapse>
             {open &&

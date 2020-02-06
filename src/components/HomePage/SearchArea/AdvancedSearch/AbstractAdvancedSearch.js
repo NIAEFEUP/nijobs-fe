@@ -5,7 +5,6 @@ import AdvancedSearchMobile from "./AdvancedSearchMobile";
 
 const AbstractAdvancedSearch = ({ mobile, ...otherProps }) => (
     <React.Fragment>
-
         {mobile ?
             <AdvancedSearchMobile
                 {...otherProps}
@@ -16,7 +15,6 @@ const AbstractAdvancedSearch = ({ mobile, ...otherProps }) => (
             />
         }
     </React.Fragment>
-
 );
 
 AbstractAdvancedSearch.propTypes = {

@@ -24,9 +24,47 @@ import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutoco
 import JobTypes from "../JobTypes";
 import useSearchAreaStyles from "../searchAreaStyle";
 
+const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
+    <Collapse
+        {...JobDurationCollapseProps}
+        className={className}
+    >
+        <FormControl fullWidth>
+            <Slider {...JobDurationSliderProps}/>
+            <FormHelperText>
+                {sliderText}
+            </FormHelperText>
+        </FormControl>
+    </Collapse>
+);
 
-// const MAX_FIELDS_CHIP = 3;
+JobDurationCollapse.propTypes = {
+    className: PropTypes.string,
+    JobDurationCollapseProps: PropTypes.object.isRequired,
+    JobDurationSliderProps: PropTypes.object.isRequired,
+    sliderText: PropTypes.string.isRequired,
+};
 
+const JobTypeSelector = ({ className, JobTypeSelectorProps }) => (
+    <TextField
+        className={className}
+        {...JobTypeSelectorProps}
+    >
+        {JobTypes.map(({ value, label }) => (
+            <MenuItem
+                key={value}
+                value={value}
+            >
+                {label}
+            </MenuItem>
+        ))}
+    </TextField>
+);
+
+JobTypeSelector.propTypes = {
+    className: PropTypes.string,
+    JobTypeSelectorProps: PropTypes.object.isRequired,
+};
 
 const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
     setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
@@ -81,19 +119,9 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                         setSearchValue={setSearchValue}
                         hideInputAdornment
                     />
-                    <TextField
-                        className={classes.jobTypeSelector}
-                        {...JobTypeSelectorProps}
-                    >
-                        {JobTypes.map(({ value, label }) => (
-                            <MenuItem
-                                key={value}
-                                value={value}
-                            >
-                                {label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                    <JobTypeSelector
+                        JobTypeSelectorProps={JobTypeSelectorProps}
+                    />
                     <MultiOptionAutocomplete
                         {...FieldsSelectorProps}
                         _id="fields_selector"
@@ -101,7 +129,6 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     <MultiOptionAutocomplete
                         {...TechsSelectorProps}
                         _id="techs_selector"
-                        // threshold={MAX_FIELDS_CHIP}
                     />
                     <FormControlLabel
                         className={classes.jobDurationSliderToggleMobile}
@@ -110,19 +137,12 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                         }
                         label={JobDurationSwitchLabel}
                     />
-                    <Collapse
-                        {...JobDurationCollapseProps}
-                    >
-                        <FormControl
-                            fullWidth
-                            className={classes.durationSlider}
-                        >
-                            <Slider {...JobDurationSliderProps}/>
-                            <FormHelperText>
-                                {JobDurationSliderText}
-                            </FormHelperText>
-                        </FormControl>
-                    </Collapse>
+                    <JobDurationCollapse
+                        className={classes.jobDurationSliderCollapse}
+                        JobDurationCollapseProps={JobDurationCollapseProps}
+                        JobDurationSliderProps={JobDurationSliderProps}
+                        sliderText={JobDurationSliderText}
+                    />
                 </FormGroup>
             </DialogContent>
             <DialogActions classes={{ root: classes.mobileAdvancedSearchActions  }}>

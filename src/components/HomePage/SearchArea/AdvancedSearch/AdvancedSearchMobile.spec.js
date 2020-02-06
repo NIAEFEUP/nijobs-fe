@@ -55,10 +55,39 @@ describe("AdvancedSearchDesktop", () => {
         });
 
         it("should contain a collapse to show the job duration slider", () => {
-            const wrapper = shallow(
+
+            const MultiOptionAutocompleteProps = {
+                multiple: true,
+                renderInput: () => {},
+                options: [],
+                id: "fields-selector",
+                onChange: () => {},
+                value: [1, 2],
+            };
+            const autocompleteProps = {
+                getRootProps: () => {},
+                getInputProps: () => {},
+                getInputLabelProps: () => {},
+                getClearProps: () => {},
+                getPopupIndicatorProps: () => {},
+                getTagProps: () => {},
+                getListboxProps: () => {},
+                getOptionProps: () => {},
+                value: [1, 2],
+            };
+
+            const SelectorProps = {
+                ...MultiOptionAutocompleteProps,
+                autocompleteProps: autocompleteProps,
+            };
+
+
+            const wrapper = mount(
                 <AdvancedSearchMobile
                     open
                     JobDurationCollapseProps={{ in: true }}
+                    FieldsSelectorProps={SelectorProps}
+                    TechsSelectorProps={SelectorProps}
                     JobDurationSliderText="test"
                 />
             );

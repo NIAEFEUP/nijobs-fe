@@ -8,6 +8,7 @@ import { Grid, Paper } from "@material-ui/core";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { useMobile } from "../../../../utils/media-queries";
 import AbstractSearchResults from "./AbstractSearchResults";
+import Offer from "../Offer/Offer";
 
 export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, offersSearchError }, ref) => {
 
@@ -18,7 +19,6 @@ export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, of
     useEffect(() => {
         if (offersLoading) setSelectedOffer(null);
     }, [offersLoading]);
-
 
     return (
 
@@ -45,7 +45,7 @@ export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, of
 // Needed because of ForwardRef usage
 SearchResultsWidget.displayName = "SearchResultsWidget";
 SearchResultsWidget.propTypes = {
-    offers: PropTypes.array,
+    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     offersSearchError: PropTypes.object,
 };
