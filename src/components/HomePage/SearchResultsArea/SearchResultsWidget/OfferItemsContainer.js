@@ -7,19 +7,14 @@ import {
     Divider,
     List,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(() => ({
-    root: {
-        height: "100%",
-    },
+import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-}));
+const OfferItemsContainer = ({ offers, loading, showDetails }) => {
+    const classes = useSearchResultsWidgetStyles();
 
-const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
-    const classes = useStyles();
     if (loading) return (
-        <div className={classes.root}>
+        <div className={classes.fullHeight}>
             <List disablePadding>
                 <OfferItem
                     loading={loading}
@@ -38,14 +33,14 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
     );
 
     return (
-        <div className={classes.root}>
+        <div className={classes.fullHeight}>
             <List disablePadding>
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
                         {i !== 0 && <Divider component="li"/>}
                         <OfferItem
                             offer={offer}
-                            setSelectedOffer={setSelectedOffer}
+                            showDetails={showDetails}
                             loading={loading}
                         />
                     </React.Fragment>
@@ -58,7 +53,7 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
 OfferItemsContainer.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
-    setSelectedOffer: PropTypes.func.isRequired,
+    showDetails: PropTypes.func.isRequired,
 };
 
 export default OfferItemsContainer;

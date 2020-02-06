@@ -4,9 +4,10 @@ import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 import Offer from "./Offer";
 
-import { makeStyles } from "@material-ui/core/styles";
-
 import LoadingMagnifyGlass from "./loading_magnify_glass_svg";
+import { useDesktop } from "../../../../utils/media-queries";
+
+import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 
 const getRandomOngoingSearchMessage = () => {
     const messages = [
@@ -17,31 +18,11 @@ const getRandomOngoingSearchMessage = () => {
     return messages[Math.floor(Math.random() * messages.length)];
 };
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        padding: theme.spacing(3),
-        height: "100%",
-    },
-    unselectedOffer: {
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    pleaseSelectOfferText: {
-        color: "grey",
-    },
-    magnifyingGlassAnimationWrapper: {
-        marginBottom: theme.spacing(2),
-    },
-}));
-
 const OfferContent = ({ offer, loading }) => {
-    const classes = useStyles();
+    const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop() });
     if (loading) {
         return (
-            <div className={classes.root}>
+            <div className={classes.offerContent}>
                 <div className={classes.unselectedOffer}>
                     <React.Fragment>
                         <div className={classes.magnifyingGlassAnimationWrapper}>
@@ -57,8 +38,7 @@ const OfferContent = ({ offer, loading }) => {
         );
     } else {
         return (
-
-            <div className={classes.root}>
+            <div className={classes.offerContent}>
                 {offer === null ?
                     <div className={classes.unselectedOffer}>
                         <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
@@ -66,7 +46,7 @@ const OfferContent = ({ offer, loading }) => {
                         </Typography>
                     </div>
                     :
-                    <div className={classes.root}>
+                    <React.Fragment>
                         <Typography variant="h2" gutterBottom>
                             {offer.position}
                         </Typography>
@@ -76,7 +56,7 @@ const OfferContent = ({ offer, loading }) => {
                         <Typography variant="body1">
                             {offer.description}
                         </Typography>
-                    </div>
+                    </React.Fragment>
                 }
             </div>
         );

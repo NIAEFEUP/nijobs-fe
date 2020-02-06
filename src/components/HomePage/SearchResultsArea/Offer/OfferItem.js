@@ -20,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
     },
     offerTitle: {
         fontWeight: "bold",
+        marginRight: theme.spacing(1),
+        wordWrap: "break-word",
+        display: "-webkit-box",
+        overflow: "hidden",
+        "-webkit-box-orient": "vertical",
+        "-webkit-line-clamp": 2,
     },
     hoverMask: {
         backgroundColor: theme.palette.primary.main,
@@ -38,13 +44,13 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const OfferItem = ({ offer, setSelectedOffer, loading }) => {
+const OfferItem = ({ offer, showDetails, loading }) => {
     const classes = useStyles();
     return (
         <div className={classes.itemWrapper}>
             <ListItem
                 alignItems="flex-start"
-                onClick={() => !loading && setSelectedOffer(offer)}
+                onClick={() => !loading && showDetails(offer)}
                 className={classes.root}
             >
                 <ListItemAvatar>
@@ -60,7 +66,12 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
                     }
                 </ListItemAvatar>
                 <ListItemText
-                    primary={loading ? <Skeleton/> : offer.position}
+                    primary={
+                        loading ?
+                            <Skeleton/>
+                            :
+                            offer.position
+                    }
                     primaryTypographyProps={{
                         className: classes.offerTitle,
                     }}
@@ -76,14 +87,14 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
                 />
 
             </ListItem>
-            <div className={classes.hoverMask} />
+            {!loading && <div className={classes.hoverMask} />}
         </div>
     );
 };
 
 OfferItem.propTypes = {
     offer: PropTypes.instanceOf(Offer),
-    setSelectedOffer: PropTypes.func,
+    showDetails: PropTypes.func,
     loading: PropTypes.bool,
 };
 

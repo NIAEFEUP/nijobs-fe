@@ -6,7 +6,7 @@ export default makeStyles((theme) => ({
         height: "100vh",
         width: "100%",
     },
-    mainMask: {
+    mainMask: ({ isMobile }) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -15,25 +15,16 @@ export default makeStyles((theme) => ({
         width: "100%",
         backgroundColor: "rgb(220, 79, 71)",
 
-        // "-webkit-clip-path": "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",
-        clipPath: "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",
-    },
-    mainMaskMobile: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "50%",
-        width: "100%",
-        backgroundColor: "rgb(220, 79, 71)",
-    },
-    mainLogo: {
+        // Only cut on desktop
+        clipPath: !isMobile && "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",
+    }),
+    mainLogo: ({ isMobile }) => ({
         textAlign: "center",
         paddingBottom: "3em",
         "& img": {
-            width: "50%",
+            width: isMobile ? "80%" : "50%",
         },
-    },
+    }),
     mainLogoMobile: {
         textAlign: "center",
         paddingBottom: "3em",
@@ -41,36 +32,24 @@ export default makeStyles((theme) => ({
             width: "80%",
         },
     },
-    searchArea: {
+    searchArea: ({ isMobile }) => ({
         width: "100%",
         position: "absolute",
         top: "42.5vh",
         "& > *:first-child": {
-            width: "60%",
+            width: isMobile ? "100%" : "60%",
             margin: "0 auto",
         },
         zIndex: 10,
-    },
-    searchAreaMobile: {
-        width: "100%",
-        position: "absolute",
-        top: "42.5vh",
-        "& > *:first-child": {
-            width: "100%",
-            margin: "0 auto",
-        },
-    },
-    infoBox: {
+    }),
+    infoBox: ({ isMobile }) => ({
         padding: theme.spacing(0, 1),
         position: "absolute",
         margin: "0 auto",
-        bottom: "25vh",
+        bottom: isMobile ? "15vh" : "25vh",
         zIndex: -1,
         width: "100%",
-    },
-    infoBoxMobile: {
-        bottom: "15vh",
-    },
+    }),
     showMoreBtn: {
         position: "absolute",
         display: "flex",

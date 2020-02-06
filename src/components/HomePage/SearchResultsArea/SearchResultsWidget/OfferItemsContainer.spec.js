@@ -7,7 +7,7 @@ describe("OfferItemsContainer", () => {
 
     describe("render", () => {
         it("should show loading state when loading", () => {
-            expect(shallow(<OfferItemsContainer loading />).text()).toEqual("loading...");
+            expect(shallow(<OfferItemsContainer loading />).find({ loading: true }).find(OfferItem)).toHaveLength(3);
         });
 
         it("should show offer items", () => {

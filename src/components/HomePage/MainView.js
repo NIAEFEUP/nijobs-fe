@@ -7,38 +7,31 @@ import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
-import { useMobile } from "../../utils/media-queries";
+import { useMobile, useDesktop } from "../../utils/media-queries";
 
 import useMainViewStyles from "./mainViewStyles.js";
-import clsx from "clsx";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
-    const classes = useMainViewStyles();
+    const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
         <div className={classes.mainView}>
-            <div className={useMobile() ? classes.mainMaskMobile : classes.mainMask}>
-                <div className={useMobile() ? classes.mainLogoMobile : classes.mainLogo}>
+            <div className={classes.mainMask}>
+                <div className={classes.mainLogo}>
                     <img
                         src={logo}
                         alt="nijobs Logo"
                     />
                 </div>
             </div>
-
-            <div className={useMobile() ? classes.searchAreaMobile : classes.searchArea}>
+            <div className={classes.searchArea}>
                 <SearchArea
                     onSubmit={() => {
                         showSearchResults();
                     }}
                 />
             </div>
-            <div
-                className={clsx(
-                    classes.infoBox,
-                    { [classes.infoBoxMobile]: useMobile() }
-                )}
-            >
+            <div className={classes.infoBox}>
                 <InfoBox size={useMobile() ? "small" : "normal"}>
                     Your next oportunity is out there. Use the search bar to find it!
                 </InfoBox>
