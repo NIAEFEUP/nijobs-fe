@@ -14,9 +14,6 @@ export default makeStyles((theme) => ({
         height: "50%",
         width: "100%",
         backgroundColor: "rgb(220, 79, 71)",
-        position: "absolute",
-        zIndex: -1,
-        top: 0,
 
         // Only cut on desktop
         clipPath: !isMobile && "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",

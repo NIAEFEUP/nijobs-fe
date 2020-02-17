@@ -12,7 +12,7 @@ const FormSchema = yup.object().shape({
     companyName: yup.string().required().min(3).max(50),
 });
 
-import useMainViewStyles from "../components/HomePage/mainViewStyles";
+import { MainMask } from "../components/HomePage/MainMask";
 
 const useStyles = makeStyles((theme) => ({
     formWrapper: {
@@ -49,13 +49,13 @@ const CompanyApplicationPage = () => {
     const onSubmit = (data) => console.log("submitted", data);
 
     const classes = useStyles();
-    const mainViewClasses = useMainViewStyles();
 
     return (
         <>
+            <MainMask/>
             <div className={classes.formWrapper}>
                 {/* TODO generalize main mask component to be reused between pages */}
-                <div className={mainViewClasses.mainMask} />
+                {/* <div className={mainViewClasses.mainMask} /> */}
             Show logo here
                 <form
                     onSubmit={handleSubmit(onSubmit)}
