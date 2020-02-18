@@ -66,6 +66,7 @@ const CompanyApplicationPage = () => {
         validationSchema: CompanyApplicationSchema,
         reValidateMode: "onChange",
     });
+
     const onSubmit = (data) => console.log("submitted", data);
 
     const classes = useStyles();
@@ -122,6 +123,7 @@ const CompanyApplicationPage = () => {
                             />
                             <TextField
                                 className={classes.motivation}
+                                key="Motivation"
                                 label="Motivation"
                                 name="motivation"
                                 placeholder="Tell us about the company. How do you think nijobs can help you achieve your goal?"
