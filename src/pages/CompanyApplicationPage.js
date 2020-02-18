@@ -1,7 +1,20 @@
 import React from "react";
 import useForm from "../hooks/useForm";
 import * as yup from "yup";
-import { TextField, makeStyles, Button, Card, CardActions, CardContent, CardHeader } from "@material-ui/core";
+import {
+    TextField,
+    makeStyles,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    Link,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions,
+} from "@material-ui/core";
 
 import {
     CompanyApplicationConstants,
@@ -29,6 +42,7 @@ const CompanyApplicationSchema = yup.object().shape({
 });
 
 import { MainMask } from "../components/HomePage/MainMask";
+import useToggle from "../hooks/useToggle";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,19 +57,21 @@ const useStyles = makeStyles((theme) => ({
     form: {
         width: "60%",
     },
+    formCard: {
+        padding: theme.spacing(10),
+        paddingBottom: theme.spacing(2),
+    },
     formContent: {
         display: "flex",
         flexDirection: "column",
-        padding: theme.spacing(10),
-        paddingBottom: 0,
     },
     buttonsArea: {
         display: "flex",
         justifyContent: "flex-end",
-        padding: theme.spacing(5, 10),
+        padding: theme.spacing(3, 2),
     },
     motivation: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(5),
     },
 }));
 
@@ -73,6 +89,13 @@ const CompanyApplicationPage = () => {
 
     const motivation = watch("motivation") || "";
 
+    const [showWhyModal, toggleWhyModal] = useToggle(false);
+
+    const openWhyModal = (e) => {
+        e.preventDefault();
+        toggleWhyModal();
+    };
+
     return (
         <>
             <MainMask/>
@@ -81,12 +104,21 @@ const CompanyApplicationPage = () => {
                     onSubmit={handleSubmit(onSubmit)}
                     className={classes.form}
                 >
-                    <Card>
+                    make me a company application form component
+                    <Card className={classes.formCard}>
                         <CardHeader
                             title="Company Application"
+                            subheader={
+                                <Link
+                                    href=""
+                                    onClick={openWhyModal}
+                                    variant="body2"
+                                >
+                                    Why do I need to apply?
+                                </Link>
+                            }
                         />
                         <CardContent className={classes.formContent}>
-                        Show title here (?)
                             <TextField
                                 label="Email"
                                 name="email"
@@ -126,7 +158,7 @@ const CompanyApplicationPage = () => {
                                 key="Motivation"
                                 label="Motivation"
                                 name="motivation"
-                                placeholder="Tell us about the company. How do you think nijobs can help you achieve your goal?"
+                                placeholder="Tell us about the company. How do you think NIJobs can help you achieve your goal?"
                                 multiline
                                 error={!!errors.motivation}
                                 inputRef={register}
@@ -153,6 +185,39 @@ const CompanyApplicationPage = () => {
                     </Card>
                 </form>
             </div>
+            <Dialog open={showWhyModal}>
+                <DialogTitle>
+                    Why do I need to apply?
+                </DialogTitle>
+                <DialogContent style={{ textAlign: "justify" }}>
+                    <p>
+                        {"NIJobs is a free platform for companies to share their job opportunities with students."}
+                    </p>
+                    <p>
+                        {"As this is made by students, for students, we oversee the entries \
+                        so that we can make sure that both our and the participating companies' expectations are satisfied."}
+                    </p>
+                    <p>
+                        {"For now, we only need you to provide an email, so that we can contact you regarding your application, \
+                        and a password, (keep in mind that you will need it to enter NIJobs if accepted, but you can change it later)."}
+                    </p>
+                    <p>
+                        {"Additionally, we also request a Company Name, so that we can better identify you, \
+                        and a motivation text: here you can talk about your company: what do you do, \
+                        why do you want to apply as NIJobs Company, share your website/social networks, etc..."}
+                    </p>
+                    <p>
+                        {"Once you're accepted, you will receive an email from us and you \
+                        will be able to further customize your profile (Add a nice Bio, and a Company Logo)"}
+                    </p>
+                    <p>
+                        {"See you soon!"}
+                    </p>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={toggleWhyModal} color="primary" variant="contained">Close</Button>
+                </DialogActions>
+            </Dialog>
         </>
 
     );
