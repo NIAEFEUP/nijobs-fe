@@ -1,6 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import useForm from "../hooks/useForm";
 import * as yup from "yup";
+import { connect } from "react-redux";
 import {
     TextField,
     makeStyles,
@@ -43,6 +45,7 @@ const CompanyApplicationSchema = yup.object().shape({
 
 import { MainMask } from "../components/HomePage/MainMask";
 import useToggle from "../hooks/useToggle";
+import { submitCompanyApplication } from "../services/companyApplicationService";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CompanyApplicationPage = () => {
+const CompanyApplicationPage = ({ submitCompanyApplication }) => {
 
     const { register, handleSubmit, errors, watch } = useForm({
         mode: "onBlur",
@@ -83,7 +86,7 @@ const CompanyApplicationPage = () => {
         reValidateMode: "onChange",
     });
 
-    const onSubmit = (data) => console.log("submitted", data);
+    const onSubmit = (data) => submitCompanyApplication(data);
 
     const classes = useStyles();
 
@@ -197,7 +200,7 @@ const CompanyApplicationPage = () => {
                         {"As this is made by students, for students, we oversee the entries \
                         so that we can make sure that both our and the participating companies' expectations are satisfied."}
                     </p>
-                    <p>
+                    {/* <p>
                         {"For now, we only need you to provide an email, so that we can contact you regarding your application, \
                         and a password, (keep in mind that you will need it to enter NIJobs if accepted, but you can change it later)."}
                     </p>
@@ -205,7 +208,7 @@ const CompanyApplicationPage = () => {
                         {"Additionally, we also request a Company Name, so that we can better identify you, \
                         and a motivation text: here you can talk about your company: what do you do, \
                         why do you want to apply as NIJobs Company, share your website/social networks, etc..."}
-                    </p>
+                    </p> */}
                     <p>
                         {"Once you're accepted, you will receive an email from us and you \
                         will be able to further customize your profile (Add a nice Bio, and a Company Logo)"}
@@ -223,4 +226,14 @@ const CompanyApplicationPage = () => {
     );
 };
 
-export default CompanyApplicationPage;
+CompanyApplicationPage.propTypes = {
+    submitCompanyApplication: PropTypes.func,
+};
+
+export const mapStateToProps = () => ({});
+
+export const mapDispatchToProps = (dispatch) => ({
+    submitCompanyApplication: (data) => dispatch(submitCompanyApplication(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyApplicationPage);

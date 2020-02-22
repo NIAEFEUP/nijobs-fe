@@ -1,4 +1,4 @@
-import { notificationTypes, addSnackbar, removeSnackbar } from "./notificationActions";
+import { NotificationTypes, addSnackbar, removeSnackbar } from "./notificationActions";
 import { mockRandomMath, mockDateNow } from "../../testUtils";
 
 describe("Notification actions", () => {
@@ -14,7 +14,7 @@ describe("Notification actions", () => {
         };
 
         const expectedAction = {
-            type: notificationTypes.ADD_SNACKBAR,
+            type: NotificationTypes.ADD_SNACKBAR,
             notification: {
                 key: DATE_NOW + RANDOM_VALUE,
                 message: "message",
@@ -48,7 +48,7 @@ describe("Notification actions", () => {
     it("should return removeSnackbar action", () => {
         const key = "key";
         const dispatch = (action) => {
-            expect(action).toEqual({ type: notificationTypes.REMOVE_SNACKBAR, key });
+            expect(action).toEqual({ type: NotificationTypes.REMOVE_SNACKBAR, key });
         };
         dispatch(removeSnackbar(key));
     });

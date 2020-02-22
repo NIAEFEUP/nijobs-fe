@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core";
 
 const useStyle = makeStyles(() => ({
@@ -18,7 +19,6 @@ const useStyle = makeStyles(() => ({
         width: "100%",
         backgroundColor: "rgb(220, 79, 71)",
 
-        // "-webkit-clip-path": "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",
         clipPath: "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",
     },
 }));
@@ -32,4 +32,8 @@ export const MainMask = ({ children }) => {
             </div>
         </div>
     );
+};
+
+MainMask.propTypes = {
+    children: PropTypes.element,
 };

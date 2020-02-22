@@ -2,7 +2,15 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { searchOffers } from "../../../actions/nijobsService";
+import { addSnackbar } from "../../../actions/notificationActions";
+import { searchOffers } from "../../../services/offerSearchService";
+import { setSearchValue, setJobDuration, setJobType, resetAdvancedSearchFields } from "../../../actions/searchOffersActions";
+import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
+
+import useToggle from "../../../hooks/useToggle";
+
+import JobTypes from "./JobTypes";
+
 import {
     setSearchValue,
     setJobDuration,
