@@ -8,14 +8,14 @@ import {
 
 export const submitCompanyApplication = (formData) => async (dispatch) => {
     dispatch(setCompanyApplicationSending(true));
+    dispatch(setCompanyApplicationSubmissionError([]));
+
 
     try {
-        // CHANGE THIS TO USE HOSTNAME
         const res = await fetch(`${API_HOSTNAME}/apply/company`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                // "Accept": "application/json",
             },
             body: JSON.stringify(formData),
         });
@@ -25,13 +25,14 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
             dispatch(setCompanyApplicationSubmissionError(json.errors));
             dispatch(setCompanyApplicationSending(false));
             // TODO count metrics
-            return;
+            return false;
         }
 
         dispatch(setCompanyApplication(json));
 
         dispatch(setCompanyApplicationSending(false));
         // TODO count metrics
+        return true;
 
     } catch (error) {
         dispatch(setCompanyApplicationSubmissionError({
@@ -39,7 +40,7 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
         }));
         dispatch(setCompanyApplicationSending(false));
         // TODO count metrics
+        return false;
     }
-};
 
-export const parseSearchFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
+};
