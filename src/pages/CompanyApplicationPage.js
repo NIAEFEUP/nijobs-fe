@@ -16,6 +16,7 @@ import {
     DialogContent,
     DialogTitle,
     DialogActions,
+    FormHelperText,
 } from "@material-ui/core";
 
 import {
@@ -78,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CompanyApplicationPage = ({ submitCompanyApplication }) => {
+const CompanyApplicationPage = ({ submitCompanyApplication, submittingApplication, submissionErrors }) => {
 
     const { register, handleSubmit, errors, watch } = useForm({
         mode: "onBlur",
@@ -179,10 +180,35 @@ const CompanyApplicationPage = ({ submitCompanyApplication }) => {
                                 }}
                             />
 
+                            {submissionErrors ?
+                                submissionErrors.map((error) => (
+                                    <FormHelperText key={error.msg} error={true}>
+                                        {error.msg}
+                                    </FormHelperText>
+                                ))
+                                :
+                                <FormHelperText error={true}>
+                                    {" "}
+                                </FormHelperText>
+                            }
+
                         </CardContent>
                         <CardActions className={classes.buttonsArea}>
-                            <Button type="reset" color="secondary">Reset</Button>
-                            <Button type="submit" variant="contained" color="primary">Apply</Button>
+                            <Button
+                                type="reset"
+                                color="secondary"
+                                disabled={submittingApplication}
+                            >
+                                Reset
+                            </Button>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                disabled={submittingApplication}
+                            >
+                                Apply
+                            </Button>
                         </CardActions>
 
                     </Card>
@@ -222,15 +248,22 @@ const CompanyApplicationPage = ({ submitCompanyApplication }) => {
                 </DialogActions>
             </Dialog>
         </>
-
     );
 };
 
 CompanyApplicationPage.propTypes = {
+    submittingApplication: PropTypes.bool,
     submitCompanyApplication: PropTypes.func,
+    submissionErrors: PropTypes.arrayOf(
+        PropTypes.shape({
+            msg: PropTypes.string.isRequired,
+        })),
 };
 
-export const mapStateToProps = () => ({});
+export const mapStateToProps = ({ companyApplication }) => ({
+    submittingApplication: companyApplication.submittingApplication,
+    submissionErrors: companyApplication.errors,
+});
 
 export const mapDispatchToProps = (dispatch) => ({
     submitCompanyApplication: (data) => dispatch(submitCompanyApplication(data)),

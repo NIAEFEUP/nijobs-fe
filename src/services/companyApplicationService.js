@@ -22,17 +22,11 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
         const json = await res.json();
 
         if (!res.ok) {
-            dispatch(setCompanyApplicationSubmissionError({
-                cause: "BAD_RESPONSE",
-                error: json.errors,
-            }));
+            dispatch(setCompanyApplicationSubmissionError(json.errors));
             dispatch(setCompanyApplicationSending(false));
             // TODO count metrics
             return;
         }
-
-        if (Math.random() !== -1)
-            throw Error("test");
 
         dispatch(setCompanyApplication(json));
 
@@ -41,7 +35,6 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
 
     } catch (error) {
         dispatch(setCompanyApplicationSubmissionError({
-            cause: "NETWORK_FAILURE",
             error,
         }));
         dispatch(setCompanyApplicationSending(false));
