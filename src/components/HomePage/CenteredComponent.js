@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
         },
     },
 }));
-const CenteredCard = ({ children, Component = "div" }) => {
+const CenteredComponent = ({ children, Component = "div" }) => {
     const classes = useStyles();
 
     return (
@@ -24,4 +24,4 @@ const CenteredCard = ({ children, Component = "div" }) => {
     );
 };
 
-export default CenteredCard;
+export default CenteredComponent;
