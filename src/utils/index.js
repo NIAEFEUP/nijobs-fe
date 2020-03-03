@@ -1,3 +1,4 @@
+import React from "react";
 export const smoothScrollToRef = (ref) => {
 
     if (!ref || !ref.current) return;
@@ -13,3 +14,17 @@ export const capitalize = (str) => {
 
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
+
+export const Wrap = ({ Wrapper, on, children }) => (
+    <>
+        {on ?
+            <Wrapper>
+                { children }
+            </Wrapper> :
+            <>
+                { children }
+            </>
+        }
+    </>
+
+);
