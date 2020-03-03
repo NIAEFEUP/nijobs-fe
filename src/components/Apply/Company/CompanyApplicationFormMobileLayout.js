@@ -4,6 +4,7 @@ import { Link, Button, Card, CardContent, CardActions, makeStyles, CardHeader } 
 const useStyles = makeStyles((theme) => ({
     formCard: {
         minHeight: "100vh",
+        padding: theme.spacing(0, 1),
     },
     formContent: {
         display: "flex",
@@ -34,6 +35,7 @@ const CompanyApplicationFormMobileLayout = ({
                             href=""
                             onClick={openWhyModal}
                             variant="body2"
+                            color="secondary"
                         >
                                 Why do I need to apply?
                         </Link>
