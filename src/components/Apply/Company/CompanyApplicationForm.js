@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -14,10 +14,13 @@ import {
     Button,
     TextField,
     FormHelperText,
+    InputAdornment,
+    IconButton,
+    Tooltip,
 } from "@material-ui/core";
 
 import CompanyApplicationSchema from "./CompanyApplicationSchema";
-import { CompanyApplicationConstants } from "./CompanyApplicationUtils";
+import { CompanyApplicationConstants, getHumanError } from "./CompanyApplicationUtils";
 import ApplicationInfoDialog from "./ApplicationInfoDialog";
 
 import { submitCompanyApplication } from "../../../services/companyApplicationService";
@@ -25,7 +28,8 @@ import { setCompanyApplicationSubmissionError } from "../../../actions/companyAp
 import { Wrap } from "../../../utils";
 import CenteredComponent from "../../HomePage/CenteredComponent";
 import useCompanyApplicationStyles from "./companyApplicationStyles";
-
+import { useMobile } from "../../../utils/media-queries";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplication, submittingApplication,
     submissionErrors, setCompanyApplicationSubmissionError }) => {
@@ -60,9 +64,6 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
 
     const motivation = watch("motivation") || "";
 
-    // REPLACE THIS ONCE MEDIA QUERIES ARE MERGED
-    const useMobile = () => true;
-
     const classes = useCompanyApplicationStyles(useMobile())();
 
     const onResetButtonClick = (e) => {
@@ -70,6 +71,24 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
         resetCompanyApplicationSubmissionError();
         reset();
     };
+
+    const [showPassword, toggleShowPassword] = useToggle(false);
+    const ShowPasswordAdornment = useMemo(() => (
+        <InputAdornment position="end">
+            <Tooltip
+                title={showPassword ? "Hide Password" : "Show Password"}
+                aria-label={showPassword ? "Hide Password" : "Show Password"}
+            >
+                <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={toggleShowPassword}
+                    onMouseDown={(e) => e.preventDefault()}
+                >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+            </Tooltip>
+        </InputAdornment>
+    ), [showPassword, toggleShowPassword]);
 
     return (
         <React.Fragment>
@@ -107,21 +126,27 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                             <TextField
                                 label="Password"
                                 name="password"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 error={!!errors.password}
                                 inputRef={register}
                                 onChange={resetCompanyApplicationSubmissionError}
                                 helperText={errors.password ? errors.password.message : <span/>}
                                 margin="dense"
+                                InputProps={{
+                                    endAdornment: ShowPasswordAdornment,
+                                }}
                             />
                             <TextField
                                 label="Confirm Password"
                                 name="confirmPassword"
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 error={!!errors.confirmPassword}
                                 inputRef={register}
                                 helperText={errors.confirmPassword ? errors.confirmPassword.message : <span/>}
                                 margin="dense"
+                                InputProps={{
+                                    endAdornment: ShowPasswordAdornment,
+                                }}
                             />
                             <TextField
                                 label="Company Name"
@@ -159,7 +184,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                             {submissionErrors ?
                                 submissionErrors.map((error) => (
                                     <FormHelperText key={error.msg} error={true}>
-                                        {error.msg}
+                                        {getHumanError(error.msg)}
                                     </FormHelperText>
                                 ))
                                 :
