@@ -21,6 +21,15 @@ export default (isMobile) => makeStyles((theme) => ({
         justifyContent: "flex-end",
         padding: theme.spacing(3, 2),
         paddingTop: isMobile && 0,
-
+    },
+    showPasswordToggle: {
+        bottom: theme.spacing(-1),
+        marginRight: theme.spacing(-1),
+    },
+    passwordGroupWrapper: {
+        justifyContent: !isMobile && "space-between",
+        "& > div:first-child": {
+            marginRight: !isMobile && theme.spacing(2),
+        },
     },
 }));

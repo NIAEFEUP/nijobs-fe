@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
@@ -14,9 +14,11 @@ import {
     Button,
     TextField,
     FormHelperText,
-    InputAdornment,
     IconButton,
     Tooltip,
+    FormControl,
+    InputAdornment,
+    FormGroup,
 } from "@material-ui/core";
 
 import CompanyApplicationSchema from "./CompanyApplicationSchema";
@@ -30,6 +32,24 @@ import CenteredComponent from "../../HomePage/CenteredComponent";
 import useCompanyApplicationStyles from "./companyApplicationStyles";
 import { useMobile } from "../../../utils/media-queries";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+
+const ShowPasswordToggle = ({ showPassword, toggleShowPassword, className }) => (
+    <FormControl>
+        <Tooltip
+            title={showPassword ? "Hide Password" : "Show Password"}
+            aria-label={showPassword ? "Hide Password" : "Show Password"}
+            className={className}
+        >
+            <IconButton
+                aria-label="toggle password visibility"
+                onClick={toggleShowPassword}
+                onMouseDown={(e) => e.preventDefault()}
+            >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+        </Tooltip>
+    </FormControl>
+);
 
 const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplication, submittingApplication,
     submissionErrors, setCompanyApplicationSubmissionError }) => {
@@ -73,22 +93,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
     };
 
     const [showPassword, toggleShowPassword] = useToggle(false);
-    const ShowPasswordAdornment = useMemo(() => (
-        <InputAdornment position="end">
-            <Tooltip
-                title={showPassword ? "Hide Password" : "Show Password"}
-                aria-label={showPassword ? "Hide Password" : "Show Password"}
-            >
-                <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={toggleShowPassword}
-                    onMouseDown={(e) => e.preventDefault()}
-                >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-            </Tooltip>
-        </InputAdornment>
-    ), [showPassword, toggleShowPassword]);
+
 
     return (
         <React.Fragment>
@@ -115,40 +120,6 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                         />
                         <CardContent className={classes.formContent} >
                             <TextField
-                                label="Email"
-                                name="email"
-                                error={!!errors.email}
-                                inputRef={register}
-                                onChange={resetCompanyApplicationSubmissionError}
-                                helperText={errors.email ? errors.email.message : <span/>}
-                                margin="dense"
-                            />
-                            <TextField
-                                label="Password"
-                                name="password"
-                                type={showPassword ? "text" : "password"}
-                                error={!!errors.password}
-                                inputRef={register}
-                                onChange={resetCompanyApplicationSubmissionError}
-                                helperText={errors.password ? errors.password.message : <span/>}
-                                margin="dense"
-                                InputProps={{
-                                    endAdornment: ShowPasswordAdornment,
-                                }}
-                            />
-                            <TextField
-                                label="Confirm Password"
-                                name="confirmPassword"
-                                type={showPassword ? "text" : "password"}
-                                error={!!errors.confirmPassword}
-                                inputRef={register}
-                                helperText={errors.confirmPassword ? errors.confirmPassword.message : <span/>}
-                                margin="dense"
-                                InputProps={{
-                                    endAdornment: ShowPasswordAdornment,
-                                }}
-                            />
-                            <TextField
                                 label="Company Name"
                                 name="companyName"
                                 error={!!errors.companyName}
@@ -157,6 +128,62 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                                 helperText={errors.companyName ? errors.companyName.message : <span/>}
                                 margin="dense"
                             />
+                            <TextField
+                                label="Email"
+                                name="email"
+                                error={!!errors.email}
+                                inputRef={register}
+                                onChange={resetCompanyApplicationSubmissionError}
+                                helperText={errors.email ? errors.email.message : <span/>}
+                                margin="dense"
+                            />
+                            <FormGroup row className={classes.passwordGroupWrapper}>
+                                <TextField
+                                    label="Password"
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    error={!!errors.password}
+                                    inputRef={register}
+                                    onChange={resetCompanyApplicationSubmissionError}
+                                    helperText={errors.password ? errors.password.message : <span/>}
+                                    margin="dense"
+                                    InputProps={{
+                                        endAdornment: useMobile() &&
+                                        <Wrap on={true} Wrapper={InputAdornment}>
+                                            <ShowPasswordToggle
+                                                showPassword={showPassword}
+                                                toggleShowPassword={toggleShowPassword}
+                                            />
+                                        </Wrap>,
+                                    }}
+                                />
+                                <TextField
+                                    label="Confirm Password"
+                                    name="confirmPassword"
+                                    type={showPassword ? "text" : "password"}
+                                    error={!!errors.confirmPassword}
+                                    inputRef={register}
+                                    helperText={errors.confirmPassword ? errors.confirmPassword.message : <span/>}
+                                    margin="dense"
+                                    InputProps={{
+                                        endAdornment: useMobile() &&
+                                        <Wrap on={true} Wrapper={InputAdornment}>
+                                            <ShowPasswordToggle
+                                                showPassword={showPassword}
+                                                toggleShowPassword={toggleShowPassword}
+                                            />
+                                        </Wrap>,
+                                    }}
+                                />
+                                {
+                                    !useMobile() &&
+                                        <ShowPasswordToggle
+                                            showPassword={showPassword}
+                                            toggleShowPassword={toggleShowPassword}
+                                            className={classes.showPasswordToggle}
+                                        />
+                                }
+                            </FormGroup>
                             <TextField
                                 className={classes.motivation}
                                 key="Motivation"
