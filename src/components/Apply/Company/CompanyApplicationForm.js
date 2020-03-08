@@ -94,7 +94,6 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
 
     const [showPassword, toggleShowPassword] = useToggle(false);
 
-
     return (
         <React.Fragment>
             <form

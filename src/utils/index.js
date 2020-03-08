@@ -1,4 +1,7 @@
 import React from "react";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { Link } from "@material-ui/core";
+
 export const smoothScrollToRef = (ref) => {
 
     if (!ref || !ref.current) return;
@@ -28,3 +31,21 @@ export const Wrap = ({ Wrapper, on, children }) => (
     </>
 
 );
+
+
+export const RouterLink = ({ to, children, ...props }) => {
+    const renderLink = React.useMemo(
+        () =>
+            // eslint-disable-next-line react/display-name
+            React.forwardRef((linkProps, ref) => (
+                <ReactRouterLink innerRef={ref} to={to} {...linkProps} />
+            )),
+        [to],
+    );
+
+    return (
+        <Link component={renderLink} {...props}>
+            {children}
+        </Link>
+    );
+};
