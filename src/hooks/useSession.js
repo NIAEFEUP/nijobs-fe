@@ -10,12 +10,14 @@ export default () => {
             credentials: "include",
         });
 
-        if (!res.ok) throw { status: res.status };
-        else return (await res.json()).data;
+        if (!res.ok) {
+            if (res.status === 401) return {};
+            throw { status: res.status };
+        } else return (await res.json()).data;
     };
 
     const { data, error, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
-        revalidateOnFocus: false,
+        // revalidateOnFocus: false,
         onErrorRetry: (error, key, option, revalidate, { retryCount }) => {
             if (error.status === 401) return;
 
