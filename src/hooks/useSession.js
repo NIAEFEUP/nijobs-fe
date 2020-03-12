@@ -2,6 +2,12 @@ import useSWR from "swr";
 
 const API_HOSTNAME = "http://localhost:8087";
 
+export const sleep = (t) => new Promise((r) => {
+    setTimeout(() => {
+        r();
+    }, t);
+});
+
 export default () => {
 
     const getSession = async (key) => {
@@ -16,20 +22,18 @@ export default () => {
         } else return (await res.json()).data;
     };
 
-    const { data, error, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
-        // revalidateOnFocus: false,
-        onErrorRetry: (error, key, option, revalidate, { retryCount }) => {
-            if (error.status === 401) return;
-
-            // retry after 5 seconds
-            setTimeout(() => revalidate({ retryCount: retryCount + 1 }), 5000);
-        },
+    const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
+        revalidateOnFocus: false,
+        initialData: null,
     });
 
     return {
         data,
         error,
-        update: () => mutate({}),
+        isValidating,
+        reset: () => mutate(null),
+        revalidate: () => mutate(`${API_HOSTNAME}/auth/me`),
+        isLoggedIn: (data && Object.keys(data).length !== 0) || false,
     };
 
 };

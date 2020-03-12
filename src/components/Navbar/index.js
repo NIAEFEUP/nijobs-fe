@@ -1,25 +1,36 @@
 import React from "react";
 import { AppBar,
     Toolbar,
-    Popper,
-    // IconButton,
-    Grow,
-    Paper,
-    ClickAwayListener,
-    MenuList,
-    MenuItem,
     Button,
     makeStyles,
-    Typography,
     Avatar,
+    CircularProgress,
 } from "@material-ui/core";
-// import { Person } from "@material-ui/icons";
 import useSession from "../../hooks/useSession";
-import { login as loginAPI, logout as logoutAPI } from "../../services/auth";
+import { login } from "../../services/auth";
+import useToggle from "../../hooks/useToggle";
+import UserMenu from "./UserMenu";
 
 const useStyles = makeStyles((theme) => ({
+    navbar: {
+        paddingTop: theme.spacing(3),
+    },
+    userAccountArea: {
+        marginRight: theme.spacing(3),
+    },
+    loginBtnWrapper: {
+        display: "grid",
+    },
     loginBtn: {
         color: "white",
+        gridColumn: 1,
+        gridRow: 1,
+    },
+    loginProgress: {
+        color: "white",
+        gridColumn: 1,
+        gridRow: 1,
+        margin: "auto",
     },
     userLogo: {
         backgroundColor: theme.palette.primary.main,
@@ -37,112 +48,69 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
 
-    const { data, update } = useSession();
-    const isLoggedIn = data && Object.keys(data).length !== 0;
-
-    const login = (e) => {
-        e.preventDefault();
-        loginAPI("angelo@niaefeup.com", "password123").then(() => update());
-    };
-
-    const logout = (e) => {
-        e.preventDefault();
-        logoutAPI().then(() => update());
-    };
-
-    const [open, setOpen] = React.useState(false);
+    const { data: sessionData, reset: resetSession, isLoggedIn, revalidate } = useSession();
+    const [loginPending, toggleLoginPending] = useToggle(false);
+    const [userMenuOpen, setUserMenuOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
 
+    const handleLogin = (e) => {
+        e.preventDefault();
+        toggleLoginPending();
+        login("angelo@niaefeup.com", "password123").then(() => {
+            revalidate();
+            toggleLoginPending();
+        });
+    };
+
     const handleToggle = () => {
-        if (isLoggedIn) setOpen((prevOpen) => !prevOpen);
+        if (isLoggedIn) setUserMenuOpen((prevOpen) => !prevOpen);
     };
 
-    const handleClose = (event) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return;
-        }
+    const handleUserMenuClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) return;
 
-        setOpen(false);
+        setUserMenuOpen(false);
     };
-
-    // return focus to the button when we transitioned from !open -> open
-    // const prevOpen = React.useRef(open);
-    // React.useEffect(() => {
-    //     if (prevOpen.current === true && open === false) {
-    //         anchorRef.current.focus();
-    //     }
-
-    //     prevOpen.current = open;
-    // }, [open]);
 
     const classes = useStyles();
 
     return (
-        <AppBar position="absolute" color="transparent" elevation={0}>
+        <AppBar className={classes.navbar} position="absolute" color="transparent" elevation={0}>
             <Toolbar style={{ display: "flex", justifyContent: "flex-end" }}>
                 <div
                     ref={anchorRef}
-                    aria-controls={open ? "menu-list-grow" : undefined}
+                    aria-controls={userMenuOpen ? "menu-list-grow" : undefined}
                     aria-haspopup="true"
                     onClick={handleToggle}
+                    className={classes.userAccountArea}
                 >
                     {isLoggedIn ?
-                        <Avatar className={classes.userLogo}/>
+                        <Avatar
+                            className={classes.userLogo}
+                            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                        />
                         :
-                        <Button className={classes.loginBtn} onClick={login}>Login</Button>
+                        <div className={classes.loginBtnWrapper}>
+                            <Button
+                                className={classes.loginBtn}
+                                onClick={handleLogin}
+                                disabled={loginPending}
+                            >
+                                Login
+                            </Button>
+                            {loginPending && <CircularProgress size={24} className={classes.loginProgress} />}
+                        </div>
                     }
 
                 </div>
-
-                <Popper
-                    open={open} anchorEl={anchorRef.current}
-                    role={undefined} transition disablePortal placement="bottom-end"
-                    modifiers={{
-                        // inner: { enabled: true },
-                        computeStyle: {
-                            gpuAcceleration: false,
-                        },
-                        preventOverflow: {
-                            enabled: true,
-                            padding: 0,
-                        },
-                        flip: {
-                            enabled: false,
-                        },
-                        offset: {
-                            enabled: true,
-                            offset: "0, -10",
-                        },
-                    }}
-                >
-                    {({ TransitionProps }) => (
-                        <Grow
-                            {...TransitionProps}
-                        >
-                            <ClickAwayListener onClickAway={handleClose}>
-                                <Paper className={classes.userMenu}>
-                                    <>
-                                        <Typography>
-                                            {isLoggedIn && data.email}
-                                        </Typography>
-                                        <MenuList autoFocusItem={open} id="menu-list-grow">
-                                            <MenuItem onClick={() => {}}>Profile</MenuItem>
-                                            <MenuItem onClick={() => {}}>My account</MenuItem>
-                                            <MenuItem
-                                                onClick={(e) => {
-                                                    handleClose(e);
-                                                    logout(e);
-                                                }}
-                                            >
-                                                    Logout
-                                            </MenuItem>
-                                        </MenuList>
-                                    </>
-                                </Paper>
-                            </ClickAwayListener>
-                        </Grow>
-                    )}
-                </Popper>
+                <UserMenu
+                    open={userMenuOpen}
+                    anchorRef={anchorRef}
+                    handleClose={handleUserMenuClose}
+                    sessionData={sessionData}
+                    resetSession={resetSession}
+                    className={classes.userMenu}
+                />
 
             </Toolbar>
         </AppBar>

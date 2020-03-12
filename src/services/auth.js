@@ -1,8 +1,13 @@
 // TODO, change this to use the one defined in index.js coming from .env
 const API_HOSTNAME = "http://localhost:8087";
 
-export const login = (email, password) =>
-    fetch(`${API_HOSTNAME}/auth/login`, {
+import { sleep } from "../hooks/useSession";
+
+export const login = async (email, password) => {
+
+    await sleep(5000);
+
+    await fetch(`${API_HOSTNAME}/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -11,6 +16,7 @@ export const login = (email, password) =>
         body: JSON.stringify({ email, password }),
     });
 
+};
 export const logout = () =>
     fetch(`${API_HOSTNAME}/auth/login`, {
         method: "DELETE",
