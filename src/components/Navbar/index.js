@@ -13,8 +13,6 @@ import { AppBar,
     DialogContentText,
 } from "@material-ui/core";
 
-import clsx from "clsx";
-
 import useSession from "../../hooks/useSession";
 import { login } from "../../services/auth";
 import useToggle from "../../hooks/useToggle";
@@ -179,7 +177,7 @@ const Navbar = () => {
                             {loginPending &&
                             <CircularProgress
                                 size={24}
-                                className={clsx(classes.loginProgress, classes.loginProgressRed)}
+                                className={classes.loginProgressRed}
                             />}
                         </div>
                     </DialogActions>
