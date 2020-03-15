@@ -5,9 +5,10 @@ import { sleep } from "../hooks/useSession";
 
 export const login = async (email, password) => {
 
+    // REMOVE MEEE
     await sleep(5000);
 
-    await fetch(`${API_HOSTNAME}/auth/login`, {
+    const res = await fetch(`${API_HOSTNAME}/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -15,6 +16,8 @@ export const login = async (email, password) => {
         },
         body: JSON.stringify({ email, password }),
     });
+
+    if (!res.ok) throw { status: res.status };
 
 };
 export const logout = () =>

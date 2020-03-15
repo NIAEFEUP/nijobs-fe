@@ -5,7 +5,16 @@ import { AppBar,
     makeStyles,
     Avatar,
     CircularProgress,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    TextField,
+    DialogActions,
+    DialogContentText,
 } from "@material-ui/core";
+
+import clsx from "clsx";
+
 import useSession from "../../hooks/useSession";
 import { login } from "../../services/auth";
 import useToggle from "../../hooks/useToggle";
@@ -32,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
         gridRow: 1,
         margin: "auto",
     },
+    loginProgressRed: {
+        composes: "$loginProgress",
+        color: theme.palette.primary.main,
+    },
     userLogo: {
         backgroundColor: theme.palette.primary.main,
         zIndex: 1,
@@ -50,13 +63,18 @@ const Navbar = () => {
 
     const { data: sessionData, reset: resetSession, isLoggedIn, revalidate } = useSession();
     const [loginPending, toggleLoginPending] = useToggle(false);
+    const [showLoginModal, toggleLoginModal] = useToggle(false);
     const [userMenuOpen, setUserMenuOpen] = React.useState(false);
+
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+
     const anchorRef = React.useRef(null);
 
-    const handleLogin = (e) => {
+    const handleLogin = (e, email, password) => {
         e.preventDefault();
         toggleLoginPending();
-        login("angelo@niaefeup.com", "password123").then(() => {
+        return login(email, password).then(() => {
             revalidate();
             toggleLoginPending();
         });
@@ -93,7 +111,7 @@ const Navbar = () => {
                         <div className={classes.loginBtnWrapper}>
                             <Button
                                 className={classes.loginBtn}
-                                onClick={handleLogin}
+                                onClick={toggleLoginModal}
                                 disabled={loginPending}
                             >
                                 Login
@@ -111,6 +129,61 @@ const Navbar = () => {
                     resetSession={resetSession}
                     className={classes.userMenu}
                 />
+                <Dialog open={showLoginModal} aria-labelledby="form-dialog-title" disableScrollLock onClose={() => console.log("asda")}>
+                    <DialogTitle id="form-dialog-title">Login</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            This still need error handling!!!! When login fails, it will stay pending forever since promise never resolves
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            id="email"
+                            label="Email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            fullWidth
+                        />
+                        <TextField
+                            id="password"
+                            label="Password"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            fullWidth
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={toggleLoginModal}
+                            variant="text"
+                            color="secondary"
+                            disabled={loginPending}
+                        >
+                            Cancel
+                        </Button>
+                        <div className={classes.loginBtnWrapper}>
+                            <Button
+                                className={classes.loginBtn}
+                                onClick={(e) => {
+                                    handleLogin(e, email, password).then(() =>
+                                        toggleLoginModal()
+                                    );
+                                }}
+                                color="primary"
+                                variant="contained"
+                                disabled={loginPending}
+                            >
+                            Login
+                            </Button>
+                            {loginPending &&
+                            <CircularProgress
+                                size={24}
+                                className={clsx(classes.loginProgress, classes.loginProgressRed)}
+                            />}
+                        </div>
+                    </DialogActions>
+                </Dialog>
 
             </Toolbar>
         </AppBar>
