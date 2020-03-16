@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
     navbar: {
         paddingTop: theme.spacing(3),
     },
+    toolbar: {
+        display: "flex",
+        justifyContent: "flex-end",
+    },
     userAccountArea: {
         marginRight: theme.spacing(3),
     },
@@ -78,7 +82,7 @@ const Navbar = () => {
 
     return (
         <AppBar className={classes.navbar} position="absolute" color="transparent" elevation={0}>
-            <Toolbar style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Toolbar className={classes.toolbar}>
                 <div
                     ref={anchorRef}
                     aria-controls={userMenuOpen ? "menu-list-grow" : undefined}

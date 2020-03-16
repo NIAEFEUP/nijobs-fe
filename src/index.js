@@ -21,7 +21,7 @@ const jss = create({
 ReactDOM.render(
     <BrowserRouter>
         <StylesProvider jss={jss}>
-            <ThemeProvider theme={AppTheme} jss>
+            <ThemeProvider theme={AppTheme}>
                 <SnackbarProvider maxSnack={3}>
                     <App />
                 </SnackbarProvider>

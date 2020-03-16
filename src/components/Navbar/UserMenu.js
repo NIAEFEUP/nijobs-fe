@@ -11,6 +11,7 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import { logout } from "../../services/auth";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => ({
     userMenuContent: {
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, className: PaperClassname }) => {
+const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, className }) => {
 
     const theme = useTheme();
     const classes = useStyles();
@@ -71,9 +72,9 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
                 <Grow
                     {...TransitionProps}
                 >
-                    <ClickAwayListener onClickAway={handleClose}>
-                        <Paper className={PaperClassname}>
-                            <div className={classes.userMenuContent}>
+                    <Paper>
+                        <ClickAwayListener onClickAway={handleClose}>
+                            <div className={clsx(className, classes.userMenuContent)}>
                                 <Typography
                                     className={classes.accountName}
                                     variant="button"
@@ -90,8 +91,8 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
                                     <MenuItem onClick={handleLogout}>Logout</MenuItem>
                                 </MenuList>
                             </div>
-                        </Paper>
-                    </ClickAwayListener>
+                        </ClickAwayListener>
+                    </Paper>
                 </Grow>
             )}
         </Popper>
