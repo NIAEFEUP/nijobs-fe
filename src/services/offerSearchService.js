@@ -2,7 +2,7 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "../actio
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 
-// import { API_HOSTNAME } from "../index";
+// import { API_HOSTNAME } from "../config";
 
 // TODO remove this
 const redditLogo = require("./reddit-logo.png");

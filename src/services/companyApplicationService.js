@@ -1,4 +1,4 @@
-import { API_HOSTNAME } from "../index";
+import { API_HOSTNAME } from "../config";
 import {
     setCompanyApplication,
     setCompanyApplicationSending,
