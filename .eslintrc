@@ -10,6 +10,7 @@
         "jsdom": true,
         "shallow": true,
         "render": true,
+        "rtlRender": true,
         "mount": true
     },
 

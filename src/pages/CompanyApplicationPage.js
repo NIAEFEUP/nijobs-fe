@@ -9,10 +9,10 @@ import CenteredComponent from "../components/HomePage/CenteredComponent";
 import CompanyApplicationForm from "../components/Apply/Company/CompanyApplicationForm";
 
 
-const CompanyApplicationPage = () => {
+const CompanyApplicationPage = ({ showConfirmation = false }) => {
 
 
-    const [showConfirmationModal, toggleConfirmationModal] = useToggle(false);
+    const [showConfirmationModal, toggleConfirmationModal] = useToggle(showConfirmation);
 
     return (
         <React.Fragment>
