@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 
 import { MainMask } from "../components/HomePage/MainMask";
 import useToggle from "../hooks/useToggle";
@@ -29,3 +29,7 @@ const CompanyApplicationPage = ({ showConfirmation = false }) => {
 };
 
 export default CompanyApplicationPage;
+
+CompanyApplicationPage.propTypes = {
+    showConfirmation: PropTypes.bool,
+};

@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import {
     ValidationReasons,
     generateValidationRule,
@@ -12,7 +13,7 @@ export default yup.object().shape({
         .required(ValidationReasons.REQUIRED)
         .min(...generateValidationRule("password", "minLength", ValidationReasons.TOO_SHORT)),
     confirmPassword: yup.string()
-        .oneOf([yup.ref("password"), null], "Passwords must match"),
+        .oneOf([yup.ref("password"), null], "Passwords must match."),
     motivation: yup.string()
         .required(ValidationReasons.REQUIRED)
         .min(...generateValidationRule("motivation", "minLength", ValidationReasons.TOO_SHORT))

@@ -43,13 +43,18 @@ const ShowPasswordToggle = ({ showPassword, toggleShowPassword, className }) => 
             <IconButton
                 aria-label="toggle password visibility"
                 onClick={toggleShowPassword}
-                onMouseDown={(e) => e.preventDefault()}
             >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
             </IconButton>
         </Tooltip>
     </FormControl>
 );
+
+ShowPasswordToggle.propTypes = {
+    showPassword: PropTypes.bool.isRequired,
+    toggleShowPassword: PropTypes.func.isRequired,
+    className: PropTypes.string,
+};
 
 const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplication, submittingApplication,
     submissionErrors, setCompanyApplicationSubmissionError }) => {
@@ -121,30 +126,33 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                             <TextField
                                 label="Company Name"
                                 name="companyName"
+                                id="input-companyName"
                                 error={!!errors.companyName}
                                 inputRef={register}
                                 onChange={resetCompanyApplicationSubmissionError}
-                                helperText={errors.companyName ? errors.companyName.message : <span/>}
+                                helperText={errors.companyName ? errors.companyName.message : " "}
                                 margin="dense"
                             />
                             <TextField
                                 label="Email"
                                 name="email"
+                                id="input-email"
                                 error={!!errors.email}
                                 inputRef={register}
                                 onChange={resetCompanyApplicationSubmissionError}
-                                helperText={errors.email ? errors.email.message : <span/>}
+                                helperText={errors.email ? errors.email.message : " "}
                                 margin="dense"
                             />
                             <FormGroup row className={classes.passwordGroupWrapper}>
                                 <TextField
                                     label="Password"
                                     name="password"
+                                    id="input-password"
                                     type={showPassword ? "text" : "password"}
                                     error={!!errors.password}
                                     inputRef={register}
                                     onChange={resetCompanyApplicationSubmissionError}
-                                    helperText={errors.password ? errors.password.message : <span/>}
+                                    helperText={errors.password ? errors.password.message : " "}
                                     margin="dense"
                                     InputProps={{
                                         endAdornment: useMobile() &&
@@ -159,10 +167,11 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                                 <TextField
                                     label="Confirm Password"
                                     name="confirmPassword"
+                                    id="input-confirmPassword"
                                     type={showPassword ? "text" : "password"}
                                     error={!!errors.confirmPassword}
                                     inputRef={register}
-                                    helperText={errors.confirmPassword ? errors.confirmPassword.message : <span/>}
+                                    helperText={errors.confirmPassword ? errors.confirmPassword.message : " "}
                                     margin="dense"
                                     InputProps={{
                                         endAdornment: useMobile() &&
@@ -185,7 +194,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                             </FormGroup>
                             <TextField
                                 className={classes.motivation}
-                                key="Motivation"
+                                id="input-motivation"
                                 label="Motivation"
                                 name="motivation"
                                 placeholder="Tell us about the company. How do you think NIJobs can help you achieve your goal?"
@@ -209,7 +218,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
 
                             {submissionErrors ?
                                 submissionErrors.map((error) => (
-                                    <FormHelperText key={error.msg} error={true}>
+                                    <FormHelperText key={error.msg} data-testid="submission-error" error={true}>
                                         {getHumanError(error.msg)}
                                     </FormHelperText>
                                 ))

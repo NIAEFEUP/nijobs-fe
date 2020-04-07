@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { makeStyles } from "@material-ui/core";
 
 export default (isMobile) => makeStyles((theme) => ({

@@ -20,23 +20,35 @@ describe("CompanyApplicationPage", () => {
     const theme = createMuiTheme({});
 
     describe("render", () => {
-        const wrapper = renderWithStoreAndTheme(<CompanyApplicationPage />, { store, theme });
 
-        it("should render an input for email", () => {
-            expect(wrapper.container.querySelector("input[name='email']")).toBeTruthy();
+        it("should render form components", () => {
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationPage />, { store, theme });
+            const emailInput = wrapper.getByLabelText("Email");
+            expect(emailInput.name).toBe("email");
+
+            const passwordInput = wrapper.getByLabelText("Password");
+            expect(passwordInput.name).toBe("password");
+            expect(passwordInput.type).toBe("password");
+
+            const confirmPasswordInput = wrapper.getByLabelText("Confirm Password");
+            expect(confirmPasswordInput.name).toBe("confirmPassword");
+            expect(confirmPasswordInput.type).toBe("password");
+
+            const companyNameInput = wrapper.getByLabelText("Company Name");
+            expect(companyNameInput.name).toBe("companyName");
+
+            const motivationInput = wrapper.getByLabelText("Motivation");
+            expect(motivationInput.name).toBe("motivation");
+            expect(motivationInput.type).toBe("textarea");
+            expect(motivationInput.placeholder).toBe("Tell us about the company. How do you think NIJobs can help you achieve your goal?");
+
+            const applyButton = wrapper.getByText("Apply");
+            expect(applyButton).toBeTruthy();
+
+            const resetButton = wrapper.getByText("Reset");
+            expect(resetButton).toBeTruthy();
         });
-        it("should render an input for password", () => {
-            expect(wrapper.container.querySelector("input[name='password']").type).toBe("password");
-        });
-        it("should render an input for password confirmation", () => {
-            expect(wrapper.container.querySelector("input[name='confirmPassword']").type).toBe("password");
-        });
-        it("should render an input for company name", () => {
-            expect(wrapper.container.querySelector("input[name='companyName']")).toBeTruthy();
-        });
-        it("should render a textarea for motivation", () => {
-            expect(wrapper.container.querySelector("textarea[name='motivation']")).toBeTruthy();
-        });
+
         it("should render a confirmation dialog on registration completion", () => {
             const wrapper = renderWithStoreAndTheme(<CompanyApplicationPage showConfirmation/>, { store, theme });
             expect(wrapper.getByText("Application Submitted")).toBeTruthy();

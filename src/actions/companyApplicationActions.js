@@ -1,5 +1,5 @@
 export const CompanyApplicationActionTypes = {
-    SET_SENDING_COMPPANY_APPLICATION: "SET_SENDING_COMPPANY_APPLICATION",
+    SET_SENDING_COMPANY_APPLICATION: "SET_SENDING_COMPANY_APPLICATION",
     SET_COMPANY_APPLICATION: "SET_COMPANY_APPLICATION",
     SET_COMPANY_APPLICATION_SUBMISSION_ERROR: "SET_COMPANY_APPLICATION_SUBMISSION_ERROR",
 };
@@ -10,7 +10,7 @@ export const setCompanyApplication = (companyApplication) => ({
 });
 
 export const setCompanyApplicationSending = (sendingApplication) => ({
-    type: CompanyApplicationActionTypes.SET_SENDING_COMPPANY_APPLICATION,
+    type: CompanyApplicationActionTypes.SET_SENDING_COMPANY_APPLICATION,
     sendingApplication,
 });
 

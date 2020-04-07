@@ -1,8 +1,5 @@
 import { CompanyApplicationActionTypes } from "../actions/companyApplicationActions";
 
-export const INITIAL_JOB_TYPE = undefined;
-export const INITIAL_JOB_DURATION = 1;
-
 const initialState = {
     companyApplication: null,
     sendingApplication: false,
@@ -12,7 +9,7 @@ const initialState = {
 export default (state = initialState, action) => {
 
     switch (action.type) {
-        case CompanyApplicationActionTypes.SET_SENDING_COMPPANY_APPLICATION:
+        case CompanyApplicationActionTypes.SET_SENDING_COMPANY_APPLICATION:
             return {
                 ...state,
                 sendingApplication: action.sendingApplication,

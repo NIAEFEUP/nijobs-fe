@@ -11,7 +11,8 @@
         "shallow": true,
         "render": true,
         "rtlRender": true,
-        "mount": true
+        "mount": true,
+        "fetchMock": true
     },
 
     "parser": "babel-eslint",

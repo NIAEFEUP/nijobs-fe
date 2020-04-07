@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
 
@@ -32,6 +33,12 @@ export const Wrap = ({ Wrapper, on, children }) => (
 
 );
 
+Wrap.propTypes = {
+    Wrapper: PropTypes.element.isRequired,
+    children: PropTypes.element.isRequired,
+    on: PropTypes.bool.isRequired,
+};
+
 
 export const RouterLink = ({ to, children, ...props }) => {
     const renderLink = React.useMemo(
@@ -48,4 +55,9 @@ export const RouterLink = ({ to, children, ...props }) => {
             {children}
         </Link>
     );
+};
+
+RouterLink.propTypes = {
+    to: PropTypes.string.isRequired,
+    children: PropTypes.element.isRequired,
 };

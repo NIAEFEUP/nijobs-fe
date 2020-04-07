@@ -10,7 +10,6 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
     dispatch(setCompanyApplicationSending(true));
     dispatch(setCompanyApplicationSubmissionError([]));
 
-
     try {
         const res = await fetch(`${API_HOSTNAME}/apply/company`, {
             method: "POST",
@@ -35,9 +34,7 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
         return true;
 
     } catch (error) {
-        dispatch(setCompanyApplicationSubmissionError({
-            error,
-        }));
+        dispatch(setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
         dispatch(setCompanyApplicationSending(false));
         // TODO count metrics
         return false;
