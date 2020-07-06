@@ -91,7 +91,7 @@ describe("Search Offers actions", () => {
             jobType: INITIAL_JOB_TYPE,
         };
         const setJobDurationAction = {
-            type: offerSearchTypes.SET_JOB_DURATION,
+            type: OfferSearchTypes.SET_JOB_DURATION,
             jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
         };
 

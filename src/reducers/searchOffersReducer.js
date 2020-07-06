@@ -48,17 +48,17 @@ export default (state = initialState, action) => {
                 ...state,
                 jobType: action.jobType,
             };
-        case offerSearchTypes.SET_JOB_FIELDS:
+        case OfferSearchTypes.SET_JOB_FIELDS:
             return {
                 ...state,
                 fields: action.fields,
             };
-        case offerSearchTypes.SET_JOB_TECHS:
+        case OfferSearchTypes.SET_JOB_TECHS:
             return {
                 ...state,
                 techs: action.techs,
             };
-        case offerSearchTypes.SET_JOB_DURATION_TOGGLE:
+        case OfferSearchTypes.SET_JOB_DURATION_TOGGLE:
             return {
                 ...state,
                 filterJobDuration: action.filterJobDuration,

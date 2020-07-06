@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export default Object.freeze([
     { label: "React.js", value: "REACT_JS" },
     { label: "Node.js", value: "NODE_JS" },

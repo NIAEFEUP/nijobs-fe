@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { RouterLink } from "../../../utils";
 import { Typography } from "@material-ui/core";
 

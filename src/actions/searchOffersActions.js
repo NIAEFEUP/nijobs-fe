@@ -33,7 +33,7 @@ export const setSearchValue = (value) => ({
 });
 
 export const setJobDuration = (minJobDuration, maxJobDuration) => ({
-    type: offerSearchTypes.SET_JOB_DURATION,
+    type: OfferSearchTypes.SET_JOB_DURATION,
     jobDuration: [minJobDuration, maxJobDuration],
 });
 
@@ -43,16 +43,16 @@ export const setJobType = (jobType) => ({
 });
 
 export const setFields = (fields) => ({
-    type: offerSearchTypes.SET_JOB_FIELDS,
+    type: OfferSearchTypes.SET_JOB_FIELDS,
     fields,
 });
 export const setTechs = (techs) => ({
-    type: offerSearchTypes.SET_JOB_TECHS,
+    type: OfferSearchTypes.SET_JOB_TECHS,
     techs,
 });
 
 export const setShowJobDurationSlider = (filterJobDuration) => ({
-    type: offerSearchTypes.SET_JOB_DURATION_TOGGLE,
+    type: OfferSearchTypes.SET_JOB_DURATION_TOGGLE,
     filterJobDuration,
 });
 

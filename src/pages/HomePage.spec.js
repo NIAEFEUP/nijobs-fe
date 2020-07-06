@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./HomePage";
 import MainView from "../components/HomePage/MainView";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
@@ -38,7 +39,11 @@ describe("HomePage", () => {
     describe("interaction", () => {
         it("should render search results after search submission", () => {
 
-            const wrapper = mountWithStore(<HomePage/>, initialState, theme);
+            const wrapper = mountWithStore(
+                <Router>
+                    <HomePage/>
+                </Router>,
+                initialState, theme);
 
             // Currently jsdom does not know about scrollIntoView function, and thus, the code will break when submitting search
             // As a workaround, a stub is defined below, just for the code to not throw the error and actually test what matters
