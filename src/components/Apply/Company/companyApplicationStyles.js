@@ -28,7 +28,6 @@ export default (isMobile) => makeStyles((theme) => ({
         marginRight: theme.spacing(-1),
     },
     passwordGroupWrapper: {
-        justifyContent: !isMobile && "space-between",
         "& > div:first-child": {
             marginRight: !isMobile && theme.spacing(2),
         },

@@ -14,9 +14,6 @@ import {
     Button,
     TextField,
     FormHelperText,
-    IconButton,
-    Tooltip,
-    FormControl,
     InputAdornment,
     FormGroup,
 } from "@material-ui/core";
@@ -31,30 +28,8 @@ import { Wrap } from "../../../utils";
 import CenteredComponent from "../../HomePage/CenteredComponent";
 import useCompanyApplicationStyles from "./companyApplicationStyles";
 import { useMobile } from "../../../utils/media-queries";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 
-const ShowPasswordToggle = ({ showPassword, toggleShowPassword, className }) => (
-    <FormControl>
-        <Tooltip
-            title={showPassword ? "Hide Password" : "Show Password"}
-            aria-label={showPassword ? "Hide Password" : "Show Password"}
-            className={className}
-        >
-            <IconButton
-                aria-label="toggle password visibility"
-                onClick={toggleShowPassword}
-            >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-            </IconButton>
-        </Tooltip>
-    </FormControl>
-);
-
-ShowPasswordToggle.propTypes = {
-    showPassword: PropTypes.bool.isRequired,
-    toggleShowPassword: PropTypes.func.isRequired,
-    className: PropTypes.string,
-};
+import ShowPasswordToggle from "../../utils/form/ShowPasswordToggle";
 
 const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplication, submittingApplication,
     submissionErrors, setCompanyApplicationSubmissionError }) => {
