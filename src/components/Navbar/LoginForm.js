@@ -10,10 +10,10 @@ import {
     Button,
     FormHelperText,
     DialogContentText,
+    makeStyles,
 } from "@material-ui/core";
 
 import { login } from "../../services/auth";
-import { useLoginStyles } from "./index";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 
@@ -25,6 +25,27 @@ const ASD_SCH = yup.object().shape({
         .required("required, but change me")
         .min(8),
 });
+
+export const useLoginStyles = makeStyles((theme) => ({
+    loginBtnWrapper: {
+        display: "grid",
+    },
+    loginBtn: {
+        color: "white",
+        gridColumn: 1,
+        gridRow: 1,
+    },
+    loginProgress: {
+        color: "white",
+        gridColumn: 1,
+        gridRow: 1,
+        margin: "auto",
+    },
+    loginProgressRed: {
+        composes: "$loginProgress",
+        color: theme.palette.primary.main,
+    },
+}));
 
 const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, updateSessionInfo }) => {
 

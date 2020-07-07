@@ -76,6 +76,13 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
                         <ClickAwayListener onClickAway={handleClose}>
                             <div className={clsx(className, classes.userMenuContent)}>
                                 <Typography
+                                    variant="subtitle1"
+                                    color="secondary"
+                                    className={classes.accountName}
+                                >
+                                    Account
+                                </Typography>
+                                <Typography
                                     className={classes.accountName}
                                     variant="button"
                                 >

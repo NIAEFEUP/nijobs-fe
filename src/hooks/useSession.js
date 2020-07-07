@@ -1,12 +1,7 @@
 import useSWR from "swr";
 
+// TODO, change this to use the one defined in index.js coming from .env
 const API_HOSTNAME = "http://localhost:8087";
-
-export const sleep = (t) => new Promise((r) => {
-    setTimeout(() => {
-        r();
-    }, t);
-});
 
 export default () => {
 

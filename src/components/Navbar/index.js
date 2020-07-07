@@ -1,10 +1,14 @@
 import React from "react";
+
+import { connect } from "react-redux";
+import { toggleLoginModal } from "../../actions/navbarActions";
+
 import { AppBar,
     Toolbar,
     Button,
     makeStyles,
     Avatar,
-    CircularProgress,
+    Typography,
 } from "@material-ui/core";
 
 import useSession from "../../hooks/useSession";
@@ -35,34 +39,19 @@ const useStyles = makeStyles((theme) => ({
         width: 300,
         padding: theme.spacing(2),
     },
-}));
-
-export const useLoginStyles = makeStyles((theme) => ({
-    loginBtnWrapper: {
-        display: "grid",
-    },
-    loginBtn: {
+    userMenuButton: {
         color: "white",
-        gridColumn: 1,
-        gridRow: 1,
-    },
-    loginProgress: {
-        color: "white",
-        gridColumn: 1,
-        gridRow: 1,
-        margin: "auto",
-    },
-    loginProgressRed: {
-        composes: "$loginProgress",
-        color: theme.palette.primary.main,
+        "&:hover": {
+            backgroundColor: "transparent",
+        },
     },
 }));
 
-const Navbar = () => {
+const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 
     const { data: sessionData, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const [loginPending, toggleLoginPending] = useToggle(false);
-    const [showLoginModal, toggleLoginModal] = useToggle(false);
+
     const [userMenuOpen, setUserMenuOpen] = React.useState(false);
 
     const anchorRef = React.useRef(null);
@@ -78,7 +67,7 @@ const Navbar = () => {
     };
 
     const classes = useStyles();
-    const loginClasses = useLoginStyles();
+    // const loginClasses = useLoginStyles();
 
     return (
         <AppBar className={classes.navbar} position="absolute" color="transparent" elevation={0}>
@@ -90,23 +79,20 @@ const Navbar = () => {
                     onClick={handleUserMenuToggle}
                     className={classes.userAccountArea}
                 >
-                    {isLoggedIn ?
-                        <Avatar
-                            className={classes.userLogo}
-                            // well, change this to use url from sessionData when possible
-                            src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                        />
-                        :
-                        <div className={loginClasses.loginBtnWrapper}>
-                            <Button
-                                className={loginClasses.loginBtn}
-                                onClick={toggleLoginModal}
-                                disabled={loginPending}
-                            >
-                                Login
-                            </Button>
-                            {loginPending && <CircularProgress size={24} className={loginClasses.loginProgress} />}
-                        </div>
+                    {isLoggedIn &&
+                        <Button
+                            className={classes.userMenuButton}
+                            disableRipple
+                        >
+                            {!userMenuOpen &&
+                                <Typography variant="button">
+                                Account
+                                </Typography>
+                            }
+                            <Avatar
+                                className={classes.userLogo}
+                            />
+                        </Button>
                     }
 
                 </div>
@@ -130,4 +116,12 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+const mapStateToProps = ({ navbar }) => ({
+    showLoginModal: navbar.showLoginModal,
+});
+
+export const mapDispatchToProps = (dispatch) => ({
+    toggleLoginModal: () => dispatch(toggleLoginModal()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

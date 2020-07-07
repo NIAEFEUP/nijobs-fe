@@ -12,6 +12,8 @@ export const HomePage = () => {
     const searchResultsRef = useRef(null);
     const [showSearchResults, setShowSearchResults] = useState(false);
 
+    const [toggleLoginModal, setToggleLoginModal] = useState(() => {});
+
     // this will not trigger the scroll on subsequent submits, because the dependencies won't change after the first call
     useEffect(() => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
@@ -20,7 +22,7 @@ export const HomePage = () => {
 
     return (
         <React.Fragment>
-            <Navbar />
+            <Navbar setToggleLoginModal={setToggleLoginModal}/>
             <MainView
                 scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef)}
                 showSearchResults={() => {
