@@ -17,6 +17,9 @@ describe("HomePage", () => {
             fields: [],
             techs: [],
         },
+        navbar: {
+            showLoginModal: false,
+        },
     };
     describe("render", () => {
         const wrapper = shallow(

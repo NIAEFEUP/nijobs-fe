@@ -1,12 +1,22 @@
 import React from "react";
-import ProductDescription from "./ProductDescription";
+import { ProductDescription } from "./ProductDescription";
+import { Button } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
 
-describe("<ProductDescription /> rendering", () => {
+describe("<ProductDescription /> interaction", () => {
 
-    it("should render a div with some text", () => {
-        const mockedRefSetter = jest.fn();
-        const wrapper = shallow(<ProductDescription setRef={mockedRefSetter}/>);
-        expect(wrapper.find("div")).toHaveLength(1);
+    it("should open login modal", () => {
+        const toggleLoginModalMock = jest.fn();
+        const wrapper = mount(
+            <Router>
+                <ProductDescription toggleLoginModal={toggleLoginModalMock}/>
+            </Router>
+        );
+
+        expect(wrapper.find(Button).text()).toBe("Login");
+        wrapper.find(Button).first().simulate("click");
+        expect(toggleLoginModalMock).toHaveBeenCalledTimes(1);
+
     });
 
 });
