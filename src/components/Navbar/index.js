@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { toggleLoginModal } from "../../actions/navbarActions";
 
@@ -114,6 +114,11 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
             </Toolbar>
         </AppBar>
     );
+};
+
+Navbar.propTypes = {
+    showLoginModal: PropTypes.bool.isRequired,
+    toggleLoginModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ navbar }) => ({

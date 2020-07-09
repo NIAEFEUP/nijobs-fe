@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import PropTypes from "prop-types";
 import {
     CircularProgress,
     Dialog,
@@ -9,22 +9,13 @@ import {
     DialogActions,
     Button,
     FormHelperText,
-    DialogContentText,
     makeStyles,
 } from "@material-ui/core";
 
 import { login } from "../../services/auth";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
 
-const ASD_SCH = yup.object().shape({
-    email: yup.string()
-        .required("required, but change me")
-        .email("email, but change me"),
-    password: yup.string()
-        .required("required, but change me")
-        .min(8),
-});
+import LOGIN_SCHEMA from "./LoginSchema";
 
 export const useLoginStyles = makeStyles((theme) => ({
     loginBtnWrapper: {
@@ -53,15 +44,12 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
 
     const { register, handleSubmit, reset, errors } = useForm({
         mode: "onBlur",
-        validationSchema: ASD_SCH,
+        validationSchema: LOGIN_SCHEMA,
         reValidateMode: "onChange",
     });
 
     const [errorCleared, setErrorCleared] = useState(true);
 
-
-    // const [email, setEmail] = React.useState("");
-    // const [password, setPassword] = React.useState("");
     const [loginError, setLoginError] = React.useState(null);
     const resetError = () => {
         if (!errorCleared) {
@@ -85,7 +73,6 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
     };
 
     const handleClose = () => {
-        console.log("SHOULD RESET FORM HERE, INCLUDING ERRORS!!");
         resetError();
         reset();
         toggleLoginModal();
@@ -98,15 +85,9 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
 
     return (
         <Dialog open={open} aria-labelledby="form-dialog-title" disableScrollLock onClose={handleClose}>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-            >
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <DialogTitle id="form-dialog-title">Login</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                    Need to use redux-form-hook here in order to handle validation, reset and error handling more easily
-                    </DialogContentText>
-
                     <TextField
                         autoFocus
                         id="email"
@@ -143,15 +124,12 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         color="secondary"
                         disabled={loginPending}
                     >
-                    Cancel
+                        Cancel
                     </Button>
                     <div className={loginClasses.loginBtnWrapper}>
                         <Button
                             type="submit"
                             className={loginClasses.loginBtn}
-                            // onClick={(e) => {
-                            //     handleLogin(e, email, password);
-                            // }}
                             color="primary"
                             variant="contained"
                             disabled={loginPending}
@@ -159,15 +137,24 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                             Login
                         </Button>
                         {loginPending &&
-                        <CircularProgress
-                            size={24}
-                            className={loginClasses.loginProgressRed}
-                        />}
+                            <CircularProgress
+                                size={24}
+                                className={loginClasses.loginProgressRed}
+                            />
+                        }
                     </div>
                 </DialogActions>
             </form>
         </Dialog>
     );
+};
+
+LoginForm.propTypes = {
+    open: PropTypes.bool.isRequired,
+    toggleLoginModal: PropTypes.func.isRequired,
+    loginPending: PropTypes.bool.isRequired,
+    toggleLoginPending: PropTypes.func.isRequired,
+    updateSessionInfo: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

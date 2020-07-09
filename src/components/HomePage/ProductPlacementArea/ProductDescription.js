@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { RouterLink } from "../../../utils";
 import { connect } from "react-redux";
 import { toggleLoginModal } from "../../../actions/navbarActions";
@@ -10,7 +11,7 @@ import {
 
 import useSession from "../../../hooks/useSession";
 
-const ProductDescription = React.forwardRef((props, ref) => {
+const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
     const { isLoggedIn } = useSession();
 
     return (
@@ -38,12 +39,15 @@ const ProductDescription = React.forwardRef((props, ref) => {
             }
 
         </div>
-    )
-};
+    );
+});
 
 
 // Needed because of ForwardRef usage
 ProductDescription.displayName = "ProductDescription";
+ProductDescription.propTypes = {
+    toggleLoginModal: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = ({ navbar }) => ({
     showLoginModal: navbar.showLoginModal,

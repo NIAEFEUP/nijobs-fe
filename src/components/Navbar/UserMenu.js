@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import PropTypes from "prop-types";
 import {
     Popper,
     Grow,
@@ -104,6 +105,17 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
             )}
         </Popper>
     );
+};
+
+UserMenu.propTypes = {
+    open: PropTypes.bool.isRequired,
+    anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    sessionData: PropTypes.shape({
+        email: PropTypes.string,
+    }),
+    resetSession: PropTypes.func.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    className: PropTypes.string,
 };
 
 export default UserMenu;
