@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage from "./pages/CompanyApplicationPage";
+import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import { ProtectedRoute } from "./utils";
 
@@ -18,16 +19,13 @@ const AppRouter = () => (
                 path="/apply/company"
                 component={CompanyApplicationPage}
             />
-
-            {/* THE FOLLOWING IS A DEMO, REMOVE IT LATER PLEASE */}
             <ProtectedRoute
                 exact
-                path="/private"
+                path="/review/applications"
                 unauthorizedRedirectPath="/"
-                // this is useful for things like user.type === admin or user.type == company
-                authorize={(user) => user.email === "angelo@niaefeup.com"}
+                authorize={(user) => user.isAdmin}
             >
-                <HomePage/>
+                <ApplicationsReviewPage/>
             </ProtectedRoute>
             <Route component={NotFound} />
         </Switch>
