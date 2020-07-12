@@ -13,6 +13,22 @@ import {
 
 import { Check, Clear, MoreHoriz } from "@material-ui/icons";
 
+const generateTableCellFromField = (field, i, labelId) => {
+
+    if (typeof field.value === "function") {
+        return field.value();
+    } else {
+        return (
+            <TableCell
+                key={field.value}
+                id={i === 0 ? labelId : undefined}
+                align={field.align || "right"}
+            >
+                {field.value}
+            </TableCell>
+        );
+    }
+};
 
 const SelectableTable = ({
     columns,
@@ -20,6 +36,9 @@ const SelectableTable = ({
     // setSelectedItems,
     sortable = false,
     stickyHeader,
+    order,
+    orderBy,
+    handleOrderBy,
 }) => {
     const [selected, setSelected] = useState({});
 
@@ -30,8 +49,6 @@ const SelectableTable = ({
     );
 
     const handleSelect = (event, name) => {
-
-        console.log("ajskdaskjdhaskjdhsk", name);
 
         if (isSelected(name)) {
             // eslint-disable-next-line no-unused-vars
@@ -70,13 +87,19 @@ const SelectableTable = ({
                             inputProps={{ "aria-label": "select all desserts" }}
                         />
                     </TableCell>
-                    {columns.map((column) => (
+                    {columns.map((column, i) => (
                         <TableCell
                             key={column.key}
                             align={column.align}
                             padding={column.disablePadding ? "none" : "default"}
                         >
-                            <TableSortLabel hideSortIcon={!sortable}>
+                            <TableSortLabel
+                                hideSortIcon={!sortable || column.disableSorting}
+                                disabled={column.disableSorting}
+                                active={orderBy === i}
+                                direction={orderBy === i ? order : "asc"}
+                                onClick={() => handleOrderBy(i)}
+                            >
                                 {column.label}
                             </TableSortLabel>
                         </TableCell>
@@ -102,13 +125,8 @@ const SelectableTable = ({
                                 />
                             </TableCell>
                             {fields.map((field, i) => (
-                                <TableCell
-                                    key={(typeof field === "object") ? field.value : field}
-                                    id={i === 0 ? labelId : undefined}
-                                    align={field.align || "right"}
-                                >
-                                    {(typeof field === "object") ? field.value : field}
-                                </TableCell>
+                                generateTableCellFromField(field, i, labelId)
+
                             ))}
                             <TableCell align="right">
                                 <IconButton aria-label="accept">
@@ -133,13 +151,12 @@ SelectableTable.propTypes = {
     rows: PropTypes.arrayOf(
         PropTypes.shape({
             key: PropTypes.string.isRequired,
-            fields: PropTypes.arrayOf(PropTypes.oneOfType([
-                PropTypes.string,
+            fields: PropTypes.arrayOf(
                 PropTypes.shape({
-                    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+                    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.func]).isRequired,
                     align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
                 }),
-            ])).isRequired,
+            ).isRequired,
         })
     ),
     columns: PropTypes.arrayOf(
@@ -154,6 +171,9 @@ SelectableTable.propTypes = {
     ),
     sortable: PropTypes.bool,
     stickyHeader: PropTypes.bool,
+    order: PropTypes.oneOf(["asc", "desc"]),
+    orderBy: PropTypes.number,
+    handleOrderBy: PropTypes.func,
 };
 
 export default SelectableTable;
