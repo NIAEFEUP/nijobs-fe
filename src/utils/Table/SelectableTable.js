@@ -7,11 +7,13 @@ import {
     TableCell,
     TableSortLabel,
     TableBody,
-    IconButton,
     Checkbox,
+    TablePagination,
+    TableContainer,
+    Paper,
 } from "@material-ui/core";
 
-import { Check, Clear, MoreHoriz } from "@material-ui/icons";
+import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 
 const generateTableCellFromField = (field, i, labelId) => {
 
@@ -39,14 +41,27 @@ const SelectableTable = ({
     order,
     orderBy,
     handleOrderBy,
+    RowActions,
+    rowsPerPage: initialRowsPerPage = 10,
 }) => {
     const [selected, setSelected] = useState({});
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
     const isSelected = useCallback(
         // eslint-disable-next-line no-prototype-builtins
         (row) => selected.hasOwnProperty(row),
         [selected],
     );
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     const handleSelect = (event, name) => {
 
@@ -74,106 +89,95 @@ const SelectableTable = ({
     const numSelected = Object.keys(selected).length;
 
     return (
-        <Table
-            stickyHeader={stickyHeader}
-        >
-            <TableHead>
-                <TableRow>
-                    <TableCell padding="checkbox">
-                        <Checkbox
-                            indeterminate={numSelected > 0 && numSelected < rows.length}
-                            checked={rows.length > 0 && numSelected === rows.length}
-                            onChange={handleSelectAllClick}
-                            inputProps={{ "aria-label": "select all desserts" }}
-                        />
-                    </TableCell>
-                    {columns.map((column, i) => (
-                        <TableCell
-                            key={column.key}
-                            align={column.align}
-                            padding={column.disablePadding ? "none" : "default"}
-                        >
-                            <TableSortLabel
-                                hideSortIcon={!sortable || column.disableSorting}
-                                disabled={column.disableSorting}
-                                active={orderBy === i}
-                                direction={orderBy === i ? order : "asc"}
-                                onClick={() => handleOrderBy(i)}
-                            >
-                                {column.label}
-                            </TableSortLabel>
-                        </TableCell>
-                    ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {rows.map(({ key, fields }, index) => {
-                    const labelId = `table-checkbox-${index}`;
-                    return (
-                        <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            onClick={(e) => handleSelect(e, key)}
-                            key={key}
-                            selected={isSelected(key)}
-                        >
+        <>
+            <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
+                <Table
+                    stickyHeader={stickyHeader}
+                >
+                    <TableHead>
+                        <TableRow>
                             <TableCell padding="checkbox">
                                 <Checkbox
-                                    checked={isSelected(key)}
-                                    inputProps={{ "aria-labelledby": labelId }}
+                                    indeterminate={numSelected > 0 && numSelected < rows.length}
+                                    checked={rows.length > 0 && numSelected === rows.length}
+                                    onChange={handleSelectAllClick}
+                                    inputProps={{ "aria-label": "select all desserts" }}
                                 />
                             </TableCell>
-                            {fields.map((field, i) => (
-                                generateTableCellFromField(field, i, labelId)
-
+                            {Object.entries(columns).map(([key, props], i) => (
+                                <TableCell
+                                    key={key}
+                                    align={props.align}
+                                    padding={props.disablePadding ? "none" : "default"}
+                                >
+                                    <TableSortLabel
+                                        hideSortIcon={!sortable || props.disableSorting}
+                                        disabled={props.disableSorting}
+                                        active={orderBy === i}
+                                        direction={orderBy === i ? order : "asc"}
+                                        onClick={() => handleOrderBy(key, i)}
+                                    >
+                                        {props.label}
+                                    </TableSortLabel>
+                                </TableCell>
                             ))}
-                            <TableCell align="right">
-                                <IconButton aria-label="accept">
-                                    <Check />
-                                </IconButton>
-                                <IconButton aria-label="reject">
-                                    <Clear />
-                                </IconButton>
-                                <IconButton aria-label="more actions" edge="end">
-                                    <MoreHoriz />
-                                </IconButton>
-                            </TableCell>
                         </TableRow>
-                    );
-                })}
-            </TableBody>
-        </Table>
+                    </TableHead>
+                    <TableBody>
+                        {rows
+                            .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                            .map((row, index) => {
+                                const { key, fields } = row;
+                                const labelId = `table-checkbox-${index}`;
+                                return (
+                                    <TableRow
+                                        hover
+                                        role="checkbox"
+                                        tabIndex={-1}
+                                        onClick={(e) => handleSelect(e, key)}
+                                        key={key}
+                                        selected={isSelected(key)}
+                                    >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                checked={isSelected(key)}
+                                                inputProps={{ "aria-labelledby": labelId }}
+                                            />
+                                        </TableCell>
+                                        {fields.map((field, i) => (
+                                            generateTableCellFromField(field, i, labelId)
+
+                                        ))}
+                                        {RowActions && <RowActions row={row} index={index}/>}
+
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={rows.length} // TODO change this to have total number of rows, even the ones not fetched yet
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+        </>
     );
 };
 
 SelectableTable.propTypes = {
-    rows: PropTypes.arrayOf(
-        PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            fields: PropTypes.arrayOf(
-                PropTypes.shape({
-                    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.func]).isRequired,
-                    align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
-                }),
-            ).isRequired,
-        })
-    ),
-    columns: PropTypes.arrayOf(
-        PropTypes.shape(
-            {
-                key: PropTypes.string.isRequired,
-                align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
-                disablePadding: PropTypes.bool,
-                label: PropTypes.string.isRequired,
-            },
-        )
-    ),
+    rows: PropTypes.arrayOf(RowPropTypes),
+    columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
     stickyHeader: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),
     orderBy: PropTypes.number,
     handleOrderBy: PropTypes.func,
+    RowActions: PropTypes.elementType,
 };
 
 export default SelectableTable;

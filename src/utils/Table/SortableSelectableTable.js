@@ -2,26 +2,28 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import SelectableTable from "./SelectableTable";
 
+import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
+
 const sortRowFields = (fieldsToReorder, isAscendingMode, sorter) => fieldsToReorder.sort(sorter(isAscendingMode));
 
 
 const SortableSelectableTable = ({
     columns,
     rows: initialRows,
-    stickyHeader,
     sorters,
+    ...props
 }) => {
 
     const [rows, setRows] = useState(initialRows);
     const [order, setOrder] = useState(true); // true means asc, false means desc
     const [orderBy, setOrderBy] = useState(null);
 
-    const handleOrderBy = (columnIdx) => {
+    const handleOrderBy = (columnKey, columnIdx) => {
 
         const fieldsToReorder = rows.map(({ fields }, i) => ({ rowId: i, field: fields[columnIdx].value }));
         const reorderMode = (orderBy === columnIdx) ? !order : true;
 
-        const sortedRows = sortRowFields(fieldsToReorder, reorderMode, sorters[columnIdx]).map(({ rowId }) => rows[rowId]);
+        const sortedRows = sortRowFields(fieldsToReorder, reorderMode, sorters[columnKey]).map(({ rowId }) => rows[rowId]);
         setRows(sortedRows);
 
         setOrder(reorderMode);
@@ -33,39 +35,19 @@ const SortableSelectableTable = ({
             sortable
             columns={columns}
             rows={rows}
-            stickyHeader={stickyHeader}
             order={order ? "asc" : "desc"}
             orderBy={orderBy}
             handleOrderBy={handleOrderBy}
+            {...props}
         />
     );
 };
 
 SortableSelectableTable.propTypes = {
-    rows: PropTypes.arrayOf(
-        PropTypes.shape({
-            key: PropTypes.string.isRequired,
-            fields: PropTypes.arrayOf(PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.shape({
-                    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.func]).isRequired,
-                    align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
-                }),
-            ])).isRequired,
-        })
-    ),
-    columns: PropTypes.arrayOf(
-        PropTypes.shape(
-            {
-                key: PropTypes.string.isRequired,
-                align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
-                disablePadding: PropTypes.bool,
-                label: PropTypes.string.isRequired,
-            },
-        )
-    ),
+    rows: PropTypes.arrayOf(RowPropTypes),
+    columns: PropTypes.objectOf(ColumnPropTypes),
     stickyHeader: PropTypes.bool,
-    sorters: PropTypes.arrayOf(PropTypes.func).isRequired,
+    sorters: PropTypes.objectOf(PropTypes.func).isRequired,
 };
 
 export default SortableSelectableTable;
