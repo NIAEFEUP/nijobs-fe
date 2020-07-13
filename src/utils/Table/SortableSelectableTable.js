@@ -3,18 +3,18 @@ import PropTypes from "prop-types";
 import SelectableTable from "./SelectableTable";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
+import MutableDataTable from "./MutableDataTable";
 
 const sortRowFields = (fieldsToReorder, isAscendingMode, sorter) => fieldsToReorder.sort(sorter(isAscendingMode));
 
 
-const SortableSelectableTable = ({
+export const SortableSelectableTable = ({
     columns,
-    rows: initialRows,
+    rows,
+    setRows,
     sorters,
     ...props
 }) => {
-
-    const [rows, setRows] = useState(initialRows);
     const [order, setOrder] = useState(true); // true means asc, false means desc
     const [orderBy, setOrderBy] = useState(null);
 
@@ -35,6 +35,7 @@ const SortableSelectableTable = ({
             sortable
             columns={columns}
             rows={rows}
+            setRows={setRows}
             order={order ? "asc" : "desc"}
             orderBy={orderBy}
             handleOrderBy={handleOrderBy}
@@ -45,9 +46,14 @@ const SortableSelectableTable = ({
 
 SortableSelectableTable.propTypes = {
     rows: PropTypes.arrayOf(RowPropTypes),
+    setRows: PropTypes.func.isRequired,
     columns: PropTypes.objectOf(ColumnPropTypes),
     stickyHeader: PropTypes.bool,
     sorters: PropTypes.objectOf(PropTypes.func).isRequired,
 };
 
-export default SortableSelectableTable;
+const UncontrolledSortableSelectableTable = (props) => (
+    <MutableDataTable tableType={SortableSelectableTable} {...props} />
+);
+
+export default UncontrolledSortableSelectableTable;

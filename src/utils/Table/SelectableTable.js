@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
+import TableToolbar from "./TableToolbar";
 
 const generateTableCellFromField = (field, i, labelId) => {
 
@@ -33,9 +34,13 @@ const generateTableCellFromField = (field, i, labelId) => {
 };
 
 const SelectableTable = ({
+    title,
     columns,
     rows,
     // setSelectedItems,
+    filterable = false,
+    filters,
+    setActiveFilters,
     sortable = false,
     stickyHeader,
     order,
@@ -54,13 +59,19 @@ const SelectableTable = ({
         [selected],
     );
 
+    const resetSelected = () => {
+        setSelected({});
+    };
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        resetSelected();
     };
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
+        resetSelected();
     };
 
     const handleSelect = (event, name) => {
@@ -76,20 +87,29 @@ const SelectableTable = ({
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelected = {};
-            rows.forEach(({ key }) => {
-                newSelected[key] = true;
-            });
+            const newSelected = { ...selected };
+            rows
+                .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                .forEach(({ key }) => {
+                    newSelected[key] = true;
+                });
             setSelected(newSelected);
             return;
         }
-        setSelected({});
+        resetSelected();
     };
 
     const numSelected = Object.keys(selected).length;
 
     return (
         <>
+            <TableToolbar
+                title={title || ""}
+                numSelected={numSelected}
+                filterable={filterable}
+                filters={filters}
+                setActiveFilters={setActiveFilters}
+            />
             <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
                 <Table
                     stickyHeader={stickyHeader}
@@ -98,8 +118,8 @@ const SelectableTable = ({
                         <TableRow>
                             <TableCell padding="checkbox">
                                 <Checkbox
-                                    indeterminate={numSelected > 0 && numSelected < rows.length}
-                                    checked={rows.length > 0 && numSelected === rows.length}
+                                    indeterminate={numSelected > 0 && numSelected < rowsPerPage}
+                                    checked={rows.length > 0 && numSelected === rowsPerPage}
                                     onChange={handleSelectAllClick}
                                     inputProps={{ "aria-label": "select all desserts" }}
                                 />
@@ -112,7 +132,7 @@ const SelectableTable = ({
                                 >
                                     <TableSortLabel
                                         hideSortIcon={!sortable || props.disableSorting}
-                                        disabled={props.disableSorting}
+                                        disabled={!sortable || props.disableSorting}
                                         active={orderBy === i}
                                         direction={orderBy === i ? order : "asc"}
                                         onClick={() => handleOrderBy(key, i)}
@@ -170,6 +190,7 @@ const SelectableTable = ({
 };
 
 SelectableTable.propTypes = {
+    title: PropTypes.string,
     rows: PropTypes.arrayOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
@@ -178,6 +199,15 @@ SelectableTable.propTypes = {
     orderBy: PropTypes.number,
     handleOrderBy: PropTypes.func,
     RowActions: PropTypes.elementType,
+    rowsPerPage: PropTypes.number,
+    filterable: PropTypes.bool,
+    filters: PropTypes.arrayOf(
+        PropTypes.shape({
+            render: PropTypes.elementType.isRequired,
+            id: PropTypes.string.isRequired,
+        })
+    ),
+    setActiveFilters: PropTypes.func,
 };
 
 export default SelectableTable;
