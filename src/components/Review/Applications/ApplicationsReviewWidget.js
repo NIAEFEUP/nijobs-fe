@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     Dialog,
     DialogTitle,
     DialogContent,
     TableCell,
     IconButton,
-    FormControlLabel,
-    Checkbox,
-    Switch,
 } from "@material-ui/core";
 import { Check, Clear, MoreHoriz } from "@material-ui/icons";
 
 import { RowPropTypes } from "../../../utils/Table/PropTypes";
 import FilterableTable from "../../../utils/Table/FilterableTable";
 import { SortableSelectableTable } from "../../../utils/Table/SortableSelectableTable";
+import { getFieldValue } from "../../../utils/Table/utils";
+import SelectFilter from "../../../utils/Table/Filters/SelectFilter";
+import TextSearchFilter from "../../../utils/Table/Filters/TextSearchFilter";
 
 const demoRows = [
     { key: "1nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: "REJECTED" }] },
@@ -45,11 +45,6 @@ const columns = {
     actions: { align: "right", disablePadding: false, label: "Actions", disableSorting: true },
 };
 
-const getFieldValue = (row, column) => {
-    const colIdx = Object.keys(columns).indexOf(column);
-
-    return row.fields[colIdx].value;
-};
 
 const genericSorter = (isAscendingMode) => (a, b) => {
     if (a.field < b.field) return isAscendingMode ? -1 : 1;
@@ -63,125 +58,46 @@ const sorters = {
     status: genericSorter,
 };
 
-const TestFilter = React.forwardRef(({ setActiveFilters, id }, ref) => {
-    // TODO use const enum of status
-    const [filteredStatus, setFilteredStatus] = useState({});
 
+const StatusFilter = React.forwardRef((props, ref) => (
+    <SelectFilter
+        label={"Status"}
+        id={"status-filter"}
+        options={["APPROVED", "PENDING", "REJECTED"]}
+        column={"status"}
+        columns={columns}
+        ref={ref}
+        {...props}
+    />
+));
 
-    const handleChange = (event) => {
-        if (event.target.checked) {
-            setFilteredStatus((filteredStatus) => ({ ...filteredStatus, [event.target.name]: event.target.checked }));
+StatusFilter.displayName = "StatusFilter";
 
-        } else {
-            // eslint-disable-next-line no-unused-vars
-            const {  [event.target.name]: keyToBeRemoved, ...newObj } = filteredStatus;
-            setFilteredStatus(newObj);
+const ValueFilter = React.forwardRef((props, ref) => (
+    <TextSearchFilter
+        label={"Company Name"}
+        id={"companyName-filter"}
+        column={"name"}
+        columns={columns}
+        ref={ref}
+        {...props}
+    />
+));
 
-        }
+ValueFilter.displayName = "StatusFilter";
 
-    };
-    useEffect(() => {
-        if (Object.keys(filteredStatus).length > 0) {
-            setActiveFilters((filters) => ({
-                ...filters,
-                [id]: (rows) => rows.filter((row) => Object.keys(filteredStatus).includes(getFieldValue(row, "status"))),
-            }));
-        } else {
-            setActiveFilters((filters) => {
-                // eslint-disable-next-line no-unused-vars
-                const { [id]: keyToBeRemoved, ...newFilters } = filters;
-                return newFilters;
-            });
-        }
-    }, [filteredStatus, id, setActiveFilters]);
-
-    return (
-        <div ref={ref}>
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        checked={filteredStatus.APPROVED || false}
-                        onChange={handleChange}
-                        name="APPROVED"
-                        color="primary"
-                    />
-                }
-                label="Approved"
-            />
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        checked={filteredStatus.PENDING || false}
-                        onChange={handleChange}
-                        name="PENDING"
-                        color="primary"
-                    />
-                }
-                label="Pending"
-            />
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        checked={filteredStatus.REJECTED || false}
-                        onChange={handleChange}
-                        name="REJECTED"
-                        color="primary"
-                    />
-                }
-                label="Rejected"
-            />
-        </div>
-    );
-});
-
-TestFilter.displayName = "TestFilter";
-
-const BlipFilter = React.forwardRef(({ setActiveFilters, id }, ref) => {
-    // TODO use const enum of status
-    const [active, setActive] = useState(false);
-
-
-    const handleChange = () => {
-
-        setActive((n) => !n);
-
-    };
-
-    useEffect(() => {
-        if (active) {
-            setActiveFilters((filters) => ({
-                ...filters,
-                [id]: (rows) => rows.filter((row) => getFieldValue(row, "name") === "BLIP"),
-            }));
-        } else {
-            setActiveFilters((filters) => {
-                // eslint-disable-next-line no-unused-vars
-                const { [id]: keyToBeRemoved, ...newFilters } = filters;
-                return newFilters;
-            });
-
-        }
-    }, [active, id, setActiveFilters]);
-
-    return (
-        <FormControlLabel
-            ref={ref}
-            control={<Switch checked={active} onChange={handleChange} />}
-            label="Blip only"
-        />
-    );
-});
-BlipFilter.displayName = "BlipFilter";
 
 const filters = [
-    { id: "blip-only", render: BlipFilter },
-    { id: "test", render: TestFilter },
+    // { id: "blip-only", render: BlipFilter },
+    // { id: "test", render: TestFilter },
+    { id: "status-filter", render: StatusFilter },
+    { id: "value-filter", render: ValueFilter },
 ];
 
 
 const RowActions = ({ row }) => (
     <TableCell align="right">
-        {getFieldValue(row, "status") === "PENDING" &&
+        {getFieldValue(row, "status", columns) === "PENDING" &&
             <>
                 <IconButton aria-label="accept">
                     <Check />

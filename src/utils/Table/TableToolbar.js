@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Toolbar, Typography, Tooltip, IconButton, Menu } from "@material-ui/core";
-import { Check, Clear, MoreHoriz, FilterList } from "@material-ui/icons";
+import { Check, Clear, MoreHoriz, Tune } from "@material-ui/icons";
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -23,6 +23,18 @@ const useToolbarStyles = makeStyles((theme) => ({
           },
     title: {
         flex: "1 1 100%",
+    },
+    filterUI: {
+        width: "100%",
+
+    },
+    filterMenu: {
+        padding: theme.spacing(2, 4, 4, 4),
+        maxHeight: "50vh",
+        width: "300px",
+        "& $filterUI:not(:first-child)": {
+            marginTop: theme.spacing(2),
+        },
     },
 }));
 
@@ -76,20 +88,39 @@ const TableToolbar = ({ numSelected, title, filterable, filters, setActiveFilter
                             aria-controls="filter-menu"
                             onClick={handleFilterButtonClick}
                         >
-                            <FilterList />
+                            <Tune />
                         </IconButton>
                     </Tooltip>
                     <Menu
                         id="filter-menu"
+                        classes={{
+                            paper: classes.filterMenu,
+                        }}
                         anchorEl={filterMenuAnchorEl}
                         keepMounted
                         open={Boolean(filterMenuAnchorEl)}
                         onClose={handleFilterMenuClose}
+                        getContentAnchorEl={null}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "right",
+                        }}
                     >
                         {
                             filters.map((filter) => {
                                 const FilterUI = filter.render;
-                                return <FilterUI id={filter.id} key={filter.id} setActiveFilters={setActiveFilters} />;
+                                return (
+                                    <FilterUI
+                                        className={classes.filterUI}
+                                        id={filter.id}
+                                        key={filter.id}
+                                        setActiveFilters={setActiveFilters}
+                                    />
+                                );
                             })
                         }
                     </Menu>

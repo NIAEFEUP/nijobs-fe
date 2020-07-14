@@ -18,8 +18,7 @@ const FilterableTable = ({
         const newRows = Object.values(activeFilters).reduce((updatedRows, filter) => filter(updatedRows), initialRows);
         setRows(newRows);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeFilters]);
+    }, [activeFilters, initialRows, setRows]);
     return (
         <Table
             rows={rows}
