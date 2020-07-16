@@ -3,8 +3,10 @@ import PropTypes from "prop-types";
 
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import { Toolbar, Typography, Tooltip, IconButton, Menu } from "@material-ui/core";
-import { Check, Clear, MoreHoriz, Tune } from "@material-ui/icons";
+import { Toolbar, Typography, Tooltip, IconButton } from "@material-ui/core";
+import { Tune } from "@material-ui/icons";
+import FilterMenu from "./FilterMenu";
+import { RowPropTypes } from "./PropTypes";
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -38,7 +40,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const TableToolbar = ({ numSelected, title, filterable, filters, setActiveFilters }) => {
+const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, setActiveFilters, MultiRowActions }) => {
     const classes = useToolbarStyles();
 
     const [filterMenuAnchorEl, setFilterMenuAnchorEl] = React.useState(null);
@@ -67,63 +69,27 @@ const TableToolbar = ({ numSelected, title, filterable, filters, setActiveFilter
                 </Typography>
             )}
 
-            {numSelected > 0 ? (
-                <>
-                    <IconButton aria-label="accept">
-                        <Check />
-                    </IconButton>
-                    <IconButton aria-label="reject">
-                        <Clear />
-                    </IconButton>
-                    <IconButton aria-label="more actions">
-                        <MoreHoriz />
-                    </IconButton>
-                </>
+            {numSelected > 0 && MultiRowActions ? (
+                <MultiRowActions rows={selectedRows}/>
             ) : filterable && (
                 <>
-                    <Tooltip title="Filter list">
+                    <Tooltip title="Filter">
                         <IconButton
-                            aria-label="filter list"
+                            aria-label="Filter list"
                             aria-haspopup="true"
                             aria-controls="filter-menu"
                             onClick={handleFilterButtonClick}
+                            color="secondary"
                         >
                             <Tune />
                         </IconButton>
                     </Tooltip>
-                    <Menu
-                        id="filter-menu"
-                        classes={{
-                            paper: classes.filterMenu,
-                        }}
+                    <FilterMenu
                         anchorEl={filterMenuAnchorEl}
-                        keepMounted
-                        open={Boolean(filterMenuAnchorEl)}
                         onClose={handleFilterMenuClose}
-                        getContentAnchorEl={null}
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
-                        }}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                        }}
-                    >
-                        {
-                            filters.map((filter) => {
-                                const FilterUI = filter.render;
-                                return (
-                                    <FilterUI
-                                        className={classes.filterUI}
-                                        id={filter.id}
-                                        key={filter.id}
-                                        setActiveFilters={setActiveFilters}
-                                    />
-                                );
-                            })
-                        }
-                    </Menu>
+                        filters={filters}
+                        setActiveFilters={setActiveFilters}
+                    />
 
                 </>
             )}
@@ -142,6 +108,8 @@ TableToolbar.propTypes = {
         })
     ),
     setActiveFilters: PropTypes.func,
+    selectedRows: PropTypes.arrayOf(RowPropTypes),
+    MultiRowActions: PropTypes.elementType,
 };
 
 export default TableToolbar;

@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
     Dialog,
     DialogTitle,
     DialogContent,
     TableCell,
     IconButton,
+    Paper,
 } from "@material-ui/core";
 import { Check, Clear, MoreHoriz } from "@material-ui/icons";
 
@@ -117,16 +119,36 @@ RowActions.propTypes = {
     row: RowPropTypes,
 };
 
+
+const MultiRowActions = ({ rows }) => {
+    const handleAction = () => {
+        console.log("This will affect rows", rows.map((row) => row.key));
+    };
+    return ( // TODO it should check if it can approve all/reject (mby some of them already approved or rej)
+        <>
+            <IconButton aria-label="accept" onClick={handleAction}>
+                <Check />
+            </IconButton>
+            <IconButton aria-label="reject" onClick={handleAction}>
+                <Clear />
+            </IconButton>
+            <IconButton aria-label="more actions" onClick={handleAction}>
+                <MoreHoriz />
+            </IconButton>
+        </>
+    );
+};
+
+MultiRowActions.propTypes = {
+    rows: PropTypes.arrayOf(RowPropTypes),
+};
 const ApplicationsReviewWidget = () => (
-    <Dialog
-        open
-        fullScreen
-    >
+    <Dialog open fullScreen>
         <DialogTitle>
             Applications Review
         </DialogTitle>
         <DialogContent>
-            <div style={{ width: "60%" }}>
+            <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
                 <FilterableTable
                     title="Applications"
                     tableComponent={SortableSelectableTable}
@@ -135,10 +157,11 @@ const ApplicationsReviewWidget = () => (
                     sorters={sorters}
                     filters={filters}
                     RowActions={RowActions}
+                    MultiRowActions={MultiRowActions}
                     rowsPerPage={5}
                     stickyHeader
                 />
-            </div>
+            </Paper>
         </DialogContent>
     </Dialog>
 );

@@ -11,10 +11,30 @@ import {
     TablePagination,
     TableContainer,
     Paper,
+    makeStyles,
 } from "@material-ui/core";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 import TableToolbar from "./TableToolbar";
+
+const useStyles = makeStyles((theme) => ({
+    columnLabel: {
+        color: "white",
+        // eslint-disable-next-line max-len
+        "&:active, &:hover, &.MuiTableSortLabel-active, &.MuiTableSortLabel-active.MuiTableSortLabel-root.MuiTableSortLabel-active .MuiTableSortLabel-icon": {
+            color: "white",
+        },
+    },
+    checkbox: {
+        color: "white",
+        "&:checked": {
+            color: "white",
+        },
+    },
+    headRow: {
+        backgroundColor: theme.palette.primary.main,
+    },
+}));
 
 const generateTableCellFromField = (field, i, labelId) => {
 
@@ -47,6 +67,7 @@ const SelectableTable = ({
     orderBy,
     handleOrderBy,
     RowActions,
+    MultiRowActions,
     rowsPerPage: initialRowsPerPage = 10,
 }) => {
     const [selected, setSelected] = useState({});
@@ -55,7 +76,7 @@ const SelectableTable = ({
 
     const isSelected = useCallback(
         // eslint-disable-next-line no-prototype-builtins
-        (row) => selected.hasOwnProperty(row),
+        (rowKey) => selected.hasOwnProperty(rowKey),
         [selected],
     );
 
@@ -100,28 +121,36 @@ const SelectableTable = ({
     };
 
     const numSelected = Object.keys(selected).length;
+    const classes = useStyles();
 
     return (
         <>
             <TableToolbar
+                selectedRows={rows.filter((r) => isSelected(r.key))}
                 title={title || ""}
                 numSelected={numSelected}
                 filterable={filterable}
                 filters={filters}
                 setActiveFilters={setActiveFilters}
+                MultiRowActions={MultiRowActions}
             />
             <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
                 <Table
                     stickyHeader={stickyHeader}
                 >
                     <TableHead>
-                        <TableRow>
-                            <TableCell padding="checkbox">
+                        <TableRow >
+                            <TableCell
+                                padding="checkbox"
+                                classes={{ head: classes.headRow }}
+                            >
                                 <Checkbox
                                     indeterminate={numSelected > 0 && numSelected < rowsPerPage}
                                     checked={rows.length > 0 && numSelected === rowsPerPage}
                                     onChange={handleSelectAllClick}
-                                    inputProps={{ "aria-label": "select all desserts" }}
+                                    inputProps={{ "aria-label": "select all applications on current page" }}
+                                    color="default"
+                                    classes={{ root: classes.checkbox }}
                                 />
                             </TableCell>
                             {Object.entries(columns).map(([key, props], i) => (
@@ -129,6 +158,10 @@ const SelectableTable = ({
                                     key={key}
                                     align={props.align}
                                     padding={props.disablePadding ? "none" : "default"}
+                                    classes={{
+                                        head: classes.headRow,
+                                    }}
+                                    className={classes.columnLabel}
                                 >
                                     <TableSortLabel
                                         hideSortIcon={!sortable || props.disableSorting}
@@ -136,6 +169,7 @@ const SelectableTable = ({
                                         active={orderBy === i}
                                         direction={orderBy === i ? order : "asc"}
                                         onClick={() => handleOrderBy(key, i)}
+                                        classes={{ root: classes.columnLabel }}
                                     >
                                         {props.label}
                                     </TableSortLabel>
@@ -168,7 +202,7 @@ const SelectableTable = ({
                                             generateTableCellFromField(field, i, labelId)
 
                                         ))}
-                                        {RowActions && <RowActions row={row} index={index}/>}
+                                        {RowActions && <RowActions row={row}/>}
 
                                     </TableRow>
                                 );
@@ -184,6 +218,8 @@ const SelectableTable = ({
                 page={page}
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
+                backIconButtonProps={{ color: "secondary" }}
+                nextIconButtonProps={{ color: "secondary" }}
             />
         </>
     );
@@ -199,6 +235,7 @@ SelectableTable.propTypes = {
     orderBy: PropTypes.number,
     handleOrderBy: PropTypes.func,
     RowActions: PropTypes.elementType,
+    MultiRowActions: PropTypes.elementType,
     rowsPerPage: PropTypes.number,
     filterable: PropTypes.bool,
     filters: PropTypes.arrayOf(
