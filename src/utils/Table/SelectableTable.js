@@ -2,56 +2,15 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
     Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableSortLabel,
-    TableBody,
-    Checkbox,
     TablePagination,
     TableContainer,
     Paper,
-    makeStyles,
 } from "@material-ui/core";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 import TableToolbar from "./TableToolbar";
-
-const useStyles = makeStyles((theme) => ({
-    columnLabel: {
-        color: "white",
-        // eslint-disable-next-line max-len
-        "&:active, &:hover, &.MuiTableSortLabel-active, &.MuiTableSortLabel-active.MuiTableSortLabel-root.MuiTableSortLabel-active .MuiTableSortLabel-icon": {
-            color: "white",
-        },
-    },
-    checkbox: {
-        color: "white",
-        "&:checked": {
-            color: "white",
-        },
-    },
-    headRow: {
-        backgroundColor: theme.palette.primary.main,
-    },
-}));
-
-const generateTableCellFromField = (field, i, labelId) => {
-
-    if (typeof field.value === "function") {
-        return field.value();
-    } else {
-        return (
-            <TableCell
-                key={field.value}
-                id={i === 0 ? labelId : undefined}
-                align={field.align || "right"}
-            >
-                {field.value}
-            </TableCell>
-        );
-    }
-};
+import TableHeader from "./TableHeader";
+import TableContent from "./TableContent";
 
 const SelectableTable = ({
     title,
@@ -74,7 +33,7 @@ const SelectableTable = ({
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
-    const isSelected = useCallback(
+    const isRowSelected = useCallback(
         // eslint-disable-next-line no-prototype-builtins
         (rowKey) => selected.hasOwnProperty(rowKey),
         [selected],
@@ -97,7 +56,7 @@ const SelectableTable = ({
 
     const handleSelect = (event, name) => {
 
-        if (isSelected(name)) {
+        if (isRowSelected(name)) {
             // eslint-disable-next-line no-unused-vars
             const { [name]: keyToDelete, ...newSelected } = selected;
             setSelected(newSelected);
@@ -121,12 +80,11 @@ const SelectableTable = ({
     };
 
     const numSelected = Object.keys(selected).length;
-    const classes = useStyles();
 
     return (
         <>
             <TableToolbar
-                selectedRows={rows.filter((r) => isSelected(r.key))}
+                selectedRows={rows.filter((r) => isRowSelected(r.key))}
                 title={title || ""}
                 numSelected={numSelected}
                 filterable={filterable}
@@ -135,79 +93,23 @@ const SelectableTable = ({
                 MultiRowActions={MultiRowActions}
             />
             <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
-                <Table
-                    stickyHeader={stickyHeader}
-                >
-                    <TableHead>
-                        <TableRow >
-                            <TableCell
-                                padding="checkbox"
-                                classes={{ head: classes.headRow }}
-                            >
-                                <Checkbox
-                                    indeterminate={numSelected > 0 && numSelected < rowsPerPage}
-                                    checked={rows.length > 0 && numSelected === rowsPerPage}
-                                    onChange={handleSelectAllClick}
-                                    inputProps={{ "aria-label": "select all applications on current page" }}
-                                    color="default"
-                                    classes={{ root: classes.checkbox }}
-                                />
-                            </TableCell>
-                            {Object.entries(columns).map(([key, props], i) => (
-                                <TableCell
-                                    key={key}
-                                    align={props.align}
-                                    padding={props.disablePadding ? "none" : "default"}
-                                    classes={{
-                                        head: classes.headRow,
-                                    }}
-                                    className={classes.columnLabel}
-                                >
-                                    <TableSortLabel
-                                        hideSortIcon={!sortable || props.disableSorting}
-                                        disabled={!sortable || props.disableSorting}
-                                        active={orderBy === i}
-                                        direction={orderBy === i ? order : "asc"}
-                                        onClick={() => handleOrderBy(key, i)}
-                                        classes={{ root: classes.columnLabel }}
-                                    >
-                                        {props.label}
-                                    </TableSortLabel>
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows
-                            .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
-                            .map((row, index) => {
-                                const { key, fields } = row;
-                                const labelId = `table-checkbox-${index}`;
-                                return (
-                                    <TableRow
-                                        hover
-                                        role="checkbox"
-                                        tabIndex={-1}
-                                        onClick={(e) => handleSelect(e, key)}
-                                        key={key}
-                                        selected={isSelected(key)}
-                                    >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                checked={isSelected(key)}
-                                                inputProps={{ "aria-labelledby": labelId }}
-                                            />
-                                        </TableCell>
-                                        {fields.map((field, i) => (
-                                            generateTableCellFromField(field, i, labelId)
-
-                                        ))}
-                                        {RowActions && <RowActions row={row}/>}
-
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
+                <Table stickyHeader={stickyHeader}>
+                    <TableHeader
+                        columns={columns}
+                        handleSelectAllClick={handleSelectAllClick}
+                        checkboxIndeterminate={numSelected > 0 && numSelected < rowsPerPage}
+                        allChecked={rows.length > 0 && numSelected === rowsPerPage}
+                        sortable={sortable}
+                        order={order}
+                        orderBy={orderBy}
+                        handleOrderBy={handleOrderBy}
+                    />
+                    <TableContent
+                        rows={rows.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)}
+                        handleSelect={handleSelect}
+                        isRowSelected={isRowSelected}
+                        RowActions={RowActions}
+                    />
                 </Table>
             </TableContainer>
             <TablePagination
