@@ -4,7 +4,7 @@ import { TextField } from "@material-ui/core";
 import { getFieldValue } from "../utils";
 import { ColumnPropTypes } from "../PropTypes";
 
-const TextSearchFilter = React.forwardRef(({ className, label, setActiveFilters, id, column, columns }, ref) => {
+const TextSearchFilter = React.forwardRef(({ className, label, setActiveFilters, id, column, columns, placeholder }, ref) => {
 
     const [query, setQuery] = useState("");
 
@@ -36,6 +36,7 @@ const TextSearchFilter = React.forwardRef(({ className, label, setActiveFilters,
             id={id}
             value={query}
             onChange={handleChange}
+            placeholder={placeholder}
             InputLabelProps={{
                 style: { left: "initial", top: "initial" },
             }}

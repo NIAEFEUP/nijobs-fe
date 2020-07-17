@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import { Toolbar, Typography, Tooltip, IconButton } from "@material-ui/core";
+import { Toolbar, Typography, Tooltip, IconButton, Badge } from "@material-ui/core";
 import { Tune } from "@material-ui/icons";
 import FilterMenu from "./FilterMenu";
 import { RowPropTypes } from "./PropTypes";
@@ -40,7 +40,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, setActiveFilters, MultiRowActions }) => {
+const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, hasActiveFilters, setActiveFilters, MultiRowActions }) => {
     const classes = useToolbarStyles();
 
     const [filterMenuAnchorEl, setFilterMenuAnchorEl] = React.useState(null);
@@ -81,7 +81,9 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, s
                             onClick={handleFilterButtonClick}
                             color="secondary"
                         >
-                            <Tune />
+                            <Badge color="primary" variant="dot" invisible={!hasActiveFilters}>
+                                <Tune />
+                            </Badge>
                         </IconButton>
                     </Tooltip>
                     <FilterMenu
@@ -101,6 +103,7 @@ TableToolbar.propTypes = {
     title: PropTypes.string.isRequired,
     numSelected: PropTypes.number.isRequired,
     filterable: PropTypes.bool,
+    hasActiveFilters: PropTypes.bool,
     filters: PropTypes.arrayOf(
         PropTypes.shape({
             render: PropTypes.elementType.isRequired,

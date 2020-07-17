@@ -17,27 +17,37 @@ import { getFieldValue } from "../../../utils/Table/utils";
 import SelectFilter from "../../../utils/Table/Filters/SelectFilter";
 import TextSearchFilter from "../../../utils/Table/Filters/TextSearchFilter";
 
+const ApplicationStatusLabel = Object.freeze({
+    APPROVED: "Approved",
+    PENDING: "Pending",
+    REJECTED: "Rejected",
+});
+
 const demoRows = [
-    { key: "1nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: "REJECTED" }] },
-    { key: "1fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: "PENDING" }] },
-    { key: "1cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: "PENDING" }] },
-    { key: "1blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: "APPROVED" }] },
-    { key: "1kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: "PENDING" }] },
-    { key: "2fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: "PENDING" }] },
-    { key: "2cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: "PENDING" }] },
-    { key: "2nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: "REJECTED" }] },
-    { key: "2blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: "PENDING" }] },
-    { key: "2kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: "PENDING" }] },
-    { key: "3fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: "PENDING" }] },
-    { key: "3kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: "PENDING" }] },
-    { key: "3cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: "PENDING" }] },
-    { key: "3nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: "REJECTED" }] },
-    { key: "3cs2", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: "PENDING" }] },
-    { key: "4nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: "REJECTED" }] },
-    { key: "4blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: "PENDING" }] },
-    { key: "4fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: "PENDING" }] },
-    { key: "4blp2", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: "PENDING" }] },
-    { key: "4kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: "PENDING" }] },
+    { key: "1nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
+    { key: "1fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: ApplicationStatusLabel.PENDING }] },
+    // eslint-disable-next-line max-len
+    { key: "1cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "1blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.APPROVED }] },
+    { key: "1kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "2fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: ApplicationStatusLabel.PENDING }] },
+    // eslint-disable-next-line max-len
+    { key: "2cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "2nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
+    { key: "2blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "2kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "3fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "3kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    // eslint-disable-next-line max-len
+    { key: "3cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "3nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
+    // eslint-disable-next-line max-len
+    { key: "3cs2", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "4nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
+    { key: "4blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "4fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "4blp2", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "4kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
 ];
 
 const columns = {
@@ -65,7 +75,7 @@ const StatusFilter = React.forwardRef((props, ref) => (
     <SelectFilter
         label={"Status"}
         id={"status-filter"}
-        options={["APPROVED", "PENDING", "REJECTED"]}
+        options={Object.values(ApplicationStatusLabel)}
         column={"status"}
         columns={columns}
         ref={ref}
@@ -78,6 +88,7 @@ StatusFilter.displayName = "StatusFilter";
 const ValueFilter = React.forwardRef((props, ref) => (
     <TextSearchFilter
         label={"Company Name"}
+        placeholder="Search"
         id={"companyName-filter"}
         column={"name"}
         columns={columns}
@@ -90,8 +101,6 @@ ValueFilter.displayName = "StatusFilter";
 
 
 const filters = [
-    // { id: "blip-only", render: BlipFilter },
-    // { id: "test", render: TestFilter },
     { id: "status-filter", render: StatusFilter },
     { id: "value-filter", render: ValueFilter },
 ];
@@ -99,7 +108,7 @@ const filters = [
 
 const RowActions = ({ row }) => (
     <TableCell align="right">
-        {getFieldValue(row, "status", columns) === "PENDING" &&
+        {getFieldValue(row, "status", columns) === ApplicationStatusLabel.PENDING &&
             <>
                 <IconButton aria-label="accept">
                     <Check />

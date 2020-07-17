@@ -25,6 +25,7 @@ const FilterableTable = ({
             setRows={setRows}
             filterable
             setActiveFilters={setActiveFilters}
+            hasActiveFilters={Object.keys(activeFilters).length > 0}
             {...props}
         />
     );

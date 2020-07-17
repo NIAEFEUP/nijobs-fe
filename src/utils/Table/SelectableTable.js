@@ -19,6 +19,7 @@ const SelectableTable = ({
     // setSelectedItems,
     filterable = false,
     filters,
+    hasActiveFilters = false,
     setActiveFilters,
     sortable = false,
     stickyHeader,
@@ -89,6 +90,7 @@ const SelectableTable = ({
                 numSelected={numSelected}
                 filterable={filterable}
                 filters={filters}
+                hasActiveFilters={hasActiveFilters}
                 setActiveFilters={setActiveFilters}
                 MultiRowActions={MultiRowActions}
             />
