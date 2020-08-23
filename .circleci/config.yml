@@ -62,7 +62,9 @@ jobs:
             - *attach_workspace
             - run:
                 name: Run tests
-                command: CI=true npm test
+                command: CI=true npm run test-ci
+                environment: 
+                    NODE_OPTIONS: --max_old_space_size=4096
 workflows:
     version: 2
     build_and_test:
