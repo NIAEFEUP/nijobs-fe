@@ -1,4 +1,4 @@
-import { notificationTypes } from "../actions/notificationActions";
+import { NotificationTypes } from "../actions/notificationActions";
 
 const initialState = {
     notifications: [],
@@ -6,7 +6,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case notificationTypes.ADD_SNACKBAR:
+        case NotificationTypes.ADD_SNACKBAR:
             return {
                 ...state,
                 notifications: [
@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
                     },
                 ],
             };
-        case notificationTypes.REMOVE_SNACKBAR:
+        case NotificationTypes.REMOVE_SNACKBAR:
             return {
                 ...state,
                 notifications: state.notifications.filter(

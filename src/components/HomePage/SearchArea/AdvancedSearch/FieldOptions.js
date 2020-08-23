@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 export default Object.freeze([
     { label: "Back-End", value: "BACK_END" },
     { label: "Front-End", value: "FRONT_END" },

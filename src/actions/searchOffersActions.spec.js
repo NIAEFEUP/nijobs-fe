@@ -1,5 +1,5 @@
 import {
-    offerSearchTypes,
+    OfferSearchTypes,
     setLoadingOffers,
     setSearchValue,
     setSearchOffers,
@@ -15,11 +15,11 @@ describe("Search Offers actions", () => {
     it("should return Loading Offers action", () => {
 
         const expectedActionLoading = {
-            type: offerSearchTypes.SET_OFFERS_LOADING,
+            type: OfferSearchTypes.SET_OFFERS_LOADING,
             loading: true,
         };
         const expectedActionNotLoading = {
-            type: offerSearchTypes.SET_OFFERS_LOADING,
+            type: OfferSearchTypes.SET_OFFERS_LOADING,
             loading: false,
         };
 
@@ -31,7 +31,7 @@ describe("Search Offers actions", () => {
 
         const offers = ["offer1", "offer2"];
         const expectedAction = {
-            type: offerSearchTypes.SET_OFFERS_SEARCH_RESULT,
+            type: OfferSearchTypes.SET_OFFERS_SEARCH_RESULT,
             offers,
         };
 
@@ -42,7 +42,7 @@ describe("Search Offers actions", () => {
 
         const value = "search_val";
         const expectedAction = {
-            type: offerSearchTypes.SET_SEARCH_VALUE,
+            type: OfferSearchTypes.SET_SEARCH_VALUE,
             value,
         };
 
@@ -53,7 +53,7 @@ describe("Search Offers actions", () => {
 
         const jobDuration = [1, 2];
         const expectedAction = {
-            type: offerSearchTypes.SET_JOB_DURATION,
+            type: OfferSearchTypes.SET_JOB_DURATION,
             jobDuration,
         };
 
@@ -64,7 +64,7 @@ describe("Search Offers actions", () => {
 
         const jobType = "JOB_TYPE";
         const expectedAction = {
-            type: offerSearchTypes.SET_JOB_TYPE,
+            type: OfferSearchTypes.SET_JOB_TYPE,
             jobType,
         };
 
@@ -75,7 +75,7 @@ describe("Search Offers actions", () => {
 
         const error = "error";
         const expectedAction = {
-            type: offerSearchTypes.SET_SEARCH_OFFERS_ERROR,
+            type: OfferSearchTypes.SET_SEARCH_OFFERS_ERROR,
             error,
         };
 
@@ -87,11 +87,11 @@ describe("Search Offers actions", () => {
         const dispatch = jest.fn();
 
         const setJobTypeAction = {
-            type: offerSearchTypes.SET_JOB_TYPE,
+            type: OfferSearchTypes.SET_JOB_TYPE,
             jobType: INITIAL_JOB_TYPE,
         };
         const setJobDurationAction = {
-            type: offerSearchTypes.SET_JOB_DURATION,
+            type: OfferSearchTypes.SET_JOB_DURATION,
             jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
         };
 

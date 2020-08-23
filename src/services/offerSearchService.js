@@ -1,9 +1,8 @@
-import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "./searchOffersActions";
+import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
-// REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
-// eslint-disable-next-line no-unused-vars
-const API_HOSTNAME = "CHANGE ME WHEN WE KNOW BETTER";
+
+// import { API_HOSTNAME } from "../config";
 
 // TODO remove this
 const redditLogo = require("./reddit-logo.png");
@@ -68,7 +67,7 @@ export const searchOffers = (filters) => async (dispatch) => {
     dispatch(setLoadingOffers(true));
 
     try {
-        // const res = await fetch(`${API_HOSTNAME}/api/offers?${parseSearchFiltersToURL(filters)}`, {
+        // const res = await fetch(`${API_HOSTNAME}/offers?${parseSearchFiltersToURL(filters)}`, {
         //     method: "GET",
         // });
         // if (!res.ok) {
@@ -81,7 +80,7 @@ export const searchOffers = (filters) => async (dispatch) => {
         //     return
         // }
         // const json = await res.json();
-        // dispatch(fetchOffersSearch(json.offers.map((offerData) => new Offer(offerData))));
+        // dispatch(setSearchOffers(json.offers.map((offerData) => new Offer(offerData))));
 
         await sleep(2000);
 

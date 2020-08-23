@@ -10,7 +10,9 @@
         "jsdom": true,
         "shallow": true,
         "render": true,
-        "mount": true
+        "rtlRender": true,
+        "mount": true,
+        "fetchMock": true
     },
 
     "parser": "babel-eslint",

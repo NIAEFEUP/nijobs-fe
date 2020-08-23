@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
-import { searchOffers } from "../../../actions/nijobsService";
+import { searchOffers } from "../../../services/offerSearchService";
 import {
     setSearchValue,
     setJobDuration,

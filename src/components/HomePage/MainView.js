@@ -10,20 +10,21 @@ import InfoBox from "./QuickInfoArea/InfoBox";
 import { useMobile, useDesktop } from "../../utils/media-queries";
 
 import useMainViewStyles from "./mainViewStyles.js";
+import { MainMask } from "./MainMask";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
     const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
         <div className={classes.mainView}>
-            <div className={classes.mainMask}>
+            <MainMask>
                 <div className={classes.mainLogo}>
                     <img
                         src={logo}
                         alt="nijobs Logo"
                     />
                 </div>
-            </div>
+            </MainMask>
             <div className={classes.searchArea}>
                 <SearchArea
                     onSubmit={() => {

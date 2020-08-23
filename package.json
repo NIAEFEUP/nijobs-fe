@@ -6,7 +6,7 @@
     "node": "10.17.0"
   },
   "dependencies": {
-    "@material-ui/core": "^4.8.0",
+    "@material-ui/core": "^4.9.3",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.34",
     "clsx": "^1.0.4",
@@ -20,14 +20,18 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.3",
+    "moment": "^2.24.0",
+    "react-hook-form": "^4.9.6",
     "redux": "^4.0.1",
     "redux-mock-store": "^1.5.3",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "yup": "^0.28.1"
   },
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --coverage --verbose",
+    "test-ci": "jest -w 1 --coverage --verbose",
     "test1": "jest --coverage --verbose --clearCache",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
@@ -42,9 +46,11 @@
   "devDependencies": {
     "@babel/core": "7.5.5",
     "@svgr/webpack": "4.3.2",
+    "@testing-library/jest-dom": "^5.3.0",
+    "@testing-library/react": "^10.0.2",
     "@typescript-eslint/eslint-plugin": "1.13.0",
     "@typescript-eslint/parser": "1.13.0",
-    "babel-eslint": "10.0.2",
+    "babel-eslint": "^10.0.3",
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.6",
     "babel-plugin-named-asset-import": "^0.3.3",
@@ -73,6 +79,7 @@
     "is-wsl": "^1.1.0",
     "jest": "24.8.0",
     "jest-environment-jsdom-fourteen": "0.1.0",
+    "jest-fetch-mock": "^3.0.3",
     "jest-resolve": "24.8.0",
     "jest-watch-typeahead": "0.3.1",
     "mini-css-extract-plugin": "0.5.0",
@@ -94,7 +101,7 @@
     "sass-loader": "7.2.0",
     "semver": "6.3.0",
     "style-loader": "1.0.0",
-    "terser-webpack-plugin": "^2.3.4",
+    "terser-webpack-plugin": "^2.3.5",
     "ts-pnp": "1.1.2",
     "url-loader": "2.1.0",
     "webpack": "4.39.1",
@@ -126,10 +133,11 @@
       }
     },
     "setupFiles": [
-      "react-app-polyfill/jsdom",
-      "<rootDir>/src/setupTests.js"
+      "react-app-polyfill/jsdom"
     ],
-    "setupFilesAfterEnv": [],
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest/setup.js"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"

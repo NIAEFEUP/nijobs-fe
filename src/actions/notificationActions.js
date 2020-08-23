@@ -1,4 +1,4 @@
-export const notificationTypes = {
+export const NotificationTypes = {
     ADD_SNACKBAR: "ADD_SNACKBAR",
     REMOVE_SNACKBAR: "REMOVE_SNACKBAR",
 };
@@ -10,7 +10,7 @@ export const addSnackbar = (notification) => {
     }
 
     return {
-        type: notificationTypes.ADD_SNACKBAR,
+        type: NotificationTypes.ADD_SNACKBAR,
         notification: {
             key: Date.now() + Math.random(),
             ...notification,
@@ -19,6 +19,6 @@ export const addSnackbar = (notification) => {
 };
 
 export const removeSnackbar = (key) => ({
-    type: notificationTypes.REMOVE_SNACKBAR,
+    type: NotificationTypes.REMOVE_SNACKBAR,
     key,
 });
