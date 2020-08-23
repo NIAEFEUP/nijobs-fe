@@ -22,6 +22,12 @@ const MOCK_OFFERS = [
         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
     }),
     new Offer({
@@ -37,7 +43,7 @@ const MOCK_OFFERS = [
     }),
     new Offer({
         id: "random uuid3",
-        position: "Frontend Developer",
+        position: "Frontend Developer But Make it Longer",
         company: {
             name: "Sigarra",
             logo: feupLogo,
@@ -48,9 +54,16 @@ const MOCK_OFFERS = [
     }),
 ];
 
+const sleep = (time) => new Promise((resolve) => {
+    setTimeout(() => {
+        resolve();
+    }, time);
+
+});
+
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
 // eslint-disable-next-line no-unused-vars
-export const searchOffers = (filters) => (dispatch) => {
+export const searchOffers = (filters) => async (dispatch) => {
 
     dispatch(setLoadingOffers(true));
 
@@ -70,11 +83,16 @@ export const searchOffers = (filters) => (dispatch) => {
         // const json = await res.json();
         // dispatch(fetchOffersSearch(json.offers.map((offerData) => new Offer(offerData))));
 
-        if (Math.random() !== -1)
-            throw Error("test");
+        await sleep(2000);
 
         // TODO remove this
-        dispatch(setSearchOffers(MOCK_OFFERS));
+        // dispatch(setSearchOffers(MOCK_OFFERS));
+
+        // Simulate Error
+        dispatch(setSearchOffers(MOCK_OFFERS.filter(() => false)));
+
+        // Simulate Error
+        // dispatch(setSearchOffers(MOCK_OFFERS.filter(() => false)));
 
         dispatch(setLoadingOffers(false));
         // TODO count metrics

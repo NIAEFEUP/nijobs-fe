@@ -2,6 +2,7 @@ import React from "react";
 import OfferItem from "./OfferItem";
 import Offer from "./Offer";
 import { ListItemText, Avatar, ListItemAvatar, ListItem } from "@material-ui/core";
+import Skeleton from "react-loading-skeleton";
 
 describe("OfferItem", () => {
 
@@ -15,6 +16,15 @@ describe("OfferItem", () => {
     });
 
     describe("render", () => {
+
+        it("should render a loading version when loading=true", () => {
+            const wrapper = shallow(<OfferItem loading/>);
+
+            expect(wrapper.find(Avatar).find(Skeleton).prop("circle")).toBe(true);
+            expect(wrapper.find(ListItemText).prop("primary")).toStrictEqual(<Skeleton/>);
+            expect(wrapper.find(ListItemText).prop("secondary")).toStrictEqual(<Skeleton/>);
+
+        });
 
         const wrapper = shallow(<OfferItem offer={offer}/>);
 

@@ -51,13 +51,13 @@ describe("Search Offers actions", () => {
 
     it("should return Set Job Duration action", () => {
 
-        const jobDuration = 2;
+        const jobDuration = [1, 2];
         const expectedAction = {
             type: offerSearchTypes.SET_JOB_DURATION,
             jobDuration,
         };
 
-        expect(setJobDuration(jobDuration)).toEqual(expectedAction);
+        expect(setJobDuration(...jobDuration)).toEqual(expectedAction);
     });
 
     it("should return Set Job Type action", () => {
@@ -92,7 +92,7 @@ describe("Search Offers actions", () => {
         };
         const setJobDurationAction = {
             type: offerSearchTypes.SET_JOB_DURATION,
-            jobDuration: INITIAL_JOB_DURATION,
+            jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
         };
 
         resetAdvancedSearchFields()(dispatch);

@@ -7,21 +7,33 @@ import {
     Divider,
     List,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(() => ({
-    root: {
-        height: "100%",
-    },
-
-}));
+import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
 const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
-    const classes = useStyles();
-    if (loading) return "loading..."; // TODO: IMPLEMENT SKELETON LOADING
+    const classes = useSearchResultsWidgetStyles();
+
+    if (loading) return (
+        <div className={classes.fullHeight}>
+            <List disablePadding>
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+                <OfferItem
+                    loading={loading}
+                />
+                <Divider component="li" />
+            </List>
+        </div>
+    );
 
     return (
-        <div className={classes.root}>
+        <div className={classes.fullHeight}>
             <List disablePadding>
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
@@ -29,6 +41,7 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
                         <OfferItem
                             offer={offer}
                             setSelectedOffer={setSelectedOffer}
+                            loading={loading}
                         />
                     </React.Fragment>
                 ))}

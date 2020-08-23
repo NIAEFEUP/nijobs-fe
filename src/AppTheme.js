@@ -1,7 +1,8 @@
 /* istanbul ignore file */
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
 
-const theme = createMuiTheme({
+
+const theme = responsiveFontSizes(createMuiTheme({
     palette: {
         primary: {
             main: "#C03736",
@@ -22,10 +23,9 @@ const theme = createMuiTheme({
             "Roboto",
             "sans-serif",
         ].join(","),
-        useNextVariants: true,
     },
 
-});
+}));
 export default theme;
 
 export const primaryColor = "#C03736";

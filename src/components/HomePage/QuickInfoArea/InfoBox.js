@@ -3,19 +3,20 @@ import PropTypes from "prop-types";
 
 import { Typography } from "@material-ui/core";
 
-const InfoBox = ({ info }) => (
+const InfoBox = ({ children, size }) => (
     <Typography
         align="center"
-        variant="body1"
+        variant={size === "small" ? "body2" : "body1"}
         gutterBottom
         color="secondary"
     >
-        {info}
+        {children}
     </Typography>
 );
 
 InfoBox.propTypes = {
-    info: PropTypes.string,
+    children: PropTypes.string,
+    size: PropTypes.string,
 };
 
 export default InfoBox;

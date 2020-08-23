@@ -7,10 +7,13 @@ import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
+import { useMobile, useDesktop } from "../../utils/media-queries";
+
 import useMainViewStyles from "./mainViewStyles.js";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
-    const classes = useMainViewStyles();
+
+    const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
         <div className={classes.mainView}>
             <div className={classes.mainMask}>
@@ -29,9 +32,9 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
                 />
             </div>
             <div className={classes.infoBox}>
-                <InfoBox
-                    info="Your next oportunity is out there. Use the search bar to find it!"
-                />
+                <InfoBox size={useMobile() ? "small" : "normal"}>
+                    Your next oportunity is out there. Use the search bar to find it!
+                </InfoBox>
             </div>
             <div className={classes.showMoreBtn}>
                 <ShowMoreButton

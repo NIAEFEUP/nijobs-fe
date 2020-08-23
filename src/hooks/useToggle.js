@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useState, useCallback } from "react";
 
 /**
@@ -11,7 +12,11 @@ const useToggle = (initialValue) => {
         setState((state) => !state);
     }, []);
 
-    return [state, toggleState];
+    const resetState = useCallback(() => {
+        setState(initialValue);
+    }, [initialValue]);
+
+    return [state, toggleState, resetState];
 };
 
 export default useToggle;

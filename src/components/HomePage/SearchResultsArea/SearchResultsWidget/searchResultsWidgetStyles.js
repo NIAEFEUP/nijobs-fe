@@ -25,7 +25,8 @@ export default makeStyles((theme) => ({
         width: "80%",
     },
     reviseCriteriaErrorMessage: {
-        marginBottom: theme.spacing(4),
+        margin: theme.spacing(4, 0),
+        textAlign: "center",
     },
     noOffersColumn: {
         height: "100%",
@@ -44,5 +45,22 @@ export default makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+    },
+    offerContent: ({ isMobile }) => ({
+        padding: !isMobile && theme.spacing(3),
+        height: "100%",
+    }),
+    unselectedOffer: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    pleaseSelectOfferText: {
+        color: "grey",
+    },
+    magnifyingGlassAnimationWrapper: {
+        marginBottom: theme.spacing(2),
     },
 }));

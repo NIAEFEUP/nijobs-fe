@@ -7,7 +7,6 @@ describe("<ProductDescription /> rendering", () => {
         const mockedRefSetter = jest.fn();
         const wrapper = shallow(<ProductDescription setRef={mockedRefSetter}/>);
         expect(wrapper.find("div")).toHaveLength(1);
-        expect(mockedRefSetter).toHaveBeenCalledTimes(1);
     });
 
 });
