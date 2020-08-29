@@ -15,6 +15,7 @@ import {
 import { login } from "../../services/auth";
 import { useForm } from "react-hook-form";
 
+import { yupResolver } from "@hookform/resolvers";
 import LOGIN_SCHEMA from "./LoginSchema";
 
 export const useLoginStyles = makeStyles((theme) => ({
@@ -42,9 +43,10 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
 
     const loginClasses = useLoginStyles();
 
+    // eslint-disable-next-line no-unused-vars
     const { register, handleSubmit, reset, errors } = useForm({
         mode: "onBlur",
-        validationSchema: LOGIN_SCHEMA,
+        resolver: yupResolver(LOGIN_SCHEMA),
         reValidateMode: "onChange",
     });
 
@@ -58,18 +60,17 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
         }
     };
 
-    const handleLogin = (data) => {
+    const handleLogin = async (data) => {
         toggleLoginPending();
-        login(data.email, data.password)
-            .then(() => {
-                updateSessionInfo();
-                toggleLoginPending();
-                toggleLoginModal();
-            })
-            .catch((e) => {
-                toggleLoginPending();
-                setLoginError(e.status === 401 ? "Email/Password combination is invalid." : "Unexpected Error. Please try again later.");
-            });
+        try {
+            await login(data.email, data.password);
+            updateSessionInfo();
+            toggleLoginPending();
+            toggleLoginModal();
+        } catch (e) {
+            toggleLoginPending();
+            setLoginError(e.status === 401 ? "Email/Password combination is invalid." : "Unexpected Error. Please try again later.");
+        }
     };
 
     const handleClose = () => {
@@ -78,14 +79,16 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
         toggleLoginModal();
     };
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         setErrorCleared(false);
-        handleLogin(data);
+        await handleLogin(data);
     };
 
     return (
         <Dialog open={open} aria-labelledby="form-dialog-title" disableScrollLock onClose={handleClose}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <DialogTitle id="form-dialog-title">Login</DialogTitle>
                 <DialogContent>
                     <TextField

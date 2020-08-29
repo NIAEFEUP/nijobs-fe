@@ -19,6 +19,8 @@ import {
 } from "@material-ui/core";
 
 import CompanyApplicationSchema from "./CompanyApplicationSchema";
+import { yupResolver } from "@hookform/resolvers";
+
 import { CompanyApplicationConstants, getHumanError } from "./CompanyApplicationUtils";
 import ApplicationInfoDialog from "./ApplicationInfoDialog";
 
@@ -58,7 +60,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
 
     const { register, handleSubmit, reset, errors, watch } = useForm({
         mode: "onBlur",
-        validationSchema: CompanyApplicationSchema,
+        resolver: yupResolver(CompanyApplicationSchema),
         reValidateMode: "onChange",
     });
 
