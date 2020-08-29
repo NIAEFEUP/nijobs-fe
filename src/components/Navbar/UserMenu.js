@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     accountName: {
         margin: theme.spacing(3, 2),
         marginBottom: theme.spacing(1),
+        overflowWrap: "anywhere",
     },
     menuList: {
         "& > *": {
@@ -63,7 +64,8 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
         <Popper
             open={open}
             anchorEl={anchorRef.current}
-            role={undefined}
+            role="dialog"
+            data-testid="menu-popover"
             transition
             disablePortal
             placement="bottom-end"
@@ -87,7 +89,7 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
                                     className={classes.accountName}
                                     variant="button"
                                 >
-                                    {sessionData && `I need overflow handling ${sessionData.email}`}
+                                    {sessionData?.email}
                                 </Typography>
                                 <MenuList
                                     className={classes.menuList}

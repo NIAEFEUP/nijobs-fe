@@ -67,7 +67,6 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
     };
 
     const classes = useStyles();
-    // const loginClasses = useLoginStyles();
 
     return (
         <AppBar className={classes.navbar} position="absolute" color="transparent" elevation={0}>
@@ -78,6 +77,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                     aria-haspopup="true"
                     onClick={handleUserMenuToggle}
                     className={classes.userAccountArea}
+                    data-testid="usermenu-button-wrapper"
                 >
                     {isLoggedIn &&
                         <Button

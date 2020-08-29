@@ -1,21 +1,24 @@
 import useSWR from "swr";
 
 // TODO, change this to use the one defined in index.js coming from .env
-const API_HOSTNAME = "http://localhost:8087";
+import { API_HOSTNAME } from "../config";
 
 export default () => {
 
-    const getSession = async (key) => {
-        const res = await fetch(key, {
-            method: "GET",
-            credentials: "include",
-        });
+    // eslint-disable-next-line max-len
+    const getSession = () => ({ name: "CompanyName", email: "emailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemailemail@comom.com" });
 
-        if (!res.ok) {
-            if (res.status === 401) return {};
-            throw { status: res.status };
-        } else return (await res.json()).data;
-    };
+    // const getSession = async (key) => {
+    //     const res = await fetch(key, {
+    //         method: "GET",
+    //         credentials: "include",
+    //     });
+
+    //     if (!res.ok) {
+    //         if (res.status === 401) return {};
+    //         throw { status: res.status };
+    //     } else return (await res.json()).data;
+    // };
 
     const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
         revalidateOnFocus: false,

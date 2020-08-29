@@ -1,5 +1,5 @@
 // TODO, change this to use the one defined in index.js coming from .env
-const API_HOSTNAME = "http://localhost:8087";
+import { API_HOSTNAME } from "../config";
 
 export const login = async (email, password) => {
 
@@ -13,6 +13,7 @@ export const login = async (email, password) => {
     });
 
     if (!res.ok) throw { status: res.status };
+
 
 };
 export const logout = () =>

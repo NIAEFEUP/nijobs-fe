@@ -1,4 +1,6 @@
-import { smoothScrollToRef, capitalize } from ".";
+import React from "react";
+import { smoothScrollToRef, capitalize, Wrap } from ".";
+import { render } from "@testing-library/react";
 
 describe("utils", () => {
     describe("smooth scroll to ref", () => {
@@ -34,6 +36,35 @@ describe("utils", () => {
         });
         it("should throw error if trying to capitalize non-string", () => {
             expect(() => capitalize([1])).toThrowError("Trying to capitalize non string object:");
+        });
+    });
+
+    describe("Wrap", () => {
+        // eslint-disable-next-line react/prop-types
+        const WrapperComponent = ({ children }) =>
+            <div data-testid="test">
+                {children}
+            </div>;
+        it("Should wrap with component", () => {
+
+            const wrapper = render(
+                <Wrap on={true} Wrapper={WrapperComponent}>
+                    <p>Hello</p>
+                </Wrap>
+            );
+
+            expect(wrapper.getByTestId("test")).toBeInTheDocument();
+            expect(wrapper.getByText("Hello")).toBeInTheDocument();
+        });
+        it("Should NOT wrap with component", () => {
+            const wrapper = render(
+                <Wrap on={false} Wrapper={WrapperComponent}>
+                    <p>Hello</p>
+                </Wrap>
+            );
+
+            expect(wrapper.queryByTestId("test")).not.toBeInTheDocument();
+            expect(wrapper.getByText("Hello")).toBeInTheDocument();
         });
     });
 });

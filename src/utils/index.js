@@ -24,18 +24,18 @@ export const Wrap = ({ Wrapper, on, children }) => (
     <>
         {on ?
             <Wrapper>
-                { children }
-            </Wrapper> :
+                {children}
+            </Wrapper>
+            :
             <>
                 { children }
             </>
         }
     </>
-
 );
 
 Wrap.propTypes = {
-    Wrapper: PropTypes.element.isRequired,
+    Wrapper: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
     children: PropTypes.element.isRequired,
     on: PropTypes.bool.isRequired,
 };

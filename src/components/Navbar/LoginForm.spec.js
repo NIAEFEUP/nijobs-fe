@@ -2,15 +2,10 @@ import React from "react";
 
 import { login } from "../../services/auth";
 
-jest.mock("../../services/auth", () => ({
-    __esModule: true,
-    login: jest.fn(() => Promise.resolve()),
-}));
+jest.mock("../../services/auth");
 
 import LoginForm from "./LoginForm";
-import { render, fireEvent, act, screen } from "../../test-utils";
-// import { act } from "@testing-library/react";
-
+import { render, fireEvent, act } from "../../test-utils";
 
 describe("Navbar - LoginForm", () => {
     describe("render", () => {
@@ -37,7 +32,7 @@ describe("Navbar - LoginForm", () => {
         it("Should login correctly and toggle Modal visibility", async () => {
 
             // Making sure that the login service allows the login
-            login.mockImplementation(() => true);
+            login.mockImplementationOnce(() => true);
 
             const toggleLoginModal = jest.fn();
 
@@ -74,6 +69,8 @@ describe("Navbar - LoginForm", () => {
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "invalidemail" } });
+            });
+            await act(async () => {
                 await fireEvent.blur(wrapper.getByLabelText("Email"));
             });
 
@@ -81,6 +78,8 @@ describe("Navbar - LoginForm", () => {
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "" } });
+            });
+            await act(async () => {
                 await fireEvent.blur(wrapper.getByLabelText("Email"));
             });
 
@@ -88,6 +87,8 @@ describe("Navbar - LoginForm", () => {
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "valid@email.com" } });
+            });
+            await act(async () => {
                 await fireEvent.blur(wrapper.getByLabelText("Email"));
             });
 
@@ -106,6 +107,8 @@ describe("Navbar - LoginForm", () => {
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Password"), { target: { value: "" } });
+            });
+            await act(async () => {
                 await fireEvent.blur(wrapper.getByLabelText("Password"));
             });
 
@@ -114,7 +117,7 @@ describe("Navbar - LoginForm", () => {
 
         it("Should show general error on login fail, and clear on input change", async () => {
             // Making sure that the login service denies the login
-            login.mockImplementation(() => {
+            login.mockImplementationOnce(() => {
                 throw new Error();
             });
 
@@ -141,7 +144,6 @@ describe("Navbar - LoginForm", () => {
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "acsd@email.com" } });
-
             });
 
             expect(await wrapper.queryByText("Unexpected Error. Please try again later.")).not.toBeInTheDocument();
