@@ -1,9 +1,10 @@
 // TODO, change this to use the one defined in index.js coming from .env
 import { API_HOSTNAME } from "../config";
+const AUTH_ENDPOINT = `${API_HOSTNAME}/auth/login`;
 
 export const login = async (email, password) => {
 
-    const res = await fetch(`${API_HOSTNAME}/auth/login`, {
+    const res = await fetch(AUTH_ENDPOINT, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -17,7 +18,7 @@ export const login = async (email, password) => {
 
 };
 export const logout = () =>
-    fetch(`${API_HOSTNAME}/auth/login`, {
+    fetch(AUTH_ENDPOINT, {
         method: "DELETE",
         credentials: "include",
     });

@@ -9,44 +9,23 @@ import {
     DialogActions,
     Button,
     FormHelperText,
-    makeStyles,
 } from "@material-ui/core";
 
 import { login } from "../../services/auth";
 import { useForm } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers";
-import LOGIN_SCHEMA from "./LoginSchema";
+import LoginSchema from "./LoginSchema";
 
-export const useLoginStyles = makeStyles((theme) => ({
-    loginBtnWrapper: {
-        display: "grid",
-    },
-    loginBtn: {
-        color: "white",
-        gridColumn: 1,
-        gridRow: 1,
-    },
-    loginProgress: {
-        color: "white",
-        gridColumn: 1,
-        gridRow: 1,
-        margin: "auto",
-    },
-    loginProgressRed: {
-        composes: "$loginProgress",
-        color: theme.palette.primary.main,
-    },
-}));
+import useLoginStyles from "./loginStyles";
 
 const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, updateSessionInfo }) => {
 
-    const loginClasses = useLoginStyles();
+    const classes = useLoginStyles();
 
-    // eslint-disable-next-line no-unused-vars
     const { register, handleSubmit, reset, errors } = useForm({
         mode: "onBlur",
-        resolver: yupResolver(LOGIN_SCHEMA),
+        resolver: yupResolver(LoginSchema),
         reValidateMode: "onChange",
     });
 
@@ -85,7 +64,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
     };
 
     return (
-        <Dialog open={open} aria-labelledby="form-dialog-title" disableScrollLock onClose={handleClose}>
+        <Dialog open={open} aria-labelledby="form-dialog-title" onClose={handleClose}>
             <form
                 onSubmit={handleSubmit(onSubmit)}
             >
@@ -129,10 +108,10 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                     >
                         Cancel
                     </Button>
-                    <div className={loginClasses.loginBtnWrapper}>
+                    <div className={classes.loginBtnWrapper}>
                         <Button
                             type="submit"
-                            className={loginClasses.loginBtn}
+                            className={classes.loginBtn}
                             color="primary"
                             variant="contained"
                             disabled={loginPending}
@@ -142,7 +121,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         {loginPending &&
                             <CircularProgress
                                 size={24}
-                                className={loginClasses.loginProgressRed}
+                                className={classes.loginProgressRed}
                             />
                         }
                     </div>

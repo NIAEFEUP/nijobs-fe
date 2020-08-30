@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { toggleLoginModal } from "../../actions/navbarActions";
 
-import { AppBar,
+import {
+    AppBar,
     Toolbar,
     Button,
-    makeStyles,
-    Avatar,
-    Typography,
 } from "@material-ui/core";
 
 import useSession from "../../hooks/useSession";
@@ -16,36 +14,11 @@ import useToggle from "../../hooks/useToggle";
 import UserMenu from "./UserMenu";
 import LoginForm from "./LoginForm";
 
-const useStyles = makeStyles((theme) => ({
-    navbar: {
-        paddingTop: theme.spacing(3),
-    },
-    toolbar: {
-        display: "flex",
-        justifyContent: "flex-end",
-    },
-    userAccountArea: {
-        marginRight: theme.spacing(3),
-    },
-    userLogo: {
-        backgroundColor: theme.palette.primary.main,
-        zIndex: 1,
-        cursor: "pointer",
-        padding: theme.spacing(1),
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
-    userMenu: {
-        width: 300,
-        padding: theme.spacing(2),
-    },
-    userMenuButton: {
-        color: "white",
-        "&:hover": {
-            backgroundColor: "transparent",
-        },
-    },
-}));
+import { useMobile } from "../../utils/media-queries";
+import { MenuRounded } from "@material-ui/icons";
+
+
+import useNavbarStyles from "./navbarStyles";
 
 const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 
@@ -61,15 +34,24 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
     };
 
     const handleUserMenuClose = (event) => {
+        if (!event) {
+            setUserMenuOpen(false);
+            return;
+        }
         if (anchorRef.current && anchorRef.current.contains(event.target)) return;
 
         setUserMenuOpen(false);
     };
-
-    const classes = useStyles();
+    const isMobile = useMobile();
+    const classes = useNavbarStyles({ isMobile });
 
     return (
-        <AppBar className={classes.navbar} position="absolute" color="transparent" elevation={0}>
+        <AppBar
+            className={classes.navbar}
+            position="absolute"
+            color="transparent"
+            elevation={0}
+        >
             <Toolbar className={classes.toolbar}>
                 <div
                     ref={anchorRef}
@@ -83,18 +65,11 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
+                            endIcon={<MenuRounded className={classes.userLogo} color="white"/>}
                         >
-                            {!userMenuOpen &&
-                                <Typography variant="button">
-                                Account
-                                </Typography>
-                            }
-                            <Avatar
-                                className={classes.userLogo}
-                            />
+                            {!userMenuOpen && !isMobile && "Account"}
                         </Button>
                     }
-
                 </div>
                 <UserMenu
                     open={userMenuOpen}
@@ -102,7 +77,6 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                     handleClose={handleUserMenuClose}
                     sessionData={sessionData}
                     resetSession={resetSession}
-                    className={classes.userMenu}
                 />
                 <LoginForm
                     open={showLoginModal}

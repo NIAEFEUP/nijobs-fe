@@ -5,21 +5,29 @@ import { logout } from "../../services/auth";
 jest.mock("../../services/auth");
 
 import UserMenu from "./UserMenu";
-import { render } from "../../test-utils";
+import { renderWithTheme } from "../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
+import { createMuiTheme } from "@material-ui/core";
 
 describe("Navbar - LoginForm", () => {
+    const theme = createMuiTheme({});
     describe("render", () => {
         it("Should not appear as default", () => {
             const mockAnchor = { current: <div /> };
-            const wrapper = render(<UserMenu anchorRef={mockAnchor}/>);
+            const wrapper = renderWithTheme(<UserMenu anchorRef={mockAnchor}/>, { theme });
             const menu = wrapper.queryByTestId("menu-popover");
             expect(menu).not.toBeInTheDocument();
         });
 
         it("Should show the email from current session", () => {
             const mockAnchor = { current: <div /> };
-            const wrapper = render(<UserMenu open anchorRef={mockAnchor} sessionData={{ email: "test-email" }}/>);
+            const wrapper = renderWithTheme(
+                <UserMenu
+                    open
+                    anchorRef={mockAnchor}
+                    sessionData={{ email: "test-email" }}
+                />,
+                { theme });
             expect(wrapper.queryByText("test-email")).toBeInTheDocument();
         });
     });
@@ -31,14 +39,15 @@ describe("Navbar - LoginForm", () => {
             const resetSession = jest.fn();
             const handleClose = jest.fn();
             const mockAnchor = { current: <div /> };
-            const wrapper = render(
+            const wrapper = renderWithTheme(
                 <UserMenu
                     open
                     anchorRef={mockAnchor}
                     sessionData={{ email: "test-email" }}
                     resetSession={resetSession}
                     handleClose={handleClose}
-                />
+                />,
+                { theme }
             );
 
             await act(async () => {

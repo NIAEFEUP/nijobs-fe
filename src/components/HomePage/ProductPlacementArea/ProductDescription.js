@@ -46,9 +46,7 @@ ProductDescription.propTypes = {
     toggleLoginModal: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = ({ navbar }) => ({
-    showLoginModal: navbar.showLoginModal,
-});
+const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = (dispatch) => ({
     toggleLoginModal: () => dispatch(toggleLoginModal()),

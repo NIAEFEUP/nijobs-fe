@@ -66,7 +66,7 @@ RouterLink.propTypes = {
 /**
  *
  * Only allows this route to be accessed when logged in.
- * Additionally, is an `authorize` function is given, it must return true for the route to accessable
+ * Additionally, if an `authorize` function is given, it must return true for the route to accessable
  * The authorize function receives the logged in user details as an object
  */
 export const ProtectedRoute = ({ authorize, unauthorizedRedirectPath, children, ...routeProps }) => {

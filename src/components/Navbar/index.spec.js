@@ -1,5 +1,5 @@
 import React from "react";
-import { renderWithStore } from "../../test-utils";
+import { renderWithStoreAndTheme } from "../../test-utils";
 
 import Navbar from ".";
 
@@ -8,10 +8,12 @@ import { createStore, compose, applyMiddleware } from "redux";
 import reducer from "../../reducers";
 import thunk from "redux-thunk";
 import { act, fireEvent } from "@testing-library/react";
+import { createMuiTheme } from "@material-ui/core";
 
 jest.mock("../../hooks/useSession");
 
 describe("Navbar", () => {
+    const theme = createMuiTheme({});
     describe("render", () => {
 
         it("Should not render anything if logged out", () => {
@@ -20,7 +22,7 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStore(<Navbar />, { store });
+            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
 
             expect(wrapper.queryByRole("button", { name: "Account" })).not.toBeInTheDocument();
         });
@@ -31,7 +33,7 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStore(<Navbar />, { store });
+            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
 
             expect(wrapper.getByRole("button", { name: "Account" })).toBeInTheDocument();
         });
@@ -43,7 +45,7 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStore(<Navbar />, { store });
+            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
 
             await act(async () => {
                 await fireEvent.click(wrapper.getByTestId("usermenu-button-wrapper"));

@@ -10,32 +10,75 @@ import {
     MenuItem,
     useTheme,
     makeStyles,
+    SwipeableDrawer,
+    Divider,
 } from "@material-ui/core";
 import { logout } from "../../services/auth";
-import clsx from "clsx";
+
+import { useMobile } from "../../utils/media-queries";
 
 const useStyles = makeStyles((theme) => ({
-    userMenuContent: {
+    userMenuContent: ({ isMobile }) => ({
+        width: isMobile ? "100%" : 300,
+        padding: theme.spacing(2),
         display: "flex",
         alignItems: "flex-end",
         flexDirection: "column",
-    },
-    accountName: {
-        margin: theme.spacing(3, 2),
+    }),
+    accountName: ({ isMobile }) => ({
+        margin: isMobile ? theme.spacing(1) : theme.spacing(3, 2),
         marginBottom: theme.spacing(1),
         overflowWrap: "anywhere",
-    },
+    }),
     menuList: {
         "& > *": {
             justifyContent: "flex-end",
         },
     },
+    userMenuPaper: {
+        borderRadius: "10px 10px 0px 0px",
+    },
+    divider: {
+        margin: theme.spacing(1),
+        width: "80%",
+    },
 }));
 
-const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, className }) => {
+const UserMenuContent = ({ isMobile = false, sessionData, handleLogout }) => {
+    const classes = useStyles({ isMobile });
+    return (
+        <div className={classes.userMenuContent}>
+            <Typography
+                className={classes.accountName}
+                variant="button"
+            >
+                {sessionData?.email}
+            </Typography>
+            <Divider className={classes.divider}/>
+            <MenuList
+                className={classes.menuList}
+                autoFocusItem={open}
+                id="menu-list-grow"
+            >
+                <MenuItem button disableTouchRipple onClick={() => {}}>My Offers</MenuItem>
+                <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
+                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+            </MenuList>
+        </div>
+    );
+};
+
+UserMenuContent.propTypes = {
+    isMobile: PropTypes.bool,
+    sessionData: PropTypes.shape({
+        email: PropTypes.string,
+    }),
+    handleLogout: PropTypes.func.isRequired,
+};
+
+const DesktopUserMenu = ({ open, anchorRef, handleClose, sessionData, handleLogout }) => {
 
     const theme = useTheme();
-    const classes = useStyles();
 
     const PopperModifiers = useMemo(() => ({
         computeStyle: {
@@ -54,12 +97,6 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
         },
     }), [theme]);
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-        handleClose(e);
-        logout().then(() => resetSession());
-    };
-
     return (
         <Popper
             open={open}
@@ -77,35 +114,87 @@ const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose, cla
                 >
                     <Paper>
                         <ClickAwayListener onClickAway={handleClose}>
-                            <div className={clsx(className, classes.userMenuContent)}>
-                                <Typography
-                                    variant="subtitle1"
-                                    color="secondary"
-                                    className={classes.accountName}
-                                >
-                                    Account
-                                </Typography>
-                                <Typography
-                                    className={classes.accountName}
-                                    variant="button"
-                                >
-                                    {sessionData?.email}
-                                </Typography>
-                                <MenuList
-                                    className={classes.menuList}
-                                    autoFocusItem={open}
-                                    id="menu-list-grow"
-                                >
-                                    <MenuItem onClick={() => {}}>My Offers</MenuItem>
-                                    <MenuItem onClick={() => {}}>Profile</MenuItem>
-                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                                </MenuList>
-                            </div>
+                            <UserMenuContent
+                                sessionData={sessionData}
+                                handleLogout={handleLogout}
+                            />
                         </ClickAwayListener>
                     </Paper>
                 </Grow>
             )}
         </Popper>
+    );
+};
+
+DesktopUserMenu.propTypes = {
+    open: PropTypes.bool.isRequired,
+    anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+    sessionData: PropTypes.shape({
+        email: PropTypes.string,
+    }),
+    handleLogout: PropTypes.func.isRequired,
+    handleClose: PropTypes.func.isRequired,
+};
+
+const MobileUserMenu = ({ open, handleClose, sessionData, handleLogout }) => {
+    const classes = useStyles({ isMobile: true });
+    return (
+        <SwipeableDrawer
+            anchor="bottom"
+            open={open}
+            onOpen={() => {}}
+            onClose={handleClose}
+            disableSwipeToOpen
+            classes={{ paper: classes.userMenuPaper }}
+        >
+            <UserMenuContent
+                isMobile
+                sessionData={sessionData}
+                handleLogout={handleLogout}
+            />
+        </SwipeableDrawer>
+    );
+};
+
+MobileUserMenu.propTypes = {
+    open: PropTypes.bool.isRequired,
+    sessionData: PropTypes.shape({
+        email: PropTypes.string,
+    }),
+    handleClose: PropTypes.func.isRequired,
+    handleLogout: PropTypes.func.isRequired,
+};
+
+const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose }) => {
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        handleClose(e);
+        logout().then(() => resetSession());
+    };
+
+    const isMobile = useMobile();
+
+    return (
+        <>
+            {isMobile ?
+                <MobileUserMenu
+                    open={open}
+                    sessionData={sessionData}
+                    handleClose={handleClose}
+                    handleLogout={handleLogout}
+                />
+                :
+                <DesktopUserMenu
+                    open={open}
+                    anchorRef={anchorRef}
+                    sessionData={sessionData}
+                    handleClose={handleClose}
+                    handleLogout={handleLogout}
+                />
+            }
+        </>
+
     );
 };
 
@@ -117,7 +206,6 @@ UserMenu.propTypes = {
     }),
     resetSession: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
-    className: PropTypes.string,
 };
 
 export default UserMenu;
