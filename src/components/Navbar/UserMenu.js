@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const UserMenuContent = ({ isMobile = false, sessionData, handleLogout }) => {
+const UserMenuContent = ({ open, isMobile = false, sessionData, handleLogout }) => {
     const classes = useStyles({ isMobile });
     return (
         <div className={classes.userMenuContent}>
@@ -69,6 +69,7 @@ const UserMenuContent = ({ isMobile = false, sessionData, handleLogout }) => {
 };
 
 UserMenuContent.propTypes = {
+    open: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool,
     sessionData: PropTypes.shape({
         email: PropTypes.string,
@@ -115,6 +116,7 @@ const DesktopUserMenu = ({ open, anchorRef, handleClose, sessionData, handleLogo
                     <Paper>
                         <ClickAwayListener onClickAway={handleClose}>
                             <UserMenuContent
+                                open={open}
                                 sessionData={sessionData}
                                 handleLogout={handleLogout}
                             />
@@ -149,6 +151,7 @@ const MobileUserMenu = ({ open, handleClose, sessionData, handleLogout }) => {
         >
             <UserMenuContent
                 isMobile
+                open={open}
                 sessionData={sessionData}
                 handleLogout={handleLogout}
             />
