@@ -1,26 +1,55 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { RouterLink } from "../../../utils";
-import { Typography } from "@material-ui/core";
+import { connect } from "react-redux";
+import { toggleLoginModal } from "../../../actions/navbarActions";
 
-const ProductDescription = React.forwardRef((props, ref) => (
-    <div
-        ref={ref}
-        style={{ height: "500px" }}
-    >
-        <Typography>
+import {
+    Typography,
+    Button,
+} from "@material-ui/core";
+
+import useSession from "../../../hooks/useSession";
+
+export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
+    const { isLoggedIn } = useSession();
+    return (
+        <div
+            ref={ref}
+            style={{ height: "500px" }}
+        >
+            <Typography>
                 Other content, like what is this for and cool vector and stock images with no copyright
-        </Typography>
-        <Typography>
-            {"Somewhere here will have the 'are you a company?"}
-            <RouterLink to="/apply/company">Join Us</RouterLink>
-            {"'"}
-        </Typography>
+            </Typography>
 
-
-    </div>
-));
+            {!isLoggedIn &&
+            <>
+                Are you a company?
+                <Button
+                    variant="text"
+                    color="primary"
+                    onClick={toggleLoginModal}
+                >
+                Login
+                </Button>
+                <RouterLink to="/apply/company">Join Us</RouterLink>
+            </>
+            }
+        </div>
+    );
+});
 
 // Needed because of ForwardRef usage
 ProductDescription.displayName = "ProductDescription";
 
-export default ProductDescription;
+ProductDescription.propTypes = {
+    toggleLoginModal: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = () => ({});
+
+export const mapDispatchToProps = (dispatch) => ({
+    toggleLoginModal: () => dispatch(toggleLoginModal()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(ProductDescription);

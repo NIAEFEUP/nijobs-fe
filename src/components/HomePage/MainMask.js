@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core";
 import { useDesktop } from "../../utils/media-queries";
 
 
-const useStyle = makeStyles(() => ({
+const useStyle = makeStyles((theme) => ({
     maskWrapper: {
         height: "100vh",
         width: "100vw",
@@ -19,7 +19,7 @@ const useStyle = makeStyles(() => ({
         justifyContent: "center",
         height: "50%",
         width: "100%",
-        backgroundColor: "rgb(220, 79, 71)",
+        backgroundColor: theme.palette.primary.main,
 
         // Only cut on desktop
         clipPath: !isMobile && "polygon(25vw 50vh, 50vh 50vh, 75vw 50vh, 100vw 40vh, 100vw 0vh, 0vw 0vh, 0vw 40vh)",

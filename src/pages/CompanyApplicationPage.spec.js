@@ -1,5 +1,5 @@
 import React from "react";
-import { renderWithStoreAndTheme } from "../utils/test-utils";
+import { renderWithStoreAndTheme } from "../test-utils";
 import CompanyApplicationPage from "./CompanyApplicationPage";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";

@@ -1,6 +1,6 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
-import { renderWithStoreAndTheme, fireEvent, waitFor } from "../../../utils/test-utils";
+import { renderWithStoreAndTheme, fireEvent, waitFor } from "../../../test-utils";
 import thunk from "redux-thunk";
 import CompanyApplicationForm from "./CompanyApplicationForm";
 import { createMuiTheme } from "@material-ui/core";
