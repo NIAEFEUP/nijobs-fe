@@ -6,6 +6,7 @@ import ProductDescription from "../components/HomePage/ProductPlacementArea/Prod
 import { smoothScrollToRef } from "../utils";
 import Navbar from "../components/Navbar";
 
+
 export const HomePage = () => {
 
     const productDescriptionRef = useRef(null);
@@ -16,7 +17,6 @@ export const HomePage = () => {
     useEffect(() => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
     }, [searchResultsRef, showSearchResults]);
-
 
     return (
         <React.Fragment>

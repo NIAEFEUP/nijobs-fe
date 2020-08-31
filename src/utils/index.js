@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link as ReactRouterLink, Route, Redirect, useLocation  } from "react-router-dom";
 import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
+import useToggle from "../hooks/useToggle";
 
 export const smoothScrollToRef = (ref) => {
 
@@ -63,30 +64,55 @@ RouterLink.propTypes = {
     children: PropTypes.element.isRequired,
 };
 
+
+const MAX_NUM_RETRIES = 1;
+
 /**
  *
  * Only allows this route to be accessed when logged in.
  * Additionally, if an `authorize` function is given, it must return true for the route to accessable
  * The authorize function receives the logged in user details as an object
  */
-export const ProtectedRoute = ({ authorize, unauthorizedRedirectPath, children, ...routeProps }) => {
-    const { isValidating, isLoggedIn, data } = useSession();
+export const ProtectedRoute = ({
+    authorize,
+    unauthorizedRedirectPath,
+    unauthorizedRedirectMessage,
+    maxNumRetries = MAX_NUM_RETRIES,
+    children,
+    ...routeProps
+}) => {
+    const [numRetries, setNumRetries] = useState(0);
+    const [requestNotAuthorized, toggleRequestNotAuthorized] = useToggle(false);
+
+    const { isValidating, isLoggedIn, data } = useSession({
+        onError: (err) => {
+            setNumRetries((n) => n + 1);
+            if (err.status === 401) toggleRequestNotAuthorized();
+        },
+        errorRetryInterval: 500,
+    });
+
+    const isAuthorized = !requestNotAuthorized && isLoggedIn && (!authorize || (authorize && authorize(data)));
+    const redirectPath = requestNotAuthorized ? unauthorizedRedirectPath : "/error";
 
     const location = useLocation();
     return (
         <Route
             {...routeProps}
         >
-            {data === null || isValidating ?
+            {(isValidating || data === null) && numRetries <= maxNumRetries ?
                 <LinearProgress /> :
                 <>
-                    {isLoggedIn && authorize && authorize(data) ?
+                    {isAuthorized ?
                         children
                         :
                         <Redirect
                             to={{
-                                pathname: unauthorizedRedirectPath,
-                                state: { from: location },
+                                pathname: redirectPath,
+                                state: {
+                                    from: location,
+                                    message: requestNotAuthorized ? unauthorizedRedirectMessage : undefined,
+                                },
                             }}
                         />
                     }
@@ -110,4 +136,9 @@ ProtectedRoute.propTypes = {
      * The path for which the site redirects in case the user can't access this route
      */
     unauthorizedRedirectPath: PropTypes.string.isRequired,
+    /**
+     * Number of retries to attempt before redirecting
+     * @default 1
+     */
+    maxNumRetries: PropTypes.number,
 };

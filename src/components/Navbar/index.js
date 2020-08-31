@@ -65,7 +65,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo} color="white"/>}
+                            endIcon={<MenuRounded className={classes.userLogo}/>}
                         >
                             {!userMenuOpen && !isMobile && "Account"}
                         </Button>

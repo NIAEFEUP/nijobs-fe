@@ -44,10 +44,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const UserMenuContent = ({ open, isMobile = false, sessionData, handleLogout }) => {
+const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
     const classes = useStyles({ isMobile });
     return (
-        <div className={classes.userMenuContent}>
+        <div className={classes.userMenuContent} ref={ref}>
             <Typography
                 className={classes.accountName}
                 variant="button"
@@ -66,7 +66,7 @@ const UserMenuContent = ({ open, isMobile = false, sessionData, handleLogout }) 
             </MenuList>
         </div>
     );
-};
+});
 
 UserMenuContent.propTypes = {
     open: PropTypes.bool.isRequired,
