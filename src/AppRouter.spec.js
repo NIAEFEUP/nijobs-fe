@@ -1,6 +1,5 @@
 import React from "react";
-import AppRouter from "./AppRouter";
-import { Route } from "react-router-dom";
+import AppRouter, { Route } from "./AppRouter";
 import HomePage from "./pages/HomePage";
 
 describe("AppRouter", () => {
@@ -8,6 +7,6 @@ describe("AppRouter", () => {
         const firstRoute = shallow(<AppRouter />).find(Route).first();
         expect(firstRoute.prop("path")).toEqual("/");
         expect(firstRoute.prop("exact")).toBe(true);
-        expect(firstRoute.prop("component")).toEqual(HomePage);
+        expect(firstRoute.prop("children")).toEqual(<HomePage />);
     });
 });

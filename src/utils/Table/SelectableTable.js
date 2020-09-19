@@ -1,16 +1,18 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import PropTypes from "prop-types";
 import {
     Table,
     TablePagination,
     TableContainer,
     Paper,
+    Button,
 } from "@material-ui/core";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 import TableToolbar from "./TableToolbar";
 import TableHeader from "./TableHeader";
 import TableContent from "./TableContent";
+import { UndoableActions } from "../../utils/UndoableActionsHandlerProvider";
 
 const SelectableTable = ({
     title,
@@ -82,8 +84,24 @@ const SelectableTable = ({
 
     const numSelected = Object.keys(selected).length;
 
+    const { submitAction } = useContext(UndoableActions);
+
+    const onDone = () => console.log("The timeout passed and the action has been done");
+    const onCancelled = () => console.log("The action has been cancelled, do something in UI to simulate undo");
+
+    const testUndo = () => {
+        submitAction(
+            Math.random().toString(36).substring(7),
+            "This action was executed",
+            onDone,
+            onCancelled,
+            5000
+        );
+    };
+
     return (
         <>
+            <Button onClick={testUndo}>Generate Action</Button>
             <TableToolbar
                 selectedRows={rows.filter((r) => isRowSelected(r.key))}
                 title={title || ""}

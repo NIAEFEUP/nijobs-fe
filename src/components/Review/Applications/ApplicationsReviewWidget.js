@@ -1,9 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
     TableCell,
     IconButton,
     Paper,
@@ -13,15 +10,11 @@ import { Check, Clear, MoreHoriz } from "@material-ui/icons";
 import { RowPropTypes } from "../../../utils/Table/PropTypes";
 import FilterableTable from "../../../utils/Table/FilterableTable";
 import { SortableSelectableTable } from "../../../utils/Table/SortableSelectableTable";
-import { getFieldValue } from "../../../utils/Table/utils";
-import SelectFilter from "../../../utils/Table/Filters/SelectFilter";
-import TextSearchFilter from "../../../utils/Table/Filters/TextSearchFilter";
+import { alphabeticalSorter, getFieldValue } from "../../../utils/Table/utils";
+import { ApplicationStatusLabel, columns } from "./ApplicationsReviewTableSchema";
+import { CompanyNameFilter, StatusFilter } from "./Filters";
+import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
 
-const ApplicationStatusLabel = Object.freeze({
-    APPROVED: "Approved",
-    PENDING: "Pending",
-    REJECTED: "Rejected",
-});
 
 const demoRows = [
     { key: "1nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
@@ -50,59 +43,15 @@ const demoRows = [
     { key: "4kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
 ];
 
-const columns = {
-    name: { align: "left", disablePadding: true, label: "Company Name" },
-    date: { align: "right", disablePadding: false, label: "Requested At" },
-    status: { align: "right", disablePadding: false, label: "Status" },
-    actions: { align: "right", disablePadding: false, label: "Actions", disableSorting: true },
-};
-
-
-const genericSorter = (isAscendingMode) => (a, b) => {
-    if (a.field < b.field) return isAscendingMode ? -1 : 1;
-    if (a.field > b.field) return isAscendingMode ? 1 : -1;
-    return 0;
-};
-
 const sorters = {
-    name: genericSorter,
-    date: genericSorter,
-    status: genericSorter,
+    name: alphabeticalSorter,
+    date: alphabeticalSorter,
+    status: alphabeticalSorter,
 };
-
-
-const StatusFilter = React.forwardRef((props, ref) => (
-    <SelectFilter
-        label={"Status"}
-        id={"status-filter"}
-        options={Object.values(ApplicationStatusLabel)}
-        column={"status"}
-        columns={columns}
-        ref={ref}
-        {...props}
-    />
-));
-
-StatusFilter.displayName = "StatusFilter";
-
-const ValueFilter = React.forwardRef((props, ref) => (
-    <TextSearchFilter
-        label={"Company Name"}
-        placeholder="Search"
-        id={"companyName-filter"}
-        column={"name"}
-        columns={columns}
-        ref={ref}
-        {...props}
-    />
-));
-
-ValueFilter.displayName = "StatusFilter";
-
 
 const filters = [
     { id: "status-filter", render: StatusFilter },
-    { id: "value-filter", render: ValueFilter },
+    { id: "company-name-filter", render: CompanyNameFilter },
 ];
 
 
@@ -110,15 +59,31 @@ const RowActions = ({ row }) => (
     <TableCell align="right">
         {getFieldValue(row, "status", columns) === ApplicationStatusLabel.PENDING &&
             <>
-                <IconButton aria-label="accept">
+                <IconButton
+                    aria-label="accept"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     <Check />
                 </IconButton>
-                <IconButton aria-label="reject">
+                <IconButton
+                    aria-label="reject"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     <Clear />
                 </IconButton>
             </>
         }
-        <IconButton aria-label="more actions" edge="end">
+        <IconButton
+            aria-label="more actions"
+            edge="end"
+            onClick={(e) => {
+                e.stopPropagation();
+            }}
+        >
             <MoreHoriz />
         </IconButton>
     </TableCell>
@@ -152,27 +117,22 @@ MultiRowActions.propTypes = {
     rows: PropTypes.arrayOf(RowPropTypes),
 };
 const ApplicationsReviewWidget = () => (
-    <Dialog open fullScreen>
-        <DialogTitle>
-            Applications Review
-        </DialogTitle>
-        <DialogContent>
-            <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
-                <FilterableTable
-                    title="Applications"
-                    tableComponent={SortableSelectableTable}
-                    rows={demoRows}
-                    columns={columns}
-                    sorters={sorters}
-                    filters={filters}
-                    RowActions={RowActions}
-                    MultiRowActions={MultiRowActions}
-                    rowsPerPage={5}
-                    stickyHeader
-                />
-            </Paper>
-        </DialogContent>
-    </Dialog>
+    <UndoableActionsHandlerProvider>
+        <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
+            <FilterableTable
+                title="Applications"
+                tableComponent={SortableSelectableTable}
+                rows={demoRows}
+                columns={columns}
+                sorters={sorters}
+                filters={filters}
+                RowActions={RowActions}
+                MultiRowActions={MultiRowActions}
+                rowsPerPage={5}
+                stickyHeader
+            />
+        </Paper>
+    </UndoableActionsHandlerProvider>
 );
 
 ApplicationsReviewWidget.propTypes = {

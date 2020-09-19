@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { BrowserRouter, Switch, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Switch, Route as BaseRoute, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage from "./pages/CompanyApplicationPage";
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
@@ -37,6 +37,19 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const RedirectInfoProvider = connect(mapStateToProps, mapDispatchToProps)(BaseRedirectInfoProvider);
 
+export const Route = ({ children, ...props }) => (
+    <BaseRoute
+        {...props}
+    >
+        <RedirectInfoProvider>
+            {children}
+        </RedirectInfoProvider>
+    </BaseRoute>
+);
+Route.propTypes = {
+    children: PropTypes.element.isRequired,
+};
+
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -45,17 +58,13 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <RedirectInfoProvider>
-                    <HomePage/>
-                </RedirectInfoProvider>
+                <HomePage/>
             </Route>
             <Route
                 exact
                 path="/apply/company"
             >
-                <RedirectInfoProvider>
-                    <CompanyApplicationPage/>
-                </RedirectInfoProvider>
+                <CompanyApplicationPage/>
             </Route>
             <ProtectedRoute
                 exact
@@ -67,8 +76,14 @@ const AppRouter = () => (
             >
                 <ApplicationsReviewPage/>
             </ProtectedRoute>
-            <Route component={ErrorPage} />
-            <Route component={NotFound} />
+            <Route
+                path="/error"
+            >
+                <ErrorPage/>
+            </Route>
+            <Route>
+                <NotFound/>
+            </Route>
         </Switch>
     </BrowserRouter>
 );

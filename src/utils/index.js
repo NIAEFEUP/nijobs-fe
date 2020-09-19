@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Link as ReactRouterLink, Route, Redirect, useLocation  } from "react-router-dom";
+import { Link as ReactRouterLink, Redirect, useLocation  } from "react-router-dom";
+import { Route } from "../AppRouter";
 import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
 import useToggle from "../hooks/useToggle";
@@ -61,7 +62,10 @@ export const RouterLink = ({ to, children, ...props }) => {
 
 RouterLink.propTypes = {
     to: PropTypes.string.isRequired,
-    children: PropTypes.element.isRequired,
+    children: PropTypes.oneOfType([
+        PropTypes.element.isRequired,
+        PropTypes.string.isRequired,
+    ]),
 };
 
 
@@ -142,3 +146,5 @@ ProtectedRoute.propTypes = {
      */
     maxNumRetries: PropTypes.number,
 };
+
+export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
