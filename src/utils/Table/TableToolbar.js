@@ -40,9 +40,11 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, hasActiveFilters, setActiveFilters, MultiRowActions }) => {
-    const classes = useToolbarStyles();
+const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
+    hasActiveFilters, activeFilters, setActiveFilters, MultiRowActions,
+}) => {
 
+    const classes = useToolbarStyles();
     const [filterMenuAnchorEl, setFilterMenuAnchorEl] = React.useState(null);
 
     const handleFilterButtonClick = (event) => {
@@ -90,6 +92,7 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, h
                         anchorEl={filterMenuAnchorEl}
                         onClose={handleFilterMenuClose}
                         filters={filters}
+                        activeFilters={activeFilters}
                         setActiveFilters={setActiveFilters}
                     />
 

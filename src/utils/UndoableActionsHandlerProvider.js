@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar, closeSnackbar } from "../actions/notificationActions";
 import { useTimeout } from "../hooks/useTimeout";
@@ -23,7 +24,6 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
     const [showNotification, setShowNotification] = useState(true);
 
     const { cancel, pause, resume } = useTimeout(action.onTimeout, action.timeout);
-
 
     const handleCancel = useCallback((key) => () => {
         cancel();
@@ -67,11 +67,7 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
                         />,
                 },
             });
-        } else {
-            setShowNotification(false);
         }
-
-
     }, [
         showNotification, addSnackbar, action.id, handleCancel, action.message,
         closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave,
@@ -124,6 +120,11 @@ const UndoableActionsHandlerProvider = ({ children }) => {
             {children}
         </UndoableActions.Provider>
     );
+};
+
+UndoableActionsHandlerProvider.propTypes = {
+    children: PropTypes.element.isRequired,
+
 };
 
 

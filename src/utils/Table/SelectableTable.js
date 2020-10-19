@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
     Table,
@@ -14,25 +14,31 @@ import TableHeader from "./TableHeader";
 import TableContent from "./TableContent";
 import { UndoableActions } from "../../utils/UndoableActionsHandlerProvider";
 
-const SelectableTable = ({
-    title,
-    columns,
-    rows,
-    // setSelectedItems,
-    filterable = false,
-    filters,
-    hasActiveFilters = false,
-    setActiveFilters,
-    sortable = false,
-    stickyHeader,
-    order,
-    orderBy,
-    handleOrderBy,
-    RowActions,
-    MultiRowActions,
-    rowsPerPage: initialRowsPerPage = 10,
-}) => {
+
+const SelectableTable = (props) => {
+
+    const {
+        title,
+        columns,
+        rows,
+        // setSelectedItems,
+        filterable = false,
+        filters,
+        hasActiveFilters = false,
+        setActiveFilters,
+        sortable = false,
+        stickyHeader,
+        order,
+        orderBy,
+        handleOrderBy,
+        RowActions,
+        MultiRowActions,
+        rowsPerPage: initialRowsPerPage = 10,
+        TableToolbarProps = {},
+    } = props;
+
     const [selected, setSelected] = useState({});
+    const [selectedRows, setSelectedRows] = useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
@@ -41,6 +47,10 @@ const SelectableTable = ({
         (rowKey) => selected.hasOwnProperty(rowKey),
         [selected],
     );
+
+    useEffect(() => {
+        setSelectedRows(rows.filter((r) => isRowSelected(r.key)));
+    }, [isRowSelected, rows]);
 
     const resetSelected = () => {
         setSelected({});
@@ -103,7 +113,7 @@ const SelectableTable = ({
         <>
             <Button onClick={testUndo}>Generate Action</Button>
             <TableToolbar
-                selectedRows={rows.filter((r) => isRowSelected(r.key))}
+                selectedRows={selectedRows}
                 title={title || ""}
                 numSelected={numSelected}
                 filterable={filterable}
@@ -111,6 +121,7 @@ const SelectableTable = ({
                 hasActiveFilters={hasActiveFilters}
                 setActiveFilters={setActiveFilters}
                 MultiRowActions={MultiRowActions}
+                {...TableToolbarProps}
             />
             <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
                 <Table stickyHeader={stickyHeader}>
@@ -152,6 +163,7 @@ SelectableTable.propTypes = {
     rows: PropTypes.arrayOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
+    hasActiveFilters: PropTypes.bool,
     stickyHeader: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),
     orderBy: PropTypes.number,

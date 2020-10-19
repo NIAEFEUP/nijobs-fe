@@ -1,4 +1,5 @@
 import { Button, emphasize, IconButton, makeStyles, Paper } from "@material-ui/core";
+import PropTypes from "prop-types";
 import { Close } from "@material-ui/icons";
 import React from "react";
 
@@ -25,7 +26,6 @@ const useStyles = makeStyles((theme) => {
 const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleClose, onMouseEnter, onMouseLeave }, ref) => {
 
     const classes = useStyles();
-
     return (
         <Paper
             ref={ref}
@@ -54,5 +54,14 @@ const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleCl
 });
 
 Notification.displayName = "Notification";
+
+Notification.propTypes = {
+    message: PropTypes.string.isRequired,
+    isUndo: PropTypes.bool, // If true, will show an undo button (for undo type notifications)
+    handleCancel: PropTypes.func,
+    handleClose: PropTypes.func,
+    onMouseEnter: PropTypes.func,
+    onMouseLeave: PropTypes.func,
+};
 
 export default Notification;

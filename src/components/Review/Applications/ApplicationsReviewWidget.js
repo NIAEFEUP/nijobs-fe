@@ -12,7 +12,7 @@ import FilterableTable from "../../../utils/Table/FilterableTable";
 import { SortableSelectableTable } from "../../../utils/Table/SortableSelectableTable";
 import { alphabeticalSorter, getFieldValue } from "../../../utils/Table/utils";
 import { ApplicationStatusLabel, columns } from "./ApplicationsReviewTableSchema";
-import { CompanyNameFilter, StatusFilter } from "./Filters";
+import { CompanyNameFilter, StatusFilter, DateFromFilter, DateToFilter } from "./Filters";
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
 
 
@@ -52,6 +52,8 @@ const sorters = {
 const filters = [
     { id: "status-filter", render: StatusFilter },
     { id: "company-name-filter", render: CompanyNameFilter },
+    { id: "date-from-filter", render: DateFromFilter },
+    { id: "date-to-filter", render: DateToFilter },
 ];
 
 
@@ -134,9 +136,5 @@ const ApplicationsReviewWidget = () => (
         </Paper>
     </UndoableActionsHandlerProvider>
 );
-
-ApplicationsReviewWidget.propTypes = {
-
-};
 
 export default ApplicationsReviewWidget;

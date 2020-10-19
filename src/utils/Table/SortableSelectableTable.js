@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import SelectableTable from "./SelectableTable";
 
@@ -15,10 +15,11 @@ export const SortableSelectableTable = ({
     sorters,
     ...props
 }) => {
+
     const [order, setOrder] = useState(true); // true means asc, false means desc
     const [orderBy, setOrderBy] = useState(null);
 
-    const handleOrderBy = (columnKey, columnIdx) => {
+    const handleOrderBy = useCallback((columnKey, columnIdx) => {
 
         const fieldsToReorder = rows.map(({ fields }, i) => ({ rowId: i, field: fields[columnIdx].value }));
         const reorderMode = (orderBy === columnIdx) ? !order : true;
@@ -28,7 +29,7 @@ export const SortableSelectableTable = ({
 
         setOrder(reorderMode);
         setOrderBy(columnIdx);
-    };
+    }, [order, orderBy, rows, setRows, sorters]);
 
     return (
         <SelectableTable

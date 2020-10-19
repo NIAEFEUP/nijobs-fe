@@ -141,6 +141,10 @@ ProtectedRoute.propTypes = {
      */
     unauthorizedRedirectPath: PropTypes.string.isRequired,
     /**
+     * The message shown in the notification when redirecting in case the user can't access this route
+     */
+    unauthorizedRedirectMessage: PropTypes.string.isRequired,
+    /**
      * Number of retries to attempt before redirecting
      * @default 1
      */

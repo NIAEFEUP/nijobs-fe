@@ -1,32 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { TextField } from "@material-ui/core";
 import { getFieldValue } from "../utils";
 import { ColumnPropTypes } from "../PropTypes";
+import ResetableFilter from "./ResetableFilter";
 
-const TextSearchFilter = React.forwardRef(({ className, label, setActiveFilters, id, column, columns, placeholder }, ref) => {
-
-    const [query, setQuery] = useState("");
+const TextSearchFilter = React.forwardRef(({
+    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, columns, placeholder,
+}, ref) => {
 
     const handleChange = (event) => {
-        setQuery(event.target.value);
+        onChange(event.target.value);
     };
 
     useEffect(() => {
-        if (query.length === 0) { // If no value chosen, disregard filter
-            setActiveFilters((filters) => {
-                // eslint-disable-next-line no-unused-vars
-                const { [id]: keyToBeRemoved, ...newFilters } = filters;
-                return newFilters;
-            });
-        } else {
-            const searchRegex = new RegExp(`.*${query}.*`);
+
+        if (value.length) {
+            const searchRegex = new RegExp(`.*${value}.*`);
             setActiveFilters((filters) => ({
                 ...filters,
                 [id]: (rows) => rows.filter((row) => searchRegex.test(getFieldValue(row, column, columns))),
             }));
+            onCommitChange();
         }
-    }, [column, columns, id, query, setActiveFilters]);
+    }, [column, columns, id, value, setActiveFilters, onCommitChange]);
 
     return (
         <TextField
@@ -34,7 +31,7 @@ const TextSearchFilter = React.forwardRef(({ className, label, setActiveFilters,
             className={className}
             label={label}
             id={id}
-            value={query}
+            value={value}
             onChange={handleChange}
             placeholder={placeholder}
             InputLabelProps={{
@@ -49,10 +46,21 @@ TextSearchFilter.displayName = "TextSearchFilter";
 TextSearchFilter.propTypes = {
     className: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
+    placeholder: PropTypes.string.isRequired,
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     column: PropTypes.string.isRequired,
     columns: PropTypes.objectOf(ColumnPropTypes),
 };
 
-export default TextSearchFilter;
+const ResetableTextFilter = React.forwardRef((props, ref) => (
+    <ResetableFilter
+        ref={ref}
+        filterUI={TextSearchFilter}
+        initialValue={""}
+        {...props}
+    />));
+
+ResetableTextFilter.displayName = "ResetableTextFilter";
+
+export default ResetableTextFilter;

@@ -4,6 +4,7 @@ import SelectableTable from "./SelectableTable";
 import MutableDataTable from "./MutableDataTable";
 import { RowPropTypes } from "./PropTypes";
 
+
 const FilterableTable = ({
     tableComponent: Table = SelectableTable,
     rows,
@@ -13,6 +14,10 @@ const FilterableTable = ({
 
     const [activeFilters, setActiveFilters] = useState({});
     const [initialRows] = useState(rows);
+
+    // const testSetAct = useCallback((...args) => {
+    //     setActiveFilters(...args);
+    // }, []);
 
     useEffect(() => {
         const newRows = Object.values(activeFilters).reduce((updatedRows, filter) => filter(updatedRows), initialRows);
@@ -26,6 +31,9 @@ const FilterableTable = ({
             filterable
             setActiveFilters={setActiveFilters}
             hasActiveFilters={Object.keys(activeFilters).length > 0}
+            TableToolbarProps={{
+                activeFilters,
+            }}
             {...props}
         />
     );

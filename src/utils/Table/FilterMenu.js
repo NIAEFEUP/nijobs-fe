@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles, Typography, Popover } from "@material-ui/core";
+import { makeStyles, Typography, Popover, Button } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     filterUI: {
         width: "100%",
-
     },
     filterMenu: {
         padding: theme.spacing(2, 4, 4, 4),
@@ -15,13 +14,20 @@ const useStyles = makeStyles((theme) => ({
             marginTop: theme.spacing(2),
         },
     },
+    resetBtn: {
+        marginTop: theme.spacing(2),
+    },
 }));
 
-const FilterMenu = ({ anchorEl, onClose, filters, setActiveFilters }) => {
+const FilterMenu = ({ anchorEl, onClose, filters, activeFilters, setActiveFilters }) => {
 
     const classes = useStyles();
-    return (
 
+    const resetFilters = () => {
+        setActiveFilters({});
+    };
+
+    return (
         <Popover
             id="filter-menu"
             classes={{
@@ -52,11 +58,19 @@ const FilterMenu = ({ anchorEl, onClose, filters, setActiveFilters }) => {
                             className={classes.filterUI}
                             id={filter.id}
                             key={filter.id}
+                            activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
                         />
                     );
                 })
             }
+            <Button
+                className={classes.resetBtn}
+                color="secondary"
+                onClick={resetFilters}
+            >
+                Reset
+            </Button>
         </Popover>
     );
 };

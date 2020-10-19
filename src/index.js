@@ -4,6 +4,8 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@material-ui/styles";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 import AppTheme from "./AppTheme.js";
 
 import "./index.css";
@@ -22,9 +24,11 @@ ReactDOM.render(
     <BrowserRouter>
         <StylesProvider jss={jss}>
             <ThemeProvider theme={AppTheme}>
-                <SnackbarProvider maxSnack={3}>
-                    <App />
-                </SnackbarProvider>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <App />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>
             </ThemeProvider>
         </StylesProvider>
     </BrowserRouter>, document.getElementById("root"));

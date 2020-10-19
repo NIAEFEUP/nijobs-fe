@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { MenuItem, TextField } from "@material-ui/core";
 import { getFieldValue } from "../utils";
 import { ColumnPropTypes } from "../PropTypes";
+import ResetableFilter from "./ResetableFilter";
 
-const SelectFilter = React.forwardRef(({ className, label, setActiveFilters, id, options, column, columns }, ref) => {
-
-    const [values, setValues] = useState([]);
+const SelectFilter = React.forwardRef(({
+    value, className, label, setActiveFilters, onChange, onCommitChange, id, options, column, columns,
+}, ref) => {
 
     const handleChange = (event) => {
-        setValues(event.target.value);
+        onChange(event.target.value);
     };
 
     useEffect(() => {
-        if (values.length === 0) { // If no value chosen, disregard filter
-            setActiveFilters((filters) => {
-                // eslint-disable-next-line no-unused-vars
-                const { [id]: keyToBeRemoved, ...newFilters } = filters;
-                return newFilters;
-            });
-        } else {
+        if (value.length !== 0) {
             setActiveFilters((filters) => ({
                 ...filters,
-                [id]: (rows) => rows.filter((row) => values.includes(getFieldValue(row, column, columns))),
+                [id]: (rows) => rows.filter((row) => value.includes(getFieldValue(row, column, columns))),
             }));
+            onCommitChange();
         }
-    }, [column, columns, id, setActiveFilters, values]);
+    }, [column, columns, id, onCommitChange, setActiveFilters, value]);
 
     return (
         <TextField
@@ -37,7 +33,7 @@ const SelectFilter = React.forwardRef(({ className, label, setActiveFilters, id,
             SelectProps={{
                 multiple: true,
             }}
-            value={values}
+            value={value}
             onChange={handleChange}
             InputLabelProps={{
                 style: { left: "initial", top: "initial" },
@@ -64,4 +60,14 @@ SelectFilter.propTypes = {
     columns: PropTypes.objectOf(ColumnPropTypes),
 };
 
-export default SelectFilter;
+const ResetableSelectFilter = React.forwardRef((props, ref) => (
+    <ResetableFilter
+        ref={ref}
+        filterUI={SelectFilter}
+        initialValue={[]}
+        {...props}
+    />));
+
+ResetableSelectFilter.displayName = "ResetableSelectFilter";
+
+export default ResetableSelectFilter;

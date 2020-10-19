@@ -49,25 +49,25 @@ const TableHeader = ({
                         classes={{ root: classes.checkbox }}
                     />
                 </TableCell>
-                {Object.entries(columns).map(([key, props], i) => (
+                {Object.entries(columns).map(([key, { align, disablePadding, disableSorting, label }], i) => (
                     <TableCell
                         key={key}
-                        align={props.align}
-                        padding={props.disablePadding ? "none" : "default"}
+                        align={align}
+                        padding={disablePadding ? "none" : "default"}
                         classes={{
                             head: classes.headRow,
                         }}
                         className={classes.columnLabel}
                     >
                         <TableSortLabel
-                            hideSortIcon={!sortable || props.disableSorting}
-                            disabled={!sortable || props.disableSorting}
+                            hideSortIcon={!sortable || disableSorting}
+                            disabled={!sortable || disableSorting}
                             active={orderBy === i}
                             direction={orderBy === i ? order : "asc"}
                             onClick={() => handleOrderBy(key, i)}
                             classes={{ root: classes.columnLabel }}
                         >
-                            {props.label}
+                            {label}
                         </TableSortLabel>
                     </TableCell>
                 ))}
