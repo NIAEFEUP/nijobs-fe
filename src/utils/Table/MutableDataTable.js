@@ -4,7 +4,6 @@ import { RowPropTypes } from "./PropTypes";
 
 const MutableDataTable = ({ rows: initialRows, tableType: Table, ...props }) => {
     const [rows, setRows] = useState(initialRows);
-
     return (
         <Table
             initialRows={initialRows}

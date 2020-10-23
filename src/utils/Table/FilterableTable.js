@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import SelectableTable from "./SelectableTable";
+import BaseTable from "./BaseTable";
 import MutableDataTable from "./MutableDataTable";
 import { RowPropTypes } from "./PropTypes";
 
 
-const FilterableTable = ({
-    tableComponent: Table = SelectableTable,
+export const ControlledFilterableTable = ({
+    tableComponent: TableComponent = BaseTable,
     rows,
     setRows,
     ...props
 }) => {
-
     const [activeFilters, setActiveFilters] = useState({});
     const [initialRows] = useState(rows);
-
-    // const testSetAct = useCallback((...args) => {
-    //     setActiveFilters(...args);
-    // }, []);
 
     useEffect(() => {
         const newRows = Object.values(activeFilters).reduce((updatedRows, filter) => filter(updatedRows), initialRows);
         setRows(newRows);
-
     }, [activeFilters, initialRows, setRows]);
     return (
-        <Table
+        <TableComponent
             rows={rows}
             setRows={setRows}
             filterable
@@ -39,7 +33,7 @@ const FilterableTable = ({
     );
 };
 
-FilterableTable.propTypes = {
+ControlledFilterableTable.propTypes = {
     rows: PropTypes.arrayOf(RowPropTypes).isRequired,
     setRows: PropTypes.func,
     filters: PropTypes.arrayOf(
@@ -51,9 +45,8 @@ FilterableTable.propTypes = {
     tableComponent: PropTypes.elementType,
 };
 
-
-const UncontrolledFilterableTable = (props) => (
-    <MutableDataTable tableType={FilterableTable} {...props} />
+const FilterableTable = (props) => (
+    <MutableDataTable tableType={ControlledFilterableTable} {...props} />
 );
 
-export default UncontrolledFilterableTable;
+export default FilterableTable;

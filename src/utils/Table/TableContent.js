@@ -20,7 +20,7 @@ const generateTableCellFromField = (field, i, labelId) => {
     }
 };
 
-const TableContent = ({ rows, handleSelect, isRowSelected, RowActions }) => (
+const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction, addRow, removeRow }) => (
     <TableBody>
         {rows.map((row, index) => {
             const { key, fields } = row;
@@ -44,7 +44,13 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions }) => (
                         generateTableCellFromField(field, i, labelId)
 
                     ))}
-                    {RowActions && <RowActions row={row}/>}
+                    {RowActions &&
+                    <RowActions
+                        row={row}
+                        submitUndoableAction={submitUndoableAction}
+                        addRow={addRow}
+                        removeRow={removeRow}
+                    />}
 
                 </TableRow>
             );
@@ -57,6 +63,7 @@ TableContent.propTypes = {
     RowActions: PropTypes.elementType,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
+    submitUndoableAction: PropTypes.func,
 };
 
 export default TableContent;

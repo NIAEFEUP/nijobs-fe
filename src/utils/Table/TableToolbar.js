@@ -116,6 +116,7 @@ TableToolbar.propTypes = {
     setActiveFilters: PropTypes.func,
     selectedRows: PropTypes.arrayOf(RowPropTypes),
     MultiRowActions: PropTypes.elementType,
+    activeFilters: PropTypes.object,
 };
 
 export default TableToolbar;

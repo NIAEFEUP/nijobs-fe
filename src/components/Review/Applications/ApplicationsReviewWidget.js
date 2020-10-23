@@ -8,12 +8,12 @@ import {
 import { Check, Clear, MoreHoriz } from "@material-ui/icons";
 
 import { RowPropTypes } from "../../../utils/Table/PropTypes";
-import FilterableTable from "../../../utils/Table/FilterableTable";
-import { SortableSelectableTable } from "../../../utils/Table/SortableSelectableTable";
 import { alphabeticalSorter, getFieldValue } from "../../../utils/Table/utils";
 import { ApplicationStatusLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StatusFilter, DateFromFilter, DateToFilter } from "./Filters";
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
+import ControlledSortableSelectableTable from "../../../utils/Table/ControlledSortableSelectableTable";
+import FilterableTable from "../../../utils/Table/FilterableTable";
 
 
 const demoRows = [
@@ -27,7 +27,7 @@ const demoRows = [
     // eslint-disable-next-line max-len
     { key: "2cs", fields: [{ value: "Critical Software", align: "left" }, { value: "2019-12-23" }, { value: ApplicationStatusLabel.PENDING }] },
     { key: "2nat", fields: [{ value: "Natixis", align: "left" }, { value: "2020-06-23" }, { value: ApplicationStatusLabel.REJECTED }] },
-    { key: "2blp", fields: [{ value: "BLIP", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.PENDING }] },
+    { key: "2blp", fields: [{ value: "BLIP1", align: "left" }, { value: "2020-02-02" }, { value: ApplicationStatusLabel.PENDING }] },
     { key: "2kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
     { key: "3fra", fields: [{ value: "Fraunhofer", align: "left" }, { value: "2020-04-13" }, { value: ApplicationStatusLabel.PENDING }] },
     { key: "3kp", fields: [{ value: "KPMG", align: "left" }, { value: "2020-04-23" }, { value: ApplicationStatusLabel.PENDING }] },
@@ -57,7 +57,7 @@ const filters = [
 ];
 
 
-const RowActions = ({ row }) => (
+const RowActions = ({ row, submitUndoableAction, addRow, removeRow }) => (
     <TableCell align="right">
         {getFieldValue(row, "status", columns) === ApplicationStatusLabel.PENDING &&
             <>
@@ -65,6 +65,21 @@ const RowActions = ({ row }) => (
                     aria-label="accept"
                     onClick={(e) => {
                         e.stopPropagation();
+                        removeRow(row.key);
+                        if (submitUndoableAction) {
+                            submitUndoableAction(
+                                row.key,
+                                `Application for ${getFieldValue(row, "name", columns)} Approved`,
+                                () => {
+                                    console.log(`SHOULD CALL API TO APPROVE ROW ${row.key} HERE`);
+                                },
+                                () => {
+                                    console.log(`APPROVE ROW ${row.key} CANCELLED`);
+                                    addRow(row);
+                                },
+                                5000
+                            );
+                        }
                     }}
                 >
                     <Check />
@@ -93,6 +108,9 @@ const RowActions = ({ row }) => (
 
 RowActions.propTypes = {
     row: RowPropTypes,
+    submitUndoableAction: PropTypes.func,
+    addRow: PropTypes.func.isRequired,
+    removeRow: PropTypes.func.isRequired,
 };
 
 
@@ -119,22 +137,25 @@ MultiRowActions.propTypes = {
     rows: PropTypes.arrayOf(RowPropTypes),
 };
 const ApplicationsReviewWidget = () => (
-    <UndoableActionsHandlerProvider>
-        <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
-            <FilterableTable
-                title="Applications"
-                tableComponent={SortableSelectableTable}
-                rows={demoRows}
-                columns={columns}
-                sorters={sorters}
-                filters={filters}
-                RowActions={RowActions}
-                MultiRowActions={MultiRowActions}
-                rowsPerPage={5}
-                stickyHeader
-            />
-        </Paper>
-    </UndoableActionsHandlerProvider>
+    <>
+        <UndoableActionsHandlerProvider>
+            <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
+                <FilterableTable
+                    title="Applications"
+                    tableComponent={ControlledSortableSelectableTable}
+                    defaultSort="name"
+                    rows={demoRows}
+                    columns={columns}
+                    sorters={sorters}
+                    filters={filters}
+                    RowActions={RowActions}
+                    MultiRowActions={MultiRowActions}
+                    rowsPerPage={5}
+                    stickyHeader
+                />
+            </Paper>
+        </UndoableActionsHandlerProvider>
+    </>
 );
 
 export default ApplicationsReviewWidget;

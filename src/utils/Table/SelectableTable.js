@@ -1,46 +1,19 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-    Table,
-    TablePagination,
-    TableContainer,
-    Paper,
-    Button,
-} from "@material-ui/core";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
-import TableToolbar from "./TableToolbar";
-import TableHeader from "./TableHeader";
-import TableContent from "./TableContent";
-import { UndoableActions } from "../../utils/UndoableActionsHandlerProvider";
+import BaseTable from "./BaseTable";
+import MutableDataTable from "./MutableDataTable";
 
-
-const SelectableTable = (props) => {
-
-    const {
-        title,
-        columns,
-        rows,
-        // setSelectedItems,
-        filterable = false,
-        filters,
-        hasActiveFilters = false,
-        setActiveFilters,
-        sortable = false,
-        stickyHeader,
-        order,
-        orderBy,
-        handleOrderBy,
-        RowActions,
-        MultiRowActions,
-        rowsPerPage: initialRowsPerPage = 10,
-        TableToolbarProps = {},
-    } = props;
+export const ControlledSelectableTable = ({
+    tableComponent: TableComponent = BaseTable,
+    ...props
+}) => {
 
     const [selected, setSelected] = useState({});
     const [selectedRows, setSelectedRows] = useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+
+    const { rows, TableToolbarProps } = props;
 
     const isRowSelected = useCallback(
         // eslint-disable-next-line no-prototype-builtins
@@ -48,27 +21,25 @@ const SelectableTable = (props) => {
         [selected],
     );
 
-    useEffect(() => {
-        setSelectedRows(rows.filter((r) => isRowSelected(r.key)));
-    }, [isRowSelected, rows]);
-
     const resetSelected = () => {
         setSelected({});
     };
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
+    const onPageChange = () => {
         resetSelected();
     };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-        resetSelected();
-    };
+    useEffect(() => {
+        if (TableToolbarProps.activeFilters)
+            resetSelected();
+    }, [TableToolbarProps.activeFilters]);
 
-    const handleSelect = (event, name) => {
+    useEffect(() => {
+        setSelectedRows(rows.filter((r) => isRowSelected(r.key)));
+    }, [isRowSelected, rows]);
 
+
+    const handleSelect = useCallback((event, name) => {
         if (isRowSelected(name)) {
             // eslint-disable-next-line no-unused-vars
             const { [name]: keyToDelete, ...newSelected } = selected;
@@ -76,9 +47,9 @@ const SelectableTable = (props) => {
         } else {
             setSelected((selected) => ({ ...selected, [name]: true }));
         }
-    };
+    }, [isRowSelected, selected]);
 
-    const handleSelectAllClick = (event) => {
+    const handleSelectAll = useCallback((page, rowsPerPage) => (event) => {
         if (event.target.checked) {
             const newSelected = { ...selected };
             rows
@@ -90,75 +61,25 @@ const SelectableTable = (props) => {
             return;
         }
         resetSelected();
-    };
+    }, [rows, selected]);
+
 
     const numSelected = Object.keys(selected).length;
 
-    const { submitAction } = useContext(UndoableActions);
-
-    const onDone = () => console.log("The timeout passed and the action has been done");
-    const onCancelled = () => console.log("The action has been cancelled, do something in UI to simulate undo");
-
-    const testUndo = () => {
-        submitAction(
-            Math.random().toString(36).substring(7),
-            "This action was executed",
-            onDone,
-            onCancelled,
-            5000
-        );
-    };
-
     return (
-        <>
-            <Button onClick={testUndo}>Generate Action</Button>
-            <TableToolbar
-                selectedRows={selectedRows}
-                title={title || ""}
-                numSelected={numSelected}
-                filterable={filterable}
-                filters={filters}
-                hasActiveFilters={hasActiveFilters}
-                setActiveFilters={setActiveFilters}
-                MultiRowActions={MultiRowActions}
-                {...TableToolbarProps}
-            />
-            <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
-                <Table stickyHeader={stickyHeader}>
-                    <TableHeader
-                        columns={columns}
-                        handleSelectAllClick={handleSelectAllClick}
-                        checkboxIndeterminate={numSelected > 0 && numSelected < rowsPerPage}
-                        allChecked={rows.length > 0 && numSelected === rowsPerPage}
-                        sortable={sortable}
-                        order={order}
-                        orderBy={orderBy}
-                        handleOrderBy={handleOrderBy}
-                    />
-                    <TableContent
-                        rows={rows.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)}
-                        handleSelect={handleSelect}
-                        isRowSelected={isRowSelected}
-                        RowActions={RowActions}
-                    />
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={rows.length} // TODO change this to have total number of rows, even the ones not fetched yet
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                backIconButtonProps={{ color: "secondary" }}
-                nextIconButtonProps={{ color: "secondary" }}
-            />
-        </>
+        <TableComponent
+            numSelected={numSelected}
+            selectedRows={selectedRows}
+            handleSelect={handleSelect}
+            handleSelectAll={handleSelectAll}
+            onPageChange={onPageChange}
+            isRowSelected={isRowSelected}
+            {...props}
+        />
     );
 };
 
-SelectableTable.propTypes = {
+ControlledSelectableTable.propTypes = {
     title: PropTypes.string,
     rows: PropTypes.arrayOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
@@ -179,6 +100,13 @@ SelectableTable.propTypes = {
         })
     ),
     setActiveFilters: PropTypes.func,
+    TableToolbarProps: PropTypes.shape({
+        activeFilters: PropTypes.object,
+    }),
 };
+
+const SelectableTable = (props) => (
+    <MutableDataTable tableType={ControlledSelectableTable} {...props} />
+);
 
 export default SelectableTable;
