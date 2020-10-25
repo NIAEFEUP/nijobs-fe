@@ -3,28 +3,27 @@ import PropTypes from "prop-types";
 import { TableBody, TableCell, Checkbox, TableRow } from "@material-ui/core";
 import { RowPropTypes } from "./PropTypes";
 
-const generateTableCellFromField = (field, i, labelId) => {
+const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
 
-    if (typeof field.value === "function") {
-        return field.value();
+    if (typeof fieldOptions.value === "function") {
+        return fieldOptions.value();
     } else {
         return (
             <TableCell
-                key={field.value}
-                id={i === 0 ? labelId : undefined}
-                align={field.align || "right"}
+                key={fieldId}
+                id={id === 0 ? labelId : undefined}
+                align={fieldOptions.align || "right"}
             >
-                {field.value}
+                {fieldOptions.value}
             </TableCell>
         );
     }
 };
 
-const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction, addRow, removeRow }) => (
+const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction, RowActionsProps }) => (
     <TableBody>
-        {rows.map((row, index) => {
-            const { key, fields } = row;
-            const labelId = `table-checkbox-${index}`;
+        {Object.entries(rows).map(([key, { fields }]) => {
+            const labelId = `table-checkbox-${key}`;
             return (
                 <TableRow
                     hover
@@ -40,16 +39,14 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                             inputProps={{ "aria-labelledby": labelId }}
                         />
                     </TableCell>
-                    {fields.map((field, i) => (
-                        generateTableCellFromField(field, i, labelId)
-
+                    {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                        generateTableCellFromField(i, fieldId, fieldOptions, labelId)
                     ))}
                     {RowActions &&
                     <RowActions
-                        row={row}
+                        row={{ key, fields }}
                         submitUndoableAction={submitUndoableAction}
-                        addRow={addRow}
-                        removeRow={removeRow}
+                        {...RowActionsProps}
                     />}
 
                 </TableRow>
@@ -59,7 +56,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
 );
 
 TableContent.propTypes = {
-    rows: PropTypes.arrayOf(RowPropTypes),
+    rows: PropTypes.objectOf(RowPropTypes),
     RowActions: PropTypes.elementType,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,

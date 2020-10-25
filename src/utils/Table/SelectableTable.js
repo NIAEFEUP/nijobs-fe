@@ -35,7 +35,7 @@ export const ControlledSelectableTable = ({
     }, [TableToolbarProps.activeFilters]);
 
     useEffect(() => {
-        setSelectedRows(rows.filter((r) => isRowSelected(r.key)));
+        setSelectedRows(Object.entries(rows).filter(([key]) => isRowSelected(key)));
     }, [isRowSelected, rows]);
 
 
@@ -81,13 +81,13 @@ export const ControlledSelectableTable = ({
 
 ControlledSelectableTable.propTypes = {
     title: PropTypes.string,
-    rows: PropTypes.arrayOf(RowPropTypes),
+    rows: PropTypes.objectOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
     hasActiveFilters: PropTypes.bool,
     stickyHeader: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),
-    orderBy: PropTypes.number,
+    orderBy: PropTypes.string,
     handleOrderBy: PropTypes.func,
     RowActions: PropTypes.elementType,
     MultiRowActions: PropTypes.elementType,

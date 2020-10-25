@@ -34,7 +34,7 @@ export const ControlledFilterableTable = ({
 };
 
 ControlledFilterableTable.propTypes = {
-    rows: PropTypes.arrayOf(RowPropTypes).isRequired,
+    rows: PropTypes.objectOf(RowPropTypes).isRequired,
     setRows: PropTypes.func,
     filters: PropTypes.arrayOf(
         PropTypes.shape({

@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import { Button, Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
+import { Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
 import { UndoableActions } from "../UndoableActionsHandlerProvider";
 import TableContent from "./TableContent";
 import TableHeader from "./TableHeader";
@@ -11,7 +11,6 @@ const BaseTable = ({
     title,
     columns,
     rows,
-    setRows,
     numSelected,
     selectedRows,
     // setSelectedItems,
@@ -29,6 +28,7 @@ const BaseTable = ({
     isRowSelected,
     onPageChange,
     RowActions,
+    RowActionsProps,
     MultiRowActions,
     rowsPerPage: initialRowsPerPage = 10,
     TableToolbarProps = {},
@@ -47,43 +47,10 @@ const BaseTable = ({
         onPageChange();
     };
 
-    const addRow = useCallback(
-        (row) => {
-            setRows((rows) => ([
-                ...rows,
-                row,
-            ]));
-        },
-        [setRows],
-    );
-
-    const removeRow = useCallback(
-        (rowId) => {
-            setRows((rows) =>
-                // eslint-disable-next-line no-unused-vars
-                rows.filter((row) => row.key !== rowId)
-            );
-        },
-        [setRows],
-    );
-
     const { submitAction } = useContext(UndoableActions);
 
-    const onDone = () => console.log("The timeout passed and the action has been done");
-    const onCancelled = () => console.log("The action has been cancelled, do something in UI to simulate undo");
-
-    const testUndo = () => {
-        submitAction(
-            Math.random().toString(36).substring(7),
-            "This action was executed",
-            onDone,
-            onCancelled,
-            5000
-        );
-    };
     return (
         <>
-            <Button onClick={testUndo}>Generate Action</Button>
             <TableToolbar
                 selectedRows={selectedRows}
                 title={title || ""}
@@ -101,27 +68,28 @@ const BaseTable = ({
                         columns={columns}
                         handleSelectAllClick={handleSelectAll(page, rowsPerPage)}
                         checkboxIndeterminate={numSelected > 0 && numSelected < rowsPerPage}
-                        allChecked={rows.length > 0 && numSelected === rowsPerPage}
+                        allChecked={Object.keys(rows).length > 0 && numSelected === rowsPerPage}
                         sortable={sortable}
                         order={order}
                         orderBy={orderBy}
                         handleOrderBy={handleOrderBy}
                     />
                     <TableContent
-                        rows={rows.slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)}
-                        addRow={addRow}
-                        removeRow={removeRow}
+                        rows={Object.entries(rows)
+                            .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
+                            .reduce((rows, [key, row]) => ({ ...rows, [key]: row }), {})}
                         handleSelect={handleSelect}
                         isRowSelected={isRowSelected}
                         submitUndoableAction={submitAction}
                         RowActions={RowActions}
+                        RowActionsProps={RowActionsProps}
                     />
                 </Table>
             </TableContainer>
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={rows.length} // TODO change this to have total number of rows, even the ones not fetched yet
+                count={Object.keys(rows).length} // TODO change this to have total number of rows, even the ones not fetched yet
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}
@@ -135,16 +103,16 @@ const BaseTable = ({
 
 BaseTable.propTypes = {
     title: PropTypes.string,
-    rows: PropTypes.arrayOf(RowPropTypes),
-    setRows: PropTypes.func.isRequired,
+    rows: PropTypes.objectOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
     hasActiveFilters: PropTypes.bool,
     stickyHeader: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),
-    orderBy: PropTypes.number,
+    orderBy: PropTypes.string,
     handleOrderBy: PropTypes.func,
     RowActions: PropTypes.elementType,
+    RowActionsProps: PropTypes.object,
     MultiRowActions: PropTypes.elementType,
     rowsPerPage: PropTypes.number,
     filterable: PropTypes.bool,

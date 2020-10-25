@@ -5,6 +5,15 @@
   "engines": {
     "node": "10.17.0"
   },
+  "scripts": {
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "jest --coverage --verbose",
+    "test-ci": "jest -w 1 --coverage --verbose",
+    "test-watch": "node scripts/test.js",
+    "lint-fix": "npm run lint -- --fix",
+    "lint": "eslint src --max-warnings 0"
+  },
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
     "@hookform/resolvers": "^0.1.0",
@@ -32,16 +41,6 @@
     "redux-thunk": "^2.3.0",
     "swr": "^0.1.18",
     "yup": "^0.28.3"
-  },
-  "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "jest --coverage --verbose",
-    "test-ci": "jest -w 1 --coverage --verbose",
-    "test1": "jest --coverage --verbose --clearCache",
-    "test-watch": "node scripts/test.js",
-    "lint-fix": "npm run lint -- --fix",
-    "lint": "eslint src --max-warnings 0"
   },
   "browserslist": [
     ">0.2%",

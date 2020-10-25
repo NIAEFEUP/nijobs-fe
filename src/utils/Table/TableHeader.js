@@ -49,7 +49,7 @@ const TableHeader = ({
                         classes={{ root: classes.checkbox }}
                     />
                 </TableCell>
-                {Object.entries(columns).map(([key, { align, disablePadding, disableSorting, label }], i) => (
+                {Object.entries(columns).map(([key, { align, disablePadding, disableSorting, label }]) => (
                     <TableCell
                         key={key}
                         align={align}
@@ -62,9 +62,9 @@ const TableHeader = ({
                         <TableSortLabel
                             hideSortIcon={!sortable || disableSorting}
                             disabled={!sortable || disableSorting}
-                            active={orderBy === i}
-                            direction={orderBy === i ? order : "asc"}
-                            onClick={() => handleOrderBy(key, i)}
+                            active={orderBy === key}
+                            direction={orderBy === key ? order : "asc"}
+                            onClick={() => handleOrderBy(key)}
                             classes={{ root: classes.columnLabel }}
                         >
                             {label}
@@ -80,7 +80,7 @@ TableHeader.propTypes = {
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),
-    orderBy: PropTypes.number,
+    orderBy: PropTypes.string,
     handleOrderBy: PropTypes.func,
     handleSelectAllClick: PropTypes.func,
     allChecked: PropTypes.bool,

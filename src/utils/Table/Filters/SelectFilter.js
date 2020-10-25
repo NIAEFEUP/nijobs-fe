@@ -17,7 +17,11 @@ const SelectFilter = React.forwardRef(({
         if (value.length !== 0) {
             setActiveFilters((filters) => ({
                 ...filters,
-                [id]: (rows) => rows.filter((row) => value.includes(getFieldValue(row, column, columns))),
+                [id]: (rows) => Object.entries(rows)
+                    .filter(([, row]) => value.includes(getFieldValue(row, column)))
+                    .reduce((filtered, [key, row]) => {
+                        filtered[key] = row; return filtered;
+                    }, {}),
             }));
             onCommitChange();
         }

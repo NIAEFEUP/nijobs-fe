@@ -30,7 +30,11 @@ const DateFilter = React.forwardRef(({
         if (value) {
             setActiveFilters((filters) => ({
                 ...filters,
-                [id]: (rows) => rows.filter((row) => comparator(mode, getFieldValue(row, column, columns), value)),
+                [id]: (rows) => Object.entries(rows)
+                    .filter(([, row]) => comparator(mode, getFieldValue(row, column), value))
+                    .reduce((filtered, [key, row]) => {
+                        filtered[key] = row; return filtered;
+                    }, {}),
             }));
             onCommitChange();
         }

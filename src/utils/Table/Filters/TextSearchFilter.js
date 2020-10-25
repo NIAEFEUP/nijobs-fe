@@ -19,7 +19,11 @@ const TextSearchFilter = React.forwardRef(({
             const searchRegex = new RegExp(`.*${value}.*`);
             setActiveFilters((filters) => ({
                 ...filters,
-                [id]: (rows) => rows.filter((row) => searchRegex.test(getFieldValue(row, column, columns))),
+                [id]: (rows) => Object.entries(rows)
+                    .filter(([, row]) => searchRegex.test(getFieldValue(row, column)))
+                    .reduce((filtered, [key, row]) => {
+                        filtered[key] = row; return filtered;
+                    }, {}),
             }));
             onCommitChange();
         }

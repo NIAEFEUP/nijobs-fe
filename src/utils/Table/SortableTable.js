@@ -14,30 +14,26 @@ export const ControlledSortableTable = ({
     rows,
     setRows,
     sorters,
-    defaultSort: defaultSorterKey,
+    defaultSort,
     defaultOrder = true,
     ...props
 }) => {
 
     const [order, setOrder] = useState(defaultOrder); // true means asc, false means desc
-    const [sorterKey, setSorterKey] = useState(defaultSorterKey);
 
-    let columnIdx = 0;
-    for (const key in columns) {
-        if (key === sorterKey) break;
-        columnIdx++;
-    }
-    const [orderBy, setOrderBy] = useState(columnIdx);
+    const [orderBy, setOrderBy] = useState(defaultSort);
 
-    const fieldsToReorder = rows.map(({ fields }, i) => ({ rowId: i, field: fields[orderBy].value }));
-    const sortedRows = sortRowFields(fieldsToReorder, order, sorters[sorterKey]).map(({ rowId }) => rows[rowId]);
+    const fieldsToReorder = Object.entries(rows).map(([i, { fields }]) => ({ rowId: i, field: fields[orderBy].value }));
+    const sortedRows = sortRowFields(fieldsToReorder, order, sorters[orderBy])
+        .reduce((sorted, { rowId }) => {
+            sorted[rowId] = rows[rowId]; return sorted;
+        }, {});
 
-    const handleOrderBy = useCallback((columnKey, columnIdx) => {
+    const handleOrderBy = useCallback((column) => {
         const reorderMode = (orderBy === orderBy) ? !order : true;
 
         setOrder(reorderMode);
-        setOrderBy(columnIdx);
-        setSorterKey(columnKey);
+        setOrderBy(column);
 
     }, [order, orderBy]);
 
@@ -49,7 +45,6 @@ export const ControlledSortableTable = ({
             setRows={setRows}
             order={order ? "asc" : "desc"}
             orderBy={orderBy}
-            sorterKey={sorterKey}
             handleOrderBy={handleOrderBy}
             {...props}
         />
@@ -57,7 +52,7 @@ export const ControlledSortableTable = ({
 };
 
 ControlledSortableTable.propTypes = {
-    rows: PropTypes.arrayOf(RowPropTypes),
+    rows: PropTypes.objectOf(RowPropTypes),
     setRows: PropTypes.func.isRequired,
     columns: PropTypes.objectOf(ColumnPropTypes),
     stickyHeader: PropTypes.bool,

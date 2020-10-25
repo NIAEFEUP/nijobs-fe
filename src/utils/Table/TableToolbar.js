@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
-import { Toolbar, Typography, Tooltip, IconButton, Badge } from "@material-ui/core";
+import { Toolbar, Typography, Tooltip, Badge, Button } from "@material-ui/core";
 import { Tune } from "@material-ui/icons";
 import FilterMenu from "./FilterMenu";
 import { RowPropTypes } from "./PropTypes";
@@ -76,17 +76,20 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
             {filterable && (
                 <>
                     <Tooltip title="Filter">
-                        <IconButton
+                        <Button
                             aria-label="Filter list"
                             aria-haspopup="true"
                             aria-controls="filter-menu"
                             onClick={handleFilterButtonClick}
                             color="secondary"
+                            endIcon={
+                                <Badge color="primary" variant="dot" invisible={!hasActiveFilters}>
+                                    <Tune />
+                                </Badge>
+                            }
                         >
-                            <Badge color="primary" variant="dot" invisible={!hasActiveFilters}>
-                                <Tune />
-                            </Badge>
-                        </IconButton>
+                            Filter
+                        </Button>
                     </Tooltip>
                     <FilterMenu
                         anchorEl={filterMenuAnchorEl}

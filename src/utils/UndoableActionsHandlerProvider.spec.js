@@ -23,7 +23,6 @@ describe("UndoableActionsHandlerProvider", () => {
 
             const { submitAction } = useContext(UndoableActions);
 
-
             const generateAction = useCallback(
                 () => {
                     submitAction(
