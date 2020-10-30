@@ -9,10 +9,29 @@ const MutableDataTable = ({ rows: initialRows, tableType: Table, ...props }) => 
         setRows(initialRows);
     }, [initialRows]);
 
-
     const changeRowState = useCallback((row, state) => {
-        const { key, fields } = row;
-        setRows((rows) => ({ ...rows, [key]: { fields: { ...fields, state: { value: state } } } }));
+        const { rowKey: key, fields } = row;
+
+        setRows((rows) => ({
+            ...rows,
+            [key]: {
+                ...rows[key],
+                fields: { ...fields, state: { value: state } },
+            } }));
+    }, []);
+
+    const updateRowRejectReason = useCallback((row, rejectReason) => {
+        const { rowKey: key, payload } = row;
+
+        setRows((rows) => ({
+            ...rows,
+            [key]: {
+                ...rows[key],
+                payload: {
+                    ...payload,
+                    rejectReason,
+                },
+            } }));
     }, []);
     return (
         <Table
@@ -22,6 +41,7 @@ const MutableDataTable = ({ rows: initialRows, tableType: Table, ...props }) => 
             setRows={setRows}
             RowActionsProps={{
                 changeRowState,
+                updateRowRejectReason,
             }}
             {...props}
         />

@@ -1,10 +1,19 @@
 import React from "react";
 import useForm from "../../../hooks/useForm";
 import { yupResolver } from "@hookform/resolvers";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, TextField } from "@material-ui/core";
 import RejectApplicationSchema, { Rules } from "./RejectApplicationSchema";
 
+
+const useStyles = makeStyles((theme) => ({
+    dialogActions: {
+        padding: theme.spacing(2),
+    },
+}));
+
 const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, setRejectReason }) => {
+
+    const classes = useStyles();
 
     const handleRejectReasonChange = (e) => {
         setRejectReason(e.target.value);
@@ -33,7 +42,6 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
                     <DialogContentText>
 
                     In order to reject an Application, you need to provide a reject reason.
-                    THIS IS MISSING INPUT VALIDATION
                     </DialogContentText>
 
                     <TextField
@@ -54,7 +62,7 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
                         error={!!errors.rejectReason}
                     />
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={classes.dialogActions}>
                     <Button onClick={cancelAction}>Cancel</Button>
                     <Button
                         type="submit"

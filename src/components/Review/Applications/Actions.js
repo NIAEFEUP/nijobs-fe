@@ -9,14 +9,16 @@ import {
 import { RowPropTypes } from "../../../utils/Table/PropTypes";
 import { getFieldValue } from "../../../utils/Table/utils";
 import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
-import { Check, Clear, MoreHoriz } from "@material-ui/icons";
+import { Check, Clear, ExpandMore, ExpandLess } from "@material-ui/icons";
 import { approveApplication, rejectApplication } from "../../../services/applicationsReviewService";
 import { addSnackbar } from "../../../actions/notificationActions";
 import { connect } from "react-redux";
 import ConfirmRejectDialog from "./ConfirmRejectDialog";
 
 
-const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState }) => {
+const BaseRowActions = ({
+    addSnackbar, row, submitUndoableAction, changeRowState, updateRowRejectReason, isCollapseOpen, toggleCollapse,
+}) => {
 
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [rejectReason, setRejectReason] = useState("");
@@ -26,15 +28,15 @@ const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState
             setActionToConfirm(null);
 
             submitUndoableAction(
-                row.key,
+                row.rowKey,
                 `Approving Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    approveApplication(row.key)
+                    approveApplication(row.rowKey)
                         .then(() => changeRowState(row, ApplicationStateLabel.APPROVED))
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not approve ${getFieldValue(row, "name")}'s application.`,
-                                key: `${row.key}-error`,
+                                key: `${row.rowKey}-error`,
                             });
                             changeRowState(row, ApplicationStateLabel.PENDING);
                         });
@@ -53,15 +55,18 @@ const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState
             setActionToConfirm(null);
 
             submitUndoableAction(
-                row.key,
+                row.rowKey,
                 `Rejecting Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    rejectApplication(row.key, rejectReason)
-                        .then(() => changeRowState(row, ApplicationStateLabel.REJECTED))
+                    rejectApplication(row.rowKey, rejectReason)
+                        .then(() => {
+                            changeRowState(row, ApplicationStateLabel.REJECTED);
+                            updateRowRejectReason(row, rejectReason);
+                        })
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not reject ${getFieldValue(row, "name")}'s application.`,
-                                key: `${row.key}-error`,
+                                key: `${row.rowKey}-error`,
                             });
                             changeRowState(row, ApplicationStateLabel.PENDING);
                         });
@@ -71,7 +76,7 @@ const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState
                 },
                 3000
             );
-        }, [addSnackbar, changeRowState, rejectReason, row, submitUndoableAction]);
+        }, [addSnackbar, changeRowState, rejectReason, row, submitUndoableAction, updateRowRejectReason]);
 
 
     const handleAction = (actionLabel) => (e) => {
@@ -152,10 +157,10 @@ const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState
                                 aria-label="more actions"
                                 edge="end"
                                 onClick={(e) => {
-                                    e.stopPropagation();
+                                    e.stopPropagation(); toggleCollapse();
                                 }}
                             >
-                                <MoreHoriz />
+                                {!isCollapseOpen ? <ExpandMore/> : <ExpandLess/>}
                             </IconButton>
                         </>
                     }
@@ -179,24 +184,22 @@ const mapDispatchToProps = (dispatch) => ({
 export const RowActions = connect(mapStateToProps, mapDispatchToProps)(BaseRowActions);
 
 
-export const MultiRowActions = ({ rows }) => {
-    const handleAction = () => {
-        console.log("This will affect rows", rows);
-    };
-    return ( // TODO it should check if it can approve all/reject (mby some of them already approved or rej)
+// eslint-disable-next-line no-unused-vars
+export const MultiRowActions = ({ rows }) =>
+    // const handleAction = () => {
+    //     console.log("This will affect rows", rows);
+    // };
+    ( // TODO it should check if it can approve all/reject (mby some of them already approved or rej)
         <>
-            <IconButton aria-label="accept" onClick={handleAction}>
+            {/* <IconButton aria-label="accept" onClick={handleAction}>
                 <Check />
             </IconButton>
             <IconButton aria-label="reject" onClick={handleAction}>
                 <Clear />
-            </IconButton>
-            <IconButton aria-label="more actions" onClick={handleAction}>
-                <MoreHoriz />
-            </IconButton>
+            </IconButton> */}
         </>
-    );
-};
+    )
+;
 
 MultiRowActions.propTypes = {
     rows: PropTypes.objectOf(RowPropTypes),

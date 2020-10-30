@@ -72,11 +72,17 @@ const filters = [
     { id: "date-to-filter", render: DateToFilter },
 ];
 
-const generateRow = (name, date, state) => ({
+const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation, email, rejectedAt }) => ({
     fields: {
-        name: { value: name, align: "left" },
-        date: { value: format(parseISO(date), "yyyy-MM-dd") },
+        name: { value: companyName, align: "left" },
+        date: { value: format(parseISO(submittedAt), "yyyy-MM-dd") },
         state: { value: ApplicationStateLabel[state] },
+    },
+    payload: {
+        email,
+        motivation,
+        rejectReason,
+        rejectedAt: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "",
     },
 });
 
@@ -87,8 +93,9 @@ const ApplicationsReviewWidget = () => {
     useEffect(() => {
         searchApplications()
             .then((rows) => {
+                console.log(rows);
                 const fetchedRows = rows.applications.reduce((rows, row) => {
-                    rows[row.id] = generateRow(row.companyName, row.submittedAt, row.state);
+                    rows[row.id] = generateRow(row);
                     return rows;
                 }, {});
                 setRows(fetchedRows);
