@@ -2,7 +2,6 @@ import { isAfter, isBefore, isEqual, parseISO } from "date-fns";
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { ColumnPropTypes } from "../PropTypes";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { getFieldValue } from "../utils";
 import ResetableFilter from "./ResetableFilter";
@@ -19,7 +18,7 @@ const comparator = (mode, rowDate, selectedDate) => MODE_COMPARE_FN[mode](parseI
 // - Date to only after DAte from(if exists)
 
 const DateFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, id, setActiveFilters, column, columns, label, mode, minDate,
+    value, onChange, onCommitChange, className, id, setActiveFilters, column, label, mode, minDate,
 }, ref) => {
 
     const handleChange = (date) => {
@@ -38,7 +37,7 @@ const DateFilter = React.forwardRef(({
             }));
             onCommitChange();
         }
-    }, [column, columns, id, mode, onCommitChange, setActiveFilters, value]);
+    }, [column, id, mode, onCommitChange, setActiveFilters, value]);
 
     return (
         <KeyboardDatePicker
@@ -63,7 +62,6 @@ DateFilter.propTypes = {
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     column: PropTypes.string.isRequired,
-    columns: PropTypes.objectOf(ColumnPropTypes),
     mode: PropTypes.oneOf(Object.keys(MODE_COMPARE_FN)),
 };
 

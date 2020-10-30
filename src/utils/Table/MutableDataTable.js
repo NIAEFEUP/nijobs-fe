@@ -1,16 +1,22 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { RowPropTypes } from "./PropTypes";
 
 const MutableDataTable = ({ rows: initialRows, tableType: Table, ...props }) => {
     const [rows, setRows] = useState(initialRows);
 
-    const changeRowState = useCallback((row, status) => {
+    useEffect(() => {
+        setRows(initialRows);
+    }, [initialRows]);
+
+
+    const changeRowState = useCallback((row, state) => {
         const { key, fields } = row;
-        setRows((rows) => ({ ...rows, [key]: { fields: { ...fields, status: { value: status } } } }));
+        setRows((rows) => ({ ...rows, [key]: { fields: { ...fields, state: { value: state } } } }));
     }, []);
     return (
         <Table
+            key={JSON.stringify(initialRows).substring(0, 20)}
             initialRows={initialRows}
             rows={rows}
             setRows={setRows}

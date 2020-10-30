@@ -144,7 +144,7 @@ SearchArea.propTypes = {
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
     resetAdvancedSearchFields: PropTypes.func.isRequired,
-    fields: PropTypes.object.isRequired,
+    fields: PropTypes.array.isRequired,
     techs: PropTypes.array.isRequired,
     showJobDurationSlider: PropTypes.bool.isRequired,
     setFields: PropTypes.func.isRequired,

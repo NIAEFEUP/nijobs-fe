@@ -124,7 +124,7 @@ BaseTable.propTypes = {
     ),
     setActiveFilters: PropTypes.func,
     numSelected: PropTypes.number,
-    selectedRows: PropTypes.arrayOf(RowPropTypes),
+    selectedRows: PropTypes.objectOf(RowPropTypes),
     handleSelectAll: PropTypes.func,
     handleSelect: PropTypes.func,
     isRowSelected: PropTypes.func,

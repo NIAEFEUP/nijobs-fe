@@ -1,12 +1,12 @@
 import React from "react";
 import DateFilter from "../../../../utils/Table/Filters/DateFilter";
-import { ApplicationStatusLabel, columns } from "../ApplicationsReviewTableSchema";
+import { ApplicationStateLabel, columns } from "../ApplicationsReviewTableSchema";
 
 const Filter = React.forwardRef((props, ref) => (
     <DateFilter
         label="Date From..."
         id="date-from-filter"
-        options={Object.values(ApplicationStatusLabel)}
+        options={Object.values(ApplicationStateLabel)}
         column="date"
         columns={columns}
         mode="isAfter"

@@ -15,6 +15,6 @@ const Filter = React.forwardRef((props, ref) => (
     />
 ));
 
-Filter.displayName = "StatusFilter";
+Filter.displayName = "StateFilter";
 
 export default Filter;

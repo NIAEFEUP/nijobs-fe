@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { TextField } from "@material-ui/core";
 import { getFieldValue } from "../utils";
-import { ColumnPropTypes } from "../PropTypes";
 import ResetableFilter from "./ResetableFilter";
 
 const TextSearchFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, columns, placeholder,
+    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, placeholder,
 }, ref) => {
 
     const handleChange = (event) => {
@@ -27,7 +26,7 @@ const TextSearchFilter = React.forwardRef(({
             }));
             onCommitChange();
         }
-    }, [column, columns, id, value, setActiveFilters, onCommitChange]);
+    }, [column, id, value, setActiveFilters, onCommitChange]);
 
     return (
         <TextField
@@ -54,7 +53,6 @@ TextSearchFilter.propTypes = {
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     column: PropTypes.string.isRequired,
-    columns: PropTypes.objectOf(ColumnPropTypes),
 };
 
 const ResetableTextFilter = React.forwardRef((props, ref) => (

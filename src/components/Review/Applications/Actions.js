@@ -1,98 +1,187 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import { IconButton, TableCell } from "@material-ui/core";
+import {
+    IconButton,
+    TableCell,
+    Tooltip,
+    Typography,
+} from "@material-ui/core";
 import { RowPropTypes } from "../../../utils/Table/PropTypes";
 import { getFieldValue } from "../../../utils/Table/utils";
-import { ApplicationStatusLabel } from "./ApplicationsReviewTableSchema";
+import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
 import { Check, Clear, MoreHoriz } from "@material-ui/icons";
+import { approveApplication, rejectApplication } from "../../../services/applicationsReviewService";
+import { addSnackbar } from "../../../actions/notificationActions";
+import { connect } from "react-redux";
+import ConfirmRejectDialog from "./ConfirmRejectDialog";
 
 
-export const RowActions = ({ row, submitUndoableAction, changeRowState }) => {
+const BaseRowActions = ({ addSnackbar, row, submitUndoableAction, changeRowState }) => {
+
+    const [actionToConfirm, setActionToConfirm] = useState(null);
+    const [rejectReason, setRejectReason] = useState("");
 
     const handleApprove = useCallback(
-        (e) => {
-            e.stopPropagation();
-            changeRowState(row, ApplicationStatusLabel.APPROVED);
+        () => {
+            setActionToConfirm(null);
+
             submitUndoableAction(
                 row.key,
-                `Application for ${getFieldValue(row, "name")} Approved`,
+                `Approving Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    console.log(`SHOULD CALL API TO APPROVE ROW ${row.key} HERE`);
+                    approveApplication(row.key)
+                        .then(() => changeRowState(row, ApplicationStateLabel.APPROVED))
+                        .catch(() => {
+                            addSnackbar({
+                                message: `An unexpected error occurred. Could not approve ${getFieldValue(row, "name")}'s application.`,
+                                key: `${row.key}-error`,
+                            });
+                            changeRowState(row, ApplicationStateLabel.PENDING);
+                        });
                 },
                 () => {
-                    console.log(`APPROVE ROW ${row.key} CANCELLED`);
-                    changeRowState(row, ApplicationStatusLabel.PENDING);
+                    changeRowState(row, ApplicationStateLabel.PENDING);
                 },
-                5000
+                3000
             );
-
         },
-        [changeRowState, row, submitUndoableAction],
+        [addSnackbar, changeRowState, row, submitUndoableAction],
     );
 
     const handleReject = useCallback(
-        (e) => {
-            e.stopPropagation();
-            changeRowState(row, ApplicationStatusLabel.REJECTED);
+        () => {
+            setActionToConfirm(null);
+
             submitUndoableAction(
                 row.key,
-                `Application for ${getFieldValue(row, "name")} Rejected`,
+                `Rejecting Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    console.log(`SHOULD CALL API TO REJECT ROW ${row.key} HERE`);
+                    rejectApplication(row.key, rejectReason)
+                        .then(() => changeRowState(row, ApplicationStateLabel.REJECTED))
+                        .catch(() => {
+                            addSnackbar({
+                                message: `An unexpected error occurred. Could not reject ${getFieldValue(row, "name")}'s application.`,
+                                key: `${row.key}-error`,
+                            });
+                            changeRowState(row, ApplicationStateLabel.PENDING);
+                        });
                 },
                 () => {
-                    console.log(`REJECT ROW ${row.key} CANCELLED`);
-                    changeRowState(row, ApplicationStatusLabel.PENDING);
+                    changeRowState(row, ApplicationStateLabel.PENDING);
                 },
-                5000
+                3000
             );
-        },
-        [changeRowState, row, submitUndoableAction],
-    );
+        }, [addSnackbar, changeRowState, rejectReason, row, submitUndoableAction]);
+
+
+    const handleAction = (actionLabel) => (e) => {
+        e.stopPropagation();
+        setActionToConfirm(actionLabel);
+    };
+
+
+    const cancelAction = (e) => {
+        e.stopPropagation();
+        setRejectReason("");
+        setActionToConfirm(null);
+    };
+
     return (
+        <>
+            <ConfirmRejectDialog
+                open={actionToConfirm === "Reject"}
+                rejectReason={rejectReason}
+                setRejectReason={setRejectReason}
+                handleReject={handleReject}
+                cancelAction={cancelAction}
+            />
+            <TableCell align="right">
+                <div style={{ minWidth: "150px" }}>
+                    {actionToConfirm === "Approve" ?
+                        <>
+                            <Typography
+                                variant="body2"
+                                display="inline"
+                                color="primary"
+                            >
+                                Approve?
+                            </Typography>
+                            <IconButton
+                                aria-label="accept"
+                                onClick={handleApprove}
+                            >
+                                <Check />
+                            </IconButton>
+                            <IconButton
+                                aria-label="reject"
+                                onClick={cancelAction}
+                            >
+                                <Clear />
+                            </IconButton>
+                        </>
+                        :
+                        <>
+                            {getFieldValue(row, "state") === ApplicationStateLabel.PENDING &&
+                            <>
+                                <Tooltip
+                                    title="Approve"
+                                    placement="top"
+                                >
+                                    <IconButton
+                                        aria-label="accept"
+                                        onClick={handleAction("Approve", handleApprove)}
+                                    >
+                                        <Check />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip
+                                    title="Reject"
+                                    placement="top"
+                                >
+                                    <IconButton
+                                        aria-label="reject"
+                                        onClick={handleAction("Reject", handleReject)}
+                                    >
+                                        <Clear />
+                                    </IconButton>
+                                </Tooltip>
+                            </>
+                            }
 
-
-        <TableCell align="right">
-            {getFieldValue(row, "status") === ApplicationStatusLabel.PENDING &&
-            <>
-                <IconButton
-                    aria-label="accept"
-                    onClick={handleApprove}
-                >
-                    <Check />
-                </IconButton>
-                <IconButton
-                    aria-label="reject"
-                    onClick={handleReject}
-                >
-                    <Clear />
-                </IconButton>
-            </>
-            }
-            <IconButton
-                aria-label="more actions"
-                edge="end"
-                onClick={(e) => {
-                    e.stopPropagation();
-                }}
-            >
-                <MoreHoriz />
-            </IconButton>
-        </TableCell>
-
+                            <IconButton
+                                aria-label="more actions"
+                                edge="end"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                }}
+                            >
+                                <MoreHoriz />
+                            </IconButton>
+                        </>
+                    }
+                </div>
+            </TableCell>
+        </>
     );
 };
 
-RowActions.propTypes = {
+BaseRowActions.propTypes = {
     row: RowPropTypes,
     submitUndoableAction: PropTypes.func,
     changeRowState: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = () => ({});
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+
+export const RowActions = connect(mapStateToProps, mapDispatchToProps)(BaseRowActions);
+
 
 export const MultiRowActions = ({ rows }) => {
     const handleAction = () => {
-        console.log("This will affect rows", rows.map((row) => row.key));
+        console.log("This will affect rows", rows);
     };
     return ( // TODO it should check if it can approve all/reject (mby some of them already approved or rej)
         <>

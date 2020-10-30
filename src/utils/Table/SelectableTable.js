@@ -11,7 +11,7 @@ export const ControlledSelectableTable = ({
 }) => {
 
     const [selected, setSelected] = useState({});
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState({});
 
     const { rows, TableToolbarProps } = props;
 
@@ -35,7 +35,14 @@ export const ControlledSelectableTable = ({
     }, [TableToolbarProps.activeFilters]);
 
     useEffect(() => {
-        setSelectedRows(Object.entries(rows).filter(([key]) => isRowSelected(key)));
+        setSelectedRows(
+            Object.entries(rows)
+                .filter(([key]) => isRowSelected(key))
+                .reduce((selectedRows, [key, row]) => {
+                    selectedRows[key] = row;
+                    return selectedRows;
+                }, {})
+        );
     }, [isRowSelected, rows]);
 
 

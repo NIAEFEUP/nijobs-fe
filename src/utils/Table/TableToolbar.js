@@ -10,8 +10,8 @@ import { RowPropTypes } from "./PropTypes";
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
+        // paddingLeft: theme.spacing(2),
+        // paddingRight: theme.spacing(2),
     },
     highlight:
       theme.palette.type === "light"
@@ -28,7 +28,6 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
     filterUI: {
         width: "100%",
-
     },
     filterMenu: {
         padding: theme.spacing(2, 4, 4, 4),
@@ -66,7 +65,7 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
                     {`${numSelected} selected`}
                 </Typography>
             ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                <Typography className={classes.title} variant="h6" id="tableTitle" color="secondary" component="div">
                     {title}
                 </Typography>
             )}
@@ -76,20 +75,20 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
             {filterable && (
                 <>
                     <Tooltip title="Filter">
-                        <Button
-                            aria-label="Filter list"
-                            aria-haspopup="true"
-                            aria-controls="filter-menu"
-                            onClick={handleFilterButtonClick}
-                            color="secondary"
-                            endIcon={
-                                <Badge color="primary" variant="dot" invisible={!hasActiveFilters}>
+                        <Badge color="primary" variant="dot" invisible={!hasActiveFilters}>
+                            <Button
+                                aria-label="Filter list"
+                                aria-haspopup="true"
+                                aria-controls="filter-menu"
+                                onClick={handleFilterButtonClick}
+                                color="secondary"
+                                endIcon={
                                     <Tune />
-                                </Badge>
-                            }
-                        >
+                                }
+                            >
                             Filter
-                        </Button>
+                            </Button>
+                        </Badge>
                     </Tooltip>
                     <FilterMenu
                         anchorEl={filterMenuAnchorEl}
@@ -117,7 +116,7 @@ TableToolbar.propTypes = {
         })
     ),
     setActiveFilters: PropTypes.func,
-    selectedRows: PropTypes.arrayOf(RowPropTypes),
+    selectedRows: PropTypes.objectOf(RowPropTypes),
     MultiRowActions: PropTypes.elementType,
     activeFilters: PropTypes.object,
 };

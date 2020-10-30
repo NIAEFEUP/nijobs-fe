@@ -1,8 +1,6 @@
 /* istanbul ignore file */
-import {
-    ValidationReasons,
-    generateValidationRule,
-} from "./CompanyApplicationUtils";
+import { generateValidationRule } from "./CompanyApplicationUtils";
+import { ValidationReasons } from "../../../utils";
 import * as yup from "yup";
 
 export default yup.object().shape({

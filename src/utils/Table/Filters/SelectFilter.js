@@ -2,11 +2,10 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { MenuItem, TextField } from "@material-ui/core";
 import { getFieldValue } from "../utils";
-import { ColumnPropTypes } from "../PropTypes";
 import ResetableFilter from "./ResetableFilter";
 
 const SelectFilter = React.forwardRef(({
-    value, className, label, setActiveFilters, onChange, onCommitChange, id, options, column, columns,
+    value, className, label, setActiveFilters, onChange, onCommitChange, id, options, column,
 }, ref) => {
 
     const handleChange = (event) => {
@@ -25,7 +24,7 @@ const SelectFilter = React.forwardRef(({
             }));
             onCommitChange();
         }
-    }, [column, columns, id, onCommitChange, setActiveFilters, value]);
+    }, [column, id, onCommitChange, setActiveFilters, value]);
 
     return (
         <TextField
@@ -61,7 +60,6 @@ SelectFilter.propTypes = {
     id: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.string).isRequired,
     column: PropTypes.string.isRequired,
-    columns: PropTypes.objectOf(ColumnPropTypes),
 };
 
 const ResetableSelectFilter = React.forwardRef((props, ref) => (
