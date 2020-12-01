@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const FilterMenu = ({ anchorEl, onClose, filters, activeFilters, setActiveFilters }) => {
+const FilterMenu = ({ anchorEl, onClose, filters,
+    filtersContext, setFiltersContext, activeFilters, setActiveFilters,
+}) => {
 
     const classes = useStyles();
 
@@ -60,6 +62,9 @@ const FilterMenu = ({ anchorEl, onClose, filters, activeFilters, setActiveFilter
                             key={filter.id}
                             activeFilters={activeFilters}
                             setActiveFilters={setActiveFilters}
+                            filtersContext={filtersContext}
+                            setFiltersContext={setFiltersContext}
+                            {...filter.props}
                         />
                     );
                 })

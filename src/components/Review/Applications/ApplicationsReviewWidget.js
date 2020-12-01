@@ -58,7 +58,6 @@ const demoRows = {
     "4kp": { fields: { name: { value: "KPMG", align: "left" }, date: { value: "2020-04-23" }, state: { value: ApplicationStateLabel.PENDING } } },
 };
 
-
 const sorters = {
     name: alphabeticalSorter,
     date: alphabeticalSorter,
@@ -68,8 +67,20 @@ const sorters = {
 const filters = [
     { id: "state-filter", render: StateFilter },
     { id: "company-name-filter", render: CompanyNameFilter },
-    { id: "date-from-filter", render: DateFromFilter },
-    { id: "date-to-filter", render: DateToFilter },
+    { id: "date-from-filter",
+        render: DateFromFilter,
+        props: {
+            onChange: (date, filtersContext, setFiltersContext) => {
+                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+            },
+        },
+    },
+    { id: "date-to-filter",
+        render: DateToFilter,
+        props: {
+            restrictMinDate: true,
+        },
+    },
 ];
 
 const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation, email, rejectedAt }) => ({
@@ -93,7 +104,6 @@ const ApplicationsReviewWidget = () => {
     useEffect(() => {
         searchApplications()
             .then((rows) => {
-                console.log(rows);
                 const fetchedRows = rows.applications.reduce((rows, row) => {
                     rows[row.id] = generateRow(row);
                     return rows;

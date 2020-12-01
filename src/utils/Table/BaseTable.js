@@ -16,6 +16,8 @@ const BaseTable = ({
     // setSelectedItems,
     filterable = false,
     filters,
+    filtersContext,
+    setFiltersContext,
     hasActiveFilters = false,
     setActiveFilters,
     sortable = false,
@@ -52,11 +54,14 @@ const BaseTable = ({
     return (
         <>
             <TableToolbar
+                // could refactor selectedRows to only change keys, and pass it here together with rows to avoid data duplication
                 selectedRows={selectedRows}
                 title={title || ""}
                 numSelected={numSelected}
                 filterable={filterable}
                 filters={filters}
+                filtersContext={filtersContext}
+                setFiltersContext={setFiltersContext}
                 hasActiveFilters={hasActiveFilters}
                 setActiveFilters={setActiveFilters}
                 MultiRowActions={MultiRowActions}

@@ -13,6 +13,7 @@ export const ControlledFilterableTable = ({
     ...props
 }) => {
     const [activeFilters, setActiveFilters] = useState({});
+    const [filtersContext, setFiltersContext] = useState({});
 
     useEffect(() => {
         // This does filtering purely on the client side.
@@ -25,6 +26,8 @@ export const ControlledFilterableTable = ({
             rows={rows}
             setRows={setRows}
             filterable
+            filtersContext={filtersContext}
+            setFiltersContext={setFiltersContext}
             setActiveFilters={setActiveFilters}
             hasActiveFilters={Object.keys(activeFilters).length > 0}
             TableToolbarProps={{

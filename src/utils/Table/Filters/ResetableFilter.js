@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 const ResetableFilter = React.forwardRef(({
-    activeFilters = {}, setActiveFilters, id, initialValue = null, filterUI: FilterUI, ...props
+    activeFilters = {}, setActiveFilters, id, initialValue = null, filterUI: FilterUI,
+    onChange: afterChange, filtersContext, setFiltersContext, ...props
 }, ref) => {
 
     const [value, setValue] = useState(initialValue);
@@ -18,6 +19,7 @@ const ResetableFilter = React.forwardRef(({
             });
         }
         setHasUncommitedChanges(true);
+        afterChange(newValue, filtersContext, setFiltersContext);
     };
 
     const onCommitChange = useCallback(
@@ -41,6 +43,8 @@ const ResetableFilter = React.forwardRef(({
             setValue={setValue}
             setActiveFilters={setActiveFilters}
             initialValue={initialValue}
+            filtersContext={filtersContext}
+            setFiltersContext={setFiltersContext}
             {...props}
         />
     );

@@ -28,15 +28,15 @@ const BaseRowActions = ({
             setActionToConfirm(null);
 
             submitUndoableAction(
-                row.rowKey,
+                row.key,
                 `Approving Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    approveApplication(row.rowKey)
+                    approveApplication(row.key)
                         .then(() => changeRowState(row, ApplicationStateLabel.APPROVED))
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not approve ${getFieldValue(row, "name")}'s application.`,
-                                key: `${row.rowKey}-error`,
+                                key: `${row.key}-error`,
                             });
                             changeRowState(row, ApplicationStateLabel.PENDING);
                         });
@@ -55,10 +55,10 @@ const BaseRowActions = ({
             setActionToConfirm(null);
 
             submitUndoableAction(
-                row.rowKey,
+                row.key,
                 `Rejecting Application for ${getFieldValue(row, "name")}...`,
                 () => {
-                    rejectApplication(row.rowKey, rejectReason)
+                    rejectApplication(row.key, rejectReason)
                         .then(() => {
                             changeRowState(row, ApplicationStateLabel.REJECTED);
                             updateRowRejectReason(row, rejectReason);
@@ -66,7 +66,7 @@ const BaseRowActions = ({
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not reject ${getFieldValue(row, "name")}'s application.`,
-                                key: `${row.rowKey}-error`,
+                                key: `${row.key}-error`,
                             });
                             changeRowState(row, ApplicationStateLabel.PENDING);
                         });

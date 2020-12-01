@@ -40,7 +40,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 }));
 
 const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
-    hasActiveFilters, activeFilters, setActiveFilters, MultiRowActions,
+    filtersContext, setFiltersContext, hasActiveFilters, activeFilters, setActiveFilters, MultiRowActions,
 }) => {
 
     const classes = useToolbarStyles();
@@ -94,6 +94,8 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
                         anchorEl={filterMenuAnchorEl}
                         onClose={handleFilterMenuClose}
                         filters={filters}
+                        filtersContext={filtersContext}
+                        setFiltersContext={setFiltersContext}
                         activeFilters={activeFilters}
                         setActiveFilters={setActiveFilters}
                     />

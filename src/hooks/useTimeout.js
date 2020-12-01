@@ -16,6 +16,10 @@ class PausableTimer {
             timerId = setTimeout(callback, remaining);
         };
 
+        this.cancel = function() {
+            clearTimeout(timerId);
+        };
+
         this.resume();
     }
 }
@@ -26,17 +30,21 @@ const useTimeout = (callback, timeout) => {
     const handleCancel = useCallback(
         () => {
             if (timer.current) {
-                clearTimeout(timer.current);
+                timer.current.cancel();
                 timer.current = undefined;
             }
         },
         [timer],
     );
 
+    // Ensures that the passed callback is stable and does not change between re-renders,
+    // triggering multiple executions of the timer
+    const safeCallback = useCallback(callback, [timer]);
+
     useEffect(() => {
-        timer.current = new PausableTimer(callback, timeout);
+        timer.current = new PausableTimer(safeCallback, timeout);
         return handleCancel;
-    }, [callback, handleCancel, timeout]);
+    }, [safeCallback, handleCancel, timeout]);
 
     const handlePause = () => {
         if (timer.current) timer.current.pause();

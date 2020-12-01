@@ -65,7 +65,7 @@ const CompanyApplicationRow = ({
                 ))}
                 {RowActions &&
                 <RowActions
-                    row={{ rowKey, fields, payload, ...rowProps }}
+                    row={{ key: rowKey, fields, payload, ...rowProps }}
                     submitUndoableAction={submitUndoableAction}
                     isCollapseOpen={open}
                     toggleCollapse={toggleOpen}

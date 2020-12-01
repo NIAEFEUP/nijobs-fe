@@ -20,9 +20,6 @@ const removeAction = (setActions) => (id) => {
 
 const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackbar }) => {
 
-    // Using this to ensure this only renders a notification once (check last useEffect)
-    const [showNotification, setShowNotification] = useState(true);
-
     const { cancel, pause, resume } = useTimeout(action.onTimeout, action.timeout);
 
     const handleCancel = useCallback((key) => () => {
@@ -49,36 +46,30 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
 
 
     useEffect(() => {
-        if (showNotification) {
-            addSnackbar({
-                message: action.message,
-                key: action.id,
-                options: {
-                    persist: true,
-                    // eslint-disable-next-line react/display-name
-                    content: (key, message) =>
-                        <Notification
-                            message={message}
-                            isUndo
-                            handleCancel={handleCancel(key)}
-                            handleClose={handleClose(key)}
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                        />,
-                },
-            });
-        }
-    }, [
-        showNotification, addSnackbar, action.id, handleCancel, action.message,
-        closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave,
-    ]);
+        addSnackbar({
+            message: action.message,
+            key: action.id,
+            options: {
+                persist: true,
+                // eslint-disable-next-line react/display-name
+                content: (key, message) =>
+                    <Notification
+                        message={message}
+                        isUndo
+                        handleCancel={handleCancel(key)}
+                        handleClose={handleClose(key)}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
+                    />,
+            },
+        });
+    }, [addSnackbar, action.id, handleCancel, action.message, closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave]);
 
-    useEffect(() => {
-        setShowNotification(false);
-        return function cleanup() {
+    useEffect(() =>
+        () => {
             closeSnackbar(action.id);
-        };
-    }, [action.id, closeSnackbar]);
+        }
+    , [action.id, closeSnackbar]);
 
     return null;
 
@@ -107,6 +98,9 @@ const UndoableActionsHandlerProvider = ({ children }) => {
     };
 
     const undoableActionsController = { submitAction };
+    const removeActionHandler = useCallback(() => {
+        removeAction(setActions);
+    }, [setActions]);
 
     return (
         <UndoableActions.Provider value={undoableActionsController}>
@@ -114,7 +108,7 @@ const UndoableActionsHandlerProvider = ({ children }) => {
                 <ActionNotification
                     key={action.id}
                     action={action}
-                    removeAction={removeAction(setActions)}
+                    removeAction={removeActionHandler}
                 />
             ))}
             {children}

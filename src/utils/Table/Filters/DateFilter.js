@@ -18,7 +18,7 @@ const comparator = (mode, rowDate, selectedDate) => MODE_COMPARE_FN[mode](parseI
 // - Date to only after DAte from(if exists)
 
 const DateFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, id, setActiveFilters, column, label, mode, minDate,
+    value, onChange, onCommitChange, className, id, setActiveFilters, column, label, mode, filtersContext, restrictMinDate,
 }, ref) => {
 
     const handleChange = (date) => {
@@ -49,7 +49,8 @@ const DateFilter = React.forwardRef(({
             onChange={handleChange}
             autoOk
             format="yyyy-MM-dd"
-            minDate={minDate}
+            minDate={restrictMinDate && filtersContext.minDate}
+            initialFocusedDate={restrictMinDate && filtersContext.minDate}
         />
     );
 });
