@@ -54,7 +54,6 @@ const BaseTable = ({
     return (
         <>
             <TableToolbar
-                // could refactor selectedRows to only change keys, and pass it here together with rows to avoid data duplication
                 selectedRows={selectedRows}
                 title={title || ""}
                 numSelected={numSelected}

@@ -19,7 +19,7 @@ const ResetableFilter = React.forwardRef(({
             });
         }
         setHasUncommitedChanges(true);
-        afterChange(newValue, filtersContext, setFiltersContext);
+        if (afterChange) afterChange(newValue, filtersContext, setFiltersContext);
     };
 
     const onCommitChange = useCallback(
