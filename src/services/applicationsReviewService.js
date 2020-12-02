@@ -1,15 +1,28 @@
 import { API_HOSTNAME } from "../config";
 
+const encodeFilters = (filters) => {
+    const encodedValues = [];
+
+    if (filters.limit) encodedValues.push(`limit=${filters.limit}`);
+    if (filters.offset) encodedValues.push(`offset=${filters.offset}`);
+    if (filters.companyName) encodedValues.push(`companyName=${filters.companyName}`);
+    if (filters.state)
+        encodedValues.push(`state=[${filters.state.map((state) => `"${state}"`).join(",")}]`);
+    if (filters.sortBy)
+        encodedValues.push(Object.entries(filters.sortBy)
+            .map(([field, mode]) => `sortBy=${field}:${mode}`)
+            .join(",")
+        );
+
+    return encodedValues.join("&");
+};
+
 export const searchApplications = async (filters) => {
 
     try {
-        const res = await fetch(`${API_HOSTNAME}/applications/company/search`, {
-            method: "POST",
+        const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
+            method: "GET",
             credentials: "include",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: filters ? JSON.stringify({ filters }) : "",
         });
         const json = await res.json();
 

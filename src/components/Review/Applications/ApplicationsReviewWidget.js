@@ -13,51 +13,6 @@ import { RowActions, MultiRowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
 
-
-// eslint-disable-next-line no-unused-vars
-const demoRows = {
-    // eslint-disable-next-line max-len
-    "1nat": { fields: { name: { value: "Natixis", align: "left" }, date: { value: "2020-06-23" }, state: { value: ApplicationStateLabel.REJECTED } } },
-    // eslint-disable-next-line max-len
-    "1fra": { fields: { name: { value: "Fraunhofer", align: "left" }, date: { value: "2020-04-13" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "1cs": { fields: { name: { value: "Critical Software", align: "left"  }, date: { value: "2019-12-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "1blp": { fields: { name: { value: "BLIP", align: "left" }, date: { value: "2020-02-02" }, state: { value: ApplicationStateLabel.APPROVED } } },
-    // eslint-disable-next-line max-len
-    "1kp": { fields: { name: { value: "KPMG", align: "left" }, date: { value: "2020-04-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "2fra": { fields: { name: { value: "Fraunhofer", align: "left" }, date: { value: "2020-04-13" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "2cs": { fields: { name: { value: "Critical Software", align: "left"  }, date: { value: "2019-12-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "2nat": { fields: { name: { value: "Natixis", align: "left" }, date: { value: "2020-06-23" }, state: { value: ApplicationStateLabel.REJECTED } } },
-    // eslint-disable-next-line max-len
-    "2blp": { fields: { name: { value: "BLIP1", align: "left" }, date: { value: "2020-02-02" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "2kp": { fields: { name: { value: "KPMG", align: "left" }, date: { value: "2020-04-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "3fra": { fields: { name: { value: "Fraunhofer", align: "left" }, date: { value: "2020-04-13" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "3kp": { fields: { name: { value: "KPMG", align: "left" }, date: { value: "2020-04-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "3cs": { fields: { name: { value: "Critical Software", align: "left"  }, date: { value: "2019-12-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "3nat": { fields: { name: { value: "Natixis", align: "left" }, date: { value: "2020-06-23" }, state: { value: ApplicationStateLabel.REJECTED } } },
-    // eslint-disable-next-line max-len
-    "3cs2": { fields: { name: { value: "Critical Software", align: "left"  }, date: { value: "2019-12-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "4nat": { fields: { name: { value: "Natixis", align: "left" }, date: { value: "2020-06-23" }, state: { value: ApplicationStateLabel.REJECTED } } },
-    // eslint-disable-next-line max-len
-    "4blp": { fields: { name: { value: "BLIP", align: "left" }, date: { value: "2020-02-02" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "4fra": { fields: { name: { value: "Fraunhofer", align: "left" }, date: { value: "2020-04-13" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "4blp2": { fields: { name: { value: "BLIP", align: "left" }, date: { value: "2020-02-02" }, state: { value: ApplicationStateLabel.PENDING } } },
-    // eslint-disable-next-line max-len
-    "4kp": { fields: { name: { value: "KPMG", align: "left" }, date: { value: "2020-04-23" }, state: { value: ApplicationStateLabel.PENDING } } },
-};
-
 const sorters = {
     name: alphabeticalSorter,
     date: alphabeticalSorter,
@@ -115,7 +70,6 @@ const ApplicationsReviewWidget = () => {
             });
     }, []);
     return (
-
         <>
             <UndoableActionsHandlerProvider>
                 <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
@@ -141,13 +95,12 @@ const ApplicationsReviewWidget = () => {
                             MultiRowActions={MultiRowActions}
                             rowsPerPage={5}
                             stickyHeader
+                            emptyMessage="No applications here."
                         />
                     }
                 </Paper>
             </UndoableActionsHandlerProvider>
         </>
-
-
     );
 };
 export default ApplicationsReviewWidget;

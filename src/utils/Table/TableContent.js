@@ -106,22 +106,30 @@ const CompanyApplicationRow = ({
     );
 };
 
-const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction, RowActionsProps }) => (
+const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
+    RowActionsProps, emptyMessage, numColumns,
+}) => (
     <TableBody>
-        {Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
-            <CompanyApplicationRow
-                key={key}
-                rowKey={key}
-                fields={fields}
-                payload={payload}
-                rowProps={rowProps}
-                handleSelect={handleSelect}
-                isRowSelected={isRowSelected}
-                RowActions={RowActions}
-                submitUndoableAction={submitUndoableAction}
-                RowActionsProps={RowActionsProps}
-            />
-        ))}
+        {Object.keys(rows).length === 0 ?
+            <TableRow>
+                <TableCell align="center" colSpan={numColumns + 1 /* This should depend whether this is selectable or not*/}>
+                    {emptyMessage}
+                </TableCell>
+            </TableRow>
+            : Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
+                <CompanyApplicationRow
+                    key={key}
+                    rowKey={key}
+                    fields={fields}
+                    payload={payload}
+                    rowProps={rowProps}
+                    handleSelect={handleSelect}
+                    isRowSelected={isRowSelected}
+                    RowActions={RowActions}
+                    submitUndoableAction={submitUndoableAction}
+                    RowActionsProps={RowActionsProps}
+                />
+            ))}
     </TableBody>
 );
 

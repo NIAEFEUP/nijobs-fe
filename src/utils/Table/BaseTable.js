@@ -32,6 +32,7 @@ const BaseTable = ({
     RowActions,
     RowActionsProps,
     MultiRowActions,
+    emptyMessage,
     rowsPerPage: initialRowsPerPage = 10,
     TableToolbarProps = {},
 }) => {
@@ -79,6 +80,7 @@ const BaseTable = ({
                         handleOrderBy={handleOrderBy}
                     />
                     <TableContent
+                        numColumns={Object.keys(columns).length}
                         rows={Object.entries(rows)
                             .slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage)
                             .reduce((rows, [key, row]) => ({ ...rows, [key]: row }), {})}
@@ -87,6 +89,7 @@ const BaseTable = ({
                         submitUndoableAction={submitAction}
                         RowActions={RowActions}
                         RowActionsProps={RowActionsProps}
+                        emptyMessage={emptyMessage}
                     />
                 </Table>
             </TableContainer>
