@@ -16,6 +16,7 @@ import {
 import { logout } from "../../services/auth";
 
 import { useMobile } from "../../utils/media-queries";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     userMenuContent: ({ isMobile }) => ({
@@ -42,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         width: "80%",
     },
+    labelledDivider: {
+        marginTop: theme.spacing(2),
+    },
+    dividerLabel: {
+        padding: theme.spacing(1, 2),
+    },
 }));
 
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
@@ -63,6 +70,31 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 <MenuItem button disableTouchRipple onClick={() => {}}>My Offers</MenuItem>
                 <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+                {/* {sessionData?.isAdmin && */}
+                {true &&
+                <>
+                    <Divider className={classes.labelledDivider} component="li"/>
+                    <li>
+                        <Typography
+                            className={classes.dividerLabel}
+                            color="textSecondary"
+                            display="block"
+                            variant="caption"
+                            align="right"
+                        >
+          Admin
+                        </Typography>
+                    </li>
+                    <MenuItem
+                        button
+                        disableTouchRipple
+                        component={Link}
+                        to="/review/applications"
+                    >
+                        Company Applications
+                    </MenuItem>
+                </>
+                }
             </MenuList>
         </div>
     );

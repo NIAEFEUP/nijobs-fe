@@ -2,43 +2,68 @@ import { Button, emphasize, IconButton, makeStyles, Paper } from "@material-ui/c
 import PropTypes from "prop-types";
 import { Close } from "@material-ui/icons";
 import React from "react";
+import { useDesktop } from "../../utils/media-queries";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme) => {
     const backgroundColor = emphasize(theme.palette.background.default, theme.palette.type === "light" ? 0.8 : 0.98);
     return {
-        notification: {
+        notification: ({ isMobile }) => ({
             backgroundColor,
             color: theme.palette.getContrastText(backgroundColor),
             padding: theme.spacing(1, 2),
             borderRadius: "5px",
-            minWidth: "500px",
-            maxWidth: "500px",
-            display: "flex",
+            width: isMobile ? "100%" : "500px",
+            display: "grid",
             alignItems: "center",
-            justifyContent: "space-between",
+            // justifyContent: "space-between",
+        }),
+        generalNotification: {
+            gridTemplateColumns: "9fr 1fr",
         },
-        actions: {
-            alignSelf: "flex-end",
+        undoNotification: {
+            gridTemplateColumns: "8fr 1fr 1fr",
+        },
+        closeAction: {
+            gridColumnStart: 2,
+            textAlign: "right",
+        },
+        closeActionUndo: {
+            gridColumnStart: 3,
+        },
+        undoAction: {
+            // minWidth: "100px",
+            gridColumnStart: 2,
+            textAlign: "right",
+            // alignSelf: "flex-end",
         },
     };
 });
 
 const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleClose, onMouseEnter, onMouseLeave }, ref) => {
 
-    const classes = useStyles();
+    const classes = useStyles({ isMobile: !useDesktop() });
+
     return (
         <Paper
             ref={ref}
-            className={ classes.notification }
+            className={clsx(classes.notification, {
+                [classes.generalNotification]: !isUndo,
+                [classes.undoNotification]: isUndo,
+            })}
+
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <div>
                 {message}
             </div>
-            <div className={classes.actions}>
-
-                {isUndo && <Button color="primary" onClick={handleCancel}>Undo</Button>}
+            {isUndo &&
+                <div className={classes.undoAction}>
+                    <Button color="primary" onClick={handleCancel}>Undo</Button>
+                </div>
+            }
+            <div className={clsx(classes.closeAction, { [classes.closeActionUndo]: isUndo })}>
                 <IconButton
                     aria-label="Close"
                     size="small"

@@ -1,9 +1,11 @@
 import useSWR from "swr";
 
 import { API_HOSTNAME } from "../config";
+const DEFAULT_RETRY_COUNT = 1;
 
-export default (params) => {
+export default (options) => {
 
+    const { errorRetryCount, ...params } = { ...options }; // necessary since options can be undefined
     const getSession = async (key) => {
         try {
             const res = await fetch(key, {
@@ -22,6 +24,7 @@ export default (params) => {
     const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
         revalidateOnFocus: false,
         initialData: null,
+        errorRetryCount: errorRetryCount || DEFAULT_RETRY_COUNT,
         ...params,
     });
 

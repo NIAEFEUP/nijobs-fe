@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { Link as ReactRouterLink, Redirect, useLocation  } from "react-router-dom";
 import { Route } from "../AppRouter";
 import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
-import useToggle from "../hooks/useToggle";
 
 export const smoothScrollToRef = (ref) => {
 
@@ -103,26 +102,22 @@ export const ProtectedRoute = ({
     children,
     ...routeProps
 }) => {
-    const [numRetries, setNumRetries] = useState(0);
-    const [requestNotAuthorized, toggleRequestNotAuthorized] = useToggle(false);
 
-    const { isValidating, isLoggedIn, data } = useSession({
-        onError: (err) => {
-            setNumRetries((n) => n + 1);
-            if (err.status === 401) toggleRequestNotAuthorized();
-        },
+    const { isValidating, isLoggedIn, data, error } = useSession({
         errorRetryInterval: 500,
+        errorRetryCount: maxNumRetries,
     });
 
-    const isAuthorized = !requestNotAuthorized && isLoggedIn && (!authorize || (authorize && authorize(data)));
-    const redirectPath = requestNotAuthorized ? unauthorizedRedirectPath : "/error";
+    const isAuthorized = isLoggedIn && (!authorize || !!authorize(data));
+    const serverError = error?.status === 500;
+    const redirectPath = !serverError ? unauthorizedRedirectPath : "/error";
 
     const location = useLocation();
     return (
         <Route
             {...routeProps}
         >
-            {(isValidating || data === null) && numRetries <= maxNumRetries ?
+            {(isValidating || data === null) && !error ?
                 <LinearProgress /> :
                 <>
                     {isAuthorized ?
@@ -133,7 +128,7 @@ export const ProtectedRoute = ({
                                 pathname: redirectPath,
                                 state: {
                                     from: location,
-                                    message: requestNotAuthorized ? unauthorizedRedirectMessage : undefined,
+                                    message: serverError ? undefined : unauthorizedRedirectMessage,
                                 },
                             }}
                         />

@@ -71,8 +71,7 @@ const AppRouter = () => (
                 path="/review/applications"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
-                // authorize={(user) => user.isAdmin}
-                authorize={() => true}
+                authorize={(user) => (user.isAdmin)}
             >
                 <ApplicationsReviewPage/>
             </ProtectedRoute>
