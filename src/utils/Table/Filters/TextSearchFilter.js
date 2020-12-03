@@ -53,6 +53,9 @@ TextSearchFilter.propTypes = {
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     column: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    onCommitChange: PropTypes.func.isRequired,
 };
 
 const ResetableTextFilter = React.forwardRef((props, ref) => (

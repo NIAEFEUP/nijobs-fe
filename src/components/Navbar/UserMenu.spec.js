@@ -8,6 +8,7 @@ import UserMenu from "./UserMenu";
 import { renderWithTheme } from "../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom";
 
 describe("Navbar - LoginForm", () => {
     const theme = createMuiTheme({});
@@ -22,11 +23,13 @@ describe("Navbar - LoginForm", () => {
         it("Should show the email from current session", () => {
             const mockAnchor = { current: <div /> };
             const wrapper = renderWithTheme(
-                <UserMenu
-                    open
-                    anchorRef={mockAnchor}
-                    sessionData={{ email: "test-email" }}
-                />,
+                <BrowserRouter>
+                    <UserMenu
+                        open
+                        anchorRef={mockAnchor}
+                        sessionData={{ email: "test-email" }}
+                    />
+                </BrowserRouter>,
                 { theme });
             expect(wrapper.queryByText("test-email")).toBeInTheDocument();
         });
@@ -40,13 +43,15 @@ describe("Navbar - LoginForm", () => {
             const handleClose = jest.fn();
             const mockAnchor = { current: <div /> };
             const wrapper = renderWithTheme(
-                <UserMenu
-                    open
-                    anchorRef={mockAnchor}
-                    sessionData={{ email: "test-email" }}
-                    resetSession={resetSession}
-                    handleClose={handleClose}
-                />,
+                <BrowserRouter>
+                    <UserMenu
+                        open
+                        anchorRef={mockAnchor}
+                        sessionData={{ email: "test-email" }}
+                        resetSession={resetSession}
+                        handleClose={handleClose}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 

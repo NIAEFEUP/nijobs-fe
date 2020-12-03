@@ -11,7 +11,6 @@ import CompanyApplicationForm from "../components/Apply/Company/CompanyApplicati
 
 const CompanyApplicationPage = ({ showConfirmation = false }) => {
 
-
     const [showConfirmationModal, toggleConfirmationModal] = useToggle(showConfirmation);
 
     return (

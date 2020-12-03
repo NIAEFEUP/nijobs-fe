@@ -90,6 +90,9 @@ FilterMenu.propTypes = {
         })
     ).isRequired,
     setActiveFilters: PropTypes.func.isRequired,
+    filtersContext: PropTypes.object.isRequired,
+    setFiltersContext: PropTypes.func.isRequired,
+    activeFilters: PropTypes.object,
 };
 
 export default FilterMenu;

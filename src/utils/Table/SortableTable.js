@@ -58,6 +58,8 @@ ControlledSortableTable.propTypes = {
     stickyHeader: PropTypes.bool,
     sorters: PropTypes.objectOf(PropTypes.func).isRequired,
     defaultSort: PropTypes.string.isRequired,
+    tableComponent: PropTypes.elementType,
+    defaultOrder: PropTypes.bool,
 };
 
 const SortableTable = (props) => (

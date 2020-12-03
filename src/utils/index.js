@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link as ReactRouterLink, Redirect, useLocation  } from "react-router-dom";
-import { Route } from "../AppRouter";
+import { Link as ReactRouterLink, Route as BaseRoute, Redirect, useLocation  } from "react-router-dom";
 import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
+import { addSnackbar } from "../actions/notificationActions";
+import { connect } from "react-redux";
 
 export const smoothScrollToRef = (ref) => {
 
@@ -83,6 +84,45 @@ RouterLink.propTypes = {
         PropTypes.element.isRequired,
         PropTypes.string.isRequired,
     ]),
+};
+
+// This allows any component to have redirect info notifications,
+// without having to write the same logic on each component
+const BaseRedirectInfoProvider = ({ addSnackbar, children }) => {
+    const redirectInfo = useLocation();
+    if (redirectInfo?.state?.message) {
+        addSnackbar({ message: redirectInfo.state.message });
+    }
+
+    return (
+        <>
+            {children}
+        </>
+    );
+};
+
+BaseRedirectInfoProvider.propTypes = {
+    addSnackbar: PropTypes.func.isRequired,
+    children: PropTypes.element.isRequired,
+};
+
+const mapStateToProps = () => ({});
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+const RedirectInfoProvider = connect(mapStateToProps, mapDispatchToProps)(BaseRedirectInfoProvider);
+
+export const Route = ({ children, ...props }) => (
+    <BaseRoute
+        {...props}
+    >
+        <RedirectInfoProvider>
+            {children}
+        </RedirectInfoProvider>
+    </BaseRoute>
+);
+Route.propTypes = {
+    children: PropTypes.element.isRequired,
 };
 
 

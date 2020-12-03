@@ -53,7 +53,14 @@ const ResetableFilter = React.forwardRef(({
 ResetableFilter.displayName = "ResetableFilter";
 
 ResetableFilter.propTypes = {
+    activeFilters: PropTypes.object,
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
+    initialValue: PropTypes.any.isRequired,
+    filterUI: PropTypes.elementType.isRequired,
+    onChange: PropTypes.func,
+    filtersContext: PropTypes.object.isRequired,
+    setFiltersContext: PropTypes.func.isRequired,
+
 };
 export default ResetableFilter;

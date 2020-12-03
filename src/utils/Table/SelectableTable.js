@@ -103,6 +103,7 @@ ControlledSelectableTable.propTypes = {
         })
     ),
     setActiveFilters: PropTypes.func,
+    tableComponent: PropTypes.elementType,
     TableToolbarProps: PropTypes.shape({
         activeFilters: PropTypes.object,
     }),

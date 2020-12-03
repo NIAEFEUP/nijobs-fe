@@ -14,11 +14,8 @@ const MODE_COMPARE_FN = Object.freeze({
 
 const comparator = (mode, rowDate, selectedDate) => MODE_COMPARE_FN[mode](parseISO(rowDate), selectedDate);
 
-// TODO:
-// - Date to only after DAte from(if exists)
-
 const DateFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, id, setActiveFilters, column, label, mode, filtersContext, restrictMinDate,
+    value, onChange, onCommitChange, className, id, setActiveFilters, column, label, mode, filtersContext, restrictMinDate = false,
 }, ref) => {
 
     const handleChange = (date) => {
@@ -64,6 +61,13 @@ DateFilter.propTypes = {
     id: PropTypes.string.isRequired,
     column: PropTypes.string.isRequired,
     mode: PropTypes.oneOf(Object.keys(MODE_COMPARE_FN)),
+    value: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    onCommitChange: PropTypes.func.isRequired,
+    filtersContext: PropTypes.shape({
+        minDate: PropTypes.string,
+    }).isRequired,
+    restrictMinDate: PropTypes.bool,
 };
 
 const ResetableDateFilter = React.forwardRef((props, ref) => (

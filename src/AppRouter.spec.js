@@ -1,6 +1,7 @@
 import React from "react";
-import AppRouter, { Route } from "./AppRouter";
+import AppRouter from "./AppRouter";
 import HomePage from "./pages/HomePage";
+import { Route } from "./utils";
 
 describe("AppRouter", () => {
     it("should have a landing route", () => {

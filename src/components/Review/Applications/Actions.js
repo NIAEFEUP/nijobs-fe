@@ -171,6 +171,10 @@ const BaseRowActions = ({
 };
 
 BaseRowActions.propTypes = {
+    addSnackbar: PropTypes.func.isRequired,
+    updateRowRejectReason: PropTypes.func.isRequired,
+    isCollapseOpen: PropTypes.bool.isRequired,
+    toggleCollapse: PropTypes.func.isRequired,
     row: RowPropTypes,
     submitUndoableAction: PropTypes.func,
     changeRowState: PropTypes.func.isRequired,

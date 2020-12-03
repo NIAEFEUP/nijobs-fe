@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { TableBody, TableCell, Checkbox, TableRow, Collapse, Typography, Divider, makeStyles } from "@material-ui/core";
-import { RowPropTypes } from "./PropTypes";
+import { RowFields, RowPayload, RowPropTypes } from "./PropTypes";
 import useToggle from "../../hooks/useToggle";
 import { ApplicationStateLabel } from "../../components/Review/Applications/ApplicationsReviewTableSchema";
 
@@ -106,6 +106,18 @@ const CompanyApplicationRow = ({
     );
 };
 
+CompanyApplicationRow.propTypes = {
+    rowKey: PropTypes.string.isRequired,
+    fields: RowFields.isRequired,
+    payload: RowPayload.isRequired,
+    rowProps: PropTypes.object.isRequired,
+    handleSelect: PropTypes.func.isRequired,
+    isRowSelected: PropTypes.func.isRequired,
+    RowActions: PropTypes.elementType.isRequired,
+    submitUndoableAction: PropTypes.func.isRequired,
+    RowActionsProps: PropTypes.object,
+};
+
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
     RowActionsProps, emptyMessage, numColumns,
 }) => (
@@ -136,9 +148,12 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
 TableContent.propTypes = {
     rows: PropTypes.objectOf(RowPropTypes),
     RowActions: PropTypes.elementType,
+    RowActionsProps: PropTypes.object,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
     submitUndoableAction: PropTypes.func,
+    emptyMessage: PropTypes.string,
+    numColumns: PropTypes.number.isRequired,
 };
 
 export default TableContent;

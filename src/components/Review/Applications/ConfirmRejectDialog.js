@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import useForm from "../../../hooks/useForm";
 import { yupResolver } from "@hookform/resolvers";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, TextField } from "@material-ui/core";
@@ -75,6 +76,14 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
             </form>
         </Dialog>
     );
+};
+
+ConfirmRejectDialog.propTypes = {
+    open: PropTypes.bool.isRequired,
+    handleReject: PropTypes.func.isRequired,
+    cancelAction: PropTypes.func.isRequired,
+    rejectReason: PropTypes.string.isRequired,
+    setRejectReason: PropTypes.func.isRequired,
 };
 
 export default ConfirmRejectDialog;

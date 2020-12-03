@@ -60,6 +60,9 @@ SelectFilter.propTypes = {
     id: PropTypes.string.isRequired,
     options: PropTypes.arrayOf(PropTypes.string).isRequired,
     column: PropTypes.string.isRequired,
+    value: PropTypes.arrayOf(PropTypes.string),
+    onChange: PropTypes.func.isRequired,
+    onCommitChange: PropTypes.func.isRequired,
 };
 
 const ResetableSelectFilter = React.forwardRef((props, ref) => (

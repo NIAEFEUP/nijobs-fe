@@ -3,16 +3,19 @@ import React, { useCallback, useContext } from "react";
 import { applyMiddleware, compose, createStore } from "redux";
 import reducer from "../reducers";
 import thunk from "redux-thunk";
-import { renderWithStore } from "../test-utils";
+import { renderWithStoreAndTheme } from "../test-utils";
 import UndoableActionsHandlerProvider, { UndoableActions } from "./UndoableActionsHandlerProvider";
 import { SnackbarProvider } from "notistack";
 import Notifier from "../components/Notifications/Notifier";
+import { createMuiTheme } from "@material-ui/core";
 
 jest.useFakeTimers();
 
 describe("UndoableActionsHandlerProvider", () => {
 
     let onDone, onCancelled, wrapper;
+    const theme = createMuiTheme({});
+
 
     beforeEach(() => {
         onDone = jest.fn();
@@ -41,14 +44,14 @@ describe("UndoableActionsHandlerProvider", () => {
         };
 
         const store = createStore(reducer, { messages: { notifications: [] } }, compose(applyMiddleware(thunk)));
-        wrapper = renderWithStore(
+        wrapper = renderWithStoreAndTheme(
             <SnackbarProvider>
                 <Notifier />
                 <UndoableActionsHandlerProvider>
                     <ActionCallerTest />
                 </UndoableActionsHandlerProvider>
             </SnackbarProvider>,
-            { store }
+            { store, theme }
         );
     });
 

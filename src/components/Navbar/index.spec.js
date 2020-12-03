@@ -9,6 +9,7 @@ import reducer from "../../reducers";
 import thunk from "redux-thunk";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../../hooks/useSession");
 
@@ -45,7 +46,12 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                </BrowserRouter>,
+                { store, theme }
+            );
 
             await act(async () => {
                 await fireEvent.click(wrapper.getByTestId("usermenu-button-wrapper"));

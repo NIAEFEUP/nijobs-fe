@@ -32,7 +32,7 @@ const BaseTable = ({
     RowActions,
     RowActionsProps,
     MultiRowActions,
-    emptyMessage,
+    emptyMessage = "No rows to show",
     rowsPerPage: initialRowsPerPage = 10,
     TableToolbarProps = {},
 }) => {
@@ -129,6 +129,9 @@ BaseTable.propTypes = {
             id: PropTypes.string.isRequired,
         })
     ),
+    filtersContext: PropTypes.object.isRequired,
+    setFiltersContext: PropTypes.func.isRequired,
+    emptyMessage: PropTypes.string,
     setActiveFilters: PropTypes.func,
     numSelected: PropTypes.number,
     selectedRows: PropTypes.objectOf(RowPropTypes),
