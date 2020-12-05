@@ -6,7 +6,6 @@ import { lighten, makeStyles } from "@material-ui/core/styles";
 import { Toolbar, Typography, Tooltip, Badge, Button } from "@material-ui/core";
 import { Tune } from "@material-ui/icons";
 import FilterMenu from "./FilterMenu";
-import { RowPropTypes } from "./PropTypes";
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -113,7 +112,7 @@ TableToolbar.propTypes = {
         })
     ),
     setActiveFilters: PropTypes.func,
-    selectedRows: PropTypes.objectOf(RowPropTypes),
+    selectedRows: PropTypes.arrayOf(PropTypes.string),
     MultiRowActions: PropTypes.elementType,
     activeFilters: PropTypes.object,
     filtersContext: PropTypes.object.isRequired,

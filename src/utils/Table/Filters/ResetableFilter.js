@@ -56,7 +56,7 @@ ResetableFilter.propTypes = {
     activeFilters: PropTypes.object,
     setActiveFilters: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
-    initialValue: PropTypes.any.isRequired,
+    initialValue: PropTypes.any,
     filterUI: PropTypes.elementType.isRequired,
     onChange: PropTypes.func,
     filtersContext: PropTypes.object.isRequired,

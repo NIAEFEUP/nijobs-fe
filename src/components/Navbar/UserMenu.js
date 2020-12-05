@@ -51,6 +51,39 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const AdminMenuOptions = ({ isMobile }) => {
+    const classes = useStyles({ isMobile });
+
+    return (
+        <>
+            <Divider className={classes.labelledDivider} component="li"/>
+            <li>
+                <Typography
+                    className={classes.dividerLabel}
+                    color="textSecondary"
+                    display="block"
+                    variant="caption"
+                    align="right"
+                >
+          Admin
+                </Typography>
+            </li>
+            <MenuItem
+                button
+                disableTouchRipple
+                component={Link}
+                to="/review/applications"
+            >
+                        Company Applications
+            </MenuItem>
+        </>
+    );
+};
+
+AdminMenuOptions.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
+};
+
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
     const classes = useStyles({ isMobile });
     return (
@@ -70,31 +103,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 <MenuItem button disableTouchRipple onClick={() => {}}>My Offers</MenuItem>
                 <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
-                {/* {sessionData?.isAdmin && */}
-                {true &&
-                <>
-                    <Divider className={classes.labelledDivider} component="li"/>
-                    <li>
-                        <Typography
-                            className={classes.dividerLabel}
-                            color="textSecondary"
-                            display="block"
-                            variant="caption"
-                            align="right"
-                        >
-          Admin
-                        </Typography>
-                    </li>
-                    <MenuItem
-                        button
-                        disableTouchRipple
-                        component={Link}
-                        to="/review/applications"
-                    >
-                        Company Applications
-                    </MenuItem>
-                </>
-                }
+                {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
             </MenuList>
         </div>
     );
@@ -105,6 +114,7 @@ UserMenuContent.propTypes = {
     isMobile: PropTypes.bool,
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleLogout: PropTypes.func.isRequired,
 };

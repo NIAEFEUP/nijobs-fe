@@ -91,6 +91,11 @@ const BaseRowActions = ({
         setActionToConfirm(null);
     };
 
+    const confirmAction = (handler) => (e) => {
+        e.stopPropagation();
+        handler();
+    };
+
     return (
         <>
             <ConfirmRejectDialog
@@ -113,7 +118,7 @@ const BaseRowActions = ({
                             </Typography>
                             <IconButton
                                 aria-label="accept"
-                                onClick={handleApprove}
+                                onClick={confirmAction(handleApprove)}
                             >
                                 <Check />
                             </IconButton>
@@ -145,7 +150,7 @@ const BaseRowActions = ({
                                 >
                                     <IconButton
                                         aria-label="reject"
-                                        onClick={handleAction("Reject", handleReject)}
+                                        onClick={handleAction("Reject", confirmAction(handleReject))}
                                     >
                                         <Clear />
                                     </IconButton>

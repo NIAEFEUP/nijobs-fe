@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar, closeSnackbar } from "../actions/notificationActions";
@@ -20,7 +20,12 @@ const removeAction = (setActions) => (id) => {
 
 const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackbar }) => {
 
-    const { cancel, pause, resume } = useTimeout(action.onTimeout, action.timeout);
+    const handleTimeout = useCallback(() => {
+        removeAction(action.id);
+        action.onTimeout();
+    }, [action, removeAction]);
+
+    const { cancel, pause, resume } = useTimeout(handleTimeout, action.timeout);
 
     const handleCancel = useCallback((key) => () => {
         cancel();
@@ -86,21 +91,28 @@ const ActionNotification = connect(mapStateToProps, mapDispatchToProps)(BaseActi
 
 const UndoableActionsHandlerProvider = ({ children }) => {
     const [actions, setActions] = useState({});
+    const [closeLock, setCloseLock] = useState(false);
+    const initialBeforeUnloadEventListener = useRef();
+
+    useEffect(() => {
+        if (Object.keys(actions).length && !closeLock) {
+            setCloseLock(true);
+            initialBeforeUnloadEventListener.current = window.onbeforeunload;
+            window.onbeforeunload =  () => "Some changes might have not taken effect yet...";
+        } else if (!Object.keys(actions).length && closeLock) {
+            setCloseLock(false);
+            window.onbeforeunload = initialBeforeUnloadEventListener.current;
+        }
+
+    }, [actions, closeLock]);
+
     const submitAction = (id, message, onTimeout, onCancel, timeout) => {
-
-        const handleTimeout = () => {
-            removeAction(setActions)(id);
-            onTimeout();
-        };
-
-        const action = generateAction(id, message, handleTimeout, onCancel, timeout);
+        const action = generateAction(id, message, onTimeout, onCancel, timeout);
         setActions({ ...actions, [action.id]: action });
     };
 
     const undoableActionsController = { submitAction };
-    const removeActionHandler = useCallback(() => {
-        removeAction(setActions);
-    }, [setActions]);
+    const removeActionHandler = useCallback(removeAction(setActions), [setActions]);
 
     return (
         <UndoableActions.Provider value={undoableActionsController}>

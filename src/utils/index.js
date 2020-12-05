@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link as ReactRouterLink, Route as BaseRoute, Redirect, useLocation  } from "react-router-dom";
 import { Link, LinearProgress } from "@material-ui/core";
@@ -90,9 +90,11 @@ RouterLink.propTypes = {
 // without having to write the same logic on each component
 const BaseRedirectInfoProvider = ({ addSnackbar, children }) => {
     const redirectInfo = useLocation();
-    if (redirectInfo?.state?.message) {
-        addSnackbar({ message: redirectInfo.state.message });
-    }
+    useEffect(() => {
+        if (redirectInfo?.state?.message) {
+            addSnackbar({ message: redirectInfo.state.message });
+        }
+    }, [addSnackbar, redirectInfo]);
 
     return (
         <>
@@ -146,9 +148,10 @@ export const ProtectedRoute = ({
     const { isValidating, isLoggedIn, data, error } = useSession({
         errorRetryInterval: 500,
         errorRetryCount: maxNumRetries,
+        revalidateOnMount: true,
     });
 
-    const isAuthorized = isLoggedIn && (!authorize || !!authorize(data));
+    const isAuthorized = !isValidating && !error && isLoggedIn && (!authorize || !!authorize(data));
     const serverError = error?.status === 500;
     const redirectPath = !serverError ? unauthorizedRedirectPath : "/error";
 

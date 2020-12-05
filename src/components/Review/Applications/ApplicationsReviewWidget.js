@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     Paper, Typography,
 } from "@material-ui/core";
@@ -53,21 +53,29 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
 });
 
 const ApplicationsReviewWidget = () => {
+    const _amMounted = useRef(); // Prevents setState calls from happening after unmount
     const [rows, setRows] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        _amMounted.current = true;
         searchApplications()
             .then((rows) => {
-                const fetchedRows = rows.applications.reduce((rows, row) => {
-                    rows[row.id] = generateRow(row);
-                    return rows;
-                }, {});
-                setRows(fetchedRows);
+                if (_amMounted.current) {
+                    const fetchedRows = rows.applications.reduce((rows, row) => {
+                        rows[row.id] = generateRow(row);
+                        return rows;
+                    }, {});
+                    setRows(fetchedRows);
+                }
             })
             .catch(() => {
-                setError("UnexpectedError");
+                if (_amMounted.current)
+                    setError("UnexpectedError");
             });
+        return () => {
+            _amMounted.current = false;
+        };
     }, []);
     return (
         <>
