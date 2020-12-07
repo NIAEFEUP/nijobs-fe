@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 import BaseTable from "./BaseTable";
 import MutableDataTable from "./MutableDataTable";
+import { RowPropTypes } from "./PropTypes";
 
 export const ControlledSelectableTable = ({
     tableComponent: TableComponent = BaseTable,
@@ -13,7 +13,7 @@ export const ControlledSelectableTable = ({
     const [selected, setSelected] = useState({});
     const [selectedRows, setSelectedRows] = useState([]);
 
-    const { rows, TableToolbarProps } = props;
+    const { rows, activeFilters } = props;
 
     const isRowSelected = useCallback(
         // eslint-disable-next-line no-prototype-builtins
@@ -30,9 +30,9 @@ export const ControlledSelectableTable = ({
     };
 
     useEffect(() => {
-        if (TableToolbarProps.activeFilters)
+        if (activeFilters)
             resetSelected();
-    }, [TableToolbarProps.activeFilters]);
+    }, [activeFilters]);
 
     useEffect(() => {
         setSelectedRows(
@@ -83,30 +83,11 @@ export const ControlledSelectableTable = ({
 };
 
 ControlledSelectableTable.propTypes = {
-    title: PropTypes.string,
+
     rows: PropTypes.objectOf(RowPropTypes),
-    columns: PropTypes.objectOf(ColumnPropTypes),
-    sortable: PropTypes.bool,
-    hasActiveFilters: PropTypes.bool,
-    stickyHeader: PropTypes.bool,
-    order: PropTypes.oneOf(["asc", "desc"]),
-    orderBy: PropTypes.string,
-    handleOrderBy: PropTypes.func,
-    RowActions: PropTypes.elementType,
-    MultiRowActions: PropTypes.elementType,
-    rowsPerPage: PropTypes.number,
-    filterable: PropTypes.bool,
-    filters: PropTypes.arrayOf(
-        PropTypes.shape({
-            render: PropTypes.elementType.isRequired,
-            id: PropTypes.string.isRequired,
-        })
-    ),
-    setActiveFilters: PropTypes.func,
     tableComponent: PropTypes.elementType,
-    TableToolbarProps: PropTypes.shape({
-        activeFilters: PropTypes.object,
-    }),
+    activeFilters: PropTypes.object,
+
 };
 
 const SelectableTable = (props) => (

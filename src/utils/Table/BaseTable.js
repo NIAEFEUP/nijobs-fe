@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
 import { UndoableActions } from "../UndoableActionsHandlerProvider";
@@ -13,11 +13,11 @@ const BaseTable = ({
     rows,
     numSelected,
     selectedRows,
-    // setSelectedItems,
     filterable = false,
     filters,
     filtersContext,
     setFiltersContext,
+    activeFilters,
     hasActiveFilters = false,
     setActiveFilters,
     sortable = false,
@@ -39,6 +39,11 @@ const BaseTable = ({
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
+    // Reset page every time filters change
+    useEffect(() => {
+        setPage(0);
+    }, [activeFilters]);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         onPageChange();
@@ -51,6 +56,9 @@ const BaseTable = ({
     };
 
     const { submitAction } = useContext(UndoableActions);
+
+    const numRowsCurrentPage = Object.keys(rows).length < rowsPerPage ? Object.keys(rows).length :
+        Object.keys(rows).slice(page * rowsPerPage, (page * rowsPerPage) + rowsPerPage).length;
 
     return (
         <>
@@ -72,8 +80,8 @@ const BaseTable = ({
                     <TableHeader
                         columns={columns}
                         handleSelectAllClick={handleSelectAll(page, rowsPerPage)}
-                        checkboxIndeterminate={numSelected > 0 && numSelected < rowsPerPage}
-                        allChecked={Object.keys(rows).length > 0 && numSelected === rowsPerPage}
+                        checkboxIndeterminate={numSelected > 0 && numSelected < numRowsCurrentPage}
+                        allChecked={Object.keys(rows).length > 0 && numSelected === numRowsCurrentPage}
                         sortable={sortable}
                         order={order}
                         orderBy={orderBy}
@@ -113,6 +121,7 @@ BaseTable.propTypes = {
     rows: PropTypes.objectOf(RowPropTypes),
     columns: PropTypes.objectOf(ColumnPropTypes),
     sortable: PropTypes.bool,
+    activeFilters: PropTypes.object,
     hasActiveFilters: PropTypes.bool,
     stickyHeader: PropTypes.bool,
     order: PropTypes.oneOf(["asc", "desc"]),

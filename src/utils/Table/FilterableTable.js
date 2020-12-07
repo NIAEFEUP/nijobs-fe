@@ -30,6 +30,7 @@ export const ControlledFilterableTable = ({
             setFiltersContext={setFiltersContext}
             setActiveFilters={setActiveFilters}
             hasActiveFilters={Object.keys(activeFilters).length > 0}
+            activeFilters={activeFilters}
             TableToolbarProps={{
                 activeFilters,
             }}

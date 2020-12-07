@@ -44,7 +44,7 @@ const TableHeader = ({
                         indeterminate={checkboxIndeterminate}
                         checked={allChecked}
                         onChange={handleSelectAllClick}
-                        inputProps={{ "aria-label": "select all applications on current page" }}
+                        inputProps={{ "aria-label": "Select all applications on current page" }}
                         color="default"
                         classes={{ root: classes.checkbox }}
                     />
@@ -64,7 +64,9 @@ const TableHeader = ({
                             disabled={!sortable || disableSorting}
                             active={orderBy === key}
                             direction={orderBy === key ? order : "asc"}
-                            onClick={() => handleOrderBy(key)}
+                            onClick={() => {
+                                handleOrderBy(key);
+                            }}
                             classes={{ root: classes.columnLabel }}
                         >
                             {label}

@@ -1,22 +1,21 @@
 /* istanbul ignore file */
-import React from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useSnackbar } from "notistack";
 import { removeSnackbar } from "../../actions/notificationActions";
 import Notification from "./Notification";
 
-let displayed = [];
-
 const Notifier = ({ notifications, removeSnackbar }) => {
+    const displayed = useRef([]);
     const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
     const storeDisplayed = (id) => {
-        displayed = [...displayed, id];
+        displayed.current = [...displayed.current, id];
     };
 
     const removeDisplayed = (id) => {
-        displayed = [...displayed.filter((key) => id !== key)];
+        displayed.current = [...displayed.current.filter((key) => id !== key)];
     };
 
     React.useEffect(() => {
@@ -28,7 +27,7 @@ const Notifier = ({ notifications, removeSnackbar }) => {
             }
 
             // do nothing if snackbar is already displayed
-            if (displayed.includes(key)) return;
+            if (displayed.current.includes(key)) return;
 
             const defaultContent = (key, message) =>
                 <Notification

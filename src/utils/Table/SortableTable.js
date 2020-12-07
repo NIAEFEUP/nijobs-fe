@@ -7,7 +7,6 @@ import MutableDataTable from "./MutableDataTable";
 
 const sortRowFields = (fieldsToReorder, isAscendingMode, sorter) => fieldsToReorder.sort(sorter(isAscendingMode));
 
-
 export const ControlledSortableTable = ({
     tableComponent: TableComponent = BaseTable,
     columns,
@@ -30,7 +29,7 @@ export const ControlledSortableTable = ({
         }, {});
 
     const handleOrderBy = useCallback((column) => {
-        const reorderMode = (orderBy === orderBy) ? !order : true;
+        const reorderMode = (column === orderBy) ? !order : true;
 
         setOrder(reorderMode);
         setOrderBy(column);

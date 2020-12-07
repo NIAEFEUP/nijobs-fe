@@ -9,9 +9,9 @@ const encodeFilters = (filters) => {
     if (filters.state)
         encodedValues.push(`state=[${filters.state.map((state) => `"${state}"`).join(",")}]`);
     if (filters.sortBy)
-        encodedValues.push(Object.entries(filters.sortBy)
-            .map(([field, mode]) => `sortBy=${field}:${mode}`)
-            .join(",")
+        encodedValues.push(`sortBy=${Object.entries(filters.sortBy)
+            .map(([field, mode]) => `${field}:${mode}`)
+            .join(",")}`
         );
 
     return encodedValues.join("&");
@@ -34,6 +34,7 @@ export const searchApplications = async (filters) => {
 
     } catch (error) {
         // TODO count metrics
+        if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
 };
@@ -55,6 +56,7 @@ export const approveApplication = async (applicationId) => {
 
     } catch (error) {
         // TODO count metrics
+        if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
 };
@@ -79,6 +81,7 @@ export const rejectApplication = async (applicationId, rejectReason) => {
 
     } catch (error) {
         // TODO count metrics
+        if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
 };

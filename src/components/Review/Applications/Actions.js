@@ -117,13 +117,13 @@ const BaseRowActions = ({
                                 Approve?
                             </Typography>
                             <IconButton
-                                aria-label="accept"
+                                aria-label="Confirm Approval"
                                 onClick={confirmAction(handleApprove)}
                             >
                                 <Check />
                             </IconButton>
                             <IconButton
-                                aria-label="reject"
+                                aria-label="Cancel Approval"
                                 onClick={cancelAction}
                             >
                                 <Clear />
@@ -138,7 +138,7 @@ const BaseRowActions = ({
                                     placement="top"
                                 >
                                     <IconButton
-                                        aria-label="accept"
+                                        aria-label="Approve Application"
                                         onClick={handleAction("Approve", handleApprove)}
                                     >
                                         <Check />
@@ -149,7 +149,7 @@ const BaseRowActions = ({
                                     placement="top"
                                 >
                                     <IconButton
-                                        aria-label="reject"
+                                        aria-label="Reject Application"
                                         onClick={handleAction("Reject", confirmAction(handleReject))}
                                     >
                                         <Clear />
@@ -159,7 +159,7 @@ const BaseRowActions = ({
                             }
 
                             <IconButton
-                                aria-label="more actions"
+                                aria-label="More Actions"
                                 edge="end"
                                 onClick={(e) => {
                                     e.stopPropagation(); toggleCollapse();

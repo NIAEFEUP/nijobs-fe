@@ -36,6 +36,7 @@ const SelectFilter = React.forwardRef(({
             SelectProps={{
                 multiple: true,
             }}
+            name={id}
             value={value}
             onChange={handleChange}
             InputLabelProps={{

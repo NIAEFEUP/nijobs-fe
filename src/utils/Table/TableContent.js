@@ -27,7 +27,7 @@ const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
         return (
             <TableCell
                 key={fieldId}
-                id={id === 0 ? labelId : undefined}
+                id={id === 0 ? `${labelId}-label` : undefined}
                 align={fieldOptions.align || "right"}
             >
                 {fieldOptions.value}
@@ -48,16 +48,17 @@ const CompanyApplicationRow = ({
         <>
             <TableRow
                 hover
-                role="checkbox"
+                // role="checkbox"
                 tabIndex={-1}
                 onClick={(e) => handleSelect(e, rowKey)}
                 key={rowKey}
                 selected={isRowSelected(rowKey)}
+                data-testid="application-row"
             >
                 <TableCell padding="checkbox">
                     <Checkbox
                         checked={isRowSelected(rowKey)}
-                        inputProps={{ "aria-labelledby": labelId }}
+                        inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
                 </TableCell>
                 {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
