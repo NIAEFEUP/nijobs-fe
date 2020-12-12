@@ -49,7 +49,6 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
         resume();
     }, [resume]);
 
-
     useEffect(() => {
         addSnackbar({
             message: action.message,
@@ -70,14 +69,14 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
         });
     }, [addSnackbar, action.id, handleCancel, action.message, closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave]);
 
-    useEffect(() =>
-        () => {
+    useEffect(
+        () => () => {
             closeSnackbar(action.id);
-        }
-    , [action.id, closeSnackbar]);
+        },
+        [action.id, closeSnackbar]
+    );
 
     return null;
-
 };
 
 const mapStateToProps = () => ({});
@@ -132,6 +131,5 @@ UndoableActionsHandlerProvider.propTypes = {
     children: PropTypes.element.isRequired,
 
 };
-
 
 export default UndoableActionsHandlerProvider;

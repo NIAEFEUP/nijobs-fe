@@ -7,7 +7,6 @@ const ControlledSortableSelectableTable = (props) => (
         tableComponent={ControlledSelectableTable}
         {...props}
     />
-
 );
 
 export default ControlledSortableSelectableTable;

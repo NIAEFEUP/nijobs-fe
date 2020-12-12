@@ -1,4 +1,3 @@
-// TODO, change this to use the one defined in index.js coming from .env
 import { API_HOSTNAME } from "../config";
 const AUTH_ENDPOINT = `${API_HOSTNAME}/auth/login`;
 

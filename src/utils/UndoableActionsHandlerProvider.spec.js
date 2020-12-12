@@ -16,7 +16,6 @@ describe("UndoableActionsHandlerProvider", () => {
     let onDone, onCancelled, wrapper;
     const theme = createMuiTheme({});
 
-
     beforeEach(() => {
         onDone = jest.fn();
         onCancelled = jest.fn();
@@ -77,7 +76,6 @@ describe("UndoableActionsHandlerProvider", () => {
         });
 
         expect(screen.queryByText("This action was executed")).not.toBeInTheDocument();
-
 
     });
 

@@ -56,11 +56,11 @@ const generateApplications = (n, forceState) => {
 
 const clickAwayFromFilterMenu = () => {
     // Don't really know why/how this works, but this was the only way I found to close the state selector+filter popover
-    screen.getAllByRole("presentation")
+    screen.queryAllByRole("presentation")
         .forEach((el) => {
             userEvent.click(el.firstElementChild);
         });
-    screen.getAllByRole("presentation")
+    screen.queryAllByRole("presentation")
         .forEach((el) => {
             fireEvent.click(el.firstElementChild);
         });
@@ -181,6 +181,54 @@ describe("Application Review Widget", () => {
             .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/approve`, { credentials: "include", method: "POST" });
     });
 
+    it("Should maintain state filter after approving an application", async () => {
+        const applications = generateApplications(1, "PENDING");
+
+        fetchMock.doMock();
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () =>
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget/>
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { store, theme })
+        );
+
+        // Open state selector and select pending option
+        await fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        await userEvent.click(screen.getByLabelText("State"));
+        await fireEvent.click(screen.getByRole("option", { name: "Pending" }));
+
+        expect(screen.getAllByTestId("application-row")
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.filter((a) => a.state === "PENDING").map((a) => a.companyName));
+
+        clickAwayFromFilterMenu();
+
+        await fireEvent.click(screen.getByRole("button", { name: "Approve Application" }));
+        await fireEvent.click(screen.getByRole("button", { name: "Confirm Approval" }));
+
+        await act(async () => {
+            await jest.advanceTimersByTime(2000);
+        });
+
+        // Show undo Notification
+        expect(screen.queryByText(`Approving Application for ${applications[0].companyName}...`)).toBeInTheDocument();
+
+        await act(async () => {
+            await jest.advanceTimersByTime(1001);
+        });
+
+        expect(fetch.mock.calls[1][0])
+            .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/approve`, { credentials: "include", method: "POST" });
+
+        // Should be empty since application is not pending anymore
+        expect(screen.queryAllByTestId("application-row")).toStrictEqual([]);
+    });
+
     it("Should reject an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
@@ -220,6 +268,58 @@ describe("Application Review Widget", () => {
 
         expect(fetch.mock.calls[1][0])
             .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/reject`, { credentials: "include", method: "POST" });
+    });
+
+    it("Should maintain state filter after rejecting an application", async () => {
+        const applications = generateApplications(1, "PENDING");
+
+        fetchMock.doMock();
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () =>
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget/>
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { store, theme })
+        );
+
+        // Open state selector and select pending option
+        await fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        await userEvent.click(screen.getByLabelText("State"));
+        await fireEvent.click(screen.getByRole("option", { name: "Pending" }));
+
+        expect(screen.getAllByTestId("application-row")
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.filter((a) => a.state === "PENDING").map((a) => a.companyName));
+
+        clickAwayFromFilterMenu();
+
+        await fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
+        await userEvent.type(screen.getByLabelText("Reject Reason"), "valid reject reason");
+        expect(screen.getByRole("button", { name: "Reject" })).not.toBeDisabled();
+        await act(async () => {
+            await fireEvent.submit(screen.getByRole("button", { name: "Reject" }));
+        });
+
+        await act(async () => {
+            await jest.advanceTimersByTime(2000);
+        });
+
+        // Show undo Notification
+        expect(screen.queryByText(`Rejecting Application for ${applications[0].companyName}...`)).toBeInTheDocument();
+
+        await act(async () => {
+            await jest.advanceTimersByTime(1001);
+        });
+
+        expect(fetch.mock.calls[1][0])
+            .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/reject`, { credentials: "include", method: "POST" });
+
+        // Should be empty since application is not pending anymore
+        expect(screen.queryAllByTestId("application-row")).toStrictEqual([]);
     });
 
     it("Should not allow rejecting with invalid reject reason", async () => {

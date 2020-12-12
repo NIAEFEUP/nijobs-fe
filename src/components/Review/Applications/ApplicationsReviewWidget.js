@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Paper, Typography,
 } from "@material-ui/core";
@@ -9,7 +9,7 @@ import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
 import ControlledSortableSelectableTable from "../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../utils/Table/FilterableTable";
-import { RowActions, MultiRowActions } from "./Actions";
+import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
 
@@ -77,6 +77,32 @@ const ApplicationsReviewWidget = () => {
             _amMounted.current = false;
         };
     }, []);
+
+    const approveApplicationRow = useCallback(({ key, fields }) => {
+
+        setRows((rows) => ({
+            ...rows,
+            [key]: {
+                ...rows[key],
+                fields: { ...fields, state: { value: ApplicationStateLabel.APPROVED } },
+            } }));
+    }, [setRows]);
+
+    const rejectApplicationRow = useCallback(({ key, fields, payload }, rejectReason) => {
+
+        setRows((rows) => ({
+            ...rows,
+            [key]: {
+                ...rows[key],
+                fields: { ...fields, state: { value: ApplicationStateLabel.REJECTED } },
+                payload: {
+                    ...payload,
+                    rejectReason,
+                    rejectedAt: format(Date.now(), "yyyy-MM-dd"),
+                },
+            } }));
+    }, [setRows]);
+
     return (
         <>
             <UndoableActionsHandlerProvider>
@@ -96,14 +122,18 @@ const ApplicationsReviewWidget = () => {
                             tableComponent={ControlledSortableSelectableTable}
                             defaultSort="name"
                             rows={rows}
+                            setInitialRows={setRows}
                             columns={columns}
                             sorters={sorters}
                             filters={filters}
                             RowActions={RowActions}
-                            MultiRowActions={MultiRowActions}
                             rowsPerPage={5}
                             stickyHeader
                             emptyMessage="No applications here."
+                            context={{
+                                approveApplicationRow,
+                                rejectApplicationRow,
+                            }}
                         />
                     }
                 </Paper>

@@ -14,27 +14,27 @@ export const ControlledSortableTable = ({
     setRows,
     sorters,
     defaultSort,
-    defaultOrder = true,
+    defaultOrderAscending = true,
     ...props
 }) => {
 
-    const [order, setOrder] = useState(defaultOrder); // true means asc, false means desc
+    const [isOrderAscending, setIsOrderAscending] = useState(defaultOrderAscending); // true means asc, false means desc
 
     const [orderBy, setOrderBy] = useState(defaultSort);
 
-    const fieldsToReorder = Object.entries(rows).map(([i, { fields }]) => ({ rowId: i, field: fields[orderBy].value }));
-    const sortedRows = sortRowFields(fieldsToReorder, order, sorters[orderBy])
+    const fieldsToReorder = Object.entries(rows).map(([rowId, { fields }]) => ({ rowId, field: fields[orderBy].value }));
+    const sortedRows = sortRowFields(fieldsToReorder, isOrderAscending, sorters[orderBy])
         .reduce((sorted, { rowId }) => {
             sorted[rowId] = rows[rowId]; return sorted;
         }, {});
 
     const handleOrderBy = useCallback((column) => {
-        const reorderMode = (column === orderBy) ? !order : true;
+        const reorderMode = (column === orderBy) ? !isOrderAscending : true;
 
-        setOrder(reorderMode);
+        setIsOrderAscending(reorderMode);
         setOrderBy(column);
 
-    }, [order, orderBy]);
+    }, [isOrderAscending, orderBy]);
 
     return (
         <TableComponent
@@ -42,7 +42,7 @@ export const ControlledSortableTable = ({
             columns={columns}
             rows={sortedRows}
             setRows={setRows}
-            order={order ? "asc" : "desc"}
+            order={isOrderAscending ? "asc" : "desc"}
             orderBy={orderBy}
             handleOrderBy={handleOrderBy}
             {...props}
@@ -58,7 +58,7 @@ ControlledSortableTable.propTypes = {
     sorters: PropTypes.objectOf(PropTypes.func).isRequired,
     defaultSort: PropTypes.string.isRequired,
     tableComponent: PropTypes.elementType,
-    defaultOrder: PropTypes.bool,
+    defaultOrderAscending: PropTypes.bool,
 };
 
 const SortableTable = (props) => (

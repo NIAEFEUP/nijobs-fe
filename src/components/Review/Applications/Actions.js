@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import {
     IconButton,
+    makeStyles,
     TableCell,
     Tooltip,
     Typography,
@@ -15,13 +16,119 @@ import { addSnackbar } from "../../../actions/notificationActions";
 import { connect } from "react-redux";
 import ConfirmRejectDialog from "./ConfirmRejectDialog";
 
+const useStyles = makeStyles(() => ({
+    tableRowActions: {
+        minWidth: "150px",
+    },
+}));
+
+const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse }) => (
+    <>
+        {getFieldValue(row, "state") === ApplicationStateLabel.PENDING &&
+            <>
+                <Tooltip
+                    title="Approve"
+                    placement="top"
+                >
+                    <IconButton
+                        aria-label="Approve Application"
+                        onClick={handleAction("Approve")}
+                    >
+                        <Check />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip
+                    title="Reject"
+                    placement="top"
+                >
+                    <IconButton
+                        aria-label="Reject Application"
+                        onClick={handleAction("Reject")}
+                    >
+                        <Clear />
+                    </IconButton>
+                </Tooltip>
+            </>
+        }
+        <IconButton
+            aria-label="More Actions"
+            edge="end"
+            onClick={(e) => {
+                e.stopPropagation(); toggleCollapse();
+            }}
+        >
+            {!isCollapseOpen ? <ExpandMore/> : <ExpandLess/>}
+        </IconButton>
+    </>
+);
+
+ActionButtons.propTypes = {
+    row: RowPropTypes,
+    isCollapseOpen: PropTypes.bool.isRequired,
+    toggleCollapse: PropTypes.func.isRequired,
+    handleAction: PropTypes.func.isRequired,
+};
+
+const RowActionsContainer = ({
+    row, actionToConfirm, confirmAction, cancelAction, handleAction, handleApprove, isCollapseOpen, toggleCollapse,
+}) => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.tableRowActions}>
+            {actionToConfirm === "Approve" ?
+                <>
+                    <Typography
+                        variant="body2"
+                        display="inline"
+                        color="primary"
+                    >
+                        Approve?
+                    </Typography>
+                    <IconButton
+                        aria-label="Confirm Approval"
+                        onClick={confirmAction(handleApprove)}
+                    >
+                        <Check />
+                    </IconButton>
+                    <IconButton
+                        aria-label="Cancel Approval"
+                        onClick={cancelAction}
+                    >
+                        <Clear />
+                    </IconButton>
+                </>
+                :
+                <ActionButtons
+                    row={row}
+                    handleAction={handleAction}
+                    isCollapseOpen={isCollapseOpen}
+                    toggleCollapse={toggleCollapse}
+                />
+            }
+        </div>
+    );
+};
+
+RowActionsContainer.propTypes = {
+    row: RowPropTypes,
+    isCollapseOpen: PropTypes.bool.isRequired,
+    toggleCollapse: PropTypes.func.isRequired,
+    actionToConfirm: PropTypes.func.isRequired,
+    confirmAction: PropTypes.func.isRequired,
+    cancelAction: PropTypes.func.isRequired,
+    handleAction: PropTypes.func.isRequired,
+    handleApprove: PropTypes.func.isRequired,
+};
 
 const BaseRowActions = ({
-    addSnackbar, row, submitUndoableAction, changeRowState, updateRowRejectReason, isCollapseOpen, toggleCollapse,
+    addSnackbar, row, submitUndoableAction, context = {}, isCollapseOpen, toggleCollapse,
 }) => {
 
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [rejectReason, setRejectReason] = useState("");
+
+    const { approveApplicationRow, rejectApplicationRow } = context;
 
     const handleApprove = useCallback(
         () => {
@@ -32,22 +139,19 @@ const BaseRowActions = ({
                 `Approving Application for ${getFieldValue(row, "name")}...`,
                 () => {
                     approveApplication(row.key)
-                        .then(() => changeRowState(row, ApplicationStateLabel.APPROVED))
+                        .then(() => approveApplicationRow(row))
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not approve ${getFieldValue(row, "name")}'s application.`,
                                 key: `${row.key}-error`,
                             });
-                            changeRowState(row, ApplicationStateLabel.PENDING);
                         });
                 },
-                () => {
-                    changeRowState(row, ApplicationStateLabel.PENDING);
-                },
+                () => {},
                 3000
             );
         },
-        [addSnackbar, changeRowState, row, submitUndoableAction],
+        [addSnackbar, approveApplicationRow, row, submitUndoableAction],
     );
 
     const handleReject = useCallback(
@@ -60,30 +164,25 @@ const BaseRowActions = ({
                 () => {
                     rejectApplication(row.key, rejectReason)
                         .then(() => {
-                            changeRowState(row, ApplicationStateLabel.REJECTED);
-                            updateRowRejectReason(row, rejectReason);
+                            rejectApplicationRow(row, rejectReason);
                         })
                         .catch(() => {
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not reject ${getFieldValue(row, "name")}'s application.`,
                                 key: `${row.key}-error`,
                             });
-                            changeRowState(row, ApplicationStateLabel.PENDING);
                         });
                 },
-                () => {
-                    changeRowState(row, ApplicationStateLabel.PENDING);
-                },
+                () => {},
                 3000
             );
-        }, [addSnackbar, changeRowState, rejectReason, row, submitUndoableAction, updateRowRejectReason]);
+        }, [addSnackbar, rejectApplicationRow, rejectReason, row, submitUndoableAction]);
 
 
     const handleAction = (actionLabel) => (e) => {
         e.stopPropagation();
         setActionToConfirm(actionLabel);
     };
-
 
     const cancelAction = (e) => {
         e.stopPropagation();
@@ -106,70 +205,17 @@ const BaseRowActions = ({
                 cancelAction={cancelAction}
             />
             <TableCell align="right">
-                <div style={{ minWidth: "150px" }}>
-                    {actionToConfirm === "Approve" ?
-                        <>
-                            <Typography
-                                variant="body2"
-                                display="inline"
-                                color="primary"
-                            >
-                                Approve?
-                            </Typography>
-                            <IconButton
-                                aria-label="Confirm Approval"
-                                onClick={confirmAction(handleApprove)}
-                            >
-                                <Check />
-                            </IconButton>
-                            <IconButton
-                                aria-label="Cancel Approval"
-                                onClick={cancelAction}
-                            >
-                                <Clear />
-                            </IconButton>
-                        </>
-                        :
-                        <>
-                            {getFieldValue(row, "state") === ApplicationStateLabel.PENDING &&
-                            <>
-                                <Tooltip
-                                    title="Approve"
-                                    placement="top"
-                                >
-                                    <IconButton
-                                        aria-label="Approve Application"
-                                        onClick={handleAction("Approve", handleApprove)}
-                                    >
-                                        <Check />
-                                    </IconButton>
-                                </Tooltip>
-                                <Tooltip
-                                    title="Reject"
-                                    placement="top"
-                                >
-                                    <IconButton
-                                        aria-label="Reject Application"
-                                        onClick={handleAction("Reject", confirmAction(handleReject))}
-                                    >
-                                        <Clear />
-                                    </IconButton>
-                                </Tooltip>
-                            </>
-                            }
-
-                            <IconButton
-                                aria-label="More Actions"
-                                edge="end"
-                                onClick={(e) => {
-                                    e.stopPropagation(); toggleCollapse();
-                                }}
-                            >
-                                {!isCollapseOpen ? <ExpandMore/> : <ExpandLess/>}
-                            </IconButton>
-                        </>
-                    }
-                </div>
+                <RowActionsContainer
+                    row={row}
+                    actionToConfirm={actionToConfirm}
+                    confirmAction={confirmAction}
+                    cancelAction={cancelAction}
+                    handleAction={handleAction}
+                    handleApprove={handleApprove}
+                    handleReject={handleReject}
+                    isCollapseOpen={isCollapseOpen}
+                    toggleCollapse={toggleCollapse}
+                />
             </TableCell>
         </>
     );
@@ -177,12 +223,14 @@ const BaseRowActions = ({
 
 BaseRowActions.propTypes = {
     addSnackbar: PropTypes.func.isRequired,
-    updateRowRejectReason: PropTypes.func.isRequired,
+    context: PropTypes.shape({
+        approveApplicationRow: PropTypes.func.isRequired,
+        rejectApplicationRow: PropTypes.func.isRequired,
+    }),
     isCollapseOpen: PropTypes.bool.isRequired,
     toggleCollapse: PropTypes.func.isRequired,
     row: RowPropTypes,
     submitUndoableAction: PropTypes.func,
-    changeRowState: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = () => ({});
@@ -191,25 +239,3 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export const RowActions = connect(mapStateToProps, mapDispatchToProps)(BaseRowActions);
-
-
-// eslint-disable-next-line no-unused-vars
-export const MultiRowActions = ({ rows }) =>
-    // const handleAction = () => {
-    //     console.log("This will affect rows", rows);
-    // };
-    ( // TODO it should check if it can approve all/reject (mby some of them already approved or rej)
-        <>
-            {/* <IconButton aria-label="accept" onClick={handleAction}>
-                <Check />
-            </IconButton>
-            <IconButton aria-label="reject" onClick={handleAction}>
-                <Clear />
-            </IconButton> */}
-        </>
-    )
-;
-
-MultiRowActions.propTypes = {
-    rows: PropTypes.objectOf(RowPropTypes),
-};

@@ -6,6 +6,7 @@ export const RowFields = PropTypes.objectOf(
         align: PropTypes.oneOf(["left", "center", "right", "inherit", "justify"]),
     }),
 );
+
 export const RowPayload = PropTypes.shape({
     motivation: PropTypes.string.isRequired,
     rejectReason: PropTypes.string,

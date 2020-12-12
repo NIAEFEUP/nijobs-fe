@@ -12,8 +12,4 @@ const ApplicationsReviewPage = () => (
     </>
 );
 
-ApplicationsReviewPage.propTypes = {
-
-};
-
 export default ApplicationsReviewPage;

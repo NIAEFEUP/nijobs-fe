@@ -35,6 +35,7 @@ const BaseTable = ({
     emptyMessage = "No rows to show",
     rowsPerPage: initialRowsPerPage = 10,
     TableToolbarProps = {},
+    context,
 }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -98,6 +99,7 @@ const BaseTable = ({
                         RowActions={RowActions}
                         RowActionsProps={RowActionsProps}
                         emptyMessage={emptyMessage}
+                        context={context}
                     />
                 </Table>
             </TableContainer>
@@ -151,6 +153,7 @@ BaseTable.propTypes = {
     TableToolbarProps: PropTypes.shape({
         activeFilters: PropTypes.object,
     }),
+    context: PropTypes.object,
 };
 
 export default BaseTable;

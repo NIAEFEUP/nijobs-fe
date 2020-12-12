@@ -28,13 +28,8 @@ const DateFilter = React.forwardRef(({
                 ...filters,
                 [id]: (rows) => Object.entries(rows)
                     .filter(([, row]) =>
-                        // eslint-disable-next-line max-len
-                        // console.log("value", value, "\n", "row val:", getFieldValue(row, column), "\n", isEqual(parseISO(format(value, "yyyy-MM-dd")), getFieldValue(row, column)));
-                        // eslint-disable-next-line max-len
-                        // console.log(row, getFieldValue(row, column), value, comparator(mode, getFieldValue(row, column), value), comparator("is", getFieldValue(row, column), value));
                         comparator(mode, getFieldValue(row, column), value)
                         || comparator("is", getFieldValue(row, column), value) // OR equal
-
                     )
                     .reduce((filtered, [key, row]) => {
                         filtered[key] = row; return filtered;

@@ -16,8 +16,7 @@ export const ControlledSelectableTable = ({
     const { rows, activeFilters } = props;
 
     const isRowSelected = useCallback(
-        // eslint-disable-next-line no-prototype-builtins
-        (rowKey) => selected.hasOwnProperty(rowKey),
+        (rowKey) => Object.hasOwnProperty.call(selected, rowKey),
         [selected],
     );
 
@@ -40,7 +39,6 @@ export const ControlledSelectableTable = ({
                 .filter((key) => isRowSelected(key))
         );
     }, [isRowSelected, rows]);
-
 
     const handleSelect = useCallback((event, name) => {
         if (isRowSelected(name)) {
@@ -66,7 +64,6 @@ export const ControlledSelectableTable = ({
         resetSelected();
     }, [rows, selected]);
 
-
     const numSelected = Object.keys(selected).length;
 
     return (
@@ -83,11 +80,9 @@ export const ControlledSelectableTable = ({
 };
 
 ControlledSelectableTable.propTypes = {
-
     rows: PropTypes.objectOf(RowPropTypes),
     tableComponent: PropTypes.elementType,
     activeFilters: PropTypes.object,
-
 };
 
 const SelectableTable = (props) => (

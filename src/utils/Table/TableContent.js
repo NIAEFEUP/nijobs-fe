@@ -37,7 +37,7 @@ const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
 };
 
 const CompanyApplicationRow = ({
-    rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions, submitUndoableAction, RowActionsProps,
+    rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions, submitUndoableAction, RowActionsProps, context,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -48,7 +48,6 @@ const CompanyApplicationRow = ({
         <>
             <TableRow
                 hover
-                // role="checkbox"
                 tabIndex={-1}
                 onClick={(e) => handleSelect(e, rowKey)}
                 key={rowKey}
@@ -65,14 +64,15 @@ const CompanyApplicationRow = ({
                     generateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
                 {RowActions &&
-                <RowActions
-                    row={{ key: rowKey, fields, payload, ...rowProps }}
-                    submitUndoableAction={submitUndoableAction}
-                    isCollapseOpen={open}
-                    toggleCollapse={toggleOpen}
-                    {...RowActionsProps}
-                />}
-
+                    <RowActions
+                        row={{ key: rowKey, fields, payload, ...rowProps }}
+                        submitUndoableAction={submitUndoableAction}
+                        isCollapseOpen={open}
+                        toggleCollapse={toggleOpen}
+                        context={context}
+                        {...RowActionsProps}
+                    />
+                }
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(fields).length + 2}>
@@ -116,11 +116,12 @@ CompanyApplicationRow.propTypes = {
     isRowSelected: PropTypes.func.isRequired,
     RowActions: PropTypes.elementType.isRequired,
     submitUndoableAction: PropTypes.func.isRequired,
+    context: PropTypes.object,
     RowActionsProps: PropTypes.object,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns,
+    RowActionsProps, emptyMessage, numColumns, context,
 }) => (
     <TableBody>
         {Object.keys(rows).length === 0 ?
@@ -141,6 +142,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     RowActions={RowActions}
                     submitUndoableAction={submitUndoableAction}
                     RowActionsProps={RowActionsProps}
+                    context={context}
                 />
             ))}
     </TableBody>
@@ -155,6 +157,7 @@ TableContent.propTypes = {
     submitUndoableAction: PropTypes.func,
     emptyMessage: PropTypes.string,
     numColumns: PropTypes.number.isRequired,
+    context: PropTypes.object,
 };
 
 export default TableContent;

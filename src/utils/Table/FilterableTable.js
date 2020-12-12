@@ -4,7 +4,6 @@ import BaseTable from "./BaseTable";
 import MutableDataTable from "./MutableDataTable";
 import { RowPropTypes } from "./PropTypes";
 
-
 export const ControlledFilterableTable = ({
     tableComponent: TableComponent = BaseTable,
     rows,
@@ -21,6 +20,7 @@ export const ControlledFilterableTable = ({
         const newRows = Object.values(activeFilters).reduce((updatedRows, filter) => filter(updatedRows), initialRows);
         setRows(newRows);
     }, [activeFilters, initialRows, setRows]);
+
     return (
         <TableComponent
             rows={rows}

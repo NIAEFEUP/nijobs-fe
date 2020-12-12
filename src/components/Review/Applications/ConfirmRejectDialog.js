@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import useForm from "../../../hooks/useForm";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, TextField } from "@material-ui/core";
 import RejectApplicationSchema, { Rules } from "./RejectApplicationSchema";
-
 
 const useStyles = makeStyles((theme) => ({
     dialogActions: {
@@ -41,10 +40,8 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
                 <DialogTitle id="form-dialog-title">Reject</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-
-                    In order to reject an Application, you need to provide a reject reason.
+                        In order to reject an Application, you need to provide a reject reason.
                     </DialogContentText>
-
                     <TextField
                         autoFocus
                         margin="dense"

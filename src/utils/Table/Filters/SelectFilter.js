@@ -19,7 +19,8 @@ const SelectFilter = React.forwardRef(({
                 [id]: (rows) => Object.entries(rows)
                     .filter(([, row]) => value.includes(getFieldValue(row, column)))
                     .reduce((filtered, [key, row]) => {
-                        filtered[key] = row; return filtered;
+                        filtered[key] = row;
+                        return filtered;
                     }, {}),
             }));
             onCommitChange();

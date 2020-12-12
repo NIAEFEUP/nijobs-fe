@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => {
             width: isMobile ? "100%" : "500px",
             display: "grid",
             alignItems: "center",
-            // justifyContent: "space-between",
         }),
         generalNotification: {
             gridTemplateColumns: "9fr 1fr",
@@ -32,10 +31,8 @@ const useStyles = makeStyles((theme) => {
             gridColumnStart: 3,
         },
         undoAction: {
-            // minWidth: "100px",
             gridColumnStart: 2,
             textAlign: "right",
-            // alignSelf: "flex-end",
         },
     };
 });
@@ -51,7 +48,6 @@ const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleCl
                 [classes.generalNotification]: !isUndo,
                 [classes.undoNotification]: isUndo,
             })}
-
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

@@ -22,9 +22,7 @@ import useNavbarStyles from "./navbarStyles";
 
 const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 
-    const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession({
-        errorRetryCount: 1,
-    });
+    const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const [loginPending, toggleLoginPending] = useToggle(false);
 

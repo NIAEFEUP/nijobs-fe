@@ -33,10 +33,57 @@ describe("Navbar - LoginForm", () => {
                 { theme });
             expect(wrapper.queryByText("test-email")).toBeInTheDocument();
         });
+
+        describe("Admin section", () => {
+
+            it("Should show the admin section from current session", () => {
+                const mockAnchor = { current: <div /> };
+                const wrapperAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", isAdmin: true }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperAdmin.queryByText("Admin")).toBeInTheDocument();
+            });
+
+            it("Should not show the admin section from current session", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", isAdmin: false }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Admin")).not.toBeInTheDocument();
+            });
+
+            it("Should not show the admin section from current session", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email" }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Admin")).not.toBeInTheDocument();
+            });
+        });
     });
     describe("interaction", () => {
         it("Should log out, re-setting the session and call close callback", async () => {
-            // Ensure that it does log out, without calling API
+            // Ensure that it does log out, without actually calling API
             logout.mockImplementationOnce(() => Promise.resolve(true));
 
             const resetSession = jest.fn();

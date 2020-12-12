@@ -58,7 +58,7 @@ const FilterMenu = ({ anchorEl, onClose, filters,
                     return (
                         <FilterUI
                             className={classes.filterUI}
-                            aria-label="FILTER TEST"
+                            aria-label={filter.id}
                             id={filter.id}
                             key={filter.id}
                             activeFilters={activeFilters}

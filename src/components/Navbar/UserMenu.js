@@ -65,7 +65,7 @@ const AdminMenuOptions = ({ isMobile }) => {
                     variant="caption"
                     align="right"
                 >
-          Admin
+                    Admin
                 </Typography>
             </li>
             <MenuItem
@@ -74,7 +74,7 @@ const AdminMenuOptions = ({ isMobile }) => {
                 component={Link}
                 to="/review/applications"
             >
-                        Company Applications
+                Company Applications
             </MenuItem>
         </>
     );
@@ -175,6 +175,7 @@ DesktopUserMenu.propTypes = {
     anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleLogout: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
@@ -205,6 +206,7 @@ MobileUserMenu.propTypes = {
     open: PropTypes.bool.isRequired,
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleClose: PropTypes.func.isRequired,
     handleLogout: PropTypes.func.isRequired,
@@ -248,6 +250,7 @@ UserMenu.propTypes = {
     anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     resetSession: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
