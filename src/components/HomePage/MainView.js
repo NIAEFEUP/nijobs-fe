@@ -11,6 +11,7 @@ import { useMobile, useDesktop } from "../../utils/media-queries";
 
 import useMainViewStyles from "./mainViewStyles.js";
 import { MainMask } from "./MainMask";
+import CenteredComponent from "./CenteredComponent";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
@@ -25,13 +26,15 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
                     />
                 </div>
             </MainMask>
-            <div className={classes.searchArea}>
-                <SearchArea
-                    onSubmit={() => {
-                        showSearchResults();
-                    }}
-                />
-            </div>
+            <CenteredComponent>
+                <div className={classes.searchArea}>
+                    <SearchArea
+                        onSubmit={() => {
+                            showSearchResults();
+                        }}
+                    />
+                </div>
+            </CenteredComponent>
             <div className={classes.infoBox}>
                 <InfoBox size={useMobile() ? "small" : "normal"}>
                     Your next oportunity is out there. Use the search bar to find it!
