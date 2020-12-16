@@ -23,7 +23,8 @@ export default makeStyles((theme) => ({
     searchArea: ({ isMobile }) => ({
         width: "100%",
         position: "absolute",
-        top: "42.5vh",
+        top: "calc(50vh - 80px)",
+        left: 0,
         "& > *:first-child": {
             width: isMobile ? "100%" : "60%",
             margin: "0 auto",
