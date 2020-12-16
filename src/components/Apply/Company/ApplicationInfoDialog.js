@@ -28,12 +28,12 @@ const ApplicationInfoDialog = ({ open, toggle }) => {
                     {"NIJobs is a free platform for companies to share their job opportunities with students."}
                 </p>
                 <p>
-                    {"As this is made by students, for students, we oversee the entries \
-                        so that we can make sure that both our and the participating companies' expectations are satisfied."}
+                    {"As this platform is made by students, for students, we oversee the entries \
+                    so that we can make sure that both our and the participating companies' expectations are satisfied."}
                 </p>
                 <p>
-                    {"Once you're accepted, you will receive an email from us and you \
-                        will be able to further customize your profile (Add a nice Bio, and a Company Logo)"}
+                    {"Once you're accepted, you will receive an email from us, and you \
+                    will be able to customize your profile further (Add a nice Bio, and a Company Logo, as well as your contacts)"}
                 </p>
                 <p>
                     {"See you soon!"}
