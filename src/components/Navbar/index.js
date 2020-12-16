@@ -22,7 +22,8 @@ import useNavbarStyles from "./navbarStyles";
 
 const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 
-    const { data: sessionData, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
+    const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
+    const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const [loginPending, toggleLoginPending] = useToggle(false);
 
     const [userMenuOpen, setUserMenuOpen] = React.useState(false);
@@ -61,11 +62,11 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                     className={classes.userAccountArea}
                     data-testid="usermenu-button-wrapper"
                 >
-                    {isLoggedIn &&
+                    {!isValidating && !error && isLoggedIn &&
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo} color="white"/>}
+                            endIcon={<MenuRounded className={classes.userLogo}/>}
                         >
                             {!userMenuOpen && !isMobile && "Account"}
                         </Button>

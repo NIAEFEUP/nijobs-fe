@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { useForm } from "react-hook-form";
 
-import useForm from "../../../hooks/useForm";
 import useToggle from "../../../hooks/useToggle";
 
 import {

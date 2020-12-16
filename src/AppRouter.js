@@ -1,9 +1,12 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+
+import { BrowserRouter, Switch } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage from "./pages/CompanyApplicationPage";
+import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
-import { ProtectedRoute } from "./utils";
+import ErrorPage from "./pages/ErrorPage";
+import { ProtectedRoute, Route } from "./utils";
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -11,25 +14,32 @@ const AppRouter = () => (
             <Route
                 exact
                 path="/"
-                component={HomePage}
-            />
+            >
+                <HomePage/>
+            </Route>
             <Route
                 exact
                 path="/apply/company"
-                component={CompanyApplicationPage}
-            />
-
-            {/* THE FOLLOWING IS A DEMO, REMOVE IT LATER PLEASE */}
+            >
+                <CompanyApplicationPage/>
+            </Route>
             <ProtectedRoute
                 exact
-                path="/private"
+                path="/review/applications"
                 unauthorizedRedirectPath="/"
-                // this is useful for things like user.type === admin or user.type == company
-                authorize={(user) => user.email === "angelo@niaefeup.com"}
+                unauthorizedRedirectMessage="You are not allowed to access the applications review page."
+                authorize={(user) => (user.isAdmin)}
             >
-                <HomePage/>
+                <ApplicationsReviewPage/>
             </ProtectedRoute>
-            <Route component={NotFound} />
+            <Route
+                path="/error"
+            >
+                <ErrorPage/>
+            </Route>
+            <Route>
+                <NotFound/>
+            </Route>
         </Switch>
     </BrowserRouter>
 );

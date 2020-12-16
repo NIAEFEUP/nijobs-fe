@@ -17,7 +17,6 @@ export const HomePage = () => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
     }, [searchResultsRef, showSearchResults]);
 
-
     return (
         <React.Fragment>
             <Navbar />

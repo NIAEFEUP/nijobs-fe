@@ -16,6 +16,7 @@ import {
 import { logout } from "../../services/auth";
 
 import { useMobile } from "../../utils/media-queries";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     userMenuContent: ({ isMobile }) => ({
@@ -42,12 +43,51 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         width: "80%",
     },
+    labelledDivider: {
+        marginTop: theme.spacing(2),
+    },
+    dividerLabel: {
+        padding: theme.spacing(1, 2),
+    },
 }));
 
-const UserMenuContent = ({ open, isMobile = false, sessionData, handleLogout }) => {
+const AdminMenuOptions = ({ isMobile }) => {
+    const classes = useStyles({ isMobile });
+
+    return (
+        <>
+            <Divider className={classes.labelledDivider} component="li"/>
+            <li>
+                <Typography
+                    className={classes.dividerLabel}
+                    color="textSecondary"
+                    display="block"
+                    variant="caption"
+                    align="right"
+                >
+                    Admin
+                </Typography>
+            </li>
+            <MenuItem
+                button
+                disableTouchRipple
+                component={Link}
+                to="/review/applications"
+            >
+                Company Applications
+            </MenuItem>
+        </>
+    );
+};
+
+AdminMenuOptions.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
+};
+
+const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
     const classes = useStyles({ isMobile });
     return (
-        <div className={classes.userMenuContent}>
+        <div className={classes.userMenuContent} ref={ref}>
             <Typography
                 className={classes.accountName}
                 variant="button"
@@ -63,16 +103,18 @@ const UserMenuContent = ({ open, isMobile = false, sessionData, handleLogout }) 
                 <MenuItem button disableTouchRipple onClick={() => {}}>My Offers</MenuItem>
                 <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+                {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
             </MenuList>
         </div>
     );
-};
+});
 
 UserMenuContent.propTypes = {
     open: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool,
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleLogout: PropTypes.func.isRequired,
 };
@@ -133,6 +175,7 @@ DesktopUserMenu.propTypes = {
     anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleLogout: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
@@ -163,6 +206,7 @@ MobileUserMenu.propTypes = {
     open: PropTypes.bool.isRequired,
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     handleClose: PropTypes.func.isRequired,
     handleLogout: PropTypes.func.isRequired,
@@ -206,6 +250,7 @@ UserMenu.propTypes = {
     anchorRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
     sessionData: PropTypes.shape({
         email: PropTypes.string,
+        isAdmin: PropTypes.bool,
     }),
     resetSession: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
