@@ -30,6 +30,8 @@ export default (options) => {
         ...params,
     });
 
+    console.log("WHY U NO RUN");
+
     return {
         data,
         error,

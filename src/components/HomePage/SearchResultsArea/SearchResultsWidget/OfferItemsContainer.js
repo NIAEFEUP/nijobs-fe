@@ -10,11 +10,11 @@ import {
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 
-const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
+const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer }) => {
     const classes = useSearchResultsWidgetStyles();
 
     if (loading) return (
-        <div className={classes.fullHeight}>
+        <div className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
                 <OfferItem
                     loading={loading}
@@ -33,13 +33,14 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
     );
 
     return (
-        <div className={classes.fullHeight}>
+        <div className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
                         {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}
+                            selectedOffer={selectedOffer}
                             setSelectedOffer={setSelectedOffer}
                             loading={loading}
                         />
@@ -53,6 +54,7 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
 OfferItemsContainer.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
+    selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
 };
 

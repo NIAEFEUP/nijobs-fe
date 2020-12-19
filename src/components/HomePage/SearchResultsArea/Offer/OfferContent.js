@@ -9,6 +9,8 @@ import { useDesktop } from "../../../../utils/media-queries";
 
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import LOADING_MESSAGES from "./offerLoadingMessages";
+import { DateRange, LocationCity } from "@material-ui/icons";
+import { format, parseISO } from "date-fns";
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
@@ -41,15 +43,50 @@ const OfferContent = ({ offer, loading }) => {
                     </div>
                     :
                     <React.Fragment>
-                        <Typography variant="h2" gutterBottom>
-                            {offer.position}
-                        </Typography>
-                        <Typography variant="h4" gutterBottom>
-                            {offer.company.name}
-                        </Typography>
-                        <Typography variant="body1">
-                            {offer.description}
-                        </Typography>
+                        <div className={classes.offerHeader}>
+                            <Typography variant="h4" gutterBottom>
+                                {offer.title}
+                            </Typography>
+
+                            <Typography variant="h6" color="primary" gutterBottom>
+                                {offer?.company?.name}
+                            </Typography>
+                            <div>
+                                <LocationCity style={{ verticalAlign: "sub" }} />
+                                <Typography variant="body1" display="inline">
+                                    {offer.location}
+                                </Typography>
+                            </div>
+                            <div>
+                                {(offer.jobMinDuration || offer.jobStartDate) &&
+                                <DateRange style={{ verticalAlign: "sub" }} />
+                                }
+                                {offer.jobStartDate &&
+                                <Typography display="inline" variant="body1">
+                                    {format(parseISO(offer.jobStartDate), "yyyy-MM-dd")}
+                                </Typography>
+                                }
+                                {offer.jobMinDuration &&
+                                <>
+                                    <Typography display="inline" variant="body1">
+                                        {offer.jobStartDate && " • "}
+                                        {offer.jobMinDuration}
+                                    </Typography>
+                                    <Typography display="inline" variant="body1">
+                                        {offer.jobMaxDuration ?
+                                            `-${offer.jobMaxDuration}` : "+"
+                                        }
+                                    </Typography>
+                                </>
+                                }
+                                {offer.jobMinDuration && " months"}
+                            </div>
+                        </div>
+                        <div className={classes.offerDescription}>
+                            <Typography variant="body1">
+                                {offer.description}
+                            </Typography>
+                        </div>
                     </React.Fragment>
                 }
             </div>

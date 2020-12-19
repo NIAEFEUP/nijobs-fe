@@ -8,10 +8,10 @@ import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import { WorkOff } from "@material-ui/icons";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, setSelectedOffer }) => (
-    <Grid item md={4} id="offer_list">
+const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer }) => (
+    <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
-            <Grid item md={11}>
+            <div className={classes.offerItemsContainer}>
                 {noOffers ?
                     <div className={classes.noOffersColumn}>
                         <WorkOff className={classes.errorLoadingOffersIcon} />
@@ -20,33 +20,39 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, setSelectedOffer
                     :
                     <OfferItemsContainer
                         offers={offers}
+                        selectedOffer={selectedOffer}
                         loading={offersLoading}
                         setSelectedOffer={setSelectedOffer}
                         noOffers={noOffers}
                     />
                 }
-            </Grid>
-            <Grid item md={1}>
                 <Divider
                     className={`${classes.divider} ${classes.fullHeight}`}
                     orientation="vertical"
                     variant="middle"
                 />
-            </Grid>
+            </div>
         </Grid>
     </Grid>
 );
 
 OffersList.propTypes = {
     noOffers: PropTypes.bool.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    classes: PropTypes.shape({
+        divider: PropTypes.string.isRequired,
+        fullHeight: PropTypes.string.isRequired,
+        offerItemsContainer: PropTypes.string.isRequired,
+        noOffersColumn: PropTypes.string.isRequired,
+        errorLoadingOffersIcon: PropTypes.string.isRequired,
+    }),
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
+    selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
 };
 
 const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }) => (
-    <Grid item md={8} id="offer_content">
+    <Grid item md={8} id="offer_content" className={classes.fullHeight}>
         {noOffers ?
             <div className={classes.searchOfferErrorContainer}>
                 <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
@@ -66,7 +72,13 @@ const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }
 
 OfferContentSection.propTypes = {
     noOffers: PropTypes.bool.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    classes: PropTypes.shape({
+        searchOfferErrorContainer: PropTypes.string.isRequired,
+        reviseCriteriaErrorMessage: PropTypes.string.isRequired,
+        searchArea: PropTypes.string.isRequired,
+        offerBodyContainer: PropTypes.string.isRequired,
+        fullHeight: PropTypes.string.isRequired,
+    }),
     offersLoading: PropTypes.bool,
     selectedOffer: PropTypes.instanceOf(Offer),
 };
@@ -78,12 +90,16 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
         fullHeight: classes.fullHeight,
         noOffersColumn: classes.noOffersColumn,
         errorLoadingOffersIcon: classes.errorLoadingOffersIcon,
+        divider: classes.divider,
+        offerItemsContainer: classes.offerItemsContainer,
     };
 
     const offerContentClasses = {
         searchOfferErrorContainer: classes.searchOfferErrorContainer,
         reviseCriteriaErrorMessage: classes.reviseCriteriaErrorMessage,
+        offerBodyContainer: classes.offerBodyContainer,
         searchArea: classes.searchArea,
+        fullHeight: classes.fullHeight,
     };
 
     return (
@@ -93,6 +109,7 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
                 noOffers={noOffers}
                 offers={offers}
                 offersLoading={offersLoading}
+                selectedOffer={selectedOffer}
                 setSelectedOffer={setSelectedOffer}
             />
             <OfferContentSection

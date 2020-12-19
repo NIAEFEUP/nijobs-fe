@@ -51,6 +51,7 @@ describe("Navbar", () => {
     });
 
     describe("interaction", () => {
+
         it("Should open user menu on account button click", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true }));
 

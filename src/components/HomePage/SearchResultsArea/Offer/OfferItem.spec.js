@@ -8,7 +8,7 @@ describe("OfferItem", () => {
 
     const offer = new Offer({
         id: "id1",
-        position: "position1",
+        title: "position1",
         company: "company1",
         location: "location1",
         date: "date1",
@@ -29,7 +29,7 @@ describe("OfferItem", () => {
         const wrapper = shallow(<OfferItem offer={offer} />);
 
         it("should render the offer position", () => {
-            expect(wrapper.find(ListItemText).first().prop("primary")).toEqual(offer.position);
+            expect(wrapper.find(ListItemText).first().prop("primary")).toEqual(offer.title);
         });
         it("should render the comapny's logo", () => {
             expect(wrapper.find(ListItemAvatar).first().find(Avatar).exists()).toBe(true);

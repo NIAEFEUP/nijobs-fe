@@ -32,7 +32,7 @@ describe("OfferContent", () => {
         describe("offer selected", () => {
             const offer = new Offer({
                 id: "id1",
-                position: "position1",
+                title: "position1",
                 company: {
                     name: "company1",
                     logo: "companyLogo",
@@ -48,13 +48,13 @@ describe("OfferContent", () => {
             );
 
             it("should render offer title", () => {
-                expect(wrapper.find(Typography).at(0).prop("variant")).toBe("h2");
-                expect(wrapper.find(Typography).at(0).prop("children")).toEqual(offer.position);
+                expect(wrapper.find(Typography).at(0).prop("variant")).toBe("h4");
+                expect(wrapper.find(Typography).at(0).prop("children")).toEqual(offer.title);
 
-                expect(wrapper.find(Typography).at(1).prop("variant")).toBe("h4");
+                expect(wrapper.find(Typography).at(1).prop("variant")).toBe("h6");
                 expect(wrapper.find(Typography).at(1).prop("children")).toEqual(offer.company.name);
 
-                expect(wrapper.find("p").first().text()).toEqual(offer.description);
+                expect(wrapper.find("p").first().text()).toEqual(offer.location);
             });
 
         });

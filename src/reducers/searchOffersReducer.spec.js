@@ -31,7 +31,7 @@ describe("Search Offers Reducer", () => {
             {
                 offers: [],
             },
-            setSearchOffers([new Offer({ id: 1 }), new Offer({ id: 2 })])
+            setSearchOffers([new Offer({ _id: 1 }), new Offer({ _id: 2 })])
         );
 
         expect(state.offers[0].id).toBe(1);

@@ -13,25 +13,25 @@ describe("OfferItemsContainer", () => {
         it("should show offer items", () => {
             const offers = [
                 new Offer({
-                    id: "id1",
-                    position: "position1",
+                    _id: "id1",
+                    title: "title1",
                     company: {
                         name: "company1",
                         logo: "companyLogo",
                     },
                     location: "location1",
-                    date: "date1",
+                    jobStartDate: "jobStartDate1",
                     description: "description1",
                 }),
                 new Offer({
-                    id: "id2",
-                    position: "position2",
+                    _id: "id2",
+                    title: "title2",
                     company: {
                         name: "company2",
                         logo: "companyLogo",
                     },
                     location: "location2",
-                    date: "date2",
+                    jobStartDate: "jobStartDate2",
                     description: "description2",
                 }),
             ];
@@ -42,20 +42,20 @@ describe("OfferItemsContainer", () => {
                     loading={false}
                     setSelectedOffer={() => {}}
                 />);
-            expect(wrapper.find(OfferItem).at(0).prop("offer").position).toBe("position1");
+            expect(wrapper.find(OfferItem).at(0).prop("offer").title).toBe("title1");
             expect(wrapper.find(OfferItem).at(0).prop("offer").company).toEqual({
                 name: "company1",
                 logo: "companyLogo",
             });
-            expect(wrapper.find(OfferItem).at(0).prop("offer").date).toBe("date1");
+            expect(wrapper.find(OfferItem).at(0).prop("offer").jobStartDate).toBe("jobStartDate1");
             expect(wrapper.find(OfferItem).at(0).prop("offer").description).toBe("description1");
 
-            expect(wrapper.find(OfferItem).at(1).prop("offer").position).toBe("position2");
+            expect(wrapper.find(OfferItem).at(1).prop("offer").title).toBe("title2");
             expect(wrapper.find(OfferItem).at(1).prop("offer").company).toEqual({
                 name: "company2",
                 logo: "companyLogo",
             },);
-            expect(wrapper.find(OfferItem).at(1).prop("offer").date).toBe("date2");
+            expect(wrapper.find(OfferItem).at(1).prop("offer").jobStartDate).toBe("jobStartDate2");
             expect(wrapper.find(OfferItem).at(1).prop("offer").description).toBe("description2");
         });
     });
