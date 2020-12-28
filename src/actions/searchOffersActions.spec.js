@@ -7,6 +7,7 @@ import {
     setJobType,
     resetAdvancedSearchFields,
     setOffersFetchError,
+    resetOffersFetchError,
 } from "./searchOffersActions";
 
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
@@ -80,6 +81,17 @@ describe("Search Offers actions", () => {
         };
 
         expect(setOffersFetchError(error)).toEqual(expectedAction);
+    });
+
+    it("should return Reset Offers Fetch Error action", () => {
+
+        const error = null;
+        const expectedAction = {
+            type: OfferSearchTypes.SET_SEARCH_OFFERS_ERROR,
+            error,
+        };
+
+        expect(resetOffersFetchError()).toEqual(expectedAction);
     });
 
     it("should reset the advanced search fields", () => {

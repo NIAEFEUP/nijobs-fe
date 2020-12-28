@@ -1,4 +1,4 @@
-import { setLoadingOffers, setSearchOffers, setOffersFetchError } from "../actions/searchOffersActions";
+import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetchError } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 import config from "../config";
@@ -56,6 +56,7 @@ const { API_HOSTNAME } = config;
 
 export const searchOffers = (filters) => async (dispatch) => {
 
+    dispatch(resetOffersFetchError());
     dispatch(setLoadingOffers(true));
 
     try {

@@ -1,4 +1,4 @@
-import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
+import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION, INITIAL_ERROR } from "../reducers/searchOffersReducer";
 
 export const OfferSearchTypes = Object.freeze({
     SET_SEARCH_VALUE: "SET_SEARCH_VALUE",
@@ -25,6 +25,11 @@ export const setSearchOffers = (offers) => ({
 export const setOffersFetchError = (error) => ({
     type: OfferSearchTypes.SET_SEARCH_OFFERS_ERROR,
     error,
+});
+
+export const resetOffersFetchError = () => ({
+    type: OfferSearchTypes.SET_SEARCH_OFFERS_ERROR,
+    error: INITIAL_ERROR,
 });
 
 export const setSearchValue = (value) => ({

@@ -2,6 +2,7 @@ import { OfferSearchTypes } from "../actions/searchOffersActions";
 
 export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
+export const INITIAL_ERROR = null;
 
 const initialState = {
     searchValue: "",
@@ -12,7 +13,7 @@ const initialState = {
     techs: [],
     offers: [],
     loading: false,
-    error: null,
+    error: INITIAL_ERROR,
 };
 
 export default (state = initialState, action) => {

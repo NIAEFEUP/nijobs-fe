@@ -12,11 +12,11 @@ const JobTypes = Object.freeze([
         label: "Curricular Internship",
     },
     {
-        value: "PART_TIME",
+        value: "PART-TIME",
         label: "Part-Time",
     },
     {
-        value: "FULL_TIME",
+        value: "FULL-TIME",
         label: "Full-Time",
     },
 

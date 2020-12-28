@@ -6,7 +6,7 @@ import Offer from "../Offer/Offer";
 
 const AbstractSearchResults = (props) => {
     const { mobile, offers, offersLoading, offersSearchError } = props;
-    const noOffers = offersSearchError || (!offersLoading && offers.length === 0);
+    const noOffers = Boolean(offersSearchError || (!offersLoading && offers.length === 0));
     return (
         <React.Fragment>
             {mobile ?

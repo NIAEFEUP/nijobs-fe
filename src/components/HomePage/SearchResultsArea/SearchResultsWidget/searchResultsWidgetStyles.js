@@ -32,6 +32,7 @@ export default makeStyles((theme) => ({
         textAlign: "center",
     },
     noOffersColumn: {
+        flexGrow: 1,
         height: "100%",
         display: "flex",
         flexDirection: "column",
