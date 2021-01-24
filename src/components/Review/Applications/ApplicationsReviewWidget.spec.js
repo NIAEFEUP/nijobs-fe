@@ -9,7 +9,9 @@ import { SnackbarProvider } from "notistack";
 import React from "react";
 import { applyMiddleware, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-import { API_HOSTNAME } from "../../../config";
+import config from "../../../config";
+const { API_HOSTNAME } = config;
+
 import reducer from "../../../reducers";
 import { renderWithStore, renderWithStoreAndTheme } from "../../../test-utils";
 import Notifier from "../../Notifications/Notifier";

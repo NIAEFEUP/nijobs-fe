@@ -9,4 +9,4 @@ services:
     ports:
       - ${HOST_PORT}:3000
     environment:
-      - PORT = 3000
+      - PORT=3000

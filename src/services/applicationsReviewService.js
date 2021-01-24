@@ -1,4 +1,6 @@
-import { API_HOSTNAME } from "../config";
+import config from "../config";
+const { API_HOSTNAME } = config;
+
 
 const encodeFilters = (filters) => {
     const encodedValues = [];

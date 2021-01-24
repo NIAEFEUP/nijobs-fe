@@ -1,4 +1,6 @@
-import { API_HOSTNAME } from "../config";
+import config from "../config";
+const { API_HOSTNAME } = config;
+
 import { submitCompanyApplication } from "./companyApplicationService";
 import {
     setCompanyApplicationSending,
