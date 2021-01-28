@@ -50,7 +50,12 @@ describe("CompanyApplicationPage", () => {
         });
 
         it("should render a confirmation dialog on registration completion", () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationPage showConfirmation/>, { store, theme });
+            const wrapper = renderWithStoreAndTheme(
+                <Router>
+                    <CompanyApplicationPage showConfirmation/>
+                </Router>, 
+                { store, theme }
+            );
             expect(wrapper.getByText("Application Submitted")).toBeTruthy();
 
         });
