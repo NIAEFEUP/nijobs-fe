@@ -4,6 +4,7 @@ import CompanyApplicationPage from "./CompanyApplicationPage";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { createMuiTheme } from "@material-ui/core";
+import { BrowserRouter as Router } from "react-router-dom";
 
 describe("CompanyApplicationPage", () => {
 
