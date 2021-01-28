@@ -1,4 +1,5 @@
 import React from "react";
+import { RouterLink } from "../../../utils";
 import { Card, CardHeader, CardContent, CardActions, Link, Typography, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -30,11 +31,11 @@ const ApplicationConfirmation = () => {
                 </Typography>
             </CardContent>
             <CardActions className={classes.actions}>
-                <Link
-                    href="/"
+                <RouterLink
+                    to="/"
                 >
                 Go to Homepage
-                </Link>
+                </RouterLink>
             </CardActions>
         </Card>
     );
