@@ -54,7 +54,7 @@ describe("CompanyApplicationPage", () => {
             const wrapper = renderWithStoreAndTheme(
                 <Router>
                     <CompanyApplicationPage showConfirmation/>
-                </Router>, 
+                </Router>,
                 { store, theme }
             );
             expect(wrapper.getByText("Application Submitted")).toBeTruthy();
