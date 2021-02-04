@@ -2,15 +2,17 @@
 
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import { Button, createMuiTheme, makeStyles, TextField, Typography } from "@material-ui/core";
+import { Button, makeStyles, TextField, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import AppTheme from "./AppTheme.js";
 
 import config, { INITIAL_API_HOSTNAME } from "./config.js";
 
 export const loadDevTools = () => new Promise((resolve) => {
-    // Allow dev tools in all envs but prod, unless it's explicitly enabled
-    const devToolsActive = process.env.REACT_APP_ALLOW_DEV_TOOLS === "true" || process.env.NODE_ENV !== "production";
+    // Allow dev tools in all envs but prod, unless it's explicitly enabled and not explicitly disabled
+    const devToolsActive =
+        process.env.REACT_APP_ALLOW_DEV_TOOLS !== "false" &&
+        (process.env.REACT_APP_ALLOW_DEV_TOOLS === "true" || process.env.NODE_ENV !== "production");
 
     if (devToolsActive) {
         install();
@@ -22,8 +24,8 @@ export const loadDevTools = () => new Promise((resolve) => {
 
 const useDevToolsStyle = makeStyles((theme) => ({
     bar: {
-        backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.common.white,
+        backgroundColor: theme.palette.dark.main,
+        color: theme.palette.dark.contrastText,
         padding: theme.spacing(1),
         position: "fixed",
         bottom: 0,
@@ -32,6 +34,12 @@ const useDevToolsStyle = makeStyles((theme) => ({
         "& > *": {
             margin: theme.spacing(0, 1),
         },
+    },
+    button: {
+        color: theme.palette.dark.contrastText,
+    },
+    input: {
+        color: theme.palette.dark.contrastText,
     },
 }));
 
@@ -56,7 +64,11 @@ const DevToolsController = () => {
             <Typography>⚠️ NIJobs Devtools</Typography>
             <Typography display="inline">API Hostname</Typography>
             <TextField
-                inputProps={{ style: { color: "white" } }}
+                InputProps={{
+                    classes: {
+                        root: classes.input,
+                    },
+                }}
                 className={classes.input}
                 placeholder="API Host in the format http(s)://host:port"
                 onChange={(e) => {
@@ -64,21 +76,11 @@ const DevToolsController = () => {
                 }}
                 value={APIHostname}
             />
-            <Button color="primary" onClick={handleApply}>Apply and Reload</Button>
-            <Button color="primary" onClick={handleReset}>Reset and Reload</Button>
+            <Button className={classes.button} onClick={handleApply}>Apply and Reload</Button>
+            <Button className={classes.button} onClick={handleReset}>Reset and Reload</Button>
         </div>
     );
 };
-
-const BarTheme = (theme) => createMuiTheme({
-    ...theme,
-    palette: {
-        ...theme.palette,
-        primary: {
-            main: "#FFFFFF",
-        },
-    },
-});
 
 const install = () => {
     const devToolsRoot = document.createElement("div");
@@ -88,9 +90,7 @@ const install = () => {
 
     ReactDOM.render(
         <ThemeProvider theme={AppTheme}>
-            <ThemeProvider theme={BarTheme}>
-                <DevToolsController />
-            </ThemeProvider>
+            <DevToolsController />
         </ThemeProvider>,
         devToolsRoot
     );

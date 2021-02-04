@@ -2,7 +2,7 @@
 [context.deploy-preview.environment]
   REACT_APP_ALLOW_DEV_TOOLS = "true"
 
-# Branch preivews context: allow dev tools usage for api hostname changing, for example
+# Branch previews context: allow dev tools usage for api hostname changing, for example
 [context.branch-deploy.environment]
   REACT_APP_ALLOW_DEV_TOOLS = "true"
 
