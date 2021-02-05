@@ -22,50 +22,6 @@ import {
 const styles = {
     parentContainer: {
         backgroundColor: "#333",
-        // clipPath: "polygon(0% 30%, 50% 0%, 100% 30%, 100% 100%, 0% 100%)",   // shows the path that follows the following trajectory
-        borderTopRadius: 0,
-    },
-    centeredText: {
-        textAlign: "center",
-        paddingTop: "2%",
-        paddingBottom: "2%",
-        color: "white",
-    },
-    contactFormContainer: {
-        display: "flex",
-        flex: 1,
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        paddingBottom: "2%",
-    },
-    boxContainer: {
-        display: "flex",
-        flex: 1,
-        paddingTop: "2rem",
-        paddingBottom: "2rem",
-        backgroundColor: "transparent",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 25,
-        marginLeft: "5%",
-        marginRight: "5%",
-        // borderWidth: 2,
-        // borderStyle: "solid",
-        // borderColor: "white",
-    },
-    boxContent: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    media: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-evenly",
-        alignItems: "center",
-    },
-    white: {
-        color: "white",
     },
 };
 
@@ -98,27 +54,27 @@ class ContactPage extends Component {
                                 </Button>
                             </ListItem>
                             <ListItem dense>
-                                <Button href="https://ni.fe.up.pt" startIcon={<Facebook/>} >
+                                <Button href="https://facebook.com/NIAEFEUP/" startIcon={<Facebook />} >
                                     Facebook
                                 </Button>
                             </ListItem>
                             <ListItem dense>
-                                <Button href="https://ni.fe.up.pt" startIcon={<GitHub/>} >
+                                <Button href="https://github.com/NIAEFEUP" startIcon={<GitHub />} >
                                     Github
                                 </Button>
                             </ListItem>
                             <ListItem dense>
-                                <Button href="https://ni.fe.up.pt" startIcon={<Instagram/>} >
+                                <Button href="https://www.instagram.com/niaefeup/" startIcon={<Instagram  />} >
                                     Instagram
                                 </Button>
                             </ListItem>
                             <ListItem dense>
-                                <Button href="https://ni.fe.up.pt" startIcon={<Twitter/>} >
+                                <Button href="https://twitter.com/niaefeup" startIcon={<Twitter/>} >
                                     Twitter
                                 </Button>
                             </ListItem>
                             <ListItem dense>
-                                <Button href="https://ni.fe.up.pt" startIcon={<LinkedIn/>} >
+                                <Button href="https://pt.linkedin.com/company/nifeup" startIcon={<LinkedIn/>} >
                                     LinkedIn
                                 </Button>
                             </ListItem>
