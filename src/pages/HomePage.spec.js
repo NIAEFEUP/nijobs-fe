@@ -10,6 +10,7 @@ import useSession from "../hooks/useSession";
 
 jest.mock("../hooks/useSession");
 
+import ContactSection from "../components/HomePage/ContactSection";
 
 describe("HomePage", () => {
     const theme = createMuiTheme();
@@ -43,6 +44,9 @@ describe("HomePage", () => {
 
         it("should not render SearchResultsWidget", () => {
             expect(wrapper.find(SearchResultsWidget).exists()).toBe(false);
+        });
+        it("should render ContactSection", () => {
+            expect(wrapper.find(ContactSection).exists()).toBe(true);
         });
     });
     describe("interaction", () => {
