@@ -4,16 +4,16 @@ import HomePage from "./HomePage";
 import MainView from "../components/HomePage/MainView";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core";
+import {  ThemeProvider } from "@material-ui/core";
 import { mountWithStore } from "../test-utils";
 import useSession from "../hooks/useSession";
+import AppTheme from "../AppTheme";
 
 jest.mock("../hooks/useSession");
 
 import ContactSection from "../components/HomePage/ContactSection";
 
 describe("HomePage", () => {
-    const theme = createMuiTheme();
     const initialState = {
         offerSearch: {
             offers: [],
@@ -30,7 +30,7 @@ describe("HomePage", () => {
 
         useSession.mockImplementation(() => ({ isLoggedIn: false }));
         const wrapper = shallow(
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={AppTheme}>
                 <HomePage/>
             </ThemeProvider>).find(HomePage).first().dive();
 
@@ -56,7 +56,7 @@ describe("HomePage", () => {
                 <Router>
                     <HomePage/>
                 </Router>,
-                initialState, theme);
+                initialState, AppTheme);
 
             // Currently jsdom does not know about scrollIntoView function, and thus, the code will break when submitting search
             // As a workaround, a stub is defined below, just for the code to not throw the error and actually test what matters

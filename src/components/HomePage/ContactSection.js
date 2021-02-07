@@ -9,8 +9,7 @@ import {
     Language,
     Email,
 } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
-import Theme from "../../AppTheme";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 
 import {
     Grid,
@@ -22,18 +21,18 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     parentContainer: {
-        backgroundColor: Theme.palette.dark.main,
-        color: Theme.palette.dark.contrastText,
+        backgroundColor: theme.palette.dark.main,
+        color: theme.palette.dark.contrastText,
         padding: theme.spacing(4),
     },
     colorText: {
-        color: Theme.palette.tertiary.main,
+        color: theme.palette.tertiary.main,
     },
     backgroundColor: {
-        color: Theme.palette.dark.main,
+        color: theme.palette.dark.main,
     },
     primaryColor: {
-        color: Theme.palette.primary.main,
+        color: theme.palette.primary.main,
     },
 }));
 
@@ -41,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 const ContactSection = () => {
 
     const classes = useStyles();
+    const theme = useTheme();
 
     return (
         <div className={classes.parentContainer}>
@@ -53,7 +53,7 @@ const ContactSection = () => {
                         <ListItem>
                             <Button
                                 href="mailto:ni@aefeup.pt"
-                                startIcon={<Email htmlColor={Theme.palette.primary.main} />}
+                                startIcon={<Email htmlColor={theme.palette.primary.main} />}
                                 className={classes.primaryColor}
                                 title="email"
                             >
@@ -72,7 +72,7 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://ni.fe.up.pt"
-                                        startIcon={<Language htmlColor={Theme.palette.tertiary.main} />}
+                                        startIcon={<Language htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="website"
                                     >
@@ -82,7 +82,7 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://facebook.com/NIAEFEUP/"
-                                        startIcon={<Facebook htmlColor={Theme.palette.tertiary.main}/>}
+                                        startIcon={<Facebook htmlColor={theme.palette.tertiary.main}/>}
                                         className={classes.colorText}
                                         title="facebook"
                                     >
@@ -92,7 +92,7 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://github.com/NIAEFEUP"
-                                        startIcon={<GitHub htmlColor={Theme.palette.tertiary.main} />}
+                                        startIcon={<GitHub htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="github"
                                     >
@@ -109,7 +109,7 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://www.instagram.com/niaefeup/"
-                                        startIcon={<Instagram htmlColor={Theme.palette.tertiary.main} />}
+                                        startIcon={<Instagram htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="instagram"
                                     >
@@ -119,7 +119,7 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://twitter.com/niaefeup"
-                                        startIcon={<Twitter htmlColor={Theme.palette.tertiary.main}/>}
+                                        startIcon={<Twitter htmlColor={theme.palette.tertiary.main}/>}
                                         className={classes.colorText}
                                         title="twitter"
                                     >
@@ -129,7 +129,7 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://pt.linkedin.com/company/nifeup"
-                                        startIcon={<LinkedIn htmlColor={Theme.palette.tertiary.main} />}
+                                        startIcon={<LinkedIn htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="linkedin"
                                     >
