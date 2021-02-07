@@ -9,7 +9,12 @@ import {
     Language,
     Email,
 } from "@material-ui/icons";
+<<<<<<< HEAD
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+=======
+import { makeStyles } from "@material-ui/core/styles";
+import Theme from "../../AppTheme";
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
 
 import {
     Grid,
@@ -21,6 +26,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     parentContainer: {
+<<<<<<< HEAD
         backgroundColor: theme.palette.dark.main,
         color: theme.palette.dark.contrastText,
         padding: theme.spacing(4),
@@ -33,6 +39,20 @@ const useStyles = makeStyles((theme) => ({
     },
     primaryColor: {
         color: theme.palette.primary.main,
+=======
+        backgroundColor: Theme.palette.dark.main,
+        color: Theme.palette.dark.contrastText,
+        padding: theme.spacing(4),
+    },
+    colorText: {
+        color: Theme.palette.tertiary.main,
+    },
+    backgroundColor: {
+        color: Theme.palette.dark.main,
+    },
+    primaryColor: {
+        color: Theme.palette.primary.main,
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
     },
 }));
 
@@ -40,7 +60,10 @@ const useStyles = makeStyles((theme) => ({
 const ContactSection = () => {
 
     const classes = useStyles();
+<<<<<<< HEAD
     const theme = useTheme();
+=======
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
 
     return (
         <div className={classes.parentContainer}>
@@ -53,7 +76,11 @@ const ContactSection = () => {
                         <ListItem>
                             <Button
                                 href="mailto:ni@aefeup.pt"
+<<<<<<< HEAD
                                 startIcon={<Email htmlColor={theme.palette.primary.main} />}
+=======
+                                startIcon={<Email htmlColor={Theme.palette.primary.main} />}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                 className={classes.primaryColor}
                                 title="email"
                             >
@@ -72,7 +99,11 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://ni.fe.up.pt"
+<<<<<<< HEAD
                                         startIcon={<Language htmlColor={theme.palette.tertiary.main} />}
+=======
+                                        startIcon={<Language htmlColor={Theme.palette.tertiary.main} />}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="website"
                                     >
@@ -82,7 +113,11 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://facebook.com/NIAEFEUP/"
+<<<<<<< HEAD
                                         startIcon={<Facebook htmlColor={theme.palette.tertiary.main}/>}
+=======
+                                        startIcon={<Facebook htmlColor={Theme.palette.tertiary.main}/>}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="facebook"
                                     >
@@ -92,7 +127,11 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://github.com/NIAEFEUP"
+<<<<<<< HEAD
                                         startIcon={<GitHub htmlColor={theme.palette.tertiary.main} />}
+=======
+                                        startIcon={<GitHub htmlColor={Theme.palette.tertiary.main} />}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="github"
                                     >
@@ -109,7 +148,11 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://www.instagram.com/niaefeup/"
+<<<<<<< HEAD
                                         startIcon={<Instagram htmlColor={theme.palette.tertiary.main} />}
+=======
+                                        startIcon={<Instagram htmlColor={Theme.palette.tertiary.main} />}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="instagram"
                                     >
@@ -119,7 +162,11 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://twitter.com/niaefeup"
+<<<<<<< HEAD
                                         startIcon={<Twitter htmlColor={theme.palette.tertiary.main}/>}
+=======
+                                        startIcon={<Twitter htmlColor={Theme.palette.tertiary.main}/>}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="twitter"
                                     >
@@ -129,7 +176,11 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://pt.linkedin.com/company/nifeup"
+<<<<<<< HEAD
                                         startIcon={<LinkedIn htmlColor={theme.palette.tertiary.main} />}
+=======
+                                        startIcon={<LinkedIn htmlColor={Theme.palette.tertiary.main} />}
+>>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
                                         className={classes.colorText}
                                         title="linkedin"
                                     >
