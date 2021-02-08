@@ -9,7 +9,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --coverage --verbose",
-    "test-ci": "jest -w 1 --coverage --verbose",
+    "test-ci": "jest --coverage --verbose",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
     "lint": "eslint src --max-warnings 0"
