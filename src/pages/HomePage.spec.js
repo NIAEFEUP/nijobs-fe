@@ -6,6 +6,10 @@ import ProductDescription from "../components/HomePage/ProductPlacementArea/Prod
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { mountWithStore } from "../test-utils";
+import useSession from "../hooks/useSession";
+
+jest.mock("../hooks/useSession");
+
 
 describe("HomePage", () => {
     const theme = createMuiTheme();
@@ -22,6 +26,8 @@ describe("HomePage", () => {
         },
     };
     describe("render", () => {
+
+        useSession.mockImplementation(() => ({ isLoggedIn: false }));
         const wrapper = shallow(
             <ThemeProvider theme={theme}>
                 <HomePage/>

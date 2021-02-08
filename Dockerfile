@@ -7,10 +7,14 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY ./src/ ./src
-COPY ./public/ ./public
+# Necessary files for building the app
+COPY public/ public/
+COPY config/ config/
+COPY scripts/ scripts/
+COPY src/ src/
 
-COPY .env ./
+# Copy env files
+COPY .env* ./
 
 EXPOSE $PORT
 

@@ -1,10 +1,11 @@
-import { API_HOSTNAME } from "../config";
 import {
     setCompanyApplication,
     setCompanyApplicationSending,
     setCompanyApplicationSubmissionError,
 } from "../actions/companyApplicationActions";
 
+import config from "../config";
+const { API_HOSTNAME } = config;
 
 export const submitCompanyApplication = (formData) => async (dispatch) => {
     dispatch(setCompanyApplicationSending(true));

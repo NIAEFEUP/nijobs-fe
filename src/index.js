@@ -14,21 +14,25 @@ import App from "./App";
 import { create } from "jss";
 import { StylesProvider, jssPreset } from "@material-ui/core/styles";
 import compose from "jss-plugin-compose";
+import { loadDevTools } from "./devTools.js";
 
 const jss = create({
     plugins: [...jssPreset().plugins, compose()],
 });
 
-
-ReactDOM.render(
-    <BrowserRouter>
+loadDevTools().then(() => {
+    ReactDOM.render(
         <StylesProvider jss={jss}>
             <ThemeProvider theme={AppTheme}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <SnackbarProvider maxSnack={3}>
-                        <App />
-                    </SnackbarProvider>
-                </MuiPickersUtilsProvider>
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <SnackbarProvider maxSnack={3}>
+                            <App />
+                        </SnackbarProvider>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>
             </ThemeProvider>
-        </StylesProvider>
-    </BrowserRouter>, document.getElementById("root"));
+        </StylesProvider>,
+        document.getElementById("root")
+    );
+});

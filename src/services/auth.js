@@ -1,4 +1,6 @@
-import { API_HOSTNAME } from "../config";
+import config from "../config";
+const { API_HOSTNAME } = config;
+
 const AUTH_ENDPOINT = `${API_HOSTNAME}/auth/login`;
 
 export const login = async (email, password) => {

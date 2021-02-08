@@ -1,4 +1,6 @@
-import { API_HOSTNAME } from "../config";
+import config from "../config";
+const { API_HOSTNAME } = config;
+
 import { login, logout } from "./auth";
 
 describe("Auth Service", () => {

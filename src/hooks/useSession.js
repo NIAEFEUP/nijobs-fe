@@ -1,6 +1,8 @@
 import useSWR, { mutate } from "swr";
 
-import { API_HOSTNAME } from "../config";
+import config from "../config";
+const { API_HOSTNAME } = config;
+
 const DEFAULT_RETRY_COUNT = 1;
 
 export default (options) => {

@@ -3,8 +3,18 @@ import Adapter from "enzyme-adapter-react-16";
 
 import "@testing-library/jest-dom";
 import { enableFetchMocks } from "jest-fetch-mock";
+
 enableFetchMocks();
 fetchMock.dontMock();
+
+// Mock localStorage
+Object.defineProperty(window, "localStorage", {
+    value: {
+        getItem: jest.fn(() => null),
+        setItem: jest.fn(() => null),
+    },
+    writable: true,
+});
 
 // React 16 Enzyme adapter
 Enzyme.configure({ adapter: new Adapter() });
@@ -23,3 +33,7 @@ global.document.createRange = () => ({
         ownerDocument: document,
     },
 });
+
+// beforeEach(async () => {
+//     await new Promise(requestAnimationFrame);
+// });

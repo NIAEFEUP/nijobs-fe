@@ -45,6 +45,28 @@ If you have already built the images/containers before you can simply run:
 docker-compose up
 ```
 
+#### Using custom API Backends
+
+In order to test something before merging a Pull Request, for example, in the NIJobs Devtools toolbar, you can specify the API host for the application to call. This is useful since in Netlify it doesn't have direct access to your `localhost` backend.
+
+![NIJobs Devtools](https://user-images.githubusercontent.com/28157246/105634004-bb251c00-5e53-11eb-881c-becf1801c855.png)
+
+> NIJobs Devtools are only available in non-production environments or if otherwise specified via REACT_APP_ALLOW_DEV_TOOLS=true env variable
+
+For it to work, you must serve a backend through some server accessible on the internet. An easy way to do it is using [ngrok](https://ngrok.com/).
+
+After starting your server on localhost, you can create a tunnel from that localhost server to the internet with ngrok with the following command:
+
+```bash
+ngrok http <backend port, usually 8087>
+```
+
+That will give you two hosts, one for `http`, another for `https`. Use the `https` one in the NIJobs Devtools.
+
+Remember that the backend server must allow the host making the requests (the Netlify origin (i.e. `https://deploy-preview-66--nijobs.netlify.app/`), or your localhost (i.e. `http://localhost:3000`), depending on the use-case).
+
+This can also be useful if you don't want to run the server on your local machine, since you are only developing the frontend. In that case, you can use the staging deployment at `https:/ni.fe.up.pt/st4g1ng/nijobs/api`, but beware that CORS will block your localhost by default, so you must talk with a project maintainer to discuss permissions.
+
 > A `dev.sh` file is available in the project's root folder to run these commands on linux environments (simply run `./dev.sh [--build]`)
 
 This will create a development server with hot reloading which will listen on `http://localhost:<HOST_PORT>`.

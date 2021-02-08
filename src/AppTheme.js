@@ -10,9 +10,6 @@ const theme = responsiveFontSizes(createMuiTheme({
         secondary: {
             main: "#4F1315",
         },
-        tertiary: {
-            main: "#C1D2D6",
-        },
     },
     status: {
         danger: "orange",
@@ -24,11 +21,16 @@ const theme = responsiveFontSizes(createMuiTheme({
             "sans-serif",
         ].join(","),
     },
-
 }));
-export default theme;
 
-export const primaryColor = "#C03736";
-export const secondaryColor = "#4F1315";
-export const tertiaryColor = "#C1D2D6";
-export const darkTextColor = "#2C3031";
+// Add custom palette variants
+theme.palette = {
+    ...theme.palette,
+    tertiary: theme.palette.augmentColor({
+        main: "#C1D2D6",
+    }),
+    dark: theme.palette.augmentColor({
+        main: "#333333",
+    }),
+};
+export default theme;
