@@ -3,6 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 import "@testing-library/jest-dom";
 import { enableFetchMocks } from "jest-fetch-mock";
+
 enableFetchMocks();
 fetchMock.dontMock();
 
@@ -31,4 +32,10 @@ global.document.createRange = () => ({
         nodeName: "BODY",
         ownerDocument: document,
     },
+});
+
+// Prevents SWR cache from leaking from test to test
+beforeEach(async () => {
+    // cache.clear();
+    await new Promise(requestAnimationFrame);
 });

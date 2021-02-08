@@ -4,7 +4,6 @@ import { Button } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
 import useSession from "../../../hooks/useSession";
 
-
 jest.mock("../../../hooks/useSession");
 
 describe("<ProductDescription /> interaction", () => {

@@ -6,6 +6,7 @@ import CompanyApplicationForm from "./CompanyApplicationForm";
 import { createMuiTheme } from "@material-ui/core";
 import { createStore, applyMiddleware, compose } from "redux";
 import reducer from "../../../reducers";
+import userEvent from "@testing-library/user-event";
 
 describe("CompanyApplicationForm", () => {
 
@@ -133,13 +134,12 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
                 .toHaveTextContent("0/1500");
 
-            input.value = "f".repeat(10);
-            fireEvent.blur(input);
+            userEvent.type(input, "f".repeat(10));
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
                 .toHaveTextContent("10/1500");
 
-            input.value = "f".repeat(50);
-            fireEvent.blur(input);
+            userEvent.type(input, `{selectall}{backspace}${"f".repeat(50)}`);
+
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
                 .toHaveTextContent("50/1500");
 
