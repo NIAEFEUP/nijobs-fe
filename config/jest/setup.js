@@ -34,8 +34,6 @@ global.document.createRange = () => ({
     },
 });
 
-// Prevents SWR cache from leaking from test to test
-beforeEach(async () => {
-    // cache.clear();
-    await new Promise(requestAnimationFrame);
-});
+// beforeEach(async () => {
+//     await new Promise(requestAnimationFrame);
+// });

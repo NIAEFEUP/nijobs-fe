@@ -5,7 +5,7 @@ version: 2
 aliases:
     - &docker_image
         docker:
-            - image: node:14.13.1-alpine
+            - image: node:10.16.0-alpine
     - run: &setup_certificates 
             # This is necessary to be able to restore from and save to CircleCI's cache and workspace
             name: Install CA certificates
