@@ -7,6 +7,7 @@ import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
+import PageLayout from "./components/PageLayout";
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -15,7 +16,9 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <HomePage/>
+                <PageLayout>
+                    <HomePage/>
+                </PageLayout>
             </Route>
             <Route
                 exact
