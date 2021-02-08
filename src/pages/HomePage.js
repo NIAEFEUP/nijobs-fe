@@ -5,7 +5,6 @@ import SearchResultsWidget from "../components/HomePage/SearchResultsArea/Search
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import { smoothScrollToRef } from "../utils";
 import Navbar from "../components/Navbar";
-import ContactSection from "../components/HomePage/ContactSection";
 
 export const HomePage = () => {
 
@@ -30,7 +29,6 @@ export const HomePage = () => {
             />
             <ProductDescription ref={productDescriptionRef}/>
             {showSearchResults && <SearchResultsWidget ref={searchResultsRef}/>}
-            <ContactSection />
         </React.Fragment>
     );
 

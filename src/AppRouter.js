@@ -24,7 +24,9 @@ const AppRouter = () => (
                 exact
                 path="/apply/company"
             >
-                <CompanyApplicationPage/>
+                <PageLayout>
+                    <CompanyApplicationPage/>
+                </PageLayout>
             </Route>
             <ProtectedRoute
                 exact
@@ -33,15 +35,21 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
                 authorize={(user) => (user.isAdmin)}
             >
-                <ApplicationsReviewPage/>
+                <PageLayout>
+                    <ApplicationsReviewPage/>
+                </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
             >
-                <ErrorPage/>
+                <PageLayout>
+                    <ErrorPage/>
+                </PageLayout>
             </Route>
             <Route>
-                <NotFound/>
+                <PageLayout>
+                    <NotFound/>
+                </PageLayout>
             </Route>
         </Switch>
     </BrowserRouter>
