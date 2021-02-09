@@ -10,7 +10,7 @@ const PageLayout = (props) => (
 );
 
 PageLayout.propTypes = {
-    children: propTypes.isRequired,
+    children: propTypes.any,
 };
 
 export default PageLayout;

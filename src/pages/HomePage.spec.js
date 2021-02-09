@@ -6,15 +6,10 @@ import ProductDescription from "../components/HomePage/ProductPlacementArea/Prod
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 import {  ThemeProvider } from "@material-ui/core";
 import { mountWithStore } from "../test-utils";
-<<<<<<< HEAD
 import useSession from "../hooks/useSession";
 import AppTheme from "../AppTheme";
 
 jest.mock("../hooks/useSession");
-
-=======
->>>>>>> Added unit tests, changed the contactPage to contactSection and made it a functional component
-import ContactSection from "../components/HomePage/ContactSection";
 
 describe("HomePage", () => {
     const initialState = {
@@ -47,9 +42,6 @@ describe("HomePage", () => {
 
         it("should not render SearchResultsWidget", () => {
             expect(wrapper.find(SearchResultsWidget).exists()).toBe(false);
-        });
-        it("should render ContactSection", () => {
-            expect(wrapper.find(ContactSection).exists()).toBe(true);
         });
     });
     describe("interaction", () => {
