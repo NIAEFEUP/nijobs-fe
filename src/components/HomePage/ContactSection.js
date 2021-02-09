@@ -43,7 +43,7 @@ const ContactSection = () => {
     const theme = useTheme();
 
     return (
-        <div className={classes.parentContainer}>
+        <div className={classes.parentContainer} data-testid="contactSection">
             <Grid container spacing={0}  >
                 <Grid item xs={12} sm={6} md={3}>
                     <List>

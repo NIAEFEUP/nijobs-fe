@@ -52,6 +52,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
             position="absolute"
             color="transparent"
             elevation={0}
+            data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
                 <div

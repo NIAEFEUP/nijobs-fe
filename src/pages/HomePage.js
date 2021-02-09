@@ -4,7 +4,6 @@ import MainView from "../components/HomePage/MainView";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import { smoothScrollToRef } from "../utils";
-import Navbar from "../components/Navbar";
 
 export const HomePage = () => {
 
@@ -19,7 +18,6 @@ export const HomePage = () => {
 
     return (
         <React.Fragment>
-            <Navbar />
             <MainView
                 scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef)}
                 showSearchResults={() => {
