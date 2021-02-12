@@ -9,18 +9,20 @@ import {
     Button,
 } from "@material-ui/core";
 
+import { Link } from "react-router-dom";
+
 import useSession from "../../hooks/useSession";
 import useToggle from "../../hooks/useToggle";
 import UserMenu from "./UserMenu";
 import LoginForm from "./LoginForm";
 
 import { useMobile } from "../../utils/media-queries";
-import { MenuRounded } from "@material-ui/icons";
+import { MenuRounded, Home } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
 
-const Navbar = ({ showLoginModal, toggleLoginModal }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -55,6 +57,14 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
             data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
+                <div className={ classes.HomePageLink }>
+                    {showHomePageLink &&
+                        <Link to="/" className={classes.linkStyle}>
+                            <Home className={classes.homeIcon} />
+                                HOMEPAGE
+                        </Link>
+                    }
+                </div>
                 <div
                     ref={anchorRef}
                     aria-controls={userMenuOpen ? "menu-list-grow" : undefined}
@@ -95,6 +105,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
+    showHomePageLink: PropTypes.bool,
 };
 
 const mapStateToProps = ({ navbar }) => ({

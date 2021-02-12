@@ -27,7 +27,10 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                </BrowserRouter>, { store, theme });
 
             expect(wrapper.queryByRole("button", { name: "Account" })).not.toBeInTheDocument();
         });
@@ -38,7 +41,10 @@ describe("Navbar", () => {
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
-            const wrapper = renderWithStoreAndTheme(<Navbar />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                </BrowserRouter>, { store, theme });
 
             expect(wrapper.getByRole("button", { name: "Account" })).toBeInTheDocument();
         });

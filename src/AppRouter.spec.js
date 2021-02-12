@@ -10,7 +10,7 @@ describe("AppRouter", () => {
         expect(firstRoute.prop("path")).toEqual("/");
         expect(firstRoute.prop("exact")).toBe(true);
         expect(firstRoute.prop("children")).toEqual(
-            <PageLayout>
+            <PageLayout showHomePageLink={false}>
                 <HomePage/>
             </PageLayout>);
     });

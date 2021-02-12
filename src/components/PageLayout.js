@@ -5,7 +5,7 @@ import Navbar from "./Navbar/index";
 
 const PageLayout = (props) => (
     <div>
-        <Navbar />
+        <Navbar showHomePageLink={props.showHomePageLink} />
         {props.children}
         <ContactSection />
     </div>
@@ -13,6 +13,7 @@ const PageLayout = (props) => (
 
 PageLayout.propTypes = {
     children: propTypes.any,
+    showHomePageLink: propTypes.bool,
 };
 
 export default PageLayout;

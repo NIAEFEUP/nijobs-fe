@@ -16,7 +16,7 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <PageLayout>
+                <PageLayout showHomePageLink={false}>
                     <HomePage/>
                 </PageLayout>
             </Route>
