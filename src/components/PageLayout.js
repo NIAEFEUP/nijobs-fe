@@ -3,10 +3,10 @@ import ContactSection from "./HomePage/ContactSection";
 import propTypes from "prop-types";
 import Navbar from "./Navbar/index";
 
-const PageLayout = (props) => (
+const PageLayout = ({ children, showHomePageLink }) => (
     <div>
-        <Navbar showHomePageLink={props.showHomePageLink} />
-        {props.children}
+        <Navbar showHomePageLink={showHomePageLink} />
+        {children}
         <ContactSection />
     </div>
 );

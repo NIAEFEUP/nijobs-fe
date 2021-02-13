@@ -27,8 +27,6 @@ const useDevToolsStyle = makeStyles((theme) => ({
         backgroundColor: theme.palette.dark.main,
         color: theme.palette.dark.contrastText,
         padding: theme.spacing(1),
-        position: "fixed",
-        bottom: 0,
         width: "100%",
         zIndex: 99999,
         "& > *": {
@@ -83,8 +81,11 @@ const DevToolsController = () => {
 };
 
 const install = () => {
+
     const devToolsRoot = document.createElement("div");
     devToolsRoot.id = "_DEV_TOOLS";
+
+    devToolsRoot.setAttribute("style", "position: sticky; bottom: 0");
 
     document.body.appendChild(devToolsRoot);
 
