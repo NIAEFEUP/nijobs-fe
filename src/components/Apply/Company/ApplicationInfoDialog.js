@@ -19,6 +19,7 @@ const ApplicationInfoDialog = ({ open, toggle }) => {
         <Dialog
             open={open}
             classes={{ paper: classes.dialog }}
+            onClose={toggle}
         >
             <DialogTitle>
                 Why do I need to apply?

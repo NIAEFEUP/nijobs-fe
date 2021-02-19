@@ -7,7 +7,7 @@ import SearchArea from "../../SearchArea/SearchArea";
 import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import useToggle from "../../../../hooks/useToggle";
-import { ArrowBackIos, WorkOff } from "@material-ui/icons";
+import { NavigateBefore, WorkOff } from "@material-ui/icons";
 
 const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails }) => (
     <Grid container className={classes.fullHeight}>
@@ -56,7 +56,7 @@ export const OfferViewer = ({ open, toggleOpenPreview, offerContentWrapperClassN
                 onClick={toggleOpenPreview}
                 color="secondary"
             >
-                <ArrowBackIos />
+                <NavigateBefore />
             </IconButton>
                     Offer Details
         </DialogTitle>

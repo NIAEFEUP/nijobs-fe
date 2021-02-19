@@ -17,7 +17,7 @@ import {
     Collapse,
     FormHelperText,
 } from "@material-ui/core";
-import { ArrowBackIos } from "@material-ui/icons";
+import { NavigateBefore } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
@@ -106,7 +106,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     onClick={handleCloseClick}
                     color="secondary"
                 >
-                    <ArrowBackIos />
+                    <NavigateBefore />
                 </IconButton>
                 Advanced Search
             </DialogTitle>
