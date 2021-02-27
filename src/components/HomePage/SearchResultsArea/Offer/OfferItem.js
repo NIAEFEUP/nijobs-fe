@@ -65,7 +65,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
             >
                 <ListItemAvatar>
                     {loading ?
-                        <Avatar variant="circular" classes={{ colorDefault: "transparent" }}>
+                        <Avatar data-testid="avatar-skeleton" variant="circular" classes={{ colorDefault: "transparent" }}>
                             <Skeleton circle width={100} height={100} />
                         </Avatar>
                         :
@@ -79,7 +79,9 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                 <ListItemText
                     primary={
                         loading ?
-                            <Skeleton />
+                            <div data-testid="title-skeleton">
+                                <Skeleton />
+                            </div>
                             :
                             offer.title
                     }
@@ -88,7 +90,10 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                         gutterBottom: true,
                     }}
                     secondary={loading ?
-                        <Skeleton /> :
+                        <div data-testid="subtitle-skeleton">
+                            <Skeleton />
+                        </div>
+                        :
                         <>
                             <Typography
                                 component="span"

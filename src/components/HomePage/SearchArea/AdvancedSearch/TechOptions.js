@@ -1,9 +1,10 @@
 /* istanbul ignore file */
 
-export default Object.freeze([
-    { label: "React.js", value: "REACT_JS" },
-    { label: "Node.js", value: "NODE_JS" },
-    { label: "Python", value: "PYTHON" },
-    { label: "Java", value: "JAVA" },
-    { label: "C++", value: "C++" },
-]);
+export default Object.freeze({
+    "REACT_JS": "React.js",
+    "NODE_JS": "Node.js",
+    "PYTHON": "Python",
+    "JAVA": "Java",
+    "C++": "C++",
+    "C#": "C#",
+});

@@ -89,4 +89,15 @@ export const searchOffers = (filters) => async (dispatch) => {
 
 };
 
-export const parseSearchFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
+export const parseSearchFiltersToURL = (filters) => Object.keys(filters)
+    .filter((key) => Array.isArray(filters[key]) ? filters[key].length : !!filters[key]) // Remove falsy values
+    .map((key) => {
+        if (filters[key]) {
+            if (Array.isArray(filters[key])) {
+                return filters[key]
+                    .map((val) => `${key}=${encodeURIComponent(val)}`)
+                    .join("&");
+            } else return `${key}=${encodeURIComponent(filters[key])}`;
+        } else return  "";
+    })
+    .join("&");

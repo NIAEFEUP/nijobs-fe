@@ -18,7 +18,7 @@ describe("HomePage", () => {
             searchValue: "searchValue",
             jobDuration: [1, 2],
             fields: [],
-            techs: [],
+            technologies: [],
         },
         navbar: {
             showLoginModal: false,

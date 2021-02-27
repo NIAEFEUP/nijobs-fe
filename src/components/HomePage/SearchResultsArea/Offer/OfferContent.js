@@ -18,7 +18,7 @@ const OfferContent = ({ offer, loading }) => {
     const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop() });
     if (loading) {
         return (
-            <div className={classes.offerContent}>
+            <div className={classes.offerContent} data-testid="offer-content">
                 <div className={classes.unselectedOffer}>
                     <React.Fragment>
                         <div className={classes.magnifyingGlassAnimationWrapper}>
@@ -34,7 +34,7 @@ const OfferContent = ({ offer, loading }) => {
         );
     } else {
         return (
-            <div className={classes.offerContent}>
+            <div className={classes.offerContent} data-testid="offer-content">
                 {offer === null ?
                     <div className={classes.unselectedOffer} id="no_selected_offer_text">
                         <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>

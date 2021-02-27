@@ -50,7 +50,7 @@ describe("SearchResultsMobile", () => {
                     searchValue: "searchValue",
                     jobDuration: [1, 2],
                     fields: [],
-                    techs: [],
+                    technologies: [],
                 },
             };
 

@@ -14,7 +14,7 @@ describe("SearchResults", () => {
             searchValue: "searchValue",
             jobDuration: [1, 2],
             fields: [],
-            techs: [],
+            technologies: [],
             offers: [new Offer({
                 id: "id1",
                 position: "position1",

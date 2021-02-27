@@ -21,8 +21,8 @@ const RenderInput = (label) => (params) => (
 );
 
 export default ({
-    minJobDuration,
-    maxJobDuration,
+    jobMinDuration,
+    jobMaxDuration,
     setJobDuration,
     showJobDurationSlider,
     toggleShowJobDurationSlider,
@@ -30,14 +30,14 @@ export default ({
     setJobType,
     fields,
     setFields,
-    techs,
+    technologies,
     setTechs,
     resetAdvancedSearchFields,
 }) => {
 
-    const jobDuration = [minJobDuration, maxJobDuration];
+    const jobDuration = [jobMinDuration, jobMaxDuration];
 
-    const JobDurationSliderText = `Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`;
+    const JobDurationSliderText = `Job Duration - ${jobMinDuration}-${jobMaxDuration} month(s)`;
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 
@@ -77,8 +77,9 @@ export default ({
     const FieldsAutocompleteProps = {
         multiple: true,
         renderInput: RenderInput("Fields"),
-        options: FIELD_OPTIONS.map((option) => option.label), // TODO Make this the same as API
+        options: Object.keys(FIELD_OPTIONS), // TODO Make this the same as API
         id: "fields-selector",
+        getOptionLabel: (option) => FIELD_OPTIONS[option],
         onChange: useCallback((e, fields) => fields && setFields(fields), [setFields]),
         value: fields,
     };
@@ -92,10 +93,11 @@ export default ({
     const TechsAutocompleteProps = {
         multiple: true,
         renderInput: RenderInput("Technologies"),
-        id: "techs-selector",
-        options: TECH_OPTIONS.map((option) => option.label), // TODO Make this the same as API
+        id: "technologies-selector",
+        options: Object.keys(TECH_OPTIONS), // TODO Make this the same as API
+        getOptionLabel: (option) => TECH_OPTIONS[option],
         onChange: useCallback((e, technologies) => technologies && setTechs(technologies), [setTechs]),
-        value: techs,
+        value: technologies,
     };
 
     const techsAutocompleteProps = useCallback(useAutocomplete({ ...TechsAutocompleteProps }), [TechsAutocompleteProps]);
@@ -109,7 +111,7 @@ export default ({
     const advancedOptionsActive = showJobDurationSlider
     || (jobType !== INITIAL_JOB_TYPE)
     || fields.length !== 0
-    || techs.length !== 0;
+    || technologies.length !== 0;
 
     const ResetButtonProps = {
         disabled: !advancedOptionsActive,

@@ -37,9 +37,9 @@ export const setSearchValue = (value) => ({
     value,
 });
 
-export const setJobDuration = (minJobDuration, maxJobDuration) => ({
+export const setJobDuration = (jobMinDuration, jobMaxDuration) => ({
     type: OfferSearchTypes.SET_JOB_DURATION,
-    jobDuration: [minJobDuration, maxJobDuration],
+    jobDuration: [jobMinDuration, jobMaxDuration],
 });
 
 export const setJobType = (jobType) => ({
@@ -51,9 +51,9 @@ export const setFields = (fields) => ({
     type: OfferSearchTypes.SET_JOB_FIELDS,
     fields,
 });
-export const setTechs = (techs) => ({
+export const setTechs = (technologies) => ({
     type: OfferSearchTypes.SET_JOB_TECHS,
-    techs,
+    technologies,
 });
 
 export const setShowJobDurationSlider = (filterJobDuration) => ({

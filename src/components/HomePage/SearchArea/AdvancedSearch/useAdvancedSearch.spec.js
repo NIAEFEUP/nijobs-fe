@@ -12,13 +12,13 @@ describe("useAdvancedSearch", () => {
         const showJobDurationSlider = false;
         const toggleShowJobDurationSlider = () => {};
         const setJobDuration = jest.fn();
-        const minJobDuration = 0;
-        const maxJobDuration = 1;
+        const jobMinDuration = 0;
+        const jobMaxDuration = 1;
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
-                minJobDuration,
-                maxJobDuration,
+                jobMinDuration,
+                jobMaxDuration,
                 setJobDuration,
                 showJobDurationSlider,
                 toggleShowJobDurationSlider,
@@ -36,7 +36,7 @@ describe("useAdvancedSearch", () => {
         expect(JobDurationSwitchProps.onChange).toBe(toggleShowJobDurationSlider);
         expect(JobDurationCollapseProps.in).toBe(showJobDurationSlider);
         expect(JobDurationSliderProps.onChange).toBe(setJobDuration);
-        expect(JobDurationSliderProps.value).toStrictEqual([minJobDuration, maxJobDuration]);
+        expect(JobDurationSliderProps.value).toStrictEqual([jobMinDuration, jobMaxDuration]);
 
         JobDurationCollapseProps.onEnter();
         expect(setJobDuration).toHaveBeenCalledWith(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]);
@@ -56,7 +56,7 @@ describe("useAdvancedSearch", () => {
 
         const { FieldsSelectorProps } = useAdvancedSearchProps;
         expect(FieldsSelectorProps.multiple).toBe(true);
-        expect(FieldsSelectorProps.options).toEqual(FIELD_OPTIONS.map((option) => option.label));
+        expect(FieldsSelectorProps.options).toEqual(Object.keys(FIELD_OPTIONS));
         expect(FieldsSelectorProps.value).toEqual(fields);
         expect(FieldsSelectorProps).toHaveProperty("autocompleteProps");
 
@@ -66,24 +66,24 @@ describe("useAdvancedSearch", () => {
 
     it("should return the correct props for Techs Selector", () => {
 
-        const techs = ["test"];
+        const technologies = ["test"];
         const setTechs = jest.fn();
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
-                techs,
+                technologies,
                 setTechs,
             });
         });
 
         const { TechsSelectorProps } = useAdvancedSearchProps;
         expect(TechsSelectorProps.multiple).toBe(true);
-        expect(TechsSelectorProps.options).toEqual(TECH_OPTIONS.map((option) => option.label));
-        expect(TechsSelectorProps.value).toEqual(techs);
+        expect(TechsSelectorProps.options).toEqual(Object.keys(TECH_OPTIONS));
+        expect(TechsSelectorProps.value).toEqual(technologies);
         expect(TechsSelectorProps).toHaveProperty("autocompleteProps");
 
-        TechsSelectorProps.onChange(null, techs);
-        expect(setTechs).toHaveBeenCalledWith(techs);
+        TechsSelectorProps.onChange(null, technologies);
+        expect(setTechs).toHaveBeenCalledWith(technologies);
     });
 
     it("should return the correct props for Job Type Selector", () => {
@@ -110,14 +110,14 @@ describe("useAdvancedSearch", () => {
         const showJobDurationSlider = false;
         const jobType = `${INITIAL_JOB_TYPE}a`;
         const fields = ["test"];
-        const techs = ["test"];
+        const technologies = ["test"];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 
@@ -131,14 +131,14 @@ describe("useAdvancedSearch", () => {
         let showJobDurationSlider = false;
         let jobType = INITIAL_JOB_TYPE;
         let fields = [];
-        let techs = [];
+        let technologies = [];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 
@@ -148,14 +148,14 @@ describe("useAdvancedSearch", () => {
         showJobDurationSlider = true;
         jobType = INITIAL_JOB_TYPE;
         fields = [];
-        techs = [];
+        technologies = [];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 
@@ -165,14 +165,14 @@ describe("useAdvancedSearch", () => {
         showJobDurationSlider = false;
         jobType = `${INITIAL_JOB_TYPE}a`;
         fields = [];
-        techs = [];
+        technologies = [];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 
@@ -182,14 +182,14 @@ describe("useAdvancedSearch", () => {
         showJobDurationSlider = false;
         jobType = INITIAL_JOB_TYPE;
         fields = ["test"];
-        techs = [];
+        technologies = [];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 
@@ -199,14 +199,14 @@ describe("useAdvancedSearch", () => {
         showJobDurationSlider = false;
         jobType = INITIAL_JOB_TYPE;
         fields = [];
-        techs = ["test"];
+        technologies = ["test"];
 
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
                 showJobDurationSlider,
                 jobType,
                 fields,
-                techs,
+                technologies,
             });
         });
 

@@ -33,7 +33,7 @@ describe("SearchArea", () => {
         it("should render a paper", () => {
             expect(
                 mountWithTheme(
-                    <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
+                    <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
                     theme
                 ).find(Paper).exists()
             ).toBe(true);
@@ -41,14 +41,14 @@ describe("SearchArea", () => {
 
         it("should render a form", () => {
             expect(mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
                 theme
             ).find("form").first().prop("id")).toEqual("search_form");
         });
 
         it("should render a SearchBar", () => {
             const searchBar = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
                 theme
             ).find(SearchBar).first();
             expect(searchBar.exists()).toBe(true);
@@ -56,7 +56,7 @@ describe("SearchArea", () => {
 
         it("should render an Advanced Search Area", () => {
             const wrapper = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
                 theme
             );
             expect(wrapper.find(AdvancedSearchDesktop).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
@@ -64,7 +64,7 @@ describe("SearchArea", () => {
 
         it("should render a SearchButton", () => {
             const searchArea = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
+                <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
                 theme
             );
             const button = searchArea.find(SubmitSearchButton).first();
@@ -83,7 +83,7 @@ describe("SearchArea", () => {
                     submitSearchForm={submitSearchForm}
                     advancedOptions={false}
                     fields={[]}
-                    techs={[]}
+                    technologies={[]}
                 />,
                 theme
             );
@@ -105,7 +105,7 @@ describe("SearchArea", () => {
                     addSnackbar={addSnackbar}
                     searchOffers={searchOffersMock}
                     fields={[]}
-                    techs={[]}
+                    technologies={[]}
                 />,
                 theme
             ).find("form#search_form").first();
@@ -136,7 +136,7 @@ describe("SearchArea", () => {
                     addSnackbar={addSnackbar}
                     onSubmit={onSubmit}
                     fields={[]}
-                    techs={[]}
+                    technologies={[]}
                 />,
                 theme
             );
@@ -156,16 +156,16 @@ describe("SearchArea", () => {
                     jobType: "jobType",
                     jobDuration: [1, 2],
                     fields: ["field1", "field2"],
-                    techs: ["tech1", "tech2"],
+                    technologies: ["tech1", "tech2"],
                 },
             };
             expect(mapStateToProps(mockState)).toEqual({
                 searchValue: "searchValue",
                 jobType: "jobType",
-                minJobDuration: 1,
-                maxJobDuration: 2,
+                jobMinDuration: 1,
+                jobMaxDuration: 2,
                 fields: ["field1", "field2"],
-                techs: ["tech1", "tech2"],
+                technologies: ["tech1", "tech2"],
             });
         });
 
@@ -192,8 +192,8 @@ describe("SearchArea", () => {
             props.setFields(fields);
             expect(dispatch).toHaveBeenCalledWith(setFields(["field1", "field2"]));
 
-            const techs = ["tech1", "tech2"];
-            props.setTechs(techs);
+            const technologies = ["tech1", "tech2"];
+            props.setTechs(technologies);
             expect(dispatch).toHaveBeenCalledWith(setTechs(["tech1", "tech2"]));
 
             const filterJobDuration = false;

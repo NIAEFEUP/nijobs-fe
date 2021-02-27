@@ -10,7 +10,7 @@ const initialState = {
     filterJobDuration: false,
     jobDuration: [null, null],
     fields: [],
-    techs: [],
+    technologies: [],
     offers: [],
     loading: false,
     error: INITIAL_ERROR,
@@ -57,7 +57,7 @@ export default (state = initialState, action) => {
         case OfferSearchTypes.SET_JOB_TECHS:
             return {
                 ...state,
-                techs: action.techs,
+                technologies: action.technologies,
             };
         case OfferSearchTypes.SET_JOB_DURATION_TOGGLE:
             return {

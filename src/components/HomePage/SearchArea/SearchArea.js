@@ -25,8 +25,8 @@ import AbstractAdvancedSearch from "./AdvancedSearch/AbstractAdvancedSearch";
 import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
-    minJobDuration = INITIAL_JOB_DURATION, maxJobDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
-    fields, techs, showJobDurationSlider, setShowJobDurationSlider,
+    jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
+    fields, technologies, showJobDurationSlider, setShowJobDurationSlider,
     setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields }) => {
 
     const classes = useSearchAreaStyles();
@@ -48,8 +48,8 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         JobDurationSliderText,
         ResetButtonProps,
     } = useAdvancedSearch({
-        minJobDuration,
-        maxJobDuration,
+        jobMinDuration,
+        jobMaxDuration,
         setJobDuration,
         showJobDurationSlider,
         toggleShowJobDurationSlider,
@@ -57,7 +57,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         setJobType,
         fields,
         setFields,
-        techs,
+        technologies,
         setTechs,
         resetAdvancedSearchFields,
     });
@@ -69,10 +69,10 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         if (e) e.preventDefault();
 
         // console.log("SEARCH SUBMITTED:");
-        // console.log(searchValue, minJobDuration, maxJobDuration, jobType, fields);
+        // console.log(searchValue, jobMinDuration, jobMaxDuration, jobType, fields);
 
         // TODO: Tinker filters later
-        searchOffers({ value: searchValue });
+        searchOffers({ value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies });
 
         if (onSubmit) onSubmit();
     };
@@ -106,8 +106,8 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                     searchValue={searchValue}
                     showJobDurationSlider={showJobDurationSlider}
                     toggleShowJobDurationSlider={toggleShowJobDurationSlider}
-                    minJobDuration={minJobDuration}
-                    maxJobDuration={maxJobDuration}
+                    jobMinDuration={jobMinDuration}
+                    jobMaxDuration={jobMaxDuration}
                     jobType={jobType}
                     fields={fields}
                     setSearchValue={setSearchValue}
@@ -137,15 +137,15 @@ SearchArea.propTypes = {
     onSubmit: PropTypes.func,
     searchOffers: PropTypes.func.isRequired,
     searchValue: PropTypes.string.isRequired,
-    minJobDuration: PropTypes.number,
-    maxJobDuration: PropTypes.number,
+    jobMinDuration: PropTypes.number,
+    jobMaxDuration: PropTypes.number,
     jobType: PropTypes.string,
     setSearchValue: PropTypes.func.isRequired,
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
     resetAdvancedSearchFields: PropTypes.func.isRequired,
     fields: PropTypes.array.isRequired,
-    techs: PropTypes.array.isRequired,
+    technologies: PropTypes.array.isRequired,
     showJobDurationSlider: PropTypes.bool.isRequired,
     setFields: PropTypes.func.isRequired,
     setTechs: PropTypes.func.isRequired,
@@ -155,10 +155,10 @@ SearchArea.propTypes = {
 export const mapStateToProps = ({ offerSearch }) => ({
     searchValue: offerSearch.searchValue,
     jobType: offerSearch.jobType,
-    minJobDuration: offerSearch.jobDuration[0],
-    maxJobDuration: offerSearch.jobDuration[1],
+    jobMinDuration: offerSearch.jobDuration[0],
+    jobMaxDuration: offerSearch.jobDuration[1],
     fields: offerSearch.fields,
-    techs: offerSearch.techs,
+    technologies: offerSearch.technologies,
     showJobDurationSlider: offerSearch.filterJobDuration,
 });
 
@@ -168,7 +168,7 @@ export const mapDispatchToProps = (dispatch) => ({
     setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
     setJobType: (e) => dispatch(setJobType(e.target.value)),
     setFields: (fields) => dispatch(setFields(fields)),
-    setTechs: (techs) => dispatch(setTechs(techs)),
+    setTechs: (technologies) => dispatch(setTechs(technologies)),
     setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
 });

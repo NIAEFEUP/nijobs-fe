@@ -81,7 +81,7 @@ describe("AdvancedSearchDesktop", () => {
             expect(wrapper.find({ _id: "fields_selector" }).find(MultiOptionAutocomplete).exists()).toBe(true);
         });
 
-        it("should contain a multiautocomplete for techs", () => {
+        it("should contain a multiautocomplete for technologies", () => {
             const wrapper = shallow(
                 <AdvancedSearchDesktop open />
             );
