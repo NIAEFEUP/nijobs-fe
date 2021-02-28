@@ -5,7 +5,7 @@ import "@testing-library/jest-dom";
 import { enableFetchMocks } from "jest-fetch-mock";
 
 enableFetchMocks();
-fetchMock.dontMock();
+fetchMock.doMock();
 
 // Mock localStorage
 Object.defineProperty(window, "localStorage", {

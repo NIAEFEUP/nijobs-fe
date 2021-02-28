@@ -10,6 +10,10 @@ import thunk from "redux-thunk";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
+import ProductDescription from "../HomePage/ProductPlacementArea/ProductDescription";
+import { logout } from "../../services/auth";
+
+jest.mock("../../services/auth");
 
 jest.mock("../../hooks/useSession");
 
@@ -59,6 +63,33 @@ describe("Navbar", () => {
 
             const menu = wrapper.queryByTestId("menu-popover");
             expect(menu).toBeInTheDocument();
+        });
+
+        it("Should hide user menu when logged out ", async () => {
+
+            useSession.mockImplementation(() => ({ isLoggedIn: true, reset: () => {}, revalidate: () => {}, data: { email: "email" } }));
+
+            const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                    {/* Using ProductDescription here since it holds the login button, if it ever changes, please fix me */}
+                    <ProductDescription />
+                </BrowserRouter>,
+                { store, theme }
+            );
+
+            expect(wrapper.queryByText("Account")).toBeInTheDocument();
+            await fireEvent.click(wrapper.getByTestId("usermenu-button-wrapper"));
+
+            // Ensure that it does log out, without actually calling API
+            logout.mockImplementationOnce(() => Promise.resolve(true));
+
+            useSession.mockImplementation(() => ({ isLoggedIn: false, reset: () => {}, revalidate: () => {}, data: null }));
+            await fireEvent.click(wrapper.getByText("Logout"));
+
+            expect(wrapper.queryByText("Account")).not.toBeInTheDocument();
         });
     });
 });

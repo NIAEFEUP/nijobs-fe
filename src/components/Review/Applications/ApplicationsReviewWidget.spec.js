@@ -80,7 +80,6 @@ describe("Application Review Widget", () => {
     it("Should load current application reviews", async () => {
 
         const applications = generateApplications(3);
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () => { // Necessary since the component auto mutates its state when loading the rows
@@ -122,8 +121,6 @@ describe("Application Review Widget", () => {
 
     it("Should change number of rows visible", async () => {
         const applications = generateApplications(25);
-
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         // Necessary to wrap in act() since the component auto-mutates its state when loading the rows
@@ -152,7 +149,6 @@ describe("Application Review Widget", () => {
     it("Should approve an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -186,7 +182,6 @@ describe("Application Review Widget", () => {
     it("Should maintain state filter after approving an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -234,7 +229,6 @@ describe("Application Review Widget", () => {
     it("Should reject an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -275,7 +269,6 @@ describe("Application Review Widget", () => {
     it("Should maintain state filter after rejecting an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -327,7 +320,6 @@ describe("Application Review Widget", () => {
     it("Should not allow rejecting with invalid reject reason", async () => {
         const applications = generateApplications(1, "PENDING");
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -351,7 +343,6 @@ describe("Application Review Widget", () => {
     it("Should select application review", async () => {
         const applications = generateApplications(2);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -385,7 +376,6 @@ describe("Application Review Widget", () => {
     it("Should select all application reviews", async () => {
         const applications = generateApplications(2);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -412,7 +402,6 @@ describe("Application Review Widget", () => {
     it("Should dismiss selection on page change", async () => {
         const applications = generateApplications(6);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -437,7 +426,6 @@ describe("Application Review Widget", () => {
     it("Should default sort by company name asc and sort rows by company name on click", async () => {
         const applications = generateApplications(10);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -470,7 +458,6 @@ describe("Application Review Widget", () => {
     it("Should sort rows by requestedAt", async () => {
         const applications = generateApplications(10);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -505,7 +492,6 @@ describe("Application Review Widget", () => {
     it("Should sort rows by state", async () => {
         const applications = generateApplications(10);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -540,7 +526,6 @@ describe("Application Review Widget", () => {
     it("Should filter by company name", async () => {
         const applications = generateApplications(11);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -566,7 +551,6 @@ describe("Application Review Widget", () => {
     it("Should filter by state", async () => {
         const applications = generateApplications(5);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -613,7 +597,6 @@ describe("Application Review Widget", () => {
     it("Should filter by date", async () => {
         const applications = generateApplications(5);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
@@ -654,7 +637,6 @@ describe("Application Review Widget", () => {
     it("Should reset filters", async () => {
         const applications = generateApplications(5);
 
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () =>
