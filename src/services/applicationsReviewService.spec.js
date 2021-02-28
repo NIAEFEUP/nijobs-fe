@@ -12,7 +12,6 @@ describe("Company Application Service", () => {
     it("should GET the API with the correct filters data", async () => {
 
         // Simulate request success
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ applications: [{ thisIsAnApplication: true }, { thisIsAnotherApplication: true }] }));
 
         const filters = {
@@ -38,7 +37,6 @@ describe("Company Application Service", () => {
     it("should handle network error", async () => {
 
         // Simulate network failure
-        fetchMock.doMock();
         fetch.mockAbort();
 
         try {
@@ -66,7 +64,6 @@ describe("Company Application Service", () => {
         const errors = [{ msg: "error1" }, { msg: "error2" }];
 
         // Simulate request error
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ errors }), { status: 422 });
 
         try {
@@ -92,7 +89,6 @@ describe("Company Application Service", () => {
     it("should POST the API to approve application", async () => {
 
         // Simulate request success
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ mockData: true }));
 
         await approveApplication("id1");
@@ -107,7 +103,6 @@ describe("Company Application Service", () => {
     it("should POST the API to reject application", async () => {
 
         // Simulate request success
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ mockData: true }));
 
         await rejectApplication("id1", "rejectReason");

@@ -95,6 +95,10 @@ describe("SearchArea", () => {
         it("should call onSubmit callback on form submit", () => {
             const addSnackbar = () => {};
             const searchOffersMock = jest.fn();
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
             const form = mountWithTheme(
                 <SearchArea
                     onSubmit={onSubmit}
@@ -120,6 +124,9 @@ describe("SearchArea", () => {
             const searchOffers = jest.fn();
             const onSubmit = jest.fn();
             const addSnackbar = () => {};
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
 
             const wrapper = mountWithTheme(
                 <SearchArea

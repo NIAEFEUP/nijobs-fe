@@ -147,7 +147,6 @@ describe("CompanyApplicationForm", () => {
         it("should show submission error after submit", async () => {
 
             // Simulate network problem
-            fetchMock.doMock();
             fetch.mockAbort();
 
             const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
@@ -239,7 +238,6 @@ describe("CompanyApplicationForm", () => {
     it("should clear submission error after changing some input", async () => {
 
         // Simulate network problem
-        fetchMock.doMock();
         fetch.mockAbort();
 
         const companyName = "valid company name";
@@ -295,7 +293,6 @@ describe("CompanyApplicationForm", () => {
     it("should show a confirmation screen after submission success", async () => {
 
         // Simulate request success
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ mockData: true }));
 
         const companyName = "valid company name";
