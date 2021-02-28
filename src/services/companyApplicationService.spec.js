@@ -12,7 +12,6 @@ describe("Company Application Service", () => {
     it("should POST the API with the form data in JSON format and dispatch the correct actions", async () => {
 
         // Simulate request success
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ mockData: true }));
 
         const dispatchMock = jest.fn();
@@ -38,7 +37,6 @@ describe("Company Application Service", () => {
     it("should handle network error", async () => {
 
         // Simulate network failure
-        fetchMock.doMock();
         fetch.mockAbort();
 
         const dispatchMock = jest.fn();
@@ -58,7 +56,6 @@ describe("Company Application Service", () => {
         const errors = [{ msg: "error1" }, { msg: "error2" }];
 
         // Simulate request error
-        fetchMock.doMock();
         fetch.mockResponse(JSON.stringify({ errors }), { status: 422 });
 
         const dispatchMock = jest.fn();

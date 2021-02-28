@@ -52,6 +52,9 @@ describe("HomePage", () => {
     describe("interaction", () => {
         it("should render search results after search submission", () => {
 
+            // Simulate search request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
             const wrapper = mountWithStore(
                 <Router>
                     <HomePage/>

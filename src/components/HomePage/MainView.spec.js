@@ -55,6 +55,9 @@ describe("Main View", () => {
         });
 
         it("should call showSearchResults when search is submitted", () => {
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
             wrapper.find("form#search_form").first().simulate("submit", {
                 preventDefault: () => {},
             });
