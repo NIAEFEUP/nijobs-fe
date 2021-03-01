@@ -1,7 +1,9 @@
 import React from "react";
 
+import ErrorComponent from "../components/Errors/ErrorComponent";
+
 const ErrorPage = () => (
-    <p>Something is wrong in the backstage. :(</p>
+    <ErrorComponent Message={"Something is wrong in the backstage. :("}/>
 );
 
 export default ErrorPage;
