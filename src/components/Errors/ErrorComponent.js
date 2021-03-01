@@ -6,21 +6,23 @@ import { MainMask } from "../HomePage/MainMask";
 import CenteredComponent from "../HomePage/CenteredComponent";
 
 const ErrorComponent = ({ Message }) => (
-      
+
     <React.Fragment>
         <MainMask/>
-            <CenteredComponent>
+        <CenteredComponent>
 
-                <Paper elevation={8} style={{ padding: "24px"}}>
-                    <Typography align="center">{Message}</Typography>
-                </Paper>
+            <Paper elevation={8} style={{ padding: "24px" }}>
+                <Typography align="center">
+                    {Message}
+                </Typography>
+            </Paper>
 
-            </CenteredComponent>
+        </CenteredComponent>
     </React.Fragment>
 );
 
 ErrorComponent.propTypes = {
-    Message: PropTypes.string
+    Message: PropTypes.string,
 };
 
 export default ErrorComponent;
