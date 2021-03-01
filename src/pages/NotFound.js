@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Paper } from "@material-ui/core";
-import { Typography } from '@material-ui/core';
+import { Paper, Typography } from "@material-ui/core";
 
 import { MainMask } from "../components/HomePage/MainMask";
 import CenteredComponent from "../components/HomePage/CenteredComponent";
