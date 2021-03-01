@@ -47,7 +47,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, tit
         setUserMenuOpen(false);
     };
     const isMobile = useMobile();
-    const classes = useNavbarStyles({ isMobile });
+    const classes = useNavbarStyles({ isMobile, showHomePageLink });
 
     return (
         <AppBar
