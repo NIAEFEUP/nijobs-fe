@@ -26,6 +26,8 @@ const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSiz
  *
  */
 
+import MyOffersPage from "./pages/MyOffersPage";
+
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
         <Switch>
@@ -72,6 +74,15 @@ const AppRouter = () => (
                 >
                     <ApplicationsReviewPage />
                 </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/offers"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the my offers page"
+                authorize={(user) => !!(user?.company)}
+            >
+                <MyOffersPage />
             </ProtectedRoute>
             <Route
                 path="/error"
