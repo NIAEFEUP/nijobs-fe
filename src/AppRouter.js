@@ -82,7 +82,9 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the my offers page"
                 authorize={(user) => !!(user?.company)}
             >
-                <MyOffersPage />
+                <PageLayout pageTitle="My Offers">
+                    <MyOffersPage />
+                </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
