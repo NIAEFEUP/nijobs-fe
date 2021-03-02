@@ -8,8 +8,8 @@ import { useState, useCallback } from "react";
 const useToggle = (initialValue) => {
     const [state, setState] = useState(initialValue);
 
-    const toggleState = useCallback(() => {
-        setState((state) => !state);
+    const toggleState = useCallback((value) => {
+        setState((state) => (value === true || value === false) ? value : !state);
     }, []);
 
     const resetState = useCallback(() => {

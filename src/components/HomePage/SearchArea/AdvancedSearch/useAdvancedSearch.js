@@ -21,6 +21,7 @@ const RenderInput = (label) => (params) => (
 );
 
 export default ({
+    enableAdvancedSearchDefault,
     jobMinDuration,
     jobMaxDuration,
     setJobDuration,
@@ -41,7 +42,7 @@ export default ({
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 
-    const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
+    const [advancedOptions, toggleAdvancedOptions] = useToggle(enableAdvancedSearchDefault);
 
     const JobTypeSelectorProps = {
         margin: "normal",

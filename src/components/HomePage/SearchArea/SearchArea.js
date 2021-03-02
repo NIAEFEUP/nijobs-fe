@@ -26,7 +26,7 @@ import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
-    fields, technologies, showJobDurationSlider, setShowJobDurationSlider,
+    fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
     setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields }) => {
 
     const classes = useSearchAreaStyles();
@@ -48,6 +48,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         JobDurationSliderText,
         ResetButtonProps,
     } = useAdvancedSearch({
+        enableAdvancedSearchDefault,
         jobMinDuration,
         jobMaxDuration,
         setJobDuration,

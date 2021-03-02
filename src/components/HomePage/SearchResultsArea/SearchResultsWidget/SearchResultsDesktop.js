@@ -7,8 +7,11 @@ import SearchArea from "../../SearchArea/SearchArea";
 import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import { WorkOff } from "@material-ui/icons";
+import clsx from "clsx";
 
-const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer }) => (
+const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer,
+    showSearchFilters, toggleShowSearchFilters,
+}) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
             <div className={classes.offerItemsContainer}>
@@ -24,6 +27,8 @@ const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, s
                         loading={offersLoading}
                         setSelectedOffer={setSelectedOffer}
                         noOffers={noOffers}
+                        showSearchFilters={showSearchFilters}
+                        toggleShowSearchFilters={toggleShowSearchFilters}
                     />
                 }
                 <Divider
@@ -56,7 +61,7 @@ const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }
         {noOffers ?
             <div className={classes.searchOfferErrorContainer}>
                 <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
-                                We could not fetch the offers you were looking for, please revise your search criteria.
+                    We could not fetch the offers you were looking for, please revise your search criteria.
                 </Typography>
                 <div className={classes.searchArea}>
                     <SearchArea />
@@ -83,7 +88,9 @@ OfferContentSection.propTypes = {
     selectedOffer: PropTypes.instanceOf(Offer),
 };
 
-const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selectedOffer, noOffers }) => {
+const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
+    noOffers, showSearchFilters, toggleShowSearchFilters,
+}) => {
     const classes = useSearchResultsWidgetStyles();
 
     const offersListClasses = {
@@ -111,13 +118,34 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
                 offersLoading={offersLoading}
                 selectedOffer={selectedOffer}
                 setSelectedOffer={setSelectedOffer}
+                showSearchFilters={showSearchFilters}
+                toggleShowSearchFilters={toggleShowSearchFilters}
             />
-            <OfferContentSection
-                classes={offerContentClasses}
-                noOffers={noOffers}
-                selectedOffer={selectedOffer}
-                offersLoading={offersLoading}
-            />
+            {showSearchFilters ?
+                <Grid
+                    item
+                    md={8}
+                    id="search_filters"
+                    className={clsx(classes.fullHeight, classes.searchOfferErrorContainer)}
+                >
+                    <div className={classes.searchArea}>
+                        <SearchArea
+                            advanced
+                            onSubmit={() => {
+                                toggleShowSearchFilters(false);
+                            }}
+                        />
+                    </div>
+                </Grid>
+                :
+                <OfferContentSection
+                    classes={offerContentClasses}
+                    noOffers={noOffers}
+                    selectedOffer={selectedOffer}
+                    offersLoading={offersLoading}
+                    showSearchFilters={showSearchFilters}
+                />
+            }
         </React.Fragment>
     );
 };

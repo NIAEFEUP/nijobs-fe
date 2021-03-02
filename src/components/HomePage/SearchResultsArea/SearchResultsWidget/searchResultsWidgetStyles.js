@@ -25,7 +25,7 @@ export default makeStyles((theme) => ({
         color: theme.palette.secondary.main,
     },
     searchArea: {
-        width: "80%",
+        width: "90%",
     },
     reviseCriteriaErrorMessage: {
         margin: theme.spacing(4, 0),
