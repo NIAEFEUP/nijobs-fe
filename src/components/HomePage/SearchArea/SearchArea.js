@@ -27,7 +27,7 @@ import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 export const SearchArea = ({ onSubmit, searchOffers, searchValue,
     jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
     fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
-    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields }) => {
+    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose }) => {
 
     const classes = useSearchAreaStyles();
 
@@ -101,6 +101,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                 />
                 <AbstractAdvancedSearch
                     mobile={useMobile()}
+                    onMobileClose={onMobileClose}
                     open={advancedOptions}
                     close={toggleAdvancedOptions}
                     submitForm={submitForm}

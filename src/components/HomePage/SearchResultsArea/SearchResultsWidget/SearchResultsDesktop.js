@@ -143,7 +143,6 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
                     noOffers={noOffers}
                     selectedOffer={selectedOffer}
                     offersLoading={offersLoading}
-                    showSearchFilters={showSearchFilters}
                 />
             }
         </React.Fragment>

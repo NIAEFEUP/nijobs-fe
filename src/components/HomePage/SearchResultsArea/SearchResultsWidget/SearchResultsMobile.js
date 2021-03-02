@@ -9,7 +9,7 @@ import Offer from "../Offer/Offer";
 import useToggle from "../../../../hooks/useToggle";
 import { NavigateBefore, WorkOff } from "@material-ui/icons";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails }) => (
+const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
             {noOffers ?
@@ -25,6 +25,8 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                     loading={offersLoading}
                     setSelectedOffer={showOfferDetails}
                     noOffers={noOffers}
+                    showSearchFilters={showSearchFilters}
+                    toggleShowSearchFilters={toggleShowSearchFilters}
                 />
             }
         </Grid>
@@ -76,7 +78,9 @@ OfferViewer.propTypes = {
     offersLoading: PropTypes.bool,
 };
 
-const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selectedOffer, noOffers }) => {
+const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
+    noOffers, showSearchFilters, toggleShowSearchFilters,
+}) => {
     const classes = useSearchResultsWidgetStyles();
     const [openPreview, toggleOpenPreview] = useToggle(false);
 
@@ -101,14 +105,29 @@ const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selected
                 offers={offers}
                 offersLoading={offersLoading}
                 showOfferDetails={showOfferDetails}
+                showSearchFilters={showSearchFilters}
+                toggleShowSearchFilters={toggleShowSearchFilters}
             />
-            <OfferViewer
-                open={openPreview}
-                toggleOpenPreview={toggleOpenPreview}
-                offerContentWrapperClassName={classes.offerBodyContainer}
-                selectedOffer={selectedOffer}
-                offersLoading={offersLoading}
-            />
+            {showSearchFilters ?
+                <SearchArea
+                    advanced
+                    onSubmit={() => {
+                        toggleShowSearchFilters(false);
+                    }}
+                    onMobileClose={() => {
+                        toggleShowSearchFilters(false);
+                    }}
+                />
+                :
+                <OfferViewer
+                    open={openPreview}
+                    toggleOpenPreview={toggleOpenPreview}
+                    offerContentWrapperClassName={classes.offerBodyContainer}
+                    selectedOffer={selectedOffer}
+                    offersLoading={offersLoading}
+                />
+            }
+
         </React.Fragment>
     );
 };

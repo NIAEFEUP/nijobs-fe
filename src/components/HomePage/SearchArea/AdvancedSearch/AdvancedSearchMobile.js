@@ -66,7 +66,7 @@ JobTypeSelector.propTypes = {
     JobTypeSelectorProps: PropTypes.object.isRequired,
 };
 
-const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
+const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, onMobileClose,
     setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
     JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
@@ -86,6 +86,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
 
     const handleCloseClick = () => {
         setShouldSubmitForm(false);
+        if (onMobileClose) onMobileClose();
         close();
     };
 
