@@ -5,24 +5,21 @@ import { Paper, Typography } from "@material-ui/core";
 import { MainMask } from "../HomePage/MainMask";
 import CenteredComponent from "../HomePage/CenteredComponent";
 
-const ErrorComponent = ({ Message }) => (
-
+const ErrorComponent = ({ message }) => (
     <React.Fragment>
-        <MainMask/>
+        <MainMask />
         <CenteredComponent>
-
             <Paper elevation={8} style={{ padding: "24px" }}>
                 <Typography align="center">
-                    {Message}
+                    {message}
                 </Typography>
             </Paper>
-
         </CenteredComponent>
     </React.Fragment>
 );
 
 ErrorComponent.propTypes = {
-    Message: PropTypes.string,
+    message: PropTypes.string,
 };
 
 export default ErrorComponent;
