@@ -19,7 +19,7 @@ const AppRouter = () => (
                 path="/"
             >
                 <PageLayout showHomePageLink={false} forceDesktopLayout>
-                    <HomePage/>
+                    <HomePage />
                 </PageLayout>
             </Route>
             <Route
@@ -27,7 +27,7 @@ const AppRouter = () => (
                 path="/apply/company"
             >
                 <PageLayout pageTitle="Company Application">
-                    <CompanyApplicationPage/>
+                    <CompanyApplicationPage />
                 </PageLayout>
             </Route>
             <ProtectedRoute
@@ -38,19 +38,19 @@ const AppRouter = () => (
                 authorize={(user) => (user.isAdmin)}
             >
                 <PageLayout pageTitle="Review Applications">
-                    <ApplicationsReviewPage/>
+                    <ApplicationsReviewPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
             >
                 <PageLayout>
-                    <ErrorPage/>
+                    <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
                 <PageLayout>
-                    <NotFound/>
+                    <NotFound />
                 </PageLayout>
             </Route>
         </Switch>

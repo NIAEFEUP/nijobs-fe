@@ -15,7 +15,7 @@ const CompanyApplicationPage = ({ showConfirmation = false }) => {
 
     return (
         <React.Fragment>
-            <MainMask/>
+            <MainMask />
             {showConfirmationModal ?
                 <CenteredComponent>
                     <ApplicationConfirmation open={showConfirmationModal} />

@@ -91,7 +91,7 @@ const CompanyApplicationRow = ({
 
                         {fields.state.value === ApplicationStateLabel.REJECTED &&
                             <div className={classes.payloadSection}>
-                                <Divider/>
+                                <Divider />
                                 <Typography variant="body1">
                                     {`Reject Reason (Rejected at ${payload.rejectedAt})`}
                                 </Typography>

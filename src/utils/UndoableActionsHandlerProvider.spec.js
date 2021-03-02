@@ -38,7 +38,7 @@ describe("UndoableActionsHandlerProvider", () => {
                 [submitAction]
             );
             return (
-                <button data-testid="action-generator-btn" onClick={generateAction}/>
+                <button data-testid="action-generator-btn" onClick={generateAction} />
             );
         };
 

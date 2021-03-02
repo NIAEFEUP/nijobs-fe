@@ -99,7 +99,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                                 </Link>
                             }
                         />
-                        <CardContent className={classes.formContent} >
+                        <CardContent className={classes.formContent}>
                             <TextField
                                 label="Company Name"
                                 name="companyName"

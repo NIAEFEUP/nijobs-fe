@@ -44,7 +44,7 @@ const ContactSection = () => {
 
     return (
         <div className={classes.parentContainer} data-testid="contactSection">
-            <Grid container spacing={0}  >
+            <Grid container spacing={0}>
                 <Grid item xs={12} sm={6} md={3}>
                     <List>
                         <ListItem>
@@ -62,9 +62,9 @@ const ContactSection = () => {
                         </ListItem>
                     </List>
                 </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                    <Grid container spacing={0} >
-                        <Grid item xs={6} md={4}>
+                <Grid item xs={12} sm={6} md={9}>
+                    <Grid container spacing={0}>
+                        <Grid item xs={6} md={3}>
                             <List>
                                 <ListItem>
                                     <Typography variant="h5">Social</Typography>
@@ -82,7 +82,7 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://facebook.com/NIAEFEUP/"
-                                        startIcon={<Facebook htmlColor={theme.palette.tertiary.main}/>}
+                                        startIcon={<Facebook htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="facebook"
                                     >
@@ -101,7 +101,7 @@ const ContactSection = () => {
                                 </ListItem>
                             </List>
                         </Grid>
-                        <Grid item xs={6} md={4}>
+                        <Grid item xs={6} md={3}>
                             <List>
                                 <ListItem>
                                     <Typography variant="h5" className={classes.backgroundColor}>.</Typography>
@@ -119,7 +119,7 @@ const ContactSection = () => {
                                 <ListItem>
                                     <Button
                                         href="https://twitter.com/niaefeup"
-                                        startIcon={<Twitter htmlColor={theme.palette.tertiary.main}/>}
+                                        startIcon={<Twitter htmlColor={theme.palette.tertiary.main} />}
                                         className={classes.colorText}
                                         title="twitter"
                                     >

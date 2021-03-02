@@ -20,7 +20,7 @@ const OfferContent = ({ offer, loading }) => {
                 <div className={classes.unselectedOffer}>
                     <React.Fragment>
                         <div className={classes.magnifyingGlassAnimationWrapper}>
-                            <LoadingMagnifyGlass duration={1.2}/>
+                            <LoadingMagnifyGlass duration={1.2} />
                         </div>
                         <Typography variant="h6">
                             {getRandomOngoingSearchMessage()}

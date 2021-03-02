@@ -53,7 +53,7 @@ describe("CompanyApplicationPage", () => {
         it("should render a confirmation dialog on registration completion", () => {
             const wrapper = renderWithStoreAndTheme(
                 <Router>
-                    <CompanyApplicationPage showConfirmation/>
+                    <CompanyApplicationPage showConfirmation />
                 </Router>,
                 { store, theme }
             );

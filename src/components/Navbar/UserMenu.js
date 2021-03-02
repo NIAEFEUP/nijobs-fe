@@ -56,7 +56,7 @@ const AdminMenuOptions = ({ isMobile }) => {
 
     return (
         <>
-            <Divider className={classes.labelledDivider} component="li"/>
+            <Divider className={classes.labelledDivider} component="li" />
             <li>
                 <Typography
                     className={classes.dividerLabel}
@@ -94,7 +94,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.email}
             </Typography>
-            <Divider className={classes.divider}/>
+            <Divider className={classes.divider} />
             <MenuList
                 className={classes.menuList}
                 autoFocusItem={open}

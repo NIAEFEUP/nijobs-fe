@@ -38,7 +38,7 @@ describe("SearchResultsMobile", () => {
                 }),
             ];
 
-            const wrapper = mount(<SearchResultsMobile offers={offers}/>);
+            const wrapper = mount(<SearchResultsMobile offers={offers} />);
             expect(wrapper.find(OfferItemsContainer).prop("offers")).toStrictEqual(offers);
         });
 
@@ -54,7 +54,7 @@ describe("SearchResultsMobile", () => {
                 },
             };
 
-            const wrapper = mountWithStore(<SearchResultsMobile noOffers/>, initialState, theme);
+            const wrapper = mountWithStore(<SearchResultsMobile noOffers />, initialState, theme);
             expect(wrapper.find("div#no_offers_container").exists()).toBe(true);
             expect(wrapper.find("div#no_offers_container").find(SearchArea).exists()).toBe(true);
         });

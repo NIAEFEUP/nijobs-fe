@@ -29,7 +29,7 @@ describe("HomePage", () => {
         useSession.mockImplementation(() => ({ isLoggedIn: false }));
         const wrapper = shallow(
             <ThemeProvider theme={AppTheme}>
-                <HomePage/>
+                <HomePage />
             </ThemeProvider>).find(HomePage).first().dive();
 
         it("should render MainView", () => {
@@ -52,7 +52,7 @@ describe("HomePage", () => {
 
             const wrapper = mountWithStore(
                 <Router>
-                    <HomePage/>
+                    <HomePage />
                 </Router>,
                 initialState, AppTheme);
 

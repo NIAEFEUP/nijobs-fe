@@ -67,7 +67,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, tit
                     }
                 </div>
                 {title &&
-                    <Typography variant="h6" component="h1" >
+                    <Typography variant="h6" component="h1">
                         {title}
                     </Typography>
                 }
@@ -83,7 +83,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, tit
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo}/>}
+                            endIcon={<MenuRounded className={classes.userLogo} />}
                         >
                             {!userMenuOpen && !isMobile && "Account"}
                         </Button>

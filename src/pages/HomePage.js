@@ -25,8 +25,8 @@ export const HomePage = () => {
                     if (searchResultsRef && searchResultsRef.current) smoothScrollToRef(searchResultsRef);
                 }}
             />
-            <ProductDescription ref={productDescriptionRef}/>
-            {showSearchResults && <SearchResultsWidget ref={searchResultsRef}/>}
+            <ProductDescription ref={productDescriptionRef} />
+            {showSearchResults && <SearchResultsWidget ref={searchResultsRef} />}
         </React.Fragment>
     );
 
