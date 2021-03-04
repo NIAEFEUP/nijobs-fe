@@ -84,6 +84,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
             elevation={8}
         >
             <form
+                aria-label="form"
                 onSubmit={submitForm}
                 autoComplete="off"
                 id={"search_form"}
@@ -152,6 +153,8 @@ SearchArea.propTypes = {
     setFields: PropTypes.func.isRequired,
     setTechs: PropTypes.func.isRequired,
     setShowJobDurationSlider: PropTypes.func.isRequired,
+    onMobileClose: PropTypes.func,
+    advanced: PropTypes.bool,
 };
 
 export const mapStateToProps = ({ offerSearch }) => ({

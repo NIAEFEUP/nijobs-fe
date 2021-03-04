@@ -59,6 +59,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
         <div className={classes.itemWrapper}>
             {!loading && <div className={clsx(classes.hoverMask, { [classes.maskActive]: isCurrentlySelected })} />}
             <ListItem
+                data-testid={`offer-item${loading ? "-loading" : ""}`}
                 alignItems="flex-start"
                 onClick={() => !loading && setSelectedOffer(offer)}
                 className={classes.root}

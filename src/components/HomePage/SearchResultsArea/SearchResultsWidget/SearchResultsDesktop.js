@@ -54,6 +54,8 @@ OffersList.propTypes = {
     offersLoading: PropTypes.bool,
     selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }) => (
@@ -155,6 +157,8 @@ SearchResultsDesktop.propTypes = {
     offersLoading: PropTypes.bool,
     setSelectedOffer: PropTypes.func.isRequired,
     noOffers: PropTypes.bool.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsDesktop;

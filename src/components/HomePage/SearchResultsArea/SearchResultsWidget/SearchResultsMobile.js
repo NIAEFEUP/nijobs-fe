@@ -45,6 +45,8 @@ OffersList.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     showOfferDetails: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export const OfferViewer = ({ open, toggleOpenPreview, offerContentWrapperClassName, selectedOffer, offersLoading }) => (
@@ -138,6 +140,8 @@ SearchResultsMobile.propTypes = {
     offersLoading: PropTypes.bool,
     setSelectedOffer: PropTypes.func.isRequired,
     noOffers: PropTypes.bool.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsMobile;

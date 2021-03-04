@@ -18,6 +18,7 @@ const SearchBar = ({ searchValue, setSearchValue, className, onEnterPress }) => 
 
     return (
         <TextField
+            id="search_bar"
             label="Search"
             name="search"
             margin="dense"

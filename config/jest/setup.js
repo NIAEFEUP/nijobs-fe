@@ -3,6 +3,7 @@ import Adapter from "enzyme-adapter-react-16";
 
 import "@testing-library/jest-dom";
 import { enableFetchMocks } from "jest-fetch-mock";
+import { createMatchMedia } from "../../src/utils/media-queries";
 
 enableFetchMocks();
 fetchMock.doMock();
@@ -32,6 +33,12 @@ global.document.createRange = () => ({
         nodeName: "BODY",
         ownerDocument: document,
     },
+});
+
+const DEFAULT_WINDOW_WIDTH_PX = 1920;
+
+beforeEach(() => {
+    window.matchMedia = createMatchMedia(DEFAULT_WINDOW_WIDTH_PX);
 });
 
 // beforeEach(async () => {

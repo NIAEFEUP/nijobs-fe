@@ -24,7 +24,7 @@ const OfferContent = ({ offer, loading }) => {
                         <div className={classes.magnifyingGlassAnimationWrapper}>
                             <LoadingMagnifyGlass duration={1.2} />
                         </div>
-                        <Typography variant="h6">
+                        <Typography data-testid="random-loading-message" variant="h6">
                             {getRandomOngoingSearchMessage()}
                         </Typography>
                     </React.Fragment>

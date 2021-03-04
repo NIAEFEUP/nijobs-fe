@@ -2,8 +2,6 @@ import React from "react";
 import { render, screen, fireEvent } from "../../../../test-utils";
 import OfferItem from "./OfferItem";
 import Offer from "./Offer";
-// import { ListItemText, Avatar, ListItemAvatar, ListItem } from "@material-ui/core";
-// import Skeleton from "react-loading-skeleton";
 
 describe("OfferItem", () => {
 
@@ -35,17 +33,6 @@ describe("OfferItem", () => {
             expect(screen.getByText(offer.location)).toBeInTheDocument();
         });
 
-        // const wrapper = shallow(<OfferItem offer={offer}/>);
-
-        // it("should render the offer position", () => {
-        //     expect(wrapper.find(ListItemText).first().prop("primary")).toEqual(offer.title);
-        // });
-        // it("should render the comapny's logo", () => {
-        //     expect(wrapper.find(ListItemAvatar).first().find(Avatar).exists()).toBe(true);
-        // });
-        // it("should render the company's name", () => {
-        //     expect(shallow(wrapper.find(ListItemText).first().prop("secondary")).prop("children")).toEqual(offer.company.name);
-        // });
     });
 
     describe("interaction", () => {

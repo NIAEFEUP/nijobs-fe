@@ -4,9 +4,6 @@ import { renderWithStoreAndTheme } from "../../test-utils";
 import Navbar from ".";
 
 import useSession from "../../hooks/useSession";
-import { createStore, compose, applyMiddleware } from "redux";
-import reducer from "../../reducers";
-import thunk from "redux-thunk";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
@@ -25,12 +22,12 @@ describe("Navbar", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
-            const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
-
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
                     <Navbar />
-                </BrowserRouter>, { store, theme });
+                </BrowserRouter>,
+                { initialState: {}, theme }
+            );
 
             expect(wrapper.queryByRole("button", { name: "Account" })).not.toBeInTheDocument();
         });
@@ -39,12 +36,12 @@ describe("Navbar", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: true }));
 
-            const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
-
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
                     <Navbar />
-                </BrowserRouter>, { store, theme });
+                </BrowserRouter>,
+                { initialState: {}, theme }
+            );
 
             expect(wrapper.getByRole("button", { name: "Account" })).toBeInTheDocument();
         });
@@ -55,13 +52,11 @@ describe("Navbar", () => {
         it("Should open user menu on account button click", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true }));
 
-            const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
-
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
                     <Navbar />
                 </BrowserRouter>,
-                { store, theme }
+                { initialState: {}, theme }
             );
 
             await act(async () => {
@@ -81,15 +76,13 @@ describe("Navbar", () => {
                 data: { email: "email" },
             }));
 
-            const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
-
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
                     <Navbar />
                     {/* Using ProductDescription here since it holds the login button, if it ever changes, please fix me */}
                     <ProductDescription />
                 </BrowserRouter>,
-                { store, theme }
+                { initialState: {}, theme }
             );
 
             expect(wrapper.queryByText("Account")).toBeInTheDocument();

@@ -20,6 +20,7 @@ const AbstractAdvancedSearch = ({ mobile, onMobileClose, ...otherProps }) => (
 
 AbstractAdvancedSearch.propTypes = {
     mobile: PropTypes.bool,
+    onMobileClose: PropTypes.func,
 };
 
 export default AbstractAdvancedSearch;

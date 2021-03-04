@@ -1,31 +1,31 @@
 import React from "react";
 import OfferContent from "./OfferContent";
 import Offer from "./Offer";
-import { mountWithTheme } from "../../../../test-utils";
-import { Typography, createMuiTheme } from "@material-ui/core";
+import { renderWithTheme, screen } from "../../../../test-utils";
+import { createMuiTheme } from "@material-ui/core";
 import LOADING_MESSAGES from "./offerLoadingMessages";
+import { format, parseISO } from "date-fns";
 
 describe("OfferContent", () => {
     describe("render", () => {
         const theme = createMuiTheme();
         it("should render placeholder content when no offer selected", () => {
 
-            const wrapper = mountWithTheme(
+            renderWithTheme(
                 <OfferContent offer={null} />,
-                theme
+                { theme }
             );
 
-            expect(wrapper.find("div#no_selected_offer_text").find(Typography).text())
-                .toEqual("Please select an offer to view the details");
+            expect(screen.getByText("Please select an offer to view the details")).toBeInTheDocument();
         });
 
         it("should render a valid loading message", () => {
-            const wrapper = mountWithTheme(
+            renderWithTheme(
                 <OfferContent loading />,
-                theme
+                { theme }
             );
 
-            expect(LOADING_MESSAGES.includes(wrapper.find(Typography).text()))
+            expect(LOADING_MESSAGES.includes(screen.getByTestId("random-loading-message").textContent))
                 .toBe(true);
         });
 
@@ -38,23 +38,22 @@ describe("OfferContent", () => {
                     logo: "companyLogo",
                 },
                 location: "location1",
-                date: "date1",
+                jobStartDate: (new Date()).toISOString(),
                 description: "description1",
             });
 
-            const wrapper = mountWithTheme(
-                <OfferContent offer={offer} />,
-                theme
-            );
+            it("should render offer details", () => {
+                renderWithTheme(
+                    <OfferContent offer={offer} />,
+                    { theme }
+                );
 
-            it("should render offer title", () => {
-                expect(wrapper.find(Typography).at(0).prop("variant")).toBe("h4");
-                expect(wrapper.find(Typography).at(0).prop("children")).toEqual(offer.title);
+                expect(screen.getByRole("heading", { name: offer.title, level: 4 })).toBeInTheDocument();
+                expect(screen.getByRole("heading", { name: offer.company.name, level: 6 })).toBeInTheDocument();
+                expect(screen.getByText(offer.location)).toBeInTheDocument();
+                expect(screen.getByText(format(parseISO(offer.jobStartDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                expect(screen.getByText(offer.description)).toBeInTheDocument();
 
-                expect(wrapper.find(Typography).at(1).prop("variant")).toBe("h6");
-                expect(wrapper.find(Typography).at(1).prop("children")).toEqual(offer.company.name);
-
-                expect(wrapper.find("p").first().text()).toEqual(offer.location);
             });
 
         });

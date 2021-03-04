@@ -24,7 +24,7 @@ const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     },
 }));
 
-const ToogleFiltersButton = ({ onClick, enabled, ...props }) => {
+const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
     const classes = useAdvancedSearchButtonStyles();
     return (
         <ListItem className={classes.root}>
@@ -43,11 +43,16 @@ const ToogleFiltersButton = ({ onClick, enabled, ...props }) => {
     );
 };
 
+ToggleFiltersButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    enabled: PropTypes.bool.isRequired,
+};
+
 const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer, showSearchFilters, toggleShowSearchFilters }) => {
     const classes = useSearchResultsWidgetStyles();
 
     if (loading) return (
-        <div className={`${classes.fullHeight} ${classes.fullWidth}`}>
+        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
                 <OfferItem
                     loading={loading}
@@ -71,9 +76,10 @@ const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer,
     };
 
     return (
-        <div className={`${classes.fullHeight} ${classes.fullWidth}`}>
+        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
-                <ToogleFiltersButton
+                <ToggleFiltersButton
+                    key="toggle-filters-button"
                     enabled={showSearchFilters}
                     onClick={() => toggleShowSearchFilters()}
                 />
@@ -98,6 +104,8 @@ OfferItemsContainer.propTypes = {
     loading: PropTypes.bool,
     selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default OfferItemsContainer;

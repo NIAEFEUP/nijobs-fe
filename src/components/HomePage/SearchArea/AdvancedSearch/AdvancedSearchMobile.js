@@ -184,6 +184,7 @@ AdvancedSearchMobile.propTypes = {
     JobDurationCollapseProps: PropTypes.object.isRequired,
     JobDurationSwitchLabel: PropTypes.string.isRequired,
     JobDurationSliderProps: PropTypes.object.isRequired,
+    onMobileClose: PropTypes.func,
 };
 
 export default AdvancedSearchMobile;

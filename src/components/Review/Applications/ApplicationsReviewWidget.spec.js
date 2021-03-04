@@ -2,18 +2,15 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { createMuiTheme } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { act, fireEvent, getByLabelText, getDefaultNormalizer, queryByText, screen } from "@testing-library/react";
+import { act, fireEvent, getByLabelText, getDefaultNormalizer, queryByText, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { format, parseISO, addDays } from "date-fns";
 import { SnackbarProvider } from "notistack";
 import React from "react";
 import { Simulate } from "react-dom/test-utils";
-import { applyMiddleware, compose, createStore } from "redux";
-import thunk from "redux-thunk";
 import config from "../../../config";
 const { API_HOSTNAME } = config;
 
-import reducer from "../../../reducers";
 import { renderWithStore, renderWithStoreAndTheme } from "../../../test-utils";
 import Notifier from "../../Notifications/Notifier";
 import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
@@ -72,7 +69,6 @@ const clickAwayFromFilterMenu = () => {
 describe("Application Review Widget", () => {
 
     const theme = createMuiTheme({});
-    const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -89,7 +85,7 @@ describe("Application Review Widget", () => {
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store });
+                </MuiPickersUtilsProvider>, { initialState: {} });
         });
 
         for (const application of applications) {
@@ -131,7 +127,7 @@ describe("Application Review Widget", () => {
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store })
+                </MuiPickersUtilsProvider>, { initialState: {} })
         );
 
         const numRowsOptions = [5, 10, 25];
@@ -159,7 +155,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Approve Application" }));
@@ -192,7 +188,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         // Open state selector and select pending option
@@ -239,7 +235,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
@@ -279,7 +275,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         // Open state selector and select pending option
@@ -330,7 +326,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
@@ -353,7 +349,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         expect(screen.queryByText(`${0} selected`)).not.toBeInTheDocument();
@@ -389,7 +385,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("checkbox", { name: "Select all applications on current page" }));
@@ -418,7 +414,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("checkbox", { name: "Select all applications on current page" }));
@@ -442,7 +438,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         const sorted5 = applications.map((a) => a.companyName).sort().slice(0, 5);
@@ -478,7 +474,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Requested At" }));
@@ -516,7 +512,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "State" }));
@@ -554,16 +550,18 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
 
         fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "1" } });
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual([...[applications[1].companyName, applications[10].companyName]]);
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual([...[applications[1].companyName, applications[10].companyName]])
+        );
 
 
     });
@@ -580,7 +578,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         // Open state selector and select approved option
@@ -589,9 +587,11 @@ describe("Application Review Widget", () => {
         fireEvent.click(screen.getByRole("option", { name: "Approved" }));
 
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").map((a) => a.companyName));
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").map((a) => a.companyName))
+        );
 
         // Verify it keeps state even if the filters menu is closed (closes state selector and filters menu)
         clickAwayFromFilterMenu();
@@ -602,18 +602,22 @@ describe("Application Review Widget", () => {
         fireEvent.click(screen.getByRole("option", { name: "Rejected" }));
 
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED").map((a) => a.companyName));
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED").map((a) => a.companyName))
+        );
 
         // De-select rejected option and add pending option
         fireEvent.click(screen.getByRole("option", { name: "Rejected" }));
         fireEvent.click(screen.getByRole("option", { name: "Pending" }));
 
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING").map((a) => a.companyName));
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING").map((a) => a.companyName))
+        );
 
 
     });
@@ -630,7 +634,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
@@ -655,9 +659,11 @@ describe("Application Review Widget", () => {
 
         fireEvent.change(screen.getByLabelText("Date From..."), { target: { value: "" } });
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.slice(0, 4).map((a) => a.companyName));
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual(applications.slice(0, 4).map((a) => a.companyName))
+        );
 
 
     });
@@ -674,7 +680,7 @@ describe("Application Review Widget", () => {
                         <Notifier />
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { store, theme })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
@@ -694,9 +700,11 @@ describe("Application Review Widget", () => {
         // Verify it keeps state even if the filters menu is closed (closes state selector and filters menu)
         clickAwayFromFilterMenu();
 
-        expect(screen.getAllByTestId("application-row")
-            .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual([applications[0].companyName]);
+        await waitFor(() =>
+            expect(screen.getAllByTestId("application-row")
+                .map((el) => el.querySelector("td:nth-child(2)").textContent)
+            ).toStrictEqual([applications[0].companyName])
+        );
 
 
         fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
