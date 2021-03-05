@@ -22,7 +22,7 @@ const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationS
         className={className}
     >
         <FormControl fullWidth>
-            <Slider {...JobDurationSliderProps}/>
+            <Slider {...JobDurationSliderProps} />
             <FormHelperText>
                 {sliderText}
             </FormHelperText>
@@ -66,7 +66,7 @@ const AdvancedSearchDesktop = ({
                 </TextField>
                 <FormControlLabel
                     className={classes.jobDurationSliderToggle}
-                    control={<Switch {...JobDurationSwitchProps}/>}
+                    control={<Switch {...JobDurationSwitchProps} />}
                     label={JobDurationSwitchLabel}
                 />
                 <JobDurationCollapse

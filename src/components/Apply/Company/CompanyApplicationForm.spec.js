@@ -304,7 +304,7 @@ describe("CompanyApplicationForm", () => {
         const toggleConfirmationModalMock = jest.fn();
 
         const wrapper = renderWithStoreAndTheme(
-            <CompanyApplicationForm toggleConfirmationModal={toggleConfirmationModalMock}/>,
+            <CompanyApplicationForm toggleConfirmationModal={toggleConfirmationModalMock} />,
             { store, theme }
         );
         const companyNameInput = wrapper.getByLabelText("Company Name");

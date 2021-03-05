@@ -31,7 +31,7 @@ describe("useSession hook", () => {
         }));
         const notifyHookResult = jest.fn();
         render(
-            <HookWrapper notifyHookResult={notifyHookResult}/>
+            <HookWrapper notifyHookResult={notifyHookResult} />
         );
 
         expect(notifyHookResult).toHaveBeenCalledWith(expect.objectContaining({
@@ -51,7 +51,7 @@ describe("useSession hook", () => {
         }));
         const notifyHookResult = jest.fn();
         render(
-            <HookWrapper notifyHookResult={notifyHookResult}/>
+            <HookWrapper notifyHookResult={notifyHookResult} />
         );
 
         expect(notifyHookResult).toHaveBeenCalledWith(expect.objectContaining({

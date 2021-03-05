@@ -64,7 +64,7 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters,
                 </Typography>
             )}
             {numSelected > 0 && MultiRowActions && (
-                <MultiRowActions selectedRows={selectedRows}/>
+                <MultiRowActions selectedRows={selectedRows} />
             )}
             {filterable && (
                 <>

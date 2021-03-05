@@ -92,7 +92,7 @@ describe("SearchResults", () => {
             theme
         );
 
-        expect(wrapperError.find("#offer_content").contains(<SearchArea/>)).toBe(true);
-        expect(wrapperNoOffers.find("#offer_content").contains(<SearchArea/>)).toBe(true);
+        expect(wrapperError.find("#offer_content").contains(<SearchArea />)).toBe(true);
+        expect(wrapperNoOffers.find("#offer_content").contains(<SearchArea />)).toBe(true);
     });
 });

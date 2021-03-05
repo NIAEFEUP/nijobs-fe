@@ -20,10 +20,10 @@ import SearchBar from "../SearchBar";
 describe("AdvancedSearchDesktop", () => {
     describe("render", () => {
         it("should render a Dialog", () => {
-            const openWrapper = shallow(<AdvancedSearchMobile open/>);
+            const openWrapper = shallow(<AdvancedSearchMobile open />);
             expect(openWrapper.find(Dialog).first().prop("open")).toBe(true);
 
-            const closedWrapper = shallow(<AdvancedSearchMobile open={false}/>);
+            const closedWrapper = shallow(<AdvancedSearchMobile open={false} />);
             expect(closedWrapper.find(Dialog).first().prop("open")).toBe(false);
         });
 
@@ -32,12 +32,12 @@ describe("AdvancedSearchDesktop", () => {
         });
 
         it("should render a SearchBar", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open/>);
+            const wrapper = shallow(<AdvancedSearchMobile open />);
             expect(wrapper.find(SearchBar).exists()).toBe(true);
         });
 
         it("should render a job selector with all job types", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open/>);
+            const wrapper = shallow(<AdvancedSearchMobile open />);
             expect(wrapper.find(TextField).contains(JobTypes.map(({ value, label }) => (
                 <MenuItem
                     key={value}
@@ -49,8 +49,8 @@ describe("AdvancedSearchDesktop", () => {
         });
 
         it("should contain a job duration toggle", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open JobDurationSwitchLabel="test"/>);
-            expect(wrapper.find(FormControlLabel).prop("control")).toEqual(<Switch/>);
+            const wrapper = shallow(<AdvancedSearchMobile open JobDurationSwitchLabel="test" />);
+            expect(wrapper.find(FormControlLabel).prop("control")).toEqual(<Switch />);
             expect(wrapper.find(FormControlLabel).prop("label")).toEqual("test");
         });
 

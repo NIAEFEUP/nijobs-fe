@@ -5,7 +5,7 @@ import CenteredComponent from "../components/HomePage/CenteredComponent";
 
 const ApplicationsReviewPage = () => (
     <>
-        <MainMask/>
+        <MainMask />
         <CenteredComponent>
             <ApplicationsReviewWidget />
         </CenteredComponent>

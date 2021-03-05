@@ -33,7 +33,7 @@ describe("SearchArea", () => {
         it("should render a paper", () => {
             expect(
                 mountWithTheme(
-                    <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
+                    <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
                     theme
                 ).find(Paper).exists()
             ).toBe(true);
@@ -41,14 +41,14 @@ describe("SearchArea", () => {
 
         it("should render a form", () => {
             expect(mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
                 theme
             ).find("form").first().prop("id")).toEqual("search_form");
         });
 
         it("should render a SearchBar", () => {
             const searchBar = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
                 theme
             ).find(SearchBar).first();
             expect(searchBar.exists()).toBe(true);
@@ -56,7 +56,7 @@ describe("SearchArea", () => {
 
         it("should render an Advanced Search Area", () => {
             const wrapper = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
                 theme
             );
             expect(wrapper.find(AdvancedSearchDesktop).exists() || wrapper.find(AdvancedSearchMobile).exists()).toBe(true);
@@ -64,7 +64,7 @@ describe("SearchArea", () => {
 
         it("should render a SearchButton", () => {
             const searchArea = mountWithTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]}/>,
+                <SearchArea onSubmit={onSubmit} fields={[]} techs={[]} />,
                 theme
             );
             const button = searchArea.find(SubmitSearchButton).first();

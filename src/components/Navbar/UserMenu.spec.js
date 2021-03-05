@@ -15,7 +15,7 @@ describe("Navbar - LoginForm", () => {
     describe("render", () => {
         it("Should not appear as default", () => {
             const mockAnchor = { current: <div /> };
-            const wrapper = renderWithTheme(<UserMenu anchorRef={mockAnchor}/>, { theme });
+            const wrapper = renderWithTheme(<UserMenu anchorRef={mockAnchor} />, { theme });
             const menu = wrapper.queryByTestId("menu-popover");
             expect(menu).not.toBeInTheDocument();
         });

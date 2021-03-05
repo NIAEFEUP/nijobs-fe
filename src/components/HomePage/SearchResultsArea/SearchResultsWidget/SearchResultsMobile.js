@@ -17,7 +17,7 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                     <WorkOff className={classes.errorLoadingOffersIcon} />
                     <Typography variant="h6">No offers available.</Typography>
                     <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">Try a different criteria.</Typography>
-                    <SearchArea/>
+                    <SearchArea />
                 </div>
                 :
                 <OfferItemsContainer
@@ -56,7 +56,7 @@ export const OfferViewer = ({ open, toggleOpenPreview, offerContentWrapperClassN
         </DialogTitle>
         <DialogContent>
             <div className={offerContentWrapperClassName}>
-                <OfferContent offer={selectedOffer} loading={offersLoading}/>
+                <OfferContent offer={selectedOffer} loading={offersLoading} />
             </div>
         </DialogContent>
     </Dialog>

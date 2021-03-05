@@ -68,7 +68,7 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
                 <ListItemText
                     primary={
                         loading ?
-                            <Skeleton/>
+                            <Skeleton />
                             :
                             offer.position
                     }
@@ -76,7 +76,7 @@ const OfferItem = ({ offer, setSelectedOffer, loading }) => {
                         className: classes.offerTitle,
                     }}
                     secondary={loading ?
-                        <Skeleton/> :
+                        <Skeleton /> :
                         <Typography
                             component="p"
                             variant="body2"

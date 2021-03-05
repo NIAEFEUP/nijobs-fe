@@ -57,7 +57,7 @@ const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse }) =>
                 e.stopPropagation(); toggleCollapse();
             }}
         >
-            {!isCollapseOpen ? <ExpandMore/> : <ExpandLess/>}
+            {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
         </IconButton>
     </>
 );

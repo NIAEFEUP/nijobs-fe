@@ -81,7 +81,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         fullWidth
                         inputRef={register}
                         error={!!errors.email}
-                        helperText={errors.email ? errors.email.message : <span/>}
+                        helperText={errors.email ? errors.email.message : <span />}
                     />
                     <TextField
                         id="password"
@@ -93,7 +93,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         fullWidth
                         inputRef={register}
                         error={!!errors.password}
-                        helperText={errors.password ? errors.password.message : <span/>}
+                        helperText={errors.password ? errors.password.message : <span />}
                     />
                     <FormHelperText error={!!loginError}>
                         {loginError || " "}

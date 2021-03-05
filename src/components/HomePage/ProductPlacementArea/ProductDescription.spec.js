@@ -14,7 +14,7 @@ describe("<ProductDescription /> interaction", () => {
 
         const wrapper = mount(
             <Router>
-                <ProductDescription toggleLoginModal={toggleLoginModalMock}/>
+                <ProductDescription toggleLoginModal={toggleLoginModalMock} />
             </Router>
         );
 
