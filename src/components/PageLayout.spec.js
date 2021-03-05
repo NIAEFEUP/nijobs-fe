@@ -2,30 +2,41 @@ import React from "react";
 import { createStore, applyMiddleware, compose } from "redux";
 import reducer from "../reducers";
 import thunk from "redux-thunk";
-import { renderWithStoreAndTheme } from "../test-utils";
+import { renderWithStoreAndTheme, screen } from "../test-utils";
 
 import AppTheme from "../AppTheme";
 import PageLayout from "./PageLayout";
 import { BrowserRouter } from "react-router-dom";
+import { createMatchMedia } from "../utils/media-queries";
+
 
 describe("PageLayout", () => {
     const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
     const theme = AppTheme;
     describe("render", () => {
         it("Should render ContactSection", () => {
-            const wrapper = renderWithStoreAndTheme(
+            renderWithStoreAndTheme(
                 <BrowserRouter>
                     <PageLayout />
                 </BrowserRouter>, { store, theme });
-            expect(wrapper.getByTestId("contactSection")).not.toBeNull();
+            expect(screen.getByTestId("contactSection")).not.toBeNull();
         });
         it("Should render Navbar", () => {
-            const wrapper = renderWithStoreAndTheme(
+            renderWithStoreAndTheme(
                 <BrowserRouter>
                     <PageLayout />
                 </BrowserRouter>, { store, theme });
-            expect(wrapper.getByTestId("navbar")).not.toBeNull();
+            expect(screen.getByTestId("navbar")).not.toBeNull();
         });
 
+        it("Should render pageTitle in mobile", () => {
+            const MOBILE_WIDTH = 360;
+            window.matchMedia = createMatchMedia(MOBILE_WIDTH);
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <PageLayout pageTitle="test123" />
+                </BrowserRouter>, { store, theme });
+            expect(screen.getByText("test123")).toBeInTheDocument();
+        });
     });
 });

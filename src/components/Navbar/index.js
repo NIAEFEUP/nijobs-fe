@@ -7,6 +7,7 @@ import {
     AppBar,
     Toolbar,
     Button,
+    Typography,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -22,7 +23,7 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 import useNavbarStyles from "./navbarStyles";
 
-const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, title, position }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -51,20 +52,25 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true }) =
     return (
         <AppBar
             className={classes.navbar}
-            position="absolute"
+            position={position || "absolute"}
             color="transparent"
             elevation={0}
             data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
-                <div className={ classes.HomePageLink }>
+                <div className={ classes.homePageLink }>
                     {showHomePageLink &&
                         <Link to="/" className={classes.linkStyle}>
-                            <Home className={classes.homeIcon} />
-                                HOMEPAGE
+                            <Home className={classes.homeIcon}  />
+                            {!isMobile && "HOMEPAGE"}
                         </Link>
                     }
                 </div>
+                {title &&
+                    <Typography variant="h6" component="h1" >
+                        {title}
+                    </Typography>
+                }
                 <div
                     ref={anchorRef}
                     aria-controls={userMenuOpen ? "menu-list-grow" : undefined}
@@ -106,6 +112,8 @@ Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
+    title: PropTypes.string,
+    position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
 };
 
 const mapStateToProps = ({ navbar }) => ({

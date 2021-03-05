@@ -8,22 +8,21 @@ export default makeStyles((theme) => ({
     toolbar: {
         display: "flex",
     },
-    HomePageLink: ({ isMobile }) => ({
+    homePageLink: ({ isMobile }) => ({
         marginLeft: theme.spacing(isMobile ? 0 : 3),
-        display: "flex",
-        flex: 1,
     }),
-    linkStyle: {
+    linkStyle: ({ isMobile }) => ({
         textDecoration: "none",
-        color: "white",
+        color: isMobile ? theme.palette.secondary.main : "white",
         fontWeight: "500",
         fontSize: "medium",
         display: "flex",
         flexDirection: "row",
         alignItems: "flex-end",
-    },
+    }),
     homeIcon: {
-        marginRight: theme.spacing(1),
+        boxSizing: "content-box",
+        paddingRight: theme.spacing(1),
     },
     userAccountArea: ({ isMobile }) => ({
         marginRight: theme.spacing(isMobile ? 0 : 3),
@@ -32,15 +31,16 @@ export default makeStyles((theme) => ({
         flexDirection: "row",
         justifyContent: "flex-end",
     }),
-    userLogo: {
-        backgroundColor: theme.palette.primary.main,
+    userLogo: ({ isMobile }) => ({
+        backgroundColor: !isMobile && theme.palette.primary.main,
         zIndex: 1,
         cursor: "pointer",
         padding: theme.spacing(1),
         width: theme.spacing(6),
         height: theme.spacing(6),
         borderRadius: "50%",
-    },
+        color: isMobile && theme.palette.secondary.main,
+    }),
     userMenuButton: {
         color: "white",
         "&:hover": {

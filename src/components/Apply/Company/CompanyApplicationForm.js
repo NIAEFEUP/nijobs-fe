@@ -88,7 +88,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                 >
                     <Card className={classes.formCard}>
                         <CardHeader
-                            title="Company Application"
+                            title={!useMobile() && "Company Application" }
                             subheader={
                                 <Link
                                     href=""
