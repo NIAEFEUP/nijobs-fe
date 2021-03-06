@@ -6,7 +6,7 @@ class NotFound extends Component {
 
     render() {
         return (
-            <ErrorComponent message={"Sorry, no page could be found at this address (404)"}/>
+            <ErrorComponent message={"Sorry, no page could be found at this address (404)"} />
         );
     }
 }
