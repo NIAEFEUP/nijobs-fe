@@ -7,7 +7,10 @@ import {
     AppBar,
     Toolbar,
     Button,
+    Typography,
 } from "@material-ui/core";
+
+import { Link } from "react-router-dom";
 
 import useSession from "../../hooks/useSession";
 import useToggle from "../../hooks/useToggle";
@@ -15,12 +18,12 @@ import UserMenu from "./UserMenu";
 import LoginForm from "./LoginForm";
 
 import { useMobile } from "../../utils/media-queries";
-import { MenuRounded } from "@material-ui/icons";
+import { MenuRounded, Home } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
 
-const Navbar = ({ showLoginModal, toggleLoginModal }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, title, position }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -44,16 +47,30 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
         setUserMenuOpen(false);
     };
     const isMobile = useMobile();
-    const classes = useNavbarStyles({ isMobile });
+    const classes = useNavbarStyles({ isMobile, showHomePageLink });
 
     return (
         <AppBar
             className={classes.navbar}
-            position="absolute"
+            position={position || "absolute"}
             color="transparent"
             elevation={0}
+            data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
+                <div className={ classes.homePageLink }>
+                    {showHomePageLink &&
+                        <Link to="/" className={classes.linkStyle}>
+                            <Home className={classes.homeIcon}  />
+                            {!isMobile && "HOMEPAGE"}
+                        </Link>
+                    }
+                </div>
+                {title &&
+                    <Typography variant="h6" component="h1">
+                        {title}
+                    </Typography>
+                }
                 <div
                     ref={anchorRef}
                     aria-controls={userMenuOpen ? "menu-list-grow" : undefined}
@@ -66,7 +83,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo}/>}
+                            endIcon={<MenuRounded className={classes.userLogo} />}
                         >
                             {!userMenuOpen && !isMobile && "Account"}
                         </Button>
@@ -94,6 +111,9 @@ const Navbar = ({ showLoginModal, toggleLoginModal }) => {
 Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
+    showHomePageLink: PropTypes.bool,
+    title: PropTypes.string,
+    position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
 };
 
 const mapStateToProps = ({ navbar }) => ({

@@ -86,7 +86,7 @@ describe("Application Review Widget", () => {
             renderWithStore(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store });
         });
@@ -128,7 +128,7 @@ describe("Application Review Widget", () => {
             renderWithStore(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store })
         );
@@ -156,7 +156,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -189,7 +189,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -236,7 +236,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -276,7 +276,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -327,7 +327,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -350,7 +350,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -383,7 +383,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -409,7 +409,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -433,7 +433,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -465,7 +465,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -499,7 +499,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -533,7 +533,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -558,7 +558,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -604,7 +604,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );
@@ -644,7 +644,7 @@ describe("Application Review Widget", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <Notifier />
-                        <ApplicationsReviewWidget/>
+                        <ApplicationsReviewWidget />
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { store, theme })
         );

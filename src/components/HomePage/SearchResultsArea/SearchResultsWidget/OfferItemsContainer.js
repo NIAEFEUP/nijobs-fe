@@ -37,7 +37,7 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
             <List disablePadding>
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
-                        {i !== 0 && <Divider component="li"/>}
+                        {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}
                             setSelectedOffer={setSelectedOffer}

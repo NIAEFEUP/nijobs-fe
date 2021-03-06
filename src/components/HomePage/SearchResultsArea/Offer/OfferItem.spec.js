@@ -18,15 +18,15 @@ describe("OfferItem", () => {
     describe("render", () => {
 
         it("should render a loading version when loading=true", () => {
-            const wrapper = shallow(<OfferItem loading/>);
+            const wrapper = shallow(<OfferItem loading />);
 
             expect(wrapper.find(Avatar).find(Skeleton).prop("circle")).toBe(true);
-            expect(wrapper.find(ListItemText).prop("primary")).toStrictEqual(<Skeleton/>);
-            expect(wrapper.find(ListItemText).prop("secondary")).toStrictEqual(<Skeleton/>);
+            expect(wrapper.find(ListItemText).prop("primary")).toStrictEqual(<Skeleton />);
+            expect(wrapper.find(ListItemText).prop("secondary")).toStrictEqual(<Skeleton />);
 
         });
 
-        const wrapper = shallow(<OfferItem offer={offer}/>);
+        const wrapper = shallow(<OfferItem offer={offer} />);
 
         it("should render the offer position", () => {
             expect(wrapper.find(ListItemText).first().prop("primary")).toEqual(offer.position);
@@ -42,7 +42,7 @@ describe("OfferItem", () => {
     describe("interaction", () => {
         it("should call setSelectedOffer onClick", () => {
             const setSelectedOfferMock = jest.fn();
-            const wrapper = shallow(<OfferItem offer={offer} setSelectedOffer={setSelectedOfferMock}/>);
+            const wrapper = shallow(<OfferItem offer={offer} setSelectedOffer={setSelectedOfferMock} />);
             wrapper.find(ListItem).first().simulate("click");
 
             expect(setSelectedOfferMock).toHaveBeenCalledWith(offer);

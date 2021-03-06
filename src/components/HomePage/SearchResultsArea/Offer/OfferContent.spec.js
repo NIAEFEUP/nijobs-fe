@@ -11,7 +11,7 @@ describe("OfferContent", () => {
         it("should render placeholder content when no offer selected", () => {
 
             const wrapper = mountWithTheme(
-                <OfferContent offer={null}/>,
+                <OfferContent offer={null} />,
                 theme
             );
 
@@ -21,7 +21,7 @@ describe("OfferContent", () => {
 
         it("should render a valid loading message", () => {
             const wrapper = mountWithTheme(
-                <OfferContent loading/>,
+                <OfferContent loading />,
                 theme
             );
 
@@ -43,7 +43,7 @@ describe("OfferContent", () => {
             });
 
             const wrapper = mountWithTheme(
-                <OfferContent offer={offer}/>,
+                <OfferContent offer={offer} />,
                 theme
             );
 

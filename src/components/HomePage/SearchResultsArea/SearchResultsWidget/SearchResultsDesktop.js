@@ -58,7 +58,7 @@ const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }
             </div>
             :
             <div className={classes.offerBodyContainer}>
-                <OfferContent offer={selectedOffer} loading={offersLoading}/>
+                <OfferContent offer={selectedOffer} loading={offersLoading} />
             </div>
         }
     </Grid>

@@ -29,7 +29,7 @@ describe("MultiOptionAutocomplete", () => {
         it("should render the component specified in renderInput", () => {
 
             const TestComponent = () => (
-                <TextField _id="test"/>
+                <TextField _id="test" />
             );
 
             const AutocompleteProps = {
@@ -52,7 +52,7 @@ describe("MultiOptionAutocomplete", () => {
         it("should render the values in chips", () => {
 
             const TestComponent = () => (
-                <TextField _id="test"/>
+                <TextField _id="test" />
             );
 
             const AutocompleteProps = {

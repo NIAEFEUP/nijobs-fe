@@ -7,15 +7,15 @@ import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutoco
 describe("AdvancedSearchDesktop", () => {
     describe("render", () => {
         it("should render a collapse", () => {
-            const openWrapper = shallow(<AdvancedSearchDesktop open/>);
+            const openWrapper = shallow(<AdvancedSearchDesktop open />);
             expect(openWrapper.find(Collapse).first().prop("in")).toBe(true);
 
-            const closedWrapper = shallow(<AdvancedSearchDesktop open={false}/>);
+            const closedWrapper = shallow(<AdvancedSearchDesktop open={false} />);
             expect(closedWrapper.find(Collapse).first().prop("in")).toBe(false);
         });
 
         it("should render a job selector with all job types", () => {
-            const wrapper = shallow(<AdvancedSearchDesktop open/>);
+            const wrapper = shallow(<AdvancedSearchDesktop open />);
             expect(wrapper.find(TextField).contains(JobTypes.map(({ value, label }) => (
                 <MenuItem
                     key={value}
@@ -27,7 +27,7 @@ describe("AdvancedSearchDesktop", () => {
         });
 
         it("should contain a job duration toggle", () => {
-            const wrapper = shallow(<AdvancedSearchDesktop open JobDurationSwitchLabel="test"/>);
+            const wrapper = shallow(<AdvancedSearchDesktop open JobDurationSwitchLabel="test" />);
             expect(wrapper.find(FormControlLabel).prop("control")).toEqual(<Switch />);
             expect(wrapper.find(FormControlLabel).prop("label")).toEqual("test");
         });

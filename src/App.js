@@ -10,7 +10,7 @@ const App = () => (
         <React.Fragment>
             <CssBaseline />
             <Notifier />
-            <AppRouter/>
+            <AppRouter />
         </React.Fragment>
 
     </Provider>

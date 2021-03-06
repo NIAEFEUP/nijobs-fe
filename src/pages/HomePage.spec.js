@@ -11,8 +11,6 @@ import AppTheme from "../AppTheme";
 
 jest.mock("../hooks/useSession");
 
-import ContactSection from "../components/HomePage/ContactSection";
-
 describe("HomePage", () => {
     const initialState = {
         offerSearch: {
@@ -31,7 +29,7 @@ describe("HomePage", () => {
         useSession.mockImplementation(() => ({ isLoggedIn: false }));
         const wrapper = shallow(
             <ThemeProvider theme={AppTheme}>
-                <HomePage/>
+                <HomePage />
             </ThemeProvider>).find(HomePage).first().dive();
 
         it("should render MainView", () => {
@@ -45,9 +43,6 @@ describe("HomePage", () => {
         it("should not render SearchResultsWidget", () => {
             expect(wrapper.find(SearchResultsWidget).exists()).toBe(false);
         });
-        it("should render ContactSection", () => {
-            expect(wrapper.find(ContactSection).exists()).toBe(true);
-        });
     });
     describe("interaction", () => {
         it("should render search results after search submission", () => {
@@ -57,7 +52,7 @@ describe("HomePage", () => {
 
             const wrapper = mountWithStore(
                 <Router>
-                    <HomePage/>
+                    <HomePage />
                 </Router>,
                 initialState, AppTheme);
 

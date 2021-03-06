@@ -3,7 +3,7 @@
         "browser": true,
         "node": true,
         "jest/globals": true,
-        "es6": true,
+        "es6": true
     },
 
     "globals": {
@@ -19,20 +19,20 @@
 
     "parserOptions": {
         "ecmaFeatures": {
-            "jsx": true,
-        },
+            "jsx": true
+        }
     },
 
     "plugins": [
         "react",
         "react-hooks",
         "jest",
-        "babel",
+        "babel"
     ],
 
     "extends": [
         "eslint:recommended",
-        "plugin:react/recommended",
+        "plugin:react/recommended"
     ],
 
     "settings": {
@@ -92,18 +92,18 @@
         "space-before-function-paren": ["error", {
             "anonymous": "never",
             "named": "never",
-            "asyncArrow": "always",
+            "asyncArrow": "always"
         }],
         "space-in-parens": "error",
         "space-infix-ops": "error",
         "space-unary-ops": ["error", {
             "words": true,
-            "nonwords": false,
+            "nonwords": false
         }],
         "spaced-comment": ["error", "always", { "exceptions": ["-"] }],
         "switch-colon-spacing": ["error", {
             "after": true,
-            "before": false,
+            "before": false
         }],
         "brace-style": ["error", "1tbs"],
         "camelcase": "error",
@@ -146,9 +146,11 @@
         "react/jsx-uses-react": "error",
         "react/jsx-uses-vars": "error",
         "react/jsx-pascal-case": "error",
-
+        "react/jsx-tag-spacing": ["error", {
+            "beforeClosing": "never"
+        }],
         // React Hooks
         "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/exhaustive-deps": "warn"
     }
 }

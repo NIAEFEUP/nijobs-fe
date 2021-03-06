@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import React from "react";
 
 import { BrowserRouter, Switch } from "react-router-dom";
@@ -7,6 +9,7 @@ import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
+import PageLayout from "./components/PageLayout";
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -15,13 +18,17 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <HomePage/>
+                <PageLayout showHomePageLink={false} forceDesktopLayout>
+                    <HomePage />
+                </PageLayout>
             </Route>
             <Route
                 exact
                 path="/apply/company"
             >
-                <CompanyApplicationPage/>
+                <PageLayout pageTitle="Company Application">
+                    <CompanyApplicationPage />
+                </PageLayout>
             </Route>
             <ProtectedRoute
                 exact
@@ -30,15 +37,21 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
                 authorize={(user) => (user.isAdmin)}
             >
-                <ApplicationsReviewPage/>
+                <PageLayout pageTitle="Review Applications">
+                    <ApplicationsReviewPage />
+                </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
             >
-                <ErrorPage/>
+                <PageLayout>
+                    <ErrorPage />
+                </PageLayout>
             </Route>
             <Route>
-                <NotFound/>
+                <PageLayout>
+                    <NotFound />
+                </PageLayout>
             </Route>
         </Switch>
     </BrowserRouter>

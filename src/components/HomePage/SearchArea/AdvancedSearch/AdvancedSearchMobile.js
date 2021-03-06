@@ -30,7 +30,7 @@ const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationS
         className={className}
     >
         <FormControl fullWidth>
-            <Slider {...JobDurationSliderProps}/>
+            <Slider {...JobDurationSliderProps} />
             <FormHelperText>
                 {sliderText}
             </FormHelperText>
@@ -133,7 +133,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     <FormControlLabel
                         className={classes.jobDurationSliderToggleMobile}
                         control={
-                            <Switch {...JobDurationSwitchProps}/>
+                            <Switch {...JobDurationSwitchProps} />
                         }
                         label={JobDurationSwitchLabel}
                     />

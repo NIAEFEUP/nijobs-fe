@@ -11,7 +11,7 @@ const ShowAdvancedOptionsButton = ({ isOpen, onClick }) => (
             aria-label="Show More Options"
             onClick={onClick}
         >
-            {isOpen ? <Close /> : <MoreHoriz fontSize="large"/>}
+            {isOpen ? <Close /> : <MoreHoriz fontSize="large" />}
         </Fab>
     </div>
 );
