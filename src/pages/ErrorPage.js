@@ -2,8 +2,12 @@ import React from "react";
 
 import ErrorComponent from "../components/Errors/ErrorComponent";
 
-const ErrorPage = () => (
-    <ErrorComponent message={"Something unexpected prevented us from fulfilling your request.Please try again later, and if the problem persists, contact us at ni@aefeup.pt"} />
+const NotFound = () => (
+    <ErrorComponent
+        title={"Unexpected error"}
+        message={"Something unexpected prevented us from fulfilling your request."}
+        email={"ni@aefeup.pt"}
+    />
 );
 
-export default ErrorPage;
+export default NotFound;
