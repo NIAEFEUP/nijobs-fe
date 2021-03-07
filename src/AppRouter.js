@@ -44,12 +44,12 @@ const AppRouter = () => (
             <Route
                 path="/error"
             >
-                <PageLayout>
+                <PageLayout forceDesktopLayout>
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
-                <PageLayout>
+                <PageLayout forceDesktopLayout>
                     <NotFound />
                 </PageLayout>
             </Route>
