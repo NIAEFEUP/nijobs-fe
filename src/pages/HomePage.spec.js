@@ -4,7 +4,7 @@ import HomePage from "./HomePage";
 import MainView from "../components/HomePage/MainView";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
-import {  ThemeProvider } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import { mountWithStore } from "../test-utils";
 import useSession from "../hooks/useSession";
 import AppTheme from "../AppTheme";
