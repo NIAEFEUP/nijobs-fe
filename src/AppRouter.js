@@ -14,6 +14,7 @@ import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import MyOffersPage from "./pages/MyOffersPage";
+import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 
 /**
  *
@@ -89,6 +90,21 @@ const AppRouter = () => (
                     <MyOffersPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route // change to ProtectedRoute before merging!!!!
+                exact
+                path="/company/registration/finish"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
+                authorize={(user) => (user.company && !user.hasFinishedRegistration)}
+            >
+                <PageLayout
+                    key="/review/applications"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Finish Registration"
+                >
+                    <FinishCompanyRegistrationPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >
