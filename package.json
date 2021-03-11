@@ -99,7 +99,7 @@
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
     "react-content-loader": "^4.2.2",
-    "react-dev-utils": "^9.1.0",
+    "react-dev-utils": "^11.0.3",
     "react-loading-skeleton": "^1.2.0",
     "react-transition-group": "^4.4.1",
     "redux-promise-middleware": "^5.1.1",
