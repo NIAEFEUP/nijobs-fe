@@ -6,7 +6,7 @@
     "node": "10.17.0"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "HTTPS=true node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "jest --coverage --verbose",
     "test-ci": "jest --coverage --verbose",
