@@ -6,17 +6,16 @@ import { MainMask } from "../HomePage/MainMask";
 import CenteredComponent from "../HomePage/CenteredComponent";
 
 const useStyles = makeStyles((theme) => ({
-    card: {
-        textAlign: "center",
-    },
     title: {
         marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
     content: {
-        textAlign: "center",
+        marginLeft: theme.spacing(1),
     },
     secondText: {
         marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
 }));
 
@@ -45,7 +44,7 @@ const ErrorComponent = ({ title, message, email }) => {
         <React.Fragment>
             <MainMask />
             <CenteredComponent>
-                <Card className={classes.card} elevation={8}>
+                <Card elevation={8}>
                     <CardHeader title={title} className={classes.title} titleTypographyProps={{ variant: "h4" }} />
                     <CardContent className={classes.content}>
                         <Typography variant="body1" className={classes.secondText}>

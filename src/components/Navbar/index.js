@@ -23,7 +23,7 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 import useNavbarStyles from "./navbarStyles";
 
-const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, title, position }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, forceDesktopLayout = false, title, position }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -47,7 +47,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, tit
         setUserMenuOpen(false);
     };
     const isMobile = useMobile();
-    const classes = useNavbarStyles({ isMobile, showHomePageLink });
+    const classes = useNavbarStyles({ isMobile, showHomePageLink, forceDesktopLayout });
 
     return (
         <AppBar
@@ -112,6 +112,7 @@ Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
+    forceDesktopLayout: PropTypes.bool,
     title: PropTypes.string,
     position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
 };
