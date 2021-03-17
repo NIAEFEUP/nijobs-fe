@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 
+import ErrorComponent from "../components/Errors/ErrorComponent";
+
 class NotFound extends Component {
 
     render() {
         return (
-            <div>
-                Oh no! Someone took this page away!
-            </div>
+            <ErrorComponent title={"Page not found"} message={"Sorry, no page could be found at this address (404)"} />
         );
     }
 }

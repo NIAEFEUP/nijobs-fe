@@ -10,7 +10,7 @@ const PageLayout = ({ children, showHomePageLink = true, pageTitle, forceDesktop
     if ((!useMobile()) || forceDesktopLayout) {
         return (
             <div>
-                <Navbar showHomePageLink={showHomePageLink} />
+                <Navbar showHomePageLink={showHomePageLink} forceDesktopLayout={forceDesktopLayout} />
                 {children}
                 <ContactSection />
             </div>
