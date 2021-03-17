@@ -6,17 +6,16 @@ import { MainMask } from "../HomePage/MainMask";
 import CenteredComponent from "../HomePage/CenteredComponent";
 
 const useStyles = makeStyles((theme) => ({
-    card: {
-        textAlign: "center",
-    },
     title: {
         marginTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
     content: {
-        textAlign: "center",
+        marginLeft: theme.spacing(1),
     },
     secondText: {
         marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(1),
     },
 }));
 
@@ -27,12 +26,12 @@ const EmailInfo = ({ email }) => {
             <Typography variant="body1" className={classes.secondText}>
                 Please try again later, and if the problem persists, contact us at
                 {" "}
-                <Link color="secondary" href="mailto:ni@aefeup.pt">
+                <Link color="secondary" href={`mailto:${email}`}>
                     {email}
                 </Link>
             </Typography>
         );
-    return <Typography />;
+    return null;
 };
 
 EmailInfo.propTypes = {
