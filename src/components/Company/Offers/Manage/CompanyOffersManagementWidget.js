@@ -1,10 +1,12 @@
-import { Card, CardContent, CardHeader, makeStyles, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
+import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
+import PropTypes from "prop-types";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -22,9 +24,9 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({  position, location }) => ({
+const generateRow = ({ title, location }) => ({
     fields: {
-        title: { value: position, align: "left" },
+        title: { value: title, align: "left" },
         publishStartDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
         location: { value: location },
@@ -43,37 +45,8 @@ const filters = [
 ];
 
 const RowActions = () => (
-    <h1>Row Actions</h1>
+    <Typography>Rows Actions</Typography>
 );
-
-const RowComponent = ({ rowKey, labelId }) => {
-    const fields = rows[rowKey].fields;
-
-    return (
-        <>
-            {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                generateTableCellFromField(i, fieldId, fieldOptions, labelId)
-            ))}
-        </>
-    );
-
-};
-
-/*
-const useRowCollapseStyles = makeStyles((theme) => ({
-    payloadSection: {
-        "&:not(:first-child)": {
-            paddingTop: theme.spacing(2),
-        },
-        "&:not(:first-child) p:first-of-type": {
-            paddingTop: theme.spacing(2),
-        },
-    },
-}));
-
-const RowCollapseComponent = ({ rowKey }) => {
-
-}; */
 
 
 const CompanyOffersManagementWidget = () => {
@@ -96,36 +69,49 @@ const CompanyOffersManagementWidget = () => {
             setIsLoading(false);
         });
     }, []);
+
+    const RowContent = ({ rowKey, labelId }) => {
+        const fields = offers[rowKey].fields;
+
+        return (
+            <>
+                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                ))}
+            </>
+        );
+    };
+
+    RowContent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+        labelId: PropTypes.string.isRequired,
+    };
+
     return (
         <div>
-            <Card>
-                <CardHeader title="Offers Management" />
-                <CardContent>
-                    {isLoading || error ?
-                        <CompanyOffersNonFullfilledRequest isLoading={isLoading} error={error} />
-                        :
-                        <FilterableTable
-                            title="Review Applications"
-                            tableComponent={ControlledSortableSelectableTable}
-                            defaultSort="title"
-                            rows={offers}
-                            setInitialRows={setOffers}
-                            columns={columns}
-                            sorters={sorters}
-                            filters={filters}
-                            RowActions={RowActions}
-                            rowsPerPage={5}
-                            stickyHeader
-                            emptyMessage="No applications here."
-                            context={{
-                                // approveApplicationRow,
-                                // rejectApplicationRow,
-                            }}
-                        />
-                    }
-
-                </CardContent>
-            </Card>
+            {isLoading || error ?
+                <CompanyOffersNonFullfilledRequest isLoading={isLoading} error={error} />
+                :
+                <FilterableTable
+                    title="Offers Management"
+                    tableComponent={ControlledSortableSelectableTable}
+                    defaultSort="title"
+                    rows={offers}
+                    setInitialRows={setOffers}
+                    columns={columns}
+                    sorters={sorters}
+                    filters={filters}
+                    RowActions={RowActions}
+                    rowsPerPage={5}
+                    stickyHeader
+                    emptyMessage="No applications here."
+                    context={{
+                        // approveApplicationRow,
+                        // rejectApplicationRow,
+                    }}
+                    RowContent={RowContent}
+                />
+            }
         </div>
     );
 };

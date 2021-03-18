@@ -5,7 +5,6 @@ export const columns = {
     actions: { align: "right", disablePadding: false, label: "Actions", disableSorting: true },
 };
 
-
 export const ApplicationStateLabel = Object.freeze({
     APPROVED: "Approved",
     PENDING: "Pending",
