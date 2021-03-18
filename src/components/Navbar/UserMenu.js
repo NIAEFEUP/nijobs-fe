@@ -100,7 +100,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
-                <MenuItem button component={Link} to="/offers" disableTouchRipple>My Offers</MenuItem>
+                <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
                 <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
