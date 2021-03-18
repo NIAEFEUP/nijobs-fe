@@ -53,6 +53,39 @@ const MOCK_OFFERS = [
         date: "2019-06",
         description: "kek",
     }),
+    new Offer({
+        id: "random uuid4",
+        position: "Guy in the background",
+        company: {
+            name: "Reddit",
+            logo: redditLogo,
+        },
+        location: "Porto",
+        date: "2019-06",
+        description: "kek",
+    }),
+    new Offer({
+        id: "random uuid5",
+        position: "Janitor",
+        company: {
+            name: "Reddit",
+            logo: redditLogo,
+        },
+        location: "Porto",
+        date: "2019-06",
+        description: "kek",
+    }),
+    new Offer({
+        id: "random uuid6",
+        position: "Fullstack developer but make it shorter",
+        company: {
+            name: "Reddit",
+            logo: redditLogo,
+        },
+        location: "Porto",
+        date: "2019-06",
+        description: "kek",
+    }),
 ];
 
 const sleep = (time) => new Promise((resolve) => {

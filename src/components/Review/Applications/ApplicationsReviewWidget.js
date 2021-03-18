@@ -14,6 +14,7 @@ import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
+import PropTypes from "prop-types";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -115,7 +116,11 @@ const ApplicationsReviewWidget = () => {
                 ))}
             </>
         );
+    };
 
+    RowComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+        labelId: PropTypes.string.isRequired,
     };
 
     const useRowCollapseStyles = makeStyles((theme) => ({
@@ -159,6 +164,10 @@ const ApplicationsReviewWidget = () => {
                 }
             </>
         );
+    };
+
+    RowCollapseComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
     };
 
     return (
