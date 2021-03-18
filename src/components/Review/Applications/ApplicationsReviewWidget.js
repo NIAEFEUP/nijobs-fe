@@ -118,7 +118,11 @@ const ApplicationsReviewWidget = () => {
         );
     };
 
+<<<<<<< HEAD
     RowContent.propTypes = {
+=======
+    RowComponent.propTypes = {
+>>>>>>> Finished simple table for companny offers and made the other Tables reusable components
         rowKey: PropTypes.string.isRequired,
         labelId: PropTypes.string.isRequired,
     };
