@@ -14,7 +14,7 @@ export const RowPayload = PropTypes.shape({
 
 export const RowPropTypes = PropTypes.shape({
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,
+    payload: PropTypes.object,
 });
 
 export const ColumnPropTypes = PropTypes.shape({
