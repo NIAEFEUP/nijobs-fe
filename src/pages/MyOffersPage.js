@@ -1,10 +1,10 @@
 import React from "react";
 import { CardContent } from "@material-ui/core";
-
+import CompanyOffersManagementWidget from "../components/Company/Offers/Manage/CompanyOffersManagementWidget";
 
 export const MyOffersPage = () => (
     <CardContent>
-        <h1>My Offers Page</h1>
+        <CompanyOffersManagementWidget />
     </CardContent>
 );
 
