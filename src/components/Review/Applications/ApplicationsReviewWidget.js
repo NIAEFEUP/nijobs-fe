@@ -1,9 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-    Divider,
-    makeStyles,
-    Paper, Typography,
-} from "@material-ui/core";
+import { Divider, makeStyles, Typography } from "@material-ui/core";
 
 import { alphabeticalSorter, generateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
@@ -173,39 +169,37 @@ const ApplicationsReviewWidget = () => {
     return (
         <>
             <UndoableActionsHandlerProvider>
-                <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
-                    {error ?
-                        <>
-                            <Typography variant="h6" color="secondary">
+                {error ?
+                    <>
+                        <Typography variant="h6" color="secondary">
                                 Review Applications
-                            </Typography>
-                            <Typography>
+                        </Typography>
+                        <Typography>
                                 An unexpected error occurred, please try refreshing the browser window.
-                            </Typography>
-                        </>
-                        :
-                        <FilterableTable
-                            title="Review Applications"
-                            tableComponent={ControlledSortableSelectableTable}
-                            defaultSort="name"
-                            rows={rows}
-                            setInitialRows={setRows}
-                            columns={columns}
-                            sorters={sorters}
-                            filters={filters}
-                            RowActions={RowActions}
-                            rowsPerPage={5}
-                            stickyHeader
-                            emptyMessage="No applications here."
-                            context={{
-                                approveApplicationRow,
-                                rejectApplicationRow,
-                            }}
-                            RowComponent={RowComponent}
-                            RowCollapseComponent={RowCollapseComponent}
-                        />
-                    }
-                </Paper>
+                        </Typography>
+                    </>
+                    :
+                    <FilterableTable
+                        title="Review Applications"
+                        tableComponent={ControlledSortableSelectableTable}
+                        defaultSort="name"
+                        rows={rows}
+                        setInitialRows={setRows}
+                        columns={columns}
+                        sorters={sorters}
+                        filters={filters}
+                        RowActions={RowActions}
+                        rowsPerPage={5}
+                        stickyHeader
+                        emptyMessage="No applications here."
+                        context={{
+                            approveApplicationRow,
+                            rejectApplicationRow,
+                        }}
+                        RowComponent={RowComponent}
+                        RowCollapseComponent={RowCollapseComponent}
+                    />
+                }
             </UndoableActionsHandlerProvider>
         </>
     );

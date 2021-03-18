@@ -53,6 +53,7 @@ const MOCK_OFFERS = [
         date: "2019-06",
         description: "kek",
     }),
+<<<<<<< HEAD
     new Offer({
         id: "random uuid4",
         position: "Guy in the background",
@@ -86,6 +87,8 @@ const MOCK_OFFERS = [
         date: "2019-06",
         description: "kek",
     }),
+=======
+>>>>>>> Refactored some Tables Components and created simple table for offers
 ];
 
 const sleep = (time) => new Promise((resolve) => {

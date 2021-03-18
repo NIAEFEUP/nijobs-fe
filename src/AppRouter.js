@@ -25,6 +25,7 @@ const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSiz
  * Obviously, since the controller are differnt, then the hooks might also be different
  *
  */
+import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -73,6 +74,21 @@ const AppRouter = () => (
                     <ApplicationsReviewPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route
+                exact
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the company offers management page."
+                authorize={(user) => (user?.company)}
+            >
+                <PageLayout
+                    pageTitle="Manage Offers"
+                    key="/company/offers/manage"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <CompanyOffersManagementPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >
