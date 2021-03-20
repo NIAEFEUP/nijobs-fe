@@ -1,4 +1,4 @@
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 import config from "../config";
 const { API_HOSTNAME } = config;
@@ -23,7 +23,7 @@ export default (options) => {
         }
     };
 
-    const { data, error, isValidating } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
+    const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
         revalidateOnFocus: false,
         initialData: null,
         errorRetryCount: errorRetryCount || DEFAULT_RETRY_COUNT,
@@ -34,8 +34,8 @@ export default (options) => {
         data,
         error,
         isValidating,
-        reset: () => mutate(null),
-        revalidate: () => mutate(`${API_HOSTNAME}/auth/me`),
+        reset: () => mutate(null, false),
+        revalidate: () => mutate(),
         isLoggedIn: !!data || false,
     };
 

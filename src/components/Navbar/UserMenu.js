@@ -214,12 +214,12 @@ MobileUserMenu.propTypes = {
     handleLogout: PropTypes.func.isRequired,
 };
 
-const UserMenu = ({ open, anchorRef, sessionData, resetSession, handleClose }) => {
+const UserMenu = ({ open, anchorRef, sessionData, closeSession, handleClose }) => {
 
     const handleLogout = (e) => {
         e.preventDefault();
         handleClose(e);
-        logout().then(() => resetSession());
+        logout().then(() => closeSession());
     };
 
     const isMobile = useMobile();
@@ -254,7 +254,7 @@ UserMenu.propTypes = {
         email: PropTypes.string,
         isAdmin: PropTypes.bool,
     }),
-    resetSession: PropTypes.func.isRequired,
+    closeSession: PropTypes.func.isRequired,
     handleClose: PropTypes.func.isRequired,
 };
 

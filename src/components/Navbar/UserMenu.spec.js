@@ -86,7 +86,7 @@ describe("Navbar - LoginForm", () => {
             // Ensure that it does log out, without actually calling API
             logout.mockImplementationOnce(() => Promise.resolve(true));
 
-            const resetSession = jest.fn();
+            const closeSession = jest.fn();
             const handleClose = jest.fn();
             const mockAnchor = { current: <div /> };
             const wrapper = renderWithTheme(
@@ -95,7 +95,7 @@ describe("Navbar - LoginForm", () => {
                         open
                         anchorRef={mockAnchor}
                         sessionData={{ email: "test-email" }}
-                        resetSession={resetSession}
+                        closeSession={closeSession}
                         handleClose={handleClose}
                     />
                 </BrowserRouter>,
@@ -107,7 +107,7 @@ describe("Navbar - LoginForm", () => {
             });
 
             expect(logout).toHaveBeenCalledTimes(1);
-            expect(resetSession).toHaveBeenCalledTimes(1);
+            expect(closeSession).toHaveBeenCalledTimes(1);
             expect(handleClose).toHaveBeenCalledTimes(1);
         });
     });

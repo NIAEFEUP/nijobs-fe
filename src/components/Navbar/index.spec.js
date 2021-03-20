@@ -73,7 +73,12 @@ describe("Navbar", () => {
 
         it("Should hide user menu when logged out ", async () => {
 
-            useSession.mockImplementation(() => ({ isLoggedIn: true, reset: () => {}, revalidate: () => {}, data: { email: "email" } }));
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true,
+                reset: () => Promise.resolve(),
+                revalidate: () => {},
+                data: { email: "email" },
+            }));
 
             const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
 

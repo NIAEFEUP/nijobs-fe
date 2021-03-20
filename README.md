@@ -62,22 +62,24 @@ For it to work, you must serve a backend through some server accessible on the i
 After starting your server on localhost, you can create a tunnel from that localhost server to the internet with ngrok with the following command:
 
 ```bash
-ngrok http <backend port, usually 8087>
+ngrok http https://localhost:8087 --region eu # chage port if not using default 8087
 ```
 
 That will give you two hosts, one for `http`, another for `https`. Use the `https` one in the NIJobs Devtools.
 
-Remember that the backend server must allow the host making the requests (the Netlify origin (i.e. `https://deploy-preview-66--nijobs.netlify.app/`), or your localhost (i.e. `http://localhost:3000`), depending on the use-case).
+Remember that the backend server must allow the host making the requests (the Netlify origin (i.e. `https://deploy-preview-66--nijobs.netlify.app/`), or your localhost (i.e. `https://localhost:3000`), depending on the use-case).
+
+Also, since the development backend uses a self-signed certificate, your browser might block it by default. To fix this, simply visit an endpoint and allow it (e.g. https://localhost:8087).
 
 This can also be useful if you don't want to run the server on your local machine, since you are only developing the frontend. In that case, you can use the staging deployment at `https:/ni.fe.up.pt/st4g1ng/nijobs/api`, but beware that CORS will block your localhost by default, so you must talk with a project maintainer to discuss permissions.
 
 > A `dev.sh` file is available in the project's root folder to run these commands on linux environments (simply run `./dev.sh [--build]`)
 
-This will create a development server with hot reloading which will listen on `http://localhost:<HOST_PORT>`.
+This will create a development server with hot reloading which will listen on `https://localhost:<HOST_PORT>`.
 
 ### Env File Specification
 
-- `HOST_PORT`= The port where you will access the dev server in your machine (`http://localhost:<HOST_PORT>`)
+- `HOST_PORT`= The port where you will access the dev server in your machine (`https://localhost:<HOST_PORT>`)
 
 ## Project Details
 

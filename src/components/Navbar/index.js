@@ -94,7 +94,9 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
                     anchorRef={anchorRef}
                     handleClose={handleUserMenuClose}
                     sessionData={sessionData}
-                    resetSession={resetSession}
+                    closeSession={() => {
+                        resetSession().then(() => updateSessionInfo());
+                    }}
                 />
                 <LoginForm
                     open={showLoginModal}
