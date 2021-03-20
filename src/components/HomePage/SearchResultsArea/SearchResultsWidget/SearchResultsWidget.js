@@ -46,14 +46,14 @@ export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, of
 
     const classes = useSearchResultsWidgetStyles();
 
-    const { ContextProvider } = useComponentController(
+    const { ContextProvider, contextProviderProps } = useComponentController(
         SearchResultsController,
         { offers, offersLoading, offersSearchError },
         SearchResultsControllerContext
     );
 
     return (
-        <ContextProvider>
+        <ContextProvider {...contextProviderProps}>
             <Paper elevation={2}>
                 <Grid
                     ref={ref}

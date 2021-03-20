@@ -59,7 +59,7 @@ export default ({
 
     const JobDurationSwitchProps = {
         checked: showJobDurationSlider,
-        onChange: toggleShowJobDurationSlider,
+        onChange: useCallback(toggleShowJobDurationSlider, []),
         value: "filterJobDuration",
     };
 
