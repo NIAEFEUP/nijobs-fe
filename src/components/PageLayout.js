@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ContactSection from "./HomePage/ContactSection";
 import PropTypes from "prop-types";
 import Navbar from "./Navbar/index";
@@ -6,6 +6,10 @@ import { useMobile } from "../utils/media-queries";
 import { Dialog } from "@material-ui/core";
 
 const PageLayout = ({ children, showHomePageLink = true, pageTitle, forceDesktopLayout = false }) => {
+
+    useEffect(() => {
+        document.title = pageTitle ? `${pageTitle} - NIJobs` : "NIJobs";
+    }, [pageTitle]);
 
     if ((!useMobile()) || forceDesktopLayout) {
         return (
