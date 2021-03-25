@@ -63,7 +63,7 @@ const RenderTableRow = ({
 RenderTableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,
+    payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
@@ -71,8 +71,8 @@ RenderTableRow.propTypes = {
     submitUndoableAction: PropTypes.func.isRequired,
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
-    RowComponent: PropTypes.node.isRequired,
-    RowCollapseComponent: PropTypes.node,
+    RowComponent: PropTypes.elementType.isRequired,
+    RowCollapseComponent: PropTypes.elementType,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
@@ -115,8 +115,8 @@ TableContent.propTypes = {
     emptyMessage: PropTypes.string,
     numColumns: PropTypes.number.isRequired,
     context: PropTypes.object,
-    RowComponent: PropTypes.node.isRequired,
-    RowCollapseComponent: PropTypes.node,
+    RowComponent: PropTypes.elementType.isRequired,
+    RowCollapseComponent: PropTypes.elementType,
 };
 
 export default TableContent;

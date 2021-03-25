@@ -158,8 +158,8 @@ BaseTable.propTypes = {
         activeFilters: PropTypes.object,
     }),
     context: PropTypes.object,
-    RowComponent: PropTypes.node,
-    RowCollapseComponent: PropTypes.node,
+    RowComponent: PropTypes.elementType.isRequired,
+    RowCollapseComponent: PropTypes.elementType,
 };
 
 export default BaseTable;
