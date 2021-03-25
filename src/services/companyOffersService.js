@@ -1,8 +1,7 @@
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
-
-// import config from "../config";
-// const { API_HOSTNAME } = config;
+import config from "../config";
+const { API_HOSTNAME } = config;
 
 
 // TODO remove this
@@ -12,7 +11,7 @@ const redditLogo = require("./reddit-logo.png");
 const MOCK_OFFERS = [
     new Offer({
         id: "random uuid1",
-        position: "Full-Stack Developer",
+        title: "Full-Stack Developer",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -33,7 +32,7 @@ const MOCK_OFFERS = [
     }),
     new Offer({
         id: "random uuid2",
-        position: "Security Guy",
+        title: "Security Guy",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -44,7 +43,7 @@ const MOCK_OFFERS = [
     }),
     new Offer({
         id: "random uuid3",
-        position: "Frontend Developer But Make it Longer",
+        title: "Frontend Developer But Make it Longer",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -53,10 +52,9 @@ const MOCK_OFFERS = [
         date: "2019-06",
         description: "kek",
     }),
-<<<<<<< HEAD
     new Offer({
         id: "random uuid4",
-        position: "Guy in the background",
+        title: "Guy in the background",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -67,7 +65,7 @@ const MOCK_OFFERS = [
     }),
     new Offer({
         id: "random uuid5",
-        position: "Janitor",
+        title: "Janitor",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -78,7 +76,7 @@ const MOCK_OFFERS = [
     }),
     new Offer({
         id: "random uuid6",
-        position: "Fullstack developer but make it shorter",
+        title: "Fullstack developer but make it shorter",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -87,23 +85,25 @@ const MOCK_OFFERS = [
         date: "2019-06",
         description: "kek",
     }),
-=======
->>>>>>> Refactored some Tables Components and created simple table for offers
 ];
+
 
 const sleep = (time) => new Promise((resolve) => {
     setTimeout(() => {
         resolve();
     }, time);
-
 });
 
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
 // eslint-disable-next-line no-unused-vars
+
+const parseFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
+
 export const fetchCompanyOffers = async (filters) => {
-    /*
+    await sleep(1000);
+
     try {
-        const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
         });
@@ -120,8 +120,7 @@ export const fetchCompanyOffers = async (filters) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
-    */
-    await sleep(1000);
+
     // throw new Error("An error occurred!");
-    return MOCK_OFFERS;
+    // return MOCK_OFFERS;
 };
