@@ -26,7 +26,7 @@ export default ({
     jobMaxDuration,
     setJobDuration,
     showJobDurationSlider,
-    toggleShowJobDurationSlider,
+    setShowJobDurationSlider,
     jobType,
     setJobType,
     fields,
@@ -52,6 +52,10 @@ export default ({
         value: jobType ? jobType : "",
         onChange: setJobType,
     };
+
+    const toggleShowJobDurationSlider = useCallback(() => {
+        setShowJobDurationSlider(!showJobDurationSlider);
+    }, [setShowJobDurationSlider, showJobDurationSlider]);
 
     const JobDurationSwitchProps = {
         checked: showJobDurationSlider,

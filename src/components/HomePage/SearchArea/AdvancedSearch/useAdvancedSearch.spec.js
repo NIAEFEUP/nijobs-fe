@@ -10,7 +10,7 @@ describe("useAdvancedSearch", () => {
     it("should return the correct props for job duration", () => {
 
         const showJobDurationSlider = false;
-        const toggleShowJobDurationSlider = () => {};
+        const setShowJobDurationSlider = () => {};
         const setJobDuration = jest.fn();
         const jobMinDuration = 0;
         const jobMaxDuration = 1;
@@ -21,7 +21,7 @@ describe("useAdvancedSearch", () => {
                 jobMaxDuration,
                 setJobDuration,
                 showJobDurationSlider,
-                toggleShowJobDurationSlider,
+                setShowJobDurationSlider,
             });
         });
 
@@ -33,7 +33,6 @@ describe("useAdvancedSearch", () => {
         } = useAdvancedSearchProps;
         expect(JobDurationSliderText).toBe("Job Duration - 0-1 month(s)");
         expect(JobDurationSwitchProps.checked).toBe(showJobDurationSlider);
-        expect(JobDurationSwitchProps.onChange).toBe(toggleShowJobDurationSlider);
         expect(JobDurationCollapseProps.in).toBe(showJobDurationSlider);
         expect(JobDurationSliderProps.onChange).toBe(setJobDuration);
         expect(JobDurationSliderProps.value).toStrictEqual([jobMinDuration, jobMaxDuration]);
