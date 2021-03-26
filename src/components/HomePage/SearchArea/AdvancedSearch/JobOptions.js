@@ -1,14 +1,16 @@
-const JobTypes = Object.freeze([
+/* istanbul ignore file */
+
+export default Object.freeze([
     {
         value: null,
         label: "Any",
     },
     {
-        value: "SUMMER_INTERNSHIP",
+        value: "SUMMER INTERNSHIP",
         label: "Summer Internship",
     },
     {
-        value: "CURRICULAR_INTERNSHIP",
+        value: "CURRICULAR INTERNSHIP",
         label: "Curricular Internship",
     },
     {
@@ -19,7 +21,9 @@ const JobTypes = Object.freeze([
         value: "FULL-TIME",
         label: "Full-Time",
     },
+    {
+        value: "OTHER",
+        label: "Other",
+    },
 
 ]);
-
-export default JobTypes;

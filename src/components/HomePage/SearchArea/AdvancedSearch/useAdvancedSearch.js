@@ -82,7 +82,7 @@ export default ({
     const FieldsAutocompleteProps = {
         multiple: true,
         renderInput: RenderInput("Fields"),
-        options: Object.keys(FIELD_OPTIONS), // TODO Make this the same as API
+        options: Object.keys(FIELD_OPTIONS),
         id: "fields-selector",
         getOptionLabel: (option) => FIELD_OPTIONS[option],
         onChange: useCallback((e, fields) => fields && setFields(fields), [setFields]),
@@ -99,7 +99,7 @@ export default ({
         multiple: true,
         renderInput: RenderInput("Technologies"),
         id: "technologies-selector",
-        options: Object.keys(TECH_OPTIONS), // TODO Make this the same as API
+        options: Object.keys(TECH_OPTIONS),
         getOptionLabel: (option) => TECH_OPTIONS[option],
         onChange: useCallback((e, technologies) => technologies && setTechs(technologies), [setTechs]),
         value: technologies,

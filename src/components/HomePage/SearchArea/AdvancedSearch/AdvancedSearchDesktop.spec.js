@@ -1,7 +1,7 @@
 import React from "react";
 import AdvancedSearchDesktop from "./AdvancedSearchDesktop";
 import { Collapse, TextField, MenuItem, FormControlLabel, Switch, Slider, FormHelperText, Button } from "@material-ui/core";
-import JobTypes from "../JobTypes";
+import JobOptions from "./JobOptions";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
 describe("AdvancedSearchDesktop", () => {
@@ -16,7 +16,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should render a job selector with all job types", () => {
             const wrapper = shallow(<AdvancedSearchDesktop open />);
-            expect(wrapper.find(TextField).contains(JobTypes.map(({ value, label }) => (
+            expect(wrapper.find(TextField).contains(JobOptions.map(({ value, label }) => (
                 <MenuItem
                     key={value}
                     value={value}

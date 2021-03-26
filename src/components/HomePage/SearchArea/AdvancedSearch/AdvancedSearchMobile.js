@@ -21,7 +21,7 @@ import { NavigateBefore } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
-import JobTypes from "../JobTypes";
+import JobOptions from "./JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
@@ -50,7 +50,7 @@ const JobTypeSelector = ({ className, JobTypeSelectorProps }) => (
         className={className}
         {...JobTypeSelectorProps}
     >
-        {JobTypes.map(({ value, label }) => (
+        {JobOptions.map(({ value, label }) => (
             <MenuItem
                 key={value}
                 value={value}

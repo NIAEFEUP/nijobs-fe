@@ -13,7 +13,7 @@ import {
     DialogTitle,
     IconButton,
 } from "@material-ui/core";
-import JobTypes from "../JobTypes";
+import JobOptions from "./JobOptions";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 import SearchBar from "../SearchBar";
 
@@ -38,7 +38,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should render a job selector with all job types", () => {
             const wrapper = shallow(<AdvancedSearchMobile open />);
-            expect(wrapper.find(TextField).contains(JobTypes.map(({ value, label }) => (
+            expect(wrapper.find(TextField).contains(JobOptions.map(({ value, label }) => (
                 <MenuItem
                     key={value}
                     value={value}

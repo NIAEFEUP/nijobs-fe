@@ -12,7 +12,7 @@ import {
     Button,
 } from "@material-ui/core";
 
-import JobTypes from "../JobTypes";
+import JobOptions from "./JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
@@ -55,7 +55,7 @@ const AdvancedSearchDesktop = ({
                     className={classes.jobTypeSelector}
                     {...JobTypeSelectorProps}
                 >
-                    {JobTypes.map(({ value, label }) => (
+                    {JobOptions.map(({ value, label }) => (
                         <MenuItem
                             key={value}
                             value={value}
