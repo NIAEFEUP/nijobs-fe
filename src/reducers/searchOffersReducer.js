@@ -2,6 +2,7 @@ import { OfferSearchTypes } from "../actions/searchOffersActions";
 
 export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
+export const INITIAL_ERROR = null;
 
 const initialState = {
     searchValue: "",
@@ -9,10 +10,10 @@ const initialState = {
     filterJobDuration: false,
     jobDuration: [null, null],
     fields: [],
-    techs: [],
+    technologies: [],
     offers: [],
     loading: false,
-    error: null,
+    error: INITIAL_ERROR,
 };
 
 export default (state = initialState, action) => {
@@ -56,7 +57,7 @@ export default (state = initialState, action) => {
         case OfferSearchTypes.SET_JOB_TECHS:
             return {
                 ...state,
-                techs: action.techs,
+                technologies: action.technologies,
             };
         case OfferSearchTypes.SET_JOB_DURATION_TOGGLE:
             return {

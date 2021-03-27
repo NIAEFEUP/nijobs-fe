@@ -17,11 +17,11 @@ import {
     Collapse,
     FormHelperText,
 } from "@material-ui/core";
-import { ArrowBackIos } from "@material-ui/icons";
+import { NavigateBefore } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
 
-import JobTypes from "../JobTypes";
+import JobOptions from "./JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
@@ -50,7 +50,7 @@ const JobTypeSelector = ({ className, JobTypeSelectorProps }) => (
         className={className}
         {...JobTypeSelectorProps}
     >
-        {JobTypes.map(({ value, label }) => (
+        {JobOptions.map(({ value, label }) => (
             <MenuItem
                 key={value}
                 value={value}
@@ -66,7 +66,7 @@ JobTypeSelector.propTypes = {
     JobTypeSelectorProps: PropTypes.object.isRequired,
 };
 
-const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
+const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, onMobileClose,
     setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
     JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
 }) => {
@@ -86,6 +86,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
 
     const handleCloseClick = () => {
         setShouldSubmitForm(false);
+        if (onMobileClose) onMobileClose();
         close();
     };
 
@@ -106,7 +107,7 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm,
                     onClick={handleCloseClick}
                     color="secondary"
                 >
-                    <ArrowBackIos />
+                    <NavigateBefore />
                 </IconButton>
                 Advanced Search
             </DialogTitle>
@@ -183,6 +184,7 @@ AdvancedSearchMobile.propTypes = {
     JobDurationCollapseProps: PropTypes.object.isRequired,
     JobDurationSwitchLabel: PropTypes.string.isRequired,
     JobDurationSliderProps: PropTypes.object.isRequired,
+    onMobileClose: PropTypes.func,
 };
 
 export default AdvancedSearchMobile;

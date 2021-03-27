@@ -1,62 +1,58 @@
+import { getByRole, getByText, render, screen } from "@testing-library/react";
 import React from "react";
 import Offer from "../Offer/Offer";
-import OfferItem from "../Offer/OfferItem";
 import OfferItemsContainer from "./OfferItemsContainer";
 
 describe("OfferItemsContainer", () => {
 
     describe("render", () => {
         it("should show loading state when loading", () => {
-            expect(shallow(<OfferItemsContainer loading />).find({ loading: true }).find(OfferItem)).toHaveLength(3);
+            render(<OfferItemsContainer loading />);
+            expect(screen.getAllByTestId("offer-item-loading")).toHaveLength(3);
         });
 
-        it("should show offer items", () => {
+        it("should show offer items", async () => {
             const offers = [
                 new Offer({
-                    id: "id1",
-                    position: "position1",
+                    _id: "id1",
+                    title: "title1",
                     company: {
                         name: "company1",
                         logo: "companyLogo",
                     },
                     location: "location1",
-                    date: "date1",
+                    jobStartDate: "jobStartDate1",
                     description: "description1",
                 }),
                 new Offer({
-                    id: "id2",
-                    position: "position2",
+                    _id: "id2",
+                    title: "title2",
                     company: {
                         name: "company2",
                         logo: "companyLogo",
                     },
                     location: "location2",
-                    date: "date2",
+                    jobStartDate: "jobStartDate2",
                     description: "description2",
                 }),
             ];
 
-            const wrapper = shallow(
+            render(
                 <OfferItemsContainer
                     offers={offers}
                     loading={false}
                     setSelectedOffer={() => {}}
                 />);
-            expect(wrapper.find(OfferItem).at(0).prop("offer").position).toBe("position1");
-            expect(wrapper.find(OfferItem).at(0).prop("offer").company).toEqual({
-                name: "company1",
-                logo: "companyLogo",
-            });
-            expect(wrapper.find(OfferItem).at(0).prop("offer").date).toBe("date1");
-            expect(wrapper.find(OfferItem).at(0).prop("offer").description).toBe("description1");
+            const items = await screen.findAllByTestId("offer-item");
+            expect(items).toHaveLength(2);
+            expect(getByText(items[0], offers[0].title)).toBeInTheDocument();
+            expect(getByText(items[0], offers[0].location)).toBeInTheDocument();
+            expect(getByRole(items[0], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[0].company.logo);
 
-            expect(wrapper.find(OfferItem).at(1).prop("offer").position).toBe("position2");
-            expect(wrapper.find(OfferItem).at(1).prop("offer").company).toEqual({
-                name: "company2",
-                logo: "companyLogo",
-            },);
-            expect(wrapper.find(OfferItem).at(1).prop("offer").date).toBe("date2");
-            expect(wrapper.find(OfferItem).at(1).prop("offer").description).toBe("description2");
+
+            expect(getByText(items[1], offers[1].title)).toBeInTheDocument();
+            expect(getByText(items[1], offers[1].location)).toBeInTheDocument();
+            expect(getByRole(items[1], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[1].company.logo);
         });
     });
 });

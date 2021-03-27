@@ -1,4 +1,4 @@
-import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
+import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION, INITIAL_ERROR } from "../reducers/searchOffersReducer";
 
 export const OfferSearchTypes = Object.freeze({
     SET_SEARCH_VALUE: "SET_SEARCH_VALUE",
@@ -27,14 +27,19 @@ export const setOffersFetchError = (error) => ({
     error,
 });
 
+export const resetOffersFetchError = () => ({
+    type: OfferSearchTypes.SET_SEARCH_OFFERS_ERROR,
+    error: INITIAL_ERROR,
+});
+
 export const setSearchValue = (value) => ({
     type: OfferSearchTypes.SET_SEARCH_VALUE,
     value,
 });
 
-export const setJobDuration = (minJobDuration, maxJobDuration) => ({
+export const setJobDuration = (jobMinDuration, jobMaxDuration) => ({
     type: OfferSearchTypes.SET_JOB_DURATION,
-    jobDuration: [minJobDuration, maxJobDuration],
+    jobDuration: [jobMinDuration, jobMaxDuration],
 });
 
 export const setJobType = (jobType) => ({
@@ -46,9 +51,9 @@ export const setFields = (fields) => ({
     type: OfferSearchTypes.SET_JOB_FIELDS,
     fields,
 });
-export const setTechs = (techs) => ({
+export const setTechs = (technologies) => ({
     type: OfferSearchTypes.SET_JOB_TECHS,
-    techs,
+    technologies,
 });
 
 export const setShowJobDurationSlider = (filterJobDuration) => ({

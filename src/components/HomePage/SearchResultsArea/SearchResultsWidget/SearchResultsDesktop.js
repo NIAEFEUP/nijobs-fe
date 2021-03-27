@@ -7,11 +7,14 @@ import SearchArea from "../../SearchArea/SearchArea";
 import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import { WorkOff } from "@material-ui/icons";
+import clsx from "clsx";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, setSelectedOffer }) => (
-    <Grid item md={4} id="offer_list">
+const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer,
+    showSearchFilters, toggleShowSearchFilters,
+}) => (
+    <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
-            <Grid item md={11}>
+            <div className={classes.offerItemsContainer}>
                 {noOffers ?
                     <div className={classes.noOffersColumn}>
                         <WorkOff className={classes.errorLoadingOffersIcon} />
@@ -20,37 +23,47 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, setSelectedOffer
                     :
                     <OfferItemsContainer
                         offers={offers}
+                        selectedOffer={selectedOffer}
                         loading={offersLoading}
                         setSelectedOffer={setSelectedOffer}
                         noOffers={noOffers}
+                        showSearchFilters={showSearchFilters}
+                        toggleShowSearchFilters={toggleShowSearchFilters}
                     />
                 }
-            </Grid>
-            <Grid item md={1}>
                 <Divider
                     className={`${classes.divider} ${classes.fullHeight}`}
                     orientation="vertical"
                     variant="middle"
                 />
-            </Grid>
+            </div>
         </Grid>
     </Grid>
 );
 
 OffersList.propTypes = {
     noOffers: PropTypes.bool.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    classes: PropTypes.shape({
+        divider: PropTypes.string.isRequired,
+        fullHeight: PropTypes.string.isRequired,
+        offerItemsContainer: PropTypes.string.isRequired,
+        noOffersColumn: PropTypes.string.isRequired,
+        errorLoadingOffersIcon: PropTypes.string.isRequired,
+    }),
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
+    selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }) => (
-    <Grid item md={8} id="offer_content">
+    <Grid item md={8} id="offer_content" className={classes.fullHeight}>
         {noOffers ?
             <div className={classes.searchOfferErrorContainer}>
                 <Typography className={classes.reviseCriteriaErrorMessage} variant="h6">
-                                We could not fetch the offers you were looking for, please revise your search criteria.
+                    We could not fetch the offers you were looking for, please revise your search criteria.
                 </Typography>
                 <div className={classes.searchArea}>
                     <SearchArea />
@@ -66,24 +79,36 @@ const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }
 
 OfferContentSection.propTypes = {
     noOffers: PropTypes.bool.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    classes: PropTypes.shape({
+        searchOfferErrorContainer: PropTypes.string.isRequired,
+        reviseCriteriaErrorMessage: PropTypes.string.isRequired,
+        searchArea: PropTypes.string.isRequired,
+        offerBodyContainer: PropTypes.string.isRequired,
+        fullHeight: PropTypes.string.isRequired,
+    }),
     offersLoading: PropTypes.bool,
     selectedOffer: PropTypes.instanceOf(Offer),
 };
 
-const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selectedOffer, noOffers }) => {
+const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
+    noOffers, showSearchFilters, toggleShowSearchFilters,
+}) => {
     const classes = useSearchResultsWidgetStyles();
 
     const offersListClasses = {
         fullHeight: classes.fullHeight,
         noOffersColumn: classes.noOffersColumn,
         errorLoadingOffersIcon: classes.errorLoadingOffersIcon,
+        divider: classes.divider,
+        offerItemsContainer: classes.offerItemsContainer,
     };
 
     const offerContentClasses = {
         searchOfferErrorContainer: classes.searchOfferErrorContainer,
         reviseCriteriaErrorMessage: classes.reviseCriteriaErrorMessage,
+        offerBodyContainer: classes.offerBodyContainer,
         searchArea: classes.searchArea,
+        fullHeight: classes.fullHeight,
     };
 
     return (
@@ -93,14 +118,35 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
                 noOffers={noOffers}
                 offers={offers}
                 offersLoading={offersLoading}
-                setSelectedOffer={setSelectedOffer}
-            />
-            <OfferContentSection
-                classes={offerContentClasses}
-                noOffers={noOffers}
                 selectedOffer={selectedOffer}
-                offersLoading={offersLoading}
+                setSelectedOffer={setSelectedOffer}
+                showSearchFilters={showSearchFilters}
+                toggleShowSearchFilters={toggleShowSearchFilters}
             />
+            {showSearchFilters ?
+                <Grid
+                    item
+                    md={8}
+                    id="search_filters"
+                    className={clsx(classes.fullHeight, classes.searchOfferErrorContainer)}
+                >
+                    <div className={classes.searchArea}>
+                        <SearchArea
+                            advanced
+                            onSubmit={() => {
+                                toggleShowSearchFilters(false);
+                            }}
+                        />
+                    </div>
+                </Grid>
+                :
+                <OfferContentSection
+                    classes={offerContentClasses}
+                    noOffers={noOffers}
+                    selectedOffer={selectedOffer}
+                    offersLoading={offersLoading}
+                />
+            }
         </React.Fragment>
     );
 };
@@ -111,6 +157,8 @@ SearchResultsDesktop.propTypes = {
     offersLoading: PropTypes.bool,
     setSelectedOffer: PropTypes.func.isRequired,
     noOffers: PropTypes.bool.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsDesktop;

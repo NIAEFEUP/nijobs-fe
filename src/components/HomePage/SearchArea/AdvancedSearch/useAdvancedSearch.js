@@ -21,27 +21,28 @@ const RenderInput = (label) => (params) => (
 );
 
 export default ({
-    minJobDuration,
-    maxJobDuration,
+    enableAdvancedSearchDefault,
+    jobMinDuration,
+    jobMaxDuration,
     setJobDuration,
     showJobDurationSlider,
-    toggleShowJobDurationSlider,
+    setShowJobDurationSlider,
     jobType,
     setJobType,
     fields,
     setFields,
-    techs,
+    technologies,
     setTechs,
     resetAdvancedSearchFields,
 }) => {
 
-    const jobDuration = [minJobDuration, maxJobDuration];
+    const jobDuration = [jobMinDuration, jobMaxDuration];
 
-    const JobDurationSliderText = `Job Duration - ${minJobDuration}-${maxJobDuration} month(s)`;
+    const JobDurationSliderText = `Job Duration - ${jobMinDuration}-${jobMaxDuration} month(s)`;
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 
-    const [advancedOptions, toggleAdvancedOptions] = useToggle(false);
+    const [advancedOptions, toggleAdvancedOptions] = useToggle(enableAdvancedSearchDefault);
 
     const JobTypeSelectorProps = {
         margin: "normal",
@@ -51,6 +52,10 @@ export default ({
         value: jobType ? jobType : "",
         onChange: setJobType,
     };
+
+    const toggleShowJobDurationSlider = useCallback(() => {
+        setShowJobDurationSlider(!showJobDurationSlider);
+    }, [setShowJobDurationSlider, showJobDurationSlider]);
 
     const JobDurationSwitchProps = {
         checked: showJobDurationSlider,
@@ -77,8 +82,9 @@ export default ({
     const FieldsAutocompleteProps = {
         multiple: true,
         renderInput: RenderInput("Fields"),
-        options: FIELD_OPTIONS.map((option) => option.label),
+        options: Object.keys(FIELD_OPTIONS),
         id: "fields-selector",
+        getOptionLabel: (option) => FIELD_OPTIONS[option],
         onChange: useCallback((e, fields) => fields && setFields(fields), [setFields]),
         value: fields,
     };
@@ -92,10 +98,11 @@ export default ({
     const TechsAutocompleteProps = {
         multiple: true,
         renderInput: RenderInput("Technologies"),
-        id: "techs-selector",
-        options: TECH_OPTIONS.map((option) => option.label),
+        id: "technologies-selector",
+        options: Object.keys(TECH_OPTIONS),
+        getOptionLabel: (option) => TECH_OPTIONS[option],
         onChange: useCallback((e, technologies) => technologies && setTechs(technologies), [setTechs]),
-        value: techs,
+        value: technologies,
     };
 
     const techsAutocompleteProps = useCallback(useAutocomplete({ ...TechsAutocompleteProps }), [TechsAutocompleteProps]);
@@ -109,7 +116,7 @@ export default ({
     const advancedOptionsActive = showJobDurationSlider
     || (jobType !== INITIAL_JOB_TYPE)
     || fields.length !== 0
-    || techs.length !== 0;
+    || technologies.length !== 0;
 
     const ResetButtonProps = {
         disabled: !advancedOptionsActive,

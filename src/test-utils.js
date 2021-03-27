@@ -2,6 +2,7 @@
 import React from "react";
 import { ThemeProvider } from "@material-ui/styles";
 import { Provider } from "react-redux";
+import reducer from "./reducers";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
@@ -44,6 +45,7 @@ export const testHook = (callback) => {
 /** *************** RTL *************** **/
 
 import { render as defaultRender, buildQueries, queries } from "@testing-library/react";
+import { applyMiddleware, compose, createStore } from "redux";
 
 
 const [queryDescriptionOf, , getDescriptionOf, , findDescriptionOf] = buildQueries(
@@ -80,10 +82,11 @@ const customRender = (
 export const renderWithStore = (
     ui,
     {
-        store,
+        initialState,
         ...renderOptions
     } = {}
 ) => {
+    const store = createStore(reducer, initialState, compose(applyMiddleware(thunk)));
     // eslint-disable-next-line react/prop-types
     const wrapper = ({ children }) =>
         <Provider store={store}>
@@ -111,11 +114,14 @@ export const renderWithTheme = (
 export const renderWithStoreAndTheme = (
     ui,
     {
-        store,
+        initialState,
         theme,
         ...renderOptions
     }
 ) => {
+
+    const store = createStore(reducer, initialState, compose(applyMiddleware(thunk)));
+
     // eslint-disable-next-line react/prop-types
     const wrapper = ({ children }) =>
         <ThemeProvider theme={theme}>

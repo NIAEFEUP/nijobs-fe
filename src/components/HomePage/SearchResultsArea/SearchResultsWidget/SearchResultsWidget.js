@@ -6,7 +6,7 @@ import { Grid, Paper } from "@material-ui/core";
 
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
-import { useMobile } from "../../../../utils/media-queries";
+import { useDesktop } from "../../../../utils/media-queries";
 import AbstractSearchResults from "./AbstractSearchResults";
 import Offer from "../Offer/Offer";
 
@@ -30,7 +30,7 @@ export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, of
                 spacing={0}
             >
                 <AbstractSearchResults
-                    mobile={useMobile()}
+                    mobile={!useDesktop()}
                     selectedOffer={selectedOffer}
                     setSelectedOffer={setSelectedOffer}
                     offers={offers}

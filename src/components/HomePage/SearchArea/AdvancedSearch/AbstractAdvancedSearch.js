@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import AdvancedSearchDesktop from "./AdvancedSearchDesktop";
 import AdvancedSearchMobile from "./AdvancedSearchMobile";
 
-const AbstractAdvancedSearch = ({ mobile, ...otherProps }) => (
+const AbstractAdvancedSearch = ({ mobile, onMobileClose, ...otherProps }) => (
     <React.Fragment>
         {mobile ?
             <AdvancedSearchMobile
+                onMobileClose={onMobileClose}
                 {...otherProps}
             />
             :
@@ -19,6 +20,7 @@ const AbstractAdvancedSearch = ({ mobile, ...otherProps }) => (
 
 AbstractAdvancedSearch.propTypes = {
     mobile: PropTypes.bool,
+    onMobileClose: PropTypes.func,
 };
 
 export default AbstractAdvancedSearch;

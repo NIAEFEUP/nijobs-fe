@@ -1,8 +1,5 @@
 import { act, fireEvent, screen } from "@testing-library/react";
 import React, { useCallback, useContext } from "react";
-import { applyMiddleware, compose, createStore } from "redux";
-import reducer from "../reducers";
-import thunk from "redux-thunk";
 import { renderWithStoreAndTheme } from "../test-utils";
 import UndoableActionsHandlerProvider, { UndoableActions } from "./UndoableActionsHandlerProvider";
 import { SnackbarProvider } from "notistack";
@@ -42,7 +39,7 @@ describe("UndoableActionsHandlerProvider", () => {
             );
         };
 
-        const store = createStore(reducer, { messages: { notifications: [] } }, compose(applyMiddleware(thunk)));
+        const initialState = { messages: { notifications: [] } };
         wrapper = renderWithStoreAndTheme(
             <SnackbarProvider>
                 <Notifier />
@@ -50,7 +47,7 @@ describe("UndoableActionsHandlerProvider", () => {
                     <ActionCallerTest />
                 </UndoableActionsHandlerProvider>
             </SnackbarProvider>,
-            { store, theme }
+            { initialState, theme }
         );
     });
 

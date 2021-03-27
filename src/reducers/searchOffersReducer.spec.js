@@ -21,7 +21,7 @@ describe("Search Offers Reducer", () => {
             filterJobDuration: false,
             offers: [],
             fields: [],
-            techs: [],
+            technologies: [],
             loading: false,
             error: null });
     });
@@ -31,7 +31,7 @@ describe("Search Offers Reducer", () => {
             {
                 offers: [],
             },
-            setSearchOffers([new Offer({ id: 1 }), new Offer({ id: 2 })])
+            setSearchOffers([new Offer({ _id: 1 }), new Offer({ _id: 2 })])
         );
 
         expect(state.offers[0].id).toBe(1);
@@ -100,15 +100,15 @@ describe("Search Offers Reducer", () => {
 
         expect(state.fields).toStrictEqual(["test1", "test2"]);
     });
-    it("should set advanced search techs when setTechs action is called", () => {
+    it("should set advanced search technologies when setTechs action is called", () => {
         const state = searchOffersState(
             {
-                techs: [],
+                technologies: [],
             },
             setTechs(["test1", "test2"])
         );
 
-        expect(state.techs).toStrictEqual(["test1", "test2"]);
+        expect(state.technologies).toStrictEqual(["test1", "test2"]);
     });
     it("should set job duration toggle when setJobDurationToggle action is called", () => {
         const state = searchOffersState(

@@ -4,17 +4,55 @@ import Offer from "../Offer/Offer";
 import OfferItem from "../Offer/OfferItem";
 
 import {
+    Button,
     Divider,
     List,
+    ListItem,
+    makeStyles,
 } from "@material-ui/core";
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
+import { Tune } from "@material-ui/icons";
+import clsx from "clsx";
 
-const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
+const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
+    root: {
+        padding: theme.spacing(3, "25%", 1, "25%"),
+    },
+    filtersButtonEnabled: {
+        backgroundColor: theme.palette.secondary.main,
+    },
+}));
+
+const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
+    const classes = useAdvancedSearchButtonStyles();
+    return (
+        <ListItem className={classes.root}>
+            <Button
+                variant="contained"
+                color="primary"
+                className={clsx({ [classes.filtersButtonEnabled]: enabled })}
+                fullWidth
+                startIcon={<Tune />}
+                onClick={onClick}
+                {...props}
+            >
+                {`${!enabled ? "Show" : "Hide"} Filters`}
+            </Button>
+        </ListItem>
+    );
+};
+
+ToggleFiltersButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
+    enabled: PropTypes.bool.isRequired,
+};
+
+const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer, showSearchFilters, toggleShowSearchFilters }) => {
     const classes = useSearchResultsWidgetStyles();
 
     if (loading) return (
-        <div className={classes.fullHeight}>
+        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
                 <OfferItem
                     loading={loading}
@@ -32,15 +70,26 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
         </div>
     );
 
+    const handleOfferSelection = (...args) => {
+        toggleShowSearchFilters(false);
+        setSelectedOffer(...args);
+    };
+
     return (
-        <div className={classes.fullHeight}>
+        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
             <List disablePadding>
+                <ToggleFiltersButton
+                    key="toggle-filters-button"
+                    enabled={showSearchFilters}
+                    onClick={() => toggleShowSearchFilters()}
+                />
                 {offers.map((offer, i) => (
                     <React.Fragment key={offer.id}>
                         {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}
-                            setSelectedOffer={setSelectedOffer}
+                            selectedOffer={selectedOffer}
+                            setSelectedOffer={handleOfferSelection}
                             loading={loading}
                         />
                     </React.Fragment>
@@ -53,7 +102,10 @@ const OfferItemsContainer = ({ offers, loading, setSelectedOffer }) => {
 OfferItemsContainer.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
+    selectedOffer: PropTypes.instanceOf(Offer),
     setSelectedOffer: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default OfferItemsContainer;

@@ -1,22 +1,19 @@
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { renderWithStoreAndTheme, fireEvent, waitFor } from "../../../test-utils";
-import thunk from "redux-thunk";
 import CompanyApplicationForm from "./CompanyApplicationForm";
 import { createMuiTheme } from "@material-ui/core";
-import { createStore, applyMiddleware, compose } from "redux";
-import reducer from "../../../reducers";
 import userEvent from "@testing-library/user-event";
 
 describe("CompanyApplicationForm", () => {
 
-    const store = createStore(reducer, {}, compose(applyMiddleware(thunk)));
+    const initialState = {};
 
     const theme = createMuiTheme({});
 
     describe("interaction", () => {
         it("should fail validation if invalid email", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const input = wrapper.getByLabelText("Email");
 
             // Empty value
@@ -40,7 +37,7 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Email"))).toHaveTextContent("\u200B");
         });
         it("should fail validation if invalid password", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const input = wrapper.getByLabelText("Password");
 
             // Invalid value
@@ -60,7 +57,7 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Password"))).toHaveTextContent("\u200B");
         });
         it("should fail validation if passwords don't match", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const passwordInput = wrapper.getByLabelText("Password");
 
             // Invalid value
@@ -82,7 +79,7 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Confirm Password"))).toHaveTextContent("\u200B");
         });
         it("should fail validation if invalid company name", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const input = wrapper.getByLabelText("Company Name");
 
             // Invalid value
@@ -108,7 +105,7 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Company Name"))).toHaveTextContent("\u200B");
         });
         it("should fail validation if invalid motivation", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const input = wrapper.getByLabelText("Motivation");
 
             // Invalid value
@@ -128,7 +125,7 @@ describe("CompanyApplicationForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation"))).toHaveTextContent("15/1500");
         });
         it("should show a char counter for motivation textarea", async () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const input = wrapper.getByLabelText("Motivation");
 
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
@@ -149,7 +146,7 @@ describe("CompanyApplicationForm", () => {
             // Simulate network problem
             fetch.mockAbort();
 
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const companyNameInput = wrapper.getByLabelText("Company Name");
             const emailInput = wrapper.getByLabelText("Email");
             const passwordInput = wrapper.getByLabelText("Password");
@@ -172,7 +169,7 @@ describe("CompanyApplicationForm", () => {
 
         it("should reset fields and errors on reset button press", async () => {
 
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
             const companyNameInput = wrapper.getByLabelText("Company Name");
             const emailInput = wrapper.getByLabelText("Email");
             const passwordInput = wrapper.getByLabelText("Password");
@@ -246,7 +243,7 @@ describe("CompanyApplicationForm", () => {
         const confirmPassword = "password123";
         const motivation = "valid motivation text";
 
-        const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+        const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
         const companyNameInput = wrapper.getByLabelText("Company Name");
         const emailInput = wrapper.getByLabelText("Email");
         const passwordInput = wrapper.getByLabelText("Password");
@@ -305,7 +302,7 @@ describe("CompanyApplicationForm", () => {
 
         const wrapper = renderWithStoreAndTheme(
             <CompanyApplicationForm toggleConfirmationModal={toggleConfirmationModalMock} />,
-            { store, theme }
+            { initialState, theme }
         );
         const companyNameInput = wrapper.getByLabelText("Company Name");
         const emailInput = wrapper.getByLabelText("Email");
@@ -334,7 +331,7 @@ describe("CompanyApplicationForm", () => {
 
         const wrapper = renderWithStoreAndTheme(
             <CompanyApplicationForm />,
-            { store, theme }
+            { initialState, theme }
         );
         const passwordInput = wrapper.getByLabelText("Password");
         const confirmPasswordInput = wrapper.getByLabelText("Confirm Password");
@@ -370,7 +367,7 @@ describe("CompanyApplicationForm", () => {
     it("should toggle the why-modal on respective link click", async () => {
 
 
-        const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { store, theme });
+        const wrapper = renderWithStoreAndTheme(<CompanyApplicationForm />, { initialState, theme });
         const whyLink = wrapper.getByText("Why do I need to apply?");
 
         expect(wrapper.queryByRole("dialog")).not.toBeInTheDocument();

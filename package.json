@@ -8,7 +8,7 @@
   "scripts": {
     "start": "HTTPS=true node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest --coverage --verbose",
+    "test": "node scripts/test.js --coverage --verbose",
     "test-ci": "jest --coverage --verbose",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",

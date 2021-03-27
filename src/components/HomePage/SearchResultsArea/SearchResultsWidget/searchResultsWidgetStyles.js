@@ -8,9 +8,12 @@ export default makeStyles((theme) => ({
     fullHeight: {
         height: "100%",
     },
+    fullWidth: {
+        width: "100%",
+    },
     searchResults: {
         boxSizing: "border-box",
-        minHeight: "100vh",
+        height: "100vh",
         width: "100%",
         margin: "0 auto",
         "& ol": {
@@ -22,22 +25,34 @@ export default makeStyles((theme) => ({
         color: theme.palette.secondary.main,
     },
     searchArea: {
-        width: "80%",
+        width: "90%",
     },
     reviseCriteriaErrorMessage: {
         margin: theme.spacing(4, 0),
         textAlign: "center",
     },
     noOffersColumn: {
+        flexGrow: 1,
         height: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
     },
+    offerItemsContainer: {
+        display: "flex",
+        justifyContent: "space-between",
+        width: "100%",
+        height: "100%",
+        overflow: "auto",
+    },
     offerBodyContainer: {
         height: "100%",
         paddingLeft: "2em",
+        overflow: "auto",
+    },
+    offerDescription: {
+
     },
     searchOfferErrorContainer: {
         height: "100%",
@@ -46,10 +61,20 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         justifyContent: "center",
     },
-    offerContent: ({ isMobile }) => ({
-        padding: !isMobile && theme.spacing(3),
-        height: "100%",
+    offerHeader: ({ isMobile }) => ({
+        position: "sticky",
+        top: 0,
+        backgroundColor: "white",
+        paddingBottom: theme.spacing(4),
+        paddingTop: !isMobile ? theme.spacing(3) : 0,
     }),
+    offerContent: ({ isMobile }) => {
+        const paddingRules = isMobile ? { padding: 0 } : { padding: theme.spacing(3), paddingTop: 0 };
+        return {
+            ...paddingRules,
+            height: "100%",
+        };
+    },
     unselectedOffer: {
         height: "100%",
         display: "flex",

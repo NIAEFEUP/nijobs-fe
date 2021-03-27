@@ -7,11 +7,11 @@ import SearchArea from "../../SearchArea/SearchArea";
 import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import useToggle from "../../../../hooks/useToggle";
-import { ArrowBackIos, WorkOff } from "@material-ui/icons";
+import { NavigateBefore, WorkOff } from "@material-ui/icons";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails }) => (
-    <Grid container>
-        <Grid xs={12} item>
+const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
+    <Grid container className={classes.fullHeight}>
+        <Grid xs={12} item className={classes.offerItemsContainer}>
             {noOffers ?
                 <div id="no_offers_container" className={classes.noOffersColumn}>
                     <WorkOff className={classes.errorLoadingOffersIcon} />
@@ -25,6 +25,8 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                     loading={offersLoading}
                     setSelectedOffer={showOfferDetails}
                     noOffers={noOffers}
+                    showSearchFilters={showSearchFilters}
+                    toggleShowSearchFilters={toggleShowSearchFilters}
                 />
             }
         </Grid>
@@ -33,10 +35,18 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
 
 OffersList.propTypes = {
     noOffers: PropTypes.bool.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string),
+    classes: PropTypes.shape({
+        reviseCriteriaErrorMessage: PropTypes.string.isRequired,
+        fullHeight: PropTypes.string.isRequired,
+        errorLoadingOffersIcon: PropTypes.string.isRequired,
+        noOffersColumn: PropTypes.string.isRequired,
+        offerItemsContainer: PropTypes.string.isRequired,
+    }),
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     showOfferDetails: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export const OfferViewer = ({ open, toggleOpenPreview, offerContentWrapperClassName, selectedOffer, offersLoading }) => (
@@ -50,7 +60,7 @@ export const OfferViewer = ({ open, toggleOpenPreview, offerContentWrapperClassN
                 onClick={toggleOpenPreview}
                 color="secondary"
             >
-                <ArrowBackIos />
+                <NavigateBefore />
             </IconButton>
                     Offer Details
         </DialogTitle>
@@ -70,7 +80,9 @@ OfferViewer.propTypes = {
     offersLoading: PropTypes.bool,
 };
 
-const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selectedOffer, noOffers }) => {
+const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
+    noOffers, showSearchFilters, toggleShowSearchFilters,
+}) => {
     const classes = useSearchResultsWidgetStyles();
     const [openPreview, toggleOpenPreview] = useToggle(false);
 
@@ -83,6 +95,8 @@ const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selected
         noOffersColumn: classes.noOffersColumn,
         errorLoadingOffersIcon: classes.errorLoadingOffersIcon,
         reviseCriteriaErrorMessage: classes.reviseCriteriaErrorMessage,
+        fullHeight: classes.fullHeight,
+        offerItemsContainer: classes.offerItemsContainer,
     };
 
     return (
@@ -93,14 +107,29 @@ const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selected
                 offers={offers}
                 offersLoading={offersLoading}
                 showOfferDetails={showOfferDetails}
+                showSearchFilters={showSearchFilters}
+                toggleShowSearchFilters={toggleShowSearchFilters}
             />
-            <OfferViewer
-                open={openPreview}
-                toggleOpenPreview={toggleOpenPreview}
-                offerContentWrapperClassName={classes.offerBodyContainer}
-                selectedOffer={selectedOffer}
-                offersLoading={offersLoading}
-            />
+            {showSearchFilters ?
+                <SearchArea
+                    advanced
+                    onSubmit={() => {
+                        toggleShowSearchFilters(false);
+                    }}
+                    onMobileClose={() => {
+                        toggleShowSearchFilters(false);
+                    }}
+                />
+                :
+                <OfferViewer
+                    open={openPreview}
+                    toggleOpenPreview={toggleOpenPreview}
+                    offerContentWrapperClassName={classes.offerBodyContainer}
+                    selectedOffer={selectedOffer}
+                    offersLoading={offersLoading}
+                />
+            }
+
         </React.Fragment>
     );
 };
@@ -111,6 +140,8 @@ SearchResultsMobile.propTypes = {
     offersLoading: PropTypes.bool,
     setSelectedOffer: PropTypes.func.isRequired,
     noOffers: PropTypes.bool.isRequired,
+    showSearchFilters: PropTypes.bool.isRequired,
+    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsMobile;
