@@ -81,6 +81,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className={classes.form}
+                aria-label="Company Application Form"
             >
                 <Wrap
                     Wrapper={CenteredComponent}

@@ -28,9 +28,10 @@ import useComponentController from "../../../hooks/useComponentController";
 
 export const AdvancedSearchControllerContext = React.createContext({});
 
-const AdvancedSearchController = ({
-    enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration, jobMaxDuration, setJobDuration, jobType,
-    setJobType, fields, setFields, technologies, setTechs, resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+export const AdvancedSearchController = ({
+    enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
+    jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
+    resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
 }) => {
 
     const advancedSearchProps = useAdvancedSearch({
@@ -72,6 +73,8 @@ const AdvancedSearchController = ({
                 ...advancedSearchProps,
                 submitForm,
                 onMobileClose,
+                searchValue,
+                setSearchValue,
             },
         },
     };
@@ -95,11 +98,10 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         {
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
-            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+            resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
         },
         AdvancedSearchControllerContext
     );
-
 
     return (
         <ContextProvider {...contextProviderProps}>
@@ -108,6 +110,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                 elevation={8}
             >
                 <form
+                    aria-label="Search Area"
                     onSubmit={submitForm}
                     autoComplete="off"
                     id={"search_form"}

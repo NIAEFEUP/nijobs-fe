@@ -36,7 +36,10 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
             onClick={(e) => e.stopPropagation()} // Required so that a click does not trigger selecting of rows
             open={open}
         >
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+                aria-label="Confirm Application Rejection Form"
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <DialogTitle id="form-dialog-title">Reject</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

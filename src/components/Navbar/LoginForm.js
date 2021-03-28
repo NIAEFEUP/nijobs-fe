@@ -66,6 +66,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
     return (
         <Dialog open={open} aria-labelledby="form-dialog-title" onClose={handleClose}>
             <form
+                aria-label="Login"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <DialogTitle id="form-dialog-title">Login</DialogTitle>

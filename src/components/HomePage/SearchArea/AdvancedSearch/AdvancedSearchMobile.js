@@ -71,7 +71,7 @@ const AdvancedSearchMobile = () => {
 
     const [shouldSubmitForm, setShouldSubmitForm] = useState(true);
 
-    const { advancedSearch, toggleAdvancedOptions, searchValue, submitForm,
+    const { advancedOptions, toggleAdvancedOptions, searchValue, submitForm,
         setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
         JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
         onMobileClose,
@@ -90,19 +90,21 @@ const AdvancedSearchMobile = () => {
 
     const handleCloseClick = () => {
         setShouldSubmitForm(false);
-        if (onMobileClose) onMobileClose();
-        close();
         toggleAdvancedOptions();
     };
 
-    const handleExit = () => shouldSubmitForm && submitForm();
+    const handleExit = () => {
+        if (shouldSubmitForm) submitForm();
+        if (onMobileClose) onMobileClose();
+
+    };
 
     const classes = useSearchAreaStyles();
 
     return (
         <Dialog
             fullScreen
-            open={advancedSearch}
+            open={advancedOptions}
             onEnter={() => setShouldSubmitForm(true)}
             onExited={handleExit}
         >

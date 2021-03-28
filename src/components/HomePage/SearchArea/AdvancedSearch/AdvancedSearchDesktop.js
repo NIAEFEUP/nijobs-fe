@@ -111,18 +111,4 @@ const AdvancedSearchDesktop = () => {
     );
 };
 
-AdvancedSearchDesktop.propTypes = {
-    open: PropTypes.bool.isRequired,
-    resetAdvancedSearch: PropTypes.func.isRequired,
-    FieldsSelectorProps: PropTypes.object.isRequired,
-    TechsSelectorProps: PropTypes.object.isRequired,
-    JobTypeSelectorProps: PropTypes.object.isRequired,
-    JobDurationSwitchProps: PropTypes.object.isRequired,
-    ResetButtonProps: PropTypes.object.isRequired,
-    JobDurationSliderText: PropTypes.string.isRequired,
-    JobDurationCollapseProps: PropTypes.object.isRequired,
-    JobDurationSwitchLabel: PropTypes.string.isRequired,
-    JobDurationSliderProps: PropTypes.object.isRequired,
-};
-
 export default AdvancedSearchDesktop;

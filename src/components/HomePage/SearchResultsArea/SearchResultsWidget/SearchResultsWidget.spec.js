@@ -1,12 +1,11 @@
 import React from "react";
-import SearchResultsWidget from "./SearchResultsWidget";
+import SearchResultsWidget, { SearchResultsControllerContext } from "./SearchResultsWidget";
 import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMuiTheme } from "@material-ui/core";
 import Offer from "../Offer/Offer";
 import { fireEvent } from "@testing-library/dom";
 
 describe("SearchResults", () => {
-    const setRef = () => {};
     const theme = createMuiTheme();
     const initialState = {
         offerSearch: {
@@ -44,9 +43,9 @@ describe("SearchResults", () => {
     it("should display OfferItemsContainer", () => {
 
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             { initialState, theme }
         );
 
@@ -65,9 +64,9 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             { initialState: initialStateWithError, theme }
         );
 
@@ -86,9 +85,9 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             { initialState: initialStateWithError, theme }
         );
 
@@ -109,9 +108,9 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             { initialState: initialStateWithoutOffers, theme }
         );
 
@@ -124,9 +123,9 @@ describe("SearchResults", () => {
 
     it("should toggle searchArea when 'show filters' is toggled", () => {
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             { initialState, theme }
         );
 
@@ -145,9 +144,9 @@ describe("SearchResults", () => {
         fetch.mockResponse(JSON.stringify(initialState.offerSearch.offers));
 
         renderWithStoreAndTheme(
-            <SearchResultsWidget
-                setRef={setRef}
-            />,
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
             {
                 initialState: {
                     ...initialState,
