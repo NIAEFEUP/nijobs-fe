@@ -35,21 +35,6 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                     <Typography>
                         As a Student, you can search for job offers according to your interests.
                     </Typography>
-
-                    {!isLoggedIn &&
-                    <>
-                        <Typography>
-                            Are you a student?
-                        </Typography>
-                        <Button
-                            variant="text"
-                            color="primary"
-                            onClick={toggleLoginModal}
-                        >
-                        Login
-                        </Button>
-                    </>
-                    }
                 </div>
 
             </div>
