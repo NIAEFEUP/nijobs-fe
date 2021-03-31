@@ -4,6 +4,13 @@ import { RouterLink } from "../../../utils";
 import { connect } from "react-redux";
 import { toggleLoginModal } from "../../../actions/navbarActions";
 
+import useProductDescriptionStyles from "./productDescriptionStyles.js";
+
+import { useDesktop } from "../../../utils/media-queries";
+
+import { ReactComponent as CompanySvg } from "./resources/company.svg";
+import { ReactComponent as StudentSvg } from "./resources/student.svg";
+
 import {
     Typography,
     Button,
@@ -13,28 +20,71 @@ import useSession from "../../../hooks/useSession";
 
 export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
     const { isLoggedIn } = useSession();
+
+    const classes = useProductDescriptionStyles({ isMobile: !useDesktop() });
+
     return (
         <div
             ref={ref}
-            style={{ height: "500px" }}
+            className={classes.productDescription}
         >
-            <Typography>
-                Other content, like what is this for and cool vector and stock images with no copyright
-            </Typography>
+            <div className={classes.productDescriptionCol}>
+                <StudentSvg />
 
-            {!isLoggedIn &&
-            <>
-                Are you a company?
-                <Button
-                    variant="text"
-                    color="primary"
-                    onClick={toggleLoginModal}
-                >
-                Login
-                </Button>
-                <RouterLink to="/apply/company">Join Us</RouterLink>
-            </>
-            }
+                <div className={classes.productDescriptionInfo}>
+                    <Typography>
+                        As a Student, you can search for job offers according to your interests.
+                    </Typography>
+
+                    {!isLoggedIn &&
+                    <>
+                        <Typography>
+                            Are you a student?
+                        </Typography>
+                        <Button
+                            variant="text"
+                            color="primary"
+                            onClick={toggleLoginModal}
+                        >
+                        Login
+                        </Button>
+                    </>
+                    }
+                </div>
+
+            </div>
+            <div className={classes.productDescriptionCol}>
+                <CompanySvg />
+
+                <div className={classes.productDescriptionInfo}>
+                    <Typography>
+                        As a Company, you can advertise yout job opportunities to students!
+                    </Typography>
+
+                    {!isLoggedIn &&
+                    <>
+                        <Typography>
+                            Are you a company?
+                        </Typography>
+                        <Button
+                            variant="text"
+                            color="primary"
+                            onClick={toggleLoginModal}
+                        >
+                        Login
+                        </Button>
+                        <Button
+                            variant="text"
+                            color="primary"
+                        >
+                            <RouterLink className={classes.productDescriptionAnchor} to="/apply/company">Join Us</RouterLink>
+                        </Button>
+                    </>
+                    }
+                </div>
+
+            </div>
+
         </div>
     );
 });
