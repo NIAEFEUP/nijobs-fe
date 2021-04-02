@@ -63,7 +63,7 @@ const TableRow = ({
 TableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
+    payload: RowPayload,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,

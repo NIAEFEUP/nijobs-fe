@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -8,6 +8,7 @@ import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
+import { OfferTitleFilter, publishDateFilter } from "../Filters/index";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -42,7 +43,15 @@ const sorters = {
 };
 
 const filters = [
-
+    { id: "offer-title-filter", render: OfferTitleFilter },
+    { id: "publish-date-filter",
+        render: publishDateFilter,
+        props: {
+            onChange: (date, filtersContext, setFiltersContext) => {
+                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+            },
+        },
+    },
 ];
 
 const RowActions = () => (
