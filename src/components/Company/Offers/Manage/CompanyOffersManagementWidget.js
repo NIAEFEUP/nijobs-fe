@@ -8,7 +8,7 @@ import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
-import { OfferTitleFilter, publishDateFilter } from "../Filters/index";
+import { OfferTitleFilter, publishDateFilter, publishEndDateFilter } from "../Filters/index";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -46,6 +46,14 @@ const filters = [
     { id: "offer-title-filter", render: OfferTitleFilter },
     { id: "publish-date-filter",
         render: publishDateFilter,
+        props: {
+            onChange: (date, filtersContext, setFiltersContext) => {
+                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+            },
+        },
+    },
+    { id: "publish-end-date-filter",
+        render: publishEndDateFilter,
         props: {
             onChange: (date, filtersContext, setFiltersContext) => {
                 setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));

@@ -13,7 +13,6 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import OfferPage, { OfferPageController, OfferPageControllerContext } from "./pages/OfferPage";
 import { ProtectedRoute, Route } from "./utils";
-<<<<<<< HEAD
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import {
     FinishCompanyRegistrationController,
@@ -33,10 +32,6 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
  */
 
 const shouldShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
-=======
-import PageLayout from "./components/PageLayout";
-import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
->>>>>>> Refactored some Tables Components and created simple table for offers
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
