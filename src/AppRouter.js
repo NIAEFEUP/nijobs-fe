@@ -6,6 +6,7 @@ import { BrowserRouter, Switch } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage from "./pages/CompanyApplicationPage";
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
+import CreateOfferPage from "./pages/CreateOfferPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
@@ -40,7 +41,15 @@ const AppRouter = () => (
                 <PageLayout pageTitle="Review Applications">
                     <ApplicationsReviewPage />
                 </PageLayout>
-            </ProtectedRoute>
+            </ProtectedRoute> 
+            <Route
+                exact
+                path="/offer/new"
+            >
+                <PageLayout pageTitle="Create Offer">
+                    <CreateOfferPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >
