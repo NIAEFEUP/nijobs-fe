@@ -74,6 +74,7 @@ const FilterMenu = ({ anchorEl, onClose, filters,
                 className={classes.resetBtn}
                 color="secondary"
                 onClick={resetFilters}
+                aria-label="Reset"
             >
                 Reset
             </Button>

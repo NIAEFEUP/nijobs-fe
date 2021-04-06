@@ -68,6 +68,7 @@ const ConfirmRejectDialog = ({ open, handleReject, cancelAction, rejectReason, s
                     <Button
                         type="submit"
                         color="primary"
+                        aria-label="Reject"
                         disabled={rejectReason === "" || Object.keys(errors).length !== 0}
                     >
                         Reject
