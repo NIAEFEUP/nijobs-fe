@@ -19,12 +19,13 @@ const encodeFilters = (filters) => {
     return encodedValues.join("&");
 };
 
-export const searchApplications = async (filters) => {
+export const searchApplications = async (filters, { signal } = {}) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
+            signal,
         });
         const json = await res.json();
 
