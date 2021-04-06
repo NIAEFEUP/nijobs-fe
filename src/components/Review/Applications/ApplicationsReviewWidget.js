@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Paper, Typography,
 } from "@material-ui/core";
@@ -12,6 +12,7 @@ import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
+import { cancelablePromise } from "../../../utils";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -53,28 +54,25 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
 });
 
 const ApplicationsReviewWidget = () => {
-    const _amMounted = useRef(); // Prevents setState calls from happening after unmount
+    // const _amMounted = useRef(); // Prevents setState calls from happening after unmount
     const [rows, setRows] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        _amMounted.current = true;
-        searchApplications()
+
+        const promise = cancelablePromise(searchApplications())
             .then((rows) => {
-                if (_amMounted.current) {
-                    const fetchedRows = rows.applications.reduce((rows, row) => {
-                        rows[row.id] = generateRow(row);
-                        return rows;
-                    }, {});
-                    setRows(fetchedRows);
-                }
+                const fetchedRows = rows.applications.reduce((rows, row) => {
+                    rows[row.id] = generateRow(row);
+                    return rows;
+                }, {});
+                setRows(fetchedRows);
             })
             .catch(() => {
-                if (_amMounted.current)
-                    setError("UnexpectedError");
+                setError("UnexpectedError");
             });
         return () => {
-            _amMounted.current = false;
+            promise.cancel();
         };
     }, []);
 
