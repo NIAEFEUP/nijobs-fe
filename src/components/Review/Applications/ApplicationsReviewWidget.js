@@ -12,7 +12,6 @@ import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
-import { cancelablePromise } from "../../../utils";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -54,13 +53,12 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
 });
 
 const ApplicationsReviewWidget = () => {
-    // const _amMounted = useRef(); // Prevents setState calls from happening after unmount
     const [rows, setRows] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
 
-        const promise = cancelablePromise(searchApplications())
+        const request = searchApplications()
             .then((rows) => {
                 const fetchedRows = rows.applications.reduce((rows, row) => {
                     rows[row.id] = generateRow(row);
@@ -72,7 +70,7 @@ const ApplicationsReviewWidget = () => {
                 setError("UnexpectedError");
             });
         return () => {
-            promise.cancel();
+            request.cancel();
         };
     }, []);
 
