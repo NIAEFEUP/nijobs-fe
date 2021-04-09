@@ -1,4 +1,4 @@
-import { testHook } from "../../../../test-utils";
+import { testHook, act } from "../../../../test-utils";
 import useAdvancedSearch from "./useAdvancedSearch";
 import FIELD_OPTIONS from "./FieldOptions";
 import TECH_OPTIONS from "./TechOptions";
@@ -213,7 +213,7 @@ describe("useAdvancedSearch", () => {
         expect(advancedOptionsActive).toBe(true);
     });
 
-    it("should return a reset function that resets the fields", () => {
+    it("should return a reset function that resets the fields", async () => {
         const resetAdvancedSearchFields = jest.fn();
         testHook(() => {
             useAdvancedSearchProps = useAdvancedSearch({
@@ -224,7 +224,9 @@ describe("useAdvancedSearch", () => {
         });
 
         const { resetAdvancedSearch } = useAdvancedSearchProps;
-        resetAdvancedSearch();
+        await act(() => {
+            resetAdvancedSearch();
+        });
         expect(resetAdvancedSearchFields).toHaveBeenCalledTimes(1);
     });
 });

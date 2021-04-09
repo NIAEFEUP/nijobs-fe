@@ -6,7 +6,7 @@ import { SnackbarProvider } from "notistack";
 import Notifier from "../components/Notifications/Notifier";
 import { createMuiTheme } from "@material-ui/core";
 
-jest.useFakeTimers();
+jest.useFakeTimers("modern");
 
 describe("UndoableActionsHandlerProvider", () => {
 
@@ -55,9 +55,7 @@ describe("UndoableActionsHandlerProvider", () => {
 
         expect(screen.queryByText("This action was executed")).not.toBeInTheDocument();
 
-        await act(async () => {
-            await fireEvent.click(wrapper.getByTestId("action-generator-btn"));
-        });
+        await fireEvent.click(wrapper.getByTestId("action-generator-btn"));
 
         expect(screen.getByText("This action was executed")).toBeInTheDocument();
 

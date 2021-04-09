@@ -155,10 +155,11 @@ const MultiOptionAutocomplete = (props) => {
                             key={getOptionLabel(option)}
                             label={getOptionLabel(option)}
                             size={size}
+                            data-testid="chip-option"
                             {...getTagProps({ index })}
                             {...ChipProps}
-                        />
-                    ))}
+                        />)
+                    )}
                 </div>
             </div>
             {popupOpen && anchorEl ? (

@@ -45,7 +45,7 @@ const SelectFilter = React.forwardRef(({
             }}
         >
             {options.map((option) => (
-                <MenuItem key={option} value={option}>
+                <MenuItem key={option} value={option} aria-label={option}>
                     {option}
                 </MenuItem>
             ))}

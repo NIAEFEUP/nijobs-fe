@@ -1,239 +1,284 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import AdvancedSearchMobile from "./AdvancedSearchMobile";
-import {
-    Collapse,
-    TextField,
-    MenuItem,
-    FormControlLabel,
-    Switch,
-    Slider,
-    FormHelperText,
-    Button,
-    Dialog,
-    DialogTitle,
-    IconButton,
-} from "@material-ui/core";
 import JobOptions from "./JobOptions";
-import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
-import SearchBar from "../SearchBar";
+import { AdvancedSearchController, AdvancedSearchControllerContext } from "../SearchArea";
+import useComponentController from "../../../../hooks/useComponentController";
+import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
+import { fireEvent } from "@testing-library/dom";
+import FieldOptions from "./FieldOptions";
+import TechOptions from "./TechOptions";
+import { render, screen } from "../../../../test-utils";
 
-describe("AdvancedSearchDesktop", () => {
+
+const AdvancedSearchWrapper = ({
+    children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
+    jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE, setJobDuration, setJobType, fields = [], setFields,
+    technologies = [], setTechs, resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
+    submitForm,
+}) => {
+    const {
+        ContextProvider,
+        contextProviderProps,
+    } = useComponentController(
+        AdvancedSearchController,
+        {
+            enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
+            jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
+            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
+            submitForm,
+        },
+        AdvancedSearchControllerContext
+    );
+
+    return (
+        <ContextProvider {...contextProviderProps}>
+            {children}
+        </ContextProvider>
+    );
+};
+
+describe("AdvancedSearchMobile", () => {
     describe("render", () => {
-        it("should render a Dialog", () => {
-            const openWrapper = shallow(<AdvancedSearchMobile open />);
-            expect(openWrapper.find(Dialog).first().prop("open")).toBe(true);
-
-            const closedWrapper = shallow(<AdvancedSearchMobile open={false} />);
-            expect(closedWrapper.find(Dialog).first().prop("open")).toBe(false);
-        });
 
         it("should render a dialog title with a button to close", () => {
+            render(
+                <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
+            );
+
+            expect(screen.getByText("Advanced Search")).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "back" })).toBeInTheDocument();
 
         });
 
         it("should render a SearchBar", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open />);
-            expect(wrapper.find(SearchBar).exists()).toBe(true);
+            render(
+                <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
+            );
+
+            expect(screen.getByLabelText("Search")).toBeInTheDocument();
         });
 
         it("should render a job selector with all job types", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open />);
-            expect(wrapper.find(TextField).contains(JobOptions.map(({ value, label }) => (
-                <MenuItem
-                    key={value}
-                    value={value}
+
+            render(
+                <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
+            );
+
+            fireEvent.mouseDown(screen.getByLabelText("Job Type"));
+            expect(screen.getAllByRole("option")).toHaveLength(JobOptions.length);
+            JobOptions.forEach(({ label: jobOption }) => {
+                try {
+                    expect(screen.getByRole("option", { name: jobOption })).toBeInTheDocument();
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error(`Could not find option: ${jobOption}`);
+                    throw err;
+                }
+            });
+        });
+
+        it("should toggle job duration slider (on)", () => {
+            const setShowJobDurationSliderMock = jest.fn();
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    jobMinDuration={1}
+                    jobMaxDuration={2}
+                    showJobDurationSlider={false}
+                    setShowJobDurationSlider={setShowJobDurationSliderMock}
                 >
-                    {label}
-                </MenuItem>
-            ))));
-        });
-
-        it("should contain a job duration toggle", () => {
-            const wrapper = shallow(<AdvancedSearchMobile open JobDurationSwitchLabel="test" />);
-            expect(wrapper.find(FormControlLabel).prop("control")).toEqual(<Switch />);
-            expect(wrapper.find(FormControlLabel).prop("label")).toEqual("test");
-        });
-
-        it("should contain a collapse to show the job duration slider", () => {
-
-            const MultiOptionAutocompleteProps = {
-                multiple: true,
-                renderInput: () => {},
-                options: [],
-                id: "fields-selector",
-                onChange: () => {},
-                value: [1, 2],
-            };
-            const autocompleteProps = {
-                getRootProps: () => {},
-                getInputProps: () => {},
-                getInputLabelProps: () => {},
-                getClearProps: () => {},
-                getPopupIndicatorProps: () => {},
-                getTagProps: () => {},
-                getListboxProps: () => {},
-                getOptionProps: () => {},
-                value: [1, 2],
-            };
-
-            const SelectorProps = {
-                ...MultiOptionAutocompleteProps,
-                autocompleteProps: autocompleteProps,
-            };
-
-
-            const wrapper = mount(
-                <AdvancedSearchMobile
-                    open
-                    JobDurationCollapseProps={{ in: true }}
-                    FieldsSelectorProps={SelectorProps}
-                    TechsSelectorProps={SelectorProps}
-                    JobDurationSliderText="test"
-                />
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            expect(wrapper.find(Collapse).first().prop("in")).toBe(true);
-            expect(wrapper.find(Collapse).first().find(Slider).exists()).toBe(true);
-            expect(wrapper.find(Collapse).first().find(FormHelperText).prop("children")).toEqual("test");
+            expect(screen.getByText("Job Duration - 1-2 month(s)")).not.toBeVisible();
+            fireEvent.click(screen.getByLabelText("Filter Job Duration"));
+            expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(true);
+            // Can't test that element is visible now (after toggling), since we can't emulate redux logic, wihtout having the whole tree,
+            // So, I'll just assert that when showJobDurationSlider=true, it shows correctly in the next test
         });
 
-        it("should contain a multiautocomplete for fields", () => {
-            const wrapper = shallow(
-                <AdvancedSearchMobile open />
+        it("should toggle job duration slider (off)", () => {
+            const setShowJobDurationSliderMock = jest.fn();
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    jobMinDuration={1}
+                    jobMaxDuration={2}
+                    showJobDurationSlider={true}
+                    setShowJobDurationSlider={setShowJobDurationSliderMock}
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            expect(wrapper.find({ _id: "fields_selector" }).find(MultiOptionAutocomplete).exists()).toBe(true);
+
+            expect(screen.getByText("Job Duration - 1-2 month(s)")).toBeVisible();
+            fireEvent.click(screen.getByLabelText("Filter Job Duration"));
+            expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(false);
         });
 
-        it("should contain a multiautocomplete for technologies", () => {
-            const wrapper = shallow(
-                <AdvancedSearchMobile open />
+        it("should render a fields selector with all field types", () => {
+
+            render(
+                <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            expect(wrapper.find({ _id: "techs_selector" }).find(MultiOptionAutocomplete).exists()).toBe(true);
+            fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
+            expect(screen.getAllByRole("option")).toHaveLength(Object.keys(FieldOptions).length);
+            Object.values(FieldOptions).forEach((fieldOption) => {
+                try {
+                    expect(screen.getByRole("option", { name: fieldOption })).toBeInTheDocument();
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error(`Could not find option: ${fieldOption}`);
+                    throw err;
+                }
+            });
         });
 
-        it("should contain a button for resetting the fields", () => {
-            const resetFn = () => {};
-            const wrapper = shallow(
-                <AdvancedSearchMobile
-                    open
-                    resetAdvancedSearch={resetFn}
-                />
+        it("should render a technologies selector with all technology types", () => {
+
+            render(
+                <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            expect(wrapper.find({ _id: "reset_btn" }).find(Button).exists()).toBe(true);
+            fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
+            expect(screen.getAllByRole("option")).toHaveLength(Object.keys(TechOptions).length);
+            Object.values(TechOptions).forEach((technologyOption) => {
+                try {
+                    expect(screen.getByRole("option", { name: technologyOption })).toBeInTheDocument();
+                } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error(`Could not find option: ${technologyOption}`);
+                    throw err;
+                }
+            });
         });
 
+        it("should disable reset button if no advanced field is set", () => {
+
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
+            );
+
+            expect(screen.getByRole("button", { name: "Reset" })).toBeDisabled();
+        });
+
+        it("should enable reset button if some advanced field is set", () => {
+
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    fields={[Object.keys(FieldOptions)[0]]}
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
+            );
+
+            expect(screen.getByRole("button", { name: "Reset" })).not.toBeDisabled();
+        });
     });
 
     describe("interaction", () => {
-        it("should close the advanced search when the close button is clicked", () => {
-            const setSearchValue = () => {};
-            const close = jest.fn();
 
-            const wrapper = shallow(
-                <AdvancedSearchMobile
-                    open
-                    setSearchValue={setSearchValue}
-                    close={close}
-                />
+        it("should change fields when selecting options", () => {
+
+            const setFieldsMock = jest.fn();
+
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    fields={[Object.keys(FieldOptions)[0]]}
+                    setFields={setFieldsMock}
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            wrapper.find(DialogTitle).first().find(IconButton).simulate("click");
-            expect(close).toHaveBeenCalledTimes(1);
+            expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
+            expect(screen.getByTestId("chip-option", { name: Object.keys(FieldOptions)[0] })).toBeInTheDocument();
+
+            fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
+            fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[1] }));
+            expect(setFieldsMock).toHaveBeenNthCalledWith(1, Object.keys(FieldOptions).slice(0, 2));
+
+            // The state isn't actaully changing in this test. So, in the following scenario,
+            // the only selected value is actually FieldOptions[0]
+            fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
+            fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[0] }));
+            expect(setFieldsMock).toHaveBeenNthCalledWith(2, []);
+
         });
 
-        it("should close the advanced search when the search button is clicked or on SearchBar enter", () => {
-            const setSearchValue = () => {};
-            const close = jest.fn();
-            const submitForm = jest.fn();
+        it("should change technologies when selecting options", () => {
 
-            const AutocompleteProps = {
-                renderInput: () => {},
-            };
+            const setTechsMock = jest.fn();
 
-            const autocompleteProps = {
-                getRootProps: () => {},
-                getInputProps: () => {},
-                getInputLabelProps: () => {},
-                getPopupIndicatorProps: () => {},
-                getClearProps: () => {},
-                getTagProps: () => {},
-                getListboxProps: () => {},
-                getOptionProps: () => {},
-                value: [],
-                dirty: false,
-                id: "",
-                popupOpen: false,
-                focused: false,
-                focusedTag: false,
-                anchorEl: null,
-                setAnchorEl: () => {},
-                inputValue: "asd",
-                groupedOptions: [],
-            };
-
-            const SelectorProps = {
-                ...AutocompleteProps,
-                autocompleteProps,
-            };
-
-            const wrapper = mount(
-                <AdvancedSearchMobile
-                    open
-                    setSearchValue={setSearchValue}
-                    close={close}
-                    submitForm={submitForm}
-                    FieldsSelectorProps={SelectorProps}
-                    TechsSelectorProps={SelectorProps}
-                />
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    technologies={[Object.keys(TechOptions)[0]]}
+                    setTechs={setTechsMock}
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            wrapper.find({ _id: "search_btn" }).find(Button).simulate("click", { preventDefault: () => {} });
-            wrapper.find(Dialog).prop("onExited")(); // Simulating the dialog exit
-            wrapper.find(SearchBar).first().find("input").simulate("keypress", { key: "Enter" });
-            wrapper.find(Dialog).prop("onExited")(); // Simulating the dialog exit
-            expect(close).toHaveBeenCalledTimes(2);
-            expect(submitForm).toHaveBeenCalledTimes(2);
+            expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
+            expect(screen.getByTestId("chip-option", { name: Object.keys(TechOptions)[0] })).toBeInTheDocument();
+
+            fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
+            fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[1] }));
+            expect(setTechsMock).toHaveBeenNthCalledWith(1, Object.keys(TechOptions).slice(0, 2));
+
+            // The state isn't actaully changing in this test. So, in the following scenario,
+            // the only selected value is actually TechOptions[0]
+            fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
+            fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[0] }));
+            expect(setTechsMock).toHaveBeenNthCalledWith(2, []);
 
         });
 
         it("should call resetAdvancedSearch when Reset button is clicked", () => {
             const resetFn = jest.fn();
-            const setSearchValue = () => {};
-            const wrapper = shallow(
-                <AdvancedSearchMobile
-                    open
-                    setSearchValue={setSearchValue}
-                    resetAdvancedSearch={resetFn}
-                />
+
+            render(
+                <AdvancedSearchWrapper
+                    enableAdvancedSearchDefault
+                    setSearchValue={() => {}}
+                    setJobType={() => {}}
+                    setJobDuration={() => {}}
+                    setShowJobDurationSlider={() => {}}
+                    setFields={() => {}}
+                    setTechs={() => {}}
+                    resetAdvancedSearchFields={resetFn}
+                    technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
+                >
+                    <AdvancedSearchMobile />
+                </AdvancedSearchWrapper>
             );
 
-            wrapper.find({ _id: "reset_btn" }).find(Button).simulate("click", { preventDefault: () => {} });
+            fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+
             expect(resetFn).toHaveBeenCalledTimes(1);
 
         });
-
-        it("should close but not submit form when back arrow button is clicked", () => {
-            const submitForm = jest.fn();
-            const close = jest.fn();
-
-            const setSearchValue = () => {};
-            const wrapper = shallow(
-                <AdvancedSearchMobile
-                    open
-                    close={close}
-                    setSearchValue={setSearchValue}
-                    submitForm={submitForm}
-                />
-            );
-
-            wrapper.find(DialogTitle).find(IconButton).simulate("click", { preventDefault: () => {} });
-            wrapper.find(Dialog).prop("onExited")(); // Simulating the dialog exit
-
-            expect(submitForm).toHaveBeenCalledTimes(0);
-            expect(close).toHaveBeenCalledTimes(1);
-        });
     });
+
 });

@@ -6,6 +6,7 @@ import { render, renderWithStoreAndTheme, renderWithTheme, screen } from "../../
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
+import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 describe("SearchResultsMobile", () => {
 
@@ -42,7 +43,12 @@ describe("SearchResultsMobile", () => {
     describe("render", () => {
         it("Should render offers if present", () => {
 
-            render(<SearchResultsMobile offers={offers} />);
+            const context = { offers };
+            render(
+                <SearchResultsControllerContext.Provider value={context}>
+                    <SearchResultsMobile offers={offers} />
+                </SearchResultsControllerContext.Provider>
+            );
             expect(screen.getByRole("button", { name: "Show Filters" })).toBeInTheDocument();
             expect(screen.getByText("position1")).toBeInTheDocument();
             expect(screen.getByText("position2")).toBeInTheDocument();
@@ -61,8 +67,13 @@ describe("SearchResultsMobile", () => {
                     technologies: [],
                 },
             };
+            const context = { noOffers: true };
 
-            renderWithStoreAndTheme(<SearchResultsMobile noOffers />, { initialState, theme });
+            renderWithStoreAndTheme(
+                <SearchResultsControllerContext.Provider value={context}>
+                    <SearchResultsMobile />
+                </SearchResultsControllerContext.Provider>
+                , { initialState, theme });
             expect(screen.getByText("No offers available.")).toBeInTheDocument();
             expect(screen.getByText("Try a different criteria.")).toBeInTheDocument();
             expect(screen.getByLabelText("Search", { selector: "input" })).toBeInTheDocument();
@@ -74,13 +85,17 @@ describe("SearchResultsMobile", () => {
         it("should open offer details on offer item click", async () => {
             const setSelectedOfferMock = jest.fn();
 
+            const context = {
+                offers,
+                setSelectedOffer: setSelectedOfferMock,
+                selectedOffer: offers[0],
+                toggleShowSearchFilters: () => {},
+            };
+
             renderWithTheme(
-                <SearchResultsMobile
-                    offers={offers}
-                    setSelectedOffer={setSelectedOfferMock}
-                    selectedOffer={offers[0]}
-                    toggleShowSearchFilters={() => {}}
-                />,
+                <SearchResultsControllerContext.Provider value={context}>
+                    <SearchResultsMobile />
+                </SearchResultsControllerContext.Provider>,
                 { theme }
             );
 

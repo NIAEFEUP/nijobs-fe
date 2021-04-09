@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Grid, Divider, Typography } from "@material-ui/core";
 import OfferItemsContainer from "./OfferItemsContainer";
@@ -8,6 +8,7 @@ import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import { WorkOff } from "@material-ui/icons";
 import clsx from "clsx";
+import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer,
     showSearchFilters, toggleShowSearchFilters,
@@ -90,9 +91,11 @@ OfferContentSection.propTypes = {
     selectedOffer: PropTypes.instanceOf(Offer),
 };
 
-const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
-    noOffers, showSearchFilters, toggleShowSearchFilters,
-}) => {
+const SearchResultsDesktop = () => {
+    const {
+        noOffers, offers, offersLoading, selectedOffer,
+        setSelectedOffer, showSearchFilters, toggleShowSearchFilters,
+    } = useContext(SearchResultsControllerContext);
     const classes = useSearchResultsWidgetStyles();
 
     const offersListClasses = {
@@ -149,16 +152,6 @@ const SearchResultsDesktop = ({ offers, offersLoading, setSelectedOffer, selecte
             }
         </React.Fragment>
     );
-};
-
-SearchResultsDesktop.propTypes = {
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    selectedOffer: PropTypes.instanceOf(Offer),
-    offersLoading: PropTypes.bool,
-    setSelectedOffer: PropTypes.func.isRequired,
-    noOffers: PropTypes.bool.isRequired,
-    showSearchFilters: PropTypes.bool.isRequired,
-    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsDesktop;

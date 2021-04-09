@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import {
     TextField,
@@ -15,6 +15,7 @@ import {
 import JobOptions from "./JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
+import { AdvancedSearchControllerContext } from "../SearchArea";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
     <Collapse
@@ -37,17 +38,19 @@ JobDurationCollapse.propTypes = {
     sliderText: PropTypes.string.isRequired,
 };
 
-const AdvancedSearchDesktop = ({
-    open, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-    ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
-}) => {
+const AdvancedSearchDesktop = () => {
 
     const classes = useSearchAreaStyles();
+
+    const {
+        advancedOptions, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
+        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+    } = useContext(AdvancedSearchControllerContext);
 
     return (
         <React.Fragment>
             <Collapse
-                in={open}
+                in={advancedOptions}
                 className={classes.advancedSearchOuterWrapper}
                 classes={{ wrapperInner: classes.advancedSearchContainer }}
             >
@@ -92,7 +95,7 @@ const AdvancedSearchDesktop = ({
                     }}
                 />
             </Collapse>
-            {open &&
+            {advancedOptions &&
                 <div className={classes.resetBtnWrapper}>
                     <Button
                         {...ResetButtonProps}
@@ -106,20 +109,6 @@ const AdvancedSearchDesktop = ({
             }
         </React.Fragment>
     );
-};
-
-AdvancedSearchDesktop.propTypes = {
-    open: PropTypes.bool.isRequired,
-    resetAdvancedSearch: PropTypes.func.isRequired,
-    FieldsSelectorProps: PropTypes.object.isRequired,
-    TechsSelectorProps: PropTypes.object.isRequired,
-    JobTypeSelectorProps: PropTypes.object.isRequired,
-    JobDurationSwitchProps: PropTypes.object.isRequired,
-    ResetButtonProps: PropTypes.object.isRequired,
-    JobDurationSliderText: PropTypes.string.isRequired,
-    JobDurationCollapseProps: PropTypes.object.isRequired,
-    JobDurationSwitchLabel: PropTypes.string.isRequired,
-    JobDurationSliderProps: PropTypes.object.isRequired,
 };
 
 export default AdvancedSearchDesktop;

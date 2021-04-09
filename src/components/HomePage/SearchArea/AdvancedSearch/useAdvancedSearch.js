@@ -10,15 +10,18 @@ import TECH_OPTIONS from "./TechOptions";
 
 
 // eslint-disable-next-line react/display-name
-const RenderInput = (label) => (params) => (
-    <TextField
-        {...params}
-        variant="standard"
-        margin="normal"
-        fullWidth
-        label={label}
-    />
-);
+const RenderInput = (label) => (params) => {
+    const inputProps = { ...params.inputProps, "aria-labelledby": `${params.id}-label` };
+    return (
+        <TextField
+            {...params}
+            variant="standard"
+            margin="normal"
+            fullWidth
+            label={label}
+            inputProps={inputProps}
+        />);
+};
 
 export default ({
     enableAdvancedSearchDefault,

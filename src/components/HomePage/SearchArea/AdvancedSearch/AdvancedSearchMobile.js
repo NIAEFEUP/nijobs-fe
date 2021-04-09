@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import {
     IconButton,
@@ -23,6 +23,7 @@ import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutoco
 
 import JobOptions from "./JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
+import { AdvancedSearchControllerContext } from "../SearchArea";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
     <Collapse
@@ -66,12 +67,15 @@ JobTypeSelector.propTypes = {
     JobTypeSelectorProps: PropTypes.object.isRequired,
 };
 
-const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, onMobileClose,
-    setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
-    JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
-}) => {
+const AdvancedSearchMobile = () => {
 
     const [shouldSubmitForm, setShouldSubmitForm] = useState(true);
+
+    const { advancedOptions, toggleAdvancedOptions, searchValue, submitForm,
+        setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
+        JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+        onMobileClose,
+    } = useContext(AdvancedSearchControllerContext);
 
     const handleResetClick = (e) => {
         e.preventDefault();
@@ -81,23 +85,26 @@ const AdvancedSearchMobile = ({ open, close, searchValue, submitForm, onMobileCl
     };
     const handleSearchClick = (e) => {
         e.preventDefault();
-        close();
+        toggleAdvancedOptions();
     };
 
     const handleCloseClick = () => {
         setShouldSubmitForm(false);
-        if (onMobileClose) onMobileClose();
-        close();
+        toggleAdvancedOptions();
     };
 
-    const handleExit = () => shouldSubmitForm && submitForm();
+    const handleExit = () => {
+        if (shouldSubmitForm) submitForm();
+        if (onMobileClose) onMobileClose();
+
+    };
 
     const classes = useSearchAreaStyles();
 
     return (
         <Dialog
             fullScreen
-            open={open}
+            open={advancedOptions}
             onEnter={() => setShouldSubmitForm(true)}
             onExited={handleExit}
         >

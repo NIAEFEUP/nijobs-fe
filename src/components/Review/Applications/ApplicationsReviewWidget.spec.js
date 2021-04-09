@@ -2,7 +2,7 @@
 import DateFnsUtils from "@date-io/date-fns";
 import { createMuiTheme } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { act, fireEvent, getByLabelText, getDefaultNormalizer, queryByText, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, getByLabelText, getDefaultNormalizer, queryByText, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { format, parseISO, addDays } from "date-fns";
 import { SnackbarProvider } from "notistack";
@@ -134,12 +134,12 @@ describe("Application Review Widget", () => {
 
         for (let i = 0; i < numRowsOptions.length; i++) {
             if (i !== 0)
-                fireEvent.click(screen.getByRole("option", {  name: `${numRowsOptions[i]}` })); // Show num pages select box
+                fireEvent.click(screen.getByText(`${numRowsOptions[i]}`)); // Show num pages select box
 
-            const expectedNumRows = 1 + (numRowsOptions[i] * 2); // Header line + 2* each row (one visible and one collapse)
-            expect(screen.getAllByRole("row").length).toBe(expectedNumRows);
+            const expectedNumRows = numRowsOptions[i];
+            expect(screen.getAllByTestId("application-row").length).toBe(expectedNumRows);
 
-            fireEvent.mouseDown(screen.getByRole("button", {  name: `Rows per page: ${numRowsOptions[i]}` })); // Show num pages select box
+            fireEvent.mouseDown(screen.getByLabelText(`Rows per page: ${numRowsOptions[i]}`)); // Show num pages select box
         }
     });
 
@@ -158,8 +158,8 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Approve Application" }));
-        fireEvent.click(screen.getByRole("button", { name: "Confirm Approval" }));
+        fireEvent.click(screen.getByLabelText("Approve Application"));
+        fireEvent.click(screen.getByLabelText("Confirm Approval"));
 
         await act(async () => {
             await jest.advanceTimersByTime(2000);
@@ -169,7 +169,7 @@ describe("Application Review Widget", () => {
         expect(screen.queryByText(`Approving Application for ${applications[0].companyName}...`)).toBeInTheDocument();
 
         await act(async () => {
-            await jest.advanceTimersByTime(1001);
+            await jest.runAllTimers();
         });
 
         expect(fetch.mock.calls[1][0])
@@ -192,18 +192,18 @@ describe("Application Review Widget", () => {
         );
 
         // Open state selector and select pending option
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
         userEvent.click(screen.getByLabelText("State"));
-        fireEvent.click(screen.getByRole("option", { name: "Pending" }));
+        fireEvent.click(screen.getByLabelText("Pending"));
 
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(applications.filter((a) => a.state === "PENDING").map((a) => a.companyName));
 
         clickAwayFromFilterMenu();
 
-        fireEvent.click(screen.getByRole("button", { name: "Approve Application" }));
-        fireEvent.click(screen.getByRole("button", { name: "Confirm Approval" }));
+        fireEvent.click(screen.getByLabelText("Approve Application"));
+        fireEvent.click(screen.getByLabelText("Confirm Approval"));
 
         await act(async () => {
             await jest.advanceTimersByTime(2000);
@@ -213,7 +213,7 @@ describe("Application Review Widget", () => {
         expect(screen.queryByText(`Approving Application for ${applications[0].companyName}...`)).toBeInTheDocument();
 
         await act(async () => {
-            await jest.advanceTimersByTime(1001);
+            await jest.runAllTimers();
         });
 
         expect(fetch.mock.calls[1][0])
@@ -238,15 +238,13 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
+        fireEvent.click((screen.getByLabelText("Reject Application")));
 
         await userEvent.type(screen.getByLabelText("Reject Reason"), "valid reject reason");
 
-        expect(screen.getByRole("button", { name: "Reject" })).not.toBeDisabled();
+        expect((screen.getByLabelText("Reject"))).not.toBeDisabled();
 
-        await act(async () => {
-            fireEvent.submit(screen.getByRole("button", { name: "Reject" }));
-        });
+        fireEvent.submit(screen.getByLabelText("Reject"));
 
         await act(async () => {
             await jest.advanceTimersByTime(2000);
@@ -256,7 +254,7 @@ describe("Application Review Widget", () => {
         expect(screen.queryByText(`Rejecting Application for ${applications[0].companyName}...`)).toBeInTheDocument();
 
         await act(async () => {
-            await jest.advanceTimersByTime(1001);
+            await jest.runAllTimers();
         });
 
         expect(fetch.mock.calls[1][0])
@@ -279,9 +277,9 @@ describe("Application Review Widget", () => {
         );
 
         // Open state selector and select pending option
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
-        await userEvent.click(screen.getByLabelText("State"));
-        fireEvent.click(screen.getByRole("option", { name: "Pending" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
+        fireEvent.mouseDown(screen.getByLabelText("State"));
+        fireEvent.click(screen.getByLabelText("Pending"));
 
         expect(screen.getAllByTestId("application-row")
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
@@ -289,12 +287,10 @@ describe("Application Review Widget", () => {
 
         clickAwayFromFilterMenu();
 
-        fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
+        fireEvent.click(screen.getByLabelText("Reject Application"));
         await userEvent.type(screen.getByLabelText("Reject Reason"), "valid reject reason");
-        expect(screen.getByRole("button", { name: "Reject" })).not.toBeDisabled();
-        await act(async () => {
-            fireEvent.submit(screen.getByRole("button", { name: "Reject" }));
-        });
+        expect(screen.getByLabelText("Reject")).not.toBeDisabled();
+        fireEvent.submit(screen.getByLabelText("Reject"));
 
         await act(async () => {
             await jest.advanceTimersByTime(2000);
@@ -304,7 +300,7 @@ describe("Application Review Widget", () => {
         expect(screen.queryByText(`Rejecting Application for ${applications[0].companyName}...`)).toBeInTheDocument();
 
         await act(async () => {
-            await jest.advanceTimersByTime(1001);
+            await jest.runAllTimers();
         });
 
         expect(fetch.mock.calls[1][0])
@@ -329,12 +325,12 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Reject Application" }));
+        fireEvent.click(screen.getByLabelText("Reject Application"));
 
         await act(async () => {
             await userEvent.type(screen.getByLabelText("Reject Reason"), "invalid"); // Too short
         });
-        expect(screen.getByRole("button", { name: "Reject" })).toBeDisabled();
+        expect(screen.getByLabelText("Reject")).toBeDisabled();
     });
 
     it("Should select application review", async () => {
@@ -443,7 +439,7 @@ describe("Application Review Widget", () => {
 
         const sorted5 = applications.map((a) => a.companyName).sort().slice(0, 5);
 
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(sorted5);
 
@@ -455,10 +451,9 @@ describe("Application Review Widget", () => {
         }).slice(0, 5);
 
 
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(reverseSorted5);
-
 
     });
 
@@ -481,7 +476,7 @@ describe("Application Review Widget", () => {
 
         const sorted5 = applications.map((a) => format(parseISO(a.submittedAt), "yyyy-MM-dd")).sort().slice(0, 5);
 
-        expect((screen.getAllByTestId("application-row"))
+        expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(3)").textContent)
         ).toStrictEqual(sorted5);
 
@@ -493,7 +488,7 @@ describe("Application Review Widget", () => {
         }).slice(0, 5);
 
 
-        expect((screen.getAllByTestId("application-row"))
+        expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(3)").textContent)
         ).toStrictEqual(reverseSorted5);
 
@@ -519,7 +514,7 @@ describe("Application Review Widget", () => {
 
         const sorted5 = applications.map((a) => ApplicationStateLabel[a.state]).sort().slice(0, 5);
 
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(4)").textContent)
         ).toStrictEqual(sorted5);
 
@@ -531,7 +526,7 @@ describe("Application Review Widget", () => {
         }).slice(0, 5);
 
 
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(4)").textContent)
         ).toStrictEqual(reverseSorted5);
 
@@ -553,16 +548,13 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
 
         fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "1" } });
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual([...[applications[1].companyName, applications[10].companyName]])
-        );
-
+        expect((await screen.findAllByTestId("application-row"))
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual([...[applications[1].companyName, applications[10].companyName]]);
 
     });
 
@@ -582,42 +574,37 @@ describe("Application Review Widget", () => {
         );
 
         // Open state selector and select approved option
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
         await userEvent.click(screen.getByLabelText("State"));
-        fireEvent.click(screen.getByRole("option", { name: "Approved" }));
+        fireEvent.click(screen.getByLabelText("Approved"));
 
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").map((a) => a.companyName))
-        );
+        expect((await screen.findAllByTestId("application-row"))
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").map((a) => a.companyName));
+
 
         // Verify it keeps state even if the filters menu is closed (closes state selector and filters menu)
         clickAwayFromFilterMenu();
 
         // Open state selector and select rejected option
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
         fireEvent.mouseDown(screen.getByLabelText("State", { selector: "div" }));
-        fireEvent.click(screen.getByRole("option", { name: "Rejected" }));
+        fireEvent.click(screen.getByLabelText("Rejected"));
 
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED").map((a) => a.companyName))
-        );
+        expect((await screen.findAllByTestId("application-row"))
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED").map((a) => a.companyName));
 
         // De-select rejected option and add pending option
-        fireEvent.click(screen.getByRole("option", { name: "Rejected" }));
-        fireEvent.click(screen.getByRole("option", { name: "Pending" }));
+        fireEvent.click(screen.getByLabelText("Rejected"));
+        fireEvent.click(screen.getByLabelText("Pending"));
 
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING").map((a) => a.companyName))
-        );
+        expect((await screen.findAllByTestId("application-row"))
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING").map((a) => a.companyName));
 
 
     });
@@ -637,34 +624,33 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
-        fireEvent.change(screen.getByLabelText("Date From..."), { target: { value:
-            format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
-        } });
+        fireEvent.click(screen.getByLabelText("Filter list"));
+        fireEvent.change(screen.getByLabelText("Date From..."), {
+            target: {
+                value: format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
+            },
+        });
 
-
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(applications.slice(1).map((a) => a.companyName));
 
-
-        fireEvent.change(screen.getByLabelText("Date To..."), { target: { value:
+        fireEvent.change(screen.getByLabelText("Date To..."), {
+            target: {
+                value:
             format(new Date(applications[3].submittedAt), "yyyy-MM-dd"),
-        } });
+            },
+        });
 
-
-        expect(screen.getAllByTestId("application-row")
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(applications.slice(1, 4).map((a) => a.companyName));
 
         fireEvent.change(screen.getByLabelText("Date From..."), { target: { value: "" } });
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual(applications.slice(0, 4).map((a) => a.companyName))
-        );
-
+        expect((screen.getAllByTestId("application-row"))
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual(applications.slice(0, 4).map((a) => a.companyName));
 
     });
 
@@ -683,7 +669,7 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
+        fireEvent.click(screen.getByLabelText("Filter list"));
 
         fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "0" } });
 
@@ -695,23 +681,20 @@ describe("Application Review Widget", () => {
         } });
 
         await userEvent.click(screen.getByLabelText("State"));
-        fireEvent.click(screen.getByRole("option", { name: "Approved" }));
+        fireEvent.click(screen.getByLabelText("Approved"));
 
         // Verify it keeps state even if the filters menu is closed (closes state selector and filters menu)
         clickAwayFromFilterMenu();
 
-        await waitFor(() =>
-            expect(screen.getAllByTestId("application-row")
-                .map((el) => el.querySelector("td:nth-child(2)").textContent)
-            ).toStrictEqual([applications[0].companyName])
-        );
-
-
-        fireEvent.click(screen.getByRole("button", { name: "Filter list" }));
-
-        fireEvent.click(screen.getByRole("button", { name: "Reset" }));
-
         expect(screen.getAllByTestId("application-row")
+            .map((el) => el.querySelector("td:nth-child(2)").textContent)
+        ).toStrictEqual([applications[0].companyName]);
+
+        fireEvent.click(screen.getByLabelText("Filter list"));
+
+        fireEvent.click(screen.getByLabelText("Reset"));
+
+        expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(applications.map((a) => a.companyName));
     });

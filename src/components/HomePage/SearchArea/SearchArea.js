@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
@@ -21,33 +21,20 @@ import SubmitSearchButton from "./SubmitSearchButton";
 import useSearchAreaStyles from "./searchAreaStyle";
 import { useMobile } from "../../../utils/media-queries";
 import useAdvancedSearch from "./AdvancedSearch/useAdvancedSearch";
-import AbstractAdvancedSearch from "./AdvancedSearch/AbstractAdvancedSearch";
 import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
+import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
+import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
+import useComponentController from "../../../hooks/useComponentController";
 
-export const SearchArea = ({ onSubmit, searchOffers, searchValue,
-    jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
-    fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
-    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose }) => {
+export const AdvancedSearchControllerContext = React.createContext({});
 
-    const classes = useSearchAreaStyles();
+export const AdvancedSearchController = ({
+    enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
+    jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
+    resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
+}) => {
 
-    const toggleShowJobDurationSlider = () => setShowJobDurationSlider(!showJobDurationSlider);
-
-    const {
-        advancedOptions,
-        advancedOptionsActive,
-        toggleAdvancedOptions,
-        resetAdvancedSearch,
-        JobTypeSelectorProps,
-        FieldsSelectorProps,
-        TechsSelectorProps,
-        JobDurationSwitchProps,
-        JobDurationCollapseProps,
-        JobDurationSwitchLabel,
-        JobDurationSliderProps,
-        JobDurationSliderText,
-        ResetButtonProps,
-    } = useAdvancedSearch({
+    const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
         jobMinDuration,
         jobMaxDuration,
@@ -63,7 +50,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         resetAdvancedSearchFields,
     });
 
-    const submitForm = (e) => {
+    const submitForm = useCallback((e) => {
         // mind the jobType value when passing value to api,
         // because for simple search, the initial jobType value will be undefined,
         // and should be treated as a filter, not a required field, just like jobDuration
@@ -76,63 +63,80 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
         searchOffers({ value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies });
 
         if (onSubmit) onSubmit();
+    }, [fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue, technologies]);
+
+    return {
+        ...advancedSearchProps,
+        submitForm,
+        controllerOptions: {
+            initialValue: {
+                ...advancedSearchProps,
+                submitForm,
+                onMobileClose,
+                searchValue,
+                setSearchValue,
+            },
+        },
     };
+};
+
+export const SearchArea = ({ onSubmit, searchOffers, searchValue,
+    jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
+    fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
+    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose }) => {
+
+    const classes = useSearchAreaStyles();
+    const {
+        advancedOptions,
+        advancedOptionsActive,
+        toggleAdvancedOptions,
+        submitForm,
+        ContextProvider,
+        contextProviderProps,
+    } = useComponentController(
+        AdvancedSearchController,
+        {
+            enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
+            jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
+            resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
+        },
+        AdvancedSearchControllerContext
+    );
 
     return (
-        <Paper
-            className={classes.searchArea}
-            elevation={8}
-        >
-            <form
-                aria-label="form"
-                onSubmit={submitForm}
-                autoComplete="off"
-                id={"search_form"}
+        <ContextProvider {...contextProviderProps}>
+            <Paper
+                className={classes.searchArea}
+                elevation={8}
             >
-                <SearchBar
-                    className={classes.searchBar}
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    onEnterPress={submitForm}
+                <form
+                    aria-label="Search Area"
+                    onSubmit={submitForm}
+                    autoComplete="off"
+                    id={"search_form"}
+                >
+                    <SearchBar
+                        className={classes.searchBar}
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                        onEnterPress={submitForm}
+                    />
+                    <AdvancedOptionsToggle
+                        advancedOptions={advancedOptions}
+                        advancedOptionsActive={advancedOptionsActive}
+                        handleAdvancedOptionsButtonClick={toggleAdvancedOptions}
+                    />
+                    {useMobile() ?
+                        <AdvancedSearchMobile />
+                        :
+                        <AdvancedSearchDesktop />
+                    }
+                </form>
+                <SubmitSearchButton
+                    onClick={submitForm}
                 />
-                <AdvancedOptionsToggle
-                    advancedOptions={advancedOptions}
-                    advancedOptionsActive={advancedOptionsActive}
-                    handleAdvancedOptionsButtonClick={toggleAdvancedOptions}
-                />
-                <AbstractAdvancedSearch
-                    mobile={useMobile()}
-                    onMobileClose={onMobileClose}
-                    open={advancedOptions}
-                    close={toggleAdvancedOptions}
-                    submitForm={submitForm}
-                    searchValue={searchValue}
-                    showJobDurationSlider={showJobDurationSlider}
-                    toggleShowJobDurationSlider={toggleShowJobDurationSlider}
-                    jobMinDuration={jobMinDuration}
-                    jobMaxDuration={jobMaxDuration}
-                    jobType={jobType}
-                    fields={fields}
-                    setSearchValue={setSearchValue}
-                    setJobType={setJobType}
-                    setJobDuration={setJobDuration}
-                    setFields={setFields}
-                    FieldsSelectorProps={FieldsSelectorProps}
-                    TechsSelectorProps={TechsSelectorProps}
-                    JobTypeSelectorProps={JobTypeSelectorProps}
-                    JobDurationSwitchProps={JobDurationSwitchProps}
-                    JobDurationCollapseProps={JobDurationCollapseProps}
-                    JobDurationSwitchLabel={JobDurationSwitchLabel}
-                    JobDurationSliderText={JobDurationSliderText}
-                    JobDurationSliderProps={JobDurationSliderProps}
-                    ResetButtonProps={ResetButtonProps}
-                    resetAdvancedSearch={resetAdvancedSearch}
-                />
-            </form>
-            <SubmitSearchButton
-                onClick={submitForm}
-            />
-        </Paper>
+            </Paper>
+        </ContextProvider>
     );
 };
 

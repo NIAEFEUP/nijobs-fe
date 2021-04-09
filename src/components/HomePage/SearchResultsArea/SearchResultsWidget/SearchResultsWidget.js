@@ -4,41 +4,71 @@ import { connect } from "react-redux";
 
 import { Grid, Paper } from "@material-ui/core";
 
-
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { useDesktop } from "../../../../utils/media-queries";
-import AbstractSearchResults from "./AbstractSearchResults";
 import Offer from "../Offer/Offer";
+import SearchResultsMobile from "./SearchResultsMobile";
+import SearchResultsDesktop from "./SearchResultsDesktop";
+import useComponentController from "../../../../hooks/useComponentController";
+import useToggle from "../../../../hooks/useToggle";
 
-export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, offersSearchError }, ref) => {
+export const SearchResultsControllerContext = React.createContext({});
+
+const SearchResultsController = ({ offersSearchError, offersLoading, offers }) => {
 
     const [selectedOffer, setSelectedOffer] = useState(null);
-    const classes = useSearchResultsWidgetStyles();
 
     // Reset the selected offer on every "loading", so that it does not show up after finished loading
     useEffect(() => {
         if (offersLoading) setSelectedOffer(null);
     }, [offersLoading]);
 
-    return (
+    const noOffers = Boolean(offersSearchError || (!offersLoading && offers.length === 0));
+    const [showSearchFilters, toggleShowSearchFilters] = useToggle(false);
 
-        <Paper elevation={2}>
-            <Grid
-                ref={ref}
-                className={classes.searchResults}
-                container
-                spacing={0}
-            >
-                <AbstractSearchResults
-                    mobile={!useDesktop()}
-                    selectedOffer={selectedOffer}
-                    setSelectedOffer={setSelectedOffer}
-                    offers={offers}
-                    offersLoading={offersLoading}
-                    offersSearchError={offersSearchError}
-                />
-            </Grid>
-        </Paper>
+    return {
+        controllerOptions: {
+            initialValue: {
+                noOffers,
+                offers,
+                offersLoading,
+                offersSearchError,
+                selectedOffer,
+                setSelectedOffer,
+                showSearchFilters,
+                toggleShowSearchFilters,
+            },
+        },
+    };
+};
+
+export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, offersSearchError }, ref) => {
+
+    const classes = useSearchResultsWidgetStyles();
+
+    const { ContextProvider, contextProviderProps } = useComponentController(
+        SearchResultsController,
+        { offers, offersLoading, offersSearchError },
+        SearchResultsControllerContext
+    );
+
+    return (
+        <ContextProvider {...contextProviderProps}>
+            <Paper elevation={2}>
+                <Grid
+                    ref={ref}
+                    className={classes.searchResults}
+                    container
+                    spacing={0}
+                >
+                    {!useDesktop() ?
+                        <SearchResultsMobile />
+                        :
+                        <SearchResultsDesktop />
+                    }
+                </Grid>
+            </Paper>
+        </ContextProvider>
     );
 });
 

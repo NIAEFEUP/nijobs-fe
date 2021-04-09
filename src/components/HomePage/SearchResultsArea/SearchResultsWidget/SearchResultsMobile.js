@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Typography, Dialog, DialogTitle, IconButton, DialogContent, Grid } from "@material-ui/core";
 import OfferItemsContainer from "./OfferItemsContainer";
@@ -8,6 +8,7 @@ import OfferContent from "../Offer/OfferContent";
 import Offer from "../Offer/Offer";
 import useToggle from "../../../../hooks/useToggle";
 import { NavigateBefore, WorkOff } from "@material-ui/icons";
+import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
     <Grid container className={classes.fullHeight}>
@@ -80,11 +81,14 @@ OfferViewer.propTypes = {
     offersLoading: PropTypes.bool,
 };
 
-const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selectedOffer,
-    noOffers, showSearchFilters, toggleShowSearchFilters,
-}) => {
+const SearchResultsMobile = () => {
     const classes = useSearchResultsWidgetStyles();
     const [openPreview, toggleOpenPreview] = useToggle(false);
+
+    const {
+        noOffers, offers, offersLoading, selectedOffer, setSelectedOffer,
+        showSearchFilters, toggleShowSearchFilters,
+    } = useContext(SearchResultsControllerContext);
 
     const showOfferDetails = (offer) => {
         setSelectedOffer(offer);
@@ -132,16 +136,6 @@ const SearchResultsMobile = ({ offers, offersLoading, setSelectedOffer, selected
 
         </React.Fragment>
     );
-};
-
-SearchResultsMobile.propTypes = {
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    selectedOffer: PropTypes.instanceOf(Offer),
-    offersLoading: PropTypes.bool,
-    setSelectedOffer: PropTypes.func.isRequired,
-    noOffers: PropTypes.bool.isRequired,
-    showSearchFilters: PropTypes.bool.isRequired,
-    toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
 export default SearchResultsMobile;
