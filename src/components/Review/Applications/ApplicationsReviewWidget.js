@@ -15,7 +15,6 @@ import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
 import PropTypes from "prop-types";
-import { cancelablePromise } from "../../../utils";
 
 const sorters = {
     name: alphabeticalSorter,

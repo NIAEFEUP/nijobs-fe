@@ -706,4 +706,31 @@ describe("Application Review Widget", () => {
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
         ).toStrictEqual(applications.map((a) => a.companyName));
     });
+
+    it("Should cancel request if unmounted", async () => {
+
+        const abortMock = jest.fn();
+        const realAbortController = global.AbortController;
+        global.AbortController = class {
+            signal = "test-signal"
+            abort = abortMock
+        };
+
+        let unmountFn;
+        await act(async () => {
+            const { unmount } = renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme });
+            unmountFn = unmount;
+        });
+
+        unmountFn();
+        expect(abortMock).toHaveBeenCalledTimes(1);
+
+        global.AbortController = realAbortController;
+    });
 });
