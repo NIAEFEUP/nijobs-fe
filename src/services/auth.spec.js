@@ -13,7 +13,7 @@ describe("Auth Service", () => {
 
         await login(email, password);
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/auth/login`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/auth/login`, expect.objectContaining({
             method: "POST",
             credentials: "include",
             headers: {
@@ -23,7 +23,7 @@ describe("Auth Service", () => {
                 email,
                 password,
             }),
-        });
+        }));
     });
 
     it("Should return status code if not 200", async () => {
@@ -41,9 +41,9 @@ describe("Auth Service", () => {
 
         await logout();
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/auth/login`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/auth/login`, expect.objectContaining({
             method: "DELETE",
             credentials: "include",
-        });
+        }));
     });
 });

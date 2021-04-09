@@ -1,12 +1,13 @@
 import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetchError } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
-import { parseFiltersToURL } from "../utils";
+import { parseFiltersToURL, buildCancelableRequest } from "../utils";
+
 
 const { API_HOSTNAME } = config;
 
 
-export const searchOffers = (filters) => async (dispatch) => {
+export const searchOffers = (filters) => buildCancelableRequest(async (dispatch, { signal }) => {
 
     dispatch(resetOffersFetchError());
     dispatch(setLoadingOffers(true));
@@ -15,6 +16,7 @@ export const searchOffers = (filters) => async (dispatch) => {
         const res = await fetch(`${API_HOSTNAME}/offers?${parseFiltersToURL(filters)}`, {
             method: "GET",
             credentials: "include",
+            signal,
         });
         if (!res.ok) {
             dispatch(setOffersFetchError({
@@ -39,7 +41,7 @@ export const searchOffers = (filters) => async (dispatch) => {
         dispatch(setLoadingOffers(false));
         // TODO count metrics
     }
-};
+});
 
 export const hideOffer = async (offerId) => {
 
