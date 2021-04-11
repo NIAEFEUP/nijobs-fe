@@ -40,7 +40,6 @@ const PageLayout = ({
     const shouldUseMobileLayout = (shouldShowMobile === undefined) ? isMobileSize : shouldShowMobile({ ...contextValues, isMobileSize });
 
     const LayoutWrapper = LayoutWrappers[(!shouldUseMobileLayout || forceDesktopLayout) ? layout : LayoutType.MOBILE];
-    console.log("LAYOUT", LayoutWrapper);
 
     return (
         <ContextProvider {...contextProviderProps}>

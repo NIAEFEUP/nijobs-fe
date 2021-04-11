@@ -4,12 +4,17 @@ import React from "react";
 
 import { BrowserRouter, Switch } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import CompanyApplicationPage from "./pages/CompanyApplicationPage";
+import CompanyApplicationPage, {
+    CompanyApplicationPageController,
+    CompanyApplicationPageControllerContext,
+} from "./pages/CompanyApplicationPage";
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
-import PageLayout from "./components/PageLayout";
+import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
+
+const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -26,7 +31,14 @@ const AppRouter = () => (
                 exact
                 path="/apply/company"
             >
-                <PageLayout pageTitle="Company Application">
+                <PageLayout
+                    pageTitle="Company Application"
+                    layout={LayoutType.DESKTOP}
+                    shouldShowMobile={shoudlShowCompanyApplicationMobile}
+                    context={CompanyApplicationPageControllerContext}
+                    controller={CompanyApplicationPageController}
+                    controllerProps={{ showConfirmation: false }}
+                >
                     <CompanyApplicationPage />
                 </PageLayout>
             </Route>
