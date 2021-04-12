@@ -8,7 +8,7 @@ import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
-import { OfferTitleFilter, publishDateFilter, publishEndDateFilter } from "../Filters/index";
+import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -45,7 +45,7 @@ const sorters = {
 const filters = [
     { id: "offer-title-filter", render: OfferTitleFilter },
     { id: "publish-date-filter",
-        render: publishDateFilter,
+        render: PublishDateFilter,
         props: {
             onChange: (date, filtersContext, setFiltersContext) => {
                 setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
@@ -53,13 +53,14 @@ const filters = [
         },
     },
     { id: "publish-end-date-filter",
-        render: publishEndDateFilter,
+        render: PublishEndDateFilter,
         props: {
             onChange: (date, filtersContext, setFiltersContext) => {
                 setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
             },
         },
     },
+    { id: "location-filter", render: LocationFilter },
 ];
 
 const RowActions = () => (
