@@ -12,12 +12,8 @@ const useStyles = makeStyles(() => ({
 const MobileLayout = ({ children, pageTitle }) => {
     const classes = useStyles();
     return (
-        <Dialog
-            fullScreen
-            open
-        >
+        <Dialog fullScreen open>
             <div className={classes.dialogContent}>
-
                 <Navbar title={pageTitle} position="relative" />
                 {children}
             </div>

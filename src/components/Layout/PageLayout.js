@@ -12,7 +12,7 @@ export const LayoutType = Object.freeze({
 });
 
 const LayoutWrappers = Object.freeze({
-    NONE: React.Fragment,
+    NONE: React.Fragment, // TODO -> Should be a component with navbar, mask and footer
     DESKTOP: DesktopLayout,
     MOBILE: MobileLayout,
 });

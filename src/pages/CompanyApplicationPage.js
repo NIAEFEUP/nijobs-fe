@@ -13,7 +13,6 @@ export const CompanyApplicationPageControllerContext = React.createContext();
 export const CompanyApplicationPageController = ({
     showConfirmation,
 }) => {
-
     const [showConfirmationModal, toggleConfirmationModal] = useToggle(showConfirmation);
 
     const [errorCleared, setErrorCleared] = useState(true);

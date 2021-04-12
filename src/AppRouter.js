@@ -16,6 +16,16 @@ import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 
 const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
+/**
+ *
+ * IMPORTANT: Each PageLayout must have a unique key, in order for the page changes to work correctly.
+ * If it doesn't, when changing pages, it will reuse the same PageLayout (reconciliation phase) and only change its contents
+ * and if the controller/context is different (which it probably is among pages),
+ * it will cause problems like hooks not being called in the same order
+ * Obviously, since the controller are differnt, then the hooks might also be different
+ *
+ */
+
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
         <Switch>
@@ -23,7 +33,7 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <PageLayout showHomePageLink={false} forceDesktopLayout>
+                <PageLayout key="/" showHomePageLink={false} forceDesktopLayout>
                     <HomePage />
                 </PageLayout>
             </Route>
@@ -32,6 +42,7 @@ const AppRouter = () => (
                 path="/apply/company"
             >
                 <PageLayout
+                    key="/apply/company"
                     pageTitle="Company Application"
                     layout={LayoutType.DESKTOP}
                     shouldShowMobile={shoudlShowCompanyApplicationMobile}
@@ -49,19 +60,19 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
                 authorize={(user) => (user.isAdmin)}
             >
-                <PageLayout pageTitle="Review Applications">
+                <PageLayout key="/review/applications" pageTitle="Review Applications">
                     <ApplicationsReviewPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
             >
-                <PageLayout forceDesktopLayout pageTitle="Unexpected error">
+                <PageLayout key="error" forceDesktopLayout pageTitle="Unexpected error">
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
-                <PageLayout forceDesktopLayout pageTitle="Page not found">
+                <PageLayout key="NOT_FOUND" forceDesktopLayout pageTitle="Page not found">
                     <NotFound />
                 </PageLayout>
             </Route>
