@@ -4,6 +4,7 @@ import { useMobile } from "../../utils/media-queries";
 import useComponentController from "../../hooks/useComponentController";
 import DesktopLayout from "./DesktopLayout";
 import MobileLayout from "./MobileLayout";
+import BaseLayout from "./BaseLayout";
 
 export const LayoutType = Object.freeze({
     NONE: "NONE",
@@ -12,7 +13,7 @@ export const LayoutType = Object.freeze({
 });
 
 const LayoutWrappers = Object.freeze({
-    NONE: React.Fragment, // TODO -> Should be a component with navbar, mask and footer
+    NONE: BaseLayout,
     DESKTOP: DesktopLayout,
     MOBILE: MobileLayout,
 });

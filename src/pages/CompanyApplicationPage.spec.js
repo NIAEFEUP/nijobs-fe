@@ -1,10 +1,34 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import { renderWithStoreAndTheme } from "../test-utils";
-import CompanyApplicationPage from "./CompanyApplicationPage";
+import CompanyApplicationPage, {
+    CompanyApplicationPageController,
+    CompanyApplicationPageControllerContext,
+} from "./CompanyApplicationPage";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
+import useComponentController from "../hooks/useComponentController";
+import { renderWithStoreAndTheme, screen, act, fireEvent } from "../test-utils";
+
+const CompanyApplicationPageWrapper = ({ children, showConfirmation = false }) => {
+    const {
+        ContextProvider,
+        contextProviderProps,
+    } = useComponentController(
+        CompanyApplicationPageController,
+        {
+            showConfirmation,
+        },
+        CompanyApplicationPageControllerContext
+    );
+
+    return (
+        <ContextProvider {...contextProviderProps}>
+            {children}
+        </ContextProvider>
+    );
+};
 
 describe("CompanyApplicationPage", () => {
 
@@ -23,7 +47,12 @@ describe("CompanyApplicationPage", () => {
     describe("render", () => {
 
         it("should render form components", () => {
-            const wrapper = renderWithStoreAndTheme(<CompanyApplicationPage />, { store, theme });
+            const wrapper = renderWithStoreAndTheme(
+                <CompanyApplicationPageWrapper>
+                    <CompanyApplicationPage />
+                </CompanyApplicationPageWrapper>,
+                { store, theme }
+            );
             const emailInput = wrapper.getByLabelText("Email");
             expect(emailInput.name).toBe("email");
 
@@ -50,14 +79,42 @@ describe("CompanyApplicationPage", () => {
             expect(resetButton).toBeTruthy();
         });
 
-        it("should render a confirmation dialog on registration completion", () => {
+        it("should render a confirmation dialog on registration completion", async () => {
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
+            const companyName = "valid company name";
+            const email = "valid@email.com";
+            const password = "password123";
+            const confirmPassword = "password123";
+            const motivation = "valid motivation text";
+
             const wrapper = renderWithStoreAndTheme(
                 <Router>
-                    <CompanyApplicationPage showConfirmation />
+                    <CompanyApplicationPageWrapper>
+                        <CompanyApplicationPage />
+                    </CompanyApplicationPageWrapper>
                 </Router>,
-                { store, theme }
+                { initialState, theme }
             );
-            expect(wrapper.getByText("Application Submitted")).toBeTruthy();
+            const companyNameInput = wrapper.getByLabelText("Company Name");
+            const emailInput = wrapper.getByLabelText("Email");
+            const passwordInput = wrapper.getByLabelText("Password");
+            const confirmPasswordInput = wrapper.getByLabelText("Confirm Password");
+            const motivationInput = wrapper.getByLabelText("Motivation");
+            const applyButton = wrapper.getByText("Apply");
+
+            await fireEvent.change(companyNameInput, { target: { value: companyName } });
+            await fireEvent.change(emailInput, { target: { value: email } });
+            await fireEvent.change(passwordInput, { target: { value: password } });
+            await fireEvent.change(confirmPasswordInput, { target: { value: confirmPassword } });
+            await fireEvent.change(motivationInput, { target: { value: motivation } });
+
+            await act(async () => {
+                await fireEvent.click(applyButton);
+            });
+
+            expect(screen.getByText("Application Submitted")).toBeInTheDocument();
 
         });
     });

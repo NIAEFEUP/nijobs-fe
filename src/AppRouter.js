@@ -33,7 +33,12 @@ const AppRouter = () => (
                 exact
                 path="/"
             >
-                <PageLayout key="/" showHomePageLink={false} forceDesktopLayout>
+                <PageLayout
+                    key="/"
+                    showHomePageLink={false}
+                    forceDesktopLayout
+                    layout={LayoutType.NONE}
+                >
                     <HomePage />
                 </PageLayout>
             </Route>
@@ -60,19 +65,33 @@ const AppRouter = () => (
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
                 authorize={(user) => (user.isAdmin)}
             >
-                <PageLayout key="/review/applications" pageTitle="Review Applications">
+                <PageLayout
+                    key="/review/applications"
+                    pageTitle="Review Applications"
+                    layout={LayoutType.DESKTOP}
+                >
                     <ApplicationsReviewPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/error"
             >
-                <PageLayout key="error" forceDesktopLayout pageTitle="Unexpected error">
+                <PageLayout
+                    key="/error"
+                    forceDesktopLayout
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Unexpected error"
+                >
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
-                <PageLayout key="NOT_FOUND" forceDesktopLayout pageTitle="Page not found">
+                <PageLayout
+                    key="NOT_FOUND"
+                    forceDesktopLayout
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Page not found"
+                >
                     <NotFound />
                 </PageLayout>
             </Route>

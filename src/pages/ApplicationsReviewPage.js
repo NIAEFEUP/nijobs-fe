@@ -1,15 +1,21 @@
+import { CardContent, makeStyles } from "@material-ui/core";
 import React from "react";
 import ApplicationsReviewWidget from "../components/Review/Applications/ApplicationsReviewWidget";
-import { MainMask } from "../components/HomePage/MainMask";
-import CenteredComponent from "../components/HomePage/CenteredComponent";
 
-const ApplicationsReviewPage = () => (
-    <>
-        <MainMask />
-        <CenteredComponent>
+const useStyles = makeStyles((theme) => ({
+    content: {
+        padding: theme.spacing(3, 9),
+        boxSizing: "content-box",
+    },
+}));
+
+const ApplicationsReviewPage = () => {
+    const classes = useStyles();
+    return (
+        <CardContent className={classes.content}>
             <ApplicationsReviewWidget />
-        </CenteredComponent>
-    </>
-);
+        </CardContent>
+    );
+};
 
 export default ApplicationsReviewPage;

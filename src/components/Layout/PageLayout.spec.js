@@ -1,13 +1,13 @@
 import React from "react";
 import { createStore, applyMiddleware, compose } from "redux";
-import reducer from "../reducers";
-import thunk from "redux-thunk";
-import { renderWithStoreAndTheme, screen } from "../test-utils";
-
-import AppTheme from "../AppTheme";
-import PageLayout from "./PageLayout";
 import { BrowserRouter } from "react-router-dom";
-import { createMatchMedia } from "../utils/media-queries";
+import thunk from "redux-thunk";
+import reducer from "../../reducers";
+
+import { renderWithStoreAndTheme, screen } from "../../test-utils";
+import AppTheme from "../../AppTheme";
+import PageLayout from "./PageLayout";
+import { createMatchMedia } from "../../utils/media-queries";
 
 
 describe("PageLayout", () => {

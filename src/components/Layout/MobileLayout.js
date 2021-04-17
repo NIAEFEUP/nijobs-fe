@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Dialog, makeStyles } from "@material-ui/core";
 import Navbar from "../Navbar";
 import ContactSection from "./ContactSection";
@@ -20,6 +21,14 @@ const MobileLayout = ({ children, pageTitle }) => {
             <ContactSection />
         </Dialog>
     );
+};
+
+MobileLayout.propTypes = {
+    children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
+    ]),
+    pageTitle: PropTypes.string,
 };
 
 export default MobileLayout;

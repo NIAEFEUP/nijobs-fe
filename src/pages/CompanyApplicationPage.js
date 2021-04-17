@@ -61,14 +61,14 @@ export const CompanyApplicationPageController = ({
 
 const CompanyApplicationPage = () => {
 
-    const { showConfirmationModal, toggleConfirmationModal } = useContext(CompanyApplicationPageControllerContext);
+    const { showConfirmationModal } = useContext(CompanyApplicationPageControllerContext);
 
     return (
         <React.Fragment>
             {showConfirmationModal ?
-                <ApplicationConfirmation open={showConfirmationModal} />
+                <ApplicationConfirmation />
                 :
-                <CompanyApplicationForm toggleConfirmationModal={toggleConfirmationModal} />
+                <CompanyApplicationForm />
             }
         </React.Fragment>
     );

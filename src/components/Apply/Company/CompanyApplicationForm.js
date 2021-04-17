@@ -27,7 +27,7 @@ import ShowPasswordToggle from "../../utils/form/ShowPasswordToggle";
 import { CompanyApplicationPageControllerContext } from "../../../pages/CompanyApplicationPage";
 import { Controller } from "react-hook-form";
 
-const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplication, submittingApplication,
+const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplication,
     submissionErrors, setCompanyApplicationSubmissionError }) => {
 
     const {
@@ -43,14 +43,15 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
         reset,
         handleSubmit,
         control,
+        toggleConfirmationModal,
     } = useContext(CompanyApplicationPageControllerContext);
 
-    const resetCompanyApplicationSubmissionError = () => {
+    const resetCompanyApplicationSubmissionError = useCallback(() => {
         if (!errorCleared) {
             setCompanyApplicationSubmissionError([]);
             setErrorCleared(true);
         }
-    };
+    }, [errorCleared, setCompanyApplicationSubmissionError, setErrorCleared]);
 
     const onSubmit = useCallback(async (data) => {
         setErrorCleared(false);
@@ -58,13 +59,16 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
             toggleConfirmationModal();
     }, [setErrorCleared, submitCompanyApplication, toggleConfirmationModal]);
 
-    const onResetButtonClick = (e) => {
+    const onResetButtonClick = useCallback((e) => {
         e.preventDefault();
         resetCompanyApplicationSubmissionError();
         reset();
-    };
+    }, [reset, resetCompanyApplicationSubmissionError]);
+
 
     const classes = useCompanyApplicationStyles(useMobile())();
+
+    const isMobile = useMobile();
 
     return (
         <React.Fragment>
@@ -89,50 +93,77 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                     <CardContent className={classes.formContent}>
                         <Controller
                             name="companyName"
-                            as={
+                            render={(
+                                { onChange, onBlur, ref, name, value },
+                            ) => (
                                 <TextField
+                                    name={name}
+                                    value={value}
                                     label="Company Name"
                                     id="input-companyName"
                                     error={!!errors.companyName}
-                                    onChange={resetCompanyApplicationSubmissionError}
+                                    inputRef={ref}
+                                    onBlur={onBlur}
+                                    onChange={(...args) => {
+                                        onChange(...args);
+                                        resetCompanyApplicationSubmissionError(...args);
+                                    }}
                                     helperText={errors.companyName ? errors.companyName.message : " "}
                                     margin="dense"
                                     fullWidth
                                 />
-                            }
+                            )}
                             control={control}
                             defaultValue=""
                         />
                         <Controller
                             name="email"
-                            as={
+                            render={(
+                                { onChange, onBlur, ref, name, value },
+                            ) => (
                                 <TextField
+                                    name={name}
+                                    value={value}
                                     label="Email"
                                     id="input-email"
                                     error={!!errors.email}
-                                    onChange={resetCompanyApplicationSubmissionError}
+                                    inputRef={ref}
+                                    onBlur={onBlur}
+                                    onChange={(...args) => {
+                                        onChange(...args);
+                                        resetCompanyApplicationSubmissionError(...args);
+                                    }}
                                     helperText={errors.email ? errors.email.message : " "}
                                     margin="dense"
                                     fullWidth
-                                />}
+                                />)}
                             control={control}
                             defaultValue=""
                         />
                         <FormGroup row className={classes.passwordGroupWrapper}>
                             <Controller
                                 name="password"
-                                as={
+                                render={(
+                                    { onChange, onBlur, ref, name, value },
+                                ) => (
                                     <TextField
+                                        name={name}
+                                        value={value}
                                         label="Password"
                                         id="input-password"
                                         type={showPassword ? "text" : "password"}
                                         error={!!errors.password}
-                                        onChange={resetCompanyApplicationSubmissionError}
+                                        inputRef={ref}
+                                        onBlur={onBlur}
+                                        onChange={(...args) => {
+                                            onChange(...args);
+                                            resetCompanyApplicationSubmissionError(...args);
+                                        }}
                                         helperText={errors.password ? errors.password.message : " "}
                                         margin="dense"
-                                        fullWidth={useMobile()}
+                                        fullWidth={isMobile}
                                         InputProps={{
-                                            endAdornment: useMobile() &&
+                                            endAdornment: isMobile &&
                                             <Wrap on={true} Wrapper={InputAdornment}>
                                                 <ShowPasswordToggle
                                                     showPassword={showPassword}
@@ -141,7 +172,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                                             </Wrap>,
                                         }}
                                     />
-                                }
+                                )}
                                 control={control}
                                 defaultValue=""
                             />
@@ -180,15 +211,24 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                         </FormGroup>
                         <Controller
                             name="motivation"
-                            as={
+                            render={(
+                                { onChange, onBlur, ref, name, value },
+                            ) => (
                                 <TextField
+                                    name={name}
+                                    value={value}
                                     className={classes.motivation}
                                     id="input-motivation"
                                     label="Motivation"
                                     placeholder="Tell us about the company. How do you think NIJobs can help you achieve your goal?"
                                     multiline
                                     error={!!errors.motivation}
-                                    onChange={resetCompanyApplicationSubmissionError}
+                                    inputRef={ref}
+                                    onBlur={onBlur}
+                                    onChange={(...args) => {
+                                        onChange(...args);
+                                        resetCompanyApplicationSubmissionError(...args);
+                                    }}
                                     helperText={
                                         `${motivation.length}/${CompanyApplicationConstants.motivation.maxLength} ${errors.motivation ?
                                             errors.motivation.message
@@ -203,7 +243,7 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
                                     }}
                                     fullWidth
                                 />
-                            }
+                            )}
                             control={control}
                             defaultValue=""
                         />
@@ -246,7 +286,6 @@ const CompanyApplicationForm = ({ toggleConfirmationModal, submitCompanyApplicat
 };
 
 CompanyApplicationForm.propTypes = {
-    toggleConfirmationModal: PropTypes.func,
     submittingApplication: PropTypes.bool,
     submitCompanyApplication: PropTypes.func,
     submissionErrors: PropTypes.arrayOf(
