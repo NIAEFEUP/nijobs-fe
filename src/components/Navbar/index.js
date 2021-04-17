@@ -23,7 +23,7 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 import useNavbarStyles from "./navbarStyles";
 
-const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, forceDesktopLayout, title, position }) => {
+const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, desktopLayout, title, position }) => {
 
     const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
@@ -47,7 +47,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
         setUserMenuOpen(false);
     };
     const isMobile = useMobile();
-    const classes = useNavbarStyles({ isMobile, showHomePageLink, forceDesktopLayout });
+    const classes = useNavbarStyles({ isMobile, showHomePageLink, desktopLayout });
 
     return (
         <AppBar
@@ -62,7 +62,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, for
                     {showHomePageLink &&
                         <Link to="/" className={classes.linkStyle}>
                             <Home className={classes.homeIcon}  />
-                            {!isMobile && "HOMEPAGE"}
+                            {desktopLayout && "HOMEPAGE"}
                         </Link>
                     }
                 </div>
@@ -114,7 +114,7 @@ Navbar.propTypes = {
     showLoginModal: PropTypes.bool.isRequired,
     toggleLoginModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
-    forceDesktopLayout: PropTypes.bool,
+    desktopLayout: PropTypes.bool,
     title: PropTypes.string,
     position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
 };

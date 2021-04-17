@@ -10,7 +10,6 @@ import FieldOptions from "./FieldOptions";
 import TechOptions from "./TechOptions";
 import { render, screen } from "../../../../test-utils";
 
-
 const AdvancedSearchWrapper = ({
     children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
     jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE, setJobDuration, setJobType, fields = [], setFields,

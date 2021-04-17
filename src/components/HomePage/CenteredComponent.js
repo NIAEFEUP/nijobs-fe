@@ -2,16 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     centered: {
-        height: "100vh",
         width: "100vw",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        minHeight: "100vh",
+        height: "auto",
+        padding: theme.spacing(16, 0),
         "& > *": {
             minWidth: "60%",
+            maxHeight: "none",
         },
     },
 }));
@@ -19,7 +22,9 @@ const CenteredComponent = ({ children, Component = "div" }) => {
     const classes = useStyles();
 
     return (
-        <Component className={classes.centered}>
+        <Component
+            className={classes.centered}
+        >
             {children}
         </Component>
     );

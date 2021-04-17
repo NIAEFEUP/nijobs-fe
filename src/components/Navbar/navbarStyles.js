@@ -11,9 +11,9 @@ export default makeStyles((theme) => ({
     homePageLink: ({ isMobile }) => ({
         marginLeft: theme.spacing(isMobile ? 0 : 3),
     }),
-    linkStyle: ({ forceDesktopLayout }) => ({
+    linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",
-        color: !forceDesktopLayout ? theme.palette.secondary.main : "white",
+        color: !desktopLayout ? theme.palette.secondary.main : "white",
         fontWeight: "500",
         fontSize: "medium",
         display: "flex",

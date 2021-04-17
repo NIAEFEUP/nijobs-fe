@@ -1,6 +1,6 @@
 import React from "react";
 import { RouterLink } from "../../../utils";
-import { Card, CardHeader, CardContent, CardActions, Link, Typography, makeStyles } from "@material-ui/core";
+import { CardHeader, CardContent, CardActions, Link, Typography, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 const ApplicationConfirmation = () => {
     const classes = useStyles();
     return (
-        <Card>
+        <>
             <CardHeader title="Application Submitted" />
             <CardContent className={classes.content}>
                 <Typography variant="body2">
@@ -26,7 +26,7 @@ const ApplicationConfirmation = () => {
                     <Link color="secondary" href="mailto:ni@aefeup.pt">ni@aefeup.pt</Link>
                 </Typography>
                 <Typography variant="body2" className={classes.secondText}>
-                    {"Once you're approved, you will receive an email, and then you can log into NiJobs! "}
+                    {"Once you're approved, you will receive an email, and then you can log into NIJobs! "}
                     Do not forget your password, you will need it on the first login.
                 </Typography>
             </CardContent>
@@ -37,7 +37,7 @@ const ApplicationConfirmation = () => {
                 Go to Homepage
                 </RouterLink>
             </CardActions>
-        </Card>
+        </>
     );
 };
 

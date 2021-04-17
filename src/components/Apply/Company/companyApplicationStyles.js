@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 
 export default (isMobile) => makeStyles((theme) => ({
     form: {
-        width: isMobile ? "100%" : "60%",
+        width: "100%",
     },
     motivation: {
         marginTop: theme.spacing(5),

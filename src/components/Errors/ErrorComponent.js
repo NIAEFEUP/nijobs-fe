@@ -1,9 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card, CardHeader, CardContent, Typography, Link, makeStyles } from "@material-ui/core";
+import { CardHeader, CardContent, Typography, Link, makeStyles } from "@material-ui/core";
 
-import { MainMask } from "../HomePage/MainMask";
-import CenteredComponent from "../HomePage/CenteredComponent";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -42,18 +40,13 @@ const ErrorComponent = ({ title, message, email }) => {
     const classes = useStyles();
     return (
         <React.Fragment>
-            <MainMask />
-            <CenteredComponent>
-                <Card className={classes.card} elevation={8}>
-                    <CardHeader title={title} className={classes.title} titleTypographyProps={{ variant: "h4" }} />
-                    <CardContent className={classes.content}>
-                        <Typography variant="body1" className={classes.secondText}>
-                            {message}
-                        </Typography>
-                        <EmailInfo email={email} />
-                    </CardContent>
-                </Card>
-            </CenteredComponent>
+            <CardHeader title={title} className={classes.title} titleTypographyProps={{ variant: "h4" }} />
+            <CardContent className={classes.content}>
+                <Typography variant="body1" className={classes.secondText}>
+                    {message}
+                </Typography>
+                <EmailInfo email={email} />
+            </CardContent>
         </React.Fragment>
     );
 };
