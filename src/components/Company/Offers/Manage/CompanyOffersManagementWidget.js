@@ -1,14 +1,14 @@
-import { Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
-import { generateTableCellFromField } from "../../../../utils/Table/utils";
+import { alphabeticalSorter, generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
+import { RowActions } from "../Actions";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -39,7 +39,7 @@ const generateRow = ({ title, location, publishDate, publishEndDate }) => ({
 });
 
 const sorters = {
-
+    title: alphabeticalSorter,
 };
 
 const filters = [
@@ -62,27 +62,6 @@ const filters = [
     },
     { id: "location-filter", render: LocationFilter },
 ];
-
-const RowActions = () => (
-    <Typography>Rows Actions</Typography>
-);
-
-/*
-const useRowCollapseStyles = makeStyles((theme) => ({
-    payloadSection: {
-        "&:not(:first-child)": {
-            paddingTop: theme.spacing(2),
-        },
-        "&:not(:first-child) p:first-of-type": {
-            paddingTop: theme.spacing(2),
-        },
-    },
-}));
-
-const RowCollapseComponent = ({ rowKey }) => {
-
-}; */
-
 
 const CompanyOffersManagementWidget = () => {
     const { data, isLoggedIn } = useSession();
