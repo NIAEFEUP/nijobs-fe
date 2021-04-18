@@ -27,7 +27,8 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({ title, location, publishDate, publishEndDate, description, ownerName }) => ({
+const generateRow = ({ title, location, description, publishDate, publishEndDate, companyName,
+    company }) => ({ // Check if it is company.name or companyName
     fields: {
         title: { value: title, align: "left" },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
@@ -35,7 +36,7 @@ const generateRow = ({ title, location, publishDate, publishEndDate, description
         location: { value: location },
     },
     payload: {
-        ownerName: { value: ownerName },
+        companyName: { value: company?.name },
         description: { value: description },
     },
 });
@@ -128,7 +129,7 @@ const CompanyOffersManagementWidget = () => {
         return (
             <>
                 <Typography variant="subtitle2">
-                    {row.payload.ownerName.value    /* CHECK WHY THIS IS NULL */}
+                    {row.payload.companyName.value}
                 </Typography>
                 <div className={classes.actionsDivider}>
                     <Typography variant="body1">
