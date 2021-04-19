@@ -14,7 +14,10 @@ import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import MyOffersPage from "./pages/MyOffersPage";
-import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
+import FinishCompanyRegistrationPage, {
+    FinishCompanyRegistrationPageController,
+    FinishCompanyRegistrationPageControllerContext,
+} from "./pages/FinishCompanyRegistrationPage";
 
 /**
  *
@@ -98,9 +101,12 @@ const AppRouter = () => (
                 authorize={(user) => (user.company && !user.hasFinishedRegistration)}
             >
                 <PageLayout
-                    key="/review/applications"
+                    key="/company/registration/finish"
                     layout={LayoutType.DESKTOP}
                     pageTitle="Finish Registration"
+                    context={FinishCompanyRegistrationPageControllerContext}
+                    controller={FinishCompanyRegistrationPageController}
+                    controllerProps={{ showConfirmation: false }}
                 >
                     <FinishCompanyRegistrationPage />
                 </PageLayout>

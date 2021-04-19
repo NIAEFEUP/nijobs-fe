@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Button,
     Card,
@@ -15,10 +15,8 @@ import {
     Typography,
 } from "@material-ui/core";
 import { CloudUpload } from "@material-ui/icons";
+import { FinishCompanyRegistrationPageControllerContext } from "../../../../pages/FinishCompanyRegistrationPage";
 
-function getSteps() {
-    return ["Set your profile picture", "Set your company's description", "Set your contacts"];
-}
 
 const useStyles = makeStyles(() => ({
     logoPreview: {
@@ -37,11 +35,6 @@ const LogoPreview = ({ img }) => {
                 className={classes.logoPreview}
             />
         </Card>
-        // <img
-        //     src={img}
-        //     title="logo-preview"
-        //     className={classes.logoPreview}
-        // />
     );
 };
 
@@ -135,16 +128,7 @@ function getStepContent(step) {
 }
 const FinishCompanyRegistrationWidget = () => {
 
-    const [activeStep, setActiveStep] = React.useState(0);
-    const steps = getSteps();
-
-    const handleNext = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    };
-
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+    const { activeStep, steps, handleNext, handleBack } = useContext(FinishCompanyRegistrationPageControllerContext);
 
     return (
         <Card>
