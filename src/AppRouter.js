@@ -14,10 +14,11 @@ import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import MyOffersPage from "./pages/MyOffersPage";
-import FinishCompanyRegistrationPage, {
-    FinishCompanyRegistrationPageController,
-    FinishCompanyRegistrationPageControllerContext,
-} from "./pages/FinishCompanyRegistrationPage";
+import {
+    FinishCompanyRegistrationController,
+    FinishCompanyRegistrationControllerContext,
+} from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
+import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 
 /**
  *
@@ -104,8 +105,8 @@ const AppRouter = () => (
                     key="/company/registration/finish"
                     layout={LayoutType.DESKTOP}
                     pageTitle="Finish Registration"
-                    context={FinishCompanyRegistrationPageControllerContext}
-                    controller={FinishCompanyRegistrationPageController}
+                    context={FinishCompanyRegistrationControllerContext}
+                    controller={FinishCompanyRegistrationController}
                     controllerProps={{ showConfirmation: false }}
                 >
                     <FinishCompanyRegistrationPage />
