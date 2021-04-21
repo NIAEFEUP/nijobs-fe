@@ -31,7 +31,7 @@ export default makeStyles((theme) => ({
         flexDirection: "row",
         justifyContent: "flex-end",
     }),
-    userLogo: ({ isMobile, forceDesktopLayout }) => ({
+    userLogo: ({ isMobile, desktopLayout }) => ({
         backgroundColor: !isMobile && theme.palette.primary.main,
         zIndex: 1,
         cursor: "pointer",
@@ -39,7 +39,7 @@ export default makeStyles((theme) => ({
         width: theme.spacing(6),
         height: theme.spacing(6),
         borderRadius: "50%",
-        color: (isMobile && !forceDesktopLayout) ? theme.palette.secondary.main : "white",
+        color: !desktopLayout ? theme.palette.secondary.main : "white",
     }),
     userMenuButton: {
         color: "white",
