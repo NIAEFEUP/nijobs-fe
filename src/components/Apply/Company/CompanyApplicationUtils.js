@@ -1,6 +1,7 @@
 export const CompanyApplicationConstants = {
     password: {
         minLength: 8,
+        hasNumber: /\d/,
     },
     motivation: {
         minLength: 10,
