@@ -10,7 +10,8 @@ export default yup.object().shape({
         .email(ValidationReasons.EMAIL),
     password: yup.string()
         .required(ValidationReasons.REQUIRED)
-        .min(...generateValidationRule("password", "minLength", ValidationReasons.TOO_SHORT)),
+        .min(...generateValidationRule("password", "minLength", ValidationReasons.TOO_SHORT))
+        .matches(...generateValidationRule("password", "hasNumber", ValidationReasons.HAVE_NUMBER)),
     confirmPassword: yup.string()
         .oneOf([yup.ref("password"), null], "Passwords must match."),
     motivation: yup.string()

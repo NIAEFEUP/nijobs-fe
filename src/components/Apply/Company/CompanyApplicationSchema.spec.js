@@ -61,6 +61,13 @@ describe("Company Application Schema", () => {
         } catch (err) {
             expect(err.message).toBe("Must have at least 8 characters.");
         }
+        try {
+            await CompanyApplicationSchema.validateAt("password", {
+                password: "password",
+            });
+        } catch (err) {
+            expect(err.message).toBe("Must contain at least a number.");
+        }
 
         const validResult = await CompanyApplicationSchema.validateAt("password", {
             password: "password123",
