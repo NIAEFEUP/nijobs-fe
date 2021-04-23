@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import { Typography } from "@material-ui/core";
 import Offer from "./Offer";
+import OfferContentItem from "./OfferContentItem";
 
 import LoadingMagnifyGlass from "./loading_magnify_glass_svg";
 import { useDesktop } from "../../../../utils/media-queries";
@@ -49,7 +50,7 @@ const OfferContent = ({ offer, loading }) => {
                             </Typography>
 
                             <Typography variant="h6" color="primary" gutterBottom>
-                                {offer?.company?.name}
+                                {offer.ownerName}
                             </Typography>
                             <div>
                                 <LocationCity style={{ verticalAlign: "sub" }} />
@@ -82,10 +83,23 @@ const OfferContent = ({ offer, loading }) => {
                                 {offer.jobMinDuration && " months"}
                             </div>
                         </div>
-                        <div className={classes.offerDescription}>
-                            <Typography variant="body1">
-                                {offer.description}
-                            </Typography>
+                        <div className={classes.offerBody}>
+                            <OfferContentItem hasPermissions title="Description" content={offer.description} />
+                            <OfferContentItem hasPermissions title="Technologies" content={offer.technologies} />
+                            <OfferContentItem hasPermissions title="Requirements" content={offer.requirements} />
+                            <OfferContentItem hasPermissions title="Contacts" content={offer.contacts} />
+                            <OfferContentItem hasPermissions title="Is Paid?" content={offer.isPaid ? "yes" : "no"} />
+                            <OfferContentItem hasPermissions title="Vacancies" content={offer.vacancies?.toString()} />
+                            <OfferContentItem hasPermissions title="Job Type" content={offer.jobType} />
+                            <OfferContentItem hasPermissions title="Fields" content={offer.fields} />
+                            <OfferContentItem hasPermissions title="Hidden Reason" content={offer.hiddenReason} />
+                            <OfferContentItem hasPermissions title="Admin Reason" content={offer.adminReason} />
+                            <OfferContentItem
+                                hasPermissions title="Publish Date" content={format(parseISO(offer.publishDate), "yyyy-MM-dd")}
+                            />
+                            <OfferContentItem
+                                hasPermissions title="Publish End Date" content={format(parseISO(offer.publishEndDate), "yyyy-MM-dd")}
+                            />
                         </div>
                     </React.Fragment>
                 }

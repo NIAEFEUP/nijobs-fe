@@ -33,12 +33,11 @@ describe("OfferContent", () => {
             const offer = new Offer({
                 id: "id1",
                 title: "position1",
-                company: {
-                    name: "company1",
-                    logo: "companyLogo",
-                },
+                ownerName: "company1",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
+                publishDate: "2021-04-22T22:35:57.177Z",
+                publishEndDate: "2021-09-19T23:00:00.000Z",
                 description: "description1",
             });
 
@@ -49,11 +48,10 @@ describe("OfferContent", () => {
                 );
 
                 expect(screen.getByRole("heading", { name: offer.title, level: 4 })).toBeInTheDocument();
-                expect(screen.getByRole("heading", { name: offer.company.name, level: 6 })).toBeInTheDocument();
+                expect(screen.getByRole("heading", { name: offer.ownerName, level: 6 })).toBeInTheDocument();
                 expect(screen.getByText(offer.location)).toBeInTheDocument();
                 expect(screen.getByText(format(parseISO(offer.jobStartDate), "yyyy-MM-dd"))).toBeInTheDocument();
                 expect(screen.getByText(offer.description)).toBeInTheDocument();
-
             });
 
         });

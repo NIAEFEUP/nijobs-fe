@@ -51,7 +51,7 @@ export default makeStyles((theme) => ({
         paddingLeft: "2em",
         overflow: "auto",
     },
-    offerDescription: {
+    offerBody: {
 
     },
     searchOfferErrorContainer: {
@@ -65,7 +65,7 @@ export default makeStyles((theme) => ({
         position: "sticky",
         top: 0,
         backgroundColor: "white",
-        paddingBottom: theme.spacing(4),
+        paddingBottom: theme.spacing(2),
         paddingTop: !isMobile ? theme.spacing(3) : 0,
     }),
     offerContent: ({ isMobile }) => {
