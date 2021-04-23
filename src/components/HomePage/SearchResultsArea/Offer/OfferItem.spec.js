@@ -8,9 +8,11 @@ describe("OfferItem", () => {
     const offer = new Offer({
         id: "id1",
         title: "position1",
-        company: { name: "company1" },
+        ownerName: "company1",
         location: "location1",
-        date: "date1",
+        jobStartDate: (new Date()).toISOString(),
+        publishDate: "2021-04-22T22:35:57.177Z",
+        publishEndDate: "2021-09-19T23:00:00.000Z",
         description: "description1",
     });
 
@@ -29,7 +31,7 @@ describe("OfferItem", () => {
             render(<OfferItem offer={offer} />);
 
             expect(screen.getByText(offer.title)).toBeInTheDocument();
-            expect(screen.getByText(offer.company.name)).toBeInTheDocument();
+            expect(screen.getByText(offer.ownerName)).toBeInTheDocument();
             expect(screen.getByText(offer.location)).toBeInTheDocument();
         });
 

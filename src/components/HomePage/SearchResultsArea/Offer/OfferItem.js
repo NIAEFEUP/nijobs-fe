@@ -73,7 +73,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                         <Avatar
                             alt="company_logo"
                             color="blue"
-                            src={offer?.company?.logo || defaultLogo}
+                            src={offer?.ownerLogo || defaultLogo}
                         />
                     }
                 </ListItemAvatar>
@@ -102,7 +102,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                                 color="primary"
                                 display="block"
                             >
-                                {offer?.company?.name}
+                                {offer?.ownerName}
                             </Typography>
                             <LocationCity fontSize="small" style={{ verticalAlign: "sub" }} />
                             <Typography display="inline" variant="caption">

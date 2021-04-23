@@ -1,4 +1,4 @@
-import { getByRole, getByText, render, screen } from "@testing-library/react";
+import { getByText, render, screen } from "@testing-library/react";
 import React from "react";
 import Offer from "../Offer/Offer";
 import OfferItemsContainer from "./OfferItemsContainer";
@@ -16,23 +16,21 @@ describe("OfferItemsContainer", () => {
                 new Offer({
                     _id: "id1",
                     title: "title1",
-                    company: {
-                        name: "company1",
-                        logo: "companyLogo",
-                    },
+                    ownerName: "company1",
                     location: "location1",
-                    jobStartDate: "jobStartDate1",
+                    jobStartDate: (new Date()).toISOString(),
+                    publishDate: "2021-04-22T22:35:57.177Z",
+                    publishEndDate: "2021-09-19T23:00:00.000Z",
                     description: "description1",
                 }),
                 new Offer({
                     _id: "id2",
                     title: "title2",
-                    company: {
-                        name: "company2",
-                        logo: "companyLogo",
-                    },
+                    ownerName: "company1",
                     location: "location2",
-                    jobStartDate: "jobStartDate2",
+                    jobStartDate: (new Date()).toISOString(),
+                    publishDate: "2021-04-22T22:35:57.177Z",
+                    publishEndDate: "2021-09-19T23:00:00.000Z",
                     description: "description2",
                 }),
             ];
@@ -47,12 +45,14 @@ describe("OfferItemsContainer", () => {
             expect(items).toHaveLength(2);
             expect(getByText(items[0], offers[0].title)).toBeInTheDocument();
             expect(getByText(items[0], offers[0].location)).toBeInTheDocument();
-            expect(getByRole(items[0], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[0].company.logo);
+            // Removed while we do dot have the logo in the frontend
+            // expect(getByRole(items[0], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[0].company.logo);
 
 
             expect(getByText(items[1], offers[1].title)).toBeInTheDocument();
             expect(getByText(items[1], offers[1].location)).toBeInTheDocument();
-            expect(getByRole(items[1], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[1].company.logo);
+            // Removed while we do dot have the logo in the frontend
+            // expect(getByRole(items[1], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[1].company.logo);
         });
     });
 });
