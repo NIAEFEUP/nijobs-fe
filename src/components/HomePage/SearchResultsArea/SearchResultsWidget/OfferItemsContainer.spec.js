@@ -14,7 +14,7 @@ describe("OfferItemsContainer", () => {
         it("should show offer items", async () => {
             const offers = [
                 new Offer({
-                    _id: "id1",
+                    id: "id1",
                     title: "title1",
                     ownerName: "company1",
                     location: "location1",
@@ -24,7 +24,7 @@ describe("OfferItemsContainer", () => {
                     description: "description1",
                 }),
                 new Offer({
-                    _id: "id2",
+                    id: "id2",
                     title: "title2",
                     ownerName: "company1",
                     location: "location2",
@@ -46,13 +46,13 @@ describe("OfferItemsContainer", () => {
             expect(getByText(items[0], offers[0].title)).toBeInTheDocument();
             expect(getByText(items[0], offers[0].location)).toBeInTheDocument();
             // Removed while we do dot have the logo in the frontend
-            // expect(getByRole(items[0], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[0].company.logo);
+            // expect(getByRole(items[0], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[0].ownerLogo);
 
 
             expect(getByText(items[1], offers[1].title)).toBeInTheDocument();
             expect(getByText(items[1], offers[1].location)).toBeInTheDocument();
             // Removed while we do dot have the logo in the frontend
-            // expect(getByRole(items[1], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[1].company.logo);
+            // expect(getByRole(items[1], "img", { name: "company_logo" }).getAttribute("src")).toBe(offers[1].ownerLogo);
         });
     });
 });

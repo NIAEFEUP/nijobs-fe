@@ -51,8 +51,8 @@ export default makeStyles((theme) => ({
         paddingLeft: "2em",
         overflow: "auto",
     },
-    offerBody: {
-
+    offerTitleLink: {
+        color: "inherit",
     },
     searchOfferErrorContainer: {
         height: "100%",
@@ -62,16 +62,22 @@ export default makeStyles((theme) => ({
         justifyContent: "center",
     },
     offerHeader: ({ isMobile }) => ({
-        position: "sticky",
-        top: 0,
         backgroundColor: "white",
         paddingBottom: theme.spacing(2),
         paddingTop: !isMobile ? theme.spacing(3) : 0,
     }),
-    offerContent: ({ isMobile }) => {
-        const paddingRules = isMobile ? { padding: 0 } : { padding: theme.spacing(3), paddingTop: 0 };
+    offerContent: ({ isMobile, isPage }) => {
+        let paddingValue = !isMobile ? theme.spacing(3) : 0;
+        let paddingTopValue = 0;
+        if (isPage) {
+            paddingValue = isMobile ? theme.spacing(3) : theme.spacing(10);
+            paddingTopValue = !isMobile && theme.spacing(5);
+        }
         return {
-            ...paddingRules,
+            paddingTop: paddingTopValue,
+            paddingRight: paddingValue,
+            paddingBottom: paddingValue,
+            paddingLeft: paddingValue,
             height: "100%",
         };
     },

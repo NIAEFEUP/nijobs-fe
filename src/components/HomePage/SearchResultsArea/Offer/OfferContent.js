@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Typography } from "@material-ui/core";
+import { Typography, Link } from "@material-ui/core";
 import Offer from "./Offer";
 import OfferContentItem from "./OfferContentItem";
 
@@ -15,8 +15,8 @@ import { format, parseISO } from "date-fns";
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
-const OfferContent = ({ offer, loading }) => {
-    const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop() });
+const OfferContent = ({ offer, loading, isPage }) => {
+    const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop(), isPage });
     if (loading) {
         return (
             <div className={classes.offerContent} data-testid="offer-content">
@@ -46,7 +46,14 @@ const OfferContent = ({ offer, loading }) => {
                     <React.Fragment>
                         <div className={classes.offerHeader}>
                             <Typography variant="h4" gutterBottom>
-                                {offer.title}
+                                {
+                                    isPage ?
+                                        offer.title
+                                        :
+                                        <Link href={`/offer/${offer.id}`} className={classes.offerTitleLink}>
+                                            {offer.title}
+                                        </Link>
+                                }
                             </Typography>
 
                             <Typography variant="h6" color="primary" gutterBottom>
@@ -83,7 +90,7 @@ const OfferContent = ({ offer, loading }) => {
                                 {offer.jobMinDuration && " months"}
                             </div>
                         </div>
-                        <div className={classes.offerBody}>
+                        <div>
                             <OfferContentItem hasPermissions title="Description" content={offer.description} />
                             <OfferContentItem hasPermissions title="Technologies" content={offer.technologies} />
                             <OfferContentItem hasPermissions title="Requirements" content={offer.requirements} />
