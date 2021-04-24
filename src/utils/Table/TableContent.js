@@ -10,11 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-<<<<<<< HEAD
 const RenderTableRow = ({
-=======
-const CompanyApplicationRow = ({
->>>>>>> Refactored some Tables Components and created simple table for offers
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
     submitUndoableAction, RowActionsProps, context, RowComponent, RowCollapseComponent,
 }) => {
@@ -39,15 +35,7 @@ const CompanyApplicationRow = ({
                         inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
                 </TableCell>
-<<<<<<< HEAD
                 <RowComponent rowKey={rowKey} labelId={labelId} />
-=======
-                {/* Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
-                ))*/
-                    <RowComponent rowKey={rowKey} labelId={labelId} />
-                }
->>>>>>> Refactored some Tables Components and created simple table for offers
                 {RowActions &&
                     <RowActions
                         row={{ key: rowKey, fields, payload, ...rowProps }}
@@ -63,32 +51,6 @@ const CompanyApplicationRow = ({
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(fields).length + 2}>
                     <Collapse in={open} timeout="auto" unmountOnExit className={classes.rowDetails}>
-<<<<<<< HEAD
-=======
-                        {/* <Typography variant="subtitle2">
-                            {payload.email}
-                        </Typography>
-                        <div className={classes.payloadSection}>
-                            <Typography variant="body1">
-                            Motivation
-                            </Typography>
-                            <Typography variant="body2">
-                                {payload.motivation}
-                            </Typography>
-                        </div>
-
-                        {fields.state.value === ApplicationStateLabel.REJECTED &&
-                            <div className={classes.payloadSection}>
-                                <Divider />
-                                <Typography variant="body1">
-                                    {`Reject Reason (Rejected at ${payload.rejectedAt})`}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {payload.rejectReason}
-                                </Typography>
-                            </div>
-                        } */}
->>>>>>> Refactored some Tables Components and created simple table for offers
                         <RowCollapseComponent rowKey={rowKey} />
                     </Collapse>
                 </TableCell>
@@ -109,13 +71,8 @@ RenderTableRow.propTypes = {
     submitUndoableAction: PropTypes.func.isRequired,
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
-<<<<<<< HEAD
     RowComponent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
-=======
-    RowComponent: PropTypes.node.isRequired,
-    RowCollapseComponent: PropTypes.node,
->>>>>>> Refactored some Tables Components and created simple table for offers
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
@@ -158,13 +115,8 @@ TableContent.propTypes = {
     emptyMessage: PropTypes.string,
     numColumns: PropTypes.number.isRequired,
     context: PropTypes.object,
-<<<<<<< HEAD
     RowComponent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
-=======
-    RowComponent: PropTypes.node.isRequired,
-    RowCollapseComponent: PropTypes.node,
->>>>>>> Refactored some Tables Components and created simple table for offers
 };
 
 export default TableContent;
