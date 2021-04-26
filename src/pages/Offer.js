@@ -1,50 +1,58 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
+import { useParams, Redirect, useLocation } from "react-router-dom";
 
 import OfferContent from "../components/HomePage/SearchResultsArea/Offer/OfferContent";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-import config from "../config";
-import NotFound from "./NotFound";
-const { API_HOSTNAME } = config;
+import { getOffer } from "../services/getOfferService";
 
-class OfferComponent extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: props.id,
-            offer: null,
-        };
-    }
+const OfferComponent = ({ id }) => { // TODO: use OfferPageController
+    const _amMounted = useRef(); // Prevents setState calls from happening after unmount
+    const [offer, setOffer] = useState({});
+    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
 
-    async getOffer(id) { // TODO: deal with errors
-        try {
-            const res = await fetch(`${API_HOSTNAME}/offers/${id}`, {
-                method: "GET",
+    useEffect(() => {
+        _amMounted.current = true;
+        // eslint-disable-next-line no-unused-vars
+        const offerPromise = getOffer(id)
+            .then((offer) => {
+                if (_amMounted.current) {
+                    setOffer(new Offer(offer));
+                    setLoading(false);
+                }
+            })
+            .catch(() => {
+                if (_amMounted.current) {
+                    setError("UnexpectedError");
+                    setLoading(false);
+                }
             });
-            if (!res.ok) {
-                return null;
-            }
-            const offerData = await res.json();
-            this.setState({ offer: new Offer(offerData) });
-        } catch (error) {
-            return null;
-        }
-        return null;
-    }
+        return () => {
+            _amMounted.current = false;
+        };
+    }, [id]);
 
-    render() {
-        this.getOffer(this.state.id);
-        if (this.state.offer) {
-            return (
-                <React.Fragment>
-                    <OfferContent offer={this.state.offer} isPage />
-                </React.Fragment>
-            );
-        }
-        return <NotFound />;
+    if (error === null) {
+        return (
+            <React.Fragment>
+                <OfferContent offer={offer} isPage loading={loading} />
+            </React.Fragment>
+        );
     }
-}
+    return (
+        <Redirect
+            to={{
+                pathname: `/not-found${location.pathname} `,
+                state: {
+                    from: location,
+                    message: `The offer with id ${id} is hidden or does not exist.`,
+                },
+            }}
+        />
+    );
+};
 
 OfferComponent.propTypes = {
     id: PropTypes.string,
