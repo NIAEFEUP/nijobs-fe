@@ -1,39 +1,23 @@
-import { setLoadingOffer, setOffer, setOfferFetchError, resetOfferFetchError } from "../actions/getOfferActions";
-import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-
 import config from "../config";
 const { API_HOSTNAME } = config;
 
-export const getOffer = (id) => async (dispatch) => {
-
-    dispatch(resetOfferFetchError());
-    dispatch(setLoadingOffer(true));
+export const getOffer = async (id) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/offers?${id}`, {
             method: "GET",
         });
-        if (!res.ok) {
-            dispatch(setOfferFetchError({
-                cause: "BAD_RESPONSE",
-                error: res.status,
-            }));
-            dispatch(setLoadingOffer(false));
-            // TODO count metrics
-            return;
-        }
-        const offerData = await res.json();
-        dispatch(setOffer(new Offer(offerData)));
+        const json = await res.json();
 
-        dispatch(setLoadingOffer(false));
+        if (!res.ok) {
+            throw json.errors;
+        }
+        return json;
         // TODO count metrics
 
     } catch (error) {
-        dispatch(setOfferFetchError({
-            cause: "NETWORK_FAILURE",
-            error,
-        }));
-        dispatch(setLoadingOffer(false));
+        if (Array.isArray(error)) throw error;
+        throw [{ msg: "Unexpected Error" }];
         // TODO count metrics
     }
 
