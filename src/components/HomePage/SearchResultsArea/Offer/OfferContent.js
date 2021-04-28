@@ -7,6 +7,7 @@ import OfferContentItem from "./OfferContentItem";
 
 import LoadingMagnifyGlass from "./loading_magnify_glass_svg";
 import { useDesktop } from "../../../../utils/media-queries";
+import useSession from "../../../../hooks/useSession";
 
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import LOADING_MESSAGES from "./offerLoadingMessages";
@@ -16,7 +17,11 @@ import { format, parseISO } from "date-fns";
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
 const OfferContent = ({ offer, loading, isPage }) => {
+
+    const { data, isValidating, error, isLoggedIn } = useSession();
+    const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop(), isPage });
+
     if (loading) {
         return (
             <div className={classes.offerContent} data-testid="offer-content">
@@ -39,7 +44,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                 {offer === null ?
                     <div className={classes.unselectedOffer} id="no_selected_offer_text">
                         <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
-                            Please select an offer to view the details
+                            {!isPage ? "Please select an offer to view the details" : "Unexpected Error"}
                         </Typography>
                     </div>
                     :
@@ -91,21 +96,63 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             </div>
                         </div>
                         <div>
-                            <OfferContentItem hasPermissions title="Description" content={offer.description} />
-                            <OfferContentItem hasPermissions title="Technologies" content={offer.technologies} />
-                            <OfferContentItem hasPermissions title="Requirements" content={offer.requirements} />
-                            <OfferContentItem hasPermissions title="Contacts" content={offer.contacts} />
-                            <OfferContentItem hasPermissions title="Is Paid?" content={offer.isPaid ? "yes" : "no"} />
-                            <OfferContentItem hasPermissions title="Vacancies" content={offer.vacancies?.toString()} />
-                            <OfferContentItem hasPermissions title="Job Type" content={offer.jobType} />
-                            <OfferContentItem hasPermissions title="Fields" content={offer.fields} />
-                            <OfferContentItem hasPermissions title="Hidden Reason" content={offer.hiddenReason} />
-                            <OfferContentItem hasPermissions title="Admin Reason" content={offer.adminReason} />
                             <OfferContentItem
-                                hasPermissions title="Publish Date" content={format(parseISO(offer.publishDate), "yyyy-MM-dd")}
+                                hasPermissions title="Description"
+                                content={offer.description}
                             />
                             <OfferContentItem
-                                hasPermissions title="Publish End Date" content={format(parseISO(offer.publishEndDate), "yyyy-MM-dd")}
+                                hasPermissions
+                                title="Technologies"
+                                content={offer.technologies}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Requirements"
+                                content={offer.requirements}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Contacts"
+                                content={offer.contacts}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Is Paid?"
+                                content={offer.isPaid ? "Yes" : "No"}
+                            />
+                            <OfferContentItem
+                                hasPermissions title="Vacancies"
+                                content={offer.vacancies?.toString()}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Job Type"
+                                content={offer.jobType}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Fields"
+                                content={offer.fields}
+                            />
+                            <OfferContentItem
+                                hasPermissions={sessionData?.isAdmin || sessionData?.company?._id === offer.owner}
+                                title="Hidden Reason"
+                                content={offer.hiddenReason}
+                            />
+                            <OfferContentItem
+                                hasPermissions={sessionData?.isAdmin}
+                                title="Admin Reason"
+                                content={offer.adminReason}
+                            />
+                            <OfferContentItem
+                                hasPermissions
+                                title="Publish Date"
+                                content={format(parseISO(offer.publishDate), "yyyy-MM-dd")}
+                            />
+                            <OfferContentItem
+                                hasPermissions={sessionData?.isAdmin || sessionData?.company?._id === offer.owner}
+                                title="Publish End Date"
+                                content={format(parseISO(offer.publishEndDate), "yyyy-MM-dd")}
                             />
                         </div>
                     </React.Fragment>
