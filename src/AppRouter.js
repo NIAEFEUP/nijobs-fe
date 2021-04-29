@@ -11,6 +11,7 @@ import CompanyApplicationPage, {
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
+import RulesPage from "./pages/RulesPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 
@@ -56,6 +57,18 @@ const AppRouter = () => (
                     controllerProps={{ showConfirmation: false }}
                 >
                     <CompanyApplicationPage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/rules"
+            >
+                <PageLayout
+                    key="/rules"
+                    pageTitle="Rules"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <RulesPage />
                 </PageLayout>
             </Route>
             <ProtectedRoute
