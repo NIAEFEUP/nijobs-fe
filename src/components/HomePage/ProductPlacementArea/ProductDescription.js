@@ -20,7 +20,7 @@ import {
 import useSession from "../../../hooks/useSession";
 
 export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
-    const { isLoggedIn } = useSession();
+    const { isLoggedIn, data } = useSession();
 
     const classes = useProductDescriptionStyles({ isMobile: !useDesktop() });
 
@@ -60,25 +60,45 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                         </Typography>
                     </Grid>
 
-                    {!isLoggedIn &&
-                    <Grid item>
-                        <Button
-                            variant="text"
-                            color="primary"
-                            onClick={toggleLoginModal}
-                        >
+                    {isLoggedIn && data?.company ?
+                        <Grid item>
+                            <Typography gutterBottom>
+                                { "Hello, " }
+                                <span className={classes.companyName}>
+                                    { data?.company?.name }
+                                </span>
+                                !
+                            </Typography>
+                            <Button
+                                underline="none"
+                                variant="contained"
+                                color="primary"
+                                component={RouterLink}
+                                to="/offers/new"
+                            >
+                            Create Offer
+                            </Button>
+                        </Grid>
+                        :
+                        <Grid item>
+                            <Button
+                                variant="text"
+                                color="primary"
+                                onClick={toggleLoginModal}
+                            >
                             Login
-                        </Button>
-                        <Button
-                            variant="text"
-                            color="primary"
-                            component={RouterLink}
-                            to="/apply/company"
-                        >
-                            Join Us
-                        </Button>
-                    </Grid>
+                            </Button>
+                            <Button
+                                variant="text"
+                                color="primary"
+                                component={RouterLink}
+                                to="/apply/company"
+                            >
+                                Join Us
+                            </Button>
+                        </Grid>
                     }
+
                 </Grid>
             </Grid>
         </div>

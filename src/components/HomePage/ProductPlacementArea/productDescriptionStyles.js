@@ -20,5 +20,8 @@ export default makeStyles(() => ({
             textDecoration: "none",
         },
     },
+    companyName: {
+        fontWeight: "bold",
+    },
 }))
 ;
