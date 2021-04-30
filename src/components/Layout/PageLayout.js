@@ -18,6 +18,14 @@ const LayoutWrappers = Object.freeze({
     MOBILE: MobileLayout,
 });
 
+function ScrollToTopOnMount() {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    return null;
+}
+
 const PageLayout = ({
     children,
     showHomePageLink = true,
@@ -44,6 +52,7 @@ const PageLayout = ({
 
     return (
         <ContextProvider {...contextProviderProps}>
+            <ScrollToTopOnMount />
             <LayoutWrapper showHomePageLink={showHomePageLink} pageTitle={pageTitle}>
                 {children}
             </LayoutWrapper>
