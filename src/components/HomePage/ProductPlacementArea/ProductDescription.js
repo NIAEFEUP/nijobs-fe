@@ -14,6 +14,7 @@ import { ReactComponent as StudentSvg } from "./resources/student.svg";
 import {
     Typography,
     Button,
+    Grid,
 } from "@material-ui/core";
 
 import useSession from "../../../hooks/useSession";
@@ -28,48 +29,58 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
             ref={ref}
             className={classes.productDescription}
         >
-            <div className={classes.productDescriptionCol}>
-                <StudentSvg />
-
-                <div className={classes.productDescriptionInfo}>
-                    <Typography>
-                        As a Student, you can search for job offers according to your interests.
-                    </Typography>
-                </div>
-
-            </div>
-            <div className={classes.productDescriptionCol}>
-                <CompanySvg />
-
-                <div className={classes.productDescriptionInfo}>
-                    <Typography>
-                        As a Company, you can advertise yout job opportunities to students!
-                    </Typography>
-
-                    {!isLoggedIn &&
-                    <>
+            <Grid container spacing={10} justify="center">
+                <Grid item xs={12} lg={6} container spacing={1} direction="column" justify="flex-start" alignItems="center">
+                    <Grid item>
+                        <StudentSvg fill="#999" className={classes.productDescriptionSVG} />
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6">
+                            Are you a student?
+                        </Typography>
+                    </Grid>
+                    <Grid item>
                         <Typography>
+                            As a Student, you can search for job offers according to your interests.
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12} lg={6} container spacing={1} direction="column" justify="flex-start" alignItems="center">
+                    <Grid item>
+                        <CompanySvg fill="#999" className={classes.productDescriptionSVG} />
+                    </Grid>
+                    <Grid item>
+                        <Typography variant="h6">
                             Are you a company?
                         </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography>
+                            As a Company, you can advertise yout job opportunities to students!
+                        </Typography>
+                    </Grid>
+
+                    {!isLoggedIn &&
+                    <Grid item>
                         <Button
                             variant="text"
                             color="primary"
                             onClick={toggleLoginModal}
                         >
-                        Login
+                            Login
                         </Button>
                         <Button
                             variant="text"
                             color="primary"
+                            component={RouterLink}
+                            to="/apply/company"
                         >
-                            <RouterLink className={classes.productDescriptionAnchor} to="/apply/company">Join Us</RouterLink>
+                            Join Us
                         </Button>
-                    </>
+                    </Grid>
                     }
-                </div>
-
-            </div>
-
+                </Grid>
+            </Grid>
         </div>
     );
 });
