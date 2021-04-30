@@ -13,6 +13,11 @@ import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWi
 import LOADING_MESSAGES from "./offerLoadingMessages";
 import { DateRange, LocationCity } from "@material-ui/icons";
 import { format, parseISO } from "date-fns";
+import createDOMPurify from "dompurify";
+import ReactMarkdown from "react-markdown";
+import remarkBreaksPlugin from "remark-breaks";
+
+const purify = createDOMPurify(window);
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
@@ -48,7 +53,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                         </Typography>
                     </div>
                     :
-                    <React.Fragment>
+                    <div>
                         <div className={classes.offerHeader}>
                             <Typography variant="h4" gutterBottom>
                                 {
@@ -96,10 +101,6 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             </div>
                         </div>
                         <div>
-                            <OfferContentItem
-                                hasPermissions title="Description"
-                                content={offer.description}
-                            />
                             <OfferContentItem
                                 hasPermissions
                                 title="Technologies"
@@ -154,8 +155,13 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                 title="Publish End Date"
                                 content={format(parseISO(offer.publishEndDate), "yyyy-MM-dd")}
                             />
+                            <Typography variant="body1">
+                                <ReactMarkdown remarkPlugins={[remarkBreaksPlugin]}>
+                                    { purify.sanitize(offer.description) }
+                                </ReactMarkdown>
+                            </Typography>
                         </div>
-                    </React.Fragment>
+                    </div>
                 }
             </div>
         );
