@@ -1,7 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Typography } from "@material-ui/core";
+import {
+    Divider,
+    makeStyles,
+    Paper, Typography,
+} from "@material-ui/core";
 
-import { alphabeticalSorter } from "../../../utils/Table/utils";
+import { alphabeticalSorter, generateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./Filters";
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
@@ -10,6 +14,7 @@ import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
+import PropTypes from "prop-types";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -101,38 +106,106 @@ const ApplicationsReviewWidget = () => {
             } }));
     }, [setRows]);
 
+    const RowComponent = ({ rowKey, labelId }) => {
+        const fields = rows[rowKey].fields;
+
+        return (
+            <>
+                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                ))}
+            </>
+        );
+    };
+
+    RowComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+        labelId: PropTypes.string.isRequired,
+    };
+
+    const useRowCollapseStyles = makeStyles((theme) => ({
+        payloadSection: {
+            "&:not(:first-child)": {
+                paddingTop: theme.spacing(2),
+            },
+            "&:not(:first-child) p:first-of-type": {
+                paddingTop: theme.spacing(2),
+            },
+        },
+    }));
+
+    const RowCollapseComponent = ({ rowKey }) => {
+        const row = rows[rowKey];
+        const classes = useRowCollapseStyles();
+        return (
+            <>
+                <Typography variant="subtitle2">
+                    {row.payload.email}
+                </Typography>
+                <div className={classes.payloadSection}>
+                    <Typography variant="body1">
+                            Motivation
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.motivation}
+                    </Typography>
+                </div>
+
+                {row.fields.state.value === ApplicationStateLabel.REJECTED &&
+                <div className={classes.payloadSection}>
+                    <Divider />
+                    <Typography variant="body1">
+                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+                    </Typography>
+                    <Typography variant="body2">
+                        {row.payload.rejectReason}
+                    </Typography>
+                </div>
+                }
+            </>
+        );
+    };
+
+    RowCollapseComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+    };
+
     return (
         <>
             <UndoableActionsHandlerProvider>
-                {error ?
-                    <>
-                        <Typography variant="h6" color="secondary">
+                <Paper style={{ width: "60%", padding: "24px 72px", boxSizing: "content-box" }}>
+                    {error ?
+                        <>
+                            <Typography variant="h6" color="secondary">
                                 Review Applications
-                        </Typography>
-                        <Typography>
+                            </Typography>
+                            <Typography>
                                 An unexpected error occurred, please try refreshing the browser window.
-                        </Typography>
-                    </>
-                    :
-                    <FilterableTable
-                        title="Review Applications"
-                        tableComponent={ControlledSortableSelectableTable}
-                        defaultSort="name"
-                        rows={rows}
-                        setInitialRows={setRows}
-                        columns={columns}
-                        sorters={sorters}
-                        filters={filters}
-                        RowActions={RowActions}
-                        rowsPerPage={5}
-                        stickyHeader
-                        emptyMessage="No applications here."
-                        context={{
-                            approveApplicationRow,
-                            rejectApplicationRow,
-                        }}
-                    />
-                }
+                            </Typography>
+                        </>
+                        :
+                        <FilterableTable
+                            title="Review Applications"
+                            tableComponent={ControlledSortableSelectableTable}
+                            defaultSort="name"
+                            rows={rows}
+                            setInitialRows={setRows}
+                            columns={columns}
+                            sorters={sorters}
+                            filters={filters}
+                            RowActions={RowActions}
+                            rowsPerPage={5}
+                            stickyHeader
+                            emptyMessage="No applications here."
+                            context={{
+                                approveApplicationRow,
+                                rejectApplicationRow,
+                            }}
+                            RowComponent={RowComponent}
+                            RowCollapseComponent={RowCollapseComponent}
+                        />
+                    }
+                </Paper>
             </UndoableActionsHandlerProvider>
         </>
     );

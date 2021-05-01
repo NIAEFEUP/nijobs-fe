@@ -1,43 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TableBody, TableCell, Checkbox, TableRow, Collapse, Typography, Divider, makeStyles } from "@material-ui/core";
+import { TableBody, TableCell, Checkbox, TableRow, Collapse, makeStyles } from "@material-ui/core";
 import { RowFields, RowPayload, RowPropTypes } from "./PropTypes";
 import useToggle from "../../hooks/useToggle";
-import { ApplicationStateLabel } from "../../components/Review/Applications/ApplicationsReviewTableSchema";
 
 const useStyles = makeStyles((theme) => ({
     rowDetails: {
         padding: theme.spacing(2),
     },
-    payloadSection: {
-        "&:not(:first-child)": {
-            paddingTop: theme.spacing(2),
-        },
-        "&:not(:first-child) p:first-of-type": {
-            paddingTop: theme.spacing(2),
-        },
-    },
 }));
 
-const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
-
-    if (typeof fieldOptions.value === "function") {
-        return fieldOptions.value();
-    } else {
-        return (
-            <TableCell
-                key={fieldId}
-                id={id === 0 ? `${labelId}-label` : undefined}
-                align={fieldOptions.align || "right"}
-            >
-                {fieldOptions.value}
-            </TableCell>
-        );
-    }
-};
-
-const CompanyApplicationRow = ({
-    rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions, submitUndoableAction, RowActionsProps, context,
+const RenderTableRow = ({
+    rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
+    submitUndoableAction, RowActionsProps, context, RowComponent, RowCollapseComponent,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -60,9 +35,7 @@ const CompanyApplicationRow = ({
                         inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
                 </TableCell>
-                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
-                ))}
+                <RowComponent rowKey={rowKey} labelId={labelId} />
                 {RowActions &&
                     <RowActions
                         row={{ key: rowKey, fields, payload, ...rowProps }}
@@ -74,43 +47,23 @@ const CompanyApplicationRow = ({
                     />
                 }
             </TableRow>
+            {!!RowCollapseComponent &&
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(fields).length + 2}>
                     <Collapse in={open} timeout="auto" unmountOnExit className={classes.rowDetails}>
-                        <Typography variant="subtitle2">
-                            {payload.email}
-                        </Typography>
-                        <div className={classes.payloadSection}>
-                            <Typography variant="body1">
-                            Motivation
-                            </Typography>
-                            <Typography variant="body2">
-                                {payload.motivation}
-                            </Typography>
-                        </div>
-
-                        {fields.state.value === ApplicationStateLabel.REJECTED &&
-                            <div className={classes.payloadSection}>
-                                <Divider />
-                                <Typography variant="body1">
-                                    {`Reject Reason (Rejected at ${payload.rejectedAt})`}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {payload.rejectReason}
-                                </Typography>
-                            </div>
-                        }
+                        <RowCollapseComponent rowKey={rowKey} />
                     </Collapse>
                 </TableCell>
             </TableRow>
+            }
         </>
     );
 };
 
-CompanyApplicationRow.propTypes = {
+RenderTableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,
+    payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
@@ -118,10 +71,12 @@ CompanyApplicationRow.propTypes = {
     submitUndoableAction: PropTypes.func.isRequired,
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
+    RowComponent: PropTypes.elementType.isRequired,
+    RowCollapseComponent: PropTypes.elementType,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context,
+    RowActionsProps, emptyMessage, numColumns, context, RowComponent, RowCollapseComponent,
 }) => (
     <TableBody>
         {Object.keys(rows).length === 0 ?
@@ -131,7 +86,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                 </TableCell>
             </TableRow>
             : Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
-                <CompanyApplicationRow
+                <RenderTableRow
                     key={key}
                     rowKey={key}
                     fields={fields}
@@ -143,6 +98,8 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     submitUndoableAction={submitUndoableAction}
                     RowActionsProps={RowActionsProps}
                     context={context}
+                    RowComponent={RowComponent}
+                    RowCollapseComponent={RowCollapseComponent}
                 />
             ))}
     </TableBody>
@@ -158,6 +115,8 @@ TableContent.propTypes = {
     emptyMessage: PropTypes.string,
     numColumns: PropTypes.number.isRequired,
     context: PropTypes.object,
+    RowComponent: PropTypes.elementType.isRequired,
+    RowCollapseComponent: PropTypes.elementType,
 };
 
 export default TableContent;
