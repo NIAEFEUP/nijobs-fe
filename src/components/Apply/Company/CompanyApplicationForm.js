@@ -94,7 +94,7 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                         <Controller
                             name="companyName"
                             render={(
-                                { onChange, onBlur, ref, name, value },
+                                { field: { onChange, onBlur, ref, name, value } },
                             ) => (
                                 <TextField
                                     name={name}
@@ -114,12 +114,11 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                                 />
                             )}
                             control={control}
-                            defaultValue=""
                         />
                         <Controller
                             name="email"
                             render={(
-                                { onChange, onBlur, ref, name, value },
+                                { field: { onChange, onBlur, ref, name, value } },
                             ) => (
                                 <TextField
                                     name={name}
@@ -138,13 +137,12 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                                     fullWidth
                                 />)}
                             control={control}
-                            defaultValue=""
                         />
                         <FormGroup row className={classes.passwordGroupWrapper}>
                             <Controller
                                 name="password"
                                 render={(
-                                    { onChange, onBlur, ref, name, value },
+                                    { field: { onChange, onBlur, ref, name, value } },
                                 ) => (
                                     <TextField
                                         name={name}
@@ -174,21 +172,21 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                                     />
                                 )}
                                 control={control}
-                                defaultValue=""
                             />
                             <Controller
                                 name="confirmPassword"
-                                as={
+                                render={({ field }) =>
                                     <TextField
+                                        {...field}
                                         label="Confirm Password"
                                         id="input-confirmPassword"
                                         type={showPassword ? "text" : "password"}
                                         error={!!errors.confirmPassword}
                                         helperText={errors.confirmPassword ? errors.confirmPassword.message : " "}
                                         margin="dense"
-                                        fullWidth={useMobile()}
+                                        fullWidth={isMobile}
                                         InputProps={{
-                                            endAdornment: useMobile() &&
+                                            endAdornment: isMobile &&
                                             <Wrap on={true} Wrapper={InputAdornment}>
                                                 <ShowPasswordToggle
                                                     showPassword={showPassword}
@@ -196,9 +194,9 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                                                 />
                                             </Wrap>,
                                         }}
-                                    />}
+                                    />
+                                }
                                 control={control}
-                                defaultValue=""
                             />
                             {
                                 !useMobile() &&
@@ -212,7 +210,7 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                         <Controller
                             name="motivation"
                             render={(
-                                { onChange, onBlur, ref, name, value },
+                                { field: { onChange, onBlur, ref, name, value } },
                             ) => (
                                 <TextField
                                     name={name}
@@ -245,7 +243,6 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                                 />
                             )}
                             control={control}
-                            defaultValue=""
                         />
 
                         {submissionErrors ?
