@@ -2,7 +2,7 @@ import config from "../config";
 const { API_HOSTNAME } = config;
 
 
-export const completeRegistration = async (logo, contacts, bio) => {
+export const completeRegistration = async ({ logo, bio, contacts }) => {
 
     const formData  = new FormData();
 

@@ -38,9 +38,18 @@ export const ValidationReasons = Object.freeze({
     ALREADY_EXISTS: (variable) => `${variable} already exists.`,
     DATE_EXPIRED: "Date must not be in the past",
     MUST_BE_AFTER: (variable) => `Date must be after ${variable}.`,
-    FILE_TOO_BIG: (val) => `File must be under ${val}.`,
+    FILE_TOO_BIG: (val) => `File size must be under ${val}.`,
     FILE_TYPE_ALLOWED: (vals) => `File type must be one of the following: ${vals.join(", ")}.`,
 });
+
+export const validationRulesGenerator = (rules) => (field, rule, reason) => {
+    const validationConstraint = rules[field][rule];
+    const params = [validationConstraint];
+
+    if (reason) params.push((typeof reason === "function") ? reason(validationConstraint) : reason);
+
+    return params;
+};
 
 export const Wrap = ({ Wrapper, on, children }) => (
     <>

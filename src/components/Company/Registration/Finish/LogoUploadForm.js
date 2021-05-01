@@ -1,18 +1,21 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import {
+    Box,
     Button,
     Card,
     Grid,
     makeStyles,
     Slider,
+    Typography,
 } from "@material-ui/core";
 import Cropper from "react-easy-crop";
 import { CloudUpload } from "@material-ui/icons";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     logoPreview: {
-        width: "100%",
+        margin: theme.spacing(4, 0),
     },
     cropperWrapper: {
         position: "relative",
@@ -20,29 +23,45 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-export const useLogoUpload = () => {
+export const useLogoUpload = ({ watch }) => {
     const [logoPreview, setLogoPreview] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
 
-    const [selectedFile, setSelectedFile] = useState(undefined);
+    const logoInput = watch("logo")?.[0];
+
+    // Reset zoom/crop on new file upload
     useEffect(() => {
-        if (!selectedFile) {
+        setCrop({ x: 0, y: 0 });
+        setZoom(1);
+    }, [logoInput]);
+
+    useEffect(() => {
+        if (!logoInput) {
             setLogoPreview(undefined);
             return () => {};
+        } else {
+
+            const objectUrl = URL.createObjectURL(logoInput);
+            setLogoPreview(objectUrl);
+
+            // free memory when ever this component is unmounted
+            return () => URL.revokeObjectURL(objectUrl);
         }
 
-        const objectUrl = URL.createObjectURL(selectedFile);
-        setLogoPreview(objectUrl);
+    }, [logoInput, setLogoPreview]);
 
-        // free memory when ever this component is unmounted
-        return () => URL.revokeObjectURL(objectUrl);
-    }, [selectedFile, setLogoPreview]);
+    const onCropComplete = (_, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    };
 
-    const validateStep = useCallback(() => selectedFile !== undefined, [selectedFile]);
+    const handleZoomChange = (event, newValue) => {
+        setZoom(newValue);
+    };
+
+    const validateStep = useCallback(() => !!logoInput, [logoInput]);
 
     return {
         logoPreview,
@@ -53,29 +72,25 @@ export const useLogoUpload = () => {
         setCrop,
         zoom,
         setZoom,
-        selectedFile,
-        setSelectedFile,
+        onCropComplete,
+        handleZoomChange,
         validateStep,
     };
 };
 
-const LogoPreview = ({ img, setCroppedAreaPixels }) => {
+const LogoPreview = ({ img }) => {
     const classes = useStyles();
 
+    const { logoUploadOptions } = useContext(FinishCompanyRegistrationControllerContext);
     const {
         crop,
         setCrop,
         zoom,
         setZoom,
-    } = useContext(FinishCompanyRegistrationControllerContext);
+        onCropComplete,
+        handleZoomChange,
+    } = logoUploadOptions;
 
-    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-        setCroppedAreaPixels(croppedAreaPixels);
-    }, [setCroppedAreaPixels]);
-
-    const handleZoomChange = (event, newValue) => {
-        setZoom(newValue);
-    };
 
     return (
         <Card>
@@ -87,6 +102,7 @@ const LogoPreview = ({ img, setCroppedAreaPixels }) => {
                     minZoom={0.5}
                     maxZoom={3}
                     aspect={1}
+                    restrictPosition={false}
                     cropShape="round"
                     onCropChange={setCrop}
                     onCropComplete={onCropComplete}
@@ -104,60 +120,88 @@ const LogoPreview = ({ img, setCroppedAreaPixels }) => {
     );
 };
 
+LogoPreview.propTypes = {
+    img: PropTypes.string,
+};
+
 const LogoUploadForm = () => {
 
     const {
-        selectedFile,
-        setSelectedFile,
-        logoPreview,
-        setCroppedAreaPixels,
+        logoUploadOptions,
         register,
         errors,
     } = useContext(FinishCompanyRegistrationControllerContext);
 
-    const onSelectFile = (e) => {
-        if (!e.target.files || e.target.files.length === 0) {
-            setSelectedFile(undefined);
-            return;
-        }
+    const {
+        logoPreview,
+        setCroppedAreaPixels,
+    } = logoUploadOptions;
 
-        setSelectedFile(e.target.files[0]);
-    };
+    const classes = useStyles();
 
     return (
-        <Grid container>
-            <Grid item xs={12} sm={5}>
-                {selectedFile &&
-                <LogoPreview
-                    img={logoPreview}
-                    setCroppedAreaPixels={setCroppedAreaPixels}
-                /> }
-            </Grid>
-            <Grid item xs={12} sm="auto">
-                <input
-                    name="logo"
-                    ref={register}
-                    hidden
-                    accept=".png,.jpg,.jpeg"
-                    id="raised-button-file"
-                    type="file"
-                    onChange={onSelectFile}
-                />
-                <label htmlFor="raised-button-file">
-                    <Button
-                        variant="contained"
-                        component="span"
-                        color="primary"
-                        startIcon={<CloudUpload />}
-                    >
+        <>
+            <Grid
+                container
+                justify="center"
+                alignItems="center"
+            >
+                <Grid item xs={12}>
+                    <Typography variant="h6">
+                        {"Upload your Company's logo."}
+                    </Typography>
+                    <Typography variant="caption" gutterBottom paragraph>
+                        {"A picture is worth a thousand words. Is there any better way to represent your brand than your Company's logo?"}
+                    </Typography>
+                    <Box marginY={1} fontStyle="italic">
+                        <Typography variant="caption" gutterBottom paragraph>
+                            {"It should be a PNG or JPG file, with no more than 10MB."}
+                        </Typography>
+                    </Box>
+                </Grid>
+                <Grid item xs="auto">
+                    <input
+                        onChange
+                        {...register("logo")}
+                        hidden
+                        accept=".png,.jpg,.jpeg"
+                        id="raised-button-file"
+                        type="file"
+                    />
+                    <label htmlFor="raised-button-file">
+                        <Button
+                            variant="contained"
+                            component="span"
+                            color="primary"
+                            startIcon={<CloudUpload />}
+                        >
                     Upload
-                    </Button>
-                </label>
-                <p>
-                    {errors?.logo?.message}
-                </p>
+                        </Button>
+                    </label>
+                </Grid>
             </Grid>
-        </Grid>
+            <Grid
+                container
+                justify="center"
+                alignItems="center"
+                className={classes.logoPreview}
+            >
+                <Grid item xs={12} sm={4}>
+                    {logoPreview &&
+                    <LogoPreview
+                        img={logoPreview}
+                        setCroppedAreaPixels={setCroppedAreaPixels}
+                    /> }
+                </Grid>
+            </Grid>
+            <Typography
+                variant="caption"
+                color="error"
+                align="center"
+            >
+                {errors?.logo?.message}
+            </Typography>
+        </>
     );
 };
 
