@@ -29,6 +29,6 @@ export const completeRegistration = async ({ logo, bio, contacts }) => {
     } catch (error) {
         // TODO count metrics
         if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+        throw [{ msg: "Unexpected Error. Please try again later." }];
     }
 };

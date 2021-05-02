@@ -26,6 +26,7 @@ import { useMobile } from "../../../../utils/media-queries";
 import clsx from "clsx";
 import BackButton from "./BackButton";
 import NextButton from "./NextButton";
+import useSession from "../../../../hooks/useSession";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     form: {
@@ -94,6 +95,9 @@ function getSteps() {
 export const FinishCompanyRegistrationControllerContext = React.createContext();
 export const FinishCompanyRegistrationController = () => {
     const [activeStep, setActiveStep] = React.useState(0);
+    const [submissionErrors, setSubmissionErrors] = React.useState(null);
+    const [succeeded, setSucceeded] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const steps = getSteps();
 
     const { handleSubmit, formState: { errors }, control, watch, register, getValues } = useForm({
@@ -113,29 +117,40 @@ export const FinishCompanyRegistrationController = () => {
 
     const submit = useCallback(
         (data) => {
+            setLoading(true);
             const { bio, contacts } = data;
             getCroppedImg(
                 logoUploadOptions.logoPreview,
                 logoUploadOptions.croppedAreaPixels,
                 0
-            ).then((croppedImage) => {
-                completeRegistration({ logo: croppedImage, bio, contacts });
-                // TODO HANDLE SUCCESS/ERROR (return this call as promise, use .then and .catch afterwards)
-            });
+            ).then((croppedImage) => completeRegistration({ logo: croppedImage, bio, contacts }))
+                .then(() => {
+                    setSucceeded(true);
+                    setLoading(false);
+
+                })
+                .catch((err) => {
+                    setSubmissionErrors(err);
+                    setLoading(false);
+
+                });
         },
         [logoUploadOptions.croppedAreaPixels, logoUploadOptions.logoPreview],
     );
 
     const handleNext = useCallback(() => {
-        if (activeStep >= steps.length - 1) setActiveStep(steps.length);
-        else setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    }, [activeStep, steps.length]);
+        setActiveStep((activeStep) => {
+            if (activeStep === steps.length - 1) return activeStep;
+            else return activeStep + 1;
+        });
+    }, [steps.length]);
 
     const handleBack = useCallback(() => {
-        if (activeStep === 0) return;
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    }, [activeStep]);
-
+        setActiveStep((activeStep) => {
+            if (activeStep === 0) return activeStep;
+            else return activeStep - 1;
+        });
+    }, []);
 
     const stepValidator = useCallback((step) => {
         switch (step) {
@@ -151,6 +166,9 @@ export const FinishCompanyRegistrationController = () => {
     }, [bioOptions, contactsOptions, errors.bio, errors.contacts, errors.logo, logoUploadOptions]);
 
     const canAdvanceStep = stepValidator(activeStep);
+
+    const { data } = useSession();
+    const companyName = data?.company?.name;
 
     return {
         controllerOptions: {
@@ -169,6 +187,10 @@ export const FinishCompanyRegistrationController = () => {
                 logoUploadOptions,
                 bioOptions,
                 contactsOptions,
+                succeeded,
+                submissionErrors,
+                companyName,
+                loading,
             },
         },
     };
@@ -183,6 +205,8 @@ const FinishCompanyRegistrationWidget = () => {
         handleBack,
         submit,
         canAdvanceStep,
+        succeeded,
+        loading,
     } = useContext(FinishCompanyRegistrationControllerContext);
 
     const classes = useStyles(useMobile())();
@@ -215,35 +239,39 @@ const FinishCompanyRegistrationWidget = () => {
                 <Content className={classes.formContent}>
                     {getStepContent(activeStep)}
                 </Content>
-                <CardActions className={clsx(classes.buttonsArea, { [classes.buttonsAreaMobile]: isMobile })}>
-                    {isMobile ?
-                        <MobileStepper
-                            variant="dots"
-                            steps={steps.length}
-                            position="static"
-                            activeStep={activeStep}
-                            nextButton={
+                {!succeeded &&
+                    <CardActions className={clsx(classes.buttonsArea, { [classes.buttonsAreaMobile]: isMobile })}>
+                        {isMobile ?
+                            <MobileStepper
+                                variant="dots"
+                                steps={steps.length}
+                                position="static"
+                                activeStep={activeStep}
+                                nextButton={
+                                    <NextButton
+                                        loading={loading}
+                                        onClick={activeStep === steps.length - 1 ? submit : handleNext}
+                                        disabled={!canAdvanceStep || loading}
+                                        type="button"
+                                        label={activeStep === steps.length - 1 ? "Finish" : "Next"}
+                                    />
+                                }
+                                backButton={<BackButton disabled={activeStep === 0 || loading} onClick={handleBack} />}
+                            />
+                            :
+                            <>
+                                <BackButton disabled={activeStep === 0 || loading} onClick={handleBack} />
                                 <NextButton
-                                    onClick={handleNext}
-                                    disabled={!canAdvanceStep}
-                                    type={activeStep === steps.length  ? "submit" : "button"}
+                                    loading={loading}
+                                    onClick={activeStep === steps.length - 1 ? submit : handleNext}
+                                    disabled={!canAdvanceStep || loading}
+                                    type="button"
                                     label={activeStep === steps.length - 1 ? "Finish" : "Next"}
                                 />
-                            }
-                            backButton={<BackButton disabled={activeStep === 0} onClick={handleBack} />}
-                        />
-                        :
-                        <>
-                            <BackButton disabled={activeStep === 0} onClick={handleBack} />
-                            <NextButton
-                                onClick={handleNext}
-                                disabled={!canAdvanceStep}
-                                type={activeStep === steps.length  ? "submit" : "button"}
-                                label={activeStep === steps.length - 1 ? "Finish" : "Next"}
-                            />
-                        </>
-                    }
-                </CardActions>
+                            </>
+                        }
+                    </CardActions>
+                }
             </div>
         </form>
     );

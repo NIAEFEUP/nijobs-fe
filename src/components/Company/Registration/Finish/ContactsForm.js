@@ -82,7 +82,7 @@ const ContactsForm = () => {
 
     return (
         <Grid container>
-            <Grid item xs={12} direction="column">
+            <Grid item xs={12}>
                 <Typography variant="h6">
                     Enter your contacts.
                 </Typography>
@@ -96,7 +96,6 @@ const ContactsForm = () => {
                     </Typography>
                 </Box>
                 <Box display="flex" flexDirection="column">
-
                     {fields.map(({ id }, i) => (
                         <Controller
                             key={id}

@@ -9,8 +9,7 @@ export const FinishCompanyRegistrationConstants = {
 export const generateValidationRule = validationRulesGenerator(FinishCompanyRegistrationConstants);
 
 const HumanReadableErrors = Object.freeze({
-    "email-already-exists": "The provided email is already associated to our platform.",
-    "company-application-duplicate-email": "There is already an application associated with that email.",
+    "registration-already-finished": "This company is already registered.",
 });
 
 export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";

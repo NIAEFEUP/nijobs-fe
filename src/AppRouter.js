@@ -99,7 +99,7 @@ const AppRouter = () => (
                 path="/company/registration/finish"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
-                authorize={(user) => (user.company && !user.hasFinishedRegistration)}
+                authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
             >
                 <PageLayout
                     key="/company/registration/finish"
