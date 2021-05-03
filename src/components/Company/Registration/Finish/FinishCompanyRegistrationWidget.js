@@ -5,7 +5,6 @@ import {
     CardHeader,
     DialogContent,
     Link,
-    makeStyles,
     MobileStepper,
     Step,
     StepLabel,
@@ -27,45 +26,7 @@ import clsx from "clsx";
 import BackButton from "./BackButton";
 import NextButton from "./NextButton";
 import useSession from "../../../../hooks/useSession";
-
-const useStyles = (isMobile) => makeStyles((theme) => ({
-    form: {
-        width: "100%",
-        flexGrow: 1,
-    },
-    formCard: {
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
-        paddingBottom: !isMobile && theme.spacing(2),
-        display: isMobile && "flex",
-        flexDirection: isMobile &&  "column",
-        height: isMobile && "100%",
-    },
-    formContent: {
-        display: !isMobile && "flex",
-        flexDirection: !isMobile && "column",
-        alignItems: "center",
-    },
-    buttonsArea: {
-        display: "flex",
-        justifyContent: "flex-end",
-        padding: theme.spacing(3, 2),
-        paddingTop: isMobile && 0,
-    },
-    buttonsAreaMobile: {
-        position: "sticky",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        width: "100%",
-        justifyContent: "center",
-        paddingBottom: 0,
-        "& > *": {
-            backgroundColor: "white",
-            width: "100%",
-            paddingBottom: theme.spacing(4),
-        },
-    },
-}));
+import useFinishCompanyRegistrationStyles from "./finishCompanyRegistrationStyles";
 
 function getStepContent(step) {
     switch (step) {
@@ -209,9 +170,8 @@ const FinishCompanyRegistrationWidget = () => {
         loading,
     } = useContext(FinishCompanyRegistrationControllerContext);
 
-    const classes = useStyles(useMobile())();
-
     const isMobile = useMobile();
+    const classes = useFinishCompanyRegistrationStyles(isMobile)();
 
     const Content = isMobile ? DialogContent : CardContent;
 

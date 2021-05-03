@@ -4,9 +4,10 @@ import { Box, Button, FormControl, Grid, IconButton, makeStyles, TextField, Tool
 import { AddCircle, RemoveCircle } from "@material-ui/icons";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
+import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";
 
 const RemoveContactButton = ({ onClick, contacts }) => {
-    const disabled = Object.keys(contacts).length < 2;
+    const disabled = Object.keys(contacts).length <= FinishCompanyRegistrationConstants.contacts.min;
     return (
         <FormControl>
             <Tooltip
@@ -53,10 +54,9 @@ export const useContacts = ({ control }) => {
         control,
     });
 
-    // TODO USE CONSTANTS FILE
     const validateStep = useCallback(() =>
-        contacts?.length > 0
-        && contacts?.length < 11
+        contacts?.length >= FinishCompanyRegistrationConstants.contacts.min
+        && contacts?.length <= FinishCompanyRegistrationConstants.contacts.max
         && contacts.every(({ value }) => value !== "")
     , [contacts]);
 
@@ -123,7 +123,7 @@ const ContactsForm = () => {
                     <Button
                         color="primary"
                         startIcon={<AddCircle />}
-                        disabled={Object.keys(fields).length > 9} // TODO MOVE THIS TO CONSTANTS PLACE
+                        disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
                         onClick={() => append()}
                         className={classes.addContactBtn}
                     >

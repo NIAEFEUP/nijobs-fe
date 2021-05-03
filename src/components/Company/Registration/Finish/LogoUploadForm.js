@@ -1,14 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import {
-    Box,
-    Button,
-    Card,
-    Grid,
-    makeStyles,
-    Slider,
-    Typography,
-} from "@material-ui/core";
+import { Box, Button, Card, Grid, makeStyles, Slider, Typography } from "@material-ui/core";
 import Cropper from "react-easy-crop";
 import { CloudUpload } from "@material-ui/icons";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";

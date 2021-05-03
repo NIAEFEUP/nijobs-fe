@@ -1,9 +1,5 @@
 import React, { useCallback, useContext } from "react";
-import {
-    Grid,
-    TextField,
-    Typography,
-} from "@material-ui/core";
+import { Grid, TextField, Typography } from "@material-ui/core";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 import { Controller, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";

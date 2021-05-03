@@ -4,6 +4,14 @@ export const FinishCompanyRegistrationConstants = {
     bio: {
         maxLength: 1500,
     },
+    logo: {
+        maxSize: 10e6,
+        allowedTypes: ["image/jpeg", "image/png"],
+    },
+    contacts: {
+        min: 1,
+        max: 10,
+    },
 };
 
 export const generateValidationRule = validationRulesGenerator(FinishCompanyRegistrationConstants);
