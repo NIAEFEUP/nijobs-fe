@@ -1,27 +1,29 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { MainMask } from "../components/HomePage/MainMask";
 import useToggle from "../hooks/useToggle";
 
-import ApplicationConfirmation from "../components/Offer/Create/ApplicationConfirmation";
-import CenteredComponent from "../components/HomePage/CenteredComponent";
+import { MainMask } from "../components/HomePage/MainMask";
+
 import CreateOfferForm from "../components/Offer/Create/CreateOfferForm";
+import { Redirect } from "react-router";
 
 
-const CreateOfferPage = ({ showConfirmation = false }) => {
+const CreateOfferPage = () => {
 
-    const [showConfirmationModal, toggleConfirmationModal] = useToggle(showConfirmation);
+    const [offerSubmited, toggleOfferSubmission] = useToggle(false);
 
     return (
         <React.Fragment>
             <MainMask />
-            {showConfirmationModal ?
-                <CenteredComponent>
-                    <ApplicationConfirmation open={showConfirmationModal} />
-                </CenteredComponent>
+            {offerSubmited ?
+                <Redirect to="/"/> 
+                // TODO -- redirect to the new offer page
                 :
-                <CreateOfferForm toggleConfirmationModal={toggleConfirmationModal} />
+                <CreateOfferForm toggleOfferSubmission={toggleOfferSubmission} userIsACompany={
+                    true
+                    // user?.company
+                } />
             }
         </React.Fragment>
     );

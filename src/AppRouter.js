@@ -44,7 +44,7 @@ const AppRouter = () => (
             </ProtectedRoute> 
             <Route
                 exact
-                path="/offer/new"
+                path="/offers/new"
             >
                 <PageLayout pageTitle="Create Offer">
                     <CreateOfferPage />

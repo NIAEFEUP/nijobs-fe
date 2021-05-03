@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import { useForm } from "react-hook-form";
 
 import useToggle from "../../../hooks/useToggle";
@@ -23,8 +22,6 @@ import { yupResolver } from "@hookform/resolvers";
 
 import { CreateOfferConstants, getHumanError } from "./CreateOfferUtils";
 
-import { submitCreateOffer } from "../../../services/createOfferService";
-import { setCreateOfferSubmissionError } from "../../../actions/createOfferActions";
 import { Wrap } from "../../../utils";
 import CenteredComponent from "../../HomePage/CenteredComponent";
 import useCreateOfferStyles from "./CreateOfferStyles";
@@ -32,7 +29,7 @@ import { useMobile } from "../../../utils/media-queries";
 
 import ShowPasswordToggle from "../../utils/form/ShowPasswordToggle";
 
-const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittingOffer,
+const CreateOfferForm = ({ userIsACompany, toggleOfferSubmission, submitCreateOffer, submittingOffer,
     submissionErrors, setCreateOfferSubmissionError }) => {
 
     const [errorCleared, setErrorCleared] = useState(true);
@@ -47,7 +44,7 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
     const onSubmit = async (data) => {
         setErrorCleared(false);
         if (await submitCreateOffer(data))
-            toggleConfirmationModal();
+            toggleOfferSubmission();
     };
 
     const { register, handleSubmit, reset, errors, watch } = useForm({
@@ -56,7 +53,7 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
         reValidateMode: "onChange",
     });
 
-    const motivation = watch("motivation") || "";
+    const offerDescription = watch("offerDescription") || "";
 
     const classes = useCreateOfferStyles(useMobile())();
 
@@ -65,7 +62,7 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
         resetCreateOfferSubmissionError();
         reset();
     };
-
+    
     const [showPassword, toggleShowPassword] = useToggle(false);
 
     return (
@@ -81,38 +78,42 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
                     <Card className={classes.formCard}>
                         <CardHeader
                             title={!useMobile() && "Create Offer" }
-                            subheader={
+                        />
+                        {   userIsACompany ?
+                            <CardContent>
                                 <Link
                                     href=""
                                     to="/"
                                     variant="body2"
                                 >
-                                You must be authenticated to create a new offer. Click here to go login!
+                                    You must be authenticated to create a new offer. Click here to go login!
                                 </Link>
-                            }
-                        />
+                            </CardContent>
+                            : null
+                        }
                         <CardContent className={classes.formContent}>
                             <TextField
-                                label="Company Name"
-                                name="companyName"
-                                id="input-companyName"
-                                error={!!errors.companyName}
+                                label="Offer Title"
+                                name="offerTitle"
+                                id="input-offerTitle"
+                                error={!!errors.offerTitle}
                                 inputRef={register}
                                 onChange={resetCreateOfferSubmissionError}
-                                helperText={errors.companyName ? errors.companyName.message : " "}
+                                helperText={errors.offerTitle ? errors.offerTitle.message : " "}
                                 margin="dense"
                             />
                             <TextField
-                                label="Email"
-                                name="email"
-                                id="input-email"
-                                error={!!errors.email}
+                                label="Employment Type"
+                                name="employmentType"
+                                id="input-employmentType"
+                                error={!!errors.employmentType}
                                 inputRef={register}
                                 onChange={resetCreateOfferSubmissionError}
-                                helperText={errors.email ? errors.email.message : " "}
+                                helperText={errors.employmentType ? errors.employmentType.message : " "}
                                 margin="dense"
                             />
                             <FormGroup row className={classes.passwordGroupWrapper}>
+                                {/* TODO SHOULD BE START AND END DATES HERE */}
                                 <TextField
                                     label="Password"
                                     name="password"
@@ -162,18 +163,18 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
                                 }
                             </FormGroup>
                             <TextField
-                                className={classes.motivation}
-                                id="input-motivation"
-                                label="Motivation"
-                                name="motivation"
-                                placeholder="Tell us about the company. How do you think NIJobs can help you achieve your goal?"
+                                className={classes.offerDescription}
+                                id="input-offerDescription"
+                                label="Offer Description"
+                                name="offerDescription"
+                                placeholder="What does the offer consist on? How does the company and the employee benefit from it?"
                                 multiline
-                                error={!!errors.motivation}
+                                error={!!errors.offerDescription}
                                 inputRef={register}
                                 onChange={resetCreateOfferSubmissionError}
                                 helperText={
-                                    `${motivation.length}/${CreateOfferConstants.motivation.maxLength} ${errors.motivation ?
-                                        errors.motivation.message
+                                    `${offerDescription.length}/${CreateOfferConstants.offerDescription.maxLength} ${errors.offerDescription ?
+                                        errors.offerDescription.message
                                         : ""}`
                                 }
                                 rows={5}
@@ -223,7 +224,8 @@ const CreateOfferForm = ({ toggleConfirmationModal, submitCreateOffer, submittin
 };
 
 CreateOfferForm.propTypes = {
-    toggleConfirmationModal: PropTypes.func,
+    userIsACompany: PropTypes.bool,
+    toggleOfferSubmission: PropTypes.func,
     submittingOffer: PropTypes.bool,
     submitCreateOffer: PropTypes.func,
     submissionErrors: PropTypes.arrayOf(
@@ -233,14 +235,4 @@ CreateOfferForm.propTypes = {
     setCreateOfferSubmissionError: PropTypes.func,
 };
 
-export const mapStateToProps = ({ createOffer }) => ({
-    submittingOffer: createOffer.submittingOffer,
-    submissionErrors: createOffer.errors,
-});
-
-export const mapDispatchToProps = (dispatch) => ({
-    submitCreateOffer: (data) => dispatch(submitCreateOffer(data)),
-    setCreateOfferSubmissionError: (e) => dispatch(setCreateOfferSubmissionError(e)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOfferForm);
+export default CreateOfferForm;

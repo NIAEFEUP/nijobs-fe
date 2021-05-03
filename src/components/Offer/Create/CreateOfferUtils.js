@@ -2,11 +2,15 @@ export const CreateOfferConstants = {
     password: {
         minLength: 8,
     },
-    motivation: {
+    offerDescription: {
         minLength: 10,
         maxLength: 1500,
     },
-    companyName: {
+    employmentType: {
+        minLength: 2,
+        maxLength: 50,
+    },    
+    offerTitle: {
         minLength: 2,
         maxLength: 50,
     },
@@ -21,7 +25,8 @@ export const generateValidationRule = (field, rule, reason) => {
     return params;
 };
 
-const HumanReadableErrors = Object.freeze({
+const HumanReadableErrors = Object.freeze({ 
+    // TODO - errors ought to be different
     "email-already-exists": "The provided email is already associated to our platform.",
     "company-application-duplicate-email": "There is already an application associated with that email.",
 });

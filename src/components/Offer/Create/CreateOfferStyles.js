@@ -5,7 +5,7 @@ export default (isMobile) => makeStyles((theme) => ({
     form: {
         width: isMobile ? "100%" : "60%",
     },
-    motivation: {
+    offerDescription: {
         marginTop: theme.spacing(5),
     },
     formCard: {

@@ -5,20 +5,21 @@ import { generateValidationRule } from "./CreateOfferUtils";
 
 
 export default yup.object().shape({
-    email: yup.string()
-        .required(ValidationReasons.REQUIRED)
-        .email(ValidationReasons.EMAIL),
     password: yup.string()
         .required(ValidationReasons.REQUIRED)
         .min(...generateValidationRule("password", "minLength", ValidationReasons.TOO_SHORT)),
     confirmPassword: yup.string()
         .oneOf([yup.ref("password"), null], "Passwords must match."),
-    motivation: yup.string()
+    offerTitle: yup.string()
         .required(ValidationReasons.REQUIRED)
-        .min(...generateValidationRule("motivation", "minLength", ValidationReasons.TOO_SHORT))
-        .max(...generateValidationRule("motivation", "maxLength", ValidationReasons.TOO_LONG)),
-    companyName: yup.string()
+        .min(...generateValidationRule("offerTitle", "minLength", ValidationReasons.TOO_SHORT))
+        .max(...generateValidationRule("offerTitle", "maxLength", ValidationReasons.TOO_LONG)),
+    offerDescription: yup.string()
         .required(ValidationReasons.REQUIRED)
-        .min(...generateValidationRule("companyName", "minLength", ValidationReasons.TOO_SHORT))
-        .max(...generateValidationRule("companyName", "maxLength", ValidationReasons.TOO_LONG)),
+        .min(...generateValidationRule("offerDescription", "minLength", ValidationReasons.TOO_SHORT))
+        .max(...generateValidationRule("offerDescription", "maxLength", ValidationReasons.TOO_LONG)),
+    employmentType: yup.string()
+        .required(ValidationReasons.REQUIRED)
+        .min(...generateValidationRule("employmentType", "minLength", ValidationReasons.TOO_SHORT))
+        .max(...generateValidationRule("employmentType", "maxLength", ValidationReasons.TOO_LONG)),
 });
