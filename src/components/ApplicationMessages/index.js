@@ -17,7 +17,7 @@ const ApplicationMessageNotifier = ({ addSnackbar }) => {
 
     useEffect(() => {
         if (!hasRevalidated || isValidating) return;
-        if (isLoggedIn && !data.company?.hasFinishedRegistration && !hasShownCompleteRegistrationMessage) {
+        if (isLoggedIn && !data.isAdmin && !data.company?.hasFinishedRegistration && !hasShownCompleteRegistrationMessage) {
             setHasShownCompleteRegistrationMessage(true);
             addSnackbar({
                 message: "In order to fully use NIJobs, you still need to finish your registration.",
