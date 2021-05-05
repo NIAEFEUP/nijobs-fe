@@ -94,7 +94,7 @@ const AppRouter = () => (
                     <MyOffersPage />
                 </PageLayout>
             </ProtectedRoute>
-            <Route // change to ProtectedRoute before merging!!!!
+            <ProtectedRoute
                 exact
                 path="/company/registration/finish"
                 unauthorizedRedirectPath="/"
@@ -107,11 +107,10 @@ const AppRouter = () => (
                     pageTitle="Finish Registration"
                     context={FinishCompanyRegistrationControllerContext}
                     controller={FinishCompanyRegistrationController}
-                    controllerProps={{ showConfirmation: false }}
                 >
                     <FinishCompanyRegistrationPage />
                 </PageLayout>
-            </Route>
+            </ProtectedRoute>
             <Route
                 path="/error"
             >
