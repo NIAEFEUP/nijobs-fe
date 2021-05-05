@@ -6,7 +6,7 @@ import { Controller, useFieldArray, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";
 
-const RemoveContactButton = ({ onClick, contacts }) => {
+const RemoveContactButton = ({ onClick, contacts, i }) => {
     const disabled = Object.keys(contacts).length <= FinishCompanyRegistrationConstants.contacts.min;
     return (
         <FormControl>
@@ -16,7 +16,7 @@ const RemoveContactButton = ({ onClick, contacts }) => {
             >
                 <span>
                     <IconButton
-                        aria-label="remove entry"
+                        aria-label={`Remove Entry ${i}`}
                         onClick={onClick}
                         disabled={disabled}
                     >
@@ -33,6 +33,7 @@ RemoveContactButton.propTypes = {
     contacts: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string,
     })).isRequired,
+    i: PropTypes.number.isRequired,
 };
 
 const useStyles = makeStyles(() => ({
@@ -112,7 +113,7 @@ const ContactsForm = () => {
                                     inputRef={ref}
                                     onBlur={onBlur}
                                     onChange={onChange}
-                                    InputProps={{ endAdornment: <RemoveContactButton contacts={fields} onClick={() => remove(i)} /> }}
+                                    InputProps={{ endAdornment: <RemoveContactButton i={i} contacts={fields} onClick={() => remove(i)} /> }}
                                     margin="normal"
                                     helperText={errors.contacts?.[i]?.value?.message || ""}
                                 />)}

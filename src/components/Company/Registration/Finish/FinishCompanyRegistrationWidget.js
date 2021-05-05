@@ -28,6 +28,7 @@ import NextButton from "./NextButton";
 import useSession from "../../../../hooks/useSession";
 import useFinishCompanyRegistrationStyles from "./finishCompanyRegistrationStyles";
 
+
 function getStepContent(step) {
     switch (step) {
         case 0:
@@ -84,7 +85,7 @@ export const FinishCompanyRegistrationController = () => {
                 logoUploadOptions.logoPreview,
                 logoUploadOptions.croppedAreaPixels,
                 0
-            ).then((croppedImage) => completeRegistration({ logo: croppedImage, bio, contacts }))
+            ).then((croppedImage) => completeRegistration({ logo: croppedImage, bio, contacts: contacts.map(({ value }) => value) }))
                 .then(() => {
                     setSucceeded(true);
                     setLoading(false);
@@ -93,7 +94,6 @@ export const FinishCompanyRegistrationController = () => {
                 .catch((err) => {
                     setSubmissionErrors(err);
                     setLoading(false);
-
                 });
         },
         [logoUploadOptions.croppedAreaPixels, logoUploadOptions.logoPreview],
