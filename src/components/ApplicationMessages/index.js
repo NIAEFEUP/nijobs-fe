@@ -9,12 +9,14 @@ import { useHistory } from "react-router";
 const ApplicationMessageNotifier = ({ addSnackbar }) => {
 
     const [hasShownCompleteRegistrationMessage, setHasShownCompleteRegistrationMessage] = useState(false);
+    const [hasRevalidated, setHasRevalidated] = useState(false);
 
     const history = useHistory();
 
+    const { data, isLoggedIn, revalidate, isValidating } = useSession();
 
-    const { data, isLoggedIn } = useSession();
     useEffect(() => {
+        if (!hasRevalidated || isValidating) return;
         if (isLoggedIn && !data.company?.hasFinishedRegistration && !hasShownCompleteRegistrationMessage) {
             setHasShownCompleteRegistrationMessage(true);
             addSnackbar({
@@ -33,7 +35,15 @@ const ApplicationMessageNotifier = ({ addSnackbar }) => {
             });
         }
         if (hasShownCompleteRegistrationMessage && !isLoggedIn) setHasShownCompleteRegistrationMessage(false);
-    }, [addSnackbar, data, hasShownCompleteRegistrationMessage, history, isLoggedIn]);
+    }, [addSnackbar, data, hasRevalidated, hasShownCompleteRegistrationMessage, history, isLoggedIn, isValidating]);
+
+    // Revalidate user session on mount to avoid showing outdated messages
+    // It's important to keep this hook after every other, so that they can safely rely on hasRevalidated being false on first render
+    useEffect(() => {
+        setHasRevalidated(true);
+        revalidate();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return null;
 };

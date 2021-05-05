@@ -89,7 +89,6 @@ export const FinishCompanyRegistrationController = () => {
                 .then(() => {
                     setSucceeded(true);
                     setLoading(false);
-
                 })
                 .catch((err) => {
                     setSubmissionErrors(err);

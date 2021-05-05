@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { renderWithStoreAndTheme, fireEvent, waitFor } from "../../../test-utils";
@@ -7,6 +6,7 @@ import { createMuiTheme } from "@material-ui/core";
 import { CompanyApplicationPageController, CompanyApplicationPageControllerContext } from "../../../pages/CompanyApplicationPage";
 import useComponentController from "../../../hooks/useComponentController";
 
+// eslint-disable-next-line react/prop-types
 const CompanyApplicationFormWrapper = ({ children, showConfirmation = false }) => {
     const {
         ContextProvider,
