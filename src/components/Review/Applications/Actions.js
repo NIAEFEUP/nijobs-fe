@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse }) => (
+const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse, disabled }) => (
     <>
         {getFieldValue(row, "state") === ApplicationStateLabel.PENDING &&
             <>
@@ -31,6 +31,7 @@ const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse }) =>
                     placement="top"
                 >
                     <IconButton
+                        disabled={disabled}
                         aria-label="Approve Application"
                         onClick={handleAction("Approve")}
                     >
@@ -42,6 +43,7 @@ const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse }) =>
                     placement="top"
                 >
                     <IconButton
+                        disabled={disabled}
                         aria-label="Reject Application"
                         onClick={handleAction("Reject")}
                     >
@@ -67,10 +69,11 @@ ActionButtons.propTypes = {
     isCollapseOpen: PropTypes.bool.isRequired,
     toggleCollapse: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,
+    disabled: PropTypes.bool.isRequired,
 };
 
 const RowActionsContainer = ({
-    row, actionToConfirm, confirmAction, cancelAction, handleAction, handleApprove, isCollapseOpen, toggleCollapse,
+    row, actionToConfirm, confirmAction, cancelAction, handleAction, handleApprove, isCollapseOpen, toggleCollapse, executingAction,
 }) => {
     const classes = useStyles();
 
@@ -104,6 +107,7 @@ const RowActionsContainer = ({
                     handleAction={handleAction}
                     isCollapseOpen={isCollapseOpen}
                     toggleCollapse={toggleCollapse}
+                    disabled={executingAction}
                 />
             }
         </div>
@@ -119,6 +123,7 @@ RowActionsContainer.propTypes = {
     cancelAction: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,
     handleApprove: PropTypes.func.isRequired,
+    executingAction: PropTypes.bool.isRequired,
 };
 
 const BaseRowActions = ({
@@ -127,13 +132,13 @@ const BaseRowActions = ({
 
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [rejectReason, setRejectReason] = useState("");
-
+    const [executingAction, setExecutingAction] = useState(false);
     const { approveApplicationRow, rejectApplicationRow } = context;
 
     const handleApprove = useCallback(
         () => {
             setActionToConfirm(null);
-
+            setExecutingAction(true);
             submitUndoableAction(
                 row.key,
                 `Approving Application for ${getFieldValue(row, "name")}...`,
@@ -141,13 +146,14 @@ const BaseRowActions = ({
                     approveApplication(row.key)
                         .then(() => approveApplicationRow(row))
                         .catch(() => {
+                            setExecutingAction(false);
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not approve ${getFieldValue(row, "name")}'s application.`,
                                 key: `${row.key}-error`,
                             });
                         });
                 },
-                () => {},
+                () => setExecutingAction(false),
                 3000
             );
         },
@@ -157,7 +163,7 @@ const BaseRowActions = ({
     const handleReject = useCallback(
         () => {
             setActionToConfirm(null);
-
+            setExecutingAction(true);
             submitUndoableAction(
                 row.key,
                 `Rejecting Application for ${getFieldValue(row, "name")}...`,
@@ -167,13 +173,14 @@ const BaseRowActions = ({
                             rejectApplicationRow(row, rejectReason);
                         })
                         .catch(() => {
+                            setExecutingAction(false);
                             addSnackbar({
                                 message: `An unexpected error occurred. Could not reject ${getFieldValue(row, "name")}'s application.`,
                                 key: `${row.key}-error`,
                             });
                         });
                 },
-                () => {},
+                () => setExecutingAction(false),
                 3000
             );
         }, [addSnackbar, rejectApplicationRow, rejectReason, row, submitUndoableAction]);
@@ -215,6 +222,7 @@ const BaseRowActions = ({
                     handleReject={handleReject}
                     isCollapseOpen={isCollapseOpen}
                     toggleCollapse={toggleCollapse}
+                    executingAction={executingAction}
                 />
             </TableCell>
         </>

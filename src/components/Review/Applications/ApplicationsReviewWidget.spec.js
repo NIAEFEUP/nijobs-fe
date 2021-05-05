@@ -161,6 +161,9 @@ describe("Application Review Widget", () => {
         fireEvent.click(screen.getByLabelText("Approve Application"));
         fireEvent.click(screen.getByLabelText("Confirm Approval"));
 
+        expect(screen.getByLabelText("Approve Application")).toBeDisabled();
+        expect(screen.getByLabelText("Reject Application")).toBeDisabled();
+
         await act(async () => {
             await jest.advanceTimersByTime(2000);
         });
@@ -244,7 +247,12 @@ describe("Application Review Widget", () => {
 
         expect((screen.getByLabelText("Reject"))).not.toBeDisabled();
 
-        fireEvent.submit(screen.getByLabelText("Reject"));
+        await act(async () => {
+            await fireEvent.submit(screen.getByLabelText("Reject"));
+        });
+
+        expect(screen.getByLabelText("Approve Application")).toBeDisabled();
+        expect(screen.getByLabelText("Reject Application")).toBeDisabled();
 
         await act(async () => {
             await jest.advanceTimersByTime(2000);
