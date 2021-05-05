@@ -1,13 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import HomePage from "./HomePage";
-import MainView from "../components/HomePage/MainView";
-import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
-import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
-import { ThemeProvider } from "@material-ui/core";
-import { mountWithStore } from "../test-utils";
+import { renderWithStoreAndTheme, screen, fireEvent } from "../test-utils";
 import useSession from "../hooks/useSession";
 import AppTheme from "../AppTheme";
+import { SnackbarProvider } from "notistack";
+import Notifier from "../components/Notifications/Notifier";
 
 jest.mock("../hooks/useSession");
 
@@ -24,25 +22,22 @@ describe("HomePage", () => {
             showLoginModal: false,
         },
     };
+    useSession.mockImplementation(() => ({ isLoggedIn: false, revalidate: () => {} }));
     describe("render", () => {
 
-        useSession.mockImplementation(() => ({ isLoggedIn: false }));
-        const wrapper = shallow(
-            <ThemeProvider theme={AppTheme}>
-                <HomePage />
-            </ThemeProvider>).find(HomePage).first().dive();
+        it("should render search area and info message", () => {
 
-        it("should render MainView", () => {
-            expect(wrapper.find(MainView).exists()).toBe(true);
+            renderWithStoreAndTheme(
+                <Router>
+                    <HomePage />
+                </Router>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(screen.getByLabelText("Search Area")).toBeInTheDocument();
+            expect(screen.getByText("Your next oportunity is out there. Use the search bar to find it!")).toBeInTheDocument();
         });
 
-        it("should render ProductDescription", () => {
-            expect(wrapper.find(ProductDescription).exists()).toBe(true);
-        });
-
-        it("should not render SearchResultsWidget", () => {
-            expect(wrapper.find(SearchResultsWidget).exists()).toBe(false);
-        });
     });
     describe("interaction", () => {
         it("should render search results after search submission", () => {
@@ -50,20 +45,68 @@ describe("HomePage", () => {
             // Simulate search request success
             fetch.mockResponse(JSON.stringify({ mockData: true }));
 
-            const wrapper = mountWithStore(
+            // Currently jsdom does not know about scrollIntoView function, and thus, the code will break when submitting search
+            // As a workaround, a stub is defined below, just for the code to not throw the error and actually test what matters
+            const scrollMock = jest.fn();
+            window.HTMLElement.prototype.scrollIntoView = scrollMock;
+
+            renderWithStoreAndTheme(
                 <Router>
                     <HomePage />
                 </Router>,
-                initialState, AppTheme);
+                { initialState, theme: AppTheme }
+            );
 
-            // Currently jsdom does not know about scrollIntoView function, and thus, the code will break when submitting search
-            // As a workaround, a stub is defined below, just for the code to not throw the error and actually test what matters
-            window.HTMLElement.prototype.scrollIntoView = function() {};
+            fireEvent.click(screen.getByRole("button", { name: "Search" }));
 
-            wrapper.find("form#search_form").first().simulate("submit", {
-                preventDefault: () => {},
-            });
-            expect(wrapper.find(SearchResultsWidget).exists()).toBe(true);
+            expect(screen.getByTestId("Search Results Widget")).toBeInTheDocument();
+            expect(scrollMock).toHaveBeenCalled();
+        });
+    });
+
+    describe("Application Messages", () => {
+        it("should show finish registration notification", async () => {
+
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true,
+                data: { company: { hasFinishedRegistration: false } },
+                revalidate: () => {},
+            }));
+
+            renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <Router>
+                        <HomePage />
+                    </Router>
+                </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(await screen.findByText("In order to fully use NIJobs, you still need to finish your registration."))
+                .toBeInTheDocument();
+        });
+
+        it("should show finish registration notification", () => {
+
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true,
+                data: { company: { hasFinishedRegistration: true } },
+                revalidate: () => {},
+            }));
+
+            renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <Router>
+                        <HomePage />
+                    </Router>
+                </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(screen.queryByText("In order to fully use NIJobs, you still need to finish your registration."))
+                .not.toBeInTheDocument();
         });
     });
 });

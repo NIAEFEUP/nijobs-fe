@@ -54,7 +54,7 @@ export const SearchResultsWidget = React.forwardRef(({ offers, offersLoading, of
 
     return (
         <ContextProvider {...contextProviderProps}>
-            <Paper elevation={2}>
+            <Paper elevation={2} data-testid="Search Results Widget">
                 <Grid
                     ref={ref}
                     className={classes.searchResults}
