@@ -2,13 +2,13 @@ import React from "react";
 import { render } from "../test-utils";
 import useSession from "./useSession";
 
+import useSWR from "swr";
+
 jest.mock("swr", () => ({
     __esModule: true,
     default: jest.fn(),
     mutate: jest.fn(),
 }));
-
-import useSWR from "swr";
 
 describe("useSession hook", () => {
 

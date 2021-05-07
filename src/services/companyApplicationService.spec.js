@@ -1,5 +1,4 @@
 import config from "../config";
-const { API_HOSTNAME } = config;
 
 import { submitCompanyApplication } from "./companyApplicationService";
 import {
@@ -7,6 +6,7 @@ import {
     setCompanyApplicationSubmissionError,
     setCompanyApplication,
 } from "../actions/companyApplicationActions";
+const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
     it("should POST the API with the form data in JSON format and dispatch the correct actions", async () => {

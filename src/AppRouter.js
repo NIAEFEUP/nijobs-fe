@@ -13,8 +13,7 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
-
-const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
+import MyOffersPage from "./pages/MyOffersPage";
 
 /**
  *
@@ -26,7 +25,7 @@ const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSiz
  *
  */
 
-import MyOffersPage from "./pages/MyOffersPage";
+const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>

@@ -1,7 +1,7 @@
 import config from "../config";
-const { API_HOSTNAME } = config;
 
 import { login, logout } from "./auth";
+const { API_HOSTNAME } = config;
 
 describe("Auth Service", () => {
     it("Should send a POST request to authenticate the current session", async () => {

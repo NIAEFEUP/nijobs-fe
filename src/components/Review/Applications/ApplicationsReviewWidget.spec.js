@@ -9,12 +9,12 @@ import { SnackbarProvider } from "notistack";
 import React from "react";
 import { Simulate } from "react-dom/test-utils";
 import config from "../../../config";
-const { API_HOSTNAME } = config;
 
 import { renderWithStore, renderWithStoreAndTheme } from "../../../test-utils";
 import Notifier from "../../Notifications/Notifier";
 import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
 import ApplicationsReviewWidget from "./ApplicationsReviewWidget";
+const { API_HOSTNAME } = config;
 
 jest.useFakeTimers("modern");
 
