@@ -1,7 +1,7 @@
 import config from "../config";
-const { API_HOSTNAME } = config;
 
 import { searchApplications, approveApplication, rejectApplication } from "./applicationsReviewService";
+const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
 

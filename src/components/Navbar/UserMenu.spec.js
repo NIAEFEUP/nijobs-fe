@@ -2,13 +2,13 @@ import React from "react";
 
 import { logout } from "../../services/auth";
 
-jest.mock("../../services/auth");
-
 import UserMenu from "./UserMenu";
 import { renderWithTheme } from "../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
+
+jest.mock("../../services/auth");
 
 describe("Navbar - LoginForm", () => {
     const theme = createMuiTheme({});

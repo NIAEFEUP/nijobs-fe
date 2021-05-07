@@ -6,6 +6,12 @@ import reducer from "./reducers";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
 
+
+/** *************** RTL *************** **/
+
+import { render as defaultRender, buildQueries, queries } from "@testing-library/react";
+import { applyMiddleware, compose, createStore } from "redux";
+
 export const mountWithStore = (component, initialState, theme) => {
 
     const mockStore = configureMockStore([thunk]);
@@ -40,12 +46,6 @@ export const TestComponent = ({ callback }) => {
 export const testHook = (callback) => {
     mount(<TestComponent callback={callback} />);
 };
-
-
-/** *************** RTL *************** **/
-
-import { render as defaultRender, buildQueries, queries } from "@testing-library/react";
-import { applyMiddleware, compose, createStore } from "redux";
 
 
 const [queryDescriptionOf, , getDescriptionOf, , findDescriptionOf] = buildQueries(
