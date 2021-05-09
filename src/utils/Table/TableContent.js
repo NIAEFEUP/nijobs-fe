@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TableBody, TableCell, Checkbox, TableRow, Collapse, makeStyles } from "@material-ui/core";
+import { TableBody, TableCell, Checkbox, TableRow as MUITableRow, Collapse, makeStyles } from "@material-ui/core";
 import { RowFields, RowPayload, RowPropTypes } from "./PropTypes";
 import useToggle from "../../hooks/useToggle";
 
@@ -10,9 +10,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const RenderTableRow = ({
+const TableRow = ({
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
-    submitUndoableAction, RowActionsProps, context, RowComponent, RowCollapseComponent,
+    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -21,7 +21,7 @@ const RenderTableRow = ({
 
     return (
         <>
-            <TableRow
+            <MUITableRow
                 hover
                 tabIndex={-1}
                 onClick={(e) => handleSelect(e, rowKey)}
@@ -35,7 +35,7 @@ const RenderTableRow = ({
                         inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
                 </TableCell>
-                <RowComponent rowKey={rowKey} labelId={labelId} />
+                <RowContent rowKey={rowKey} labelId={labelId} />
                 {RowActions &&
                     <RowActions
                         row={{ key: rowKey, fields, payload, ...rowProps }}
@@ -46,21 +46,21 @@ const RenderTableRow = ({
                         {...RowActionsProps}
                     />
                 }
-            </TableRow>
+            </MUITableRow>
             {!!RowCollapseComponent &&
-            <TableRow>
+            <MUITableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={Object.keys(fields).length + 2}>
                     <Collapse in={open} timeout="auto" unmountOnExit className={classes.rowDetails}>
                         <RowCollapseComponent rowKey={rowKey} />
                     </Collapse>
                 </TableCell>
-            </TableRow>
+            </MUITableRow>
             }
         </>
     );
 };
 
-RenderTableRow.propTypes = {
+TableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
     payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
@@ -71,22 +71,22 @@ RenderTableRow.propTypes = {
     submitUndoableAction: PropTypes.func.isRequired,
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
-    RowComponent: PropTypes.elementType.isRequired,
+    RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowComponent, RowCollapseComponent,
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent,
 }) => (
     <TableBody>
         {Object.keys(rows).length === 0 ?
-            <TableRow>
+            <MUITableRow>
                 <TableCell align="center" colSpan={numColumns + 1 /* This should depend whether this is selectable or not*/}>
                     {emptyMessage}
                 </TableCell>
-            </TableRow>
+            </MUITableRow>
             : Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
-                <RenderTableRow
+                <TableRow
                     key={key}
                     rowKey={key}
                     fields={fields}
@@ -98,7 +98,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     submitUndoableAction={submitUndoableAction}
                     RowActionsProps={RowActionsProps}
                     context={context}
-                    RowComponent={RowComponent}
+                    RowContent={RowContent}
                     RowCollapseComponent={RowCollapseComponent}
                 />
             ))}
@@ -115,7 +115,7 @@ TableContent.propTypes = {
     emptyMessage: PropTypes.string,
     numColumns: PropTypes.number.isRequired,
     context: PropTypes.object,
-    RowComponent: PropTypes.elementType.isRequired,
+    RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
 };
 

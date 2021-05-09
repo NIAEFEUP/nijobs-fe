@@ -106,7 +106,7 @@ const ApplicationsReviewWidget = () => {
             } }));
     }, [setRows]);
 
-    const RowComponent = ({ rowKey, labelId }) => {
+    const RowContent = ({ rowKey, labelId }) => {
         const fields = rows[rowKey].fields;
 
         return (
@@ -118,7 +118,7 @@ const ApplicationsReviewWidget = () => {
         );
     };
 
-    RowComponent.propTypes = {
+    RowContent.propTypes = {
         rowKey: PropTypes.string.isRequired,
         labelId: PropTypes.string.isRequired,
     };
@@ -200,7 +200,7 @@ const ApplicationsReviewWidget = () => {
                             approveApplicationRow,
                             rejectApplicationRow,
                         }}
-                        RowComponent={RowComponent}
+                        RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
                     />
                 }
