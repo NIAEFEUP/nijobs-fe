@@ -11,8 +11,8 @@ const redditLogo = require("./reddit-logo.png");
 // eslint-disable-next-line no-unused-vars
 const MOCK_OFFERS = [
     new Offer({
-        id: "random uuid1",
-        position: "Full-Stack Developer",
+        _id: "random uuid1",
+        title: "Full-Stack Developer",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -32,8 +32,8 @@ const MOCK_OFFERS = [
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
     }),
     new Offer({
-        id: "random uuid2",
-        position: "Security Guy",
+        _id: "random uuid2",
+        title: "Security Guy",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -43,8 +43,8 @@ const MOCK_OFFERS = [
         description: "You won't do much, really...",
     }),
     new Offer({
-        id: "random uuid3",
-        position: "Frontend Developer But Make it Longer",
+        _id: "random uuid3",
+        title: "Frontend Developer But Make it Longer",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -54,8 +54,8 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        id: "random uuid4",
-        position: "Guy in the background",
+        _id: "random uuid4",
+        title: "Guy in the background",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -65,8 +65,8 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        id: "random uuid5",
-        position: "Janitor",
+        _id: "random uuid5",
+        title: "Janitor",
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -76,8 +76,8 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        id: "random uuid6",
-        position: "Fullstack developer but make it shorter",
+        _id: "random uuid6",
+        title: "Fullstack developer but make it shorter",
         company: {
             name: "Reddit",
             logo: redditLogo,
