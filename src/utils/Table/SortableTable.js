@@ -4,8 +4,11 @@ import BaseTable from "./BaseTable";
 
 import { RowPropTypes, ColumnPropTypes } from "./PropTypes";
 import MutableDataTable from "./MutableDataTable";
+import { alphabeticalSorter } from "./utils";
 
 const sortRowFields = (fieldsToReorder, isAscendingMode, sorter) => fieldsToReorder.sort(sorter(isAscendingMode));
+
+const defaultSorter = alphabeticalSorter;
 
 export const ControlledSortableTable = ({
     tableComponent: TableComponent = BaseTable,
@@ -23,7 +26,7 @@ export const ControlledSortableTable = ({
     const [orderBy, setOrderBy] = useState(defaultSort);
 
     const fieldsToReorder = Object.entries(rows).map(([rowId, { fields }]) => ({ rowId, field: fields[orderBy].value }));
-    const sortedRows = sortRowFields(fieldsToReorder, isOrderAscending, sorters[orderBy])
+    const sortedRows = sortRowFields(fieldsToReorder, isOrderAscending, sorters[orderBy] || defaultSorter)
         .reduce((sorted, { rowId }) => {
             sorted[rowId] = rows[rowId]; return sorted;
         }, {});
