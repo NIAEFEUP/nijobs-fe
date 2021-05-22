@@ -79,6 +79,35 @@ describe("Navbar - LoginForm", () => {
                     { theme });
                 expect(wrapperNonAdmin.queryByText("Admin")).not.toBeInTheDocument();
             });
+
+            it("Should show the finish company registration if the company hasn't done it", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", company: { hasFinishedRegistration: false } }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Finish Registration")).toBeInTheDocument();
+            });
+            it("Should not show the finish company registration if the company has done it already", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", company: { hasFinishedRegistration: true } }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Finish Registration")).not.toBeInTheDocument();
+            });
         });
     });
     describe("interaction", () => {
