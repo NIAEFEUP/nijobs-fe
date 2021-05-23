@@ -14,6 +14,11 @@ import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import MyOffersPage from "./pages/MyOffersPage";
+import {
+    FinishCompanyRegistrationController,
+    FinishCompanyRegistrationControllerContext,
+} from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
+import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 
 /**
  *
@@ -87,6 +92,23 @@ const AppRouter = () => (
                     layout={LayoutType.DESKTOP}
                 >
                     <MyOffersPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/company/registration/finish"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
+                authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
+            >
+                <PageLayout
+                    key="/company/registration/finish"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Finish Registration"
+                    context={FinishCompanyRegistrationControllerContext}
+                    controller={FinishCompanyRegistrationController}
+                >
+                    <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route

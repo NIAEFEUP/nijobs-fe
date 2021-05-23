@@ -59,8 +59,8 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
                 content: (key, message) =>
                     <Notification
                         message={message}
-                        isUndo
-                        handleCancel={handleCancel(key)}
+                        actionText="Undo"
+                        actionHandler={handleCancel(key)}
                         handleClose={handleClose(key)}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}

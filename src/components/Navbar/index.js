@@ -8,6 +8,7 @@ import {
     Toolbar,
     Button,
     Typography,
+    Badge,
 } from "@material-ui/core";
 
 import { Link } from "react-router-dom";
@@ -22,6 +23,7 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
+import { Wrap } from "../../utils";
 
 const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, desktopLayout, title, position }) => {
 
@@ -83,9 +85,21 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
                         <Button
                             className={classes.userMenuButton}
                             disableRipple
-                            endIcon={<MenuRounded className={classes.userLogo} />}
+                            endIcon={
+                                <Wrap
+                                    on={!data?.company?.hasFinishedRegistration}
+                                    Wrapper={({ children }) =>
+                                        <Badge variant="dot" color="secondary" overlap="circle">
+                                            {children}
+                                        </Badge>}
+                                >
+
+                                    <MenuRounded className={classes.userLogo} />
+                                </Wrap>
+                            }
                         >
                             {!userMenuOpen && !isMobile && "Account"}
+
                         </Button>
                     }
                 </div>

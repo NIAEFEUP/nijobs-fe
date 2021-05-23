@@ -1,3 +1,6 @@
+import { validationRulesGenerator } from "../../../utils";
+
+
 export const CompanyApplicationConstants = {
     password: {
         minLength: 8,
@@ -13,14 +16,7 @@ export const CompanyApplicationConstants = {
     },
 };
 
-export const generateValidationRule = (field, rule, reason) => {
-    const validationConstraint = CompanyApplicationConstants[field][rule];
-    const params = [validationConstraint];
-
-    if (reason) params.push((typeof reason === "function") ? reason(validationConstraint) : reason);
-
-    return params;
-};
+export const generateValidationRule = validationRulesGenerator(CompanyApplicationConstants);
 
 const HumanReadableErrors = Object.freeze({
     "email-already-exists": "The provided email is already associated to our platform.",

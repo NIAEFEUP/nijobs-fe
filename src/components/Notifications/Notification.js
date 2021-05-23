@@ -16,11 +16,12 @@ const useStyles = makeStyles((theme) => {
             width: isMobile ? "100%" : "500px",
             display: "grid",
             alignItems: "center",
+            gap: theme.spacing(2),
         }),
         generalNotification: {
             gridTemplateColumns: "9fr 1fr",
         },
-        undoNotification: {
+        actionNotification: {
             gridTemplateColumns: "8fr 1fr 1fr",
         },
         closeAction: {
@@ -30,23 +31,26 @@ const useStyles = makeStyles((theme) => {
         closeActionUndo: {
             gridColumnStart: 3,
         },
-        undoAction: {
+        action: {
             gridColumnStart: 2,
             textAlign: "right",
+            width: "max-content",
         },
     };
 });
 
-const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleClose, onMouseEnter, onMouseLeave }, ref) => {
+const Notification = React.forwardRef(({ message, actionText, actionHandler, handleClose, onMouseEnter, onMouseLeave }, ref) => {
 
     const classes = useStyles({ isMobile: !useDesktop() });
+
+    const hasAction = actionText !== undefined;
 
     return (
         <Paper
             ref={ref}
             className={clsx(classes.notification, {
-                [classes.generalNotification]: !isUndo,
-                [classes.undoNotification]: isUndo,
+                [classes.generalNotification]: !hasAction,
+                [classes.actionNotification]: hasAction,
             })}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
@@ -54,16 +58,18 @@ const Notification = React.forwardRef(({ message, isUndo, handleCancel, handleCl
             <div>
                 {message}
             </div>
-            {isUndo &&
-                <div className={classes.undoAction}>
-                    <Button color="primary" onClick={handleCancel}>Undo</Button>
+            {hasAction &&
+                <div className={classes.action}>
+                    <Button color="primary" onClick={actionHandler}>
+                        {actionText}
+                    </Button>
                 </div>
             }
-            <div className={clsx(classes.closeAction, { [classes.closeActionUndo]: isUndo })}>
+            <div className={clsx(classes.closeAction, { [classes.closeActionUndo]: hasAction })}>
                 <IconButton
                     aria-label="Close"
                     size="small"
-                    edge={isUndo ? false : "end"}
+                    edge={hasAction ? false : "end"}
                     color="inherit"
                     onClick={handleClose}
                 >
@@ -78,8 +84,8 @@ Notification.displayName = "Notification";
 
 Notification.propTypes = {
     message: PropTypes.string.isRequired,
-    isUndo: PropTypes.bool, // If true, will show an undo button (for undo type notifications)
-    handleCancel: PropTypes.func,
+    actionText: PropTypes.string, // If present, will show a button that calls actionHandler on click
+    actionHandler: PropTypes.func,
     handleClose: PropTypes.func,
     onMouseEnter: PropTypes.func,
     onMouseLeave: PropTypes.func,

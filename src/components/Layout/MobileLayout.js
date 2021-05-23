@@ -5,15 +5,24 @@ import Navbar from "../Navbar";
 import ContactSection from "./ContactSection";
 
 const useStyles = makeStyles(() => ({
+    dialog: {
+        display: "flex",
+        flexDirection: "column",
+    },
     dialogContent: {
-        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        flex: "1 0 100vh",
     },
 }));
 
 const MobileLayout = ({ children, pageTitle }) => {
     const classes = useStyles();
     return (
-        <Dialog fullScreen open>
+        <Dialog
+            fullScreen
+            open
+        >
             <div className={classes.dialogContent}>
                 <Navbar title={pageTitle} position="relative" />
                 {children}

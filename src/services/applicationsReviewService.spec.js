@@ -42,19 +42,19 @@ describe("Company Application Service", () => {
         try {
             await searchApplications();
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
         try {
             await approveApplication("id1");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
         try {
             await rejectApplication("id1", "rejectReason");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
     });

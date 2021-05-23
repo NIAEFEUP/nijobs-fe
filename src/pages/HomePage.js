@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from "react";
 import MainView from "../components/HomePage/MainView";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
+import ApplicationMessagesNotifier from "../components/ApplicationMessages";
 import { smoothScrollToRef } from "../utils";
 
 export const HomePage = () => {
@@ -18,6 +19,7 @@ export const HomePage = () => {
 
     return (
         <React.Fragment>
+            <ApplicationMessagesNotifier />
             <MainView
                 scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef)}
                 showSearchResults={() => {

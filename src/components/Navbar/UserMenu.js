@@ -12,6 +12,8 @@ import {
     makeStyles,
     SwipeableDrawer,
     Divider,
+    Badge,
+    Box,
 } from "@material-ui/core";
 import { logout } from "../../services/auth";
 
@@ -100,8 +102,27 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
-                {!!sessionData?.company &&
-                <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>}
+                {sessionData?.company && sessionData.company.hasFinishedRegistration ?
+                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                    :
+                    <MenuItem
+                        button
+                        className={classes.highlightedMenuItem}
+                        component={Link}
+                        to="/company/registration/finish"
+                        disableTouchRipple
+                    >
+                        <Badge
+                            variant="dot"
+                            color="primary"
+                            anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                        >
+                            <Box pl={2}>
+                                Finish Registration
+                            </Box>
+                        </Badge>
+                    </MenuItem>
+                }
 
                 {/* <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem> */}
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
