@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { IconButton, TableCell } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -9,7 +9,9 @@ import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
-import { RowActions } from "../Actions";
+import { Edit as EditIcon } from "@material-ui/icons";
+// import { RowActions } from "../Actions";
+
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -27,8 +29,8 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({ title, location, description, publishDate, publishEndDate, companyName,
-    company }) => ({ // Check if it is company.name or companyName
+const generateRow = ({ title, location, description, publishDate, publishEndDate,
+    ownerName }) => ({ // Check if it is company.name or companyName
     fields: {
         title: { value: title, align: "left" },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
@@ -36,7 +38,7 @@ const generateRow = ({ title, location, description, publishDate, publishEndDate
         location: { value: location },
     },
     payload: {
-        companyName: { value: company?.name },
+        companyName: { value: ownerName },
         description: { value: description },
     },
 });
@@ -65,6 +67,20 @@ const filters = [
     },
     { id: "location-filter", render: LocationFilter },
 ];
+
+const RowActions = () => (
+    <TableCell align="right">
+        <IconButton
+            onClick={(e) => {
+                e.stopPropagation();
+                // Navigate to Edit Offer Page
+            }}
+        >
+            <EditIcon color="secondary" fontSize="default" />
+        </IconButton>
+    </TableCell>
+);
+
 
 const CompanyOffersManagementWidget = () => {
     const { data, isLoggedIn } = useSession();
@@ -109,6 +125,7 @@ const CompanyOffersManagementWidget = () => {
         labelId: PropTypes.string.isRequired,
     };
 
+    /*
     const useRowCollapseStyles = makeStyles((theme) => ({
         payloadSection: {
             "&:not(:first-child)": {
@@ -122,42 +139,39 @@ const CompanyOffersManagementWidget = () => {
             paddingTop: theme.spacing(2),
         },
     }));
-
+    */
+    /*
     const RowCollapseComponent = ({ rowKey }) => {
         const row = offers[rowKey];
         const classes = useRowCollapseStyles();
         return (
-            <>
-                <Typography variant="subtitle2">
-                    {row.payload.companyName.value}
-                </Typography>
-                <div className={classes.actionsDivider}>
-                    <Typography variant="body1">
+            <div style={{ display: "flex", flex: 1, flexDirection: "row" }}>
+                <div style={{ flex: 1 }}>
+                    <Typography variant="subtitle2">
+                        {row.payload.companyName.value}
+                    </Typography>
+                    <div className={classes.actionsDivider}>
+                        <Typography variant="body1">
                             Description
-                    </Typography>
-                    <Typography variant="body2">
-                        {row.payload.description.value}
-                    </Typography>
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.payload.description.value}
+                        </Typography>
+                    </div>
                 </div>
+                <div style={{ flex: 1 }}>
+                    { // Edit Offer button could be in the collapsable?
+                    }
+                    <Typography>Some text</Typography>
+                </div>
+            </div>
 
-                { /* row.fields.state.value === ApplicationStateLabel.REJECTED &&
-                <div className={classes.payloadSection}>
-                    <Divider />
-                    <Typography variant="body1">
-                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
-                    </Typography>
-                    <Typography variant="body2">
-                        {row.payload.rejectReason}
-                    </Typography>
-                </div>
-                */ }
-            </>
         );
     };
 
     RowCollapseComponent.propTypes = {
         rowKey: PropTypes.string.isRequired,
-    };
+    }; */
 
     return (
         <div>
@@ -178,6 +192,7 @@ const CompanyOffersManagementWidget = () => {
                     stickyHeader
                     emptyMessage="No applications here."
                     RowContent={RowContent}
+                    // RowCollapseComponent={RowCollapseComponent}
                 />
             }
         </div>

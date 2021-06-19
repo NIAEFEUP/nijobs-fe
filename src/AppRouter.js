@@ -86,22 +86,6 @@ const AppRouter = () => (
             </ProtectedRoute>
             <ProtectedRoute
                 exact
-                key="/company/offers/manage"
-                path="/company/offers/manage"
-                unauthorizedRedirectPath="/"
-                unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
-                authorize={(user) => !!(user?.company)}
-            >
-                <PageLayout
-                    key="/company/offers/manage"
-                    pageTitle="My Offers"
-                    layout={LayoutType.DESKTOP}
-                >
-                    <CompanyOffersManagementPage />
-                </PageLayout>
-            </ProtectedRoute>
-            <ProtectedRoute
-                exact
                 key="/company/registration/finish"
                 path="/company/registration/finish"
                 unauthorizedRedirectPath="/"
@@ -119,6 +103,22 @@ const AppRouter = () => (
                     <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                key="/company/offers/manage"
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
+                authorize={(user) => !!(user?.company)}
+            >
+                <PageLayout
+                    key="/company/offers/manage"
+                    pageTitle="My Offers"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <CompanyOffersManagementPage />
+                </PageLayout>
+            </ProtectedRoute>
             <Route
                 path="/offer/:id"
                 key="/offer/:id"
@@ -132,17 +132,6 @@ const AppRouter = () => (
                     context={OfferPageControllerContext}
                 >
                     <OfferPage />
-                </PageLayout>
-            </Route>
-            <Route
-                exact
-                path="/company/offers/manage"
-                unauthorizedRedirectPath="/"
-                unauthorizedRedirectMessage="You are not allowed to access the company offers management page."
-                authorize={(user) => (user?.company)}
-            >
-                <PageLayout pageTitle="Manage Offers">
-                    <CompanyOffersManagementPage />
                 </PageLayout>
             </Route>
             <Route
