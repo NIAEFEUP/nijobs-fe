@@ -68,7 +68,7 @@ TableRow.propTypes = {
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
     RowActions: PropTypes.elementType.isRequired,
-    submitUndoableAction: PropTypes.func.isRequired,
+    submitUndoableAction: PropTypes.func,   // Need to check what to do with this propTypes (specific to Company Applications)
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,

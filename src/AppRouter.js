@@ -12,8 +12,8 @@ import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
+import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
-import MyOffersPage from "./pages/MyOffersPage";
 import {
     FinishCompanyRegistrationController,
     FinishCompanyRegistrationControllerContext,
@@ -91,7 +91,7 @@ const AppRouter = () => (
                     pageTitle="My Offers"
                     layout={LayoutType.DESKTOP}
                 >
-                    <MyOffersPage />
+                    <CompanyOffersManagementPage />
                 </PageLayout>
             </ProtectedRoute>
             <ProtectedRoute
@@ -111,6 +111,17 @@ const AppRouter = () => (
                     <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route
+                exact
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the company offers management page."
+                authorize={(user) => (user?.company)}
+            >
+                <PageLayout pageTitle="Manage Offers">
+                    <CompanyOffersManagementPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >
