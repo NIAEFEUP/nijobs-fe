@@ -25,6 +25,7 @@ export default (options) => {
 
     const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
         revalidateOnFocus: false,
+        revalidateOnMount: false,
         initialData: null,
         errorRetryCount: errorRetryCount || DEFAULT_RETRY_COUNT,
         ...params,

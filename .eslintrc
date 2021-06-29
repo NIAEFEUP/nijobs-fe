@@ -25,6 +25,7 @@
 
     "plugins": [
         "react",
+        "import",
         "react-hooks",
         "jest",
         "babel"
@@ -46,6 +47,7 @@
         "no-template-curly-in-string": "error",
         "no-console": "warn",
         "linebreak-style": ["error", "unix"],
+        "import/first": "error",
 
         // Best practices
         "array-callback-return": "error",

@@ -2,10 +2,10 @@ import React from "react";
 
 import { login } from "../../services/auth";
 
-jest.mock("../../services/auth");
-
 import LoginForm from "./LoginForm";
 import { render, fireEvent, act } from "../../test-utils";
+
+jest.mock("../../services/auth");
 
 describe("Navbar - LoginForm", () => {
     describe("render", () => {

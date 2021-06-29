@@ -14,7 +14,7 @@ import {
 import { login } from "../../services/auth";
 import { useForm } from "react-hook-form";
 
-import { yupResolver } from "@hookform/resolvers";
+import { yupResolver } from "@hookform/resolvers/yup";
 import LoginSchema from "./LoginSchema";
 
 import useLoginStyles from "./loginStyles";
@@ -23,7 +23,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
 
     const classes = useLoginStyles();
 
-    const { register, handleSubmit, reset, errors } = useForm({
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({
         mode: "onBlur",
         resolver: yupResolver(LoginSchema),
         reValidateMode: "onChange",
@@ -80,7 +80,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         onChange={resetError}
                         margin="normal"
                         fullWidth
-                        inputRef={register}
+                        inputProps={{ ...register("email") }}
                         error={!!errors.email}
                         helperText={errors.email ? errors.email.message : <span />}
                     />
@@ -92,7 +92,7 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                         onChange={resetError}
                         margin="normal"
                         fullWidth
-                        inputRef={register}
+                        inputProps={{ ...register("password") }}
                         error={!!errors.password}
                         helperText={errors.password ? errors.password.message : <span />}
                     />

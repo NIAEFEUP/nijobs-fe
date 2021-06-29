@@ -1,7 +1,7 @@
 import config from "../config";
-const { API_HOSTNAME } = config;
 
 import { searchApplications, approveApplication, rejectApplication } from "./applicationsReviewService";
+const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
 
@@ -42,19 +42,19 @@ describe("Company Application Service", () => {
         try {
             await searchApplications();
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
         try {
             await approveApplication("id1");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
         try {
             await rejectApplication("id1", "rejectReason");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error" }]);
+            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
         }
 
     });

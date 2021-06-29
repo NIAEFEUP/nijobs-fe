@@ -36,7 +36,7 @@ const BaseTable = ({
     rowsPerPage: initialRowsPerPage = 10,
     TableToolbarProps = {},
     context,
-    RowComponent,
+    RowContent,
     RowCollapseComponent,
 }) => {
     const [page, setPage] = React.useState(0);
@@ -102,7 +102,7 @@ const BaseTable = ({
                         RowActionsProps={RowActionsProps}
                         emptyMessage={emptyMessage}
                         context={context}
-                        RowComponent={RowComponent}
+                        RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
                     />
                 </Table>
@@ -158,7 +158,7 @@ BaseTable.propTypes = {
         activeFilters: PropTypes.object,
     }),
     context: PropTypes.object,
-    RowComponent: PropTypes.elementType.isRequired,
+    RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
 };
 

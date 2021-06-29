@@ -1,5 +1,6 @@
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
+
 import config from "../config";
 const { API_HOSTNAME } = config;
 
@@ -87,7 +88,6 @@ const MOCK_OFFERS = [
     }),
 ];
 
-
 const sleep = (time) => new Promise((resolve) => {
     setTimeout(() => {
         resolve();
@@ -122,5 +122,6 @@ export const fetchCompanyOffers = async (filters) => {
     }
 
     // throw new Error("An error occurred!");
+
     // return MOCK_OFFERS;
 };

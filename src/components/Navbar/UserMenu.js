@@ -12,6 +12,8 @@ import {
     makeStyles,
     SwipeableDrawer,
     Divider,
+    Badge,
+    Box,
 } from "@material-ui/core";
 import { logout } from "../../services/auth";
 
@@ -100,10 +102,29 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
-                {/*
-                <MenuItem button disableTouchRipple onClick={() => {}}>My Offers</MenuItem>     // These options need to be implemented
-                <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem>
-                */}
+                {sessionData?.company && sessionData.company.hasFinishedRegistration ?
+                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                    :
+                    <MenuItem
+                        button
+                        className={classes.highlightedMenuItem}
+                        component={Link}
+                        to="/company/registration/finish"
+                        disableTouchRipple
+                    >
+                        <Badge
+                            variant="dot"
+                            color="primary"
+                            anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                        >
+                            <Box pl={2}>
+                                Finish Registration
+                            </Box>
+                        </Badge>
+                    </MenuItem>
+                }
+
+                {/* <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem> */}
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
             </MenuList>
@@ -117,6 +138,7 @@ UserMenuContent.propTypes = {
     sessionData: PropTypes.shape({
         email: PropTypes.string,
         isAdmin: PropTypes.bool,
+        company: PropTypes.object,
     }),
     handleLogout: PropTypes.func.isRequired,
 };

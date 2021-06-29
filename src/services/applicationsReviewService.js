@@ -37,7 +37,7 @@ export const searchApplications = async (filters) => {
     } catch (error) {
         // TODO count metrics
         if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+        throw [{ msg: "Unexpected Error. Please try again later." }];
     }
 };
 
@@ -59,7 +59,7 @@ export const approveApplication = async (applicationId) => {
     } catch (error) {
         // TODO count metrics
         if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+        throw [{ msg: "Unexpected Error. Please try again later." }];
     }
 };
 
@@ -84,6 +84,6 @@ export const rejectApplication = async (applicationId, rejectReason) => {
     } catch (error) {
         // TODO count metrics
         if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+        throw [{ msg: "Unexpected Error. Please try again later." }];
     }
 };

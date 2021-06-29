@@ -2,13 +2,13 @@ import React from "react";
 
 import { logout } from "../../services/auth";
 
-jest.mock("../../services/auth");
-
 import UserMenu from "./UserMenu";
 import { renderWithTheme } from "../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
+
+jest.mock("../../services/auth");
 
 describe("Navbar - LoginForm", () => {
     const theme = createMuiTheme({});
@@ -78,6 +78,35 @@ describe("Navbar - LoginForm", () => {
                     </BrowserRouter>,
                     { theme });
                 expect(wrapperNonAdmin.queryByText("Admin")).not.toBeInTheDocument();
+            });
+
+            it("Should show the finish company registration if the company hasn't done it", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", company: { hasFinishedRegistration: false } }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Finish Registration")).toBeInTheDocument();
+            });
+            it("Should not show the finish company registration if the company has done it already", () => {
+                const mockAnchor = { current: <div /> };
+
+                const wrapperNonAdmin = renderWithTheme(
+                    <BrowserRouter>
+                        <UserMenu
+                            open
+                            anchorRef={mockAnchor}
+                            sessionData={{ email: "test-email", company: { hasFinishedRegistration: true } }}
+                        />
+                    </BrowserRouter>,
+                    { theme });
+                expect(wrapperNonAdmin.queryByText("Finish Registration")).not.toBeInTheDocument();
             });
         });
     });

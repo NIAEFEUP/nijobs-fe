@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Divider, makeStyles, Typography } from "@material-ui/core";
+import {
+    Divider,
+    makeStyles,
+    Typography,
+} from "@material-ui/core";
 
 import { alphabeticalSorter, generateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
@@ -102,7 +106,7 @@ const ApplicationsReviewWidget = () => {
             } }));
     }, [setRows]);
 
-    const RowComponent = ({ rowKey, labelId }) => {
+    const RowContent = ({ rowKey, labelId }) => {
         const fields = rows[rowKey].fields;
 
         return (
@@ -114,7 +118,7 @@ const ApplicationsReviewWidget = () => {
         );
     };
 
-    RowComponent.propTypes = {
+    RowContent.propTypes = {
         rowKey: PropTypes.string.isRequired,
         labelId: PropTypes.string.isRequired,
     };
@@ -196,7 +200,7 @@ const ApplicationsReviewWidget = () => {
                             approveApplicationRow,
                             rejectApplicationRow,
                         }}
-                        RowComponent={RowComponent}
+                        RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
                     />
                 }

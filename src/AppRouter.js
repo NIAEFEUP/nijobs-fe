@@ -13,8 +13,12 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
-
-const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
+import MyOffersPage from "./pages/MyOffersPage";
+import {
+    FinishCompanyRegistrationController,
+    FinishCompanyRegistrationControllerContext,
+} from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
+import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 
 /**
  *
@@ -26,6 +30,8 @@ const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSiz
  *
  */
 import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
+
+const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -72,6 +78,38 @@ const AppRouter = () => (
                     layout={LayoutType.DESKTOP}
                 >
                     <ApplicationsReviewPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/company/offers/manage"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
+                authorize={(user) => !!(user?.company)}
+            >
+                <PageLayout
+                    key="/company/offers/manage"
+                    pageTitle="My Offers"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <MyOffersPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/company/registration/finish"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
+                authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
+            >
+                <PageLayout
+                    key="/company/registration/finish"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Finish Registration"
+                    context={FinishCompanyRegistrationControllerContext}
+                    controller={FinishCompanyRegistrationController}
+                >
+                    <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
