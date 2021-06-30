@@ -1,15 +1,11 @@
 import React from "react";
 import CompanyOffersManagementWidget from "../components/Company/Offers/Manage/CompanyOffersManagementWidget";
-import CenteredComponent from "../components/HomePage/CenteredComponent";
-import { MainMask } from "../components/HomePage/MainMask";
+import { CardContent } from "@material-ui/core";
 
 const CompanyOffersManagementPage = () => (
-    <>
-        <MainMask />
-        <CenteredComponent>
-            <CompanyOffersManagementWidget />
-        </CenteredComponent>
-    </>
+    <CardContent>
+        <CompanyOffersManagementWidget />
+    </CardContent>
 );
 
 export default CompanyOffersManagementPage;
