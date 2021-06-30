@@ -1,8 +1,8 @@
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 
-// import config from "../config";
-// const { API_HOSTNAME } = config;
+import config from "../config";
+const { API_HOSTNAME } = config;
 
 
 // TODO remove this
@@ -11,7 +11,7 @@ const redditLogo = require("./reddit-logo.png");
 // eslint-disable-next-line no-unused-vars
 const MOCK_OFFERS = [
     new Offer({
-        _id: "random uuid1",
+        id: "random uuid1",
         title: "Full-Stack Developer",
         company: {
             name: "Reddit",
@@ -32,7 +32,7 @@ const MOCK_OFFERS = [
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
     }),
     new Offer({
-        _id: "random uuid2",
+        id: "random uuid2",
         title: "Security Guy",
         company: {
             name: "Reddit",
@@ -43,7 +43,7 @@ const MOCK_OFFERS = [
         description: "You won't do much, really...",
     }),
     new Offer({
-        _id: "random uuid3",
+        id: "random uuid3",
         title: "Frontend Developer But Make it Longer",
         company: {
             name: "Reddit",
@@ -54,7 +54,7 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        _id: "random uuid4",
+        id: "random uuid4",
         title: "Guy in the background",
         company: {
             name: "Reddit",
@@ -65,7 +65,7 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        _id: "random uuid5",
+        id: "random uuid5",
         title: "Janitor",
         company: {
             name: "Reddit",
@@ -76,7 +76,7 @@ const MOCK_OFFERS = [
         description: "kek",
     }),
     new Offer({
-        _id: "random uuid6",
+        id: "random uuid6",
         title: "Fullstack developer but make it shorter",
         company: {
             name: "Reddit",
@@ -90,10 +90,14 @@ const MOCK_OFFERS = [
 
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
 // eslint-disable-next-line no-unused-vars
+
+const parseFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
+
 export const fetchCompanyOffers = async (filters) => {
-    /*
+    await sleep(1000);
+
     try {
-        const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
         });
@@ -110,14 +114,8 @@ export const fetchCompanyOffers = async (filters) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
-    */
-
-    await new Promise((resolve) => {
-        setTimeout(() => {
-            resolve("resolved");
-        }, 1000);
-    });
 
     // throw new Error("An error occurred!");
-    return MOCK_OFFERS;
+
+    // return MOCK_OFFERS;
 };
