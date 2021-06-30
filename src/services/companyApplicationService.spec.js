@@ -19,13 +19,13 @@ describe("Company Application Service", () => {
         const formData = { field1: 1, field2: 2 };
         await submitCompanyApplication(formData)(dispatchMock);
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/apply/company`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/apply/company`, expect.objectContaining({
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(formData),
-        });
+        }));
 
 
         expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));

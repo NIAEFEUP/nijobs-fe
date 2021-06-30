@@ -2,6 +2,7 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 import config from "../config";
+import { buildCancelableRequest } from "../utils";
 const { API_HOSTNAME } = config;
 
 // TODO remove this
@@ -54,7 +55,7 @@ const { API_HOSTNAME } = config;
 // ];
 
 
-export const searchOffers = (filters) => async (dispatch) => {
+export const searchOffers = (filters) => buildCancelableRequest(async (dispatch, { signal }) => {
 
     dispatch(resetOffersFetchError());
     dispatch(setLoadingOffers(true));
@@ -62,6 +63,7 @@ export const searchOffers = (filters) => async (dispatch) => {
     try {
         const res = await fetch(`${API_HOSTNAME}/offers?${parseSearchFiltersToURL(filters)}`, {
             method: "GET",
+            signal,
         });
         if (!res.ok) {
             dispatch(setOffersFetchError({
@@ -87,7 +89,7 @@ export const searchOffers = (filters) => async (dispatch) => {
         // TODO count metrics
     }
 
-};
+});
 
 export const parseSearchFiltersToURL = (filters) => Object.keys(filters)
     .filter((key) => Array.isArray(filters[key]) ? filters[key].length : !!filters[key]) // Remove falsy values

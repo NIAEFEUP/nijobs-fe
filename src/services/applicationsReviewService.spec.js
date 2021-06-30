@@ -27,10 +27,10 @@ describe("Company Application Service", () => {
         await searchApplications(filters);
 
         const filtersString = "limit=10&offset=10&companyName=company&state=[\"APPROVED\",\"PENDING\"]&sortBy=state:asc,companyName:desc";
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/search?${filtersString}`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/search?${filtersString}`, expect.objectContaining({
             method: "GET",
             credentials: "include",
-        });
+        }));
 
     });
 
@@ -93,10 +93,10 @@ describe("Company Application Service", () => {
 
         await approveApplication("id1");
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/id1/approve`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/id1/approve`, expect.objectContaining({
             method: "POST",
             credentials: "include",
-        });
+        }));
 
     });
 
@@ -107,14 +107,14 @@ describe("Company Application Service", () => {
 
         await rejectApplication("id1", "rejectReason");
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/id1/reject`, {
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/applications/company/id1/reject`, expect.objectContaining({
             method: "POST",
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ rejectReason: "rejectReason" }),
-        });
+        }));
 
     });
 });

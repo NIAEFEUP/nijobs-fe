@@ -21,6 +21,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.34",
     "@material-ui/pickers": "^3.2.10",
+    "cancelable-promise": "^3.2.3",
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
     "dotenv": "6.2.0",

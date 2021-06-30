@@ -1,4 +1,5 @@
 import config from "../config";
+import { buildCancelableRequest } from "../utils";
 const { API_HOSTNAME } = config;
 
 
@@ -19,12 +20,13 @@ const encodeFilters = (filters) => {
     return encodedValues.join("&");
 };
 
-export const searchApplications = async (filters) => {
+export const searchApplications = buildCancelableRequest(async (filters, { signal } = {}) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
+            signal,
         });
         const json = await res.json();
 
@@ -39,14 +41,15 @@ export const searchApplications = async (filters) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const approveApplication = async (applicationId) => {
+export const approveApplication = buildCancelableRequest(async (applicationId, { signal }) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/approve`, {
             method: "POST",
             credentials: "include",
+            signal,
         });
         const json = await res.json();
 
@@ -61,9 +64,9 @@ export const approveApplication = async (applicationId) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const rejectApplication = async (applicationId, rejectReason) => {
+export const rejectApplication = buildCancelableRequest(async (applicationId, rejectReason, { signal }) => {
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/reject`, {
             method: "POST",
@@ -72,6 +75,7 @@ export const rejectApplication = async (applicationId, rejectReason) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ rejectReason }),
+            signal,
         });
         const json = await res.json();
 
@@ -86,4 +90,4 @@ export const rejectApplication = async (applicationId, rejectReason) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
