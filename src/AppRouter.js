@@ -13,12 +13,12 @@ import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
-import MyOffersPage from "./pages/MyOffersPage";
 import {
     FinishCompanyRegistrationController,
     FinishCompanyRegistrationControllerContext,
 } from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
 import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
+import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 
 /**
  *
@@ -91,7 +91,7 @@ const AppRouter = () => (
                     pageTitle="My Offers"
                     layout={LayoutType.DESKTOP}
                 >
-                    <MyOffersPage />
+                    <CompanyOffersManagementPage />
                 </PageLayout>
             </ProtectedRoute>
             <ProtectedRoute
