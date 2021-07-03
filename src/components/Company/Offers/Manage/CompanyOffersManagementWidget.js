@@ -7,7 +7,11 @@ import FilterableTable from "../../../../utils/Table/FilterableTable";
 import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
+<<<<<<< HEAD
 import { format, parseISO } from "date-fns";
+=======
+import useSession from "../../../../hooks/useSession";
+>>>>>>> Changed API Call for specific offers which owner is the current logged in company
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -51,12 +55,13 @@ const RowActions = () => (
 
 
 const CompanyOffersManagementWidget = () => {
+    const { data } = useSession();
     const [offers, setOffers] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchCompanyOffers().then((offers) => {
+        fetchCompanyOffers(data.company._id).then((offers) => {
             /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
@@ -74,7 +79,7 @@ const CompanyOffersManagementWidget = () => {
             setError(err);
             setIsLoading(false);
         });
-    }, []);
+    }, [data.company._id]);
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;

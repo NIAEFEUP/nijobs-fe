@@ -91,11 +91,9 @@ const MOCK_OFFERS = [
 
 const parseFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
 
-export const fetchCompanyOffers = async (filters) => {
-    await sleep(1000);
-
+export const fetchCompanyOffers = async (companyID, filters) => {
     try {
-        const res = await fetch(`${API_HOSTNAME}/offers${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers/company/${companyID}${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
         });
