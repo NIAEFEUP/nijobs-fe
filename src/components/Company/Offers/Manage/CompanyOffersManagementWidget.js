@@ -105,10 +105,6 @@ const CompanyOffersManagementWidget = () => {
                     rowsPerPage={5}
                     stickyHeader
                     emptyMessage="No applications here."
-                    context={{
-                        // approveApplicationRow,
-                        // rejectApplicationRow,
-                    }}
                     RowContent={RowContent}
                 />
             }

@@ -116,14 +116,14 @@ const RowActionsContainer = ({
 
 RowActionsContainer.propTypes = {
     row: RowPropTypes,
-    isCollapseOpen: PropTypes.bool,     /* Removed isRequired from all props */
-    toggleCollapse: PropTypes.func,
-    actionToConfirm: PropTypes.func,
-    confirmAction: PropTypes.func,
-    cancelAction: PropTypes.func,
-    handleAction: PropTypes.func,
-    handleApprove: PropTypes.func,
-    executingAction: PropTypes.bool,
+    isCollapseOpen: PropTypes.bool.isRequired,
+    toggleCollapse: PropTypes.func.isRequired,
+    actionToConfirm: PropTypes.func.isRequired,
+    confirmAction: PropTypes.func.isRequired,
+    cancelAction: PropTypes.func.isRequired,
+    handleAction: PropTypes.func.isRequired,
+    handleApprove: PropTypes.func.isRequired,
+    executingAction: PropTypes.bool.isRequired,
 };
 
 const BaseRowActions = ({
