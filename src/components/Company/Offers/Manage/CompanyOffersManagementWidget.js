@@ -63,6 +63,7 @@ const CompanyOffersManagementWidget = () => {
     useEffect(() => {
         fetchCompanyOffers(data.company._id).then((offers) => {
             /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
+<<<<<<< HEAD
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
                     rows[row.id] = generateRow(row);
@@ -73,6 +74,14 @@ const CompanyOffersManagementWidget = () => {
             } else {
                 setOffers([]);
             }
+=======
+            const fetchedRows = offers.reduce((rows, row) => {
+                rows[row._id] = generateRow(row);
+                return rows;
+            }, {});
+
+            setOffers(fetchedRows);
+>>>>>>> Fixed bug where it only returned 1 offer and removed mock offers
             setIsLoading(false);
 
         }).catch((err) => {

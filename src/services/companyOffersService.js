@@ -1,6 +1,3 @@
-import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-
-
 import config from "../config";
 const { API_HOSTNAME } = config;
 
@@ -110,8 +107,4 @@ export const fetchCompanyOffers = async (companyID, filters) => {
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error" }];
     }
-
-    // throw new Error("An error occurred!");
-
-    // return MOCK_OFFERS;
 };
