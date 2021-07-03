@@ -88,13 +88,6 @@ const MOCK_OFFERS = [
     }),
 ];
 
-const sleep = (time) => new Promise((resolve) => {
-    setTimeout(() => {
-        resolve();
-    }, time);
-
-});
-
 // REMOVE THIS LATER; WHEN THE FETCH CALL IS UNCOMMENTED
 // eslint-disable-next-line no-unused-vars
 export const fetchCompanyOffers = async (filters) => {
@@ -118,7 +111,13 @@ export const fetchCompanyOffers = async (filters) => {
         throw [{ msg: "Unexpected Error" }];
     }
     */
-    await sleep(1000);
+
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("resolved");
+        }, 1000);
+    });
+
     // throw new Error("An error occurred!");
     return MOCK_OFFERS;
 };
