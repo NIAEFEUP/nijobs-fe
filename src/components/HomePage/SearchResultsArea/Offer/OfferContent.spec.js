@@ -50,7 +50,7 @@ describe("OfferContent", () => {
                 expect(screen.getByRole("heading", { name: offer.title, level: 4 })).toBeInTheDocument();
                 expect(screen.getByRole("heading", { name: offer.ownerName, level: 6 })).toBeInTheDocument();
                 expect(screen.getByText(offer.location)).toBeInTheDocument();
-                expect(screen.getByText(format(parseISO(offer.jobStartDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                expect(screen.getByText(format(parseISO(offer.jobStartDate), "dd-MM-yyyy"))).toBeInTheDocument();
                 expect(screen.getByText(offer.description)).toBeInTheDocument();
             });
 

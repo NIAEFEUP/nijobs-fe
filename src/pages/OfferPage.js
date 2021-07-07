@@ -49,9 +49,9 @@ export const OfferPageController = () => {
 };
 
 const useStyles = makeStyles(() => ({
-    offerCard: {
-        maxWidth: "80%",
-    },
+    /* offerCard: {
+        maxWidth: "auto",
+    }, */
 }));
 
 const OfferPage = () => {
