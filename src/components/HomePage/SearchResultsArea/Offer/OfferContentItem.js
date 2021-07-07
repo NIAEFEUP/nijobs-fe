@@ -15,12 +15,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function capitalizeString(content) {
-    if (content === content.toUpperCase())
-        return content.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" ");
-    return content;
-}
-
 const OfferContentItem = ({ hasPermissions, title, content }) => {
     const classes = useStyles();
     if (hasPermissions && content) {
@@ -31,14 +25,14 @@ const OfferContentItem = ({ hasPermissions, title, content }) => {
                         {title}
                     </Typography>
                     <Typography variant="body1">
-                        {capitalizeString(content)}
+                        {content}
                     </Typography>
                 </div>
             );
         }
         const listItems = content.map((listElement) =>
             <li key={listElement}>
-                {capitalizeString(listElement)}
+                {listElement}
             </li>
         );
         return (
