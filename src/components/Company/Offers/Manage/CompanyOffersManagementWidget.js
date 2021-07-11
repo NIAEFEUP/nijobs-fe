@@ -16,7 +16,7 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     } else if (error) {
         return (
             <h1>
-                {error.message}
+                {error}
             </h1>
         );
     } else {
@@ -57,13 +57,18 @@ const CompanyOffersManagementWidget = () => {
     useEffect(() => {
         fetchCompanyOffers().then((offers) => {
             /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
-            const fetchedRows = offers.reduce((rows, row) => {
-                rows[row.id] = generateRow(row);
-                return rows;
-            }, {});
+            if (Array.isArray(offers)) {
+                const fetchedRows = offers.reduce((rows, row) => {
+                    rows[row.id] = generateRow(row);
+                    return rows;
+                }, {});
 
-            setOffers(fetchedRows);
+                setOffers(fetchedRows);
+            } else {
+                setOffers([]);
+            }
             setIsLoading(false);
+
         }).catch((err) => {
             setError(err);
             setIsLoading(false);
