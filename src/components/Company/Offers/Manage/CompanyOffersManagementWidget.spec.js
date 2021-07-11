@@ -5,8 +5,35 @@ import CompanyOffersManagementWidget from "./CompanyOffersManagementWidget";
 import { renderWithStore } from "../../../../test-utils";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import * as companyOffersService from "../../../../services/companyOffersService";
+// import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 
 describe("App", () => {
+    const MOCK_OFFERS = [
+        {
+            id: "random uuid4",
+            title: "Guy in the background",
+            company: {
+                name: "Reddit",
+                logo: "logo.com",
+            },
+            location: "Porto",
+            date: "2019-06",
+            description: "kek",
+        },
+        {
+            id: "random uuid5",
+            title: "Guy in the background",
+            company: {
+                name: "Reddit",
+                logo: "logo.com",
+            },
+            location: "Porto",
+            date: "2019-06",
+            description: "kek",
+        },
+    ];
+
     test("Renders Loading", () => {
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -21,26 +48,11 @@ describe("App", () => {
         expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
     });
 
-    test("Loads Offers", async () => {
-        /*
-        Use this after the companyOffersService stops using a MOCK
-        fetch.mockResponse(() => (
-            {
-                id: "random uuid4",
-                title: "Guy in the background",
-                company: {
-                    name: "Reddit",
-                    logo: "logo.com",
-                },
-                location: "Porto",
-                date: "2019-06",
-                description: "kek",
-            }
-        )); */
+    test("Loads Valid Offers", async () => {
+        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve(MOCK_OFFERS));
 
-        // Makes sure all updates like rendering, user events or data fetching are done before making the assertions
-        // Since render() is a synchronous function, it only flushes synchronous state updates.
-        act(() => {
+        // By waiting for act it executes all the async code at once
+        await act(() => {
             renderWithStore(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <CompanyOffersManagementWidget />
@@ -48,6 +60,41 @@ describe("App", () => {
             );
         });
 
-        expect(await screen.findByText("Offers Management")).toBeInTheDocument();
+        expect(await screen.getByText("Offers Management")).toBeInTheDocument();
+        expect(await screen.getAllByText("Guy in the background")).toHaveLength(2);
+    });
+
+    test("Loads Empty Offers", async () => {
+        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve([]));
+
+        // By waiting for act it executes all the async code at once
+        await act(() => {
+            renderWithStore(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <CompanyOffersManagementWidget />
+                </MuiPickersUtilsProvider>
+            );
+        });
+
+        expect(screen.getByText("Offers Management")).toBeInTheDocument();
+    });
+
+    test("Error fetching offers", async () => {
+        companyOffersService.fetchCompanyOffers = jest.fn(() => new Promise(() => {
+            throw "Error fetching offers";
+        }));
+
+        // By waiting for act it executes all the async code at once
+        await act(() => {
+            renderWithStore(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <CompanyOffersManagementWidget />
+                </MuiPickersUtilsProvider>
+            );
+        });
+
+        expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
+
+        expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
     });
 });
