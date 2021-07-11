@@ -7,11 +7,8 @@ import FilterableTable from "../../../../utils/Table/FilterableTable";
 import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
-<<<<<<< HEAD
 import { format, parseISO } from "date-fns";
-=======
 import useSession from "../../../../hooks/useSession";
->>>>>>> Changed API Call for specific offers which owner is the current logged in company
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -55,18 +52,17 @@ const RowActions = () => (
 
 
 const CompanyOffersManagementWidget = () => {
-    const { data } = useSession();
+    const { data, isLoggedIn } = useSession();
     const [offers, setOffers] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchCompanyOffers(data.company._id).then((offers) => {
+        if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
             /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
-<<<<<<< HEAD
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
-                    rows[row.id] = generateRow(row);
+                    rows[row._id] = generateRow(row);
                     return rows;
                 }, {});
 
@@ -74,21 +70,12 @@ const CompanyOffersManagementWidget = () => {
             } else {
                 setOffers([]);
             }
-=======
-            const fetchedRows = offers.reduce((rows, row) => {
-                rows[row._id] = generateRow(row);
-                return rows;
-            }, {});
-
-            setOffers(fetchedRows);
->>>>>>> Fixed bug where it only returned 1 offer and removed mock offers
             setIsLoading(false);
-
         }).catch((err) => {
             setError(err);
             setIsLoading(false);
         });
-    }, [data.company._id]);
+    }, [data.company._id, isLoggedIn]);
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
