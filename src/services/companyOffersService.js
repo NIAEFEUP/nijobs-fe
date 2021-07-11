@@ -10,22 +10,16 @@ export const fetchCompanyOffers = async (companyID, filters) => {
         }, 500);
     });
 
-    try {
-        const res = await fetch(`${API_HOSTNAME}/offers/company/${companyID}${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
-            method: "GET",
-            credentials: "include",
-        });
-        const json = await res.json();
+    const res = await fetch(`${API_HOSTNAME}/offers/company/${companyID}${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
+        method: "GET",
+        credentials: "include",
+    });
+    const json = await res.json();
 
-        if (!res.ok) {
-            throw json.errors;
-        }
-        // TODO count metrics
-        return json;
-
-    } catch (error) {
-        // TODO count metrics
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+    if (!res.ok) {
+        throw json.errors;
     }
+    // TODO count metrics
+    return json;
+
 };
