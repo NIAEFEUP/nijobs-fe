@@ -72,7 +72,7 @@ Wrap.propTypes = {
 };
 
 
-export const RouterLink = ({ to, children, ...props }) => {
+export const RouterLink = React.forwardRef(({ to, children, ...props }, ref) => {
     const renderLink = React.useMemo(
         () =>
             // eslint-disable-next-line react/display-name
@@ -83,18 +83,20 @@ export const RouterLink = ({ to, children, ...props }) => {
     );
 
     return (
-        <Link component={renderLink} {...props}>
+        <Link component={renderLink} ref={ref} {...props}>
             {children}
         </Link>
     );
-};
+});
+
+RouterLink.displayName = "RouterLink";
 
 RouterLink.propTypes = {
     to: PropTypes.string.isRequired,
     children: PropTypes.oneOfType([
-        PropTypes.element.isRequired,
-        PropTypes.string.isRequired,
-    ]),
+        PropTypes.node,
+        PropTypes.arrayOf(PropTypes.node),
+    ]).isRequired,
 };
 
 // This allows any component to have redirect info notifications,
