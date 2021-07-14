@@ -11,6 +11,7 @@ import CompanyApplicationPage, {
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
+import OfferPage, { OfferPageController, OfferPageControllerContext } from "./pages/OfferPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import MyOffersPage from "./pages/MyOffersPage";
@@ -111,6 +112,20 @@ const AppRouter = () => (
                     <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route
+                path="/offer/:id"
+                component={OfferPage}
+            >
+                <PageLayout
+                    key="/offer/:id"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Job offer"
+                    context={OfferPageControllerContext}
+                    controller={OfferPageController}
+                >
+                    <OfferPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/error"
             >

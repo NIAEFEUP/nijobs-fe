@@ -51,8 +51,15 @@ export default makeStyles((theme) => ({
         paddingLeft: "2em",
         overflow: "auto",
     },
-    offerDescription: {
-
+    offerTitleRow: {
+        display: "flex",
+        alignItems: "baseline",
+    },
+    offerTitle: {
+        marginRight: theme.spacing(2),
+    },
+    offerTitleLink: {
+        color: "inherit",
     },
     searchOfferErrorContainer: {
         height: "100%",
@@ -61,17 +68,39 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         justifyContent: "center",
     },
+    iconStyle: {
+        verticalAlign: "sub",
+        marginRight: theme.spacing(1),
+    },
+    offerDivider: {
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    },
     offerHeader: ({ isMobile }) => ({
-        position: "sticky",
-        top: 0,
         backgroundColor: "white",
-        paddingBottom: theme.spacing(4),
+        paddingBottom: theme.spacing(1),
         paddingTop: !isMobile ? theme.spacing(3) : 0,
     }),
-    offerContent: ({ isMobile }) => {
-        const paddingRules = isMobile ? { padding: 0 } : { padding: theme.spacing(3), paddingTop: 0 };
+    companyInfo: {
+        display: "flex",
+    },
+    companyLogoInOffer: {
+        height: "2em",
+        display: "inline",
+        marginRight: theme.spacing(1),
+    },
+    offerContent: ({ isMobile, isPage }) => {
+        let paddingValue = !isMobile ? theme.spacing(3) : 0;
+        let paddingTopValue = 0;
+        if (isPage) {
+            paddingValue = isMobile ? theme.spacing(3) : theme.spacing(10);
+            paddingTopValue = !isMobile && theme.spacing(5);
+        }
         return {
-            ...paddingRules,
+            paddingTop: paddingTopValue,
+            paddingRight: paddingValue,
+            paddingBottom: paddingValue,
+            paddingLeft: paddingValue,
             height: "100%",
         };
     },
