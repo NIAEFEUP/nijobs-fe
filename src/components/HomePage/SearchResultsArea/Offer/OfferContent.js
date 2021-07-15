@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 
-import { Typography, Link, Grid, Switch, FormControlLabel, Divider } from "@material-ui/core";
+import { Typography, Link, Grid, Tooltip, Divider, IconButton, Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import Offer from "./Offer";
-import OfferContentItem from "./OfferContentItem";
+import OfferContentListItem from "./OfferContentListItem";
 
 import LoadingMagnifyGlass from "./loading_magnify_glass_svg";
 import { useDesktop } from "../../../../utils/media-queries";
@@ -12,12 +13,16 @@ import useSession from "../../../../hooks/useSession";
 
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import LOADING_MESSAGES from "./offerLoadingMessages";
-import { DateRange, LocationCity, Work, Schedule, MonetizationOn, FindInPage } from "@material-ui/icons";
+import {
+    DateRange, LocationCity, Work, Schedule, MonetizationOn,
+    FindInPage, Visibility, VisibilityOff, Block, Info,
+} from "@material-ui/icons";
 import { format, parseISO } from "date-fns";
 import createDOMPurify from "dompurify";
 import ReactMarkdown from "react-markdown";
 import remarkBreaksPlugin from "remark-breaks";
 import ChipList from "./ChipList";
+import { disableOffer, enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
 
 const purify = createDOMPurify(window);
 
@@ -35,20 +40,68 @@ const OfferContent = ({ offer, loading, isPage }) => {
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile: !useDesktop(), isPage });
 
-    const [state, setState] = React.useState({
+    const [visibilityState, setVisibilityState] = React.useState({
         isVisible: !offer?.isHidden,
+        isDisabled: undefined,
     });
+    const [visibilityError, setVisibilityError] = React.useState(null);
 
-    const handleOfferVisibility = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked });
-        if (!event.target.checked) {
-            // Hide offer
-            // Ask for hidden reason or admin reason
-            // Use the /hide endpoint
+    visibilityState.isDisabled = offer?.isHidden && offer?.hiddenReason === "ADMIN_REQUEST";
+
+    const dealWithPromiseError = (err) => {
+        if (Array.isArray(err))
+            setVisibilityError(err[0]?.msg);
+        else if (Object.prototype.toString.call(err) === "[object String]") // err is a string
+            setVisibilityError(err);
+    };
+
+    const handleOfferVisibility = () => {
+        if (visibilityState.isVisible) {
+            hideOffer(offer.id).then(() => {
+                offer.isHidden = true;
+                setVisibilityState({ ...visibilityState, isVisible: false });
+            }).catch((err) => {
+                dealWithPromiseError(err);
+            });
         } else  {
-            // Make offer visible
-            // Use /enable endpoint
+            enableOffer(offer.id).then(() => {
+                offer.isHidden = false;
+                setVisibilityState({ ...visibilityState, isVisible: true });
+            }).catch((err) => {
+                dealWithPromiseError(err);
+            });
         }
+    };
+
+    const handleEnableDisableOffer = () => {
+        // TODO: ask the admin for the adminReason
+        const adminReason = "An admin reason.";
+        if (!visibilityState.isDisabled) {
+            disableOffer(offer.id, adminReason).then(() => {
+                offer.hiddenReason = "ADMIN_REQUEST";
+                offer.isHidden = true;
+                offer.adminReason = adminReason;
+                setVisibilityState({ ...visibilityState, isDisabled: true });
+            }).catch((err) => {
+                dealWithPromiseError(err);
+            });
+
+        } else {
+            enableOffer(offer.id).then(() => {
+                offer.adminReason = null;
+                offer.hiddenReason = null;
+                offer.isHidden = false;
+                setVisibilityState({ ...visibilityState, isDisabled: false });
+            }).catch((err) => {
+                dealWithPromiseError(err);
+            });
+
+        }
+
+    };
+
+    const handleCloseVisibilityErrorSnackbar = () => {
+        setVisibilityError(null);
     };
 
     if (loading) {
@@ -70,6 +123,19 @@ const OfferContent = ({ offer, loading, isPage }) => {
     } else {
         return (
             <div className={classes.offerContent} data-testid="offer-content">
+                <Snackbar
+                    open={visibilityError !== null}
+                    autoHideDuration={3000}
+                    onClose={handleCloseVisibilityErrorSnackbar}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "left",
+                    }}
+                >
+                    <Alert onClose={handleCloseVisibilityErrorSnackbar} severity="error">
+                        {visibilityError ? visibilityError : "Unexpected Error. Please try again later."}
+                    </Alert>
+                </Snackbar>
                 {offer === null ?
                     <div className={classes.unselectedOffer} id="no_selected_offer_text">
                         <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
@@ -91,21 +157,68 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                     }
                                 </Typography>
                                 {
-                                // TODO: only the owner company can see this switch
-                                    (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
-                                    <FormControlLabel
-                                        control={
-                                            <Switch
-                                                checked={state.isVisible}
-                                                onChange={handleOfferVisibility}
-                                                name="isVisible"
-                                                color="primary"
-                                            />
+                                    (sessionData?.company?._id === offer.owner) &&
+                                    <IconButton
+                                        onClick={handleOfferVisibility}
+                                        className={classes.visibilityButton}
+                                        disabled={visibilityState.isDisabled}
+                                    >
+                                        {
+                                            (visibilityState.isVisible) ?
+                                                <Tooltip title="Hide Offer">
+                                                    <VisibilityOff className={classes.visibilityIcon} />
+                                                </Tooltip>
+                                                :
+                                                <Tooltip title="Enable Offer">
+                                                    <Visibility className={classes.visibilityIcon} />
+                                                </Tooltip>
                                         }
-                                        label="Visible"
-                                    />
+                                    </IconButton>
+                                }
+                                {
+                                    (sessionData?.isAdmin) &&
+                                    <IconButton
+                                        onClick={handleEnableDisableOffer}
+                                        className={classes.visibilityButton}
+                                    >
+                                        {
+                                            (!visibilityState.isDisabled) ?
+                                                <Tooltip title="Disable Offer">
+                                                    <Block color="primary" className={classes.visibilityIcon} />
+                                                </Tooltip>
+                                                :
+                                                <Tooltip title="Enable Offer">
+                                                    <Visibility className={classes.visibilityIcon} />
+                                                </Tooltip>
+                                        }
+                                    </IconButton>
                                 }
                             </span>
+                            <Typography variant="subtitle1" className={classes.hiddenOfferInfo}>
+                                {
+                                    (!visibilityState.isVisible || visibilityState.isDisabled) &&
+                                        <span>
+                                            <Info className={classes.iconStyle} />
+                                            <span>
+                                                {
+                                                    // eslint-disable-next-line no-nested-ternary
+                                                    (visibilityState.isDisabled) ?
+                                                        (
+                                                            (sessionData?.isAdmin) ?
+                                                                `Offer disabled by an admin. Reason: ${offer.adminReason}`
+                                                                :
+                                                                "This offer was hidden by an admin so it won't show up in search results. "
+                                                                    + "Please contact support for more information."
+                                                        )
+                                                        :
+                                                        "This offer is hidden so it won't show up in search results"
+
+                                                }
+                                            </span>
+                                        </span>
+
+                                }
+                            </Typography>
                             <span className={classes.companyInfo}>
                                 <img src={offer.ownerLogo} alt="Company Logo" className={classes.companyLogoInOffer} />
                                 <Typography variant="h6" color="primary" gutterBottom>
@@ -219,25 +332,13 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                 content={offer.fields}
                             />
                             <Divider className={classes.offerDivider} />
-                            <OfferContentItem
-                                hasPermissions
+                            <OfferContentListItem
                                 title="Requirements"
                                 content={offer.requirements}
                             />
-                            <OfferContentItem
-                                hasPermissions
+                            <OfferContentListItem
                                 title="Contacts"
                                 content={offer.contacts}
-                            />
-                            <OfferContentItem
-                                hasPermissions={sessionData?.isAdmin || sessionData?.company?._id === offer.owner}
-                                title="Hidden Reason"
-                                content={offer.hiddenReason}
-                            />
-                            <OfferContentItem
-                                hasPermissions={sessionData?.isAdmin}
-                                title="Admin Reason"
-                                content={offer.adminReason}
                             />
                             <Divider className={classes.offerDivider} />
                             <Typography variant="body1">

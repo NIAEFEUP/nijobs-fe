@@ -16,8 +16,7 @@ export const OfferPageController = () => {
     const location = useLocation();
 
     useEffect(() => {
-        // eslint-disable-next-line no-unused-vars
-        const offerPromise = getOffer(id)
+        getOffer(id)
             .then((offer) => {
                 setOffer(new Offer(offer));
                 setLoading(false);

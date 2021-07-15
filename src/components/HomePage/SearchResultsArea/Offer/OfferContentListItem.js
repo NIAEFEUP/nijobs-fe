@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OfferContentItem = ({ hasPermissions, title, content }) => {
+const OfferContentListItem = ({ title, content }) => {
     const classes = useStyles();
-    if (hasPermissions && content) {
+    if (content) {
         if (typeof content === "string") {
             return (
                 <div className={classes.singleElement}>
@@ -52,8 +52,7 @@ const OfferContentItem = ({ hasPermissions, title, content }) => {
     return null;
 };
 
-OfferContentItem.propTypes = {
-    hasPermissions: PropTypes.bool,
+OfferContentListItem.propTypes = {
     title: PropTypes.string,
     content: PropTypes.oneOfType([
         PropTypes.string,
@@ -61,4 +60,4 @@ OfferContentItem.propTypes = {
     ]),
 };
 
-export default OfferContentItem;
+export default OfferContentListItem;

@@ -62,6 +62,7 @@ export const searchOffers = (filters) => async (dispatch) => {
     try {
         const res = await fetch(`${API_HOSTNAME}/offers?${parseSearchFiltersToURL(filters)}`, {
             method: "GET",
+            credentials: "include",
         });
         if (!res.ok) {
             dispatch(setOffersFetchError({

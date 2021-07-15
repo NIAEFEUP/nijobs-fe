@@ -53,13 +53,19 @@ export default makeStyles((theme) => ({
     },
     offerTitleRow: {
         display: "flex",
-        alignItems: "baseline",
+        alignItems: "center",
+        marginBottom: theme.spacing(1),
     },
     offerTitle: {
-        marginRight: theme.spacing(2),
+        marginRight: theme.spacing(3),
+        marginBottom: 0,
     },
     offerTitleLink: {
         color: "inherit",
+    },
+    hiddenOfferInfo: {
+        color: "grey",
+        marginBottom: theme.spacing(1),
     },
     searchOfferErrorContainer: {
         height: "100%",
@@ -81,6 +87,12 @@ export default makeStyles((theme) => ({
         paddingBottom: theme.spacing(1),
         paddingTop: !isMobile ? theme.spacing(3) : 0,
     }),
+    visibilityButton: {
+        padding: 0,
+    },
+    visibilityIcon: {
+        fontSize: "1.2em",
+    },
     companyInfo: {
         display: "flex",
     },
