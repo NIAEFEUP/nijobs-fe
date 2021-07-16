@@ -318,11 +318,6 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             </Grid>
                         </div>
                         <div>
-                            {/* { console.log(sessionData) }
-                            { console.log(data) }
-                            { console.log(`isValidating: ${isValidating}`) }
-                            { console.log(`error: ${error}`) }
-                            { console.log(`isLoggedIn: ${isLoggedIn}`) } */}
                             <ChipList
                                 type="Technologies"
                                 content={offer.technologies}

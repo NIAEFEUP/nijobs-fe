@@ -4,7 +4,7 @@ import { useParams, Redirect, useLocation } from "react-router-dom";
 import OfferContent from "../components/HomePage/SearchResultsArea/Offer/OfferContent";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import { getOffer } from "../services/getOfferService";
-import { makeStyles } from "@material-ui/core";
+import { CardContent } from "@material-ui/core";
 
 export const OfferPageControllerContext = React.createContext();
 
@@ -47,22 +47,15 @@ export const OfferPageController = () => {
     };
 };
 
-const useStyles = makeStyles(() => ({
-    /* offerCard: {
-        maxWidth: "auto",
-    }, */
-}));
-
 const OfferPage = () => {
 
-    const classes = useStyles();
     const { offer, loading, error, redirectProps } = useContext(OfferPageControllerContext);
 
     if (error === null) {
         return (
-            <div className={classes.offerCard}>
+            <CardContent>
                 <OfferContent offer={offer} isPage loading={loading} />
-            </div>
+            </CardContent>
         );
     }
     return (

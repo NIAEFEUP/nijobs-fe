@@ -23,6 +23,8 @@ export default (options) => {
         }
     };
 
+    // When the page changes, the session must be revalidated, and revalidateOnMount must be set
+    // to true, that is being done on the navbar only, since doing it globally causes problems
     const { data, error, isValidating, mutate } = useSWR(`${API_HOSTNAME}/auth/me`, getSession, {
         revalidateOnFocus: false,
         revalidateOnMount: false,

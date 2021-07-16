@@ -119,7 +119,7 @@ const AppRouter = () => (
                 <PageLayout
                     key="/offer/:id"
                     layout={LayoutType.DESKTOP}
-                    pageTitle="Job offer"
+                    pageTitle="Job Offer"
                     context={OfferPageControllerContext}
                     controller={OfferPageController}
                 >
@@ -133,17 +133,17 @@ const AppRouter = () => (
                     key="/error"
                     forceDesktopLayout
                     layout={LayoutType.DESKTOP}
-                    pageTitle="Unexpected error"
+                    pageTitle="Unexpected Error"
                 >
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
                 <PageLayout
-                    key="NOT_FOUND"
+                    key="/not_found"
                     forceDesktopLayout
                     layout={LayoutType.DESKTOP}
-                    pageTitle="Page not found"
+                    pageTitle="Page Not Found"
                 >
                     <NotFound />
                 </PageLayout>
