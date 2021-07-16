@@ -22,7 +22,8 @@ import createDOMPurify from "dompurify";
 import ReactMarkdown from "react-markdown";
 import remarkBreaksPlugin from "remark-breaks";
 import ChipList from "./ChipList";
-import { disableOffer, enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
+import AdminReasonModal from "./AdminReasonModal";
+import { enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
 
 const purify = createDOMPurify(window);
 
@@ -44,9 +45,10 @@ const OfferContent = ({ offer, loading, isPage }) => {
         isVisible: !offer?.isHidden,
         isDisabled: undefined,
     });
-    const [visibilityError, setVisibilityError] = React.useState(null);
-
     visibilityState.isDisabled = offer?.isHidden && offer?.hiddenReason === "ADMIN_REQUEST";
+
+    const [visibilityError, setVisibilityError] = React.useState(null);
+    const [showAdminReasonModal, setShowAdminReasonModal] = React.useState(false);
 
     const dealWithPromiseError = (err) => {
         if (Array.isArray(err))
@@ -74,18 +76,8 @@ const OfferContent = ({ offer, loading, isPage }) => {
     };
 
     const handleEnableDisableOffer = () => {
-        // TODO: ask the admin for the adminReason
-        const adminReason = "An admin reason.";
         if (!visibilityState.isDisabled) {
-            disableOffer(offer.id, adminReason).then(() => {
-                offer.hiddenReason = "ADMIN_REQUEST";
-                offer.isHidden = true;
-                offer.adminReason = adminReason;
-                setVisibilityState({ ...visibilityState, isDisabled: true });
-            }).catch((err) => {
-                dealWithPromiseError(err);
-            });
-
+            setShowAdminReasonModal(true);
         } else {
             enableOffer(offer.id).then(() => {
                 offer.adminReason = null;
@@ -95,9 +87,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
             }).catch((err) => {
                 dealWithPromiseError(err);
             });
-
         }
-
     };
 
     const handleCloseVisibilityErrorSnackbar = () => {
@@ -116,7 +106,6 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             {getRandomOngoingSearchMessage()}
                         </Typography>
                     </React.Fragment>
-
                 </div>
             </div>
         );
@@ -136,6 +125,15 @@ const OfferContent = ({ offer, loading, isPage }) => {
                         {visibilityError ? visibilityError : "Unexpected Error. Please try again later."}
                     </Alert>
                 </Snackbar>
+                <AdminReasonModal
+                    open={showAdminReasonModal}
+                    setOpen={setShowAdminReasonModal}
+                    offer={offer}
+                    setShowAdminReasonModal={setShowAdminReasonModal}
+                    setVisibilityState={setVisibilityState}
+                    visibilityState={visibilityState}
+                    dealWithPromiseError={dealWithPromiseError}
+                />
                 {offer === null ?
                     <div className={classes.unselectedOffer} id="no_selected_offer_text">
                         <Typography variant="h5" classes={{ root: classes.pleaseSelectOfferText }}>
@@ -228,7 +226,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             <Divider className={classes.offerDivider} />
                             <Grid container spacing={1}>
                                 <Grid container item xs={12} spacing={3}>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <div>
                                             <LocationCity className={classes.iconStyle} />
                                             <Typography variant="body1" display="inline">
@@ -236,7 +234,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                             </Typography>
                                         </div>
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <div>
                                             <Work className={classes.iconStyle} />
                                             <Typography variant="body1" display="inline">
@@ -246,7 +244,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid container item xs={12} spacing={3}>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <div>
                                             {(offer.jobMinDuration || offer.jobStartDate) &&
                                             <DateRange className={classes.iconStyle} />
@@ -272,7 +270,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                             {offer.jobMinDuration && " months"}
                                         </div>
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <div>
                                             <Schedule className={classes.iconStyle} />
                                             <Typography display="inline" variant="body1">
@@ -293,7 +291,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                     <Grid container item xs={12} spacing={3}>
                                         {
                                             offer.vacancies &&
-                                            <Grid item xs={6}>
+                                            <Grid item xs={12} md={6}>
                                                 <div>
                                                     <FindInPage className={classes.iconStyle} />
                                                     <Typography display="inline" variant="body1">
@@ -304,7 +302,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                         }
                                         {
                                             offer.isPaid &&
-                                            <Grid item xs={6}>
+                                            <Grid item xs={12} md={6}>
                                                 <div>
                                                     <MonetizationOn className={classes.iconStyle} />
                                                     <Typography display="inline" variant="body1">
