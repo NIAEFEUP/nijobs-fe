@@ -24,16 +24,11 @@ import remarkBreaksPlugin from "remark-breaks";
 import ChipList from "./ChipList";
 import AdminReasonModal from "./AdminReasonModal";
 import { enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
+import { capitalizeUpperCaseString } from "../../../../utils";
 
 const purify = createDOMPurify(window);
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
-
-function capitalizeString(content) {
-    if (content && content === content.toUpperCase())
-        return content.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" ");
-    return content;
-}
 
 const OfferContent = ({ offer, loading, isPage }) => {
 
@@ -93,6 +88,14 @@ const OfferContent = ({ offer, loading, isPage }) => {
     const handleCloseVisibilityErrorSnackbar = () => {
         setVisibilityError(null);
     };
+
+    const getDisabledOfferMessage = () => (
+        (sessionData?.isAdmin) ?
+            `Offer disabled by an admin. Reason: ${offer.adminReason}`
+            :
+            "This offer was hidden by an admin so it won't show up in search results. "
+                                                                    + "Please contact support for more information."
+    );
 
     if (loading) {
         return (
@@ -199,18 +202,10 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                             <Info className={classes.iconStyle} />
                                             <span>
                                                 {
-                                                    // eslint-disable-next-line no-nested-ternary
                                                     (visibilityState.isDisabled) ?
-                                                        (
-                                                            (sessionData?.isAdmin) ?
-                                                                `Offer disabled by an admin. Reason: ${offer.adminReason}`
-                                                                :
-                                                                "This offer was hidden by an admin so it won't show up in search results. "
-                                                                    + "Please contact support for more information."
-                                                        )
+                                                        getDisabledOfferMessage()
                                                         :
                                                         "This offer is hidden so it won't show up in search results"
-
                                                 }
                                             </span>
                                         </span>
@@ -238,7 +233,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                         <div>
                                             <Work className={classes.iconStyle} />
                                             <Typography variant="body1" display="inline">
-                                                {capitalizeString(offer.jobType)}
+                                                {capitalizeUpperCaseString(offer.jobType)}
                                             </Typography>
                                         </div>
                                     </Grid>
@@ -278,9 +273,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                                 {
                                                     offer.jobStartDate &&
                                                     (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
-                                                    <Typography display="inline" variant="body1">
-                                                        {` • until ${format(parseISO(offer.jobStartDate), "dd-MM-yyyy")}`}
-                                                    </Typography>
+                                                    ` • until ${format(parseISO(offer.jobStartDate), "dd-MM-yyyy")}`
                                                 }
                                             </Typography>
                                         </div>
@@ -334,7 +327,12 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                 content={offer.contacts}
                             />
                             <Divider className={classes.offerDivider} />
-                            <Typography variant="body1">
+                            <Typography
+                                component="span" /* if we don't use component="span",
+                                    there is a <p> element inside a <p>,
+                                    which fails the validateDOMNesting*/
+                                variant="body1"
+                            >
                                 <ReactMarkdown remarkPlugins={[remarkBreaksPlugin]}>
                                     { purify.sanitize(offer.description) }
                                 </ReactMarkdown>

@@ -9,10 +9,10 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
 import AdminReasonModalSchema from "./AdminReasonModalSchema";
+import Offer from "./Offer";
 import { disableOffer } from "../../../../services/offerVisibilityService";
 
 import { useForm } from "react-hook-form";
-
 import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function AdminReasonModal({
@@ -85,9 +85,9 @@ export default function AdminReasonModal({
 AdminReasonModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
-    offer: PropTypes.object.isRequired,
+    offer: PropTypes.instanceOf(Offer),
     setShowAdminReasonModal: PropTypes.func.isRequired,
     setVisibilityState: PropTypes.func.isRequired,
-    visibilityState: PropTypes.bool.isRequired,
+    visibilityState: PropTypes.object.isRequired,
     dealWithPromiseError: PropTypes.func.isRequired,
 };

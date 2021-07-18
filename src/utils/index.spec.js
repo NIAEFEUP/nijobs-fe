@@ -1,5 +1,5 @@
 import React from "react";
-import { smoothScrollToRef, capitalize, Wrap } from ".";
+import { smoothScrollToRef, capitalize, capitalizeUpperCaseString, Wrap } from ".";
 import { render } from "@testing-library/react";
 
 describe("utils", () => {
@@ -36,6 +36,16 @@ describe("utils", () => {
         });
         it("should throw error if trying to capitalize non-string", () => {
             expect(() => capitalize([1])).toThrowError("Trying to capitalize non string object:");
+        });
+    });
+
+    describe("capitalizeUpperCaseString", () => {
+        it("should capitalize uppercase string", () => {
+            expect(capitalizeUpperCaseString("MACHINE LEARNING")).toBe("Machine Learning");
+            expect(capitalizeUpperCaseString("FULL-TIME")).toBe("Full-time");
+        });
+        it("should not capitalize non-uppercase string", () => {
+            expect(capitalizeUpperCaseString("java")).toBe("java");
         });
     });
 

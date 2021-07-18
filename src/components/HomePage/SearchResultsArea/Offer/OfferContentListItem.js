@@ -40,7 +40,12 @@ const OfferContentListItem = ({ title, content }) => {
                 <Typography variant="h6">
                     {title}
                 </Typography>
-                <Typography variant="body1">
+                <Typography
+                    component="span" /* if we don't use component="span",
+                                    there is an <ul> element inside a <p>,
+                                    which fails the validateDOMNesting*/
+                    variant="body1"
+                >
                     <ul className={classes.list}>
                         {listItems}
                     </ul>

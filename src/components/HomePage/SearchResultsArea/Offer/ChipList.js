@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Chip, makeStyles } from "@material-ui/core";
+import { capitalizeUpperCaseString } from "../../../../utils";
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -16,19 +17,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function capitalizeString(content) {
-    if (content && content === content.toUpperCase())
-        return content.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" ");
-    return content;
-}
-
 const ChipList = ({ type, content }) => {
     const classes = useStyles();
     if (content) {
         const listItems = content.map((listElement) =>
             <li key={listElement}>
                 <Chip
-                    label={capitalizeString(listElement)}
+                    label={capitalizeUpperCaseString(listElement)}
                     variant={type === "Technologies" ? "outlined" : "default"}
                     size="small"
                     className={classes.chip}

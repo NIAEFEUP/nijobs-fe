@@ -10,7 +10,7 @@ export const OfferPageControllerContext = React.createContext();
 
 export const OfferPageController = () => {
     const { id } = useParams();
-    const [offer, setOffer] = useState({});
+    const [offer, setOffer] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const location = useLocation();
