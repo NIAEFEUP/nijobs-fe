@@ -18,7 +18,7 @@ export const getOffer = async (id) => {
 
     } catch (error) {
         if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error" }];
+        throw [{ msg: "Unexpected Error. Please try again later." }];
         // TODO count metrics
     }
 

@@ -19,7 +19,6 @@ export default function AdminReasonModal({
     open,
     setOpen,
     offer,
-    setShowAdminReasonModal,
     setVisibilityState,
     visibilityState,
     dealWithPromiseError }) {
@@ -36,7 +35,7 @@ export default function AdminReasonModal({
 
     const onSubmit = async (data) => {
         await disableOffer(offer.id, data.adminReason).then(() => {
-            setShowAdminReasonModal(false);
+            setOpen(false);
             offer.hiddenReason = "ADMIN_REQUEST";
             offer.isHidden = true;
             offer.adminReason = data.adminReason;
@@ -86,7 +85,6 @@ AdminReasonModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     offer: PropTypes.instanceOf(Offer),
-    setShowAdminReasonModal: PropTypes.func.isRequired,
     setVisibilityState: PropTypes.func.isRequired,
     visibilityState: PropTypes.object.isRequired,
     dealWithPromiseError: PropTypes.func.isRequired,

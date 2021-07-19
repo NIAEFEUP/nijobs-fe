@@ -48,7 +48,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
     const dealWithPromiseError = (err) => {
         if (Array.isArray(err))
             setVisibilityError(err[0]?.msg);
-        else if (Object.prototype.toString.call(err) === "[object String]") // err is a string
+        else if (typeof err === "string")
             setVisibilityError(err);
     };
 
@@ -94,7 +94,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
             `Offer disabled by an admin. Reason: ${offer.adminReason}`
             :
             "This offer was hidden by an admin so it won't show up in search results. "
-                                                                    + "Please contact support for more information."
+            + "Please contact support for more information."
     );
 
     if (loading) {
@@ -132,7 +132,6 @@ const OfferContent = ({ offer, loading, isPage }) => {
                     open={showAdminReasonModal}
                     setOpen={setShowAdminReasonModal}
                     offer={offer}
-                    setShowAdminReasonModal={setShowAdminReasonModal}
                     setVisibilityState={setVisibilityState}
                     visibilityState={visibilityState}
                     dealWithPromiseError={dealWithPromiseError}
@@ -163,6 +162,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                         onClick={handleOfferVisibility}
                                         className={classes.visibilityButton}
                                         disabled={visibilityState.isDisabled}
+                                        role="visibilityButton"
                                     >
                                         {
                                             (visibilityState.isVisible) ?
@@ -181,6 +181,7 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                     <IconButton
                                         onClick={handleEnableDisableOffer}
                                         className={classes.visibilityButton}
+                                        role="visibilityButton"
                                     >
                                         {
                                             (!visibilityState.isDisabled) ?
@@ -271,9 +272,9 @@ const OfferContent = ({ offer, loading, isPage }) => {
                                             <Typography display="inline" variant="body1">
                                                 {moment(parseISO(offer.publishDate)).fromNow()}
                                                 {
-                                                    offer.jobStartDate &&
+                                                    offer.publishEndDate &&
                                                     (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
-                                                    ` • until ${format(parseISO(offer.jobStartDate), "dd-MM-yyyy")}`
+                                                    ` • until ${format(parseISO(offer.publishEndDate), "dd-MM-yyyy")}`
                                                 }
                                             </Typography>
                                         </div>
@@ -329,8 +330,8 @@ const OfferContent = ({ offer, loading, isPage }) => {
                             <Divider className={classes.offerDivider} />
                             <Typography
                                 component="span" /* if we don't use component="span",
-                                    there is a <p> element inside a <p>,
-                                    which fails the validateDOMNesting*/
+                                                    there is a <p> element inside a <p>,
+                                                    which fails the validateDOMNesting*/
                                 variant="body1"
                             >
                                 <ReactMarkdown remarkPlugins={[remarkBreaksPlugin]}>
