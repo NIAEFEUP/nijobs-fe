@@ -39,6 +39,19 @@ export default makeStyles((theme) => ({
         alignItems: "center",
         justifyContent: "center",
     },
+    unselectedOffer: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    pleaseSelectOfferText: {
+        color: "grey",
+    },
+    magnifyingGlassAnimationWrapper: {
+        marginBottom: theme.spacing(2),
+    },
     offerItemsContainer: {
         display: "flex",
         justifyContent: "space-between",
@@ -51,14 +64,24 @@ export default makeStyles((theme) => ({
         paddingLeft: "2em",
         overflow: "auto",
     },
-    offerTitleRow: {
-        display: "flex",
-        alignItems: "center",
+    offerHeader: {
         marginBottom: theme.spacing(1),
+        alignItems: "flex-start",
+
     },
+    verticalDivider: {
+        height: "3em",
+        marginRight: theme.spacing(2),
+    },
+    offerOptions: ({ isMobile }) => ({
+        display: "flex",
+        justifyContent: !isMobile && "flex-end",
+        marginTop: isMobile && theme.spacing(2),
+        paddingLeft: isMobile && theme.spacing(1),
+    }),
     offerTitle: {
         marginRight: theme.spacing(3),
-        marginBottom: 0,
+        marginBottom: theme.spacing(2),
     },
     offerTitleLink: {
         color: "inherit",
@@ -66,6 +89,7 @@ export default makeStyles((theme) => ({
     hiddenOfferInfo: {
         color: "grey",
         marginBottom: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     searchOfferErrorContainer: {
         height: "100%",
@@ -82,7 +106,7 @@ export default makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(2),
     },
-    offerHeader: ({ isMobile }) => ({
+    offerDetails: ({ isMobile }) => ({
         backgroundColor: "white",
         paddingBottom: theme.spacing(1),
         paddingTop: !isMobile ? theme.spacing(3) : 0,
@@ -90,11 +114,14 @@ export default makeStyles((theme) => ({
     visibilityButton: {
         padding: 0,
     },
-    visibilityIcon: {
-        fontSize: "1.2em",
-    },
-    companyInfo: {
+    companyInfo: ({ loading }) => ({
         display: "flex",
+        alignItems: "center",
+        width: loading && "30%",
+    }),
+    ownerNameSkeleton: {
+        width: "30%",
+        marginLeft: theme.spacing(1),
     },
     companyLogoInOffer: {
         height: "2em",
@@ -116,17 +143,7 @@ export default makeStyles((theme) => ({
             height: "100%",
         };
     },
-    unselectedOffer: {
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    pleaseSelectOfferText: {
-        color: "grey",
-    },
-    magnifyingGlassAnimationWrapper: {
-        marginBottom: theme.spacing(2),
+    offerDescription: {
+        marginTop: theme.spacing(3),
     },
 }));

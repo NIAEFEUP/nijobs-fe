@@ -2,7 +2,7 @@ import React from "react";
 import { createMuiTheme } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 
-import { renderWithTheme, act, screen } from "../test-utils";
+import { renderWithStoreAndTheme, act, screen } from "../test-utils";
 import useComponentController from "../hooks/useComponentController";
 import OfferPage, { OfferPageController, OfferPageControllerContext } from "./OfferPage";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
@@ -43,6 +43,7 @@ describe("Offer Page", () => {
             title: "position1",
             owner: "company_id",
             ownerName: "company1",
+            ownerLogo: "",
             location: "location1",
             jobStartDate: (new Date()).toISOString(),
             publishDate: "2021-04-22T22:35:57.177Z",
@@ -53,7 +54,7 @@ describe("Offer Page", () => {
         getOffer.mockImplementation(() => Promise.resolve(offer));
 
         await act(async () => {
-            await renderWithTheme(
+            await renderWithStoreAndTheme(
                 <BrowserRouter>
                     <OfferPageWrapper>
                         <OfferPage />

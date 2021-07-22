@@ -22,19 +22,6 @@ export const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-/**
- * Converts an uppercase string to a capitalized string.
- * Used for dealing with the received uppercase strings from the backend.
- * Example:
- * > capitalizeUpperCaseString("MACHINE LEARNING")
- * < "Machine Learning"
- */
-export const capitalizeUpperCaseString = (content) => {
-    if (content && content === content.toUpperCase())
-        return content.toLowerCase().split(" ").map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(" ");
-    return content;
-};
-
 export const ValidationReasons = Object.freeze({
     DEFAULT: "Invalid value.",
     REQUIRED: "Required field.",

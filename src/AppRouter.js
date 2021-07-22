@@ -114,7 +114,6 @@ const AppRouter = () => (
             </ProtectedRoute>
             <Route
                 path="/offer/:id"
-                component={OfferPage}
             >
                 <PageLayout
                     key="/offer/:id"

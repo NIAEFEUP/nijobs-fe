@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -11,17 +12,19 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import AdminReasonModalSchema from "./AdminReasonModalSchema";
 import Offer from "./Offer";
 import { disableOffer } from "../../../../services/offerVisibilityService";
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-export default function AdminReasonModal({
+const AdminReasonModal = ({
+    addSnackbar,
     open,
     setOpen,
     offer,
     setVisibilityState,
     visibilityState,
-    dealWithPromiseError }) {
+    dealWithPromiseError }) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -40,6 +43,10 @@ export default function AdminReasonModal({
             offer.isHidden = true;
             offer.adminReason = data.adminReason;
             setVisibilityState({ ...visibilityState, isDisabled: true });
+            addSnackbar({
+                message: "The offer was disabled",
+                key: "disabled",
+            });
         }).catch((err) => {
             dealWithPromiseError(err);
         });
@@ -68,10 +75,18 @@ export default function AdminReasonModal({
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button
+                        onClick={handleClose}
+                        color="secondary"
+                    >
                         Cancel
                     </Button>
-                    <Button type="submit" color="primary">
+                    <Button
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                        disabled={!!errors.adminReason}
+                    >
                         Disable Offer
                     </Button>
                 </DialogActions>
@@ -79,9 +94,10 @@ export default function AdminReasonModal({
         </Dialog>
 
     );
-}
+};
 
 AdminReasonModal.propTypes = {
+    addSnackbar: PropTypes.func,
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     offer: PropTypes.instanceOf(Offer),
@@ -89,3 +105,11 @@ AdminReasonModal.propTypes = {
     visibilityState: PropTypes.object.isRequired,
     dealWithPromiseError: PropTypes.func.isRequired,
 };
+
+
+const mapStateToProps = () => ({});
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminReasonModal);

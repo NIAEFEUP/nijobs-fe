@@ -19,18 +19,6 @@ describe("OfferContentListItem", () => {
             expect(screen.queryByText("Good problem solving skills")).toBeInTheDocument();
         });
 
-        it("should render an OfferContentListItem if it has a content string", () => {
-            render(
-                <OfferContentListItem
-                    title="Some title"
-                    content="This should also work"
-                />
-            );
-
-            expect(screen.queryByText("Some title")).toBeInTheDocument();
-            expect(screen.queryByText("This should also work")).toBeInTheDocument();
-        });
-
         it("should not render a OfferContentListItem if does not have content", () => {
             render(
                 <OfferContentListItem

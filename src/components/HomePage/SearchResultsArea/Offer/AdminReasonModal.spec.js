@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, act } from "../../../../test-utils";
+import { renderWithStore, fireEvent, act } from "../../../../test-utils";
 import AdminReasonModal from "./AdminReasonModal";
 import Offer from "./Offer";
 import { disableOffer } from "../../../../services/offerVisibilityService";
@@ -29,7 +29,7 @@ describe("AdminReasonModal", () => {
     describe("render", () => {
 
         it("Should not appear when open prop is false", () => {
-            const wrapper = render(
+            const wrapper = renderWithStore(
                 <AdminReasonModal
                     open={false}
                     setOpen={setOpen}
@@ -46,7 +46,7 @@ describe("AdminReasonModal", () => {
         });
 
         it("Should appear if open prop is true", () => {
-            const wrapper = render(
+            const wrapper = renderWithStore(
                 <AdminReasonModal
                     open={true}
                     setOpen={setOpen}
@@ -72,7 +72,7 @@ describe("AdminReasonModal", () => {
         let wrapper;
 
         beforeEach(() => {
-            wrapper = render(
+            wrapper = renderWithStore(
                 <AdminReasonModal
                     open={true}
                     setOpen={setOpen}

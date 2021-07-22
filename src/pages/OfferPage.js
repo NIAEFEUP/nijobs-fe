@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useParams, Redirect, useLocation } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 
 import OfferContent from "../components/HomePage/SearchResultsArea/Offer/OfferContent";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
@@ -13,7 +13,6 @@ export const OfferPageController = () => {
     const [offer, setOffer] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const location = useLocation();
 
     useEffect(() => {
         getOffer(id)
@@ -27,12 +26,8 @@ export const OfferPageController = () => {
         return () => {
         };
     }, [id]);
-    const redirectProps = { to: {
-        pathname: "/not-found",
-        state: {
-            from: location,
-            message: `The offer with id ${id} is hidden or does not exist.`,
-        } },
+    const redirectProps = {
+        to: { pathname: "/not-found" },
     };
 
     return {

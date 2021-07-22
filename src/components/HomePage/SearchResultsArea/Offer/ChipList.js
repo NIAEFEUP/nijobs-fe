@@ -2,9 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Chip, makeStyles } from "@material-ui/core";
-import { capitalizeUpperCaseString } from "../../../../utils";
+
+import FIELD_OPTIONS from "../../SearchArea/AdvancedSearch/FieldOptions";
+import TECH_OPTIONS from "../../SearchArea/AdvancedSearch/TechOptions";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
+    skeleton: {
+        marginBottom: theme.spacing(1),
+        width: "100%",
+    },
     list: {
         marginTop: theme.spacing(0.5),
         listStyleType: "none",
@@ -17,13 +24,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ChipList = ({ type, content }) => {
+const ChipList = ({ type, content, loading }) => {
     const classes = useStyles();
+    if (loading)
+        return (
+            <div className={classes.skeleton}>
+                <Skeleton />
+            </div>
+        );
     if (content) {
         const listItems = content.map((listElement) =>
             <li key={listElement}>
                 <Chip
-                    label={capitalizeUpperCaseString(listElement)}
+                    label={ type === "Technologies" ? TECH_OPTIONS[listElement] : FIELD_OPTIONS[listElement] }
                     variant={type === "Technologies" ? "outlined" : "default"}
                     size="small"
                     className={classes.chip}
@@ -42,7 +55,8 @@ const ChipList = ({ type, content }) => {
 
 ChipList.propTypes = {
     type: PropTypes.string,
-    content: PropTypes.array,
+    content: PropTypes.arrayOf(PropTypes.string),
+    loading: PropTypes.bool,
 };
 
 export default ChipList;

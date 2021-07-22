@@ -6,15 +6,15 @@ describe("ChipList", () => {
 
     describe("render", () => {
 
-        it("should render a ChipList with capitalized content", () => {
+        it("should render a ChipList if it has content", () => {
             render(
                 <ChipList
                     type="Technologies"
-                    content={["CSS", "DART", "FLUTTER"]}
+                    content={["CSS", "Dart", "Flutter"]}
                 />
             );
 
-            expect(screen.queryByText("Css")).toBeInTheDocument();
+            expect(screen.queryByText("CSS")).toBeInTheDocument();
             expect(screen.queryByText("Dart")).toBeInTheDocument();
             expect(screen.queryByText("Flutter")).toBeInTheDocument();
             expect(screen.queryByText("Technologies")).not.toBeInTheDocument();
@@ -27,8 +27,8 @@ describe("ChipList", () => {
             );
 
             expect(screen.queryByText("Machine Learning")).toBeInTheDocument();
-            expect(screen.queryByText("Frontend")).toBeInTheDocument();
-            expect(screen.queryByText("Devops")).toBeInTheDocument();
+            expect(screen.queryByText("Front-End")).toBeInTheDocument();
+            expect(screen.queryByText("Dev-Ops")).toBeInTheDocument();
             expect(screen.queryByText("Fields")).not.toBeInTheDocument();
         });
 

@@ -2,7 +2,7 @@ import React from "react";
 import SearchResultsMobile from "./SearchResultsMobile";
 import Offer from "../Offer/Offer";
 import { createMuiTheme } from "@material-ui/core";
-import { render, renderWithStoreAndTheme, renderWithTheme, screen } from "../../../../test-utils";
+import { render, renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
@@ -90,7 +90,7 @@ describe("SearchResultsMobile", () => {
                 toggleShowSearchFilters: () => {},
             };
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <SearchResultsControllerContext.Provider value={context}>
                     <SearchResultsMobile />
                 </SearchResultsControllerContext.Provider>,

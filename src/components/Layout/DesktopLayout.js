@@ -1,24 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Card } from "@material-ui/core";
+import { Card, makeStyles } from "@material-ui/core";
 import CenteredComponent from "../HomePage/CenteredComponent";
 import { MainMask } from "../HomePage/MainMask";
 import Navbar from "../Navbar";
 import ContactSection from "./ContactSection";
 
-const DesktopLayout = ({ children, showHomePageLink }) => (
-    <React.Fragment>
-        <Navbar showHomePageLink={showHomePageLink} desktopLayout />
-        <MainMask />
-        <CenteredComponent>
-            <Card>
-                {children}
-            </Card>
-        </CenteredComponent>
-        <ContactSection />
+const useStyles = makeStyles((theme) => ({
+    content: {
+        maxWidth: theme.breakpoints.values.lg,
+    },
+}));
 
-    </React.Fragment>
-);
+const DesktopLayout = ({ children, showHomePageLink }) => {
+    const classes = useStyles();
+    return (
+        <React.Fragment>
+            <Navbar showHomePageLink={showHomePageLink} desktopLayout />
+            <MainMask />
+            <CenteredComponent>
+                <Card className={classes.content}>
+                    {children}
+                </Card>
+            </CenteredComponent>
+            <ContactSection />
+        </React.Fragment>
+    );
+};
 
 DesktopLayout.propTypes = {
     children: PropTypes.oneOfType([

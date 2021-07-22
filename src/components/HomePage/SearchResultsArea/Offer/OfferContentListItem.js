@@ -2,36 +2,31 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { Typography, makeStyles } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
-    singleElement: {
-        marginTop: theme.spacing(2),
-    },
     listElement: {
         marginTop: theme.spacing(2),
     },
     list: {
-        marginTop: 0,
+        margin: 0,
+    },
+    item: {
+        marginTop: theme.spacing(0.5),
     },
 }));
 
-const OfferContentListItem = ({ title, content }) => {
+const OfferContentListItem = ({ title, content, loading }) => {
     const classes = useStyles();
+    if (loading)
+        return (
+            <div className={classes.listElement}>
+                <Skeleton variant="rect" height="50px" />
+            </div>
+        );
     if (content) {
-        if (typeof content === "string") {
-            return (
-                <div className={classes.singleElement}>
-                    <Typography variant="h6">
-                        {title}
-                    </Typography>
-                    <Typography variant="body1">
-                        {content}
-                    </Typography>
-                </div>
-            );
-        }
         const listItems = content.map((listElement) =>
-            <li key={listElement}>
+            <li key={listElement} className={classes.item}>
                 {listElement}
             </li>
         );
@@ -59,10 +54,8 @@ const OfferContentListItem = ({ title, content }) => {
 
 OfferContentListItem.propTypes = {
     title: PropTypes.string,
-    content: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.array,
-    ]),
+    content: PropTypes.arrayOf(PropTypes.string),
+    loading: PropTypes.bool,
 };
 
 export default OfferContentListItem;

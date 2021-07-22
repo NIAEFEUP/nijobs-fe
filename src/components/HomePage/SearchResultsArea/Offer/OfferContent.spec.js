@@ -1,12 +1,15 @@
 import React from "react";
 import OfferContent from "./OfferContent";
 import Offer from "./Offer";
-import { renderWithTheme, screen, act, fireEvent } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen, act, fireEvent } from "../../../../test-utils";
 import { createMuiTheme } from "@material-ui/core";
 import LOADING_MESSAGES from "./offerLoadingMessages";
 import { format, parseISO } from "date-fns";
 import moment from "moment";
+import { SnackbarProvider } from "notistack";
 import useSession from "../../../../hooks/useSession";
+
+import Notifier from "../../../Notifications/Notifier";
 
 jest.mock("../../../../hooks/useSession");
 
@@ -17,6 +20,7 @@ describe("OfferContent", () => {
         title: "position1",
         owner: "company_id",
         ownerName: "company1",
+        ownerLogo: "",
         location: "location1",
         jobStartDate: (new Date()).toISOString(),
         publishDate: "2021-04-22T22:35:57.177Z",
@@ -31,7 +35,7 @@ describe("OfferContent", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={null} />,
                 { theme }
             );
@@ -43,7 +47,7 @@ describe("OfferContent", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent loading />,
                 { theme }
             );
@@ -58,7 +62,7 @@ describe("OfferContent", () => {
 
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -79,7 +83,7 @@ describe("OfferContent", () => {
 
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -93,7 +97,7 @@ describe("OfferContent", () => {
 
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -108,7 +112,7 @@ describe("OfferContent", () => {
                     isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
                 }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -125,6 +129,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -141,7 +146,7 @@ describe("OfferContent", () => {
                     isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
                 }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -159,7 +164,7 @@ describe("OfferContent", () => {
                     isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
                 }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -171,7 +176,7 @@ describe("OfferContent", () => {
 
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
-                renderWithTheme(
+                renderWithStoreAndTheme(
                     <OfferContent offer={offer} />,
                     { theme }
                 );
@@ -195,6 +200,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -212,7 +218,7 @@ describe("OfferContent", () => {
                 isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
             }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={anotherOffer} />,
                 { theme }
             );
@@ -241,6 +247,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -258,7 +265,7 @@ describe("OfferContent", () => {
                 isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
             }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={anotherOffer} />,
                 { theme }
             );
@@ -288,6 +295,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -303,7 +311,7 @@ describe("OfferContent", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={anotherOffer} />,
                 { theme }
             );
@@ -320,7 +328,6 @@ describe("OfferContent", () => {
             expect(screen.queryByText("Please enter a reason for disabling this offer.")).toBeInTheDocument();
             expect(screen.queryByLabelText("Reason")).toBeInTheDocument();
             expect(screen.queryByText("Cancel")).toBeInTheDocument();
-            expect(screen.queryByText("Disable Offer")).toBeInTheDocument();
         });
 
         it ("should not let owner company enable offer is it was disabled by admin", async () => {
@@ -330,6 +337,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -347,7 +355,7 @@ describe("OfferContent", () => {
                 isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
             }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={anotherOffer} />,
                 { theme }
             );
@@ -379,6 +387,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -394,7 +403,7 @@ describe("OfferContent", () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
-            renderWithTheme(
+            renderWithStoreAndTheme(
                 <OfferContent offer={anotherOffer} />,
                 { theme }
             );
@@ -422,6 +431,7 @@ describe("OfferContent", () => {
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
+                ownerLogo: "",
                 location: "location1",
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
@@ -439,8 +449,11 @@ describe("OfferContent", () => {
                 isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
             }));
 
-            renderWithTheme(
-                <OfferContent offer={anotherOffer} />,
+            renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <OfferContent offer={anotherOffer} />
+                </SnackbarProvider>,
                 { theme }
             );
 
