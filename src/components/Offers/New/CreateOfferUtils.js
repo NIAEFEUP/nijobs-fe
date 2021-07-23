@@ -6,7 +6,6 @@ export const CreateOfferConstants = {
         maxLength: 90,
     },
     description: {
-        minLength: 200,
         maxLength: 1500,
     },
 };

@@ -1,7 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CardContent, CardHeader, DialogContent, FormHelperText, Grid, TextField } from "@material-ui/core";
+import {
+    CardContent,
+    CardHeader,
+    DialogContent,
+    FormHelperText,
+    Grid,
+    TextField,
+} from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
 import React, { useCallback, useContext, useEffect } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMobile } from "../../../utils/media-queries";
@@ -10,6 +18,8 @@ import useCreateOfferStyles from "./createOfferStyles";
 import { CreateOfferConstants } from "./CreateOfferUtils";
 
 import "./editor.css";
+import { FormatBold, FormatItalic, FormatUnderlined } from "@material-ui/icons";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -87,7 +97,6 @@ export const CreateOfferController = () => {
                 control,
                 contacts,
                 requirements,
-                // description,
                 fields,
                 errors,
             },
@@ -95,7 +104,59 @@ export const CreateOfferController = () => {
     };
 };
 
-const TipTapEditor = ({ editor, onChangeDescription, onChangeDescriptionText, helperText, error }) => {
+// TODO MOVE THIS COMPONENT TO UTILS
+
+const EditorToolbar = ({ editor }) => {
+
+    const [formats, setFormats] = React.useState(() => []);
+
+    useEffect(() => {
+        if (!editor) return;
+
+        const toggleButtonsState = () => {
+            const state = [];
+            if (editor.isActive("bold")) state.push("bold");
+            if (editor.isActive("italic")) state.push("italic");
+            if (editor.isActive("underline")) state.push("underline");
+            setFormats(state);
+        };
+
+        editor.on("transaction", toggleButtonsState);
+
+        // eslint-disable-next-line consistent-return
+        return () => {
+            editor.off("transaction", toggleButtonsState);
+        };
+    }, [editor]);
+
+    return (
+        <ToggleButtonGroup size="small" value={formats} aria-label="text formatting">
+            <ToggleButton
+                value="bold"
+                aria-label="bold"
+                onClick={() => editor.chain().focus().toggleBold().run()}
+            >
+                <FormatBold fontSize="small" />
+            </ToggleButton>
+            <ToggleButton
+                value="italic"
+                aria-label="italic"
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+            >
+                <FormatItalic fontSize="small" />
+            </ToggleButton>
+            <ToggleButton
+                value="underline"
+                aria-label="underline"
+                onClick={() => editor.chain().focus().toggleUnderline().run()}
+            >
+                <FormatUnderlined fontSize="small" />
+            </ToggleButton>
+        </ToggleButtonGroup>
+    );
+};
+
+const TextEditor = ({ editor, onChangeDescription, onChangeDescriptionText, helperText, error }) => {
     useEffect(() => {
         if (!editor) return;
 
@@ -114,10 +175,15 @@ const TipTapEditor = ({ editor, onChangeDescription, onChangeDescriptionText, he
 
     return (
         <>
-            <EditorContent editor={editor} />
-            <FormHelperText error={error}>
-                {helperText}
-            </FormHelperText>
+            {!!editor &&
+            <>
+                <EditorToolbar editor={editor} />
+                <EditorContent editor={editor} />
+                <FormHelperText error={error}>
+                    {helperText}
+                </FormHelperText>
+            </>
+            }
         </>
     );
 };
@@ -137,7 +203,7 @@ const CreateOfferForm = () => {
 
 
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [StarterKit, Underline],
         content: "<p>Hello World! 🌎️</p><h1>title</h1>",
         editable: true,
         editorProps: {
@@ -196,7 +262,7 @@ const CreateOfferForm = () => {
                                         render={(
                                             { field: { onChange: onChangeDescription } },
                                         ) => (
-                                            <TipTapEditor
+                                            <TextEditor
                                                 onChangeDescription={onChangeDescription}
                                                 onChangeDescriptionText={onChangeDescriptionText}
                                                 editor={editor}

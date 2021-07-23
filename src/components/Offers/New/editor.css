@@ -1,3 +1,28 @@
 .editor {
     outline: 0px solid transparent;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    padding: 16px;
+    height: 300px;
+    resize: vertical;
+    overflow: auto;
+    max-width: 100%;
+    /* border-top-left-radius: 0;
+    border-top-right-radius: 0; */
+    /* border-top: 0px; */
+}
+
+.editor > * {
+    margin-top: 0;
+}
+.editor > *:last-child {
+    margin-bottom: 0;
+}
+
+.editor:hover {
+    border-color: #212121;
+}
+
+.editor:focus {
+    border-color: #f44336;
 }
