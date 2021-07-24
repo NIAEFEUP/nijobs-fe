@@ -6,12 +6,14 @@ import { renderWithStore } from "../../../../test-utils";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import * as companyOffersService from "../../../../services/companyOffersService";
-// import { fetchCompanyOffers } from "../../../../services/companyOffersService";
+import useSession from "../../../../hooks/useSession";
+
+jest.mock("../../../../hooks/useSession");
 
 describe("App", () => {
     const MOCK_OFFERS = [
         {
-            id: "random uuid4",
+            _id: "random uuid4",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -21,7 +23,7 @@ describe("App", () => {
             description: "kek",
         },
         {
-            id: "random uuid5",
+            _id: "random uuid5",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -31,6 +33,10 @@ describe("App", () => {
             description: "kek",
         },
     ];
+
+    beforeEach(() => {
+        useSession.mockReturnValue({ data: { company: "company" }, isLoggedIn: true });
+    });
 
     test("Renders Loading", () => {
         renderWithStore(

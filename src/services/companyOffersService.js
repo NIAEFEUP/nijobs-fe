@@ -17,7 +17,6 @@ export const fetchCompanyOffers = async (companyID, filters) => {
         }
         // TODO count metrics
         return json;
-
     } catch (error) {
         // TODO count metrics
         if (Array.isArray(error)) throw error;
