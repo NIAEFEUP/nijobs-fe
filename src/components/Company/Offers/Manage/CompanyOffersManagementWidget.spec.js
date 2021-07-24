@@ -1,5 +1,5 @@
 import React from "react";
-import { act, screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 
 import CompanyOffersManagementWidget from "./CompanyOffersManagementWidget";
 import { renderWithStore } from "../../../../test-utils";
@@ -52,31 +52,32 @@ describe("App", () => {
         companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve(MOCK_OFFERS));
 
         // By waiting for act it executes all the async code at once
-        await act(() => {
-            renderWithStore(
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <CompanyOffersManagementWidget />
-                </MuiPickersUtilsProvider>
-            );
-        });
+        renderWithStore(
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <CompanyOffersManagementWidget />
+            </MuiPickersUtilsProvider>
+        );
 
-        expect(await screen.getByText("Offers Management")).toBeInTheDocument();
-        expect(await screen.getAllByText("Guy in the background")).toHaveLength(2);
+        // wait for the wrapped assertions to pass within a certain timeout window (wait for all updates to complete)
+        await waitFor(() => {
+            expect(screen.getByText("Offers Management")).toBeInTheDocument();
+            expect(screen.getAllByText("Guy in the background")).toHaveLength(2);
+        });
     });
 
     test("Loads Empty Offers", async () => {
         companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve([]));
 
         // By waiting for act it executes all the async code at once
-        await act(() => {
-            renderWithStore(
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <CompanyOffersManagementWidget />
-                </MuiPickersUtilsProvider>
-            );
-        });
+        renderWithStore(
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <CompanyOffersManagementWidget />
+            </MuiPickersUtilsProvider>
+        );
 
-        expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        });
     });
 
     test("Error fetching offers", async () => {
@@ -85,16 +86,16 @@ describe("App", () => {
         }));
 
         // By waiting for act it executes all the async code at once
-        await act(() => {
-            renderWithStore(
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <CompanyOffersManagementWidget />
-                </MuiPickersUtilsProvider>
-            );
+        renderWithStore(
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <CompanyOffersManagementWidget />
+            </MuiPickersUtilsProvider>
+        );
+
+        await waitFor(() => {
+            expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
+
+            expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
         });
-
-        expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
-
-        expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
     });
 });
