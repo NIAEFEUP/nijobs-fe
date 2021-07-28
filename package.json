@@ -26,6 +26,7 @@
     "@tiptap/react": "^2.0.0-beta.55",
     "@tiptap/starter-kit": "^2.0.0-beta.89",
     "cancelable-promise": "^3.2.3",
+    "@tiptap/extension-placeholder": "^2.0.0-beta.26",
     "clsx": "^1.1.1",
     "date-fns": "^2.16.1",
     "dotenv": "6.2.0",

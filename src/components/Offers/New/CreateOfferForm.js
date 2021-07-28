@@ -1,15 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
+    Box,
     CardContent,
     CardHeader,
     DialogContent,
     FormHelperText,
     Grid,
     TextField,
+    makeStyles,
+    FormControl,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import Placeholder from "@tiptap/extension-placeholder";
 import React, { useCallback, useContext, useEffect } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMobile } from "../../../utils/media-queries";
@@ -18,7 +22,7 @@ import useCreateOfferStyles from "./createOfferStyles";
 import { CreateOfferConstants } from "./CreateOfferUtils";
 
 import "./editor.css";
-import { FormatBold, FormatItalic, FormatUnderlined } from "@material-ui/icons";
+import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 
 export const CreateOfferControllerContext = React.createContext();
@@ -106,9 +110,18 @@ export const CreateOfferController = () => {
 
 // TODO MOVE THIS COMPONENT TO UTILS
 
+
+const useStyles = makeStyles((theme) => ({
+    editorToolbar: {
+        marginBottom: theme.spacing(1),
+    },
+}));
+
+
 const EditorToolbar = ({ editor }) => {
 
     const [formats, setFormats] = React.useState(() => []);
+    const classes = useStyles();
 
     useEffect(() => {
         if (!editor) return;
@@ -118,6 +131,8 @@ const EditorToolbar = ({ editor }) => {
             if (editor.isActive("bold")) state.push("bold");
             if (editor.isActive("italic")) state.push("italic");
             if (editor.isActive("underline")) state.push("underline");
+            if (editor.isActive("bulletList")) state.push("bulletList");
+            if (editor.isActive("orderedList")) state.push("orderedList");
             setFormats(state);
         };
 
@@ -130,36 +145,77 @@ const EditorToolbar = ({ editor }) => {
     }, [editor]);
 
     return (
-        <ToggleButtonGroup size="small" value={formats} aria-label="text formatting">
-            <ToggleButton
-                value="bold"
-                aria-label="bold"
-                onClick={() => editor.chain().focus().toggleBold().run()}
-            >
-                <FormatBold fontSize="small" />
-            </ToggleButton>
-            <ToggleButton
-                value="italic"
-                aria-label="italic"
-                onClick={() => editor.chain().focus().toggleItalic().run()}
-            >
-                <FormatItalic fontSize="small" />
-            </ToggleButton>
-            <ToggleButton
-                value="underline"
-                aria-label="underline"
-                onClick={() => editor.chain().focus().toggleUnderline().run()}
-            >
-                <FormatUnderlined fontSize="small" />
-            </ToggleButton>
-        </ToggleButtonGroup>
+
+        <div className={classes.editorToolbar}>
+            <Box mr={1} display="inline">
+                <ToggleButtonGroup size="small" value={formats} aria-label="text formatting">
+                    <ToggleButton
+                        value="bold"
+                        aria-label="bold"
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                    >
+                        <FormatBold fontSize="small" />
+                    </ToggleButton>
+                    <ToggleButton
+                        value="italic"
+                        aria-label="italic"
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                    >
+                        <FormatItalic fontSize="small" />
+                    </ToggleButton>
+                    <ToggleButton
+                        value="underline"
+                        aria-label="underline"
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    >
+                        <FormatUnderlined fontSize="small" />
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Box>
+            <Box ml={1} display="inline">
+                <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
+                    <ToggleButton
+                        value="bulletList"
+                        aria-label="bulletList"
+                        onClick={() => editor.chain().focus().toggleBulletList().run()}
+                    >
+                        <FormatListBulleted fontSize="small" />
+                    </ToggleButton>
+                    <ToggleButton
+                        value="orderedList"
+                        aria-label="orderedList"
+                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                    >
+                        <FormatListNumbered fontSize="small" />
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Box>
+        </div>
     );
 };
 
-const TextEditor = ({ editor, onChangeDescription, onChangeDescriptionText, helperText, error }) => {
+const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText }) => {
+
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Underline,
+            Placeholder.configure({
+                placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc.",
+            }),
+        ],
+        content,
+        editable: true,
+        editorProps: {
+
+            attributes: {
+                class: "editor", // Cannot use makeStyles with this since it won't update the class name on re-render :(
+            },
+        },
+    });
+
     useEffect(() => {
         if (!editor) return;
-
         const updateFn = ({ editor }) => {
             onChangeDescription(editor.getHTML());
             onChangeDescriptionText(editor.view.state.doc.textContent);
@@ -173,16 +229,19 @@ const TextEditor = ({ editor, onChangeDescription, onChangeDescriptionText, help
 
     }, [editor, onChangeDescription, onChangeDescriptionText]);
 
+    const helperText =
+    `${editor?.view.state.doc.textContent.length}/${CreateOfferConstants.description.maxLength} ${additionalHelperText}`;
+
     return (
         <>
             {!!editor &&
-            <>
+            <FormControl margin="dense" fullWidth>
                 <EditorToolbar editor={editor} />
                 <EditorContent editor={editor} />
                 <FormHelperText error={error}>
                     {helperText}
                 </FormHelperText>
-            </>
+            </FormControl>
             }
         </>
     );
@@ -194,26 +253,13 @@ const CreateOfferForm = () => {
         submit,
         errors,
         control,
+        fields,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
 
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useCreateOfferStyles(isMobile)();
-
-
-    const editor = useEditor({
-        extensions: [StarterKit, Underline],
-        content: "<p>Hello World! 🌎️</p><h1>title</h1>",
-        editable: true,
-        editorProps: {
-            attributes: {
-                class: "editor", // Cannot use makeStyles with this since it won't update the class name on re-render :(
-            },
-        },
-    });
-    const descriptionHelperText =
-    `${editor?.view.state.doc.textContent.length}/${CreateOfferConstants.description.maxLength} ${errors.descriptionText?.message || ""}`;
 
     return (
         <div className={classes.formCard}>
@@ -248,6 +294,7 @@ const CreateOfferForm = () => {
                                                 marginLeft: 0,
                                             },
                                         }}
+                                        margin="dense"
                                         fullWidth
                                     />)}
                                 control={control}
@@ -265,9 +312,9 @@ const CreateOfferForm = () => {
                                             <TextEditor
                                                 onChangeDescription={onChangeDescription}
                                                 onChangeDescriptionText={onChangeDescriptionText}
-                                                editor={editor}
                                                 error={!!errors?.descriptionText}
-                                                helperText={descriptionHelperText}
+                                                content={fields.description}
+                                                helperText={errors.descriptionText?.message || ""}
                                             />
                                         )}
                                         control={control}

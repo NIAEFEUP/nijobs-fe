@@ -26,3 +26,12 @@
 .editor:focus {
     border-color: #f44336;
 }
+
+/* Placeholder (at the top) */
+.editor p.is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #ced4da;
+    pointer-events: none;
+    height: 0;
+  }
