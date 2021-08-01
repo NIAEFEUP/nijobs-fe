@@ -18,7 +18,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "San Francisco",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit,
         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -39,7 +40,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "Porto",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: "You won't do much, really...",
     }),
     new Offer({
@@ -50,7 +52,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "Porto",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: "kek",
     }),
     new Offer({
@@ -61,7 +64,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "Porto",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: "kek",
     }),
     new Offer({
@@ -72,7 +76,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "Porto",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: "kek",
     }),
     new Offer({
@@ -83,7 +88,8 @@ const MOCK_OFFERS = [
             logo: redditLogo,
         },
         location: "Porto",
-        date: "2019-06",
+        publishDate: "2019-06",
+        publishEndDate: "2021-09",
         description: "kek",
     }),
 ];

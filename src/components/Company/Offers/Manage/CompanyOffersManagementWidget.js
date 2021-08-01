@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { format, parseISO } from "date-fns";
+// import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
@@ -7,6 +7,7 @@ import FilterableTable from "../../../../utils/Table/FilterableTable";
 import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
+import { format, parseISO } from "date-fns";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -24,11 +25,11 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     }
 };
 
-const generateRow = ({ title, location }) => ({
+const generateRow = ({ title, location, publishDate, publishEndDate }) => ({
     fields: {
         title: { value: title, align: "left" },
-        publishStartDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
-        publishEndDate: { value: format(parseISO((new Date()).toISOString()), "yyyy-MM-dd") },
+        publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
+        publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
     },
     payload: {

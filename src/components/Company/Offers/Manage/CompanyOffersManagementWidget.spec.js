@@ -18,7 +18,8 @@ describe("App", () => {
                 logo: "logo.com",
             },
             location: "Porto",
-            date: "2019-06",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
             description: "kek",
         },
         {
@@ -29,7 +30,8 @@ describe("App", () => {
                 logo: "logo.com",
             },
             location: "Porto",
-            date: "2019-06",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
             description: "kek",
         },
     ];
