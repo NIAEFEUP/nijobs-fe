@@ -13,10 +13,8 @@ describe("App", () => {
         {
             id: "random uuid4",
             title: "Guy in the background",
-            company: {
-                name: "Reddit",
-                logo: "logo.com",
-            },
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
             location: "Porto",
             publishDate: "2019-06",
             publishEndDate: "2020-09",
@@ -25,10 +23,8 @@ describe("App", () => {
         {
             id: "random uuid5",
             title: "Guy in the background",
-            company: {
-                name: "Reddit",
-                logo: "logo.com",
-            },
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
             location: "Porto",
             publishDate: "2019-06",
             publishEndDate: "2020-09",

@@ -13,6 +13,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid1",
         title: "Full-Stack Developer",
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         company: {
             name: "Reddit",
             logo: redditLogo,
@@ -35,10 +37,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid2",
         title: "Security Guy",
-        company: {
-            name: "Reddit",
-            logo: redditLogo,
-        },
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         location: "Porto",
         publishDate: "2019-06",
         publishEndDate: "2021-09",
@@ -47,10 +47,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid3",
         title: "Frontend Developer But Make it Longer",
-        company: {
-            name: "Reddit",
-            logo: redditLogo,
-        },
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         location: "Porto",
         publishDate: "2019-06",
         publishEndDate: "2021-09",
@@ -59,10 +57,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid4",
         title: "Guy in the background",
-        company: {
-            name: "Reddit",
-            logo: redditLogo,
-        },
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         location: "Porto",
         publishDate: "2019-06",
         publishEndDate: "2021-09",
@@ -71,10 +67,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid5",
         title: "Janitor",
-        company: {
-            name: "Reddit",
-            logo: redditLogo,
-        },
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         location: "Porto",
         publishDate: "2019-06",
         publishEndDate: "2021-09",
@@ -83,10 +77,8 @@ const MOCK_OFFERS = [
     new Offer({
         _id: "random uuid6",
         title: "Fullstack developer but make it shorter",
-        company: {
-            name: "Reddit",
-            logo: redditLogo,
-        },
+        ownerName: "Reddit",
+        ownerLogo: redditLogo,
         location: "Porto",
         publishDate: "2019-06",
         publishEndDate: "2021-09",
