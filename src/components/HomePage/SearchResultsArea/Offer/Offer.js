@@ -1,10 +1,15 @@
 export default class Offer {
     constructor({
-        _id, title, company, location, jobStartDate, jobMinDuration, jobMaxDuration, description, contacts, fields, technologies,
+        _id, title, publishDate, publishEndDate, owner, ownerName, ownerLogo, location, jobStartDate, jobMinDuration,
+        jobMaxDuration, description, contacts, fields, technologies,
     }) {
         this.id = _id;
         this.title = title;
-        this.company = company;
+        this.publishDate = publishDate;
+        this.publishEndDate = publishEndDate;
+        this.owner = owner;
+        this.ownerName = ownerName;
+        this.ownerLogo = ownerLogo;
         this.location = location;
         this.jobStartDate = jobStartDate;
         this.jobMinDuration = jobMinDuration;
