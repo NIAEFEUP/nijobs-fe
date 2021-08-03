@@ -17,9 +17,6 @@ import {
     FindInPage, Visibility, VisibilityOff, Block, Info,
 } from "@material-ui/icons";
 import { format, parseISO } from "date-fns";
-import createDOMPurify from "dompurify";
-import ReactMarkdown from "react-markdown";
-import remarkBreaksPlugin from "remark-breaks";
 import ChipList from "./ChipList";
 import AdminReasonModal from "./AdminReasonModal";
 import { enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
@@ -31,8 +28,7 @@ import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
 import { getHumanError } from "../../../../utils/offer/OfferUtils";
 import { Skeleton } from "@material-ui/lab";
-
-const purify = createDOMPurify(window);
+import OfferDescription from "./OfferDescription";
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
@@ -392,9 +388,7 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                     { loading ?
                                         <Skeleton variant="rect" height="100px" />
                                         :
-                                        <ReactMarkdown remarkPlugins={[remarkBreaksPlugin]}>
-                                            { purify.sanitize(offer.description) }
-                                        </ReactMarkdown>
+                                        <OfferDescription content={offer.description} />
                                     }
                                 </Typography>
                             </div>
