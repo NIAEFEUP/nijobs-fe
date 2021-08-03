@@ -70,7 +70,7 @@ export default makeStyles((theme) => ({
 
     },
     verticalDivider: {
-        height: "3em",
+        height: "auto",
         marginRight: theme.spacing(2),
     },
     offerOptions: ({ isMobile }) => ({
@@ -79,6 +79,11 @@ export default makeStyles((theme) => ({
         marginTop: isMobile && theme.spacing(2),
         paddingLeft: isMobile && theme.spacing(1),
     }),
+    offerOptionsButtons: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+    },
     offerTitle: {
         marginRight: theme.spacing(3),
         marginBottom: theme.spacing(2),
@@ -113,6 +118,8 @@ export default makeStyles((theme) => ({
     }),
     visibilityButton: {
         padding: 0,
+        marginBottom: theme.spacing(0.7),
+        marginTop: theme.spacing(0.7),
     },
     companyInfo: ({ loading }) => ({
         display: "flex",

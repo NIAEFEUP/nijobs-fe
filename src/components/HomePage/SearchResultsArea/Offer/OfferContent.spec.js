@@ -4,8 +4,7 @@ import Offer from "./Offer";
 import { renderWithStoreAndTheme, screen, act, fireEvent } from "../../../../test-utils";
 import { createMuiTheme } from "@material-ui/core";
 import LOADING_MESSAGES from "./offerLoadingMessages";
-import { format, parseISO } from "date-fns";
-import moment from "moment";
+import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
 import { SnackbarProvider } from "notistack";
 import useSession from "../../../../hooks/useSession";
 
@@ -71,7 +70,7 @@ describe("OfferContent", () => {
                 expect(screen.getByRole("heading", { name: offer.ownerName, level: 6 })).toBeInTheDocument();
                 expect(screen.getByText(offer.location)).toBeInTheDocument();
                 expect(screen.getByText(format(parseISO(offer.jobStartDate), "dd-MM-yyyy"))).toBeInTheDocument();
-                expect(screen.getByText(moment(parseISO(offer.publishDate)).fromNow())).toBeInTheDocument();
+                expect(screen.getByText(formatDistanceToNowStrict(parseISO(offer.publishDate), { addSuffix: true }))).toBeInTheDocument();
                 expect(screen.getByText(offer.description)).toBeInTheDocument();
                 expect(screen.getByText(offer.location)).toBeInTheDocument();
             });
@@ -228,7 +227,52 @@ describe("OfferContent", () => {
                 { exact: false }
             )).not.toBeInTheDocument();
 
-            const visibilityButton = screen.getByRole("visibilityButton");
+            const visibilityButton = screen.getByRole("hideEnableOfferButton");
+            expect(visibilityButton).toBeInTheDocument();
+
+            await act(async () => {
+                await fireEvent.click(visibilityButton);
+            });
+
+            expect(screen.queryByText(
+                "This offer is hidden so it won't show up in search results", { exact: false }
+            )).toBeInTheDocument();
+        });
+
+        it ("should hide offer if an admin clicks the hide button", async () => {
+
+            const anotherOffer = new Offer({
+                id: "id1",
+                title: "position1",
+                owner: "company_id",
+                ownerName: "company1",
+                ownerLogo: "",
+                location: "location1",
+                jobStartDate: (new Date()).toISOString(),
+                publishDate: "2021-04-22T22:35:57.177Z",
+                publishEndDate: "2021-09-19T23:00:00.000Z",
+                description: "description1",
+                isHidden: false,
+                hiddenReason: null,
+                adminReason: null,
+            });
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
+
+            renderWithStoreAndTheme(
+                <OfferContent offer={anotherOffer} />,
+                { theme }
+            );
+
+            expect(screen.queryByText(
+                "This offer is hidden so it won't show up in search results",
+                { exact: false }
+            )).not.toBeInTheDocument();
+
+            const visibilityButton = screen.getByRole("hideEnableOfferButton");
             expect(visibilityButton).toBeInTheDocument();
 
             await act(async () => {
@@ -275,7 +319,7 @@ describe("OfferContent", () => {
                 { exact: false }
             )).toBeInTheDocument();
 
-            const visibilityButton = screen.getByRole("visibilityButton");
+            const visibilityButton = screen.getByRole("hideEnableOfferButton");
             expect(visibilityButton).toBeInTheDocument();
 
             await act(async () => {
@@ -286,6 +330,42 @@ describe("OfferContent", () => {
                 "This offer is hidden so it won't show up in search results",
                 { exact: false }
             )).not.toBeInTheDocument();
+        });
+
+        it ("should show special message if the owner company is blocked", () => {
+
+            const anotherOffer = new Offer({
+                id: "id1",
+                title: "position1",
+                owner: "company_id",
+                ownerName: "company1",
+                ownerLogo: "",
+                location: "location1",
+                jobStartDate: (new Date()).toISOString(),
+                publishDate: "2021-04-22T22:35:57.177Z",
+                publishEndDate: "2021-09-19T23:00:00.000Z",
+                description: "description1",
+                isHidden: true,
+                hiddenReason: "COMPANY_BLOCKED",
+                adminReason: null,
+            });
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
+            }));
+
+            renderWithStoreAndTheme(
+                <OfferContent offer={anotherOffer} />,
+                { theme }
+            );
+
+            expect(screen.queryByText(
+                "This offer is hidden, because the company is blocked.",
+                { exact: false }
+            )).toBeInTheDocument();
         });
 
         it ("should open admin reason modal if an admin clicks the disable button", async () => {
@@ -318,11 +398,11 @@ describe("OfferContent", () => {
 
             expect(screen.queryByText("Offer disabled by an admin.", { exact: false })).not.toBeInTheDocument();
 
-            const visibilityButton = screen.getByRole("visibilityButton");
-            expect(visibilityButton).toBeInTheDocument();
+            const disableButton = screen.getByRole("disableEnableOfferButton");
+            expect(disableButton).toBeInTheDocument();
 
             await act(async () => {
-                await fireEvent.click(visibilityButton);
+                await fireEvent.click(disableButton);
             });
 
             expect(screen.queryByText("Please enter a reason for disabling this offer.")).toBeInTheDocument();
@@ -365,7 +445,7 @@ describe("OfferContent", () => {
                 + "Please contact support for more information."
             )).toBeInTheDocument();
 
-            const visibilityButton = screen.getByRole("visibilityButton");
+            const visibilityButton = screen.getByRole("hideEnableOfferButton");
             expect(visibilityButton).toBeInTheDocument();
 
             await act(async () => {
@@ -411,7 +491,7 @@ describe("OfferContent", () => {
             expect(screen.queryByText("Offer disabled by an admin.", { exact: false })).toBeInTheDocument();
             expect(screen.queryByText(anotherOffer.adminReason, { exact: false })).toBeInTheDocument();
 
-            const visibilityButton = screen.getByRole("visibilityButton");
+            const visibilityButton = screen.getByRole("disableEnableOfferButton");
             expect(visibilityButton).toBeInTheDocument();
 
             await act(async () => {
@@ -457,7 +537,7 @@ describe("OfferContent", () => {
                 { theme }
             );
 
-            const visibilityButton = screen.getByRole("visibilityButton");
+            const visibilityButton = screen.getByRole("hideEnableOfferButton");
             expect(visibilityButton).toBeInTheDocument();
 
             await act(async () => {

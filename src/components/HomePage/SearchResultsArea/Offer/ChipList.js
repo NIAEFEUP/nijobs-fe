@@ -29,7 +29,7 @@ const ChipList = ({ type, content, loading }) => {
     if (loading)
         return (
             <div className={classes.skeleton}>
-                <Skeleton />
+                <Skeleton height={40} />
             </div>
         );
     if (content) {

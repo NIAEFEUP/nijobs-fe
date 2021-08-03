@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import moment from "moment";
 
-import { Avatar, Typography, Link, Grid, Tooltip, Divider, Button } from "@material-ui/core";
+import { Avatar, Typography, Link, Grid, Tooltip, Divider } from "@material-ui/core";
 import Offer from "./Offer";
 import OfferContentListItem from "./OfferContentListItem";
 
@@ -14,12 +13,11 @@ import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWi
 import LOADING_MESSAGES from "./offerLoadingMessages";
 import {
     DateRange, LocationOn, Work, Schedule, MonetizationOn, MoneyOff,
-    FindInPage, Visibility, VisibilityOff, Block, Info,
+    FindInPage, Info,
 } from "@material-ui/icons";
-import { format, parseISO } from "date-fns";
+import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
 import ChipList from "./ChipList";
 import AdminReasonModal from "./AdminReasonModal";
-import { enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
 
 import JOB_OPTIONS from "../../SearchArea/AdvancedSearch/JobOptions";
 
@@ -29,6 +27,7 @@ import { connect } from "react-redux";
 import { getHumanError } from "../../../../utils/offer/OfferUtils";
 import { Skeleton } from "@material-ui/lab";
 import OfferDescription from "./OfferDescription";
+import OfferVisibilityOptions from "./OfferVisibilityOptions";
 
 const getRandomOngoingSearchMessage = () => LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)];
 
@@ -44,9 +43,11 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
     const [visibilityState, setVisibilityState] = useState({
         isVisible: undefined,
         isDisabled: undefined,
+        isBlocked: undefined,
     });
     visibilityState.isDisabled = offer?.isHidden && offer?.hiddenReason === "ADMIN_REQUEST";
     visibilityState.isVisible = !offer?.isHidden;
+    visibilityState.isBlocked = offer?.isHidden && offer?.hiddenReason === "COMPANY_BLOCKED";
 
     const [visibilityError, setVisibilityError] = useState(null);
     const [showAdminReasonModal, setShowAdminReasonModal] = useState(false);
@@ -64,51 +65,6 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
         });
     };
 
-    const handleOfferVisibility = () => {
-        if (visibilityState.isVisible) {
-            hideOffer(offer.id).then(() => {
-                offer.isHidden = true;
-                setVisibilityState({ ...visibilityState, isVisible: false });
-                addSnackbar({
-                    message: "The offer was hidden",
-                    key: "hidden",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
-            });
-        } else  {
-            enableOffer(offer.id).then(() => {
-                offer.isHidden = false;
-                setVisibilityState({ ...visibilityState, isVisible: true });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: "enabled",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
-            });
-        }
-    };
-
-    const handleEnableDisableOffer = () => {
-        if (!visibilityState.isDisabled) {
-            setShowAdminReasonModal(true);
-        } else {
-            enableOffer(offer.id).then(() => {
-                offer.adminReason = null;
-                offer.hiddenReason = null;
-                offer.isHidden = false;
-                setVisibilityState({ ...visibilityState, isDisabled: false });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: "enabled",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
-            });
-        }
-    };
-
     const getDisabledOfferMessage = () => (
         (sessionData?.isAdmin) ?
             `Offer disabled by an admin. Reason: ${offer.adminReason}`
@@ -116,6 +72,16 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
             "This offer was hidden by an admin so it won't show up in search results. "
             + "Please contact support for more information."
     );
+
+    const getHiddenOfferMessage = () => {
+        if (visibilityState.isDisabled)
+            return getDisabledOfferMessage();
+        else {
+            return visibilityState.isBlocked ?
+                "This offer is hidden, because the company is blocked."
+                : "This offer is hidden so it won't show up in search results";
+        }
+    };
 
     if (loading && !isPage) {
         return (
@@ -177,7 +143,7 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                                     <Skeleton variant="circle">
                                                         <Avatar />
                                                     </Skeleton>
-                                                    <Skeleton className={classes.ownerNameSkeleton} />
+                                                    <Skeleton variant="text" height={30} className={classes.ownerNameSkeleton} />
                                                 </>
                                                 :
                                                 <Avatar
@@ -192,52 +158,26 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                         </Typography>
                                     </span>
                                 </Grid>
-                                {
-                                    !loading && (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
-                                    <Grid item xs={12} md={3} className={classes.offerOptions}>
-                                        {!isMobile && <Divider orientation="vertical" className={classes.verticalDivider} /> }
-                                        {
-                                            (sessionData?.company?._id === offer.owner) &&
-                                            <Tooltip title={ visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-                                                <Button
-                                                    onClick={handleOfferVisibility}
-                                                    className={classes.visibilityButton}
-                                                    role="visibilityButton"
-                                                    disabled={visibilityState.isDisabled}
-                                                    startIcon={visibilityState.isVisible ? <VisibilityOff /> : <Visibility />}
-                                                >
-                                                    { visibilityState.isVisible ? "Hide Offer" : "Enable Offer" }
-                                                </Button>
-                                            </Tooltip>
-                                        }
-                                        {
-                                            (sessionData?.isAdmin) &&
-                                                <Tooltip title={ (!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer"}>
-                                                    <Button
-                                                        onClick={handleEnableDisableOffer}
-                                                        className={classes.visibilityButton}
-                                                        role="visibilityButton"
-                                                        startIcon={(!visibilityState.isDisabled) ? <Block /> : <Visibility />}
-                                                    >
-                                                        { (!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer" }
-                                                    </Button>
-                                                </Tooltip>
-                                        }
-                                    </Grid>
-                                }
+                                <OfferVisibilityOptions
+                                    loading={loading}
+                                    sessionData={sessionData}
+                                    classes={classes}
+                                    visibilityState={visibilityState}
+                                    setVisibilityState={setVisibilityState}
+                                    addSnackbar={addSnackbar}
+                                    setShowAdminReasonModal={setShowAdminReasonModal}
+                                    dealWithPromiseError={dealWithPromiseError}
+                                    isMobile={isMobile}
+                                    offer={offer}
+                                />
                             </Grid>
                             <Typography variant="subtitle1" className={classes.hiddenOfferInfo}>
                                 {
-                                    !loading && (!visibilityState.isVisible || visibilityState.isDisabled) &&
+                                    !loading && (!visibilityState.isVisible) &&
                                         <span>
                                             <Info className={classes.iconStyle} />
                                             <span>
-                                                {
-                                                    (visibilityState.isDisabled) ?
-                                                        getDisabledOfferMessage()
-                                                        :
-                                                        "This offer is hidden so it won't show up in search results"
-                                                }
+                                                {getHiddenOfferMessage()}
                                             </span>
                                         </span>
 
@@ -250,7 +190,7 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                         <Typography variant="body1" display="inline" color="secondary">
                                             {
                                                 loading ?
-                                                    <Skeleton />
+                                                    <Skeleton height={35} />
                                                     :
                                                     <>
                                                         <LocationOn className={classes.iconStyle} />
@@ -265,7 +205,7 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                         <Typography variant="body1" display="inline" color="secondary">
                                             {
                                                 loading ?
-                                                    <Skeleton />
+                                                    <Skeleton height={35} />
                                                     :
                                                     <>
                                                         <Work className={classes.iconStyle} />
@@ -309,11 +249,11 @@ const OfferContent = ({ addSnackbar, offer, loading, isPage }) => {
                                     <Tooltip title="Publish Date" placement="left" disableHoverListener={loading}>
                                         <Typography display="inline" variant="body1" color="secondary">
                                             {loading ?
-                                                <Skeleton />
+                                                <Skeleton height={35} />
                                                 :
                                                 <>
                                                     <Schedule className={classes.iconStyle} />
-                                                    {moment(parseISO(offer.publishDate)).fromNow()}
+                                                    {formatDistanceToNowStrict(parseISO(offer.publishDate), { addSuffix: true })}
                                                     {
                                                         offer.publishEndDate &&
                                                 (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
