@@ -1,21 +1,22 @@
 import React from "react";
-import { renderWithStore, fireEvent, act } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../../test-utils";
+import { createTheme } from "@material-ui/core/styles";
 import AdminReasonModal from "./AdminReasonModal";
 import Offer from "./Offer";
-import { disableOffer } from "../../../../services/offerVisibilityService";
+import { disableOffer as disableOfferService } from "../../../../services/offerVisibilityService";
 
 jest.mock("../../../../services/offerVisibilityService");
 
 describe("AdminReasonModal", () => {
 
-    let setOpen, setVisibilityState, dealWithPromiseError, offer;
+    let setOpen, setVisibilityState, onError, offer;
 
     beforeEach(() => {
         setOpen = jest.fn();
         setVisibilityState = jest.fn();
-        dealWithPromiseError = jest.fn();
+        onError = jest.fn();
         offer = new Offer({
-            id: "id1",
+            _id: "id1",
             title: "position1",
             ownerName: "company1",
             location: "location1",
@@ -23,69 +24,88 @@ describe("AdminReasonModal", () => {
             publishDate: "2021-04-22T22:35:57.177Z",
             publishEndDate: "2021-09-19T23:00:00.000Z",
             description: "description1",
+            isHidden: false,
+            adminReason: null,
+            hiddenReason: null,
         });
     });
+    const theme = createTheme();
 
     describe("render", () => {
 
         it("Should not appear when open prop is false", () => {
-            const wrapper = renderWithStore(
+            renderWithStoreAndTheme(
                 <AdminReasonModal
                     open={false}
                     setOpen={setOpen}
                     offer={offer}
-                    visibilityState={ { isVisible: true, isDisabled: false } }
                     setVisibilityState={setVisibilityState}
-                    dealWithPromiseError={dealWithPromiseError}
-                />
+                    onError={onError}
+                />,
+                { theme }
             );
-            const labelText = wrapper.queryByLabelText("Reason");
-            const descriptionText = wrapper.queryByText("Please enter a reason for disabling this offer.");
-            expect(labelText).not.toBeInTheDocument();
-            expect(descriptionText).not.toBeInTheDocument();
+
+            expect(screen.queryByLabelText("Reason")).not.toBeInTheDocument();
+            expect(screen.queryByText("Please enter a reason for disabling this offer.")).not.toBeInTheDocument();
         });
 
         it("Should appear if open prop is true", () => {
-            const wrapper = renderWithStore(
+            renderWithStoreAndTheme(
                 <AdminReasonModal
                     open={true}
                     setOpen={setOpen}
                     offer={offer}
-                    visibilityState={ { isVisible: true, isDisabled: false } }
                     setVisibilityState={setVisibilityState}
-                    dealWithPromiseError={dealWithPromiseError}
-                />
+                    onError={onError}
+                />,
+                { theme }
             );
-            const labelText = wrapper.queryByLabelText("Reason");
-            const descriptionText = wrapper.queryByText("Please enter a reason for disabling this offer.");
-            const submitButton = wrapper.queryByText("Disable Offer");
-            const cancelButton = wrapper.queryByText("Cancel");
-            expect(labelText).toBeInTheDocument();
-            expect(descriptionText).toBeInTheDocument();
-            expect(submitButton).toBeInTheDocument();
-            expect(cancelButton).toBeInTheDocument();
+
+            expect(screen.queryByLabelText("Reason")).toBeInTheDocument();
+            expect(screen.queryByText("Please enter a reason for disabling this offer.")).toBeInTheDocument();
+            expect(screen.queryByText("Disable Offer")).toBeInTheDocument();
+            expect(screen.queryByText("Cancel")).toBeInTheDocument();
         });
     });
 
     describe("interaction", () => {
 
-        let wrapper;
+        const handleDisableOffer = jest.fn();
+        handleDisableOffer.mockImplementation(async ({
+            offer,
+            adminReason,
+            setOpen,
+            setVisibilityState,
+            visibilityState,
+            onError,
+        }) => {
+            await disableOfferService(offer.id, adminReason).then(() => {
+                setOpen(false);
+                offer.hiddenReason = "ADMIN_REASON";
+                offer.isHidden = true;
+                offer.adminReason = adminReason;
+                setVisibilityState({ ...visibilityState, isVisible: false, isDisabled: true });
+            }).catch((err) => {
+                onError(err);
+            });
+        });
 
         beforeEach(() => {
-            wrapper = renderWithStore(
+            renderWithStoreAndTheme(
                 <AdminReasonModal
                     open={true}
                     setOpen={setOpen}
                     offer={offer}
-                    visibilityState={ { isVisible: true, isDisabled: false } }
+                    handleDisableOffer={handleDisableOffer}
                     setVisibilityState={setVisibilityState}
-                    dealWithPromiseError={dealWithPromiseError}
-                />
+                    onError={onError}
+                />,
+                { theme }
             );
         });
 
         it("Should be closed when clicking Cancel button", () => {
-            const cancelButton = wrapper.queryByText("Cancel");
+            const cancelButton = screen.queryByText("Cancel");
             expect(cancelButton).toBeInTheDocument();
 
             fireEvent.click(cancelButton);
@@ -95,9 +115,9 @@ describe("AdminReasonModal", () => {
         });
 
         it("Should not submit when the input is empty", async () => {
-            const reason = wrapper.getByLabelText("Reason");
-            const submitButton = wrapper.queryByText("Disable Offer");
-            const helperText = wrapper.queryByText("Please enter a reason for disabling this offer.");
+            const reason = screen.getByLabelText("Reason");
+            const submitButton = screen.queryByText("Disable Offer");
+            const helperText = screen.queryByText("Please enter a reason for disabling this offer.");
             expect(submitButton).toBeInTheDocument();
             expect(helperText).toBeInTheDocument();
 
@@ -110,16 +130,16 @@ describe("AdminReasonModal", () => {
 
             expect(setVisibilityState).toHaveBeenCalledTimes(0);
             expect(setOpen).toHaveBeenCalledTimes(0);
-            expect(dealWithPromiseError).toHaveBeenCalledTimes(0);
+            expect(onError).toHaveBeenCalledTimes(0);
             expect(helperText).toBeInTheDocument();
         });
 
         it("Should submit when the input is not empty", async () => {
 
-            disableOffer.mockImplementationOnce(() => new Promise((resolve) => resolve()));
+            disableOfferService.mockImplementationOnce(() => new Promise((resolve) => resolve()));
 
-            const reason = wrapper.getByLabelText("Reason");
-            const submitButton = wrapper.queryByText("Disable Offer");
+            const reason = screen.getByLabelText("Reason");
+            const submitButton = screen.queryByText("Disable Offer");
             expect(submitButton).toBeInTheDocument();
 
             await act(async () => {
@@ -131,15 +151,15 @@ describe("AdminReasonModal", () => {
 
             expect(setVisibilityState).toHaveBeenCalledTimes(1);
             expect(setOpen).toHaveBeenCalledTimes(1);
-            expect(dealWithPromiseError).toHaveBeenCalledTimes(0);
+            expect(onError).toHaveBeenCalledTimes(0);
         });
 
         it("Should deal with promise error if the service fails", async () => {
 
-            disableOffer.mockImplementationOnce(() => Promise.reject());
+            disableOfferService.mockImplementationOnce(() => Promise.reject());
 
-            const reason = wrapper.getByLabelText("Reason");
-            const submitButton = wrapper.queryByText("Disable Offer");
+            const reason = screen.getByLabelText("Reason");
+            const submitButton = screen.queryByText("Disable Offer");
             expect(submitButton).toBeInTheDocument();
 
             await act(async () => {
@@ -151,7 +171,7 @@ describe("AdminReasonModal", () => {
 
             expect(setVisibilityState).toHaveBeenCalledTimes(0);
             expect(setOpen).toHaveBeenCalledTimes(0);
-            expect(dealWithPromiseError).toHaveBeenCalledTimes(1);
+            expect(onError).toHaveBeenCalledTimes(1);
         });
     });
 });

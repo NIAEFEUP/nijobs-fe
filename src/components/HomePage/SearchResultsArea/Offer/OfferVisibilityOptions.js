@@ -3,54 +3,49 @@ import React from "react";
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
 import { Visibility, VisibilityOff, Block } from "@material-ui/icons";
 
-import { enableOffer, hideOffer } from "../../../../services/offerVisibilityService";
-
 const OfferVisibilityOptions = ({
-    loading, sessionData, classes, visibilityState,
-    setVisibilityState, addSnackbar, setShowAdminReasonModal,
-    dealWithPromiseError, isMobile, offer }) => {
+    loading,
+    sessionData,
+    classes,
+    visibilityState,
+    setVisibilityState,
+    addSnackbar,
+    setShowAdminReasonModal,
+    onError,
+    isMobile,
+    offer,
+    handleHideOffer,
+    handleCompanyEnableOffer,
+    handleAdminEnableOffer,
+}) => {
 
-    const handleOfferVisibility = () => {
+    const handleOfferVisibility = async () => {
         if (visibilityState.isVisible) {
-            hideOffer(offer.id).then(() => {
-                offer.isHidden = true;
-                setVisibilityState({ ...visibilityState, isVisible: false });
-                addSnackbar({
-                    message: "The offer was hidden",
-                    key: "hidden",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
+            await handleHideOffer({
+                offer: offer,
+                setVisibilityState: setVisibilityState,
+                addSnackbar: addSnackbar,
+                onError: onError,
             });
         } else  {
-            enableOffer(offer.id).then(() => {
-                offer.isHidden = false;
-                setVisibilityState({ ...visibilityState, isVisible: true });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: "enabled",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
+            await handleCompanyEnableOffer({
+                offer: offer,
+                setVisibilityState: setVisibilityState,
+                addSnackbar: addSnackbar,
+                onError: onError,
             });
         }
     };
 
-    const handleEnableDisableOffer = () => {
+    const handleEnableDisableOffer = async () => {
         if (!visibilityState.isDisabled) {
             setShowAdminReasonModal(true);
         } else {
-            enableOffer(offer.id).then(() => {
-                offer.adminReason = null;
-                offer.hiddenReason = null;
-                offer.isHidden = false;
-                setVisibilityState({ ...visibilityState, isDisabled: false });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: "enabled",
-                });
-            }).catch((err) => {
-                dealWithPromiseError(err);
+            await handleAdminEnableOffer({
+                offer: offer,
+                setVisibilityState: setVisibilityState,
+                addSnackbar: addSnackbar,
+                onError: onError,
             });
         }
     };

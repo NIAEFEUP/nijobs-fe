@@ -10,7 +10,7 @@ describe("ChipList", () => {
             render(
                 <ChipList
                     type="Technologies"
-                    content={["CSS", "Dart", "Flutter"]}
+                    values={["CSS", "Dart", "Flutter"]}
                 />
             );
 
@@ -22,7 +22,7 @@ describe("ChipList", () => {
             render(
                 <ChipList
                     type="Fields"
-                    content={["MACHINE LEARNING", "FRONTEND", "DEVOPS"]}
+                    values={["MACHINE LEARNING", "FRONTEND", "DEVOPS"]}
                 />
             );
 

@@ -10,7 +10,7 @@ describe("OfferContentListItem", () => {
             render(
                 <OfferContentListItem
                     title="Requirements"
-                    content={["Good english communication", "Good problem solving skills"]}
+                    items={["Good english communication", "Good problem solving skills"]}
                 />
             );
 

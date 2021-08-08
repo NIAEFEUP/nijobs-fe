@@ -39,7 +39,7 @@ describe("Offer Page", () => {
     it("should render successfully", async () => {
 
         const offer = new Offer({
-            id: "id1",
+            _id: "id1",
             title: "position1",
             owner: "company_id",
             ownerName: "company1",

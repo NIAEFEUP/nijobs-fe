@@ -15,7 +15,7 @@ describe("SearchResults", () => {
             technologies: [],
             offers: [
                 new Offer({
-                    id: "id1",
+                    _id: "id1",
                     title: "position1",
                     ownerName: "company1",
                     location: "location1",
@@ -25,7 +25,7 @@ describe("SearchResults", () => {
                     description: "description1",
                 }),
                 new Offer({
-                    id: "id2",
+                    _id: "id2",
                     title: "position2",
                     ownerName: "company1",
                     location: "location2",

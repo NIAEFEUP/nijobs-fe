@@ -1,21 +1,25 @@
 import React from "react";
-import OfferContent from "./OfferContent";
+import OfferWidget from "./OfferWidget";
 import Offer from "./Offer";
 import { renderWithStoreAndTheme, screen, act, fireEvent } from "../../../../test-utils";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import LOADING_MESSAGES from "./offerLoadingMessages";
 import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
 import { SnackbarProvider } from "notistack";
 import useSession from "../../../../hooks/useSession";
-
 import Notifier from "../../../Notifications/Notifier";
+import {
+    hideOffer as hideOfferService,
+    enableOffer as enableOfferService,
+} from "../../../../services/offerVisibilityService";
 
+jest.mock("../../../../services/offerVisibilityService");
 jest.mock("../../../../hooks/useSession");
 
-describe("OfferContent", () => {
+describe("OfferWidget", () => {
 
     let offer = new Offer({
-        id: "id1",
+        _id: "id1",
         title: "position1",
         owner: "company_id",
         ownerName: "company1",
@@ -26,7 +30,7 @@ describe("OfferContent", () => {
         publishEndDate: "2021-09-19T23:00:00.000Z",
         description: "description1",
     });
-    const theme = createMuiTheme();
+    const theme = createTheme();
 
     describe("render", () => {
 
@@ -35,7 +39,7 @@ describe("OfferContent", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={null} />,
+                <OfferWidget offer={null} />,
                 { theme }
             );
 
@@ -47,7 +51,7 @@ describe("OfferContent", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
             renderWithStoreAndTheme(
-                <OfferContent loading />,
+                <OfferWidget loading />,
                 { theme }
             );
 
@@ -62,7 +66,7 @@ describe("OfferContent", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -83,7 +87,7 @@ describe("OfferContent", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -97,7 +101,7 @@ describe("OfferContent", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -112,7 +116,7 @@ describe("OfferContent", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -124,7 +128,7 @@ describe("OfferContent", () => {
         describe("hidden offer", () => {
 
             offer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -146,7 +150,7 @@ describe("OfferContent", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -164,7 +168,7 @@ describe("OfferContent", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -176,7 +180,7 @@ describe("OfferContent", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
                 renderWithStoreAndTheme(
-                    <OfferContent offer={offer} />,
+                    <OfferWidget offer={offer} />,
                     { theme }
                 );
 
@@ -192,10 +196,113 @@ describe("OfferContent", () => {
             fetch.resetMocks();
         });
 
+        hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+
+        const handleHideOffer = jest.fn();
+        handleHideOffer.mockImplementation(async ({
+            offer,
+            setVisibilityState,
+            visibilityState,
+            onError,
+            addSnackbar,
+        }) => {
+            await hideOfferService(offer.id).then(() => {
+                offer.isHidden = true;
+                setVisibilityState({ ...visibilityState, isVisible: false });
+                addSnackbar({
+                    message: "The offer was hidden",
+                    key: `${Date.now()}-hidden`,
+                });
+            }).catch((err) => {
+                onError(err);
+                addSnackbar({
+                    message: err ? err : "Unexpected Error. Please try again later.",
+                    key: `${Date.now()}-visibilityError`,
+                });
+            });
+        });
+
+        const handleDisableOffer = jest.fn();
+        handleDisableOffer.mockImplementation(async ({
+            offer,
+            setVisibilityState,
+            adminReason,
+            onError,
+            addSnackbar,
+        }) => {
+            await handleDisableOffer(offer.id, adminReason).then(() => {
+                offer.isHidden = true;
+                offer.hiddenReason = "ADMIN_REQUEST";
+                offer.adminReason = adminReason;
+                setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: false, isDisabled: true }));
+                addSnackbar({
+                    message: "The offer was disabled",
+                    key: `${Date.now()}-disabled`,
+                });
+            }).catch((err) => {
+                onError(err);
+                addSnackbar({
+                    message: err ? err : "Unexpected Error. Please try again later.",
+                    key: `${Date.now()}-visibilityError`,
+                });
+            });
+        });
+
+        const handleCompanyEnableOffer = jest.fn();
+        handleCompanyEnableOffer.mockImplementation(async ({
+            offer,
+            setVisibilityState,
+            visibilityState,
+            onError,
+            addSnackbar,
+        }) => {
+            await enableOfferService(offer.id).then(() => {
+                offer.isHidden = false;
+                setVisibilityState({ ...visibilityState, isVisible: true });
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            }).catch((err) => {
+                onError(err);
+                addSnackbar({
+                    message: err ? err : "Unexpected Error. Please try again later.",
+                    key: `${Date.now()}-visibilityError`,
+                });
+            });
+        });
+
+        const handleAdminEnableOffer = jest.fn();
+        handleAdminEnableOffer.mockImplementation(async ({
+            offer,
+            setVisibilityState,
+            visibilityState,
+            onError,
+            addSnackbar,
+        }) => {
+            await enableOfferService(offer.id).then(() => {
+                offer.isHidden = false;
+                offer.hiddenReason = null;
+                offer.adminReason = null;
+                setVisibilityState({ ...visibilityState, isVisible: true, isDisabled: false });
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            }).catch((err) => {
+                onError(err);
+                addSnackbar({
+                    message: err ? err : "Unexpected Error. Please try again later.",
+                    key: `${Date.now()}-visibilityError`,
+                });
+            });
+        });
+
         it ("should hide offer if the owner company clicks the hide button", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -218,7 +325,13 @@ describe("OfferContent", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -242,7 +355,7 @@ describe("OfferContent", () => {
         it ("should hide offer if an admin clicks the hide button", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -263,7 +376,13 @@ describe("OfferContent", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -287,7 +406,7 @@ describe("OfferContent", () => {
         it ("should enable hidden offer if the owner company clicks the enable button", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -310,7 +429,13 @@ describe("OfferContent", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -335,7 +460,7 @@ describe("OfferContent", () => {
         it ("should show special message if the owner company is blocked", () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -358,12 +483,18 @@ describe("OfferContent", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
             expect(screen.queryByText(
-                "This offer is hidden, because the company is blocked.",
+                "This offer is hidden due to the company being blocked.",
                 { exact: false }
             )).toBeInTheDocument();
         });
@@ -371,7 +502,7 @@ describe("OfferContent", () => {
         it ("should open admin reason modal if an admin clicks the disable button", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -392,7 +523,13 @@ describe("OfferContent", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -413,7 +550,7 @@ describe("OfferContent", () => {
         it ("should not let owner company enable offer is it was disabled by admin", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -436,7 +573,13 @@ describe("OfferContent", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -463,7 +606,7 @@ describe("OfferContent", () => {
             const adminReason = "This offer is offensive.";
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -484,7 +627,13 @@ describe("OfferContent", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferContent offer={anotherOffer} />,
+                <OfferWidget
+                    offer={anotherOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                />,
                 { theme }
             );
 
@@ -507,7 +656,7 @@ describe("OfferContent", () => {
         it ("should show snackbar message if the hide offer service fails", async () => {
 
             const anotherOffer = new Offer({
-                id: "id1",
+                _id: "id1",
                 title: "position1",
                 owner: "company_id",
                 ownerName: "company1",
@@ -525,6 +674,8 @@ describe("OfferContent", () => {
             // Simulate network problem
             fetch.mockAbort();
 
+            hideOfferService.mockImplementation(() => Promise.reject());
+
             useSession.mockImplementation(() => ({
                 isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
             }));
@@ -532,7 +683,13 @@ describe("OfferContent", () => {
             renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
                     <Notifier />
-                    <OfferContent offer={anotherOffer} />
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
                 </SnackbarProvider>,
                 { theme }
             );

@@ -14,6 +14,8 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         marginTop: theme.spacing(0.5),
+        marginBottom: theme.spacing(1),
+        padding: 0,
         listStyleType: "none",
         display: "flex",
         flexWrap: "wrap",
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ChipList = ({ type, content, loading }) => {
+const ChipList = ({ type, values, loading }) => {
     const classes = useStyles();
     if (loading)
         return (
@@ -32,30 +34,28 @@ const ChipList = ({ type, content, loading }) => {
                 <Skeleton height={40} />
             </div>
         );
-    if (content) {
-        const listItems = content.map((listElement) =>
-            <li key={listElement}>
-                <Chip
-                    label={ type === "Technologies" ? TECH_OPTIONS[listElement] : FIELD_OPTIONS[listElement] }
-                    variant={type === "Technologies" ? "outlined" : "default"}
-                    size="small"
-                    className={classes.chip}
-                />
-            </li>
-        );
+    else if (values) {
         return (
-            <div component="ul" className={classes.list}>
-                {listItems}
-            </div>
+            <ul className={classes.list}>
+                {values.map((value) =>
+                    <li key={value}>
+                        <Chip
+                            label={ type === "Technologies" ? TECH_OPTIONS[value] : FIELD_OPTIONS[value] }
+                            variant={type === "Technologies" ? "outlined" : "default"}
+                            size="small"
+                            className={classes.chip}
+                        />
+                    </li>
+                )}
+            </ul>
         );
-
     }
     return null;
 };
 
 ChipList.propTypes = {
     type: PropTypes.string,
-    content: PropTypes.arrayOf(PropTypes.string),
+    values: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool,
 };
 

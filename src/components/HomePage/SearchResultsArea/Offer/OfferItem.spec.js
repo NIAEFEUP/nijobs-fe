@@ -6,7 +6,7 @@ import Offer from "./Offer";
 describe("OfferItem", () => {
 
     const offer = new Offer({
-        id: "id1",
+        _id: "id1",
         title: "position1",
         ownerName: "company1",
         location: "location1",
@@ -38,12 +38,20 @@ describe("OfferItem", () => {
     });
 
     describe("interaction", () => {
-        it("should call setSelectedOffer onClick", () => {
-            const setSelectedOfferMock = jest.fn();
-            render(<OfferItem offer={offer} setSelectedOffer={setSelectedOfferMock} />);
+        it("should call setSelectedOfferIdx onClick", () => {
+            const setSelectedOfferIdxMock = jest.fn();
+            const offerIdx = 0;
+            render(
+                <OfferItem
+                    offer={offer}
+                    offerIdx={offerIdx}
+                    selectedOfferIdx={offerIdx}
+                    setSelectedOfferIdx={setSelectedOfferIdxMock}
+                />
+            );
             fireEvent.click(screen.getByText(offer.title));
 
-            expect(setSelectedOfferMock).toHaveBeenCalledWith(offer);
+            expect(setSelectedOfferIdxMock).toHaveBeenCalledWith(offerIdx);
         });
     });
 });

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OfferContentListItem = ({ title, content, loading }) => {
+const OfferContentListItem = ({ title, items, loading }) => {
     const classes = useStyles();
     if (loading)
         return (
@@ -24,12 +24,7 @@ const OfferContentListItem = ({ title, content, loading }) => {
                 <Skeleton variant="rect" height="50px" />
             </div>
         );
-    if (content) {
-        const listItems = content.map((listElement) =>
-            <li key={listElement} className={classes.item}>
-                {listElement}
-            </li>
-        );
+    else if (items) {
         return (
             <div className={classes.listElement}>
                 <Typography variant="h6">
@@ -42,19 +37,22 @@ const OfferContentListItem = ({ title, content, loading }) => {
                     variant="body1"
                 >
                     <ul className={classes.list}>
-                        {listItems}
+                        {items.map((item) =>
+                            <li key={item} className={classes.item}>
+                                {item}
+                            </li>
+                        )}
                     </ul>
                 </Typography>
             </div>
         );
-
     }
     return null;
 };
 
 OfferContentListItem.propTypes = {
     title: PropTypes.string,
-    content: PropTypes.arrayOf(PropTypes.string),
+    items: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool,
 };
 

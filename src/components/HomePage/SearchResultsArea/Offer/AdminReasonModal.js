@@ -11,7 +11,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 
 import AdminReasonModalSchema from "./AdminReasonModalSchema";
 import Offer from "./Offer";
-import { disableOffer } from "../../../../services/offerVisibilityService";
 import { addSnackbar } from "../../../../actions/notificationActions";
 
 import { useForm } from "react-hook-form";
@@ -22,9 +21,10 @@ const AdminReasonModal = ({
     open,
     setOpen,
     offer,
+    handleDisableOffer,
     setVisibilityState,
-    visibilityState,
-    dealWithPromiseError }) => {
+    onError,
+}) => {
 
     const handleClose = () => {
         setOpen(false);
@@ -37,18 +37,13 @@ const AdminReasonModal = ({
     });
 
     const onSubmit = async (data) => {
-        await disableOffer(offer.id, data.adminReason).then(() => {
-            setOpen(false);
-            offer.hiddenReason = "ADMIN_REQUEST";
-            offer.isHidden = true;
-            offer.adminReason = data.adminReason;
-            setVisibilityState({ ...visibilityState, isDisabled: true });
-            addSnackbar({
-                message: "The offer was disabled",
-                key: "disabled",
-            });
-        }).catch((err) => {
-            dealWithPromiseError(err);
+        await handleDisableOffer({
+            offer: offer,
+            adminReason: data.adminReason,
+            setOpen: setOpen,
+            setVisibilityState: setVisibilityState,
+            addSnackbar: addSnackbar,
+            onError: onError,
         });
     };
 
@@ -101,11 +96,10 @@ AdminReasonModal.propTypes = {
     open: PropTypes.bool.isRequired,
     setOpen: PropTypes.func.isRequired,
     offer: PropTypes.instanceOf(Offer),
+    handleDisableOffer: PropTypes.func,
     setVisibilityState: PropTypes.func.isRequired,
-    visibilityState: PropTypes.object.isRequired,
-    dealWithPromiseError: PropTypes.func.isRequired,
+    onError: PropTypes.func.isRequired,
 };
-
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = (dispatch) => ({

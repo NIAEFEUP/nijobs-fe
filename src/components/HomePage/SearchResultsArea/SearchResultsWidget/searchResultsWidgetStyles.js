@@ -135,7 +135,7 @@ export default makeStyles((theme) => ({
         display: "inline",
         marginRight: theme.spacing(1),
     },
-    offerContent: ({ isMobile, isPage }) => {
+    offerWidget: ({ isMobile, isPage }) => {
         let paddingValue = !isMobile ? theme.spacing(3) : 0;
         let paddingTopValue = 0;
         if (isPage) {

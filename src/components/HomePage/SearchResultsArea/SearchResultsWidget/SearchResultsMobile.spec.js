@@ -17,7 +17,7 @@ describe("SearchResultsMobile", () => {
 
     const offers = [
         new Offer({
-            id: "id1",
+            _id: "id1",
             title: "position1",
             ownerName: "company1",
             location: "location1",
@@ -27,7 +27,7 @@ describe("SearchResultsMobile", () => {
             description: "description1",
         }),
         new Offer({
-            id: "id2",
+            _id: "id2",
             title: "position2",
             ownerName: "company1",
             location: "location2",
@@ -81,12 +81,12 @@ describe("SearchResultsMobile", () => {
 
     describe("interaction", () => {
         it("should open offer details on offer item click", async () => {
-            const setSelectedOfferMock = jest.fn();
+            const setSelectedOfferIdxMock = jest.fn();
 
             const context = {
                 offers,
-                setSelectedOffer: setSelectedOfferMock,
-                selectedOffer: offers[0],
+                setSelectedOfferIdx: setSelectedOfferIdxMock,
+                selectedOfferIdx: 0,
                 toggleShowSearchFilters: () => {},
             };
 
@@ -99,7 +99,7 @@ describe("SearchResultsMobile", () => {
 
             expect(screen.queryByText(offers[0].description)).not.toBeInTheDocument();
             Simulate.click(screen.getByText(offers[0].title));
-            expect(setSelectedOfferMock).toHaveBeenCalledWith(offers[0]);
+            expect(setSelectedOfferIdxMock).toHaveBeenCalledWith(0);
             expect(screen.getByText(offers[0].description)).toBeInTheDocument();
             Simulate.click(screen.getByLabelText("back", { selector: "button" }));
             await waitForElementToBeRemoved(() => screen.getByText(offers[0].description));
