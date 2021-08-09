@@ -24,23 +24,24 @@ import { CreateOfferConstants } from "./CreateOfferUtils";
 import "./editor.css";
 import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 
 export const CreateOfferControllerContext = React.createContext();
 
 export const CreateOfferController = () => {
 
     // eslint-disable-next-line no-unused-vars
-    const { handleSubmit, formState: { errors }, control, register, getValues } = useForm({
+    const { handleSubmit, formState: { errors }, control, register, setValue, getValues } = useForm({
         mode: "all",
         resolver: yupResolver(CreateOfferSchema),
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
-            publishDate: "",
-            publishEndDate: "",
+            publishDate: null,
+            publishEndDate: null,
             jobMinDuration: 1,
             jobMaxDuration: 2,
-            jobStartDate: "",
+            jobStartDate: null,
             description: "",
             descriptionText: "",
             contacts: [{ value: "" }],
@@ -296,6 +297,26 @@ const CreateOfferForm = () => {
                                         }}
                                         margin="dense"
                                         fullWidth
+                                    />)}
+                                control={control}
+                            />
+                            The publish date details should be asked only if the user wants to schedule it (advanced settings)
+                            <Controller
+                                name="publishDate"
+                                render={(
+                                    { field: { onChange, onBlur, name, value } },
+                                ) => (
+                                    <KeyboardDatePicker
+                                        value={value}
+                                        label="Publication Date"
+                                        id="publishDate-input"
+                                        name={name}
+                                        onChange={(_, value) => onChange(value)}
+                                        onBlur={onBlur}
+                                        variant="inline"
+                                        autoOk
+                                        format="yyyy-MM-dd"
+                                        minDate={Date.now()}
                                     />)}
                                 control={control}
                             />
