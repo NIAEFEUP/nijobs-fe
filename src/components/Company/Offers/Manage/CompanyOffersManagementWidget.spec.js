@@ -9,6 +9,7 @@ import * as companyOffersService from "../../../../services/companyOffersService
 import useSession from "../../../../hooks/useSession";
 
 jest.mock("../../../../hooks/useSession");
+jest.mock("../../../../services/companyOffersService");
 
 describe("App", () => {
     const MOCK_OFFERS = [
@@ -39,6 +40,10 @@ describe("App", () => {
     });
 
     test("Renders Loading", () => {
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) => setTimeout(() => {
+            resolve();
+        }, 1000)));
+
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <CompanyOffersManagementWidget />
@@ -53,7 +58,9 @@ describe("App", () => {
     });
 
     test("Loads Valid Offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve(MOCK_OFFERS));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) => setTimeout(() => {
+            resolve(MOCK_OFFERS);
+        }, 1000)));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(
@@ -66,12 +73,15 @@ describe("App", () => {
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
             expect(screen.getAllByText("Guy in the background")).toHaveLength(2);
+        }, {
+            timeout: 2000,
         });
     });
 
     test("Loads Empty Offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve([]));
-
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) => setTimeout(() => {
+            resolve([]);
+        }, 1000)));
         // By waiting for act it executes all the async code at once
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -81,13 +91,15 @@ describe("App", () => {
 
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        }, {
+            timeout: 2000,
         });
     });
 
     test("Error fetching offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() => new Promise(() => {
-            throw "Error fetching offers";
-        }));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) => setTimeout(() => {
+            reject("Error fetching offers");
+        }, 1000)));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(
@@ -100,6 +112,8 @@ describe("App", () => {
             expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
 
             expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
+        }, {
+            timeout: 2000,
         });
     });
 });
