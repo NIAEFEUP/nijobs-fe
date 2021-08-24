@@ -9,6 +9,7 @@ import {
     TextField,
     makeStyles,
     FormControl,
+    Typography,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -20,11 +21,13 @@ import { useMobile } from "../../../utils/media-queries";
 import CreateOfferSchema from "./CreateOfferSchema";
 import useCreateOfferStyles from "./createOfferStyles";
 import { CreateOfferConstants } from "./CreateOfferUtils";
+import { searchCities } from "../../../services/locationSearchService";
 
 import "./editor.css";
-import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined } from "@material-ui/icons";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined, LocationOn } from "@material-ui/icons";
+import { Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
+import { throttle } from "lodash";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -248,6 +251,102 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
     );
 };
 
+
+// Based on https://github.com/lodash/lodash/issues/4700#issuecomment-805439202
+const asyncThrottle = (func, wait) => {
+    const throttled = throttle((resolve, reject, args) => {
+        func(...args).then(resolve).catch(reject);
+    }, wait);
+    return (...args) =>
+        new Promise((resolve, reject) => {
+            throttled(resolve, reject, args);
+        });
+};
+
+
+// Maybe move this to utils
+const LocationPicker = () => {
+    const [value, setValue] = React.useState(null);
+    const [inputValue, setInputValue] = React.useState("");
+    const [options, setOptions] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
+
+    const fetchCitiesThrottled = useCallback(
+        asyncThrottle(searchCities, 1500),
+        [],
+    );
+
+    useEffect(() => {
+
+        if (inputValue === "") {
+            setOptions(value ? [value] : []);
+            return undefined;
+        }
+        if (inputValue.length < 3) return undefined;
+
+        setLoading(true);
+        fetchCitiesThrottled(inputValue)
+            .then((results) => {
+                setLoading(false);
+                let newOptions = [];
+
+                if (value) {
+                    newOptions = [value];
+                }
+
+                if (results) {
+                    newOptions = [...newOptions, ...results];
+                }
+
+                setOptions(newOptions);
+
+            })
+            .catch(() => {
+                setLoading(false);
+                setOptions(value);
+            });
+
+        return undefined;
+
+    }, [value, inputValue, fetchCitiesThrottled]);
+
+    return (
+        <Autocomplete
+            getOptionLabel={(option) => `${option.city}, ${option.country}`}
+            filterOptions={(x) => x}
+            options={options}
+            autoComplete
+            includeInputInList
+            filterSelectedOptions
+            freeSolo
+            loading={loading}
+            value={value}
+            onChange={(event, newValue) => {
+                setOptions(newValue ? [newValue, ...options] : options);
+                setValue(newValue);
+            }}
+            onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+            }}
+            renderInput={(params) => (
+                <TextField {...params} label="Choose a location" variant="outlined" fullWidth />
+            )}
+            renderOption={(option) => (
+                <Grid container alignItems="center">
+                    <Grid item>
+                        <LocationOn />
+                    </Grid>
+                    <Grid item xs>
+                        <Typography variant="body1">
+                            {`${option.city}, ${option.country}`}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            )}
+        />
+    );
+};
+
 const CreateOfferForm = () => {
 
     const {
@@ -300,6 +399,37 @@ const CreateOfferForm = () => {
                                     />)}
                                 control={control}
                             />
+                            {/* <Controller
+                                name="location"
+                                render={(
+                                    { field: { onChange, onBlur, ref, name, value } },
+                                ) => (
+                                    <TextField
+                                        name={name}
+                                        value={value}
+                                        label="Location"
+                                        id="location"
+                                        error={!!errors.location}
+                                        inputRef={ref}
+                                        onBlur={onBlur}
+                                        onChange={onChange}
+                                        helperText={
+                                            `${value?.length}/${CreateOfferConstants.location.maxLength} ${errors.location?.message || ""}`
+                                        }
+                                        variant="outlined"
+                                        FormHelperTextProps={{
+                                            style: {
+                                                marginLeft: 0,
+                                            },
+                                        }}
+                                        margin="dense"
+                                        fullWidth
+                                    />
+                                    <LocationPicker />
+                                )}
+                                control={control}
+                            /> */}
+                            <LocationPicker />
                             The publish date details should be asked only if the user wants to schedule it (advanced settings)
                             <Controller
                                 name="publishDate"
