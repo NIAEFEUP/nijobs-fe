@@ -22,7 +22,6 @@ const AdminReasonModal = ({
     setOpen,
     offer,
     handleDisableOffer,
-    setVisibilityState,
     onError,
 }) => {
 
@@ -41,7 +40,6 @@ const AdminReasonModal = ({
             offer: offer,
             adminReason: data.adminReason,
             setOpen: setOpen,
-            setVisibilityState: setVisibilityState,
             addSnackbar: addSnackbar,
             onError: onError,
         });
@@ -97,7 +95,6 @@ AdminReasonModal.propTypes = {
     setOpen: PropTypes.func.isRequired,
     offer: PropTypes.instanceOf(Offer),
     handleDisableOffer: PropTypes.func,
-    setVisibilityState: PropTypes.func.isRequired,
     onError: PropTypes.func.isRequired,
 };
 

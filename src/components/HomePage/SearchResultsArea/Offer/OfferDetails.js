@@ -29,7 +29,6 @@ const OfferDetails = ({
     isPage,
     addSnackbar,
     visibilityState,
-    setVisibilityState,
     isMobile,
     setShowAdminReasonModal,
     handleError,
@@ -106,7 +105,6 @@ const OfferDetails = ({
                     sessionData={sessionData}
                     classes={classes}
                     visibilityState={visibilityState}
-                    setVisibilityState={setVisibilityState}
                     addSnackbar={addSnackbar}
                     setShowAdminReasonModal={setShowAdminReasonModal}
                     onError={handleError}
@@ -269,7 +267,6 @@ OfferDetails.propTypes = {
     isPage: PropTypes.bool,
     addSnackbar: PropTypes.func.isRequired,
     visibilityState: PropTypes.object.isRequired,
-    setVisibilityState: PropTypes.func.isRequired,
     isMobile: PropTypes.bool.isRequired,
     setShowAdminReasonModal: PropTypes.func.isRequired,
     handleError: PropTypes.func.isRequired,

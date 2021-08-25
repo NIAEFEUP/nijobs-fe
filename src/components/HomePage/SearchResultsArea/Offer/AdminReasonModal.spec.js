@@ -9,11 +9,10 @@ jest.mock("../../../../services/offerVisibilityService");
 
 describe("AdminReasonModal", () => {
 
-    let setOpen, setVisibilityState, onError, offer;
+    let setOpen, onError, offer;
 
     beforeEach(() => {
         setOpen = jest.fn();
-        setVisibilityState = jest.fn();
         onError = jest.fn();
         offer = new Offer({
             _id: "id1",
@@ -39,7 +38,6 @@ describe("AdminReasonModal", () => {
                     open={false}
                     setOpen={setOpen}
                     offer={offer}
-                    setVisibilityState={setVisibilityState}
                     onError={onError}
                 />,
                 { theme }
@@ -55,7 +53,6 @@ describe("AdminReasonModal", () => {
                     open={true}
                     setOpen={setOpen}
                     offer={offer}
-                    setVisibilityState={setVisibilityState}
                     onError={onError}
                 />,
                 { theme }
@@ -75,8 +72,6 @@ describe("AdminReasonModal", () => {
             offer,
             adminReason,
             setOpen,
-            setVisibilityState,
-            visibilityState,
             onError,
         }) => {
             await disableOfferService(offer.id, adminReason).then(() => {
@@ -84,7 +79,6 @@ describe("AdminReasonModal", () => {
                 offer.hiddenReason = "ADMIN_REASON";
                 offer.isHidden = true;
                 offer.adminReason = adminReason;
-                setVisibilityState({ ...visibilityState, isVisible: false, isDisabled: true });
             }).catch((err) => {
                 onError(err);
             });
@@ -97,7 +91,6 @@ describe("AdminReasonModal", () => {
                     setOpen={setOpen}
                     offer={offer}
                     handleDisableOffer={handleDisableOffer}
-                    setVisibilityState={setVisibilityState}
                     onError={onError}
                 />,
                 { theme }
@@ -128,7 +121,6 @@ describe("AdminReasonModal", () => {
                 await fireEvent.click(submitButton);
             });
 
-            expect(setVisibilityState).toHaveBeenCalledTimes(0);
             expect(setOpen).toHaveBeenCalledTimes(0);
             expect(onError).toHaveBeenCalledTimes(0);
             expect(helperText).toBeInTheDocument();
@@ -149,7 +141,6 @@ describe("AdminReasonModal", () => {
                 await fireEvent.click(submitButton);
             });
 
-            expect(setVisibilityState).toHaveBeenCalledTimes(1);
             expect(setOpen).toHaveBeenCalledTimes(1);
             expect(onError).toHaveBeenCalledTimes(0);
         });
@@ -169,7 +160,6 @@ describe("AdminReasonModal", () => {
                 await fireEvent.click(submitButton);
             });
 
-            expect(setVisibilityState).toHaveBeenCalledTimes(0);
             expect(setOpen).toHaveBeenCalledTimes(0);
             expect(onError).toHaveBeenCalledTimes(1);
         });

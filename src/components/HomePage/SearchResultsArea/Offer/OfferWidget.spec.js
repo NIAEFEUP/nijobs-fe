@@ -5,9 +5,7 @@ import { renderWithStoreAndTheme, screen, act, fireEvent } from "../../../../tes
 import { createTheme } from "@material-ui/core/styles";
 import LOADING_MESSAGES from "./offerLoadingMessages";
 import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
-import { SnackbarProvider } from "notistack";
 import useSession from "../../../../hooks/useSession";
-import Notifier from "../../../Notifications/Notifier";
 import {
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
@@ -25,9 +23,13 @@ describe("OfferWidget", () => {
         ownerName: "company1",
         ownerLogo: "",
         location: "location1",
+        jobMinDuration: 1,
+        jobMaxDuration: 12,
         jobStartDate: (new Date()).toISOString(),
         publishDate: "2021-04-22T22:35:57.177Z",
         publishEndDate: "2021-09-19T23:00:00.000Z",
+        isPaid: false,
+        vacancies: 2,
         description: "description1",
     });
     const theme = createTheme();
@@ -134,9 +136,13 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
+                isPaid: false,
+                vacancies: 2,
                 description: "description1",
                 isHidden: true,
                 hiddenReason: "ADMIN_REQUEST",
@@ -200,104 +206,9 @@ describe("OfferWidget", () => {
         enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
 
         const handleHideOffer = jest.fn();
-        handleHideOffer.mockImplementation(async ({
-            offer,
-            setVisibilityState,
-            visibilityState,
-            onError,
-            addSnackbar,
-        }) => {
-            await hideOfferService(offer.id).then(() => {
-                offer.isHidden = true;
-                setVisibilityState({ ...visibilityState, isVisible: false });
-                addSnackbar({
-                    message: "The offer was hidden",
-                    key: `${Date.now()}-hidden`,
-                });
-            }).catch((err) => {
-                onError(err);
-                addSnackbar({
-                    message: err ? err : "Unexpected Error. Please try again later.",
-                    key: `${Date.now()}-visibilityError`,
-                });
-            });
-        });
-
         const handleDisableOffer = jest.fn();
-        handleDisableOffer.mockImplementation(async ({
-            offer,
-            setVisibilityState,
-            adminReason,
-            onError,
-            addSnackbar,
-        }) => {
-            await handleDisableOffer(offer.id, adminReason).then(() => {
-                offer.isHidden = true;
-                offer.hiddenReason = "ADMIN_REQUEST";
-                offer.adminReason = adminReason;
-                setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: false, isDisabled: true }));
-                addSnackbar({
-                    message: "The offer was disabled",
-                    key: `${Date.now()}-disabled`,
-                });
-            }).catch((err) => {
-                onError(err);
-                addSnackbar({
-                    message: err ? err : "Unexpected Error. Please try again later.",
-                    key: `${Date.now()}-visibilityError`,
-                });
-            });
-        });
-
         const handleCompanyEnableOffer = jest.fn();
-        handleCompanyEnableOffer.mockImplementation(async ({
-            offer,
-            setVisibilityState,
-            visibilityState,
-            onError,
-            addSnackbar,
-        }) => {
-            await enableOfferService(offer.id).then(() => {
-                offer.isHidden = false;
-                setVisibilityState({ ...visibilityState, isVisible: true });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: `${Date.now()}-enabled`,
-                });
-            }).catch((err) => {
-                onError(err);
-                addSnackbar({
-                    message: err ? err : "Unexpected Error. Please try again later.",
-                    key: `${Date.now()}-visibilityError`,
-                });
-            });
-        });
-
         const handleAdminEnableOffer = jest.fn();
-        handleAdminEnableOffer.mockImplementation(async ({
-            offer,
-            setVisibilityState,
-            visibilityState,
-            onError,
-            addSnackbar,
-        }) => {
-            await enableOfferService(offer.id).then(() => {
-                offer.isHidden = false;
-                offer.hiddenReason = null;
-                offer.adminReason = null;
-                setVisibilityState({ ...visibilityState, isVisible: true, isDisabled: false });
-                addSnackbar({
-                    message: "The offer was enabled",
-                    key: `${Date.now()}-enabled`,
-                });
-            }).catch((err) => {
-                onError(err);
-                addSnackbar({
-                    message: err ? err : "Unexpected Error. Please try again later.",
-                    key: `${Date.now()}-visibilityError`,
-                });
-            });
-        });
 
         it ("should hide offer if the owner company clicks the hide button", async () => {
 
@@ -308,6 +219,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -347,9 +260,7 @@ describe("OfferWidget", () => {
                 await fireEvent.click(visibilityButton);
             });
 
-            expect(screen.queryByText(
-                "This offer is hidden so it won't show up in search results", { exact: false }
-            )).toBeInTheDocument();
+            expect(handleHideOffer).toHaveBeenCalled();
         });
 
         it ("should hide offer if an admin clicks the hide button", async () => {
@@ -361,6 +272,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -398,9 +311,7 @@ describe("OfferWidget", () => {
                 await fireEvent.click(visibilityButton);
             });
 
-            expect(screen.queryByText(
-                "This offer is hidden so it won't show up in search results", { exact: false }
-            )).toBeInTheDocument();
+            expect(handleHideOffer).toHaveBeenCalled();
         });
 
         it ("should enable hidden offer if the owner company clicks the enable button", async () => {
@@ -412,6 +323,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -451,10 +364,7 @@ describe("OfferWidget", () => {
                 await fireEvent.click(visibilityButton);
             });
 
-            expect(screen.queryByText(
-                "This offer is hidden so it won't show up in search results",
-                { exact: false }
-            )).not.toBeInTheDocument();
+            expect(handleCompanyEnableOffer).toHaveBeenCalled();
         });
 
         it ("should show special message if the owner company is blocked", () => {
@@ -466,9 +376,13 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
+                isPaid: true,
+                vacancies: 1,
                 description: "description1",
                 isHidden: true,
                 hiddenReason: "COMPANY_BLOCKED",
@@ -508,6 +422,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -556,6 +472,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -612,6 +530,8 @@ describe("OfferWidget", () => {
                 ownerName: "company1",
                 ownerLogo: "",
                 location: "location1",
+                jobMinDuration: 1,
+                jobMaxDuration: 12,
                 jobStartDate: (new Date()).toISOString(),
                 publishDate: "2021-04-22T22:35:57.177Z",
                 publishEndDate: "2021-09-19T23:00:00.000Z",
@@ -647,63 +567,7 @@ describe("OfferWidget", () => {
                 await fireEvent.click(visibilityButton);
             });
 
-            // using adminReason instead of anotherOffer.adminReason,
-            // because anotherOffer.adminReason is set to null when the offer is enabled
-            expect(screen.queryByText(adminReason, { exact: false })).not.toBeInTheDocument();
-            expect(screen.queryByText("Offer disabled by an admin.", { exact: false })).not.toBeInTheDocument();
-        });
-
-        it ("should show snackbar message if the hide offer service fails", async () => {
-
-            const anotherOffer = new Offer({
-                _id: "id1",
-                title: "position1",
-                owner: "company_id",
-                ownerName: "company1",
-                ownerLogo: "",
-                location: "location1",
-                jobStartDate: (new Date()).toISOString(),
-                publishDate: "2021-04-22T22:35:57.177Z",
-                publishEndDate: "2021-09-19T23:00:00.000Z",
-                description: "description1",
-                isHidden: false,
-                hiddenReason: null,
-                adminReason: null,
-            });
-
-            // Simulate network problem
-            fetch.mockAbort();
-
-            hideOfferService.mockImplementation(() => Promise.reject());
-
-            useSession.mockImplementation(() => ({
-                isLoggedIn: true, data: { company: { name: "company1", _id: "company_id" } },
-            }));
-
-            renderWithStoreAndTheme(
-                <SnackbarProvider maxSnack={3}>
-                    <Notifier />
-                    <OfferWidget
-                        offer={anotherOffer}
-                        handleHideOffer={handleHideOffer}
-                        handleDisableOffer={handleDisableOffer}
-                        handleCompanyEnableOffer={handleCompanyEnableOffer}
-                        handleAdminEnableOffer={handleAdminEnableOffer}
-                    />
-                </SnackbarProvider>,
-                { theme }
-            );
-
-            const visibilityButton = screen.getByRole("hideEnableOfferButton");
-            expect(visibilityButton).toBeInTheDocument();
-
-            await act(async () => {
-                await fireEvent.click(visibilityButton);
-            });
-
-            expect(await screen.findByText("Unexpected Error. Please try again later.")).toBeInTheDocument();
+            expect(handleAdminEnableOffer).toHaveBeenCalled();
         });
     });
-
-
 });

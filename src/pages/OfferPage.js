@@ -3,7 +3,6 @@ import { useParams, Redirect } from "react-router-dom";
 
 import OfferWidget from "../components/HomePage/SearchResultsArea/Offer/OfferWidget";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-import { getOffer } from "../services/getOfferService";
 import { CardContent } from "@material-ui/core";
 
 import {
@@ -11,51 +10,40 @@ import {
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
 } from "../services/offerVisibilityService";
+import useOffer from "../hooks/useOffer";
 
 export const OfferPageControllerContext = React.createContext();
 
 export const OfferPageController = () => {
     const { id } = useParams();
     const [offer, setOffer] = useState(null);
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { offerData, error, mutate } = useOffer(id);
+    const redirectProps = { to: { pathname: "/not-found" } };
 
     useEffect(() => {
-        getOffer(id)
-            .then((offer) => {
-                setOffer(new Offer(offer));
-                setLoading(false);
-            })
-            .catch(() => {
-                setError("Unexpected Error. Could not fetch requested offer.");
-            });
-        return () => {
-        };
-    }, [id]);
-
-    const redirectProps = { to: { pathname: "/not-found" } };
+        if (offerData) {
+            setOffer(new Offer(offerData));
+            setLoading(false);
+        }
+    }, [offerData]);
 
     const handleDisableOffer = useCallback(async ({
         offer,
         adminReason,
         setOpen,
-        setVisibilityState,
-        visibilityState,
         addSnackbar,
         onError,
     }) => {
         await disableOfferService(offer.id, adminReason).then(() => {
             setOpen(false);
-            setOffer((offer) => (
-                new Offer({
-                    ...offer,
-                    _id: offer.id,
-                    hiddenReason: "ADMIN_REQUEST",
-                    isHidden: true,
-                    adminReason: adminReason,
-                })
-            ));
-            setVisibilityState({ ...visibilityState, isVisible: false, isDisabled: true });
+            mutate({
+                ...offerData,
+                _id: offer.id,
+                hiddenReason: "ADMIN_REQUEST",
+                isHidden: true,
+                adminReason: adminReason,
+            });
             addSnackbar({
                 message: "The offer was disabled",
                 key: `${Date.now()}-disabled`,
@@ -63,25 +51,20 @@ export const OfferPageController = () => {
         }).catch((err) => {
             onError(err);
         });
-    }, []);
+    }, [mutate, offerData]);
 
     const handleHideOffer = useCallback(async ({
         offer,
-        setVisibilityState,
-        visibilityState,
         addSnackbar,
         onError,
     }) => {
         await hideOfferService(offer.id).then(() => {
-            setOffer((offer) => (
-                new Offer({
-                    ...offer,
-                    _id: offer.id,
-                    hiddenReason: "COMPANY_REQUEST",
-                    isHidden: true,
-                })
-            ));
-            setVisibilityState({ ...visibilityState, isVisible: false });
+            mutate({
+                ...offerData,
+                _id: offer.id,
+                hiddenReason: "COMPANY_REQUEST",
+                isHidden: true,
+            });
             addSnackbar({
                 message: "The offer was hidden",
                 key: `${Date.now()}-hidden`,
@@ -89,24 +72,19 @@ export const OfferPageController = () => {
         }).catch((err) => {
             onError(err);
         });
-    }, []);
+    }, [mutate, offerData]);
 
     const handleCompanyEnableOffer = useCallback(async ({
         offer,
-        setVisibilityState,
-        visibilityState,
         addSnackbar,
         onError,
     }) => {
         await enableOfferService(offer.id).then(() => {
-            setOffer((offer) => (
-                new Offer({
-                    ...offer,
-                    _id: offer.id,
-                    isHidden: false,
-                })
-            ));
-            setVisibilityState({ ...visibilityState, isVisible: true });
+            mutate({
+                ...offerData,
+                _id: offer.id,
+                isHidden: false,
+            });
             addSnackbar({
                 message: "The offer was enabled",
                 key: `${Date.now()}-enabled`,
@@ -114,26 +92,21 @@ export const OfferPageController = () => {
         }).catch((err) => {
             onError(err);
         });
-    }, []);
+    }, [mutate, offerData]);
 
     const handleAdminEnableOffer = useCallback(async ({
         offer,
-        setVisibilityState,
-        visibilityState,
         addSnackbar,
         onError,
     }) => {
         await enableOfferService(offer.id).then(() => {
-            setOffer((offer) => (
-                new Offer({
-                    ...offer,
-                    _id: offer.id,
-                    isHidden: false,
-                    hiddenReason: null,
-                    adminReason: null,
-                })
-            ));
-            setVisibilityState({ ...visibilityState, isVisible: true, isDisabled: false });
+            mutate({
+                ...offerData,
+                _id: offer.id,
+                isHidden: false,
+                hiddenReason: null,
+                adminReason: null,
+            });
             addSnackbar({
                 message: "The offer was enabled",
                 key: `${Date.now()}-enabled`,
@@ -141,7 +114,7 @@ export const OfferPageController = () => {
         }).catch((err) => {
             onError(err);
         });
-    }, []);
+    }, [mutate, offerData]);
 
     return {
         controllerOptions: {
@@ -172,7 +145,7 @@ const OfferPage = () => {
         redirectProps,
     } = useContext(OfferPageControllerContext);
 
-    if (error === null) {
+    if (!error) {
         return (
             <CardContent>
                 <OfferWidget

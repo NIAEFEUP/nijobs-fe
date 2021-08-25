@@ -46,14 +46,12 @@ const SearchResultsController = ({
         offer,
         adminReason,
         setOpen,
-        setVisibilityState,
         addSnackbar,
         onError,
     }) => {
         await disableOfferService(offer.id, adminReason).then(() => {
             setOpen(false);
             disableOffer(selectedOfferIdx, adminReason);
-            setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: false, isDisabled: true }));
             addSnackbar({
                 message: "The offer was disabled",
                 key: `${Date.now()}-disabled`,
@@ -65,13 +63,11 @@ const SearchResultsController = ({
 
     const handleHideOffer = useCallback(async ({
         offer,
-        setVisibilityState,
         addSnackbar,
         onError,
     }) => {
         await hideOfferService(offer.id).then(() => {
             hideOffer(selectedOfferIdx);
-            setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: false }));
             addSnackbar({
                 message: "The offer was hidden",
                 key: `${Date.now()}-hidden`,
@@ -83,13 +79,11 @@ const SearchResultsController = ({
 
     const handleCompanyEnableOffer = useCallback(async ({
         offer,
-        setVisibilityState,
         addSnackbar,
         onError,
     }) => {
         await enableOfferService(offer.id).then(() => {
             companyEnableOffer(selectedOfferIdx);
-            setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: true }));
             addSnackbar({
                 message: "The offer was enabled",
                 key: `${Date.now()}-enabled`,
@@ -101,13 +95,11 @@ const SearchResultsController = ({
 
     const handleAdminEnableOffer = useCallback(async ({
         offer,
-        setVisibilityState,
         addSnackbar,
         onError,
     }) => {
         await enableOfferService(offer.id).then(() => {
             adminEnableOffer(selectedOfferIdx);
-            setVisibilityState((visibilityState) => ({ ...visibilityState, isVisible: true, isDisabled: false }));
             addSnackbar({
                 message: "The offer was enabled",
                 key: `${Date.now()}-enabled`,

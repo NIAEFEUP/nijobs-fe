@@ -8,7 +8,6 @@ const OfferVisibilityOptions = ({
     sessionData,
     classes,
     visibilityState,
-    setVisibilityState,
     addSnackbar,
     setShowAdminReasonModal,
     onError,
@@ -23,14 +22,12 @@ const OfferVisibilityOptions = ({
         if (visibilityState.isVisible) {
             await handleHideOffer({
                 offer: offer,
-                setVisibilityState: setVisibilityState,
                 addSnackbar: addSnackbar,
                 onError: onError,
             });
         } else  {
             await handleCompanyEnableOffer({
                 offer: offer,
-                setVisibilityState: setVisibilityState,
                 addSnackbar: addSnackbar,
                 onError: onError,
             });
@@ -43,7 +40,6 @@ const OfferVisibilityOptions = ({
         } else {
             await handleAdminEnableOffer({
                 offer: offer,
-                setVisibilityState: setVisibilityState,
                 addSnackbar: addSnackbar,
                 onError: onError,
             });

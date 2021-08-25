@@ -5,10 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import { renderWithStoreAndTheme, act, screen } from "../test-utils";
 import useComponentController from "../hooks/useComponentController";
 import OfferPage, { OfferPageController, OfferPageControllerContext } from "./OfferPage";
-import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-import { getOffer } from "../services/getOfferService";
+import useOffer from "../hooks/useOffer";
 
-jest.mock("../services/getOfferService");
+jest.mock("../hooks/useOffer");
 
 const theme = createMuiTheme({});
 
@@ -32,13 +31,9 @@ const OfferPageWrapper = ({ children }) => {
 
 describe("Offer Page", () => {
 
-    beforeEach(() => {
-        fetch.resetMocks();
-    });
-
     it("should render successfully", async () => {
 
-        const offer = new Offer({
+        const offerData = {
             _id: "id1",
             title: "position1",
             owner: "company_id",
@@ -49,9 +44,9 @@ describe("Offer Page", () => {
             publishDate: "2021-04-22T22:35:57.177Z",
             publishEndDate: "2021-09-19T23:00:00.000Z",
             description: "description1",
-        });
+        };
 
-        getOffer.mockImplementation(() => Promise.resolve(offer));
+        useOffer.mockImplementation(() => ({ offerData: offerData, error: null, mutate: () => {} }));
 
         await act(async () => {
             await renderWithStoreAndTheme(

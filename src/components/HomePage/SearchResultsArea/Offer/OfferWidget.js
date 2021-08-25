@@ -72,7 +72,6 @@ const OfferWidget = ({
                     setOpen={setShowAdminReasonModal}
                     offer={offer}
                     handleDisableOffer={handleDisableOffer}
-                    setVisibilityState={setVisibilityState}
                     onError={handleError}
                 />
                 {(offer === null && !isPage) ?
@@ -92,7 +91,6 @@ const OfferWidget = ({
                             isPage={isPage}
                             addSnackbar={addSnackbar}
                             visibilityState={visibilityState}
-                            setVisibilityState={setVisibilityState}
                             isMobile={isMobile}
                             setShowAdminReasonModal={setShowAdminReasonModal}
                             handleError={handleError}
