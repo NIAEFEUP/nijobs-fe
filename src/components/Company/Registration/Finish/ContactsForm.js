@@ -64,7 +64,7 @@ export const useContacts = ({ control }) => {
     return {
         validateStep,
         fields,
-        append,
+        append: () => append({ value: "" }),
         remove,
     };
 };
@@ -125,7 +125,7 @@ const ContactsForm = () => {
                         color="primary"
                         startIcon={<AddCircle />}
                         disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
-                        onClick={() => append({ value: "" })}
+                        onClick={append}
                         className={classes.addContactBtn}
                     >
                 Add Entry
