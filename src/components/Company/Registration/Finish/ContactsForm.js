@@ -125,7 +125,7 @@ const ContactsForm = () => {
                         color="primary"
                         startIcon={<AddCircle />}
                         disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
-                        onClick={() => append()}
+                        onClick={() => append({ value: "" })}
                         className={classes.addContactBtn}
                     >
                 Add Entry
