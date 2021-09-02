@@ -56,7 +56,7 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                     </Grid>
                     <Grid item>
                         <Typography>
-                            As a Company, you can advertise yout job opportunities to students!
+                            As a Company, you can publish your job or internship opportunities to students!
                         </Typography>
                     </Grid>
 
