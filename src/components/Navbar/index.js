@@ -27,7 +27,14 @@ import { Wrap } from "../../utils";
 
 const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, desktopLayout, title, position }) => {
 
-    const { data, isValidating, error, reset: resetSession, isLoggedIn, revalidate: updateSessionInfo } = useSession();
+    const { data,
+        isValidating,
+        error,
+        reset: resetSession,
+        isLoggedIn,
+        revalidate: updateSessionInfo,
+    } = useSession({ revalidateOnMount: true });
+
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const [loginPending, toggleLoginPending] = useToggle(false);
 

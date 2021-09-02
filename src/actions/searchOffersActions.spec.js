@@ -5,6 +5,10 @@ import {
     setSearchOffers,
     setJobDuration,
     setJobType,
+    hideOffer,
+    disableOffer,
+    companyEnableOffer,
+    adminEnableOffer,
     resetAdvancedSearchFields,
     setOffersFetchError,
     resetOffersFetchError,
@@ -81,6 +85,52 @@ describe("Search Offers actions", () => {
         };
 
         expect(setOffersFetchError(error)).toEqual(expectedAction);
+    });
+
+    it("should return Hide Offer action", () => {
+
+        const offerIdx = 0;
+        const expectedAction = {
+            type: OfferSearchTypes.HIDE_OFFER,
+            offerIdx,
+        };
+
+        expect(hideOffer(offerIdx)).toEqual(expectedAction);
+    });
+
+    it("should return Disable Offer action", () => {
+
+        const offerIdx = 0;
+        const adminReason = "This offer is offensive";
+        const expectedAction = {
+            type: OfferSearchTypes.DISABLE_OFFER,
+            offerIdx,
+            adminReason,
+        };
+
+        expect(disableOffer(offerIdx, adminReason)).toEqual(expectedAction);
+    });
+
+    it("should return Hide Offer action", () => {
+
+        const offerIdx = 0;
+        const expectedAction = {
+            type: OfferSearchTypes.COMPANY_ENABLE_OFFER,
+            offerIdx,
+        };
+
+        expect(companyEnableOffer(offerIdx)).toEqual(expectedAction);
+    });
+
+    it("should return Hide Offer action", () => {
+
+        const offerIdx = 0;
+        const expectedAction = {
+            type: OfferSearchTypes.ADMIN_ENABLE_OFFER,
+            offerIdx,
+        };
+
+        expect(adminEnableOffer(offerIdx)).toEqual(expectedAction);
     });
 
     it("should return Reset Offers Fetch Error action", () => {

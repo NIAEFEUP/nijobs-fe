@@ -45,6 +45,8 @@ const useStyles = makeStyles(() => ({
 
 export const useContacts = ({ control }) => {
 
+    const DEFAULT_VALUE = { value: "" };
+
     const { fields, append, remove } = useFieldArray({
         control,
         name: "contacts",
@@ -64,7 +66,7 @@ export const useContacts = ({ control }) => {
     return {
         validateStep,
         fields,
-        append,
+        append: () => append({ DEFAULT_VALUE }),
         remove,
     };
 };
@@ -125,7 +127,7 @@ const ContactsForm = () => {
                         color="primary"
                         startIcon={<AddCircle />}
                         disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
-                        onClick={() => append()}
+                        onClick={append}
                         className={classes.addContactBtn}
                     >
                 Add Entry

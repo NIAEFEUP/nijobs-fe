@@ -4,13 +4,13 @@ import { Grid, Divider, Typography } from "@material-ui/core";
 import OfferItemsContainer from "./OfferItemsContainer";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import SearchArea from "../../SearchArea/SearchArea";
-import OfferContent from "../Offer/OfferContent";
+import OfferWidget from "../Offer/OfferWidget";
 import Offer from "../Offer/Offer";
 import { WorkOff } from "@material-ui/icons";
 import clsx from "clsx";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
-const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, setSelectedOffer,
+const OffersList = ({ noOffers, classes, offers, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
     showSearchFilters, toggleShowSearchFilters,
 }) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
@@ -24,9 +24,9 @@ const OffersList = ({ noOffers, classes, offers, selectedOffer, offersLoading, s
                     :
                     <OfferItemsContainer
                         offers={offers}
-                        selectedOffer={selectedOffer}
+                        selectedOfferIdx={selectedOfferIdx}
                         loading={offersLoading}
-                        setSelectedOffer={setSelectedOffer}
+                        setSelectedOfferIdx={setSelectedOfferIdx}
                         noOffers={noOffers}
                         showSearchFilters={showSearchFilters}
                         toggleShowSearchFilters={toggleShowSearchFilters}
@@ -53,13 +53,22 @@ OffersList.propTypes = {
     }),
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
-    selectedOffer: PropTypes.instanceOf(Offer),
-    setSelectedOffer: PropTypes.func.isRequired,
+    selectedOfferIdx: PropTypes.number,
+    setSelectedOfferIdx: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
-const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }) => (
+const OfferWidgetSection = ({
+    noOffers,
+    classes,
+    offer,
+    handleDisableOffer,
+    handleHideOffer,
+    handleCompanyEnableOffer,
+    handleAdminEnableOffer,
+    offersLoading,
+}) => (
     <Grid item md={8} id="offer_content" className={classes.fullHeight}>
         {noOffers ?
             <div className={classes.searchOfferErrorContainer}>
@@ -72,13 +81,20 @@ const OfferContentSection = ({ noOffers, classes, selectedOffer, offersLoading }
             </div>
             :
             <div className={classes.offerBodyContainer}>
-                <OfferContent offer={selectedOffer} loading={offersLoading} />
+                <OfferWidget
+                    offer={offer}
+                    handleDisableOffer={handleDisableOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
+                    loading={offersLoading}
+                />
             </div>
         }
     </Grid>
 );
 
-OfferContentSection.propTypes = {
+OfferWidgetSection.propTypes = {
     noOffers: PropTypes.bool.isRequired,
     classes: PropTypes.shape({
         searchOfferErrorContainer: PropTypes.string.isRequired,
@@ -88,13 +104,26 @@ OfferContentSection.propTypes = {
         fullHeight: PropTypes.string.isRequired,
     }),
     offersLoading: PropTypes.bool,
-    selectedOffer: PropTypes.instanceOf(Offer),
+    offer: PropTypes.instanceOf(Offer),
+    handleDisableOffer: PropTypes.func,
+    handleHideOffer: PropTypes.func,
+    handleCompanyEnableOffer: PropTypes.func,
+    handleAdminEnableOffer: PropTypes.func,
 };
 
 const SearchResultsDesktop = () => {
     const {
-        noOffers, offers, offersLoading, selectedOffer,
-        setSelectedOffer, showSearchFilters, toggleShowSearchFilters,
+        noOffers,
+        offers,
+        offersLoading,
+        selectedOfferIdx,
+        setSelectedOfferIdx,
+        handleDisableOffer,
+        handleHideOffer,
+        handleCompanyEnableOffer,
+        handleAdminEnableOffer,
+        showSearchFilters,
+        toggleShowSearchFilters,
     } = useContext(SearchResultsControllerContext);
     const classes = useSearchResultsWidgetStyles();
 
@@ -106,7 +135,7 @@ const SearchResultsDesktop = () => {
         offerItemsContainer: classes.offerItemsContainer,
     };
 
-    const offerContentClasses = {
+    const OfferWidgetClasses = {
         searchOfferErrorContainer: classes.searchOfferErrorContainer,
         reviseCriteriaErrorMessage: classes.reviseCriteriaErrorMessage,
         offerBodyContainer: classes.offerBodyContainer,
@@ -121,8 +150,8 @@ const SearchResultsDesktop = () => {
                 noOffers={noOffers}
                 offers={offers}
                 offersLoading={offersLoading}
-                selectedOffer={selectedOffer}
-                setSelectedOffer={setSelectedOffer}
+                selectedOfferIdx={selectedOfferIdx}
+                setSelectedOfferIdx={setSelectedOfferIdx}
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
             />
@@ -143,10 +172,14 @@ const SearchResultsDesktop = () => {
                     </div>
                 </Grid>
                 :
-                <OfferContentSection
-                    classes={offerContentClasses}
+                <OfferWidgetSection
+                    classes={OfferWidgetClasses}
                     noOffers={noOffers}
-                    selectedOffer={selectedOffer}
+                    offer={selectedOfferIdx !== null && offers?.length > 0 ? offers[selectedOfferIdx] : null}
+                    handleDisableOffer={handleDisableOffer}
+                    handleHideOffer={handleHideOffer}
+                    handleCompanyEnableOffer={handleCompanyEnableOffer}
+                    handleAdminEnableOffer={handleAdminEnableOffer}
                     offersLoading={offersLoading}
                 />
             }

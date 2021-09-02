@@ -1,4 +1,5 @@
 import { OfferSearchTypes } from "../actions/searchOffersActions";
+import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
@@ -64,6 +65,34 @@ export default (state = initialState, action) => {
                 ...state,
                 filterJobDuration: action.filterJobDuration,
             };
+        case OfferSearchTypes.HIDE_OFFER:
+            return {
+                ...state,
+                offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
+                    new Offer({ ...offer, _id: offer.id, isHidden: true, hiddenReason: "COMPANY_REQUEST" })
+                    : offer
+                ) };
+        case OfferSearchTypes.DISABLE_OFFER:
+            return {
+                ...state,
+                offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
+                    new Offer({ ...offer, _id: offer.id, isHidden: true, hiddenReason: "ADMIN_REQUEST", adminReason: action.adminReason })
+                    : offer
+                ) };
+        case OfferSearchTypes.COMPANY_ENABLE_OFFER:
+            return {
+                ...state,
+                offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
+                    new Offer({ ...offer, _id: offer.id, isHidden: false })
+                    : offer
+                ) };
+        case OfferSearchTypes.ADMIN_ENABLE_OFFER:
+            return {
+                ...state,
+                offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
+                    new Offer({ ...offer, _id: offer.id, isHidden: false, hiddenReason: null, adminReason: null })
+                    : offer
+                ) };
         default:
             return state;
     }

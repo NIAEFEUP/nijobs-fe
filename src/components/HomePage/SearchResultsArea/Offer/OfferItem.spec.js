@@ -6,11 +6,13 @@ import Offer from "./Offer";
 describe("OfferItem", () => {
 
     const offer = new Offer({
-        id: "id1",
+        _id: "id1",
         title: "position1",
-        company: { name: "company1" },
+        ownerName: "company1",
         location: "location1",
-        date: "date1",
+        jobStartDate: (new Date()).toISOString(),
+        publishDate: "2021-04-22T22:35:57.177Z",
+        publishEndDate: "2021-09-19T23:00:00.000Z",
         description: "description1",
     });
 
@@ -29,19 +31,27 @@ describe("OfferItem", () => {
             render(<OfferItem offer={offer} />);
 
             expect(screen.getByText(offer.title)).toBeInTheDocument();
-            expect(screen.getByText(offer.company.name)).toBeInTheDocument();
+            expect(screen.getByText(offer.ownerName)).toBeInTheDocument();
             expect(screen.getByText(offer.location)).toBeInTheDocument();
         });
 
     });
 
     describe("interaction", () => {
-        it("should call setSelectedOffer onClick", () => {
-            const setSelectedOfferMock = jest.fn();
-            render(<OfferItem offer={offer} setSelectedOffer={setSelectedOfferMock} />);
+        it("should call setSelectedOfferIdx onClick", () => {
+            const setSelectedOfferIdxMock = jest.fn();
+            const offerIdx = 0;
+            render(
+                <OfferItem
+                    offer={offer}
+                    offerIdx={offerIdx}
+                    selectedOfferIdx={offerIdx}
+                    setSelectedOfferIdx={setSelectedOfferIdxMock}
+                />
+            );
             fireEvent.click(screen.getByText(offer.title));
 
-            expect(setSelectedOfferMock).toHaveBeenCalledWith(offer);
+            expect(setSelectedOfferIdxMock).toHaveBeenCalledWith(offerIdx);
         });
     });
 });

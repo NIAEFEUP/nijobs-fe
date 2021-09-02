@@ -52,8 +52,8 @@ const useStyles = makeStyles((theme) => ({
 
 const defaultLogo = require("./default_icon.svg");
 
-const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
-    const isCurrentlySelected = offer?.id === selectedOffer?.id;
+const OfferItem = ({ offer, offerIdx, selectedOfferIdx, setSelectedOfferIdx, loading }) => {
+    const isCurrentlySelected = selectedOfferIdx === offerIdx;
     const classes = useStyles();
     return (
         <div className={classes.itemWrapper}>
@@ -61,7 +61,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
             <ListItem
                 data-testid={`offer-item${loading ? "-loading" : ""}`}
                 alignItems="flex-start"
-                onClick={() => !loading && setSelectedOffer(offer)}
+                onClick={() => !loading && setSelectedOfferIdx(offerIdx)}
                 className={classes.root}
             >
                 <ListItemAvatar>
@@ -72,8 +72,9 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                         :
                         <Avatar
                             alt="company_logo"
+                            role="company_logo"
                             color="blue"
-                            src={offer?.company?.logo || defaultLogo}
+                            src={offer?.ownerLogo || defaultLogo}
                         />
                     }
                 </ListItemAvatar>
@@ -102,7 +103,7 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
                                 color="primary"
                                 display="block"
                             >
-                                {offer?.company?.name}
+                                {offer?.ownerName}
                             </Typography>
                             <LocationCity fontSize="small" style={{ verticalAlign: "sub" }} />
                             <Typography display="inline" variant="caption">
@@ -119,8 +120,9 @@ const OfferItem = ({ selectedOffer, offer, setSelectedOffer, loading }) => {
 
 OfferItem.propTypes = {
     offer: PropTypes.instanceOf(Offer),
-    selectedOffer: PropTypes.instanceOf(Offer),
-    setSelectedOffer: PropTypes.func,
+    offerIdx: PropTypes.number,
+    selectedOfferIdx: PropTypes.number,
+    setSelectedOfferIdx: PropTypes.func,
     loading: PropTypes.bool,
 };
 

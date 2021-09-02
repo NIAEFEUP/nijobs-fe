@@ -45,10 +45,10 @@ const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
 
 ToggleFiltersButton.propTypes = {
     onClick: PropTypes.func.isRequired,
-    enabled: PropTypes.bool.isRequired,
+    enabled: PropTypes.bool,
 };
 
-const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer, showSearchFilters, toggleShowSearchFilters }) => {
+const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOfferIdx, showSearchFilters, toggleShowSearchFilters }) => {
     const classes = useSearchResultsWidgetStyles();
 
     if (loading) return (
@@ -72,7 +72,7 @@ const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer,
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
-        setSelectedOffer(...args);
+        setSelectedOfferIdx(...args);
     };
 
     return (
@@ -88,8 +88,9 @@ const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer,
                         {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}
-                            selectedOffer={selectedOffer}
-                            setSelectedOffer={handleOfferSelection}
+                            offerIdx={i}
+                            selectedOfferIdx={selectedOfferIdx}
+                            setSelectedOfferIdx={handleOfferSelection}
                             loading={loading}
                         />
                     </React.Fragment>
@@ -102,9 +103,9 @@ const OfferItemsContainer = ({ offers, loading, selectedOffer, setSelectedOffer,
 OfferItemsContainer.propTypes = {
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
-    selectedOffer: PropTypes.instanceOf(Offer),
-    setSelectedOffer: PropTypes.func.isRequired,
-    showSearchFilters: PropTypes.bool.isRequired,
+    selectedOfferIdx: PropTypes.number,
+    setSelectedOfferIdx: PropTypes.func.isRequired,
+    showSearchFilters: PropTypes.bool,
     toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 

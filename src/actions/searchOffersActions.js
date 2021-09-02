@@ -10,6 +10,10 @@ export const OfferSearchTypes = Object.freeze({
     SET_OFFERS_LOADING: "SET_OFFERS_LOADING",
     SET_SEARCH_OFFERS_ERROR: "SET_SEARCH_OFFERS_ERROR",
     SET_JOB_DURATION_TOGGLE: "SET_JOB_DURATION_TOGGLE",
+    HIDE_OFFER: "HIDE_OFFER",
+    DISABLE_OFFER: "DISABLE_OFFER",
+    COMPANY_ENABLE_OFFER: "COMPANY_ENABLE_OFFER",
+    ADMIN_ENABLE_OFFER: "ADMIN_ENABLE_OFFER",
 });
 
 export const setLoadingOffers = (loading) => ({
@@ -59,6 +63,27 @@ export const setTechs = (technologies) => ({
 export const setShowJobDurationSlider = (filterJobDuration) => ({
     type: OfferSearchTypes.SET_JOB_DURATION_TOGGLE,
     filterJobDuration,
+});
+
+export const hideOffer = (offerIdx) => ({
+    type: OfferSearchTypes.HIDE_OFFER,
+    offerIdx,
+});
+
+export const disableOffer = (offerIdx, adminReason) => ({
+    type: OfferSearchTypes.DISABLE_OFFER,
+    offerIdx,
+    adminReason,
+});
+
+export const companyEnableOffer = (offerIdx) => ({
+    type: OfferSearchTypes.COMPANY_ENABLE_OFFER,
+    offerIdx,
+});
+
+export const adminEnableOffer = (offerIdx) => ({
+    type: OfferSearchTypes.ADMIN_ENABLE_OFFER,
+    offerIdx,
 });
 
 export const resetAdvancedSearchFields = () => (dispatch) => {

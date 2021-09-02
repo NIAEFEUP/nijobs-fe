@@ -11,6 +11,7 @@ import CompanyApplicationPage, {
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
+import OfferPage, { OfferPageController, OfferPageControllerContext } from "./pages/OfferPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import {
@@ -112,23 +113,36 @@ const AppRouter = () => (
                 </PageLayout>
             </ProtectedRoute>
             <Route
+                path="/offer/:id"
+            >
+                <PageLayout
+                    key="/offer/:id"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Job Offer"
+                    context={OfferPageControllerContext}
+                    controller={OfferPageController}
+                >
+                    <OfferPage />
+                </PageLayout>
+            </Route>
+            <Route
                 path="/error"
             >
                 <PageLayout
                     key="/error"
                     forceDesktopLayout
                     layout={LayoutType.DESKTOP}
-                    pageTitle="Unexpected error"
+                    pageTitle="Unexpected Error"
                 >
                     <ErrorPage />
                 </PageLayout>
             </Route>
             <Route>
                 <PageLayout
-                    key="NOT_FOUND"
+                    key="/not_found"
                     forceDesktopLayout
                     layout={LayoutType.DESKTOP}
-                    pageTitle="Page not found"
+                    pageTitle="Page Not Found"
                 >
                     <NotFound />
                 </PageLayout>
