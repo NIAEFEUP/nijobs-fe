@@ -15,7 +15,7 @@ import {
     disableOffer as disableOfferService,
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
-} from "../../../../services/offerVisibilityService";
+} from "../../../../services/offerService";
 import {
     adminEnableOffer,
     companyEnableOffer,
@@ -42,71 +42,55 @@ const SearchResultsController = ({
         if (offersLoading) setSelectedOfferIdx(null);
     }, [offersLoading]);
 
-    const handleDisableOffer = useCallback(async ({
-        offer,
-        adminReason,
-        setOpen,
-        addSnackbar,
-        onError,
-    }) => {
-        await disableOfferService(offer.id, adminReason).then(() => {
-            setOpen(false);
+    const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
+        disableOfferService(offer.id, adminReason).then(() => {
             disableOffer(selectedOfferIdx, adminReason);
-            addSnackbar({
-                message: "The offer was disabled",
-                key: `${Date.now()}-disabled`,
-            });
+            if (onSuccess) onSuccess();
         }).catch((err) => {
-            onError(err);
+            if (onError) onError(err);
         });
     }, [disableOffer, selectedOfferIdx]);
 
-    const handleHideOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await hideOfferService(offer.id).then(() => {
-            hideOffer(selectedOfferIdx);
-            addSnackbar({
-                message: "The offer was hidden",
-                key: `${Date.now()}-hidden`,
+    const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        hideOfferService(offer.id)
+            .then(() => {
+                hideOffer(selectedOfferIdx);
+                addSnackbar({
+                    message: "The offer was hidden",
+                    key: `${Date.now()}-hidden`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-        }).catch((err) => {
-            onError(err);
-        });
     }, [hideOffer, selectedOfferIdx]);
 
-    const handleCompanyEnableOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await enableOfferService(offer.id).then(() => {
-            companyEnableOffer(selectedOfferIdx);
-            addSnackbar({
-                message: "The offer was enabled",
-                key: `${Date.now()}-enabled`,
+    const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        enableOfferService(offer.id)
+            .then(() => {
+                companyEnableOffer(selectedOfferIdx);
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-        }).catch((err) => {
-            onError(err);
-        });
     }, [companyEnableOffer, selectedOfferIdx]);
 
-    const handleAdminEnableOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await enableOfferService(offer.id).then(() => {
-            adminEnableOffer(selectedOfferIdx);
-            addSnackbar({
-                message: "The offer was enabled",
-                key: `${Date.now()}-enabled`,
+    const handleAdminEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        enableOfferService(offer.id)
+            .then(() => {
+                adminEnableOffer(selectedOfferIdx);
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-        }).catch((err) => {
-            onError(err);
-        });
     }, [adminEnableOffer, selectedOfferIdx]);
 
 

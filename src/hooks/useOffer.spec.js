@@ -3,6 +3,7 @@ import { render } from "../test-utils";
 import useOffer from "./useOffer";
 
 import useSWR, { mutate } from "swr";
+import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 jest.mock("swr", () => ({
     __esModule: true,
@@ -48,8 +49,9 @@ describe("useOffer hook", () => {
         );
 
         expect(notifyHookResult).toHaveBeenCalledWith(expect.objectContaining({
-            offerData: offerData,
+            offer: new Offer(offerData),
             error: null,
+            loading: false,
             mutate: mutate,
         }));
     });

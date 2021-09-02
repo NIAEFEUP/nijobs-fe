@@ -9,9 +9,9 @@ import useSession from "../../../../hooks/useSession";
 import {
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
-} from "../../../../services/offerVisibilityService";
+} from "../../../../services/offerService";
 
-jest.mock("../../../../services/offerVisibilityService");
+jest.mock("../../../../services/offerService");
 jest.mock("../../../../hooks/useSession");
 
 describe("OfferWidget", () => {

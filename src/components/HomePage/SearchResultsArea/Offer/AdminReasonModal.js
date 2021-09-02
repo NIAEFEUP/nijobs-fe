@@ -25,23 +25,30 @@ const AdminReasonModal = ({
     onError,
 }) => {
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
         resolver: yupResolver(AdminReasonModalSchema),
         reValidateMode: "onChange",
     });
 
-    const onSubmit = async (data) => {
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const onSuccess = () => {
+        handleClose();
+        addSnackbar({
+            message: "The offer was disabled",
+            key: `${Date.now()}-disabled`,
+        });
+    };
+
+    const onSubmit = async ({ adminReason }) => {
         await handleDisableOffer({
-            offer: offer,
-            adminReason: data.adminReason,
-            setOpen: setOpen,
-            addSnackbar: addSnackbar,
-            onError: onError,
+            offer,
+            adminReason,
+            onError,
+            onSuccess,
         });
     };
 
@@ -76,6 +83,7 @@ const AdminReasonModal = ({
                     </Button>
                     <Button
                         type="submit"
+                        role="disableOffer"
                         color="primary"
                         variant="contained"
                         disabled={!!errors.adminReason}

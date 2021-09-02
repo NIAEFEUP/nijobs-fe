@@ -3,9 +3,9 @@ import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../../tes
 import { createTheme } from "@material-ui/core/styles";
 import AdminReasonModal from "./AdminReasonModal";
 import Offer from "./Offer";
-import { disableOffer as disableOfferService } from "../../../../services/offerVisibilityService";
+import { disableOffer as disableOfferService } from "../../../../services/offerService";
 
-jest.mock("../../../../services/offerVisibilityService");
+jest.mock("../../../../services/offerService");
 
 describe("AdminReasonModal", () => {
 
@@ -71,11 +71,11 @@ describe("AdminReasonModal", () => {
         handleDisableOffer.mockImplementation(async ({
             offer,
             adminReason,
-            setOpen,
+            onSuccess,
             onError,
         }) => {
             await disableOfferService(offer.id, adminReason).then(() => {
-                setOpen(false);
+                onSuccess();
                 offer.hiddenReason = "ADMIN_REASON";
                 offer.isHidden = true;
                 offer.adminReason = adminReason;

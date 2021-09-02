@@ -133,6 +133,9 @@ const SearchResultsMobile = () => {
         offerItemsContainer: classes.offerItemsContainer,
     };
 
+    const selectedOffer = (selectedOfferIdx !== null && offers?.length > selectedOfferIdx)
+        ? offers[selectedOfferIdx] : null;
+
     return (
         <React.Fragment>
             <OffersList
@@ -159,7 +162,7 @@ const SearchResultsMobile = () => {
                     open={openPreview}
                     toggleOpenPreview={toggleOpenPreview}
                     offerWidgetWrapperClassName={classes.offerBodyContainer}
-                    offer={selectedOfferIdx !== null && offers?.length > 0 ? offers[selectedOfferIdx] : null}
+                    offer={selectedOffer}
                     handleDisableOffer={handleDisableOffer}
                     handleHideOffer={handleHideOffer}
                     handleCompanyEnableOffer={handleCompanyEnableOffer}

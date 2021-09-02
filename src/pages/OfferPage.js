@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useCallback } from "react";
+import React, { useContext, useCallback } from "react";
 import { useParams, Redirect } from "react-router-dom";
 
 import OfferWidget from "../components/HomePage/SearchResultsArea/Offer/OfferWidget";
@@ -9,112 +9,89 @@ import {
     disableOffer as disableOfferService,
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
-} from "../services/offerVisibilityService";
+} from "../services/offerService";
 import useOffer from "../hooks/useOffer";
 
 export const OfferPageControllerContext = React.createContext();
 
 export const OfferPageController = () => {
     const { id } = useParams();
-    const [offer, setOffer] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const { offerData, error, mutate } = useOffer(id);
+    const { offer, error, loading, mutate } = useOffer(id);
     const redirectProps = { to: { pathname: "/not-found" } };
 
-    useEffect(() => {
-        if (offerData) {
-            setOffer(new Offer(offerData));
-            setLoading(false);
-        }
-    }, [offerData]);
+    const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
+        disableOfferService(offer.id, adminReason)
+            .then(() => {
+                mutate(new Offer({
+                    ...offer,
+                    _id: offer.id,
+                    hiddenReason: "ADMIN_REQUEST",
+                    isHidden: true,
+                    adminReason,
+                }));
+                if (onSuccess) onSuccess();
+            })
+            .catch((err) => {
+                if (onError) onError(err);
+            });
+    }, [mutate]);
 
-    const handleDisableOffer = useCallback(async ({
-        offer,
-        adminReason,
-        setOpen,
-        addSnackbar,
-        onError,
-    }) => {
-        await disableOfferService(offer.id, adminReason).then(() => {
-            setOpen(false);
-            mutate({
-                ...offerData,
-                _id: offer.id,
-                hiddenReason: "ADMIN_REQUEST",
-                isHidden: true,
-                adminReason: adminReason,
+    const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        hideOfferService(offer.id)
+            .then(() => {
+                mutate(new Offer({
+                    ...offer,
+                    _id: offer.id,
+                    hiddenReason: "COMPANY_REQUEST",
+                    isHidden: true,
+                }));
+                addSnackbar({
+                    message: "The offer was hidden",
+                    key: `${Date.now()}-hidden`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-            addSnackbar({
-                message: "The offer was disabled",
-                key: `${Date.now()}-disabled`,
-            });
-        }).catch((err) => {
-            onError(err);
-        });
-    }, [mutate, offerData]);
+    }, [mutate]);
 
-    const handleHideOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await hideOfferService(offer.id).then(() => {
-            mutate({
-                ...offerData,
-                _id: offer.id,
-                hiddenReason: "COMPANY_REQUEST",
-                isHidden: true,
+    const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        enableOfferService(offer.id)
+            .then(() => {
+                mutate(new Offer({
+                    ...offer,
+                    _id: offer.id,
+                    isHidden: false,
+                }));
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-            addSnackbar({
-                message: "The offer was hidden",
-                key: `${Date.now()}-hidden`,
-            });
-        }).catch((err) => {
-            onError(err);
-        });
-    }, [mutate, offerData]);
+    }, [mutate]);
 
-    const handleCompanyEnableOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await enableOfferService(offer.id).then(() => {
-            mutate({
-                ...offerData,
-                _id: offer.id,
-                isHidden: false,
+    const handleAdminEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        enableOfferService(offer.id)
+            .then(() => {
+                mutate(new Offer({
+                    ...offer,
+                    _id: offer.id,
+                    isHidden: false,
+                    hiddenReason: null,
+                    adminReason: null,
+                }));
+                addSnackbar({
+                    message: "The offer was enabled",
+                    key: `${Date.now()}-enabled`,
+                });
+            })
+            .catch((err) => {
+                if (onError) onError(err);
             });
-            addSnackbar({
-                message: "The offer was enabled",
-                key: `${Date.now()}-enabled`,
-            });
-        }).catch((err) => {
-            onError(err);
-        });
-    }, [mutate, offerData]);
-
-    const handleAdminEnableOffer = useCallback(async ({
-        offer,
-        addSnackbar,
-        onError,
-    }) => {
-        await enableOfferService(offer.id).then(() => {
-            mutate({
-                ...offerData,
-                _id: offer.id,
-                isHidden: false,
-                hiddenReason: null,
-                adminReason: null,
-            });
-            addSnackbar({
-                message: "The offer was enabled",
-                key: `${Date.now()}-enabled`,
-            });
-        }).catch((err) => {
-            onError(err);
-        });
-    }, [mutate, offerData]);
+    }, [mutate]);
 
     return {
         controllerOptions: {

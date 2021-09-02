@@ -45,6 +45,8 @@ const useStyles = makeStyles(() => ({
 
 export const useContacts = ({ control }) => {
 
+    const DEFAULT_VALUE = { value: "" };
+
     const { fields, append, remove } = useFieldArray({
         control,
         name: "contacts",
@@ -64,7 +66,7 @@ export const useContacts = ({ control }) => {
     return {
         validateStep,
         fields,
-        append: () => append({ value: "" }),
+        append: () => append({ DEFAULT_VALUE }),
         remove,
     };
 };

@@ -1,9 +1,9 @@
 import config from "../config";
 
-import { hideOffer, disableOffer, enableOffer } from "./offerVisibilityService";
+import { hideOffer, disableOffer, enableOffer } from "./offerService";
 const { API_HOSTNAME } = config;
 
-describe("Offer Visibility Service", () => {
+describe("Offer Service", () => {
 
     const id = "60f16140fb2b9800321e2ca1";
     const adminReason = "This offer is offensive.";

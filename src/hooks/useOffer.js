@@ -1,4 +1,5 @@
 import useSWR from "swr";
+import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
 import config from "../config";
 const { API_HOSTNAME } = config;
@@ -30,8 +31,9 @@ export default (id) => {
     const { data, error, mutate } = useSWR(`${API_HOSTNAME}/offers/${id}`, getOffer);
 
     return {
-        offerData: data,
+        offer: data ? new Offer(data) : null,
         error,
+        loading: !data,
         mutate,
     };
 
