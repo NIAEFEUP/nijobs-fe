@@ -84,7 +84,7 @@ const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOff
                     onClick={() => toggleShowSearchFilters()}
                 />
                 {offers.map((offer, i) => (
-                    <React.Fragment key={offer.id}>
+                    <React.Fragment key={offer._id}>
                         {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}

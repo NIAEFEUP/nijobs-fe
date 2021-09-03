@@ -71,7 +71,7 @@ const OfferDetails = ({
                                 isPage ?
                                     offer.title
                                     :
-                                    <Link href={`/offer/${offer.id}`} className={classes.offerTitleLink}>
+                                    <Link href={`/offer/${offer._id}`} className={classes.offerTitleLink}>
                                         {offer.title}
                                     </Link>
                         }

@@ -116,7 +116,7 @@ describe("Offer Page", () => {
         }));
 
         useOffer.mockImplementation(() => ({
-            offer: new Offer({ ...offer, _id: offer.id, isHidden: true }),
+            offer: new Offer({ ...offer, isHidden: true }),
             loading: false,
             error: null,
             mutate: jest.fn() }));
