@@ -96,7 +96,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
                                 <Wrap
                                     on={data?.company && !data?.company?.hasFinishedRegistration}
                                     Wrapper={({ children }) =>
-                                        <Badge variant="dot" color="secondary" overlap="circle">
+                                        <Badge variant="dot" color="secondary" overlap="circle" data-testid="finish-registration-badge">
                                             {children}
                                         </Badge>}
                                 >
