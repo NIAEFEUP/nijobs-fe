@@ -94,7 +94,7 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
                             disableRipple
                             endIcon={
                                 <Wrap
-                                    on={!data?.company?.hasFinishedRegistration}
+                                    on={data?.company && !data?.company?.hasFinishedRegistration}
                                     Wrapper={({ children }) =>
                                         <Badge variant="dot" color="secondary" overlap="circle">
                                             {children}

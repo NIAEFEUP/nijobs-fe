@@ -86,6 +86,37 @@ AdminMenuOptions.propTypes = {
     isMobile: PropTypes.bool.isRequired,
 };
 
+const CompanyMenuOptions = ({ isMobile, sessionData }) => {
+
+    const classes = useStyles({ isMobile });
+
+    if (sessionData.company.hasFinishedRegistration)
+        return (
+            <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+        );
+    else {
+        return (
+            <MenuItem
+                button
+                className={classes.highlightedMenuItem}
+                component={Link}
+                to="/company/registration/finish"
+                disableTouchRipple
+            >
+                <Badge
+                    variant="dot"
+                    color="primary"
+                    anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                >
+                    <Box pl={2}>
+                        Finish Registration
+                    </Box>
+                </Badge>
+            </MenuItem>
+        );
+    }
+};
+
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
     const classes = useStyles({ isMobile });
     return (
@@ -102,29 +133,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
-                {sessionData?.company && sessionData.company.hasFinishedRegistration ?
-                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
-                    :
-                    <MenuItem
-                        button
-                        className={classes.highlightedMenuItem}
-                        component={Link}
-                        to="/company/registration/finish"
-                        disableTouchRipple
-                    >
-                        <Badge
-                            variant="dot"
-                            color="primary"
-                            anchorOrigin={{ horizontal: "left", vertical: "top" }}
-                        >
-                            <Box pl={2}>
-                                Finish Registration
-                            </Box>
-                        </Badge>
-                    </MenuItem>
-                }
-
-                {/* <MenuItem button disableTouchRipple onClick={() => {}}>Profile</MenuItem> */}
+                {sessionData?.company && <CompanyMenuOptions isMobile={isMobile} sessionData={sessionData} />}
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
             </MenuList>
