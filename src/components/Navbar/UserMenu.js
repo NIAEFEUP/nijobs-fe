@@ -90,31 +90,41 @@ const CompanyMenuOptions = ({ isMobile, sessionData }) => {
 
     const classes = useStyles({ isMobile });
 
-    if (sessionData.company.hasFinishedRegistration)
-        return (
-            <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
-        );
-    else {
-        return (
-            <MenuItem
-                button
-                className={classes.highlightedMenuItem}
-                component={Link}
-                to="/company/registration/finish"
-                disableTouchRipple
-            >
-                <Badge
-                    variant="dot"
-                    color="primary"
-                    anchorOrigin={{ horizontal: "left", vertical: "top" }}
+    return (
+        <>
+            {
+            sessionData?.company?.hasFinishedRegistration ?
+                <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                :
+                <MenuItem
+                    button
+                    className={classes.highlightedMenuItem}
+                    component={Link}
+                    to="/company/registration/finish"
+                    disableTouchRipple
                 >
-                    <Box pl={2}>
+                    <Badge
+                        variant="dot"
+                        color="primary"
+                        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                    >
+                        <Box pl={2}>
                         Finish Registration
-                    </Box>
-                </Badge>
-            </MenuItem>
-        );
-    }
+                        </Box>
+                    </Badge>
+                </MenuItem>
+            }
+        </>
+    );
+};
+
+CompanyMenuOptions.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
+    sessionData: PropTypes.shape({
+        email: PropTypes.string,
+        isAdmin: PropTypes.bool,
+        company: PropTypes.object,
+    }),
 };
 
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
