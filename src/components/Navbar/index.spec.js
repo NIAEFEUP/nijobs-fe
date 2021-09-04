@@ -45,6 +45,48 @@ describe("Navbar", () => {
 
             expect(wrapper.getByRole("button", { name: "Account" })).toBeInTheDocument();
         });
+
+        it("Should show finish registration badge if the company hasn't done it already", async () => {
+
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true,
+                data: { email: "email@email.com", company: { hasFinishedRegistration: false } },
+            }));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                </BrowserRouter>,
+                { initialState: {}, theme }
+            );
+
+            await act(async () => {
+                await fireEvent.click(wrapper.getByTestId("usermenu-button-wrapper"));
+            });
+
+            expect(wrapper.queryByTestId("finish-registration-badge")).toBeInTheDocument();
+        });
+
+        it("Should not show finish registration badge to an admin", async () => {
+
+            useSession.mockImplementation(() => ({
+                isLoggedIn: true,
+                data: { email: "email@email.com", isAdmin: true },
+            }));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <Navbar />
+                </BrowserRouter>,
+                { initialState: {}, theme }
+            );
+
+            await act(async () => {
+                await fireEvent.click(wrapper.getByTestId("usermenu-button-wrapper"));
+            });
+
+            expect(wrapper.queryByTestId("finish-registration-badge")).not.toBeInTheDocument();
+        });
     });
 
     describe("interaction", () => {
