@@ -29,7 +29,6 @@
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
     "jss-plugin-compose": "^10.1.1",
-    "moment": "^2.24.0",
     "notistack": "^1.0.0",
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.4",
