@@ -10,6 +10,14 @@ import {
     makeStyles,
     FormControl,
     Typography,
+    Collapse,
+    Button,
+    Slider,
+    IconButton,
+    Tooltip,
+    Checkbox,
+    FormControlLabel,
+    MenuItem,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -24,10 +32,27 @@ import { CreateOfferConstants } from "./CreateOfferUtils";
 import { searchCities } from "../../../services/locationSearchService";
 
 import "./editor.css";
-import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined, LocationOn } from "@material-ui/icons";
-import { Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import {
+    FormatBold,
+    FormatItalic,
+    FormatListBulleted,
+    FormatListNumbered,
+    FormatUnderlined,
+    LocationOn,
+    KeyboardArrowDown,
+    KeyboardArrowUp,
+    AddCircle,
+    RemoveCircle,
+} from "@material-ui/icons";
+import { Autocomplete, useAutocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { throttle } from "lodash";
+
+import TechOptions from "../../HomePage/SearchArea/AdvancedSearch/TechOptions";
+import FieldOptions from "../../HomePage/SearchArea/AdvancedSearch/FieldOptions";
+import JobOptions from "../../HomePage/SearchArea/AdvancedSearch/JobOptions";
+import { INITIAL_JOB_DURATION, JOB_MIN_DURATION, JOB_MAX_DURATION } from "../../../reducers/searchOffersReducer";
+import MultiOptionAutocomplete from "../../HomePage/SearchArea/AdvancedSearch/MultiOptionAutocomplete/MultiOptionAutocomplete";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -40,34 +65,34 @@ export const CreateOfferController = () => {
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
-            publishDate: null,
+            publishDate: Date.now(),
             publishEndDate: null,
-            jobMinDuration: 1,
-            jobMaxDuration: 2,
+            jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
             jobStartDate: null,
             description: "",
             descriptionText: "",
             contacts: [{ value: "" }],
             isPaid: false,
-            vacancies: undefined,
+            vacancies: "",
+            // https://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
             jobType: "",
             fields: [{ value: "" }],
             technologies: [{ value: "" }],
             location: "",
-            requirements: [{ value: "" }],
+            requirements: [],
         },
     });
 
     const fields = useWatch({ control });
 
     // eslint-disable-next-line no-unused-vars
-    const { fields: requirements, appendRequirement, removeRequirement } = useFieldArray({
+    const { fields: requirements, append: appendRequirement, remove: removeRequirement } = useFieldArray({
         control,
         name: "requirements",
     });
 
     // eslint-disable-next-line no-unused-vars
-    const { fields: contacts, appendContact, removeContact } = useFieldArray({
+    const { fields: contacts, append: appendContact, remove: removeContact } = useFieldArray({
         control,
         name: "contacts",
     });
@@ -75,6 +100,8 @@ export const CreateOfferController = () => {
     const submit = useCallback(
         // eslint-disable-next-line no-unused-vars
         (data) => {
+
+            console.log("data", data);
 
             // TODO
 
@@ -107,6 +134,11 @@ export const CreateOfferController = () => {
                 requirements,
                 fields,
                 errors,
+                appendContact,
+                removeContact,
+                appendRequirement,
+                removeRequirement,
+                getValues,
             },
         },
     };
@@ -347,6 +379,146 @@ const LocationPicker = () => {
     );
 };
 
+const RemoveLineButton = ({ onClick, items, i }) => {
+    const disabled = Object.keys(items).length <= 0;
+    return (
+        <FormControl>
+            <Tooltip
+                title={disabled ? "At least 1 contact required" : "Remove Entry"}
+                aria-label={disabled ? "At least 1 contact required" : "Remove Entry"}
+            >
+                <span>
+                    <IconButton
+                        aria-label={`Remove Entry ${i}`}
+                        onClick={onClick}
+                        disabled={disabled}
+                    >
+                        <RemoveCircle />
+                    </IconButton>
+                </span>
+            </Tooltip>
+        </FormControl>
+    );
+};
+
+const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors }) => {
+    const isMobile = useMobile();
+    const classes = useCreateOfferStyles(isMobile)();
+
+    return (
+        <>
+            <Typography
+                variant="h6"
+            >
+                                Contacts
+            </Typography>
+            <Box display="flex" flexDirection="column">
+                {contacts.map(({ id }, i) => (
+                    <Controller
+                        key={id}
+                        name={`contacts.${i}.value`}
+                        render={(
+                            { field: { onChange, onBlur, ref, name, value } },
+                        ) => (
+                            <TextField
+                                name={name}
+                                value={value}
+                                label={`Contact #${i}`}
+                                id={`Contact #${i}`}
+                                error={!!errors.contacts?.[i]}
+                                inputRef={ref}
+                                onBlur={onBlur}
+                                onChange={onChange}
+                                InputProps={{
+                                    endAdornment:
+    <RemoveLineButton i={i} items={contacts} onClick={() => onRemove(i)} /> }}
+                                margin="normal"
+                                helperText={errors.contacts?.[i]?.value?.message || ""}
+                            />)}
+                        control={control}
+                        defaultValue={getValues(`contacts.${i}.value`) || ""}
+                    />
+                ))}
+                <Button
+                    color="primary"
+                    startIcon={<AddCircle />}
+                    disabled={Object.keys(contacts).length >= 10}
+                    onClick={() => onAdd()}
+                    className={classes.addContactBtn}
+                >
+                Add Entry
+                </Button>
+            </Box>
+        </>
+    );
+};
+
+const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, control, errors }) => {
+    const isMobile = useMobile();
+    const classes = useCreateOfferStyles(isMobile)();
+
+    return (
+        <>
+            <Typography
+                variant="h6"
+            >
+                Requirements
+            </Typography>
+            <Box display="flex" flexDirection="column">
+                {requirements.map(({ id }, i) => (
+                    <Controller
+                        key={id}
+                        name={`requirements.${i}.value`}
+                        render={(
+                            { field: { onChange, onBlur, ref, name, value } },
+                        ) => (
+                            <TextField
+                                name={name}
+                                value={value}
+                                label={`Requirement #${i}`}
+                                id={`Requirement #${i}`}
+                                error={!!errors.requirements?.[i]}
+                                inputRef={ref}
+                                onBlur={onBlur}
+                                onChange={onChange}
+                                InputProps={{
+                                    endAdornment:
+    <RemoveLineButton i={i} items={requirements} onClick={() => onRemove(i)} /> }}
+                                margin="normal"
+                                helperText={errors.requirements?.[i]?.value?.message || ""}
+                            />)}
+                        control={control}
+                        defaultValue={getValues(`requirements.${i}.value`) || ""}
+                    />
+                ))}
+                <Button
+                    color="primary"
+                    startIcon={<AddCircle />}
+                    disabled={Object.keys(requirements).length >= 10}
+                    onClick={() => onAdd()}
+                    className={classes.addContactBtn}
+                >
+                    Add Entry
+                </Button>
+            </Box>
+        </>
+    );
+};
+
+// eslint-disable-next-line react/display-name
+const RenderInput = (label) => (params) => {
+    const inputProps = { ...params.inputProps, "aria-labelledby": `${params.id}-label` };
+    return (
+        <TextField
+            {...params}
+            variant="standard"
+            margin="normal"
+            fullWidth
+            label={label}
+            inputProps={inputProps}
+        />);
+};
+
 const CreateOfferForm = () => {
 
     const {
@@ -354,12 +526,57 @@ const CreateOfferForm = () => {
         errors,
         control,
         fields,
+        contacts,
+        requirements,
+        getValues,
+        appendContact,
+        removeContact,
+        appendRequirement,
+        removeRequirement,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
 
+    const [isAdvancedOpen, setAdvancedOpen] = React.useState(false);
+
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useCreateOfferStyles(isMobile)();
+
+
+    const FieldsAutocompleteProps = {
+        multiple: true,
+        renderInput: RenderInput("Fields"),
+        options: Object.keys(FieldOptions),
+        id: "fields-selector",
+        getOptionLabel: (option) => FieldOptions[option],
+        // onChange: useCallback((e, fields) => setValue(fields), []),
+        forcePopupIcon: true,
+        // value: stuff,
+    };
+
+    const TechnologiesAutocompleteProps = {
+        multiple: true,
+        renderInput: RenderInput("Technologies"),
+        options: Object.keys(TechOptions),
+        id: "tech-selector",
+        getOptionLabel: (option) => TechOptions[option],
+        forcePopupIcon: true,
+    };
+
+    const fieldsAutocompleteProps = useCallback(useAutocomplete({ ...FieldsAutocompleteProps }), [FieldsAutocompleteProps]);
+    const technologiesAutocompleteProps = useCallback(useAutocomplete(
+        { ...TechnologiesAutocompleteProps }), [TechnologiesAutocompleteProps]);
+
+    const FieldsSelectorProps = {
+        ...FieldsAutocompleteProps,
+        autocompleteProps: fieldsAutocompleteProps,
+    };
+
+    const TechnologiesSelectorProps = {
+        ...TechnologiesAutocompleteProps,
+        autocompleteProps: technologiesAutocompleteProps,
+    };
+
 
     return (
         <div className={classes.formCard}>
@@ -399,57 +616,265 @@ const CreateOfferForm = () => {
                                     />)}
                                 control={control}
                             />
-                            {/* <Controller
-                                name="location"
-                                render={(
-                                    { field: { onChange, onBlur, ref, name, value } },
-                                ) => (
-                                    <TextField
-                                        name={name}
-                                        value={value}
-                                        label="Location"
-                                        id="location"
-                                        error={!!errors.location}
-                                        inputRef={ref}
-                                        onBlur={onBlur}
-                                        onChange={onChange}
-                                        helperText={
-                                            `${value?.length}/${CreateOfferConstants.location.maxLength} ${errors.location?.message || ""}`
-                                        }
-                                        variant="outlined"
-                                        FormHelperTextProps={{
-                                            style: {
-                                                marginLeft: 0,
-                                            },
-                                        }}
-                                        margin="dense"
-                                        fullWidth
-                                    />
+
+                            <Grid container>
+                                <Grid item xs={12} lg={6}>
                                     <LocationPicker />
-                                )}
+
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    <Controller
+                                        name="jobType"
+                                        render={(
+                                            { field: { onChange, onBlur, name, value } },
+                                        ) => (
+                                            <TextField
+                                                name={name}
+                                                fullWidth
+                                                id="job_type"
+                                                select
+                                                label="Job Type"
+                                                value={value ? value : ""}
+                                                onChange={onChange}
+                                                onBlur={onBlur}
+                                            >
+                                                {JobOptions.map(({ value, label }) => (
+                                                    <MenuItem
+                                                        key={value}
+                                                        value={value}
+                                                    >
+                                                        {label}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
+
+                                        )}
+                                        control={control}
+                                    />
+
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+
+                                    <Controller
+                                        name="publishDate"
+                                        render={(
+                                            { field: { onChange, onBlur, name, value } },
+                                        ) => (
+                                            <KeyboardDatePicker
+                                                margin="dense"
+                                                value={value}
+                                                label="Publication Date"
+                                                id="publishDate-input"
+                                                name={name}
+                                                onChange={(_, value) => onChange(value)}
+                                                onBlur={onBlur}
+                                                variant="inline"
+                                                autoOk
+                                                format="yyyy-MM-dd"
+                                                minDate={Date.now()}
+                                            />)}
+                                        control={control}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+
+                                    <Controller
+                                        name="publishEndDate"
+                                        render={(
+                                            { field: { onChange, onBlur, name, value } },
+                                        ) => (
+                                            <KeyboardDatePicker
+                                                margin="dense"
+                                                value={value}
+                                                label="Publication End Date"
+                                                id="publishEndDate-input"
+                                                name={name}
+                                                onChange={(_, value) => onChange(value)}
+                                                onBlur={onBlur}
+                                                variant="inline"
+                                                autoOk
+                                                format="yyyy-MM-dd"
+                                                minDate={Date.now()}
+                                            />)}
+                                        control={control}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} lg={6}>
+                                    <Controller
+                                        name="fields"
+                                        render={(
+                                            { field: { onChange, onBlur, name, value } },
+                                        ) => (
+                                            <MultiOptionAutocomplete
+                                                name={name}
+                                                onBlur={onBlur}
+                                                onChange={onChange}
+                                                value={value}
+                                                {...FieldsSelectorProps}
+                                            />)}
+                                        control={control}
+                                    />
+
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    <Controller
+                                        name="technologies"
+                                        render={(
+                                            { field: { _onChange, onBlur, name, value } },
+                                        ) => (
+                                            <MultiOptionAutocomplete
+                                                {...TechnologiesSelectorProps}
+                                                name={name}
+                                                onBlur={onBlur}
+                                                onChange={(value) => {
+                                                    console.log("hi", value);
+                                                    // onChange(value);
+                                                }}
+                                                value={value}
+                                            />)}
+                                        control={control}
+                                    />
+
+                                </Grid>
+                                <Grid item xs={12} lg={12}>
+                                    <Button
+                                        onClick={() => setAdvancedOpen(!isAdvancedOpen)}
+                                        size="small"
+                                        margin="dense"
+                                        style={{ marginTop: 10 }}
+                                        endIcon={
+                                            isAdvancedOpen
+                                                ? <KeyboardArrowUp />
+                                                : <KeyboardArrowDown />}
+                                    >
+                                        <Typography>Advanced Settings</Typography>
+
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12} lg={12}>
+                                    <Collapse in={isAdvancedOpen}>
+                                        <Grid container>
+                                            <Grid item xs={12} lg={6}>
+                                                <Controller
+                                                    name="jobStartDate"
+                                                    render={(
+                                                        { field: { onChange, onBlur, name, value } },
+                                                    ) => (
+                                                        <KeyboardDatePicker
+                                                            margin="dense"
+                                                            value={value}
+                                                            label="Job Start Date"
+                                                            id="startDate-input"
+                                                            name={name}
+                                                            onChange={(_, value) => onChange(value)}
+                                                            onBlur={onBlur}
+                                                            variant="inline"
+                                                            autoOk
+                                                            format="yyyy-MM-dd"
+                                                            minDate={Date.now()}
+                                                        />)}
+                                                    control={control}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} lg={6}>
+                                                <Controller
+                                                    name="jobDuration"
+                                                    render={(
+                                                        { field: { onChange, onBlur, name, value } },
+                                                    ) => (
+                                                        <FormControl
+                                                            fullWidth
+                                                        >
+                                                            <Slider
+                                                                name={name}
+                                                                value={value}
+                                                                onChange={(_e, values) => onChange(values)}
+                                                                onBlur={onBlur}
+                                                                valueLabelDisplay="auto"
+                                                                aria-labelledby="range-slider"
+                                                                min={JOB_MIN_DURATION}
+                                                                max={JOB_MAX_DURATION}
+                                                            />
+
+                                                            <FormHelperText>
+                                                                {`Job duration: ${value[0]} - ${value[1]} month(s)`}
+                                                            </FormHelperText>
+                                                        </FormControl>)}
+                                                    control={control}
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} lg={6}>
+                                                <Controller
+                                                    name="vacancies"
+                                                    render={(
+                                                        { field: { onChange, onBlur, name, ref, value } },
+                                                    ) => (
+                                                        <TextField
+                                                            name={name}
+                                                            value={value}
+                                                            label="Vacancies"
+                                                            id="vacancies"
+                                                            error={!!errors.title}
+                                                            inputRef={ref}
+                                                            onChange={(_e) => {
+                                                                let value = _e.target.value.replace(/[^0-9]/g, "");
+                                                                value = value ? Number.parseInt(value, 10) : "";
+                                                                onChange(value);
+                                                            }}
+                                                            onBlur={onBlur}
+                                                        />)}
+                                                    control={control}
+                                                />
+                                            </Grid>
+
+                                            <Grid item xs={12} lg={6}>
+                                                <Controller
+                                                    name="isPaid"
+                                                    render={(
+                                                        { field: { onChange, onBlur, name, value } },
+                                                    ) => (
+                                                        <FormControlLabel
+                                                            control={
+                                                                <Checkbox
+                                                                    checked={value}
+                                                                    onChange={onChange}
+                                                                    name={name}
+                                                                    onBlur={onBlur}
+                                                                />
+                                                            }
+                                                            label="Paid?"
+                                                        />
+                                                    )}
+                                                    control={control}
+                                                />
+                                            </Grid>
+
+                                        </Grid>
+
+                                    </Collapse>
+                                </Grid>
+                            </Grid>
+
+                            <ContactsSelector
+                                contacts={contacts}
+                                onAdd={appendContact}
+                                onRemove={removeContact}
+                                getValues={getValues}
                                 control={control}
-                            /> */}
-                            <LocationPicker />
-                            The publish date details should be asked only if the user wants to schedule it (advanced settings)
-                            <Controller
-                                name="publishDate"
-                                render={(
-                                    { field: { onChange, onBlur, name, value } },
-                                ) => (
-                                    <KeyboardDatePicker
-                                        value={value}
-                                        label="Publication Date"
-                                        id="publishDate-input"
-                                        name={name}
-                                        onChange={(_, value) => onChange(value)}
-                                        onBlur={onBlur}
-                                        variant="inline"
-                                        autoOk
-                                        format="yyyy-MM-dd"
-                                        minDate={Date.now()}
-                                    />)}
-                                control={control}
+                                errors={errors}
                             />
+
+                            <RequirementsSelector
+                                requirements={requirements}
+                                onAdd={appendRequirement}
+                                onRemove={removeRequirement}
+                                getValues={getValues}
+                                control={control}
+                                errors={errors}
+                            />
+
                             <Controller
                                 name="descriptionText"
                                 render={(
@@ -473,7 +898,8 @@ const CreateOfferForm = () => {
                                 )}
                                 control={control}
                             />
-
+                            <Grid item xs={12} lg={12} />
+                            <Button onClick={submit}>Submit</Button>
                         </form>
                     </Grid>
                 </Grid>

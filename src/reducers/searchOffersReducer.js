@@ -4,6 +4,8 @@ import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
 export const INITIAL_ERROR = null;
+export const JOB_MIN_DURATION = 0;
+export const JOB_MAX_DURATION = 12;
 
 const initialState = {
     searchValue: "",
