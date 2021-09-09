@@ -31,7 +31,7 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
  *
  */
 
-const shoudlShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
+const shouldShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
@@ -52,15 +52,16 @@ const AppRouter = () => (
             <Route
                 exact
                 path="/apply/company"
+                context={CompanyApplicationPageControllerContext}
+                controller={CompanyApplicationPageController}
+                controllerProps={{ showConfirmation: false }}
             >
                 <PageLayout
                     key="/apply/company"
                     pageTitle="Company Application"
                     layout={LayoutType.DESKTOP}
-                    shouldShowMobile={shoudlShowCompanyApplicationMobile}
+                    shouldShowMobile={shouldShowCompanyApplicationMobile}
                     context={CompanyApplicationPageControllerContext}
-                    controller={CompanyApplicationPageController}
-                    controllerProps={{ showConfirmation: false }}
                 >
                     <CompanyApplicationPage />
                 </PageLayout>
@@ -101,26 +102,28 @@ const AppRouter = () => (
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
                 authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
+                context={FinishCompanyRegistrationControllerContext}
+                controller={FinishCompanyRegistrationController}
             >
                 <PageLayout
                     key="/company/registration/finish"
                     layout={LayoutType.DESKTOP}
                     pageTitle="Finish Registration"
                     context={FinishCompanyRegistrationControllerContext}
-                    controller={FinishCompanyRegistrationController}
                 >
                     <FinishCompanyRegistrationPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route
                 path="/offer/:id"
+                context={OfferPageControllerContext}
+                controller={OfferPageController}
             >
                 <PageLayout
                     key="/offer/:id"
                     layout={LayoutType.DESKTOP}
                     pageTitle="Job Offer"
                     context={OfferPageControllerContext}
-                    controller={OfferPageController}
                 >
                     <OfferPage />
                 </PageLayout>

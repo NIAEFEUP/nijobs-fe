@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useMobile } from "../../utils/media-queries";
-import useComponentController from "../../hooks/useComponentController";
 import DesktopLayout from "./DesktopLayout";
 import MobileLayout from "./MobileLayout";
 import BaseLayout from "./BaseLayout";
+
+export const DefaultContext = React.createContext();
 
 export const LayoutType = Object.freeze({
     NONE: "NONE",
@@ -31,19 +32,18 @@ const PageLayout = ({
     showHomePageLink = true,
     pageTitle,
     forceDesktopLayout = false,
-    controller,
-    controllerProps,
     layout = LayoutType.NONE,
     shouldShowMobile,
     // eslint-disable-next-line react/prop-types
     context,
 }) => {
 
-    const { ContextProvider, contextProviderProps, ...contextValues } = useComponentController(controller, controllerProps, context);
-
     useEffect(() => {
         document.title = pageTitle ? `${pageTitle} - NIJobs` : "NIJobs";
     }, [pageTitle]);
+
+    const usedContext = context ? context : DefaultContext;
+    const contextValues = useContext(usedContext);
 
     const isMobileSize = useMobile();
     const shouldUseMobileLayout = (shouldShowMobile === undefined) ? isMobileSize : shouldShowMobile({ ...contextValues, isMobileSize });
@@ -51,12 +51,12 @@ const PageLayout = ({
     const LayoutWrapper = LayoutWrappers[(!shouldUseMobileLayout || forceDesktopLayout) ? layout : LayoutType.MOBILE];
 
     return (
-        <ContextProvider {...contextProviderProps}>
+        <>
             <ScrollToTopOnMount />
             <LayoutWrapper showHomePageLink={showHomePageLink} pageTitle={pageTitle}>
                 {children}
             </LayoutWrapper>
-        </ContextProvider>
+        </>
     );
 };
 
@@ -65,8 +65,6 @@ PageLayout.propTypes = {
     showHomePageLink: PropTypes.bool,
     forceDesktopLayout: PropTypes.bool,
     pageTitle: PropTypes.string,
-    controller: PropTypes.func,
-    controllerProps: PropTypes.object,
     layout: PropTypes.oneOf(Object.values(LayoutType)),
     shouldShowMobile: PropTypes.func,
 };

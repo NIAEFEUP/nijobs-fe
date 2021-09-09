@@ -5,6 +5,7 @@ import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
 import { addSnackbar } from "../actions/notificationActions";
 import { connect } from "react-redux";
+import useComponentController from "../hooks/useComponentController";
 
 export const smoothScrollToRef = (ref) => {
 
@@ -127,17 +128,33 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const RedirectInfoProvider = connect(mapStateToProps, mapDispatchToProps)(BaseRedirectInfoProvider);
 
-export const Route = ({ children, ...props }) => (
-    <BaseRoute
-        {...props}
-    >
-        <RedirectInfoProvider>
-            {children}
-        </RedirectInfoProvider>
-    </BaseRoute>
-);
+export const Route = ({
+    children,
+    controller,
+    controllerProps,
+    // eslint-disable-next-line react/prop-types
+    context,
+    ...props
+}) => {
+
+    const { ContextProvider, contextProviderProps } = useComponentController(controller, controllerProps, context);
+
+    return (
+        <ContextProvider {...contextProviderProps}>
+            <BaseRoute
+                {...props}
+            >
+                <RedirectInfoProvider>
+                    {children}
+                </RedirectInfoProvider>
+            </BaseRoute>
+        </ContextProvider>
+    );
+};
 Route.propTypes = {
     children: PropTypes.element.isRequired,
+    controller: PropTypes.func,
+    controllerProps: PropTypes.object,
 };
 
 
