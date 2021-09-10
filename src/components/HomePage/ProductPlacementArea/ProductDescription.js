@@ -81,13 +81,15 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                         </Grid>
                         :
                         <Grid item>
-                            <Button
-                                variant="text"
-                                color="primary"
-                                onClick={toggleLoginModal}
-                            >
-                            Login
-                            </Button>
+                            {!isLoggedIn &&
+                                <Button
+                                    variant="text"
+                                    color="primary"
+                                    onClick={toggleLoginModal}
+                                >
+                                Login
+                                </Button>
+                            }
                             <Button
                                 variant="text"
                                 color="primary"
