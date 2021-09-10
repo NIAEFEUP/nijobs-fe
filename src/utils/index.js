@@ -135,44 +135,40 @@ export const Route = ({
     // eslint-disable-next-line react/prop-types
     context,
     ...props
-}) => {
-
-    const { ContextProvider, contextProviderProps } = useComponentController(controller, controllerProps, context);
-
-    return (
-        <ContextProvider {...contextProviderProps}>
-            <BaseRoute
-                {...props}
+}) => (
+    <BaseRoute
+        {...props}
+    >
+        <RedirectInfoProvider>
+            <RouteController
+                controller={controller}
+                controllerProps={controllerProps}
+                context={context}
             >
-                <RedirectInfoProvider>
-                    {children}
-                </RedirectInfoProvider>
-            </BaseRoute>
-        </ContextProvider>
-    );
-};
+                {children}
+            </RouteController>
+        </RedirectInfoProvider>
+    </BaseRoute>
+);
 Route.propTypes = {
     children: PropTypes.element.isRequired,
     controller: PropTypes.func,
     controllerProps: PropTypes.object,
 };
 
-
 const MAX_NUM_RETRIES = 1;
 
-/**
- *
- * Only allows this route to be accessed when logged in.
- * Additionally, if an `authorize` function is given, it must return true for the route to accessable
- * The authorize function receives the logged in user details as an object
- */
-export const ProtectedRoute = ({
+const RouteController = ({
+    isProtected,
     authorize,
     unauthorizedRedirectPath,
     unauthorizedRedirectMessage,
     maxNumRetries = MAX_NUM_RETRIES,
     children,
-    ...routeProps
+    controller,
+    controllerProps,
+    // eslint-disable-next-line react/prop-types
+    context,
 }) => {
 
     const { isValidating, isLoggedIn, data, error } = useSession({
@@ -186,14 +182,15 @@ export const ProtectedRoute = ({
     const redirectPath = !serverError ? unauthorizedRedirectPath : "/error";
 
     const location = useLocation();
+
+    const { ContextProvider, contextProviderProps } = useComponentController(controller, controllerProps, context);
+
     return (
-        <Route
-            {...routeProps}
-        >
-            {(isValidating || data === null) && !error ?
+        <ContextProvider {...contextProviderProps}>
+            {(isValidating || data === null) && !error && isProtected ?
                 <LinearProgress /> :
                 <>
-                    {isAuthorized ?
+                    {isAuthorized || !isProtected ?
                         children
                         :
                         <Redirect
@@ -208,9 +205,56 @@ export const ProtectedRoute = ({
                     }
                 </>
             }
-        </Route>
+        </ContextProvider>
     );
 };
+
+RouteController.propTypes = {
+    isProtected: PropTypes.bool,
+    children: PropTypes.element.isRequired,
+    authorize: PropTypes.func,
+    unauthorizedRedirectPath: PropTypes.string,
+    unauthorizedRedirectMessage: PropTypes.string,
+    maxNumRetries: PropTypes.number,
+    controller: PropTypes.func,
+    controllerProps: PropTypes.object,
+};
+
+/**
+ *
+ * Only allows this route to be accessed when logged in.
+ * Additionally, if an `authorize` function is given, it must return true for the route to accessable
+ * The authorize function receives the logged in user details as an object
+ */
+export const ProtectedRoute = ({
+    authorize,
+    unauthorizedRedirectPath,
+    unauthorizedRedirectMessage,
+    maxNumRetries = MAX_NUM_RETRIES,
+    children,
+    controller,
+    controllerProps,
+    // eslint-disable-next-line react/prop-types
+    context,
+    ...routeProps
+}) => (
+    <Route
+        {...routeProps}
+    >
+        <RouteController
+            isProtected
+            authorize={authorize}
+            unauthorizedRedirectPath={unauthorizedRedirectPath}
+            unauthorizedRedirectMessage={unauthorizedRedirectMessage}
+            maxNumRetries={maxNumRetries}
+            controller={controller}
+            controllerProps={controllerProps}
+            context={context}
+        >
+            {children}
+        </RouteController>
+    </Route>
+);
 
 ProtectedRoute.propTypes = {
     /**
@@ -235,6 +279,8 @@ ProtectedRoute.propTypes = {
      * @default 1
      */
     maxNumRetries: PropTypes.number,
+    controller: PropTypes.func,
+    controllerProps: PropTypes.object,
 };
 
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";

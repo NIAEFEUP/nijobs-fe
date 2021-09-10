@@ -39,6 +39,7 @@ const AppRouter = () => (
             <Route
                 exact
                 path="/"
+                key="/"
             >
                 <PageLayout
                     key="/"
@@ -51,6 +52,7 @@ const AppRouter = () => (
             </Route>
             <Route
                 exact
+                key="/apply/company"
                 path="/apply/company"
                 context={CompanyApplicationPageControllerContext}
                 controller={CompanyApplicationPageController}
@@ -68,6 +70,7 @@ const AppRouter = () => (
             </Route>
             <ProtectedRoute
                 exact
+                key="/review/applications"
                 path="/review/applications"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
@@ -83,6 +86,7 @@ const AppRouter = () => (
             </ProtectedRoute>
             <ProtectedRoute
                 exact
+                key="/company/offers/manage"
                 path="/company/offers/manage"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
@@ -98,6 +102,7 @@ const AppRouter = () => (
             </ProtectedRoute>
             <ProtectedRoute
                 exact
+                key="/company/registration/finish"
                 path="/company/registration/finish"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
@@ -116,6 +121,7 @@ const AppRouter = () => (
             </ProtectedRoute>
             <Route
                 path="/offer/:id"
+                key="/offer/:id"
                 context={OfferPageControllerContext}
                 controller={OfferPageController}
             >
@@ -130,6 +136,7 @@ const AppRouter = () => (
             </Route>
             <Route
                 path="/error"
+                key="/error"
             >
                 <PageLayout
                     key="/error"
@@ -140,7 +147,7 @@ const AppRouter = () => (
                     <ErrorPage />
                 </PageLayout>
             </Route>
-            <Route>
+            <Route key="/not_found">
                 <PageLayout
                     key="/not_found"
                     forceDesktopLayout
