@@ -38,8 +38,8 @@ describe("Search Offers Reducer", () => {
             setSearchOffers([new Offer({ _id: 1 }), new Offer({ _id: 2 })])
         );
 
-        expect(state.offers[0].id).toBe(1);
-        expect(state.offers[1].id).toBe(2);
+        expect(state.offers[0]._id).toBe(1);
+        expect(state.offers[1]._id).toBe(2);
     });
 
     it("should set loading when setLoadingOffers action is called", () => {

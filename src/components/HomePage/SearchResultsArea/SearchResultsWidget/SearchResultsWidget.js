@@ -43,7 +43,7 @@ const SearchResultsController = ({
     }, [offersLoading]);
 
     const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
-        disableOfferService(offer.id, adminReason).then(() => {
+        disableOfferService(offer._id, adminReason).then(() => {
             disableOffer(selectedOfferIdx, adminReason);
             if (onSuccess) onSuccess();
         }).catch((err) => {
@@ -52,7 +52,7 @@ const SearchResultsController = ({
     }, [disableOffer, selectedOfferIdx]);
 
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        hideOfferService(offer.id)
+        hideOfferService(offer._id)
             .then(() => {
                 hideOffer(selectedOfferIdx);
                 addSnackbar({
@@ -66,7 +66,7 @@ const SearchResultsController = ({
     }, [hideOffer, selectedOfferIdx]);
 
     const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        enableOfferService(offer.id)
+        enableOfferService(offer._id)
             .then(() => {
                 companyEnableOffer(selectedOfferIdx);
                 addSnackbar({
@@ -80,7 +80,7 @@ const SearchResultsController = ({
     }, [companyEnableOffer, selectedOfferIdx]);
 
     const handleAdminEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        enableOfferService(offer.id)
+        enableOfferService(offer._id)
             .then(() => {
                 adminEnableOffer(selectedOfferIdx);
                 addSnackbar({

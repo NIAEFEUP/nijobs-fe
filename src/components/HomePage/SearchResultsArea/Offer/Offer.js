@@ -3,7 +3,7 @@ export default class Offer {
         _id, title, publishDate, publishEndDate, owner, ownerName, ownerLogo, location, jobStartDate, jobMinDuration, jobMaxDuration,
         description, contacts, isPaid, vacancies, jobType, fields, technologies, isHidden, hiddenReason, adminReason, requirements,
     }) {
-        this.id = _id;
+        this._id = _id;
         this.title = title;
         this.publishDate = publishDate;
         this.publishEndDate = publishEndDate;

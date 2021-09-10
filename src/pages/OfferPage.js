@@ -20,11 +20,10 @@ export const OfferPageController = () => {
     const redirectProps = { to: { pathname: "/not-found" } };
 
     const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
-        disableOfferService(offer.id, adminReason)
+        disableOfferService(offer._id, adminReason)
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    _id: offer.id,
                     hiddenReason: "ADMIN_REQUEST",
                     isHidden: true,
                     adminReason,
@@ -37,11 +36,10 @@ export const OfferPageController = () => {
     }, [mutate]);
 
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        hideOfferService(offer.id)
+        hideOfferService(offer._id)
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    _id: offer.id,
                     hiddenReason: "COMPANY_REQUEST",
                     isHidden: true,
                 }));
@@ -56,11 +54,10 @@ export const OfferPageController = () => {
     }, [mutate]);
 
     const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        enableOfferService(offer.id)
+        enableOfferService(offer._id)
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    _id: offer.id,
                     isHidden: false,
                 }));
                 addSnackbar({
@@ -74,11 +71,10 @@ export const OfferPageController = () => {
     }, [mutate]);
 
     const handleAdminEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        enableOfferService(offer.id)
+        enableOfferService(offer._id)
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    _id: offer.id,
                     isHidden: false,
                     hiddenReason: null,
                     adminReason: null,

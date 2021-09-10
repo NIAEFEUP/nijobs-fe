@@ -74,7 +74,7 @@ describe("AdminReasonModal", () => {
             onSuccess,
             onError,
         }) => {
-            await disableOfferService(offer.id, adminReason).then(() => {
+            await disableOfferService(offer._id, adminReason).then(() => {
                 onSuccess();
                 offer.hiddenReason = "ADMIN_REASON";
                 offer.isHidden = true;
