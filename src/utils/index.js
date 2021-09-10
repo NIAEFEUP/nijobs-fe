@@ -128,6 +128,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const RedirectInfoProvider = connect(mapStateToProps, mapDispatchToProps)(BaseRedirectInfoProvider);
 
+/* istanbul ignore next */
 export const Route = ({
     children,
     controller,
@@ -156,10 +157,34 @@ Route.propTypes = {
     controllerProps: PropTypes.object,
 };
 
+/* istanbul ignore next */
+const RouteController = ({
+    children,
+    controller,
+    controllerProps,
+    // eslint-disable-next-line react/prop-types
+    context,
+}) => {
+
+    const { ContextProvider, contextProviderProps } = useComponentController(controller, controllerProps, context);
+
+    return (
+        <ContextProvider {...contextProviderProps}>
+            {children}
+        </ContextProvider>
+    );
+};
+
+RouteController.propTypes = {
+    children: PropTypes.element.isRequired,
+    controller: PropTypes.func,
+    controllerProps: PropTypes.object,
+};
+
 const MAX_NUM_RETRIES = 1;
 
-const RouteController = ({
-    isProtected,
+/* istanbul ignore next */
+const ProtectedRouteController = ({
     authorize,
     unauthorizedRedirectPath,
     unauthorizedRedirectMessage,
@@ -187,10 +212,10 @@ const RouteController = ({
 
     return (
         <ContextProvider {...contextProviderProps}>
-            {(isValidating || data === null) && !error && isProtected ?
+            {(isValidating || data === null) && !error ?
                 <LinearProgress /> :
                 <>
-                    {isAuthorized || !isProtected ?
+                    {isAuthorized ?
                         children
                         :
                         <Redirect
@@ -209,12 +234,11 @@ const RouteController = ({
     );
 };
 
-RouteController.propTypes = {
-    isProtected: PropTypes.bool,
+ProtectedRouteController.propTypes = {
     children: PropTypes.element.isRequired,
     authorize: PropTypes.func,
-    unauthorizedRedirectPath: PropTypes.string,
-    unauthorizedRedirectMessage: PropTypes.string,
+    unauthorizedRedirectPath: PropTypes.string.isRequired,
+    unauthorizedRedirectMessage: PropTypes.string.isRequired,
     maxNumRetries: PropTypes.number,
     controller: PropTypes.func,
     controllerProps: PropTypes.object,
@@ -223,9 +247,10 @@ RouteController.propTypes = {
 /**
  *
  * Only allows this route to be accessed when logged in.
- * Additionally, if an `authorize` function is given, it must return true for the route to accessable
+ * Additionally, if an `authorize` function is given, it must return true for the route to be accessible
  * The authorize function receives the logged in user details as an object
  */
+/* istanbul ignore next */
 export const ProtectedRoute = ({
     authorize,
     unauthorizedRedirectPath,
@@ -241,7 +266,7 @@ export const ProtectedRoute = ({
     <Route
         {...routeProps}
     >
-        <RouteController
+        <ProtectedRouteController
             isProtected
             authorize={authorize}
             unauthorizedRedirectPath={unauthorizedRedirectPath}
@@ -252,7 +277,7 @@ export const ProtectedRoute = ({
             context={context}
         >
             {children}
-        </RouteController>
+        </ProtectedRouteController>
     </Route>
 );
 

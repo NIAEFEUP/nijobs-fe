@@ -23,11 +23,11 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 
 /**
  *
- * IMPORTANT: Each PageLayout must have a unique key, in order for the page changes to work correctly.
+ * IMPORTANT: Each PageLayout and Route must have a unique key, in order for the page changes to work correctly.
  * If it doesn't, when changing pages, it will reuse the same PageLayout (reconciliation phase) and only change its contents
  * and if the controller/context is different (which it probably is among pages),
  * it will cause problems like hooks not being called in the same order
- * Obviously, since the controller are differnt, then the hooks might also be different
+ * Obviously, since the controller is different, then the hooks might also be different
  *
  */
 

@@ -5,7 +5,7 @@ import DesktopLayout from "./DesktopLayout";
 import MobileLayout from "./MobileLayout";
 import BaseLayout from "./BaseLayout";
 
-export const DefaultContext = React.createContext();
+const DefaultContext = React.createContext();
 
 export const LayoutType = Object.freeze({
     NONE: "NONE",
@@ -43,7 +43,7 @@ const PageLayout = ({
     }, [pageTitle]);
 
     const usedContext = context ? context : DefaultContext;
-    const contextValues = useContext(usedContext);
+    const contextValues = useContext(usedContext || DefaultContext);
 
     const isMobileSize = useMobile();
     const shouldUseMobileLayout = (shouldShowMobile === undefined) ? isMobileSize : shouldShowMobile({ ...contextValues, isMobileSize });
