@@ -29,8 +29,8 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
             ref={ref}
             className={classes.productDescription}
         >
-            <Grid container spacing={10} justify="center">
-                <Grid item xs={12} lg={6} container spacing={1} direction="column" justify="flex-start" alignItems="center">
+            <Grid container spacing={10} justifyContent="center">
+                <Grid item xs={12} lg={6} container spacing={1} direction="column" justifyContent="flex-start" alignItems="center">
                     <Grid item>
                         <StudentSvg fill="#999" className={classes.productDescriptionSVG} />
                     </Grid>
@@ -45,7 +45,7 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} lg={6} container spacing={1} direction="column" justify="flex-start" alignItems="center">
+                <Grid item xs={12} lg={6} container spacing={1} direction="column" justifyContent="flex-start" alignItems="center">
                     <Grid item>
                         <CompanySvg fill="#999" className={classes.productDescriptionSVG} />
                     </Grid>
