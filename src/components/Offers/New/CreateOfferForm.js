@@ -44,15 +44,15 @@ import {
     AddCircle,
     RemoveCircle,
 } from "@material-ui/icons";
-import { Autocomplete, useAutocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { throttle } from "lodash";
 
-import TechOptions from "../../HomePage/SearchArea/AdvancedSearch/TechOptions";
-import FieldOptions from "../../HomePage/SearchArea/AdvancedSearch/FieldOptions";
-import JobOptions from "../../HomePage/SearchArea/AdvancedSearch/JobOptions";
+import JobOptions from "../../utils/offers/JobOptions";
 import { INITIAL_JOB_DURATION, JOB_MIN_DURATION, JOB_MAX_DURATION } from "../../../reducers/searchOffersReducer";
-import MultiOptionAutocomplete from "../../HomePage/SearchArea/AdvancedSearch/MultiOptionAutocomplete/MultiOptionAutocomplete";
+import MultiOptionAutocomplete from "../../utils/form/MultiOptionAutocomplete";
+import useFieldSelector from "../../utils/offers/useFieldSelector";
+import useTechSelector from "../../utils/offers/useTechSelector";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -76,8 +76,8 @@ export const CreateOfferController = () => {
             vacancies: "",
             // https://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
             jobType: "",
-            fields: [{ value: "" }],
-            technologies: [{ value: "" }],
+            fields: [],
+            technologies: [],
             location: "",
             requirements: [],
         },
@@ -139,6 +139,7 @@ export const CreateOfferController = () => {
                 appendRequirement,
                 removeRequirement,
                 getValues,
+                setValue,
             },
         },
     };
@@ -505,20 +506,6 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
     );
 };
 
-// eslint-disable-next-line react/display-name
-const RenderInput = (label) => (params) => {
-    const inputProps = { ...params.inputProps, "aria-labelledby": `${params.id}-label` };
-    return (
-        <TextField
-            {...params}
-            variant="standard"
-            margin="normal"
-            fullWidth
-            label={label}
-            inputProps={inputProps}
-        />);
-};
-
 const CreateOfferForm = () => {
 
     const {
@@ -533,6 +520,7 @@ const CreateOfferForm = () => {
         removeContact,
         appendRequirement,
         removeRequirement,
+        setValue,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
@@ -543,40 +531,8 @@ const CreateOfferForm = () => {
     const classes = useCreateOfferStyles(isMobile)();
 
 
-    const FieldsAutocompleteProps = {
-        multiple: true,
-        renderInput: RenderInput("Fields"),
-        options: Object.keys(FieldOptions),
-        id: "fields-selector",
-        getOptionLabel: (option) => FieldOptions[option],
-        // onChange: useCallback((e, fields) => setValue(fields), []),
-        forcePopupIcon: true,
-        // value: stuff,
-    };
-
-    const TechnologiesAutocompleteProps = {
-        multiple: true,
-        renderInput: RenderInput("Technologies"),
-        options: Object.keys(TechOptions),
-        id: "tech-selector",
-        getOptionLabel: (option) => TechOptions[option],
-        forcePopupIcon: true,
-    };
-
-    const fieldsAutocompleteProps = useCallback(useAutocomplete({ ...FieldsAutocompleteProps }), [FieldsAutocompleteProps]);
-    const technologiesAutocompleteProps = useCallback(useAutocomplete(
-        { ...TechnologiesAutocompleteProps }), [TechnologiesAutocompleteProps]);
-
-    const FieldsSelectorProps = {
-        ...FieldsAutocompleteProps,
-        autocompleteProps: fieldsAutocompleteProps,
-    };
-
-    const TechnologiesSelectorProps = {
-        ...TechnologiesAutocompleteProps,
-        autocompleteProps: technologiesAutocompleteProps,
-    };
-
+    const FieldsSelectorProps = useFieldSelector(fields.fields, (fields) => setValue("fields", fields));
+    const TechSelectorProps = useTechSelector(fields.technologies, (fields) => setValue("technologies", fields));
 
     return (
         <div className={classes.formCard}>
@@ -704,34 +660,27 @@ const CreateOfferForm = () => {
                                     <Controller
                                         name="fields"
                                         render={(
-                                            { field: { onChange, onBlur, name, value } },
+                                            { field: {  onBlur, name } },
                                         ) => (
                                             <MultiOptionAutocomplete
                                                 name={name}
                                                 onBlur={onBlur}
-                                                onChange={onChange}
-                                                value={value}
                                                 {...FieldsSelectorProps}
-                                            />)}
+                                            />
+                                        )}
                                         control={control}
                                     />
-
                                 </Grid>
                                 <Grid item xs={12} lg={6}>
                                     <Controller
                                         name="technologies"
                                         render={(
-                                            { field: { _onChange, onBlur, name, value } },
+                                            { field: { onBlur, name } },
                                         ) => (
                                             <MultiOptionAutocomplete
-                                                {...TechnologiesSelectorProps}
                                                 name={name}
                                                 onBlur={onBlur}
-                                                onChange={(value) => {
-                                                    console.log("hi", value);
-                                                    // onChange(value);
-                                                }}
-                                                value={value}
+                                                {...TechSelectorProps}
                                             />)}
                                         control={control}
                                     />

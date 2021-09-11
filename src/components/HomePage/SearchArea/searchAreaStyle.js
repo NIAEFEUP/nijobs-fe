@@ -81,16 +81,6 @@ export default makeStyles((theme) => ({
         gridRowStart: 2,
         gridColumnStart: 2,
     },
-    chipListWrapper: {
-        display: "flex",
-        flexWrap: "wrap",
-        maxWidth: "100%",
-        marginTop: theme.spacing(1),
-        "& > *": {
-            marginRight: theme.spacing(1),
-            marginBottom: theme.spacing(1),
-        },
-    },
     resetBtnWrapper: {
         display: "flex",
         "& > *": {
