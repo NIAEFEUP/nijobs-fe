@@ -128,7 +128,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 const RedirectInfoProvider = connect(mapStateToProps, mapDispatchToProps)(BaseRedirectInfoProvider);
 
-/* istanbul ignore next */
 export const Route = ({
     children,
     controller,
@@ -157,7 +156,6 @@ Route.propTypes = {
     controllerProps: PropTypes.object,
 };
 
-/* istanbul ignore next */
 const RouteController = ({
     children,
     controller,
@@ -183,7 +181,6 @@ RouteController.propTypes = {
 
 const MAX_NUM_RETRIES = 1;
 
-/* istanbul ignore next */
 const ProtectedRouteController = ({
     authorize,
     unauthorizedRedirectPath,
@@ -250,7 +247,6 @@ ProtectedRouteController.propTypes = {
  * Additionally, if an `authorize` function is given, it must return true for the route to be accessible
  * The authorize function receives the logged in user details as an object
  */
-/* istanbul ignore next */
 export const ProtectedRoute = ({
     authorize,
     unauthorizedRedirectPath,
