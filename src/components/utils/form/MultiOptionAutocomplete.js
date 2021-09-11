@@ -2,6 +2,8 @@ import React, { useCallback, forwardRef } from "react";
 import { Autocomplete } from "@material-ui/lab";
 import { Chip, TextField } from "@material-ui/core";
 import useMultiOptionAutocompleteStyles from "./multiOptionAutocompleteStyle";
+import clsx from "clsx";
+import PropTypes from "prop-types";
 
 const MultiOptionAutocomplete = forwardRef(
     ({
@@ -12,6 +14,8 @@ const MultiOptionAutocomplete = forwardRef(
         onChange,
         onBlur,
         getOptionLabel,
+        chipWrapperProps,
+        className,
     },
     ref) => {
 
@@ -26,7 +30,7 @@ const MultiOptionAutocomplete = forwardRef(
         const multiOptionAutocompleteClasses = useMultiOptionAutocompleteStyles();
 
         return (
-            <div>
+            <div className={className}>
                 <Autocomplete
                     multiple
                     id="tags-filled"
@@ -49,7 +53,10 @@ const MultiOptionAutocomplete = forwardRef(
                     )}
                 />
                 <div
-                    className={multiOptionAutocompleteClasses.chipListWrapper}
+                    {...chipWrapperProps}
+                    className={clsx(
+                        multiOptionAutocompleteClasses.chipListWrapper,
+                        chipWrapperProps?.className)}
                 >
                     {value.map((option, index) => (
                         <Chip
@@ -65,5 +72,17 @@ const MultiOptionAutocomplete = forwardRef(
     });
 
 MultiOptionAutocomplete.displayName = "MultiOptionAutocomplete";
+MultiOptionAutocomplete.propTypes = {
+    label: PropTypes.string.isRequired,
+    placeholder: PropTypes.string.isRequired,
+    value: PropTypes.arrayOf(PropTypes.string).isRequired,
+    options: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func,
+    getOptionLabel: PropTypes.func.isRequired,
+    chipWrapperProps: PropTypes.any,
+    className: PropTypes.any,
+
+};
 
 export default MultiOptionAutocomplete;
