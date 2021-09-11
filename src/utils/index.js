@@ -267,7 +267,6 @@ export const ProtectedRoute = ({
         {...routeProps}
     >
         <ProtectedRouteController
-            isProtected
             authorize={authorize}
             unauthorizedRedirectPath={unauthorizedRedirectPath}
             unauthorizedRedirectMessage={unauthorizedRedirectMessage}

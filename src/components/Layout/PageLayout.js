@@ -4,8 +4,7 @@ import { useMobile } from "../../utils/media-queries";
 import DesktopLayout from "./DesktopLayout";
 import MobileLayout from "./MobileLayout";
 import BaseLayout from "./BaseLayout";
-
-const DefaultContext = React.createContext();
+import { DefaultContext } from "../../hooks/useComponentController";
 
 export const LayoutType = Object.freeze({
     NONE: "NONE",
@@ -42,8 +41,7 @@ const PageLayout = ({
         document.title = pageTitle ? `${pageTitle} - NIJobs` : "NIJobs";
     }, [pageTitle]);
 
-    const usedContext = context ? context : DefaultContext;
-    const contextValues = useContext(usedContext || DefaultContext);
+    const contextValues = useContext(context || DefaultContext);
 
     const isMobileSize = useMobile();
     const shouldUseMobileLayout = (shouldShowMobile === undefined) ? isMobileSize : shouldShowMobile({ ...contextValues, isMobileSize });
