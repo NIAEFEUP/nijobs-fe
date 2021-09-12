@@ -7,9 +7,9 @@
 [![Build Preview](https://img.shields.io/badge/Build%20Preview-Develop-brightgreen.svg?style=for-the-badge)](https://develop--nijobs.netlify.com/)
 
 ![LGTM Grade](https://img.shields.io/lgtm/grade/javascript/g/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)
-[![GitHub issues](https://img.shields.io/github/issues/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/issues)
 [![GitHub license](https://img.shields.io/github/license/NIAEFEUP/nijobs-fe.svg?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/blob/master/LICENSE)
 
+[![MVP Milestone](https://img.shields.io/github/milestones/progress-percent/NIAEFEUP/nijobs-fe/2?style=for-the-badge)](https://github.com/NIAEFEUP/nijobs-fe/milestone/2)
 
 A platform for companies to advertise their job opportunities to the students
 
