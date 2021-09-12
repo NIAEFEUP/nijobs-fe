@@ -7,6 +7,7 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import * as companyOffersService from "../../../../services/companyOffersService";
 import useSession from "../../../../hooks/useSession";
+import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../../../../hooks/useSession");
 jest.mock("../../../../services/companyOffersService");
@@ -63,10 +64,13 @@ describe("App", () => {
         ));
 
         // By waiting for act it executes all the async code at once
+        // Need to wrap with BrowserRouter since I have a Link inside
         renderWithStore(
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <CompanyOffersManagementWidget />
-            </MuiPickersUtilsProvider>
+            <BrowserRouter>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <CompanyOffersManagementWidget />
+                </MuiPickersUtilsProvider>
+            </BrowserRouter>
         );
 
         // wait for the wrapped assertions to pass within a certain timeout window (wait for all updates to complete)
