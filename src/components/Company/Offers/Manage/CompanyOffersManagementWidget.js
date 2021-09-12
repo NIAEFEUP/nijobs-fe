@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
 import { Edit as EditIcon } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 // import { RowActions } from "../Actions";
 
 
@@ -68,18 +69,25 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-const RowActions = () => (
-    <TableCell align="right">
-        <IconButton
-            onClick={(e) => {
-                e.stopPropagation();
-                // Navigate to Edit Offer Page
-            }}
-        >
-            <EditIcon color="secondary" fontSize="default" />
-        </IconButton>
-    </TableCell>
-);
+const RowActions = ({ row }) => {
+    const offerRoute = `/offer/${row?.key}`;
+
+    // Need to change the route from View Offer to Edit Offer
+
+    return (
+        <TableCell align="right">
+            <Link to={offerRoute}>
+                <IconButton>
+                    <EditIcon color="secondary" fontSize="default" />
+                </IconButton>
+            </Link>
+        </TableCell>
+    );
+};
+
+RowActions.propTypes = {
+    row: PropTypes.object.isRequired,
+};
 
 
 const CompanyOffersManagementWidget = () => {
