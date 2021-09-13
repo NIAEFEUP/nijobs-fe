@@ -4,10 +4,10 @@ import { columns } from "../Manage/CompanyOffersManagementSchema";
 
 const Filter = React.forwardRef((props, ref) => (
     <TextSearchFilter
-        label={"Location"}
+        label="Location"
         placeholder="Search"
-        id={"location-filter"}
-        column={"location"}    // column value that will be searched
+        id="location-filter"
+        column="location"  // column value that will be searched
         columns={columns}
         ref={ref}
         {...props}
