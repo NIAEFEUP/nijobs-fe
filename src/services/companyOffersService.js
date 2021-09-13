@@ -1,12 +1,10 @@
 import config from "../config";
+import { parseSearchFiltersToURL } from "./offerService";
 const { API_HOSTNAME } = config;
-
-
-const parseFiltersToURL = (filters) => Object.keys(filters).map((key) => `${key}=${filters[key]}`).join("&");
 
 export const fetchCompanyOffers = async (companyID, filters) => {
     try {
-        const res = await fetch(`${API_HOSTNAME}/offers/company/${companyID}${filters ? `?${parseFiltersToURL(filters)}` : ""}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers/company/${companyID}${filters ? `?${parseSearchFiltersToURL(filters)}` : ""}`, {
             method: "GET",
             credentials: "include",
         });

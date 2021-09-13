@@ -4,7 +4,7 @@ import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 const { API_HOSTNAME } = config;
 
-const parseSearchFiltersToURL = (filters) => Object.keys(filters)
+export const parseSearchFiltersToURL = (filters) => Object.keys(filters)
     .filter((key) => Array.isArray(filters[key]) ? filters[key].length : !!filters[key]) // Remove falsy values
     .map((key) => {
         if (filters[key]) {
