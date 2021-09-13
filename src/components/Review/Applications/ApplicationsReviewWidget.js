@@ -198,6 +198,7 @@ const ApplicationsReviewWidget = () => {
                         }}
                         RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
+                        isSelectableTable={true}
                     />
                 }
             </UndoableActionsHandlerProvider>

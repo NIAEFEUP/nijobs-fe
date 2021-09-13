@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TableRow = ({
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
-    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent,
+    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -29,12 +29,13 @@ const TableRow = ({
                 selected={isRowSelected(rowKey)}
                 data-testid="application-row"
             >
+                {isSelectableTable &&
                 <TableCell padding="checkbox">
                     <Checkbox
                         checked={isRowSelected(rowKey)}
                         inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
-                </TableCell>
+                </TableCell>}
                 <RowContent rowKey={rowKey} labelId={labelId} />
                 {RowActions &&
                     <RowActions
@@ -73,10 +74,11 @@ TableRow.propTypes = {
     RowActionsProps: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
+    isSelectableTable: PropTypes.bool,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent,
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable,
 }) => (
     <TableBody>
         {Object.keys(rows).length === 0 ?
@@ -100,6 +102,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     context={context}
                     RowContent={RowContent}
                     RowCollapseComponent={RowCollapseComponent}
+                    isSelectableTable={isSelectableTable}
                 />
             ))}
     </TableBody>
@@ -117,6 +120,7 @@ TableContent.propTypes = {
     context: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
+    isSelectableTable: PropTypes.bool,
 };
 
 export default TableContent;

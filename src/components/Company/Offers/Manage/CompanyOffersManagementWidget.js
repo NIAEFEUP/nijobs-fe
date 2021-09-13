@@ -200,6 +200,9 @@ const CompanyOffersManagementWidget = () => {
                     stickyHeader
                     emptyMessage="No applications here."
                     RowContent={RowContent}
+                    handleSelect={() => {}}
+                    handleSelectAll={() => {}}
+                    isSelectableTable={false}
                     // RowCollapseComponent={RowCollapseComponent}
                 />
             }
