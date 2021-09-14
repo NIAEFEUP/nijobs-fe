@@ -80,6 +80,7 @@ export const CreateOfferController = () => {
             technologies: [],
             location: "",
             requirements: [],
+            isHidden: false,
         },
     });
 
@@ -298,7 +299,7 @@ const asyncThrottle = (func, wait) => {
 
 
 // Maybe move this to utils
-const LocationPicker = () => {
+const LocationPicker = ({ error }) => {
     const [value, setValue] = React.useState(null);
     const [inputValue, setInputValue] = React.useState("");
     const [options, setOptions] = React.useState([]);
@@ -362,7 +363,14 @@ const LocationPicker = () => {
                 setInputValue(newInputValue);
             }}
             renderInput={(params) => (
-                <TextField {...params} label="Choose a location" variant="outlined" fullWidth />
+                <TextField
+                    {...params}
+                    label="Choose a location" variant="outlined" fullWidth
+                    error={!!error}
+                    helperText={
+                        `${error?.message || ""}`
+                    }
+                />
             )}
             renderOption={(option) => (
                 <Grid container alignItems="center">
@@ -482,6 +490,7 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
                                 inputRef={ref}
                                 onBlur={onBlur}
                                 onChange={onChange}
+                                multiline
                                 InputProps={{
                                     endAdornment:
     <RemoveLineButton i={i} items={requirements} onClick={() => onRemove(i)} /> }}
@@ -526,6 +535,12 @@ const CreateOfferForm = () => {
     const isMobile = useMobile();
 
     const [isAdvancedOpen, setAdvancedOpen] = React.useState(false);
+    const isAdvancedOpenOrErrors = () => (
+        isAdvancedOpen ||
+        !!errors.publishDate ||
+        !!errors.publishEndDate ||
+        !!errors.isHidden
+    );
 
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useCreateOfferStyles(isMobile)();
@@ -575,86 +590,51 @@ const CreateOfferForm = () => {
 
                             <Grid container>
                                 <Grid item xs={12} lg={6}>
-                                    <LocationPicker />
+                                    <FormControl fullWidth margin="dense">
+                                        <LocationPicker error={errors.location} />
+                                    </FormControl>
 
                                 </Grid>
                                 <Grid item xs={12} lg={6}>
-                                    <Controller
-                                        name="jobType"
-                                        render={(
-                                            { field: { onChange, onBlur, name, value } },
-                                        ) => (
-                                            <TextField
-                                                name={name}
-                                                fullWidth
-                                                id="job_type"
-                                                select
-                                                label="Job Type"
-                                                value={value ? value : ""}
-                                                onChange={onChange}
-                                                onBlur={onBlur}
-                                            >
-                                                {JobOptions.map(({ value, label }) => (
-                                                    <MenuItem
-                                                        key={value}
-                                                        value={value}
-                                                    >
-                                                        {label}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
+                                    <FormControl fullWidth margin="dense">
 
-                                        )}
-                                        control={control}
-                                    />
+                                        <Controller
+                                            name="jobType"
+                                            render={(
+                                                { field: { onChange, onBlur, name, value } },
+                                            ) => (
+                                                <TextField
+                                                    name={name}
+                                                    fullWidth
+                                                    id="job_type"
+                                                    select
+                                                    label="Job Type"
+                                                    value={value ? value : ""}
+                                                    onChange={onChange}
+                                                    onBlur={onBlur}
+                                                    variant="outlined"
+                                                    error={!!errors?.jobType}
+                                                    helperText={
+                                                        `${errors.jobType?.message || ""}`
+                                                    }
+                                                >
+                                                    {JobOptions.map(({ value, label }) => (
+                                                        <MenuItem
+                                                            key={value}
+                                                            value={value}
+                                                        >
+                                                            {label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
 
+                                            )}
+                                            control={control}
+                                        />
+
+                                    </FormControl>
                                 </Grid>
-                                <Grid item xs={12} lg={6}>
 
-                                    <Controller
-                                        name="publishDate"
-                                        render={(
-                                            { field: { onChange, onBlur, name, value } },
-                                        ) => (
-                                            <KeyboardDatePicker
-                                                margin="dense"
-                                                value={value}
-                                                label="Publication Date"
-                                                id="publishDate-input"
-                                                name={name}
-                                                onChange={(_, value) => onChange(value)}
-                                                onBlur={onBlur}
-                                                variant="inline"
-                                                autoOk
-                                                format="yyyy-MM-dd"
-                                                minDate={Date.now()}
-                                            />)}
-                                        control={control}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} lg={6}>
-
-                                    <Controller
-                                        name="publishEndDate"
-                                        render={(
-                                            { field: { onChange, onBlur, name, value } },
-                                        ) => (
-                                            <KeyboardDatePicker
-                                                margin="dense"
-                                                value={value}
-                                                label="Publication End Date"
-                                                id="publishEndDate-input"
-                                                name={name}
-                                                onChange={(_, value) => onChange(value)}
-                                                onBlur={onBlur}
-                                                variant="inline"
-                                                autoOk
-                                                format="yyyy-MM-dd"
-                                                minDate={Date.now()}
-                                            />)}
-                                        control={control}
-                                    />
-                                </Grid>
 
                                 <Grid item xs={12} lg={6}>
                                     <Controller
@@ -665,6 +645,7 @@ const CreateOfferForm = () => {
                                             <MultiOptionAutocomplete
                                                 name={name}
                                                 onBlur={onBlur}
+                                                error={errors.fields}
                                                 {...FieldsSelectorProps}
                                             />
                                         )}
@@ -680,12 +661,125 @@ const CreateOfferForm = () => {
                                             <MultiOptionAutocomplete
                                                 name={name}
                                                 onBlur={onBlur}
+                                                error={errors.technologies}
                                                 {...TechSelectorProps}
                                             />)}
                                         control={control}
                                     />
 
                                 </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    <FormControl>
+                                        <Controller
+                                            name="jobStartDate"
+                                            render={(
+                                                { field: { onChange, onBlur, name, value } },
+                                            ) => (
+                                                <KeyboardDatePicker
+                                                    margin="dense"
+                                                    value={value}
+                                                    label="Job Start Date"
+                                                    id="startDate-input"
+                                                    name={name}
+                                                    onChange={(_, value) => onChange(value)}
+                                                    onBlur={onBlur}
+                                                    variant="inline"
+                                                    autoOk
+                                                    format="yyyy-MM-dd"
+                                                    minDate={Date.now()}
+                                                    error={!!errors?.jobStartDate}
+                                                    helperText={
+                                                        `${errors.jobStartDate?.message || ""}`
+                                                    }
+                                                />)}
+                                            control={control}
+                                        />
+
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+
+                                    <Controller
+                                        name="jobDuration"
+                                        render={(
+                                            { field: { onChange, onBlur, name, value } },
+                                        ) => (
+                                            <FormControl
+                                                margin="normal"
+                                                variant="outlined"
+                                            >
+                                                <Slider
+                                                    name={name}
+                                                    value={value}
+                                                    onChange={(_e, values) => onChange(values)}
+                                                    onBlur={onBlur}
+                                                    valueLabelDisplay="auto"
+                                                    aria-labelledby="range-slider"
+                                                    min={JOB_MIN_DURATION}
+                                                    max={JOB_MAX_DURATION}
+                                                />
+
+                                                <FormHelperText>
+                                                    {`Job duration: ${value[0]} - ${value[1]} month(s)`}
+                                                </FormHelperText>
+                                            </FormControl>)}
+                                        control={control}
+                                    />
+
+                                </Grid>
+
+                                <Grid item xs={12} lg={6}>
+                                    <FormControl>
+                                        <Controller
+                                            name="vacancies"
+                                            render={(
+                                                { field: { onChange, onBlur, name, ref, value } },
+                                            ) => (
+                                                <TextField
+                                                    name={name}
+                                                    value={value}
+                                                    label="Vacancies"
+                                                    id="vacancies"
+                                                    error={!!errors?.vacancies}
+                                                    helperText={
+                                                        `${errors.vacancies?.message || ""}`
+                                                    }                                                    inputRef={ref}
+                                                    onChange={(_e) => {
+                                                        let value = _e.target.value.replace(/[^0-9]/g, "");
+                                                        value = value ? Number.parseInt(value, 10) : "";
+                                                        onChange(value);
+                                                    }}
+                                                    onBlur={onBlur}
+                                                />)}
+                                            control={control}
+                                        />
+                                    </FormControl>
+                                </Grid>
+
+                                <Grid item xs={12} lg={6}>
+                                    <FormControl>
+                                        <FormControlLabel
+                                            label="Paid Job"
+                                            control={
+                                                <Controller
+                                                    name="isPaid"
+                                                    render={(
+                                                        { field: { onChange, onBlur, name, value } },
+                                                    ) => (
+                                                        <Checkbox
+                                                            checked={value}
+                                                            onChange={onChange}
+                                                            name={name}
+                                                            onBlur={onBlur}
+                                                        />
+                                                    )}
+                                                    control={control}
+                                                />
+                                            }
+                                        />
+                                    </FormControl>
+                                </Grid>
+
                                 <Grid item xs={12} lg={12}>
                                     <Button
                                         onClick={() => setAdvancedOpen(!isAdvancedOpen)}
@@ -693,7 +787,7 @@ const CreateOfferForm = () => {
                                         margin="dense"
                                         style={{ marginTop: 10 }}
                                         endIcon={
-                                            isAdvancedOpen
+                                            isAdvancedOpenOrErrors()
                                                 ? <KeyboardArrowUp />
                                                 : <KeyboardArrowDown />}
                                     >
@@ -702,19 +796,24 @@ const CreateOfferForm = () => {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12} lg={12}>
-                                    <Collapse in={isAdvancedOpen}>
+                                    <Collapse
+                                        in={
+                                            isAdvancedOpenOrErrors()
+                                        }
+                                    >
                                         <Grid container>
                                             <Grid item xs={12} lg={6}>
+
                                                 <Controller
-                                                    name="jobStartDate"
+                                                    name="publishDate"
                                                     render={(
                                                         { field: { onChange, onBlur, name, value } },
                                                     ) => (
                                                         <KeyboardDatePicker
                                                             margin="dense"
                                                             value={value}
-                                                            label="Job Start Date"
-                                                            id="startDate-input"
+                                                            label="Publication Date"
+                                                            id="publishDate-input"
                                                             name={name}
                                                             onChange={(_, value) => onChange(value)}
                                                             onBlur={onBlur}
@@ -727,79 +826,52 @@ const CreateOfferForm = () => {
                                                 />
                                             </Grid>
                                             <Grid item xs={12} lg={6}>
+
                                                 <Controller
-                                                    name="jobDuration"
+                                                    name="publishEndDate"
                                                     render={(
                                                         { field: { onChange, onBlur, name, value } },
                                                     ) => (
-                                                        <FormControl
-                                                            fullWidth
-                                                        >
-                                                            <Slider
-                                                                name={name}
-                                                                value={value}
-                                                                onChange={(_e, values) => onChange(values)}
-                                                                onBlur={onBlur}
-                                                                valueLabelDisplay="auto"
-                                                                aria-labelledby="range-slider"
-                                                                min={JOB_MIN_DURATION}
-                                                                max={JOB_MAX_DURATION}
-                                                            />
-
-                                                            <FormHelperText>
-                                                                {`Job duration: ${value[0]} - ${value[1]} month(s)`}
-                                                            </FormHelperText>
-                                                        </FormControl>)}
-                                                    control={control}
-                                                />
-                                            </Grid>
-
-                                            <Grid item xs={12} lg={6}>
-                                                <Controller
-                                                    name="vacancies"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, ref, value } },
-                                                    ) => (
-                                                        <TextField
-                                                            name={name}
+                                                        <KeyboardDatePicker
+                                                            margin="dense"
                                                             value={value}
-                                                            label="Vacancies"
-                                                            id="vacancies"
-                                                            error={!!errors.title}
-                                                            inputRef={ref}
-                                                            onChange={(_e) => {
-                                                                let value = _e.target.value.replace(/[^0-9]/g, "");
-                                                                value = value ? Number.parseInt(value, 10) : "";
-                                                                onChange(value);
-                                                            }}
+                                                            label="Publication End Date"
+                                                            id="publishEndDate-input"
+                                                            name={name}
+                                                            onChange={(_, value) => onChange(value)}
                                                             onBlur={onBlur}
+                                                            variant="inline"
+                                                            autoOk
+                                                            format="yyyy-MM-dd"
+                                                            minDate={Date.now()}
+                                                            error={!!errors?.publishEndDate}
+                                                            helperText={errors.publishEndDate?.message || ""}
                                                         />)}
                                                     control={control}
                                                 />
                                             </Grid>
 
                                             <Grid item xs={12} lg={6}>
-                                                <Controller
-                                                    name="isPaid"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, value } },
-                                                    ) => (
-                                                        <FormControlLabel
-                                                            control={
+                                                <FormControlLabel
+                                                    label="Hide offer"
+                                                    control={
+                                                        <Controller
+                                                            name="isHidden"
+                                                            render={(
+                                                                { field: { onChange, onBlur, name, value } },
+                                                            ) => (
                                                                 <Checkbox
                                                                     checked={value}
                                                                     onChange={onChange}
                                                                     name={name}
                                                                     onBlur={onBlur}
                                                                 />
-                                                            }
-                                                            label="Paid?"
+                                                            )}
+                                                            control={control}
                                                         />
-                                                    )}
-                                                    control={control}
+                                                    }
                                                 />
                                             </Grid>
-
                                         </Grid>
 
                                     </Collapse>

@@ -13,6 +13,7 @@ const MultiOptionAutocomplete = forwardRef(
         options,
         onChange,
         onBlur,
+        error,
         getOptionLabel,
         chipWrapperProps,
         className,
@@ -49,6 +50,10 @@ const MultiOptionAutocomplete = forwardRef(
                             label={label}
                             placeholder={placeholder}
                             inputRef={ref}
+                            error={!!error}
+                            helperText={
+                                `${error?.message || ""}`
+                            }
                         />
                     )}
                 />
@@ -82,6 +87,8 @@ MultiOptionAutocomplete.propTypes = {
     getOptionLabel: PropTypes.func.isRequired,
     chipWrapperProps: PropTypes.any,
     className: PropTypes.any,
+    error: PropTypes.any,
+    "error.messages": PropTypes.string,
 
 };
 
