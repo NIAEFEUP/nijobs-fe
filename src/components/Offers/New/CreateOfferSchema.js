@@ -13,6 +13,13 @@ export default yup.object().shape({
     publishEndDate: yup.date(ValidationReasons.DATE)
         .nullable(true)
         .required(ValidationReasons.REQUIRED),
+    // .min(yup.ref("publishDate"), "Publication end date should be after Publication date"),
+    // .when("publishDate", (publishDate, schema) => schema.test({
+    //     test: (publishEndDate) => !!publishDate && (console.log(publishDate),
+    //     new Date(publishEndDate) >= new Date(publishDate)),
+    //     message: "Publication end date should be after Publication date",
+    // })),
+
     jobDuration: yup.array()
         .of(yup.number(ValidationReasons.INT).positive()),
     jobStartDate: yup.date().nullable(true),
@@ -31,12 +38,15 @@ export default yup.object().shape({
         return yup.number(ValidationReasons.INT);
     }),
     jobType: yup.string()
+        .nullable(true)
         .required(ValidationReasons.REQUIRED),
     fields: yup.array()
         .required(ValidationReasons.REQUIRED),
     technologies: yup.array()
         .required(ValidationReasons.REQUIRED),
     location: yup.string()
+        .nullable(true)
+        .matches(/^([a-zA-Z]+([\s-][a-zA-Z])*)+, ([a-zA-Z]+([\s-][a-zA-Z])*)+$/, "The location format must be <city>, <country>")
         .required(ValidationReasons.REQUIRED),
     requirements: yup.array()
         .of(yup.string()),

@@ -14,7 +14,7 @@ import Offer from "./Offer";
 import OfferVisibilityOptions from "./OfferVisibilityOptions";
 import ChipList from "./ChipList";
 import OfferContentListItem from "./OfferContentListItem";
-import JOB_OPTIONS from "../../SearchArea/AdvancedSearch/JobOptions";
+import JOB_OPTIONS from "../../../utils/offers/JobOptions";
 import useSession from "../../../../hooks/useSession";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 

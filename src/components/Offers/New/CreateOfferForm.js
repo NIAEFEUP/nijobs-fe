@@ -78,7 +78,7 @@ export const CreateOfferController = () => {
             jobType: "",
             fields: [],
             technologies: [],
-            location: "",
+            location: null,
             requirements: [],
             isHidden: false,
         },
@@ -299,8 +299,7 @@ const asyncThrottle = (func, wait) => {
 
 
 // Maybe move this to utils
-const LocationPicker = ({ error }) => {
-    const [value, setValue] = React.useState(null);
+const LocationPicker = ({ name, value, onChange, onBlur,  error }) => {
     const [inputValue, setInputValue] = React.useState("");
     const [options, setOptions] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
@@ -308,6 +307,37 @@ const LocationPicker = ({ error }) => {
     const fetchCitiesThrottled = useCallback(
         asyncThrottle(searchCities, 1500),
         [],
+    );
+
+    const parseCustomLocation = useCallback(
+        (loc) => loc.trimStart() || null,
+        []
+    );
+
+    const parsePresetLocation = useCallback(
+        (loc) => `${loc.city}, ${loc.country}`,
+        []
+    );
+
+    const isCustomLocation = useCallback(
+        (loc) => typeof loc === "string",
+        []
+    );
+
+    const parseNewLocation = useCallback(
+        (location) => {
+            let value;
+
+            if (!location) {
+                value = location;
+            } else {
+                value = isCustomLocation(location)
+                    ? parseCustomLocation(location)
+                    : parsePresetLocation(location);
+            }
+            return value;
+        },
+        [parseCustomLocation, parsePresetLocation, isCustomLocation]
     );
 
     useEffect(() => {
@@ -346,21 +376,27 @@ const LocationPicker = ({ error }) => {
 
     return (
         <Autocomplete
-            getOptionLabel={(option) => `${option.city}, ${option.country}`}
+            getOptionLabel={(option) => parseNewLocation(option)}
             filterOptions={(x) => x}
             options={options}
             autoComplete
+            autoSelect
             includeInputInList
             filterSelectedOptions
             freeSolo
             loading={loading}
             value={value}
-            onChange={(event, newValue) => {
-                setOptions(newValue ? [newValue, ...options] : options);
-                setValue(newValue);
+            inputValue={inputValue}
+            name={name}
+            onBlur={onBlur}
+            onChange={(e, newValue) => {
+                const value = parseNewLocation(newValue);
+                setOptions(value ? [value, ...options] : options);
+                onChange(e, value);
             }}
-            onInputChange={(event, newInputValue) => {
-                setInputValue(newInputValue);
+            onInputChange={(e, newInputValue) => {
+                const value = newInputValue.trimStart();
+                setInputValue(value);
             }}
             renderInput={(params) => (
                 <TextField
@@ -373,16 +409,19 @@ const LocationPicker = ({ error }) => {
                 />
             )}
             renderOption={(option) => (
-                <Grid container alignItems="center">
-                    <Grid item>
-                        <LocationOn />
-                    </Grid>
-                    <Grid item xs>
-                        <Typography variant="body1">
-                            {`${option.city}, ${option.country}`}
-                        </Typography>
-                    </Grid>
-                </Grid>
+                option.city && option.country
+                    ? (
+                        <Grid container alignItems="center">
+                            <Grid item>
+                                <LocationOn />
+                            </Grid>
+                            <Grid item xs>
+                                <Typography variant="body1">
+                                    {`${option.city}, ${option.country}`}
+                                </Typography>
+                            </Grid>
+                        </Grid>)
+                    : <></>
             )}
         />
     );
@@ -553,7 +592,7 @@ const CreateOfferForm = () => {
         <div className={classes.formCard}>
             <CardHeader title={!useMobile() && "New Offer" } />
             <Content className={classes.formContent}>
-                <Grid container>
+                <Grid container className={classes.formArea}>
                     <Grid item xs={12}>
                         <form
                             onSubmit={submit}
@@ -591,7 +630,22 @@ const CreateOfferForm = () => {
                             <Grid container>
                                 <Grid item xs={12} lg={6}>
                                     <FormControl fullWidth margin="dense">
-                                        <LocationPicker error={errors.location} />
+                                        <Controller
+                                            name="location"
+                                            render={(
+                                                { field: { onChange, onBlur, name, value } },
+                                            ) => (
+                                                <LocationPicker
+                                                    value={value}
+                                                    onChange={(_e, value) => onChange(value)}
+                                                    onBlur={onBlur}
+                                                    name={name}
+                                                    error={errors.location}
+                                                />
+                                            )}
+                                            control={control}
+                                        />
+
                                     </FormControl>
 
                                 </Grid>
@@ -797,9 +851,7 @@ const CreateOfferForm = () => {
                                 </Grid>
                                 <Grid item xs={12} lg={12}>
                                     <Collapse
-                                        in={
-                                            isAdvancedOpenOrErrors()
-                                        }
+                                        in={isAdvancedOpenOrErrors()}
                                     >
                                         <Grid container>
                                             <Grid item xs={12} lg={6}>
@@ -838,12 +890,16 @@ const CreateOfferForm = () => {
                                                             label="Publication End Date"
                                                             id="publishEndDate-input"
                                                             name={name}
-                                                            onChange={(_, value) => onChange(value)}
+                                                            onChange={(_, value) => {
+                                                                const date = new Date(value);
+                                                                date.setHours(23, 59, 59, 0);
+                                                                onChange(date);
+                                                            }}
                                                             onBlur={onBlur}
                                                             variant="inline"
                                                             autoOk
                                                             format="yyyy-MM-dd"
-                                                            minDate={Date.now()}
+                                                            minDate={fields.publishDate}
                                                             error={!!errors?.publishEndDate}
                                                             helperText={errors.publishEndDate?.message || ""}
                                                         />)}
