@@ -18,7 +18,7 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     } else if (error) {
         return (
             <h1>
-                {error}
+                {error?.msg ?? error}
             </h1>
         );
     } else {
@@ -72,7 +72,7 @@ const CompanyOffersManagementWidget = () => {
             }
             setIsLoading(false);
         }).catch((err) => {
-            setError(err);
+            setError(err[0]);
             setIsLoading(false);
         });
     }, [data.company._id, isLoggedIn]);

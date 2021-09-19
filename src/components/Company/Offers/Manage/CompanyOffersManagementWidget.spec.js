@@ -15,6 +15,7 @@ describe("App", () => {
     const MOCK_OFFERS = [
         {
             _id: "random uuid4",
+            owner: "company_id",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -25,6 +26,7 @@ describe("App", () => {
         },
         {
             _id: "random uuid5",
+            owner: "company_id",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -36,7 +38,7 @@ describe("App", () => {
     ];
 
     beforeEach(() => {
-        useSession.mockReturnValue({ data: { company: "company" }, isLoggedIn: true });
+        useSession.mockReturnValue({ data: { company: { name: "company1", _id: "company_id" } }, isLoggedIn: true });
     });
 
     test("Renders Loading", () => {
@@ -97,9 +99,9 @@ describe("App", () => {
     });
 
     test("Error fetching offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) => setTimeout(() => {
-            reject("Error fetching offers");
-        }, 1000)));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) =>
+            reject([{ msg: "Error fetching offers" }])
+        ));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(

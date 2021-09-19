@@ -1,21 +1,10 @@
 import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetchError } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-
 import config from "../config";
+import { parseFiltersToURL } from "../utils";
+
 const { API_HOSTNAME } = config;
 
-export const parseSearchFiltersToURL = (filters) => Object.keys(filters)
-    .filter((key) => Array.isArray(filters[key]) ? filters[key].length : !!filters[key]) // Remove falsy values
-    .map((key) => {
-        if (filters[key]) {
-            if (Array.isArray(filters[key])) {
-                return filters[key]
-                    .map((val) => `${key}=${encodeURIComponent(val)}`)
-                    .join("&");
-            } else return `${key}=${encodeURIComponent(filters[key])}`;
-        } else return  "";
-    })
-    .join("&");
 
 export const searchOffers = (filters) => async (dispatch) => {
 
@@ -23,7 +12,7 @@ export const searchOffers = (filters) => async (dispatch) => {
     dispatch(setLoadingOffers(true));
 
     try {
-        const res = await fetch(`${API_HOSTNAME}/offers?${parseSearchFiltersToURL(filters)}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers?${parseFiltersToURL(filters)}`, {
             method: "GET",
             credentials: "include",
         });
