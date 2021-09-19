@@ -60,9 +60,9 @@ describe("App", () => {
     });
 
     test("Loads Valid Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) => setTimeout(() => {
-            resolve(MOCK_OFFERS);
-        }, 1000)));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+            resolve(MOCK_OFFERS)
+        ));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(
@@ -76,14 +76,14 @@ describe("App", () => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
             expect(screen.getAllByText("Guy in the background")).toHaveLength(2);
         }, {
-            timeout: 2000,
+            timeout: 1000,
         });
     });
 
     test("Loads Empty Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) => setTimeout(() => {
-            resolve([]);
-        }, 1000)));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+            resolve([])
+        ));
         // By waiting for act it executes all the async code at once
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -94,7 +94,7 @@ describe("App", () => {
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
         }, {
-            timeout: 2000,
+            timeout: 1000,
         });
     });
 
@@ -115,7 +115,7 @@ describe("App", () => {
 
             expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
         }, {
-            timeout: 2000,
+            timeout: 1000,
         });
     });
 });
