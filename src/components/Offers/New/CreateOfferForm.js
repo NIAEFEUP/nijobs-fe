@@ -19,6 +19,7 @@ import {
     FormControlLabel,
     MenuItem,
     CircularProgress,
+    Snackbar,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -45,7 +46,7 @@ import {
     AddCircle,
     RemoveCircle,
 } from "@material-ui/icons";
-import { Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
+import { Alert, Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { throttle } from "lodash";
 
@@ -56,6 +57,7 @@ import useFieldSelector from "../../utils/offers/useFieldSelector";
 import useTechSelector from "../../utils/offers/useTechSelector";
 import { newOffer } from "../../../services/offerService";
 import useSession from "../../../hooks/useSession";
+import { RouterLink } from "../../../utils";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -66,7 +68,7 @@ export const CreateOfferController = () => {
     const isAdmin = session.data?.isAdmin;
     const company = session.data?.company?._id;
 
-    const isLoggedIn = isAdmin || !!company;
+    const isLoggedIn = session.isLoggedIn;
 
     // eslint-disable-next-line no-unused-vars
     const { handleSubmit, formState: { errors }, control, register, setValue, getValues } = useForm({
@@ -590,6 +592,37 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
     );
 };
 
+const LoginAlert = ({ isLoggedIn }) => (
+
+    <Snackbar open={!isLoggedIn}>
+        <Alert
+            severity="error"
+            action={
+                <>
+                    <Button
+                        color="inherit"
+                        size="small"
+                        component={RouterLink}
+                        to="/"
+                    >
+                    Login
+                    </Button>
+                    <Button
+                        color="inherit"
+                        size="small"
+                        component={RouterLink}
+                        to="/apply/company"
+                    >
+                    Join us
+                    </Button>
+                </>
+            }
+        >
+        The user must be logged in to create an offer
+        </Alert>
+    </Snackbar>
+);
+
 const CreateOfferForm = () => {
 
     const {
@@ -631,8 +664,7 @@ const CreateOfferForm = () => {
         <div className={classes.formCard}>
             <CardHeader title={!useMobile() && "New Offer" } />
             <Content className={classes.formContent}>
-                {!isLoggedIn &&
-                <Typography variant="h6">The user must be logged in to create an offer</Typography>}
+                <LoginAlert isLoggedIn={isLoggedIn} />
                 <Grid container className={classes.formArea}>
                     <Grid item xs={12}>
                         <form
