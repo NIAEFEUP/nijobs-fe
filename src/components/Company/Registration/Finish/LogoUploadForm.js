@@ -135,7 +135,7 @@ const LogoUploadForm = () => {
         <>
             <Grid
                 container
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
             >
                 <Grid item xs={12}>
@@ -174,7 +174,7 @@ const LogoUploadForm = () => {
             </Grid>
             <Grid
                 container
-                justify="center"
+                justifyContent="center"
                 alignItems="center"
                 className={classes.logoPreview}
             >
