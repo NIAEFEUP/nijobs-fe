@@ -18,6 +18,7 @@ import {
     Checkbox,
     FormControlLabel,
     MenuItem,
+    CircularProgress,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -28,7 +29,7 @@ import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMobile } from "../../../utils/media-queries";
 import CreateOfferSchema from "./CreateOfferSchema";
 import useCreateOfferStyles from "./createOfferStyles";
-import { CreateOfferConstants } from "./CreateOfferUtils";
+import { CreateOfferConstants, defaultDates } from "./CreateOfferUtils";
 import { searchCities } from "../../../services/locationSearchService";
 
 import "./editor.css";
@@ -53,10 +54,19 @@ import { INITIAL_JOB_DURATION, JOB_MIN_DURATION, JOB_MAX_DURATION } from "../../
 import MultiOptionAutocomplete from "../../utils/form/MultiOptionAutocomplete";
 import useFieldSelector from "../../utils/offers/useFieldSelector";
 import useTechSelector from "../../utils/offers/useTechSelector";
+import { newOffer } from "../../../services/offerService";
+import useSession from "../../../hooks/useSession";
 
 export const CreateOfferControllerContext = React.createContext();
 
 export const CreateOfferController = () => {
+
+    const session = useSession();
+
+    const isAdmin = session.data?.isAdmin;
+    const company = session.data?.company?._id;
+
+    const isLoggedIn = isAdmin || !!company;
 
     // eslint-disable-next-line no-unused-vars
     const { handleSubmit, formState: { errors }, control, register, setValue, getValues } = useForm({
@@ -65,8 +75,8 @@ export const CreateOfferController = () => {
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
-            publishDate: Date.now(),
-            publishEndDate: null,
+            publishDate: defaultDates.publishDate(),
+            publishEndDate: defaultDates.publishEndDate(),
             jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
             jobStartDate: null,
             description: "",
@@ -79,8 +89,9 @@ export const CreateOfferController = () => {
             fields: [],
             technologies: [],
             location: null,
-            requirements: [],
+            requirements: [{ value: "" }],
             isHidden: false,
+            owner: "",
         },
     });
 
@@ -98,32 +109,27 @@ export const CreateOfferController = () => {
         name: "contacts",
     });
 
+    const [loading, setLoading] = React.useState(false);
+
     const submit = useCallback(
         // eslint-disable-next-line no-unused-vars
         (data) => {
-
-            console.log("data", data);
-
-            // TODO
-
-
-            // setLoading(true);
-            // const { bio, contacts } = data;
-            // getCroppedImg(
-            //     logoUploadOptions.logoPreview,
-            //     logoUploadOptions.croppedAreaPixels,
-            //     0
-            // ).then((croppedImage) => completeRegistration({ logo: croppedImage, bio, contacts: contacts.map(({ value }) => value) }))
-            //     .then(() => {
-            //         setSucceeded(true);
-            //         setLoading(false);
-            //     })
-            //     .catch((err) => {
-            //         setSubmissionErrors(err);
-            //         setLoading(false);
-            //     });
+            setLoading(true);
+            newOffer({
+                ...data,
+                contacts: contacts.map((val) => val.value),
+                requirements: requirements.map((val) => (val, val.value)),
+                owner: data.owner || company,
+            })
+                .then(() => {
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setLoading(false);
+                });
         },
-        [],
+        [company, contacts, requirements],
     );
 
     return {
@@ -141,6 +147,11 @@ export const CreateOfferController = () => {
                 removeRequirement,
                 getValues,
                 setValue,
+                loading,
+                setLoading,
+                isAdmin,
+                company,
+                isLoggedIn,
             },
         },
     };
@@ -156,7 +167,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const EditorToolbar = ({ editor }) => {
+const EditorToolbar = ({ editor, disabled }) => {
 
     const [formats, setFormats] = React.useState(() => []);
     const classes = useStyles();
@@ -191,6 +202,7 @@ const EditorToolbar = ({ editor }) => {
                         value="bold"
                         aria-label="bold"
                         onClick={() => editor.chain().focus().toggleBold().run()}
+                        disabled={disabled}
                     >
                         <FormatBold fontSize="small" />
                     </ToggleButton>
@@ -198,6 +210,7 @@ const EditorToolbar = ({ editor }) => {
                         value="italic"
                         aria-label="italic"
                         onClick={() => editor.chain().focus().toggleItalic().run()}
+                        disabled={disabled}
                     >
                         <FormatItalic fontSize="small" />
                     </ToggleButton>
@@ -205,6 +218,7 @@ const EditorToolbar = ({ editor }) => {
                         value="underline"
                         aria-label="underline"
                         onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        disabled={disabled}
                     >
                         <FormatUnderlined fontSize="small" />
                     </ToggleButton>
@@ -216,6 +230,7 @@ const EditorToolbar = ({ editor }) => {
                         value="bulletList"
                         aria-label="bulletList"
                         onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        disabled={disabled}
                     >
                         <FormatListBulleted fontSize="small" />
                     </ToggleButton>
@@ -223,6 +238,7 @@ const EditorToolbar = ({ editor }) => {
                         value="orderedList"
                         aria-label="orderedList"
                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                        disabled={disabled}
                     >
                         <FormatListNumbered fontSize="small" />
                     </ToggleButton>
@@ -232,7 +248,7 @@ const EditorToolbar = ({ editor }) => {
     );
 };
 
-const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText }) => {
+const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText, disabled }) => {
 
     const editor = useEditor({
         extensions: [
@@ -267,6 +283,11 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 
     }, [editor, onChangeDescription, onChangeDescriptionText]);
 
+    useEffect(() => {
+        if (!editor) return;
+        editor.setEditable(!disabled);
+    }, [disabled, editor]);
+
     const helperText =
     `${editor?.view.state.doc.textContent.length}/${CreateOfferConstants.description.maxLength} ${additionalHelperText}`;
 
@@ -274,7 +295,7 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
         <>
             {!!editor &&
             <FormControl margin="dense" fullWidth>
-                <EditorToolbar editor={editor} />
+                <EditorToolbar editor={editor} disabled={disabled} />
                 <EditorContent editor={editor} />
                 <FormHelperText error={error}>
                     {helperText}
@@ -299,7 +320,7 @@ const asyncThrottle = (func, wait) => {
 
 
 // Maybe move this to utils
-const LocationPicker = ({ name, value, onChange, onBlur,  error }) => {
+const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => {
     const [inputValue, setInputValue] = React.useState("");
     const [options, setOptions] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
@@ -388,6 +409,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error }) => {
             value={value}
             inputValue={inputValue}
             name={name}
+            disabled={disabled}
             onBlur={onBlur}
             onChange={(e, newValue) => {
                 const value = parseNewLocation(newValue);
@@ -449,7 +471,7 @@ const RemoveLineButton = ({ onClick, items, i }) => {
     );
 };
 
-const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors }) => {
+const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors, disabled }) => {
     const isMobile = useMobile();
     const classes = useCreateOfferStyles(isMobile)();
 
@@ -473,15 +495,16 @@ const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, error
                                 value={value}
                                 label={`Contact #${i}`}
                                 id={`Contact #${i}`}
-                                error={!!errors.contacts?.[i]}
+                                error={!!errors?.[i]}
                                 inputRef={ref}
                                 onBlur={onBlur}
+                                disabled={disabled}
                                 onChange={onChange}
                                 InputProps={{
                                     endAdornment:
     <RemoveLineButton i={i} items={contacts} onClick={() => onRemove(i)} /> }}
                                 margin="normal"
-                                helperText={errors.contacts?.[i]?.value?.message || ""}
+                                helperText={errors?.[i]?.value?.message || ""}
                             />)}
                         control={control}
                         defaultValue={getValues(`contacts.${i}.value`) || ""}
@@ -490,18 +513,24 @@ const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, error
                 <Button
                     color="primary"
                     startIcon={<AddCircle />}
-                    disabled={Object.keys(contacts).length >= 10}
+                    disabled={Object.keys(contacts).length >= 10 || disabled}
                     onClick={() => onAdd()}
                     className={classes.addContactBtn}
                 >
                 Add Entry
                 </Button>
+                {errors ?
+                    <FormHelperText error={!!errors}>
+                        {errors.message}
+                    </FormHelperText>
+                    : <></>
+                }
             </Box>
         </>
     );
 };
 
-const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, control, errors }) => {
+const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, control, errors, disabled }) => {
     const isMobile = useMobile();
     const classes = useCreateOfferStyles(isMobile)();
 
@@ -525,16 +554,17 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
                                 value={value}
                                 label={`Requirement #${i}`}
                                 id={`Requirement #${i}`}
-                                error={!!errors.requirements?.[i]}
+                                error={!!errors?.[i]}
                                 inputRef={ref}
                                 onBlur={onBlur}
                                 onChange={onChange}
+                                disabled={disabled}
                                 multiline
                                 InputProps={{
                                     endAdornment:
     <RemoveLineButton i={i} items={requirements} onClick={() => onRemove(i)} /> }}
                                 margin="normal"
-                                helperText={errors.requirements?.[i]?.value?.message || ""}
+                                helperText={errors?.[i]?.value?.message || ""}
                             />)}
                         control={control}
                         defaultValue={getValues(`requirements.${i}.value`) || ""}
@@ -543,12 +573,18 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
                 <Button
                     color="primary"
                     startIcon={<AddCircle />}
-                    disabled={Object.keys(requirements).length >= 10}
+                    disabled={Object.keys(requirements).length >= 10 || disabled}
                     onClick={() => onAdd()}
                     className={classes.addContactBtn}
                 >
                     Add Entry
                 </Button>
+                {errors ?
+                    <FormHelperText error={!!errors}>
+                        {errors.message}
+                    </FormHelperText>
+                    : <></>
+                }
             </Box>
         </>
     );
@@ -569,6 +605,9 @@ const CreateOfferForm = () => {
         appendRequirement,
         removeRequirement,
         setValue,
+        loading,
+        isAdmin,
+        isLoggedIn,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
@@ -592,42 +631,71 @@ const CreateOfferForm = () => {
         <div className={classes.formCard}>
             <CardHeader title={!useMobile() && "New Offer" } />
             <Content className={classes.formContent}>
+                {!isLoggedIn &&
+                <Typography variant="h6">The user must be logged in to create an offer</Typography>}
                 <Grid container className={classes.formArea}>
                     <Grid item xs={12}>
                         <form
                             onSubmit={submit}
                             aria-label="Create Offer Form"
                         >
-                            <Controller
-                                name="title"
-                                render={(
-                                    { field: { onChange, onBlur, ref, name, value } },
-                                ) => (
-                                    <TextField
-                                        name={name}
-                                        value={value}
-                                        label="Offer Title"
-                                        id="title"
-                                        error={!!errors.title}
-                                        inputRef={ref}
-                                        onBlur={onBlur}
-                                        onChange={onChange}
-                                        helperText={
-                                            `${value?.length}/${CreateOfferConstants.title.maxLength} ${errors.title?.message || ""}`
-                                        }
-                                        variant="outlined"
-                                        FormHelperTextProps={{
-                                            style: {
-                                                marginLeft: 0,
-                                            },
-                                        }}
-                                        margin="dense"
-                                        fullWidth
-                                    />)}
-                                control={control}
-                            />
-
                             <Grid container>
+                                <Grid item xs={12} lg={isAdmin ? 6 : 12}>
+                                    <Controller
+                                        name="title"
+                                        render={(
+                                            { field: { onChange, onBlur, ref, name, value } },
+                                        ) => (
+                                            <TextField
+                                                name={name}
+                                                value={value}
+                                                label="Offer Title"
+                                                id="title"
+                                                error={!!errors.title}
+                                                inputRef={ref}
+                                                onBlur={onBlur}
+                                                onChange={onChange}
+                                                helperText={
+                                                    `${value?.length}/${CreateOfferConstants.title.maxLength} 
+                                                    ${errors.title?.message || ""}`
+                                                }
+                                                variant="outlined"
+                                                margin="dense"
+                                                fullWidth
+                                                disabled={!isLoggedIn}
+                                            />)}
+                                        control={control}
+                                    />
+                                </Grid>
+
+                                {isAdmin &&
+                                <Grid item xs={12} lg={6}>
+                                    <Controller
+                                        name="owner"
+                                        render={(
+                                            { field: { onChange, onBlur, ref, name, value } },
+                                        ) => (
+                                            <TextField
+                                                name={name}
+                                                value={value}
+                                                label="Owner"
+                                                id="owner"
+                                                error={!!errors.owner}
+                                                inputRef={ref}
+                                                onBlur={onBlur}
+                                                onChange={onChange}
+                                                helperText={
+                                                    `${errors.owner?.message || ""}`
+                                                }
+                                                variant="outlined"
+                                                margin="dense"
+                                                fullWidth
+                                                disabled={!isLoggedIn}
+                                            />)}
+                                        control={control}
+                                    />
+                                </Grid>}
+
                                 <Grid item xs={12} lg={6}>
                                     <FormControl fullWidth margin="dense">
                                         <Controller
@@ -641,6 +709,7 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     name={name}
                                                     error={errors.location}
+                                                    disabled={!isLoggedIn}
                                                 />
                                             )}
                                             control={control}
@@ -667,6 +736,7 @@ const CreateOfferForm = () => {
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     variant="outlined"
+                                                    disabled={!isLoggedIn}
                                                     error={!!errors?.jobType}
                                                     helperText={
                                                         `${errors.jobType?.message || ""}`
@@ -700,6 +770,7 @@ const CreateOfferForm = () => {
                                                 name={name}
                                                 onBlur={onBlur}
                                                 error={errors.fields}
+                                                disabled={!isLoggedIn}
                                                 {...FieldsSelectorProps}
                                             />
                                         )}
@@ -716,6 +787,7 @@ const CreateOfferForm = () => {
                                                 name={name}
                                                 onBlur={onBlur}
                                                 error={errors.technologies}
+                                                disabled={!isLoggedIn}
                                                 {...TechSelectorProps}
                                             />)}
                                         control={control}
@@ -739,6 +811,7 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     variant="inline"
                                                     autoOk
+                                                    disabled={!isLoggedIn}
                                                     format="yyyy-MM-dd"
                                                     minDate={Date.now()}
                                                     error={!!errors?.jobStartDate}
@@ -771,6 +844,7 @@ const CreateOfferForm = () => {
                                                     aria-labelledby="range-slider"
                                                     min={JOB_MIN_DURATION}
                                                     max={JOB_MAX_DURATION}
+                                                    disabled={!isLoggedIn}
                                                 />
 
                                                 <FormHelperText>
@@ -794,6 +868,7 @@ const CreateOfferForm = () => {
                                                     value={value}
                                                     label="Vacancies"
                                                     id="vacancies"
+                                                    disabled={!isLoggedIn}
                                                     error={!!errors?.vacancies}
                                                     helperText={
                                                         `${errors.vacancies?.message || ""}`
@@ -814,6 +889,7 @@ const CreateOfferForm = () => {
                                     <FormControl>
                                         <FormControlLabel
                                             label="Paid Job"
+                                            disabled={!isLoggedIn}
                                             control={
                                                 <Controller
                                                     name="isPaid"
@@ -825,6 +901,7 @@ const CreateOfferForm = () => {
                                                             onChange={onChange}
                                                             name={name}
                                                             onBlur={onBlur}
+                                                            disabled={!isLoggedIn}
                                                         />
                                                     )}
                                                     control={control}
@@ -867,12 +944,15 @@ const CreateOfferForm = () => {
                                                             label="Publication Date"
                                                             id="publishDate-input"
                                                             name={name}
+                                                            disabled={!isLoggedIn}
                                                             onChange={(_, value) => onChange(value)}
                                                             onBlur={onBlur}
                                                             variant="inline"
                                                             autoOk
                                                             format="yyyy-MM-dd"
                                                             minDate={Date.now()}
+                                                            error={!!errors?.publishDate}
+                                                            helperText={errors.publishDate?.message || ""}
                                                         />)}
                                                     control={control}
                                                 />
@@ -890,6 +970,7 @@ const CreateOfferForm = () => {
                                                             label="Publication End Date"
                                                             id="publishEndDate-input"
                                                             name={name}
+                                                            disabled={!isLoggedIn}
                                                             onChange={(_, value) => {
                                                                 const date = new Date(value);
                                                                 date.setHours(23, 59, 59, 0);
@@ -910,6 +991,7 @@ const CreateOfferForm = () => {
                                             <Grid item xs={12} lg={6}>
                                                 <FormControlLabel
                                                     label="Hide offer"
+                                                    disabled={!isLoggedIn}
                                                     control={
                                                         <Controller
                                                             name="isHidden"
@@ -921,6 +1003,7 @@ const CreateOfferForm = () => {
                                                                     onChange={onChange}
                                                                     name={name}
                                                                     onBlur={onBlur}
+                                                                    disabled={!isLoggedIn}
                                                                 />
                                                             )}
                                                             control={control}
@@ -933,23 +1016,23 @@ const CreateOfferForm = () => {
                                     </Collapse>
                                 </Grid>
                             </Grid>
-
                             <ContactsSelector
                                 contacts={contacts}
                                 onAdd={appendContact}
                                 onRemove={removeContact}
                                 getValues={getValues}
                                 control={control}
-                                errors={errors}
+                                errors={errors.contacts}
+                                disabled={!isLoggedIn}
                             />
-
                             <RequirementsSelector
                                 requirements={requirements}
                                 onAdd={appendRequirement}
                                 onRemove={removeRequirement}
                                 getValues={getValues}
                                 control={control}
-                                errors={errors}
+                                errors={errors.requirements}
+                                disabled={!isLoggedIn}
                             />
 
                             <Controller
@@ -968,6 +1051,7 @@ const CreateOfferForm = () => {
                                                 error={!!errors?.descriptionText}
                                                 content={fields.description}
                                                 helperText={errors.descriptionText?.message || ""}
+                                                disabled={!isLoggedIn}
                                             />
                                         )}
                                         control={control}
@@ -976,7 +1060,18 @@ const CreateOfferForm = () => {
                                 control={control}
                             />
                             <Grid item xs={12} lg={12} />
-                            <Button onClick={submit}>Submit</Button>
+                            <Button
+                                disabled={loading || !isLoggedIn}
+                                onClick={submit}
+                            >
+                                Submit
+                            </Button>
+                            {loading &&
+                            <CircularProgress
+                                size={24}
+                                className={classes.finishProgress}
+                            />
+                            }
                         </form>
                     </Grid>
                 </Grid>

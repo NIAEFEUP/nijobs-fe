@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
+import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -41,8 +42,10 @@ export const parseFiltersToURL = (filters) => Object.keys(filters)
 export const ValidationReasons = Object.freeze({
     DEFAULT: "Invalid value.",
     REQUIRED: "Required field.",
-    TOO_LONG: (len) => `Must not exceed ${len} characters.`,
-    TOO_SHORT: (len) => `Must have at least ${len} characters.`,
+    TOO_LONG: (len) => `Must not exceed ${len} character(s).`,
+    TOO_SHORT: (len) => `Must have at least ${len} character(s).`,
+    OPTIONS_TOO_LONG: (len) => `Must not exceed ${len} option(s).`,
+    OPTIONS_TOO_SHORT: (len) => `Must have at least ${len} option(s).`,
     STRING: "Must be text.",
     DATE: "Must be a valid ISO8601 date.",
     INT: "Must be a number.",
@@ -56,6 +59,9 @@ export const ValidationReasons = Object.freeze({
     MUST_BE_AFTER: (variable) => `Date must be after ${variable}.`,
     FILE_TOO_BIG: (val) => `File size must be under ${val}.`,
     FILE_TYPE_ALLOWED: (vals) => `File type must be one of the following: ${vals.join(", ")}.`,
+    LOCATION_FORMAT: () => "The location format must be <city>, <country>. Beware of extra spaces.",
+    PUBLISH_END_DATE: () => `Publication end date should be after Publication date and last less 
+                                than ${OFFER_MAX_LIFETIME_MONTHS} month(s).`,
 });
 
 export const validationRulesGenerator = (rules) => (field, rule, reason) => {

@@ -17,6 +17,7 @@ const MultiOptionAutocomplete = forwardRef(
         getOptionLabel,
         chipWrapperProps,
         className,
+        disabled,
     },
     ref) => {
 
@@ -39,6 +40,7 @@ const MultiOptionAutocomplete = forwardRef(
                     options={options}
                     onChange={(e, val) => onChange(e, val)}
                     onBlur={onBlur}
+                    disabled={disabled}
                     getOptionLabel={getOptionLabel}
                     renderTags={() => null}
                     renderInput={(params) => (

@@ -58,6 +58,83 @@ export const searchOffers = (filters) => buildCancelableRequest(
         }
     })
 );
+        dispatch(setLoadingOffers(false));
+        // TODO count metrics
+
+    } catch (error) {
+        dispatch(setOffersFetchError({
+            cause: "NETWORK_FAILURE",
+            error,
+        }));
+        dispatch(setLoadingOffers(false));
+        // TODO count metrics
+    }
+});
+
+export const newOffer = async ({
+    title,
+    publishDate,
+    publishEndDate,
+    jobMinDuration,
+    jobMaxDuration,
+    jobStartDate,
+    description,
+    contacts,
+    isPaid,
+    vacancies,
+    jobType,
+    fields,
+    technologies,
+    isHidden,
+    owner,
+    location,
+    coordinates,
+    requirements,
+}) => {
+
+    const data = {
+        title,
+        publishDate,
+        publishEndDate,
+        jobMinDuration,
+        jobMaxDuration,
+        jobStartDate,
+        description,
+        contacts,
+        isPaid,
+        vacancies,
+        jobType,
+        fields,
+        technologies,
+        isHidden,
+        owner,
+        location,
+        coordinates,
+        requirements,
+    };
+
+    console.log(data);
+
+    try {
+        const res = await fetch(`${API_HOSTNAME}/offers/new`, {
+            method: "POST",
+            credentials: "include",
+            body: data,
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+            throw json.errors;
+        }
+        // TODO count metrics
+        return json;
+
+    } catch (error) {
+        // TODO count metrics
+        if (Array.isArray(error)) throw error;
+        throw [{ msg: "Unexpected Error. Please try again later." }];
+    }
+};
 
 export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) => {
     let isErrorRegistered = false;

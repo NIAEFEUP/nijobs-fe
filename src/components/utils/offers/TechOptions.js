@@ -20,3 +20,6 @@ export default Object.freeze({
     "CSS": "CSS",
     "Other": "Other",
 });
+
+export const MIN_TECHNOLOGIES = 1;
+export const MAX_TECHNOLOGIES = 7;
