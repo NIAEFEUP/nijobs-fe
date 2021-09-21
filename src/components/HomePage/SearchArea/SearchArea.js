@@ -13,7 +13,6 @@ import {
     setTechs,
 } from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
-import { measureTime, TIMED_ACTIONS } from "../../../utils/AnalyticsUtils";
 
 import { Paper } from "@material-ui/core";
 import SearchBar from "./SearchBar";
@@ -53,9 +52,7 @@ export const AdvancedSearchController = ({
 
     const submitForm = useCallback((e) => {
         if (e) e.preventDefault();
-        measureTime(searchOffers, TIMED_ACTIONS.OFFER_SEARCH)(
-            { value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies }
-        );
+        searchOffers({ value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies });
 
         if (onSubmit) onSubmit();
     }, [fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue, technologies]);

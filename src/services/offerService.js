@@ -2,12 +2,13 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-
+import { createEvent, recordTime, EVENT_TYPES, TIMED_ACTIONS } from "../utils/AnalyticsUtils";
 
 const { API_HOSTNAME } = config;
 
 
 export const searchOffers = (filters) => buildCancelableRequest(async (dispatch, { signal }) => {
+    const t0 = performance.now();
 
     dispatch(resetOffersFetchError());
     dispatch(setLoadingOffers(true));
@@ -24,14 +25,19 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
                 error: res.status,
             }));
             dispatch(setLoadingOffers(false));
-            // TODO count metrics
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Offer Search",
+                "BAD_RESPONSE",
+                res.status
+            ));
             return;
         }
         const offers = await res.json();
         dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
-
         dispatch(setLoadingOffers(false));
-        // TODO count metrics
+
+        recordTime(TIMED_ACTIONS.OFFER_SEARCH, t0, performance.now());
 
     } catch (error) {
         dispatch(setOffersFetchError({
@@ -39,7 +45,11 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
             error,
         }));
         dispatch(setLoadingOffers(false));
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Offer Search",
+            "NETWORK_FAILURE"
+        ));
     }
 });
 
