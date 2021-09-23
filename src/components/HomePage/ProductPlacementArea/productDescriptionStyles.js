@@ -6,7 +6,8 @@ export default (isMobile) => makeStyles((theme) => ({
         display: "flex",
         justifyContent: "center",
         width: isMobile ? "100%" : "80%",
-        margin: "5em auto",
+        height: !isMobile && "50vh",
+        margin: "5em auto 10em",
         textAlign: "center",
     },
     productDescriptionSVG: {

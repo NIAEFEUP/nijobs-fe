@@ -5,12 +5,14 @@ import SearchResultsWidget from "../components/HomePage/SearchResultsArea/Search
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import ApplicationMessagesNotifier from "../components/ApplicationMessages";
 import { smoothScrollToRef } from "../utils";
+import { useDesktop } from "../utils/media-queries";
 
 export const HomePage = () => {
 
     const productDescriptionRef = useRef(null);
     const searchResultsRef = useRef(null);
     const [showSearchResults, setShowSearchResults] = useState(false);
+    const productDescriptionScrollBlock = useDesktop() ? "end" : "center";
 
     // this will not trigger the scroll on subsequent submits, because the dependencies won't change after the first call
     useEffect(() => {
@@ -21,7 +23,7 @@ export const HomePage = () => {
         <React.Fragment>
             <ApplicationMessagesNotifier />
             <MainView
-                scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef)}
+                scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef, productDescriptionScrollBlock)}
                 showSearchResults={() => {
                     setShowSearchResults(true);
                     if (searchResultsRef && searchResultsRef.current) smoothScrollToRef(searchResultsRef);
