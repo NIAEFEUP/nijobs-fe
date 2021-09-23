@@ -35,7 +35,7 @@ describe("HomePage", () => {
             );
 
             expect(screen.getByLabelText("Search Area")).toBeInTheDocument();
-            expect(screen.getByText("Your next oportunity is out there. Use the search bar to find it!")).toBeInTheDocument();
+            expect(screen.getByText("Your next opportunity is out there. Use the search bar to find it!")).toBeInTheDocument();
         });
 
     });

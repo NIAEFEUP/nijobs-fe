@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import logo from "./nijobs.png";
@@ -14,6 +14,21 @@ import { MainMask } from "./MainMask";
 import CenteredComponent from "./CenteredComponent";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
+
+    const hideScrollButtonPosition = 450;
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const handleScroll = () => {
+        setScrollPosition(window.pageYOffset);
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
 
     const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
@@ -37,13 +52,16 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
             </CenteredComponent>
             <div className={classes.infoBox}>
                 <InfoBox size={useMobile() ? "small" : "normal"}>
-                    Your next oportunity is out there. Use the search bar to find it!
+                    Your next opportunity is out there. Use the search bar to find it!
                 </InfoBox>
             </div>
             <div className={classes.showMoreBtn}>
-                <ShowMoreButton
-                    onClick={scrollToProductDescription}
-                />
+                {
+                    scrollPosition < hideScrollButtonPosition &&
+                    <ShowMoreButton
+                        onClick={scrollToProductDescription}
+                    />
+                }
             </div>
         </div>
     );
