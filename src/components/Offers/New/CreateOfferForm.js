@@ -19,7 +19,6 @@ import {
     FormControlLabel,
     MenuItem,
     CircularProgress,
-    Snackbar,
 } from "@material-ui/core";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -58,6 +57,8 @@ import useTechSelector from "../../utils/offers/useTechSelector";
 import { newOffer } from "../../../services/offerService";
 import useSession from "../../../hooks/useSession";
 import { RouterLink } from "../../../utils";
+import { toggleLoginModal } from "../../../actions/navbarActions";
+import { connect } from "react-redux";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -67,8 +68,9 @@ export const CreateOfferController = () => {
 
     const isAdmin = session.data?.isAdmin;
     const company = session.data?.company?._id;
-
+    const companyFinishedRegistration = session.data?.company?.hasFinishedRegistration;
     const isLoggedIn = session.isLoggedIn;
+    const loginDataLoaded = !!session.data;
 
     // eslint-disable-next-line no-unused-vars
     const { handleSubmit, formState: { errors }, control, register, setValue, getValues } = useForm({
@@ -154,6 +156,8 @@ export const CreateOfferController = () => {
                 isAdmin,
                 company,
                 isLoggedIn,
+                companyFinishedRegistration,
+                loginDataLoaded,
             },
         },
     };
@@ -592,18 +596,17 @@ const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, contro
     );
 };
 
-const LoginAlert = ({ isLoggedIn }) => (
-
-    <Snackbar open={!isLoggedIn}>
+const LoginAlert = React.forwardRef(({ isLoggedIn, companyFinishedRegistration, toggleLoginModal }, _) => (
+    <>
+        {!isLoggedIn &&
         <Alert
             severity="error"
             action={
                 <>
                     <Button
-                        color="inherit"
-                        size="small"
-                        component={RouterLink}
-                        to="/"
+                        variant="text"
+                        color="primary"
+                        onClick={toggleLoginModal}
                     >
                     Login
                     </Button>
@@ -619,9 +622,36 @@ const LoginAlert = ({ isLoggedIn }) => (
             }
         >
         The user must be logged in to create an offer
-        </Alert>
-    </Snackbar>
-);
+        </Alert>}
+        {!companyFinishedRegistration &&
+        <Alert
+            severity="error"
+            action={
+                <Button
+                    color="inherit"
+                    size="small"
+                    component={RouterLink}
+                    to="/company/registration/finish"
+                >
+                Finish Registration
+                </Button>
+            }
+        >
+            The company must finish their registration
+        </Alert>}
+    </>
+));
+
+LoginAlert.displayName = "LoginAlert";
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+    toggleLoginModal: () => dispatch(toggleLoginModal()),
+});
+
+const ConnectedLoginAlert = connect(mapStateToProps, mapDispatchToProps)(LoginAlert);
+
 
 const CreateOfferForm = () => {
 
@@ -641,9 +671,13 @@ const CreateOfferForm = () => {
         loading,
         isAdmin,
         isLoggedIn,
+        companyFinishedRegistration,
+        loginDataLoaded,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
+
+    const disabled = !isLoggedIn || !companyFinishedRegistration;
 
     const [isAdvancedOpen, setAdvancedOpen] = React.useState(false);
     const isAdvancedOpenOrErrors = () => (
@@ -662,9 +696,10 @@ const CreateOfferForm = () => {
 
     return (
         <div className={classes.formCard}>
-            <CardHeader title={!useMobile() && "New Offer" } />
+            <CardHeader title={!isMobile && "New Offer" } />
+            {loginDataLoaded &&
             <Content className={classes.formContent}>
-                <LoginAlert isLoggedIn={isLoggedIn} />
+                <ConnectedLoginAlert isLoggedIn={isLoggedIn} companyFinishedRegistration={companyFinishedRegistration} />
                 <Grid container className={classes.formArea}>
                     <Grid item xs={12}>
                         <form
@@ -694,7 +729,7 @@ const CreateOfferForm = () => {
                                                 variant="outlined"
                                                 margin="dense"
                                                 fullWidth
-                                                disabled={!isLoggedIn}
+                                                disabled={disabled}
                                             />)}
                                         control={control}
                                     />
@@ -722,7 +757,7 @@ const CreateOfferForm = () => {
                                                 variant="outlined"
                                                 margin="dense"
                                                 fullWidth
-                                                disabled={!isLoggedIn}
+                                                disabled={disabled}
                                             />)}
                                         control={control}
                                     />
@@ -741,7 +776,7 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     name={name}
                                                     error={errors.location}
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                 />
                                             )}
                                             control={control}
@@ -768,7 +803,7 @@ const CreateOfferForm = () => {
                                                     onChange={onChange}
                                                     onBlur={onBlur}
                                                     variant="outlined"
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                     error={!!errors?.jobType}
                                                     helperText={
                                                         `${errors.jobType?.message || ""}`
@@ -802,7 +837,7 @@ const CreateOfferForm = () => {
                                                 name={name}
                                                 onBlur={onBlur}
                                                 error={errors.fields}
-                                                disabled={!isLoggedIn}
+                                                disabled={disabled}
                                                 {...FieldsSelectorProps}
                                             />
                                         )}
@@ -819,7 +854,7 @@ const CreateOfferForm = () => {
                                                 name={name}
                                                 onBlur={onBlur}
                                                 error={errors.technologies}
-                                                disabled={!isLoggedIn}
+                                                disabled={disabled}
                                                 {...TechSelectorProps}
                                             />)}
                                         control={control}
@@ -843,7 +878,7 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     variant="inline"
                                                     autoOk
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                     format="yyyy-MM-dd"
                                                     minDate={Date.now()}
                                                     error={!!errors?.jobStartDate}
@@ -876,7 +911,7 @@ const CreateOfferForm = () => {
                                                     aria-labelledby="range-slider"
                                                     min={JOB_MIN_DURATION}
                                                     max={JOB_MAX_DURATION}
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                 />
 
                                                 <FormHelperText>
@@ -900,7 +935,7 @@ const CreateOfferForm = () => {
                                                     value={value}
                                                     label="Vacancies"
                                                     id="vacancies"
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                     error={!!errors?.vacancies}
                                                     helperText={
                                                         `${errors.vacancies?.message || ""}`
@@ -921,19 +956,20 @@ const CreateOfferForm = () => {
                                     <FormControl>
                                         <FormControlLabel
                                             label="Paid Job"
-                                            disabled={!isLoggedIn}
+                                            disabled={disabled}
                                             control={
                                                 <Controller
                                                     name="isPaid"
                                                     render={(
                                                         { field: { onChange, onBlur, name, value } },
                                                     ) => (
+                                                        // TODO Add unspecified
                                                         <Checkbox
                                                             checked={value}
                                                             onChange={onChange}
                                                             name={name}
                                                             onBlur={onBlur}
-                                                            disabled={!isLoggedIn}
+                                                            disabled={disabled}
                                                         />
                                                     )}
                                                     control={control}
@@ -976,7 +1012,7 @@ const CreateOfferForm = () => {
                                                             label="Publication Date"
                                                             id="publishDate-input"
                                                             name={name}
-                                                            disabled={!isLoggedIn}
+                                                            disabled={disabled}
                                                             onChange={(_, value) => onChange(value)}
                                                             onBlur={onBlur}
                                                             variant="inline"
@@ -1002,7 +1038,7 @@ const CreateOfferForm = () => {
                                                             label="Publication End Date"
                                                             id="publishEndDate-input"
                                                             name={name}
-                                                            disabled={!isLoggedIn}
+                                                            disabled={disabled}
                                                             onChange={(_, value) => {
                                                                 const date = new Date(value);
                                                                 date.setHours(23, 59, 59, 0);
@@ -1023,7 +1059,7 @@ const CreateOfferForm = () => {
                                             <Grid item xs={12} lg={6}>
                                                 <FormControlLabel
                                                     label="Hide offer"
-                                                    disabled={!isLoggedIn}
+                                                    disabled={disabled}
                                                     control={
                                                         <Controller
                                                             name="isHidden"
@@ -1035,7 +1071,7 @@ const CreateOfferForm = () => {
                                                                     onChange={onChange}
                                                                     name={name}
                                                                     onBlur={onBlur}
-                                                                    disabled={!isLoggedIn}
+                                                                    disabled={disabled}
                                                                 />
                                                             )}
                                                             control={control}
@@ -1055,7 +1091,7 @@ const CreateOfferForm = () => {
                                 getValues={getValues}
                                 control={control}
                                 errors={errors.contacts}
-                                disabled={!isLoggedIn}
+                                disabled={disabled}
                             />
                             <RequirementsSelector
                                 requirements={requirements}
@@ -1064,7 +1100,7 @@ const CreateOfferForm = () => {
                                 getValues={getValues}
                                 control={control}
                                 errors={errors.requirements}
-                                disabled={!isLoggedIn}
+                                disabled={disabled}
                             />
 
                             <Controller
@@ -1083,7 +1119,7 @@ const CreateOfferForm = () => {
                                                 error={!!errors?.descriptionText}
                                                 content={fields.description}
                                                 helperText={errors.descriptionText?.message || ""}
-                                                disabled={!isLoggedIn}
+                                                disabled={disabled}
                                             />
                                         )}
                                         control={control}
@@ -1093,7 +1129,7 @@ const CreateOfferForm = () => {
                             />
                             <Grid item xs={12} lg={12} />
                             <Button
-                                disabled={loading || !isLoggedIn}
+                                disabled={loading || disabled}
                                 onClick={submit}
                             >
                                 Submit
@@ -1107,7 +1143,7 @@ const CreateOfferForm = () => {
                         </form>
                     </Grid>
                 </Grid>
-            </Content>
+            </Content>}
         </div>
     );
 };
