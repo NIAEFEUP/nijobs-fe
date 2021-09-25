@@ -1,8 +1,9 @@
 import config from "../config";
+import { measureTime, createEvent, TIMED_ACTIONS, EVENT_TYPES } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
 
-export const completeRegistration = async ({ logo, bio, contacts }) => {
+export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRATION, async ({ logo, bio, contacts }) => {
 
     const formData  = new FormData();
 
@@ -21,14 +22,25 @@ export const completeRegistration = async ({ logo, bio, contacts }) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Complete Registration",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Complete Registration",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});

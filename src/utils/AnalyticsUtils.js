@@ -87,6 +87,10 @@ export const TIMED_ACTIONS = Object.freeze({
         category: "Offer",
         variable: "Enable Offer",
     },
+    COMPLETE_REGISTRATION: {
+        category: "Registration",
+        variable: "Complete Registration",
+    },
     OTHER: {
         category: "Other",
         variable: "Other",
