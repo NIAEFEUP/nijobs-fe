@@ -2,8 +2,7 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-import { createEvent, recordTime, EVENT_TYPES, TIMED_ACTIONS } from "../utils/AnalyticsUtils";
-
+import { createEvent, recordTime, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
 
@@ -53,8 +52,7 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
     }
 });
 
-export const hideOffer = async (offerId) => {
-
+export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) => {
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/hide`, {
             method: "POST",
@@ -63,19 +61,30 @@ export const hideOffer = async (offerId) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Hide Offer",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Hide Offer",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const disableOffer = async (offerId, adminReason) => {
+export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offerId, adminReason) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/disable`, {
@@ -89,19 +98,30 @@ export const disableOffer = async (offerId, adminReason) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Disable Offer",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Disable Offer",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const enableOffer = async (offerId) => {
+export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerId) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/enable`, {
@@ -111,14 +131,25 @@ export const enableOffer = async (offerId) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Enable Offer",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Enable Offer",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});

@@ -16,21 +16,17 @@ export const initAnalytics = () => {
 /**
  * Measures the time taken by func and sends it to Google Analytics.
  *
- * @param func Function whose time will be measured.
+ * @param func Function whose time will be measured. Func shouldn't return if there's an error, it must throw it.
  * @param action Type of action being measured, from {@link TIMED_ACTIONS}.
  * @param label Optional label to describe the action.
  * @param args The func's arguments.
  */
-export const measureTime = (action = TIMED_ACTIONS.UNKNOWN, func, label) => (...args) => {
+export const measureTime = (action = TIMED_ACTIONS.UNKNOWN, func, label) => async (...args) => {
     const t0 = performance.now();
-    func(...args);
+    await func(...args);
     const t1 = performance.now();
 
-    ReactGa.timing({
-        ...action,
-        value: t1 - t0,
-        label,
-    });
+    recordTime(action, t0, t1, label);
 };
 
 /**
@@ -73,11 +69,23 @@ export const EVENT_TYPES = Object.freeze({
 export const TIMED_ACTIONS = Object.freeze({
     OFFER_CREATE: {
         category: "Offer",
-        variable: "Offer Create",
+        variable: "Create Offer",
     },
     OFFER_SEARCH: {
         category: "Offer",
-        variable: "Offer Search",
+        variable: "Search Offer",
+    },
+    OFFER_HIDE: {
+        category: "Offer",
+        variable: "Hide Offer",
+    },
+    OFFER_DISABLE: {
+        category: "Offer",
+        variable: "Disable Offer",
+    },
+    OFFER_ENABLE: {
+        category: "Offer",
+        variable: "Enable Offer",
     },
     OTHER: {
         category: "Other",
