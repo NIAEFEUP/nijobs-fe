@@ -104,6 +104,10 @@ export const TIMED_ACTIONS = Object.freeze({
         category: "Application",
         variable: "Reject Application",
     },
+    APPLICATION_SUBMIT: {
+        category: "Application",
+        variable: "Submit Application",
+    },
     OTHER: {
         category: "Other",
         variable: "Other",

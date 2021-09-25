@@ -6,9 +6,11 @@ import {
 
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
+import { recordTime, TIMED_ACTIONS, createEvent, EVENT_TYPES } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
 export const submitCompanyApplication = (formData) => buildCancelableRequest(async (dispatch, { signal }) => {
+    const t0 = performance.now();
     dispatch(setCompanyApplicationSending(true));
     dispatch(setCompanyApplicationSubmissionError([]));
 
@@ -26,20 +28,31 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(asy
         if (!res.ok) {
             dispatch(setCompanyApplicationSubmissionError(json.errors));
             dispatch(setCompanyApplicationSending(false));
-            // TODO count metrics
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Submit Company Application",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             return false;
         }
 
         dispatch(setCompanyApplication(json));
-
         dispatch(setCompanyApplicationSending(false));
-        // TODO count metrics
+
+        recordTime(TIMED_ACTIONS.APPLICATION_SUBMIT, t0, performance.now());
         return true;
 
     } catch (error) {
         dispatch(setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
         dispatch(setCompanyApplicationSending(false));
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Submit Company Application",
+            "UNEXPECTED"
+        ));
+
         return false;
     }
 
