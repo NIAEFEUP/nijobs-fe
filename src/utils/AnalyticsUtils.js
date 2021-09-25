@@ -23,10 +23,11 @@ export const initAnalytics = () => {
  */
 export const measureTime = (action = TIMED_ACTIONS.UNKNOWN, func, label) => async (...args) => {
     const t0 = performance.now();
-    await func(...args);
+    const result = await func(...args);
     const t1 = performance.now();
 
     recordTime(action, t0, t1, label);
+    return result;
 };
 
 /**
@@ -73,7 +74,7 @@ export const TIMED_ACTIONS = Object.freeze({
     },
     OFFER_SEARCH: {
         category: "Offer",
-        variable: "Search Offer",
+        variable: "Search Offers",
     },
     OFFER_HIDE: {
         category: "Offer",
@@ -90,6 +91,18 @@ export const TIMED_ACTIONS = Object.freeze({
     COMPLETE_REGISTRATION: {
         category: "Registration",
         variable: "Complete Registration",
+    },
+    APPLICATION_SEARCH: {
+        category: "Application",
+        variable: "Search Applications",
+    },
+    APPLICATION_APPROVE: {
+        category: "Application",
+        variable: "Approve Application",
+    },
+    APPLICATION_REJECT: {
+        category: "Application",
+        variable: "Reject Application",
     },
     OTHER: {
         category: "Other",

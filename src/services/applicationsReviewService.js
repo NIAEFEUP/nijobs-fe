@@ -1,5 +1,6 @@
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
+import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
 
@@ -20,7 +21,7 @@ const encodeFilters = (filters) => {
     return encodedValues.join("&");
 };
 
-export const searchApplications = buildCancelableRequest(async (filters, { signal } = {}) => {
+export const searchApplications = measureTime(TIMED_ACTIONS.APPLICATION_SEARCH, buildCancelableRequest(async (filters, { signal } = {}) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
@@ -31,19 +32,30 @@ export const searchApplications = buildCancelableRequest(async (filters, { signa
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Application Search",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Application Search",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-});
+}));
 
-export const approveApplication = buildCancelableRequest(async (applicationId, { signal }) => {
+export const approveApplication = measureTime(TIMED_ACTIONS.APPLICATION_APPROVE, buildCancelableRequest(async (applicationId, { signal }) => {
 
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/approve`, {
@@ -54,19 +66,30 @@ export const approveApplication = buildCancelableRequest(async (applicationId, {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Approve Application",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Approve Application",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-});
+}));
 
-export const rejectApplication = buildCancelableRequest(async (applicationId, rejectReason, { signal }) => {
+export const rejectApplication = measureTime(TIMED_ACTIONS.APPLICATION_REJECT, buildCancelableRequest(async (applicationId, rejectReason, { signal }) => {
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/reject`, {
             method: "POST",
@@ -80,14 +103,25 @@ export const rejectApplication = buildCancelableRequest(async (applicationId, re
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                "Reject Application",
+                "BAD_RESPONSE",
+                res.status
+            ));
+
             throw json.errors;
         }
-        // TODO count metrics
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.ERROR(
+            "Reject Application",
+            "UNEXPECTED"
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-});
+}));
