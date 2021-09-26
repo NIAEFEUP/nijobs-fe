@@ -202,7 +202,7 @@ const CompanyOffersManagementWidget = () => {
                     RowActions={RowActions}
                     rowsPerPage={5}
                     stickyHeader
-                    emptyMessage="No applications here."
+                    emptyMessage="No offers here."
                     RowContent={RowContent}
                     handleSelect={() => {}}
                     handleSelectAll={() => {}}
