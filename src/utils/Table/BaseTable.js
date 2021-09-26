@@ -39,6 +39,8 @@ const BaseTable = ({
     RowContent,
     RowCollapseComponent,
     isSelectableTable,
+    isLoading,
+    error,
 }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -107,6 +109,8 @@ const BaseTable = ({
                         RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
                         isSelectableTable={isSelectableTable}
+                        isLoading={isLoading}
+                        error={error}
                     />
                 </Table>
             </TableContainer>
@@ -164,6 +168,8 @@ BaseTable.propTypes = {
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
     isSelectableTable: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    error: PropTypes.object,
 };
 
 export default BaseTable;

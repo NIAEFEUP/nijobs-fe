@@ -11,24 +11,9 @@ import useSession from "../../../../hooks/useSession";
 import { OfferTitleFilter, PublishDateFilter, PublishEndDateFilter, LocationFilter } from "../Filters/index";
 import { Edit as EditIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { addSnackbar } from "../../../../actions/notificationActions";
+import { connect } from "react-redux";
 // import { RowActions } from "../Actions";
-
-
-const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
-    if (isLoading) {
-        return (
-            <h1>Loading...</h1>
-        );
-    } else if (error) {
-        return (
-            <h1>
-                {error?.msg ?? error}
-            </h1>
-        );
-    } else {
-        return null;
-    }
-};
 
 const generateRow = ({ title, location, description, publishDate, publishEndDate,
     ownerName, _id }) => ({ // Check if it is company.name or companyName
@@ -94,9 +79,9 @@ RowActions.propTypes = {
 };
 
 
-const CompanyOffersManagementWidget = () => {
+const CompanyOffersManagementWidget = ({ addSnackbar }) => {
     const { data, isLoggedIn } = useSession();
-    const [offers, setOffers] = useState(null);
+    const [offers, setOffers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -117,8 +102,12 @@ const CompanyOffersManagementWidget = () => {
         }).catch((err) => {
             setError(err[0]);
             setIsLoading(false);
+            addSnackbar({
+                message: "Unable to fetch Company Offers.",
+                key: `${Date.now()}-fetchOffersError`,
+            });
         });
-    }, [data.company._id, isLoggedIn]);
+    }, [addSnackbar, data.company._id, isLoggedIn]);
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
@@ -187,31 +176,37 @@ const CompanyOffersManagementWidget = () => {
 
     return (
         <div>
-            {isLoading || error ?
-                <CompanyOffersNonFullfilledRequest isLoading={isLoading} error={error} />
-                :
-                <FilterableTable
-                    title="Offers Management"
-                    tableComponent={ControlledSortableSelectableTable}
-                    defaultSort="title"
-                    rows={offers}
-                    setInitialRows={setOffers}
-                    columns={columns}
-                    sorters={sorters}
-                    filters={filters}
-                    RowActions={RowActions}
-                    rowsPerPage={5}
-                    stickyHeader
-                    emptyMessage="No offers here."
-                    RowContent={RowContent}
-                    handleSelect={() => {}}
-                    handleSelectAll={() => {}}
-                    isSelectableTable={false}
-                    // RowCollapseComponent={RowCollapseComponent}
-                />
-            }
+            <FilterableTable
+                title="Offers Management"
+                tableComponent={ControlledSortableSelectableTable}
+                defaultSort="title"
+                rows={offers}
+                setInitialRows={setOffers}
+                columns={columns}
+                sorters={sorters}
+                filters={filters}
+                RowActions={RowActions}
+                rowsPerPage={5}
+                stickyHeader
+                emptyMessage="No offers here."
+                RowContent={RowContent}
+                handleSelect={() => {}}
+                handleSelectAll={() => {}}
+                isSelectableTable={false}
+                isLoading={isLoading}
+                error={error}
+                // RowCollapseComponent={RowCollapseComponent}
+            />
         </div>
     );
 };
 
-export default CompanyOffersManagementWidget;
+CompanyOffersManagementWidget.propTypes = {
+    addSnackbar: PropTypes.func,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(CompanyOffersManagementWidget);
