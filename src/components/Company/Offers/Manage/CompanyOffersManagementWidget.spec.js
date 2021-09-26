@@ -8,9 +8,11 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as companyOffersService from "../../../../services/companyOffersService";
 import useSession from "../../../../hooks/useSession";
 import { BrowserRouter } from "react-router-dom";
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 jest.mock("../../../../hooks/useSession");
 jest.mock("../../../../services/companyOffersService");
+jest.mock("../../../../actions/notificationActions");
 
 describe("App", () => {
     const MOCK_OFFERS = [
@@ -52,10 +54,12 @@ describe("App", () => {
         );
 
         // Use getBy by default when element should be available
-        expect(screen.getByText("Loading...")).toBeInTheDocument();
+        for (let i = 0; i < 5; i++) {
+            expect(screen.getByTestId(`tableCellSkeleton-${i}`)).toBeInTheDocument();
+        }
 
         // Use queryBy When asserting for missing element
-        expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
+        expect(screen.getByText("Offers Management")).toBeInTheDocument();
     });
 
     test("Loads Valid Offers", async () => {
@@ -95,12 +99,16 @@ describe("App", () => {
 
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
+
+            expect(screen.getByText("No offers here.")).toBeInTheDocument();
         }, {
             timeout: 1000,
         });
     });
 
     test("Error fetching offers", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) =>
             reject([{ msg: "Error fetching offers" }])
         ));
@@ -113,9 +121,13 @@ describe("App", () => {
         );
 
         await waitFor(() => {
-            expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
+            expect(screen.getByText("Offers Management")).toBeInTheDocument();
 
-            expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
+            expect(screen.getByText("No offers here.")).toBeInTheDocument();
+
+            expect(addSnackbar).toHaveBeenCalledTimes(1);
+
+            // expect(screen.getByText("An unexpected error occurred, please try refreshing the browser window.")).toBeInTheDocument();
         }, {
             timeout: 1000,
         });

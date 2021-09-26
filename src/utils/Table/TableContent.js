@@ -89,7 +89,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
         }
         return (
             rowsArray.map((rowIdx) => (
-                <MUITableRow key={rowIdx}>
+                <MUITableRow data-testid={`tableCellSkeleton-${rowIdx}`} key={rowIdx}>
                     {iterableColArray.map((element) => (
                         <TableCell
                             key={element.key}
