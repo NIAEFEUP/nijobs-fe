@@ -31,9 +31,13 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
 };
 
 const generateRow = ({ title, location, description, publishDate, publishEndDate,
-    ownerName }) => ({ // Check if it is company.name or companyName
+    ownerName, _id }) => ({ // Check if it is company.name or companyName
     fields: {
-        title: { value: title, align: "left" },
+        title: { value: title, align: "left", customComponent:
+    <Link to={`/offer/${_id}`} style={{ color: "initial", textDecoration: "underline", textUnderlineOffset: 2 }}>
+        {title}
+    </Link>,
+        },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },

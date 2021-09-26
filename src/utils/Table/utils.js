@@ -10,18 +10,30 @@ export const alphabeticalSorter = (isAscendingMode) => (a, b) => {
 };
 
 export const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
-
+    const customComponent = fieldOptions?.customComponent;
     if (typeof fieldOptions.value === "function") {
         return fieldOptions.value();
     } else {
-        return (
-            <TableCell
-                key={fieldId}
-                id={id === 0 ? `${labelId}-label` : undefined}
-                align={fieldOptions.align || "right"}
-            >
-                {fieldOptions.value}
-            </TableCell>
-        );
+        if (customComponent) {
+            return (
+                <TableCell
+                    key={fieldId}
+                    id={id === 0 ? `${labelId}-label` : undefined}
+                    align={fieldOptions.align || "right"}
+                >
+                    {customComponent}
+                </TableCell>
+            );
+        } else {
+            return (
+                <TableCell
+                    key={fieldId}
+                    id={id === 0 ? `${labelId}-label` : undefined}
+                    align={fieldOptions.align || "right"}
+                >
+                    {fieldOptions.value}
+                </TableCell>
+            );
+        }
     }
 };
