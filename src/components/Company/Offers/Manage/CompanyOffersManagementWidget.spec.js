@@ -42,9 +42,7 @@ describe("App", () => {
     });
 
     test("Renders Loading", () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) => setTimeout(() => {
-            resolve();
-        }, 1000)));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => {}));
 
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
