@@ -1,4 +1,4 @@
-import { IconButton, TableCell } from "@material-ui/core";
+import { IconButton, TableCell, Tooltip } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -65,11 +65,13 @@ const RowActions = ({ row }) => {
 
     return (
         <TableCell align="right">
-            <Link to={offerRoute}>
-                <IconButton>
-                    <EditIcon color="secondary" fontSize="default" />
-                </IconButton>
-            </Link>
+            <Tooltip title="Edit Offer">
+                <Link to={offerRoute}>
+                    <IconButton>
+                        <EditIcon color="secondary" fontSize="default" />
+                    </IconButton>
+                </Link>
+            </Tooltip>
         </TableCell>
     );
 };
