@@ -103,7 +103,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
             setError(err[0]);
             setIsLoading(false);
             addSnackbar({
-                message: "Unable to fetch Company Offers.",
+                message: "An unexpected error occurred, please try refreshing the browser window.",
                 key: `${Date.now()}-fetchOffersError`,
             });
         });

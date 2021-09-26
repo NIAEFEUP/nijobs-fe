@@ -84,7 +84,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
     if (isLoading) {
         const rowsArray = [0, 1, 2, 3, 4];
         const iterableColArray = [];
-        for (let idx = 0; idx < numColumns; idx++) {
+        for (let idx = 0; idx < numColumns + (isSelectableTable ? 1 : 0); idx++) {
             iterableColArray.push({ key: idx });
         }
         return (
@@ -105,7 +105,7 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
     } else if ((Object.keys(rows).length === 0) || error) {
         return (
             <MUITableRow>
-                <TableCell align="center" colSpan={numColumns + 1 /* This should depend whether this is selectable or not*/}>
+                <TableCell align="center" colSpan={numColumns + (isSelectableTable ? 1 : 0)}>
                     {emptyMessage}
                 </TableCell>
             </MUITableRow>

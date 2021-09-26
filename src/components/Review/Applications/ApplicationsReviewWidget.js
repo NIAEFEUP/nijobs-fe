@@ -15,6 +15,9 @@ import { RowActions } from "./Actions";
 import { searchApplications } from "../../../services/applicationsReviewService";
 import { format, parseISO } from "date-fns";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addSnackbar } from "../../../actions/notificationActions";
+import { cancelablePromise } from "../../../utils";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -55,27 +58,35 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
     },
 });
 
-const ApplicationsReviewWidget = () => {
+const ApplicationsReviewWidget = ({ addSnackbar }) => {
     const [rows, setRows] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
 
-        const request = searchApplications()
+        const promise = cancelablePromise(searchApplications())
             .then((rows) => {
                 const fetchedRows = rows.applications.reduce((rows, row) => {
                     rows[row.id] = generateRow(row);
                     return rows;
                 }, {});
                 setRows(fetchedRows);
+
+                setIsLoading(false);
             })
             .catch(() => {
                 setError("UnexpectedError");
+                setIsLoading(false);
+                addSnackbar({
+                    message: "An unexpected error occurred, please try refreshing the browser window.",
+                    key: `${Date.now()}-fetchApplicationsError`,
+                });
             });
         return () => {
-            request.cancel();
+            promise.cancel();
         };
-    }, []);
+    }, [addSnackbar]);
 
     const approveApplicationRow = useCallback(({ key, fields }) => {
 
@@ -169,40 +180,40 @@ const ApplicationsReviewWidget = () => {
     return (
         <>
             <UndoableActionsHandlerProvider>
-                {error ?
-                    <>
-                        <Typography variant="h6" color="secondary">
-                                Review Applications
-                        </Typography>
-                        <Typography>
-                                An unexpected error occurred, please try refreshing the browser window.
-                        </Typography>
-                    </>
-                    :
-                    <FilterableTable
-                        title="Review Applications"
-                        tableComponent={ControlledSortableSelectableTable}
-                        defaultSort="name"
-                        rows={rows}
-                        setInitialRows={setRows}
-                        columns={columns}
-                        sorters={sorters}
-                        filters={filters}
-                        RowActions={RowActions}
-                        rowsPerPage={5}
-                        stickyHeader
-                        emptyMessage="No applications here."
-                        context={{
-                            approveApplicationRow,
-                            rejectApplicationRow,
-                        }}
-                        RowContent={RowContent}
-                        RowCollapseComponent={RowCollapseComponent}
-                        isSelectableTable={true}
-                    />
-                }
+                <FilterableTable
+                    title="Review Applications"
+                    tableComponent={ControlledSortableSelectableTable}
+                    defaultSort="name"
+                    rows={rows}
+                    setInitialRows={setRows}
+                    columns={columns}
+                    sorters={sorters}
+                    filters={filters}
+                    RowActions={RowActions}
+                    rowsPerPage={5}
+                    stickyHeader
+                    emptyMessage="No applications here."
+                    context={{
+                        approveApplicationRow,
+                        rejectApplicationRow,
+                    }}
+                    RowContent={RowContent}
+                    RowCollapseComponent={RowCollapseComponent}
+                    isSelectableTable={true}
+                    isLoading={isLoading}
+                    error={error}
+                />
             </UndoableActionsHandlerProvider>
         </>
     );
 };
-export default ApplicationsReviewWidget;
+
+ApplicationsReviewWidget.propTypes = {
+    addSnackbar: PropTypes.func,
+};
+
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(ApplicationsReviewWidget);
