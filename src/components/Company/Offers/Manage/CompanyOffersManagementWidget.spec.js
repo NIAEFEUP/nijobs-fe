@@ -6,12 +6,16 @@ import { renderWithStore } from "../../../../test-utils";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import * as companyOffersService from "../../../../services/companyOffersService";
-// import { fetchCompanyOffers } from "../../../../services/companyOffersService";
+import useSession from "../../../../hooks/useSession";
+
+jest.mock("../../../../hooks/useSession");
+jest.mock("../../../../services/companyOffersService");
 
 describe("App", () => {
     const MOCK_OFFERS = [
         {
-            id: "random uuid4",
+            _id: "random uuid4",
+            owner: "company_id",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -21,7 +25,8 @@ describe("App", () => {
             description: "kek",
         },
         {
-            id: "random uuid5",
+            _id: "random uuid5",
+            owner: "company_id",
             title: "Guy in the background",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
@@ -32,7 +37,13 @@ describe("App", () => {
         },
     ];
 
+    beforeEach(() => {
+        useSession.mockReturnValue({ data: { company: { name: "company1", _id: "company_id" } }, isLoggedIn: true });
+    });
+
     test("Renders Loading", () => {
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => {}));
+
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <CompanyOffersManagementWidget />
@@ -47,7 +58,9 @@ describe("App", () => {
     });
 
     test("Loads Valid Offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve(MOCK_OFFERS));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+            resolve(MOCK_OFFERS)
+        ));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(
@@ -60,12 +73,15 @@ describe("App", () => {
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
             expect(screen.getAllByText("Guy in the background")).toHaveLength(2);
+        }, {
+            timeout: 1000,
         });
     });
 
     test("Loads Empty Offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() =>  Promise.resolve([]));
-
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+            resolve([])
+        ));
         // By waiting for act it executes all the async code at once
         renderWithStore(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -75,13 +91,15 @@ describe("App", () => {
 
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        }, {
+            timeout: 1000,
         });
     });
 
     test("Error fetching offers", async () => {
-        companyOffersService.fetchCompanyOffers = jest.fn(() => new Promise(() => {
-            throw "Error fetching offers";
-        }));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) =>
+            reject([{ msg: "Error fetching offers" }])
+        ));
 
         // By waiting for act it executes all the async code at once
         renderWithStore(
@@ -94,6 +112,8 @@ describe("App", () => {
             expect(screen.queryByText("Offers Management")).not.toBeInTheDocument();
 
             expect(screen.getByText("Error fetching offers")).toBeInTheDocument();
+        }, {
+            timeout: 1000,
         });
     });
 });

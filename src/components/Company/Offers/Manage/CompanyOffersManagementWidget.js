@@ -8,6 +8,7 @@ import { generateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import { format, parseISO } from "date-fns";
+import useSession from "../../../../hooks/useSession";
 
 const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     if (isLoading) {
@@ -17,7 +18,7 @@ const CompanyOffersNonFullfilledRequest = ({ isLoading, error }) => {
     } else if (error) {
         return (
             <h1>
-                {error}
+                {error?.msg ?? error}
             </h1>
         );
     } else {
@@ -51,16 +52,17 @@ const RowActions = () => (
 
 
 const CompanyOffersManagementWidget = () => {
+    const { data, isLoggedIn } = useSession();
     const [offers, setOffers] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchCompanyOffers().then((offers) => {
+        if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
             /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
-                    rows[row.id] = generateRow(row);
+                    rows[row._id] = generateRow(row);
                     return rows;
                 }, {});
 
@@ -69,12 +71,11 @@ const CompanyOffersManagementWidget = () => {
                 setOffers([]);
             }
             setIsLoading(false);
-
         }).catch((err) => {
-            setError(err);
+            setError(err[0]);
             setIsLoading(false);
         });
-    }, []);
+    }, [data.company._id, isLoggedIn]);
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
