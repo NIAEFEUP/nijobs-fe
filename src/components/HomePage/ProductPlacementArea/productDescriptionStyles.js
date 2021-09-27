@@ -1,14 +1,14 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default makeStyles(() => ({
-    productDescription: ({ isMobile }) => ({
+export default (isMobile) => makeStyles(() => ({
+    productDescription: {
         display: "flex",
         justifyContent: "center",
         width: isMobile ? "100%" : "80%",
         margin: "5em auto",
         textAlign: "center",
-    }),
+    },
     productDescriptionSVG: {
         width: "150px",
         height: "150px",
@@ -23,5 +23,9 @@ export default makeStyles(() => ({
     companyName: {
         fontWeight: "bold",
     },
-}))
-;
+    productDescriptionGrid: {
+        "& > div": {
+            padding: isMobile ? "40px 0" : "40px 40px",
+        },
+    },
+}));
