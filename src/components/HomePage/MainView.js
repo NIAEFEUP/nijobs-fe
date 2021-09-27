@@ -5,6 +5,7 @@ import logo from "./nijobs.png";
 
 import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
+import ScrollToTopButton from "./ScrollToTopButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
 import { useMobile, useDesktop } from "../../utils/media-queries";
@@ -15,7 +16,7 @@ import CenteredComponent from "./CenteredComponent";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
-    const hideScrollButtonPosition = 450;
+    const switchScrollButtonPosition = 450;
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = () => {
         setScrollPosition(window.pageYOffset);
@@ -57,10 +58,12 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
             </div>
             <div className={classes.showMoreBtn}>
                 {
-                    scrollPosition < hideScrollButtonPosition &&
-                    <ShowMoreButton
-                        onClick={scrollToProductDescription}
-                    />
+                    scrollPosition < switchScrollButtonPosition ?
+                        <ShowMoreButton
+                            onClick={scrollToProductDescription}
+                        />
+                        :
+                        <ScrollToTopButton />
                 }
             </div>
         </div>

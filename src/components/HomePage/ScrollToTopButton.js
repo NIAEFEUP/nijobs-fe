@@ -1,28 +1,28 @@
 import React from "react";
-import PropTypes from "prop-types";
-
 import { IconButton } from "@material-ui/core";
-import { KeyboardArrowDownRounded } from "@material-ui/icons";
+import { KeyboardArrowUpRounded } from "@material-ui/icons";
 import scrollButtonAnimation from "../../utils/styles/ScrollButtonAnimations";
 
-const ShowMoreButton = ({ onClick }) => {
+const ScrollToTopButton = () => {
 
     const classes = scrollButtonAnimation();
 
     return (
         <IconButton
-            onClick={onClick}
+            onClick={() => {
+                window.scroll({
+                    top: 0,
+                    left: 0,
+                    behavior: "smooth",
+                });
+            }}
             className={classes.button}
         >
-            <KeyboardArrowDownRounded
+            <KeyboardArrowUpRounded
                 fontSize="large"
             />
         </IconButton>
     );
 };
 
-ShowMoreButton.propTypes = {
-    onClick: PropTypes.func.isRequired,
-};
-
-export default ShowMoreButton;
+export default ScrollToTopButton;
