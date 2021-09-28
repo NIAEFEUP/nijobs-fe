@@ -5,7 +5,7 @@ import Navbar from ".";
 
 import useSession from "../../hooks/useSession";
 import { act, fireEvent } from "@testing-library/react";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { BrowserRouter } from "react-router-dom";
 import ProductDescription from "../HomePage/ProductPlacementArea/ProductDescription";
 import { logout } from "../../services/auth";
@@ -15,7 +15,7 @@ jest.mock("../../services/auth");
 jest.mock("../../hooks/useSession");
 
 describe("Navbar", () => {
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
     describe("render", () => {
 
         it("Should not render anything if logged out", () => {

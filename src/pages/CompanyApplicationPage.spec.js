@@ -6,7 +6,7 @@ import CompanyApplicationPage, {
 } from "./CompanyApplicationPage";
 import configureMockStore from "redux-mock-store";
 import thunk from "redux-thunk";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { BrowserRouter as Router } from "react-router-dom";
 import useComponentController from "../hooks/useComponentController";
 import { renderWithStoreAndTheme, screen, act, fireEvent } from "../test-utils";
@@ -42,7 +42,7 @@ describe("CompanyApplicationPage", () => {
     const mockStore = configureMockStore([thunk]);
     const store = mockStore(initialState);
 
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
 
     describe("render", () => {
 

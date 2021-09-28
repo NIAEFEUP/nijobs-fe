@@ -11,12 +11,8 @@ import {
 import SearchBar from "./SearchBar";
 import SubmitSearchButton from "./SubmitSearchButton";
 
-import {
-    Paper,
-    Fab,
-    createMuiTheme,
-
-} from "@material-ui/core";
+import { Paper, Fab } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 import { mountWithTheme } from "../../../test-utils";
@@ -24,7 +20,7 @@ import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 
 describe("SearchArea", () => {
     let onSubmit;
-    const theme = createMuiTheme();
+    const theme = createTheme();
     beforeEach(() => {
         onSubmit = jest.fn();
     });

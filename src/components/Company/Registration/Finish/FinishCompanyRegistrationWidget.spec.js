@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import React from "react";
 import useComponentController from "../../../../hooks/useComponentController";
 import { renderWithTheme, screen, act, fireEvent } from "../../../../test-utils";
@@ -35,7 +35,7 @@ const FinishCompanyRegistrationWrapper = ({ children }) => {
 };
 
 describe("FinishCompanyRegistrationWidget", () => {
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
 
     it("Should submit request successfully", async () => {
 

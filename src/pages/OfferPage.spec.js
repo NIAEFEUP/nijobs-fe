@@ -1,5 +1,5 @@
 import React from "react";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { BrowserRouter } from "react-router-dom";
 
 import { renderWithStoreAndTheme, act, screen, fireEvent } from "../test-utils";
@@ -18,7 +18,7 @@ jest.mock("../hooks/useOffer");
 jest.mock("../hooks/useSession");
 jest.mock("../services/offerService");
 
-const theme = createMuiTheme({});
+const theme = createTheme({});
 
 // eslint-disable-next-line react/prop-types
 const OfferPageWrapper = ({ children }) => {

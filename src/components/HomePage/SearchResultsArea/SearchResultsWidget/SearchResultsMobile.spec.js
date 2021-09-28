@@ -1,7 +1,7 @@
 import React from "react";
 import SearchResultsMobile from "./SearchResultsMobile";
 import Offer from "../Offer/Offer";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { render, renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
@@ -10,7 +10,7 @@ import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 describe("SearchResultsMobile", () => {
 
-    const theme = createMuiTheme();
+    const theme = createTheme();
 
     const MOBILE_WIDTH_PX = 500;
     window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);

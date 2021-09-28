@@ -1,6 +1,6 @@
 import React from "react";
 import { ProductDescription } from "./ProductDescription";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { act, fireEvent } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom";
 import useSession from "../../../hooks/useSession";
@@ -8,7 +8,7 @@ import { renderWithTheme, screen } from "../../../test-utils";
 
 jest.mock("../../../hooks/useSession");
 
-const theme = createMuiTheme({});
+const theme = createTheme({});
 
 describe("ProductDescription", () => {
 

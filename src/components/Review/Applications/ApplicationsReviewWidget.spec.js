@@ -1,6 +1,6 @@
 /* eslint-disable require-await */
 import DateFnsUtils from "@date-io/date-fns";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { act, fireEvent, getByLabelText, getDefaultNormalizer, queryByText, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -68,7 +68,7 @@ const clickAwayFromFilterMenu = () => {
 
 describe("Application Review Widget", () => {
 
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
 
     beforeEach(() => {
         fetch.resetMocks();

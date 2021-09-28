@@ -2,7 +2,7 @@ import React from "react";
 import { act, Simulate } from "react-dom/test-utils";
 import { renderWithStoreAndTheme, fireEvent, waitFor } from "../../../test-utils";
 import CompanyApplicationForm from "./CompanyApplicationForm";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { CompanyApplicationPageController, CompanyApplicationPageControllerContext } from "../../../pages/CompanyApplicationPage";
 import useComponentController from "../../../hooks/useComponentController";
 
@@ -30,7 +30,7 @@ describe("CompanyApplicationForm", () => {
 
     const initialState = {};
 
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
 
     describe("interaction", () => {
         it("should fail validation if invalid email", async () => {
