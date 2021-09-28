@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 
 import logo from "./nijobs.png";
@@ -16,20 +16,21 @@ import CenteredComponent from "./CenteredComponent";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
-    const switchScrollButtonPosition = 450;
+    const scrollButtonRef = useRef(null);
     const [scrollPosition, setScrollPosition] = useState(0);
     const handleScroll = () => {
         setScrollPosition(window.pageYOffset);
     };
+    const [switchScrollButtonPosition, setSwitchScrollButtonPosition] = useState(null);
 
     useEffect(() => {
         window.addEventListener("scroll", handleScroll, { passive: true });
+        setSwitchScrollButtonPosition(scrollButtonRef?.current?.getBoundingClientRect()?.y / 2);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
     }, []);
-
 
     const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
@@ -56,14 +57,15 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
                     Your next opportunity is out there. Use the search bar to find it!
                 </InfoBox>
             </div>
-            <div className={classes.showMoreBtn}>
+            <div className={classes.showMoreBtn} ref={scrollButtonRef}>
                 {
-                    scrollPosition < switchScrollButtonPosition ?
+                    scrollPosition > switchScrollButtonPosition ?
+                        <ScrollToTopButton role="scrollButton" />
+                        :
                         <ShowMoreButton
                             onClick={scrollToProductDescription}
+                            role="scrollButton"
                         />
-                        :
-                        <ScrollToTopButton />
                 }
             </div>
         </div>
