@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default (isMobile) => makeStyles(() => ({
+export default (isMobile) => makeStyles((theme) => ({
     productDescription: {
         display: "flex",
         justifyContent: "center",
@@ -25,7 +25,7 @@ export default (isMobile) => makeStyles(() => ({
     },
     productDescriptionGrid: {
         "& > div": {
-            padding: isMobile ? "40px 0" : "40px 40px",
+            padding: isMobile ? theme.spacing(5, 1) : theme.spacing(5, 5),
         },
     },
 }));
