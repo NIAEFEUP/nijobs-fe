@@ -4,14 +4,14 @@ import { renderWithStoreAndTheme } from "../test-utils";
 import UndoableActionsHandlerProvider, { UndoableActions } from "./UndoableActionsHandlerProvider";
 import { SnackbarProvider } from "notistack";
 import Notifier from "../components/Notifications/Notifier";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 
 jest.useFakeTimers("modern");
 
 describe("UndoableActionsHandlerProvider", () => {
 
     let onDone, onCancelled, wrapper;
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
 
     beforeEach(() => {
         onDone = jest.fn();

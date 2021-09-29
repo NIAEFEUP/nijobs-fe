@@ -1,10 +1,10 @@
 import React from "react";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 
 import { renderWithTheme } from "../test-utils";
 import ErrorPage from "./ErrorPage";
 
-const theme = createMuiTheme({});
+const theme = createTheme({});
 
 describe("NotFound page", () => {
     it("should render successfully", () => {

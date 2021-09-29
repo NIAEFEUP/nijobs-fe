@@ -4,12 +4,12 @@ import MainView from "./MainView";
 import InfoBox from "./QuickInfoArea/InfoBox";
 import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import { mountWithStore } from "../../test-utils";
 
 describe("Main View", () => {
     let scrollToProductDescription, showSearchResults, wrapper;
-    const theme = createMuiTheme({});
+    const theme = createTheme({});
     const initialState = {
         offerSearch: {
             searchValue: "searchValue",

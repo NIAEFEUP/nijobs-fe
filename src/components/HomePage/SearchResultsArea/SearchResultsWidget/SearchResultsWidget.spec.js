@@ -1,12 +1,12 @@
 import React from "react";
 import SearchResultsWidget, { SearchResultsControllerContext } from "./SearchResultsWidget";
 import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 import Offer from "../Offer/Offer";
 import { fireEvent } from "@testing-library/dom";
 
 describe("SearchResults", () => {
-    const theme = createMuiTheme();
+    const theme = createTheme();
     const initialState = {
         offerSearch: {
             searchValue: "searchValue",

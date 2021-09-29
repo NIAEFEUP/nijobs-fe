@@ -11,7 +11,7 @@ import {
     NonMobileLayout,
 } from ".";
 import { TestComponent, mountWithTheme } from "../../test-utils";
-import { createMuiTheme } from "@material-ui/core";
+import { createTheme } from "@material-ui/core/styles";
 
 const renderComponentForWidth = (Component, width, theme) => {
     window.matchMedia = createMatchMedia(width);
@@ -73,7 +73,7 @@ const renderMediaQueryComponents = (theme, Component) => {
 };
 
 describe("media-query utils", () => {
-    const theme = createMuiTheme();
+    const theme = createTheme();
     it("should return true for useDesktop and nonMobile and false for others", () => {
 
         const { desktop, tablet, mobile, nonMobile } = renderMediaQueryHooks(theme, 1200);
