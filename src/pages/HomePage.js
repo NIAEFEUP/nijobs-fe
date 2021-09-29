@@ -25,8 +25,11 @@ export const HomePage = () => {
     useEffect(() => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
 
+        // check if the current browser is Firefox, because scroll scroll-snap does not work correctly in Firefox
+        const isFirefox = typeof InstallTrigger !== "undefined";
+
         // It's mandatory to add the scroll-snap-type style property to the html tag in order to use snap-scroll
-        document.getElementsByTagName("html")[0].style.scrollSnapType = "y proximity";
+        if (!isFirefox) document.getElementsByTagName("html")[0].style.scrollSnapType = "y proximity";
     }, [searchResultsRef, showSearchResults]);
 
     const classes = useStyles();
