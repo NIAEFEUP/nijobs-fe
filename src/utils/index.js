@@ -6,6 +6,7 @@ import useSession from "../hooks/useSession";
 import { addSnackbar } from "../actions/notificationActions";
 import { connect } from "react-redux";
 import useComponentController from "../hooks/useComponentController";
+import CancelablePromise from "cancelable-promise";
 
 export const smoothScrollToRef = (ref) => {
 
@@ -315,5 +316,26 @@ ProtectedRoute.propTypes = {
     controller: PropTypes.func,
     controllerProps: PropTypes.object,
 };
+
+export const cancelablePromise = (promise, onCancelCallback) => new CancelablePromise((resolve, reject, onCancel) => {
+    if (onCancelCallback) onCancel(onCancelCallback);
+
+    promise.then(resolve, reject);
+});
+
+export const buildCancelablePromise = (promiseFn, onCancelCallback) => (...args) => new CancelablePromise((resolve, reject, onCancel) => {
+    if (onCancelCallback) onCancel(onCancelCallback);
+
+    promiseFn(...args).then(resolve, reject);
+});
+
+export const buildCancelableRequest = (promiseFn) => (...args) => new CancelablePromise((resolve, reject, onCancel) => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    onCancel(() => controller.abort());
+
+    promiseFn(...args, { signal }).then(resolve, reject);
+});
 
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";

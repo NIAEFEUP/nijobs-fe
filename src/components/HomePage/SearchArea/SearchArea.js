@@ -51,15 +51,7 @@ export const AdvancedSearchController = ({
     });
 
     const submitForm = useCallback((e) => {
-        // mind the jobType value when passing value to api,
-        // because for simple search, the initial jobType value will be undefined,
-        // and should be treated as a filter, not a required field, just like jobDuration
         if (e) e.preventDefault();
-
-        // console.log("SEARCH SUBMITTED:");
-        // console.log(searchValue, jobMinDuration, jobMaxDuration, jobType, fields);
-
-        // TODO: Tinker filters later
         searchOffers({ value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies });
 
         if (onSubmit) onSubmit();

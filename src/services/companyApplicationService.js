@@ -5,9 +5,10 @@ import {
 } from "../actions/companyApplicationActions";
 
 import config from "../config";
+import { buildCancelableRequest } from "../utils";
 const { API_HOSTNAME } = config;
 
-export const submitCompanyApplication = (formData) => async (dispatch) => {
+export const submitCompanyApplication = (formData) => buildCancelableRequest(async (dispatch, { signal }) => {
     dispatch(setCompanyApplicationSending(true));
     dispatch(setCompanyApplicationSubmissionError([]));
 
@@ -18,6 +19,7 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(formData),
+            signal,
         });
         const json = await res.json();
 
@@ -41,4 +43,4 @@ export const submitCompanyApplication = (formData) => async (dispatch) => {
         return false;
     }
 
-};
+});

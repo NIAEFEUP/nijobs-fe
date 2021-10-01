@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     Divider,
     makeStyles,
@@ -56,28 +56,24 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
 });
 
 const ApplicationsReviewWidget = () => {
-    const _amMounted = useRef(); // Prevents setState calls from happening after unmount
     const [rows, setRows] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        _amMounted.current = true;
-        searchApplications()
+
+        const request = searchApplications()
             .then((rows) => {
-                if (_amMounted.current) {
-                    const fetchedRows = rows.applications.reduce((rows, row) => {
-                        rows[row.id] = generateRow(row);
-                        return rows;
-                    }, {});
-                    setRows(fetchedRows);
-                }
+                const fetchedRows = rows.applications.reduce((rows, row) => {
+                    rows[row.id] = generateRow(row);
+                    return rows;
+                }, {});
+                setRows(fetchedRows);
             })
             .catch(() => {
-                if (_amMounted.current)
-                    setError("UnexpectedError");
+                setError("UnexpectedError");
             });
         return () => {
-            _amMounted.current = false;
+            request.cancel();
         };
     }, []);
 
