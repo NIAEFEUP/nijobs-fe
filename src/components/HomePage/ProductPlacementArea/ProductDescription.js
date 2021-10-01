@@ -22,14 +22,14 @@ import useSession from "../../../hooks/useSession";
 export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
     const { isLoggedIn, data } = useSession();
 
-    const classes = useProductDescriptionStyles({ isMobile: !useDesktop() });
+    const classes = useProductDescriptionStyles({ isMobile: !useDesktop() })();
 
     return (
         <div
             ref={ref}
             className={classes.productDescription}
         >
-            <Grid container spacing={10} justifyContent="center">
+            <Grid container justifyContent="center" className={classes.productDescriptionGrid}>
                 <Grid item xs={12} lg={6} container spacing={1} direction="column" justifyContent="flex-start" alignItems="center">
                     <Grid item>
                         <StudentSvg fill="#999" className={classes.productDescriptionSVG} />
