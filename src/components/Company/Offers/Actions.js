@@ -8,10 +8,9 @@ import { RowPropTypes } from "../../../utils/Table/PropTypes";
 import { ExpandMore, ExpandLess } from "@material-ui/icons";
 
 
-const ActionButtons = ({ /* row, */isCollapseOpen, toggleCollapse }) => (
+const ActionButtons = ({ isCollapseOpen, toggleCollapse }) => (
     <IconButton
         aria-label="More Actions"
-        // edge="end"
         onClick={(e) => {
             e.stopPropagation();
             toggleCollapse();
@@ -22,7 +21,6 @@ const ActionButtons = ({ /* row, */isCollapseOpen, toggleCollapse }) => (
 );
 
 ActionButtons.propTypes = {
-    // row: RowPropTypes,
     isCollapseOpen: PropTypes.bool.isRequired,
     toggleCollapse: PropTypes.func.isRequired,
 };

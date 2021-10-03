@@ -12,7 +12,12 @@ export const alphabeticalSorter = (isAscendingMode) => (a, b) => {
 
 const useStyles = makeStyles({
     fieldLink: {
-        color: "initial", textDecoration: "underline", textUnderlineOffset: 2,
+        color: "initial",
+        textDecoration: "none",
+        "&:hover": {
+            textDecoration: "underline",
+            textUnderlineOffset: 2,
+        },
     },
 });
 

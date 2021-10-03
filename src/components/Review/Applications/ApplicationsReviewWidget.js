@@ -17,7 +17,6 @@ import { format, parseISO } from "date-fns";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
-import { cancelablePromise } from "../../../utils";
 
 const sorters = {
     name: alphabeticalSorter,
@@ -64,8 +63,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-
-        const promise = cancelablePromise(searchApplications())
+        const request = searchApplications()
             .then((rows) => {
                 const fetchedRows = rows.applications.reduce((rows, row) => {
                     rows[row.id] = generateRow(row);
@@ -84,7 +82,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                 });
             });
         return () => {
-            promise.cancel();
+            request.cancel();
         };
     }, [addSnackbar]);
 
