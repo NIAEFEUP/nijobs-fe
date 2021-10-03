@@ -42,7 +42,24 @@ export const defaultDates = {
 export const generateValidationRule = validationRulesGenerator(CreateOfferConstants);
 
 const HumanReadableErrors = Object.freeze({
-    // TODO
+    "no-company-found-with-id": (id) => `No company found with given ID: ${id}.`,
+    "max-concurrent-offers-reached": (val) => `Maximum concurrent offers exceeded. You cannot have more than ${val} offers at a time.`,
+    "must-be-int": () => "Must be an integer.",
+    "company-blocked": () => "Company is blocked. Please contact the team to review this situation if you think this is a mistake.",
+    "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
 });
 
-export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";
+export const getHumanError = (error) => {
+    const [errorId, errorValue] = error.split(":");
+    return HumanReadableErrors[errorId](errorValue) || "An error occurred, please try again.";
+};
+
+export const parseRequestErrors = (err) => {
+    const generalErrors = err.filter((error) => !error.param).map((error) => ({ message: getHumanError(error.msg) }));
+    const paramErrors = err.filter((error) => !!error.param)
+        .reduce((obj, cur) => ({ ...obj, [cur.param]: { message: getHumanError(cur.msg) } }), {});
+    return {
+        ...paramErrors,
+        generalErrors,
+    };
+};
