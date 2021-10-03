@@ -79,27 +79,24 @@ TableRow.propTypes = {
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error,
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage,
 }) => {
     if (isLoading) {
-        const rowsArray = [0, 1, 2, 3, 4];
-        const iterableColArray = [];
-        for (let idx = 0; idx < numColumns + (isSelectableTable ? 1 : 0); idx++) {
-            iterableColArray.push({ key: idx });
-        }
+        const rowsMock = Array(rowsPerPage).fill(0);
+        const columnsMock = Array(numColumns + (isSelectableTable ? 1 : 0)).fill(0);
+
         return (
-            rowsArray.map((rowIdx) => (
-                <MUITableRow data-testid={`tableCellSkeleton-${rowIdx}`} key={rowIdx}>
-                    {iterableColArray.map((element) => (
+            rowsMock.map((_, i) => (
+                <MUITableRow data-testid={`tableCellSkeleton-${i}`} key={i}>
+                    {columnsMock.map((_, j) => (
                         <TableCell
-                            key={element.key}
+                            key={j}
                             align="right"
                         >
                             <Skeleton variant="rect" height={30} />
                         </TableCell>
                     ))}
                 </MUITableRow>
-
             ))
         );
     } else if ((Object.keys(rows).length === 0) || error) {
@@ -149,6 +146,7 @@ TableContent.propTypes = {
     isSelectableTable: PropTypes.bool,
     isLoading: PropTypes.bool,
     error: PropTypes.object,
+    rowsPerPage: PropTypes.number.isRequired,
 };
 
 export default TableContent;

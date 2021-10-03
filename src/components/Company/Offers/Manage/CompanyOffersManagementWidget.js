@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
-import { alphabeticalSorter, generateTableCellFromField } from "../../../../utils/Table/utils";
+import { alphabeticalSorter, GenerateTableCellFromField } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
 import PropTypes from "prop-types";
 import useSession from "../../../../hooks/useSession";
@@ -13,16 +13,11 @@ import { Edit as EditIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
-// import { RowActions } from "../Actions";
 
 const generateRow = ({ title, location, description, publishDate, publishEndDate,
-    ownerName, _id }) => ({ // Check if it is company.name or companyName
+    ownerName, _id }) => ({
     fields: {
-        title: { value: title, align: "left", customComponent:
-    <Link to={`/offer/${_id}`} style={{ color: "initial", textDecoration: "underline", textUnderlineOffset: 2 }}>
-        {title}
-    </Link>,
-        },
+        title: { value: title, align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
@@ -61,7 +56,7 @@ const filters = [
 const RowActions = ({ row }) => {
     const offerRoute = `/offer/${row?.key}`;
 
-    // Need to change the route from View Offer to Edit Offer
+    // Need to change the route from View Offer to Edit Offer (After Edit Offer page is done)
 
     return (
         <TableCell align="right">
@@ -89,7 +84,6 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
     useEffect(() => {
         if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
-            /* TODO: SHOULD NOT RUN WHEN COMPONENT IS UNMOUNTED: CANCEL PROMISE */
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
                     rows[row._id] = generateRow(row);
@@ -117,7 +111,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
         return (
             <>
                 {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
         );
@@ -128,78 +122,27 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
         labelId: PropTypes.string.isRequired,
     };
 
-    /*
-    const useRowCollapseStyles = makeStyles((theme) => ({
-        payloadSection: {
-            "&:not(:first-child)": {
-                paddingTop: theme.spacing(2),
-            },
-            "&:not(:first-child) p:first-of-type": {
-                paddingTop: theme.spacing(2),
-            },
-        },
-        actionsDivider: {
-            paddingTop: theme.spacing(2),
-        },
-    }));
-    */
-    /*
-    const RowCollapseComponent = ({ rowKey }) => {
-        const row = offers[rowKey];
-        const classes = useRowCollapseStyles();
-        return (
-            <div style={{ display: "flex", flex: 1, flexDirection: "row" }}>
-                <div style={{ flex: 1 }}>
-                    <Typography variant="subtitle2">
-                        {row.payload.companyName.value}
-                    </Typography>
-                    <div className={classes.actionsDivider}>
-                        <Typography variant="body1">
-                            Description
-                        </Typography>
-                        <Typography variant="body2">
-                            {row.payload.description.value}
-                        </Typography>
-                    </div>
-                </div>
-                <div style={{ flex: 1 }}>
-                    { // Edit Offer button could be in the collapsable?
-                    }
-                    <Typography>Some text</Typography>
-                </div>
-            </div>
-
-        );
-    };
-
-    RowCollapseComponent.propTypes = {
-        rowKey: PropTypes.string.isRequired,
-    }; */
-
     return (
-        <div>
-            <FilterableTable
-                title="Offers Management"
-                tableComponent={ControlledSortableSelectableTable}
-                defaultSort="title"
-                rows={offers}
-                setInitialRows={setOffers}
-                columns={columns}
-                sorters={sorters}
-                filters={filters}
-                RowActions={RowActions}
-                rowsPerPage={5}
-                stickyHeader
-                emptyMessage="No offers here."
-                RowContent={RowContent}
-                handleSelect={() => {}}
-                handleSelectAll={() => {}}
-                isSelectableTable={false}
-                isLoading={isLoading}
-                error={error}
-                // RowCollapseComponent={RowCollapseComponent}
-            />
-        </div>
+        <FilterableTable
+            title="Offers Management"
+            tableComponent={ControlledSortableSelectableTable}
+            defaultSort="title"
+            rows={offers}
+            setInitialRows={setOffers}
+            columns={columns}
+            sorters={sorters}
+            filters={filters}
+            RowActions={RowActions}
+            rowsPerPage={5}
+            stickyHeader
+            emptyMessage="No offers here."
+            RowContent={RowContent}
+            handleSelect={() => {}}
+            handleSelectAll={() => {}}
+            isSelectableTable={false}
+            isLoading={isLoading}
+            error={error}
+        />
     );
 };
 

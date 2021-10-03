@@ -13,7 +13,8 @@ const ActionButtons = ({ /* row, */isCollapseOpen, toggleCollapse }) => (
         aria-label="More Actions"
         // edge="end"
         onClick={(e) => {
-            e.stopPropagation(); toggleCollapse();
+            e.stopPropagation();
+            toggleCollapse();
         }}
     >
         {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}

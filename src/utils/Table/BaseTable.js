@@ -111,6 +111,7 @@ const BaseTable = ({
                         isSelectableTable={isSelectableTable}
                         isLoading={isLoading}
                         error={error}
+                        rowsPerPage={rowsPerPage}
                     />
                 </Table>
             </TableContainer>

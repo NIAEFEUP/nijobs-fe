@@ -5,7 +5,7 @@ import {
     Typography,
 } from "@material-ui/core";
 
-import { alphabeticalSorter, generateTableCellFromField } from "../../../utils/Table/utils";
+import { alphabeticalSorter, GenerateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./Filters";
 import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
@@ -119,7 +119,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
         return (
             <>
                 {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    generateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
         );

@@ -1,5 +1,6 @@
 import React from "react";
-import { TableCell } from "@material-ui/core";
+import { TableCell, makeStyles } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 export const getFieldValue = (row, column) => row.fields[column].value;
 
@@ -9,31 +10,30 @@ export const alphabeticalSorter = (isAscendingMode) => (a, b) => {
     return 0;
 };
 
-export const generateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
-    const customComponent = fieldOptions?.customComponent;
+const useStyles = makeStyles({
+    fieldLink: {
+        color: "initial", textDecoration: "underline", textUnderlineOffset: 2,
+    },
+});
+
+export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
+    const classes = useStyles();
+
+    const linkDestination = fieldOptions?.linkDestination;
     if (typeof fieldOptions.value === "function") {
         return fieldOptions.value();
     } else {
-        if (customComponent) {
-            return (
-                <TableCell
-                    key={fieldId}
-                    id={id === 0 ? `${labelId}-label` : undefined}
-                    align={fieldOptions.align || "right"}
-                >
-                    {customComponent}
-                </TableCell>
-            );
-        } else {
-            return (
-                <TableCell
-                    key={fieldId}
-                    id={id === 0 ? `${labelId}-label` : undefined}
-                    align={fieldOptions.align || "right"}
-                >
-                    {fieldOptions.value}
-                </TableCell>
-            );
-        }
+        return (
+            <TableCell
+                key={fieldId}
+                id={id === 0 ? `${labelId}-label` : undefined}
+                align={fieldOptions.align || "right"}
+            >
+                {fieldOptions?.linkDestination ?
+                    <Link to={linkDestination} className={classes.fieldLink}>
+                        {fieldOptions?.value}
+                    </Link> : fieldOptions.value}
+            </TableCell>
+        );
     }
 };

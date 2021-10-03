@@ -10,7 +10,6 @@ const Filter = React.forwardRef((props, ref) => (
         column="title"   // column value that will be searched
         columns={columns}
         ref={ref}
-        isCaseSensitive={false}
         {...props}
     />
 ));
