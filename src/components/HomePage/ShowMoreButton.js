@@ -1,13 +1,32 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { IconButton } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import { KeyboardArrowDownRounded } from "@material-ui/icons";
-import useScrollButtonAnimation from "../../hooks/useScrollButtonAnimation";
+
+const useStyles = makeStyles(() => ({
+    "@keyframes bounce": {
+        "80%": {
+            transform: "translateY(0)",
+        },
+        "40%": {
+            transform: "translateY(-12px)",
+        },
+        "60%": {
+            transform: "translateY(-5px)",
+        },
+    },
+    button: {
+        animation: "$bounce infinite 1.5s",
+        "&:hover": {
+            animation: "none",
+        },
+    },
+}));
 
 const ShowMoreButton = ({ onClick }) => {
 
-    const classes = useScrollButtonAnimation();
+    const classes = useStyles();
 
     return (
         <IconButton

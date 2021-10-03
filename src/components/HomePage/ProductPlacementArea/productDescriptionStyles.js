@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default (isMobile) => makeStyles((theme) => ({
+export default ({ isMobile }) => makeStyles((theme) => ({
     productDescription: {
         display: "flex",
         justifyContent: "center",

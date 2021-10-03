@@ -5,7 +5,6 @@ import logo from "./nijobs.png";
 
 import SearchArea from "./SearchArea/SearchArea";
 import ShowMoreButton from "./ShowMoreButton";
-import ScrollToTopButton from "./ScrollToTopButton";
 import InfoBox from "./QuickInfoArea/InfoBox";
 
 import { useMobile, useDesktop } from "../../utils/media-queries";
@@ -19,14 +18,14 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
     const scrollButtonRef = useRef(null);
     const scrollButtonRefCurrent = scrollButtonRef?.current;
     const [scrollPosition, setScrollPosition] = useState(0);
-    const [switchScrollButtonPosition, setSwitchScrollButtonPosition] = useState(null);
+    const [hideScrollButtonPosition, setHideScrollButtonPosition] = useState(null);
 
     useEffect(() => {
         const handleScroll = () => {
             setScrollPosition(window.pageYOffset);
         };
         window.addEventListener("scroll", handleScroll, { passive: true });
-        setSwitchScrollButtonPosition(scrollButtonRefCurrent?.getBoundingClientRect()?.y / 2);
+        setHideScrollButtonPosition(scrollButtonRefCurrent?.getBoundingClientRect()?.y / 2);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
@@ -60,9 +59,7 @@ const MainView = ({ scrollToProductDescription, showSearchResults }) => {
             </div>
             <div className={classes.showMoreBtn} ref={scrollButtonRef}>
                 {
-                    scrollPosition > switchScrollButtonPosition ?
-                        <ScrollToTopButton role="scrollButton" />
-                        :
+                    scrollPosition <= hideScrollButtonPosition &&
                         <ShowMoreButton
                             onClick={scrollToProductDescription}
                             role="scrollButton"
