@@ -14,7 +14,7 @@ export const smoothScrollToRef = (ref, block = "start") => {
 
     ref.current.scrollIntoView({
         behavior: "smooth",
-        block: block,
+        block,
     });
 };
 

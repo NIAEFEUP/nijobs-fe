@@ -7,12 +7,24 @@ import { useDesktop } from "../utils/media-queries";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 
-const useStyles = makeStyles(() => ({
-    searchResults: {
-        scrollSnapAlign: "start",
-        scrollMarginBottom: "100vh", // don't apply snap scroll to the bottom of the search results, so that it's possible to see the footer
-    },
-}));
+const useStyles = ({ isMobile, showSearchResults }) => makeStyles(() => (
+    showSearchResults &&
+        {
+            search: {
+                scrollSnapAlign: "start",
+            },
+            productDescription: {
+                scrollSnapAlign: isMobile ? "center" : "end",
+            },
+            searchResults: {
+                scrollSnapAlign: "start",
+
+                // don't apply snap scroll to the bottom of the search
+                // results, so that it's possible to see the footer
+                scrollMarginBottom: "100vh",
+            },
+        }
+));
 
 export const HomePage = () => {
 
@@ -25,27 +37,27 @@ export const HomePage = () => {
     useEffect(() => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
 
-        // check if the current browser is Firefox, because scroll scroll-snap does not work correctly in Firefox
-        const isFirefox = typeof InstallTrigger !== "undefined";
-
         // It's mandatory to add the scroll-snap-type style property to the html tag in order to use snap-scroll
-        if (!isFirefox) document.getElementsByTagName("html")[0].style.scrollSnapType = "y proximity";
+        document.getElementsByTagName("html")[0].style.scrollSnapType = "y proximity";
     }, [searchResultsRef, showSearchResults]);
 
-    const classes = useStyles();
+    const classes = useStyles({ isMobile: !useDesktop(), showSearchResults })();
 
     return (
         <React.Fragment>
             <ApplicationMessagesNotifier />
-            <MainView
-                scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef, productDescriptionScrollBlock)}
-                showSearchResults={() => {
-                    setShowSearchResults(true);
-                    if (searchResultsRef && searchResultsRef.current) smoothScrollToRef(searchResultsRef);
-                }}
-            />
-            <ProductDescription ref={productDescriptionRef}  />
-
+            <div className={classes.search}>
+                <MainView
+                    scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef, productDescriptionScrollBlock)}
+                    showSearchResults={() => {
+                        setShowSearchResults(true);
+                        if (searchResultsRef && searchResultsRef.current) smoothScrollToRef(searchResultsRef);
+                    }}
+                />
+            </div>
+            <div className={classes.productDescription}>
+                <ProductDescription ref={productDescriptionRef} />
+            </div>
             {showSearchResults &&
                 <div className={classes.searchResults}>
                     <SearchResultsWidget ref={searchResultsRef} />

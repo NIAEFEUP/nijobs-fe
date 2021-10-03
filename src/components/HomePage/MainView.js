@@ -17,20 +17,21 @@ import CenteredComponent from "./CenteredComponent";
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
     const scrollButtonRef = useRef(null);
+    const scrollButtonRefCurrent = scrollButtonRef?.current;
     const [scrollPosition, setScrollPosition] = useState(0);
-    const handleScroll = () => {
-        setScrollPosition(window.pageYOffset);
-    };
     const [switchScrollButtonPosition, setSwitchScrollButtonPosition] = useState(null);
 
     useEffect(() => {
+        const handleScroll = () => {
+            setScrollPosition(window.pageYOffset);
+        };
         window.addEventListener("scroll", handleScroll, { passive: true });
-        setSwitchScrollButtonPosition(scrollButtonRef?.current?.getBoundingClientRect()?.y / 2);
+        setSwitchScrollButtonPosition(scrollButtonRefCurrent?.getBoundingClientRect()?.y / 2);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [scrollButtonRefCurrent]);
 
     const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (

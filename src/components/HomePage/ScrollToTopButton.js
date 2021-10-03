@@ -1,11 +1,11 @@
 import React from "react";
 import { IconButton } from "@material-ui/core";
 import { KeyboardArrowUpRounded } from "@material-ui/icons";
-import scrollButtonAnimation from "../../utils/styles/ScrollButtonAnimations";
+import useScrollButtonAnimation from "../../hooks/useScrollButtonAnimation";
 
 const ScrollToTopButton = () => {
 
-    const classes = scrollButtonAnimation();
+    const classes = useScrollButtonAnimation();
 
     return (
         <IconButton

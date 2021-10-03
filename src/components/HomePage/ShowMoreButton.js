@@ -3,11 +3,11 @@ import PropTypes from "prop-types";
 
 import { IconButton } from "@material-ui/core";
 import { KeyboardArrowDownRounded } from "@material-ui/icons";
-import scrollButtonAnimation from "../../utils/styles/ScrollButtonAnimations";
+import useScrollButtonAnimation from "../../hooks/useScrollButtonAnimation";
 
 const ShowMoreButton = ({ onClick }) => {
 
-    const classes = scrollButtonAnimation();
+    const classes = useScrollButtonAnimation();
 
     return (
         <IconButton
