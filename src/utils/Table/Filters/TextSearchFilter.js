@@ -5,7 +5,7 @@ import { getFieldValue } from "../utils";
 import ResetableFilter from "./ResetableFilter";
 
 const TextSearchFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, placeholder, isCaseSensitive = true,
+    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, placeholder, isCaseSensitive = false,
 }, ref) => {
 
     const handleChange = (event) => {
