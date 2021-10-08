@@ -5,12 +5,11 @@ import ReactGa from "react-ga";
  */
 export const initAnalytics = () => {
     ReactGa.initialize(process.env.ANALYTICS_ID, {
-        debug: true, // enables useful info on console
         gaOptions: {
             siteSpeedSampleRate: 100,
         },
     });
-    ReactGa.pageview(window.location.pathname + window.location.search);
+    ReactGa.pageview(window.location.pathname);
 };
 
 /**
@@ -60,6 +59,11 @@ export const EVENT_TYPES = Object.freeze({
         action: `${action} Error`,
         label: `ERROR: ${type}`,
         value: status,
+    }),
+    SUCCESS: (action, label) => ({
+        category: "Successful Response",
+        action,
+        label,
     }),
     OTHER: {
         category: "Other",

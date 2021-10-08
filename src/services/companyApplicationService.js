@@ -9,6 +9,8 @@ import { buildCancelableRequest } from "../utils";
 import { recordTime, TIMED_ACTIONS, createEvent, EVENT_TYPES } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
+const SUBMIT_COMPANY_APPLICATION = "Submit Company Application";
+
 export const submitCompanyApplication = (formData) => buildCancelableRequest(async (dispatch, { signal }) => {
     const t0 = performance.now();
     dispatch(setCompanyApplicationSending(true));
@@ -30,7 +32,7 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(asy
             dispatch(setCompanyApplicationSending(false));
 
             createEvent(EVENT_TYPES.ERROR(
-                "Submit Company Application",
+                SUBMIT_COMPANY_APPLICATION,
                 "BAD_RESPONSE",
                 res.status
             ));
@@ -41,6 +43,7 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(asy
         dispatch(setCompanyApplication(json));
         dispatch(setCompanyApplicationSending(false));
 
+        createEvent(EVENT_TYPES.SUCCESS(SUBMIT_COMPANY_APPLICATION));
         recordTime(TIMED_ACTIONS.APPLICATION_SUBMIT, t0, performance.now());
         return true;
 
@@ -49,7 +52,7 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(asy
         dispatch(setCompanyApplicationSending(false));
 
         createEvent(EVENT_TYPES.ERROR(
-            "Submit Company Application",
+            SUBMIT_COMPANY_APPLICATION,
             "UNEXPECTED"
         ));
 

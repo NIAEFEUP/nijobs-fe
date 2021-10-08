@@ -5,6 +5,11 @@ import { parseFiltersToURL, buildCancelableRequest } from "../utils";
 import { createEvent, recordTime, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
+const OFFER_SEARCH = "Offer Search";
+const HIDE_OFFER = "Hide Offer";
+const DISABLE_OFFER = "Disable Offer";
+const ENABLE_OFFER = "Enable Offer";
+
 
 export const searchOffers = (filters) => buildCancelableRequest(async (dispatch, { signal }) => {
     const t0 = performance.now();
@@ -13,7 +18,8 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
     dispatch(setLoadingOffers(true));
 
     try {
-        const res = await fetch(`${API_HOSTNAME}/offers?${parseFiltersToURL(filters)}`, {
+        const query = parseFiltersToURL(filters);
+        const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
             method: "GET",
             credentials: "include",
             signal,
@@ -26,7 +32,7 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
             dispatch(setLoadingOffers(false));
 
             createEvent(EVENT_TYPES.ERROR(
-                "Offer Search",
+                OFFER_SEARCH,
                 "BAD_RESPONSE",
                 res.status
             ));
@@ -36,6 +42,7 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
         dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
         dispatch(setLoadingOffers(false));
 
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_SEARCH, query));
         recordTime(TIMED_ACTIONS.OFFER_SEARCH, t0, performance.now());
 
     } catch (error) {
@@ -46,7 +53,7 @@ export const searchOffers = (filters) => buildCancelableRequest(async (dispatch,
         dispatch(setLoadingOffers(false));
 
         createEvent(EVENT_TYPES.ERROR(
-            "Offer Search",
+            OFFER_SEARCH,
             "NETWORK_FAILURE"
         ));
     }
@@ -63,19 +70,21 @@ export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) =
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                "Hide Offer",
+                HIDE_OFFER,
                 "BAD_RESPONSE",
                 res.status
             ));
 
             throw json.errors;
         }
+
+        createEvent(EVENT_TYPES.SUCCESS(HIDE_OFFER));
         return json;
 
     } catch (error) {
 
         createEvent(EVENT_TYPES.ERROR(
-            "Hide Offer",
+            HIDE_OFFER,
             "UNEXPECTED"
         ));
 
@@ -100,19 +109,21 @@ export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offe
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                "Disable Offer",
+                DISABLE_OFFER,
                 "BAD_RESPONSE",
                 res.status
             ));
 
             throw json.errors;
         }
+
+        createEvent(EVENT_TYPES.SUCCESS(DISABLE_OFFER));
         return json;
 
     } catch (error) {
 
         createEvent(EVENT_TYPES.ERROR(
-            "Disable Offer",
+            DISABLE_OFFER,
             "UNEXPECTED"
         ));
 
@@ -133,19 +144,21 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                "Enable Offer",
+                ENABLE_OFFER,
                 "BAD_RESPONSE",
                 res.status
             ));
 
             throw json.errors;
         }
+
+        createEvent(EVENT_TYPES.SUCCESS(ENABLE_OFFER));
         return json;
 
     } catch (error) {
 
         createEvent(EVENT_TYPES.ERROR(
-            "Enable Offer",
+            ENABLE_OFFER,
             "UNEXPECTED"
         ));
 

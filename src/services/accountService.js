@@ -2,6 +2,8 @@ import config from "../config";
 import { measureTime, createEvent, TIMED_ACTIONS, EVENT_TYPES } from "../utils/AnalyticsUtils";
 const { API_HOSTNAME } = config;
 
+const COMPLETE_REGISTRATION = "Complete Registration";
+
 
 export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRATION, async ({ logo, bio, contacts }) => {
 
@@ -24,19 +26,21 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                "Complete Registration",
+                COMPLETE_REGISTRATION,
                 "BAD_RESPONSE",
                 res.status
             ));
 
             throw json.errors;
         }
+
+        createEvent(EVENT_TYPES.SUCCESS(COMPLETE_REGISTRATION));
         return json;
 
     } catch (error) {
 
         createEvent(EVENT_TYPES.ERROR(
-            "Complete Registration",
+            COMPLETE_REGISTRATION,
             "UNEXPECTED"
         ));
 
