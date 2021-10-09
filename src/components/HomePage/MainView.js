@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 import logo from "./nijobs.png";
@@ -15,22 +15,24 @@ import CenteredComponent from "./CenteredComponent";
 
 const MainView = ({ scrollToProductDescription, showSearchResults }) => {
 
-    const scrollButtonRef = useRef(null);
-    const scrollButtonRefCurrent = scrollButtonRef?.current;
     const [scrollPosition, setScrollPosition] = useState(0);
     const [hideScrollButtonPosition, setHideScrollButtonPosition] = useState(null);
 
+    const scrollButtonRef = useCallback((node) => {
+        setHideScrollButtonPosition(node?.getBoundingClientRect()?.y / 2);
+    }, []);
+
+    const handleScroll = useCallback(() => {
+        setScrollPosition(window.pageYOffset);
+    }, []);
+
     useEffect(() => {
-        const handleScroll = () => {
-            setScrollPosition(window.pageYOffset);
-        };
         window.addEventListener("scroll", handleScroll, { passive: true });
-        setHideScrollButtonPosition(scrollButtonRefCurrent?.getBoundingClientRect()?.y / 2);
 
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, [scrollButtonRefCurrent]);
+    }, [handleScroll]);
 
     const classes = useMainViewStyles({ isMobile: !useDesktop() });
     return (
