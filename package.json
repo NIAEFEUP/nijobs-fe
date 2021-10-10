@@ -12,7 +12,8 @@
     "test-ci": "jest --coverage --verbose",
     "test-watch": "node scripts/test.js",
     "lint-fix": "npm run lint -- --fix",
-    "lint": "eslint src --max-warnings 0"
+    "lint": "eslint src --max-warnings 0",
+    "audit": "npm audit --production --audit-level=high"
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.13",
