@@ -1,11 +1,12 @@
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
-import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/AnalyticsUtils";
+import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/analytics";
+import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
-const SEARCH_APPLICATIONS = "Search Applications";
-const APPROVE_APPLICATION = "Approve Application";
-const REJECT_APPLICATION = "Reject Application";
+const APPLICATION_SEARCH_METRIC_ID = "application/search";
+const APPLICATION_APPROVE_METRIC_ID = "application/approve";
+const APPLICATION_REJECT_METRIC_ID = "application/reject";
 
 
 const encodeFilters = (filters) => {
@@ -27,6 +28,7 @@ const encodeFilters = (filters) => {
 
 export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIONS.APPLICATION_SEARCH, async (filters, { signal } = {}) => {
 
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/applications/company/search${filters ? `?${encodeFilters(filters)}` : ""}`, {
             method: "GET",
@@ -38,22 +40,23 @@ export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIO
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                SEARCH_APPLICATIONS,
-                "BAD_RESPONSE",
+                APPLICATION_SEARCH_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
                 res.status
             ));
+            isErrorRegistered = true;
 
             throw json.errors;
         }
 
-        createEvent(EVENT_TYPES.SUCCESS(SEARCH_APPLICATIONS));
+        createEvent(EVENT_TYPES.SUCCESS(APPLICATION_SEARCH_METRIC_ID));
         return json;
 
     } catch (error) {
 
-        createEvent(EVENT_TYPES.ERROR(
-            SEARCH_APPLICATIONS,
-            "UNEXPECTED"
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+            APPLICATION_SEARCH_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
         ));
 
         if (Array.isArray(error)) throw error;
@@ -64,6 +67,7 @@ export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIO
 export const approveApplication = buildCancelableRequest(
     measureTime(TIMED_ACTIONS.APPLICATION_APPROVE, async (applicationId, { signal }) => {
 
+        let isErrorRegistered = false;
         try {
             const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/approve`, {
                 method: "POST",
@@ -75,22 +79,23 @@ export const approveApplication = buildCancelableRequest(
             if (!res.ok) {
 
                 createEvent(EVENT_TYPES.ERROR(
-                    APPROVE_APPLICATION,
-                    "BAD_RESPONSE",
+                    APPLICATION_APPROVE_METRIC_ID,
+                    ErrorTypes.BAD_RESPONSE,
                     res.status
                 ));
+                isErrorRegistered = true;
 
                 throw json.errors;
             }
 
-            createEvent(EVENT_TYPES.SUCCESS(APPROVE_APPLICATION));
+            createEvent(EVENT_TYPES.SUCCESS(APPLICATION_APPROVE_METRIC_ID));
             return json;
 
         } catch (error) {
 
-            createEvent(EVENT_TYPES.ERROR(
-                APPROVE_APPLICATION,
-                "UNEXPECTED"
+            if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+                APPLICATION_APPROVE_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE
             ));
 
             if (Array.isArray(error)) throw error;
@@ -101,6 +106,7 @@ export const approveApplication = buildCancelableRequest(
 
 export const rejectApplication = buildCancelableRequest(
     measureTime(TIMED_ACTIONS.APPLICATION_REJECT, async (applicationId, rejectReason, { signal }) => {
+        let isErrorRegistered = false;
         try {
             const res = await fetch(`${API_HOSTNAME}/applications/company/${applicationId}/reject`, {
                 method: "POST",
@@ -116,22 +122,23 @@ export const rejectApplication = buildCancelableRequest(
             if (!res.ok) {
 
                 createEvent(EVENT_TYPES.ERROR(
-                    REJECT_APPLICATION,
-                    "BAD_RESPONSE",
+                    APPLICATION_REJECT_METRIC_ID,
+                    ErrorTypes.BAD_RESPONSE,
                     res.status
                 ));
+                isErrorRegistered = true;
 
                 throw json.errors;
             }
 
-            createEvent(EVENT_TYPES.SUCCESS(REJECT_APPLICATION));
+            createEvent(EVENT_TYPES.SUCCESS(APPLICATION_REJECT_METRIC_ID));
             return json;
 
         } catch (error) {
 
-            createEvent(EVENT_TYPES.ERROR(
-                REJECT_APPLICATION,
-                "UNEXPECTED"
+            if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+                APPLICATION_REJECT_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE
             ));
 
             if (Array.isArray(error)) throw error;

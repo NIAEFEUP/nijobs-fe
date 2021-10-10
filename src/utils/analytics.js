@@ -9,7 +9,6 @@ export const initAnalytics = () => {
             siteSpeedSampleRate: 100,
         },
     });
-    ReactGa.pageview(window.location.pathname);
 };
 
 /**
@@ -55,73 +54,73 @@ export const createEvent = (event = EVENT_TYPES.OTHER) => {
 
 export const EVENT_TYPES = Object.freeze({
     ERROR: (action, type, status = 500) => ({
-        category: "Error",
-        action: `${action} Error`,
+        category: "error",
+        action: `error-${action}`,
         label: `ERROR: ${type}`,
         value: status,
     }),
     SUCCESS: (action, label) => ({
-        category: "Successful Response",
+        category: "success",
         action,
         label,
     }),
     OTHER: {
-        category: "Other",
-        action: "Another type of event",
+        category: "other",
+        action: "another-event-type",
     },
 });
 
 export const TIMED_ACTIONS = Object.freeze({
     OFFER_CREATE: {
-        category: "Offer",
-        variable: "Create Offer",
+        category: "offer",
+        variable: "offer/create",
     },
     OFFER_SEARCH: {
-        category: "Offer",
-        variable: "Search Offers",
+        category: "offer",
+        variable: "offer/search",
     },
     OFFER_HIDE: {
-        category: "Offer",
-        variable: "Hide Offer",
+        category: "offer",
+        variable: "offer/hide",
     },
     OFFER_DISABLE: {
-        category: "Offer",
-        variable: "Disable Offer",
+        category: "offer",
+        variable: "offer/disable",
     },
     OFFER_ENABLE: {
-        category: "Offer",
-        variable: "Enable Offer",
+        category: "offer",
+        variable: "offer/enable",
     },
     COMPLETE_REGISTRATION: {
-        category: "Registration",
-        variable: "Complete Registration",
+        category: "registration",
+        variable: "registration/complete",
     },
     APPLICATION_SEARCH: {
-        category: "Application",
-        variable: "Search Applications",
+        category: "application",
+        variable: "application/search",
     },
     APPLICATION_APPROVE: {
-        category: "Application",
-        variable: "Approve Application",
+        category: "application",
+        variable: "application/approve",
     },
     APPLICATION_REJECT: {
-        category: "Application",
-        variable: "Reject Application",
+        category: "application",
+        variable: "application/reject",
     },
     APPLICATION_SUBMIT: {
-        category: "Application",
-        variable: "Submit Application",
+        category: "application",
+        variable: "application/submit",
     },
     COMPANY_OFFERS_FETCH: {
-        category: "Company Offers",
-        variable: "Fetch Company Offers",
+        category: "company_offers",
+        variable: "company_offers/fetch",
     },
     OTHER: {
-        category: "Other",
-        variable: "Other",
+        category: "other",
+        variable: "other",
     },
     UNKNOWN: {
-        category: "Unknown",
-        variable: "Unknown",
+        category: "unknown",
+        variable: "unknown",
     },
 });

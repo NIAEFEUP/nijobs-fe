@@ -1,8 +1,9 @@
 import config from "../config";
-import { measureTime, createEvent, TIMED_ACTIONS, EVENT_TYPES } from "../utils/AnalyticsUtils";
+import { measureTime, createEvent, TIMED_ACTIONS, EVENT_TYPES } from "../utils/analytics";
+import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
-const COMPLETE_REGISTRATION = "Complete Registration";
+const COMPLETE_REGISTRATION_METRIC_ID = "registration/complete";
 
 
 export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRATION, async ({ logo, bio, contacts }) => {
@@ -15,6 +16,7 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
     });
     formData.append("bio", bio);
 
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/company/application/finish`, {
             method: "POST",
@@ -26,22 +28,23 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
         if (!res.ok) {
 
             createEvent(EVENT_TYPES.ERROR(
-                COMPLETE_REGISTRATION,
-                "BAD_RESPONSE",
+                COMPLETE_REGISTRATION_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
                 res.status
             ));
+            isErrorRegistered = true;
 
             throw json.errors;
         }
 
-        createEvent(EVENT_TYPES.SUCCESS(COMPLETE_REGISTRATION));
+        createEvent(EVENT_TYPES.SUCCESS(COMPLETE_REGISTRATION_METRIC_ID));
         return json;
 
     } catch (error) {
 
-        createEvent(EVENT_TYPES.ERROR(
-            COMPLETE_REGISTRATION,
-            "UNEXPECTED"
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+            COMPLETE_REGISTRATION_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
         ));
 
         if (Array.isArray(error)) throw error;
