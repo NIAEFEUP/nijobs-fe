@@ -13,8 +13,6 @@ import {
     Collapse,
     Button,
     Slider,
-    IconButton,
-    Tooltip,
     Checkbox,
     FormControlLabel,
     MenuItem,
@@ -42,8 +40,6 @@ import {
     LocationOn,
     KeyboardArrowDown,
     KeyboardArrowUp,
-    AddCircle,
-    RemoveCircle,
 } from "@material-ui/icons";
 import { Alert, Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
@@ -60,6 +56,7 @@ import { RouterLink } from "../../../utils";
 import { toggleLoginModal } from "../../../actions/navbarActions";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import MultiOptionTextField from "../../utils/form/MultiOptionTextField";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -119,7 +116,7 @@ export const CreateOfferController = () => {
     const submit = useCallback(
         (data) => {
             setLoading(true);
-
+            console.log(data);
             newOffer({
                 ...data,
                 vacancies: data.vacancies || undefined,
@@ -142,6 +139,8 @@ export const CreateOfferController = () => {
         [company],
     );
 
+    const DEFAULT_VALUE = { value: "" };
+
     return {
         controllerOptions: {
             initialValue: {
@@ -152,9 +151,9 @@ export const CreateOfferController = () => {
                 fields,
                 errors,
                 requestErrors,
-                appendContact,
+                appendContact: () => appendContact(DEFAULT_VALUE),
                 removeContact,
-                appendRequirement,
+                appendRequirement: () => appendRequirement(DEFAULT_VALUE),
                 removeRequirement,
                 getValues,
                 setValue,
@@ -460,147 +459,6 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
                     : <></>
             )}
         />
-    );
-};
-
-const RemoveLineButton = ({ onClick, items, i }) => {
-    const disabled = Object.keys(items).length <= 0;
-    return (
-        <FormControl>
-            <Tooltip
-                title={disabled ? "At least 1 contact required" : "Remove Entry"}
-                aria-label={disabled ? "At least 1 contact required" : "Remove Entry"}
-            >
-                <span>
-                    <IconButton
-                        aria-label={`Remove Entry ${i}`}
-                        onClick={onClick}
-                        disabled={disabled}
-                    >
-                        <RemoveCircle />
-                    </IconButton>
-                </span>
-            </Tooltip>
-        </FormControl>
-    );
-};
-
-const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors, disabled  }) => {
-    const isMobile = useMobile();
-    const classes = useCreateOfferStyles(isMobile)();
-
-    return (
-        <>
-            <Typography
-                variant="h6"
-            >
-                                Contacts
-            </Typography>
-            <Box display="flex" flexDirection="column">
-                {contacts.map(({ id }, i) => (
-                    <Controller
-                        key={id}
-                        name={`contacts.${i}.value`}
-                        render={(
-                            { field: { onChange, onBlur, ref, name, value } },
-                        ) => (
-                            <TextField
-                                name={name}
-                                value={value}
-                                label={`Contact #${i}`}
-                                id={`Contact #${i}`}
-                                error={!!errors?.[i]}
-                                inputRef={ref}
-                                onBlur={onBlur}
-                                disabled={disabled}
-                                onChange={onChange}
-                                InputProps={{
-                                    endAdornment:
-    <RemoveLineButton i={i} items={contacts} onClick={() => onRemove(i)} /> }}
-                                margin="normal"
-                                helperText={errors?.[i]?.value?.message || ""}
-                            />)}
-                        control={control}
-                        defaultValue={getValues(`contacts.${i}.value`) || ""}
-                    />
-                ))}
-                <Button
-                    color="primary"
-                    startIcon={<AddCircle />}
-                    disabled={Object.keys(contacts).length >= 10 || disabled}
-                    onClick={() => onAdd()}
-                    className={classes.addContactBtn}
-                >
-                Add Entry
-                </Button>
-                {errors ?
-                    <FormHelperText error={!!errors}>
-                        {errors.message}
-                    </FormHelperText>
-                    : <></>
-                }
-            </Box>
-        </>
-    );
-};
-
-const RequirementsSelector = ({ requirements, onAdd, onRemove, getValues, control, errors, disabled }) => {
-    const isMobile = useMobile();
-    const classes = useCreateOfferStyles(isMobile)();
-
-    return (
-        <>
-            <Typography
-                variant="h6"
-            >
-                Requirements
-            </Typography>
-            <Box display="flex" flexDirection="column">
-                {requirements.map(({ id }, i) => (
-                    <Controller
-                        key={id}
-                        name={`requirements.${i}.value`}
-                        render={(
-                            { field: { onChange, onBlur, ref, name, value } },
-                        ) => (
-                            <TextField
-                                name={name}
-                                value={value}
-                                label={`Requirement #${i}`}
-                                id={`Requirement #${i}`}
-                                error={!!errors?.[i]}
-                                inputRef={ref}
-                                onBlur={onBlur}
-                                onChange={onChange}
-                                disabled={disabled}
-                                multiline
-                                InputProps={{
-                                    endAdornment:
-    <RemoveLineButton i={i} items={requirements} onClick={() => onRemove(i)} /> }}
-                                margin="normal"
-                                helperText={errors?.[i]?.value?.message || ""}
-                            />)}
-                        control={control}
-                        defaultValue={getValues(`requirements.${i}.value`) || ""}
-                    />
-                ))}
-                <Button
-                    color="primary"
-                    startIcon={<AddCircle />}
-                    disabled={Object.keys(requirements).length >= 10 || disabled}
-                    onClick={() => onAdd()}
-                    className={classes.addContactBtn}
-                >
-                    Add Entry
-                </Button>
-                {errors ?
-                    <FormHelperText error={!!errors}>
-                        {errors.message}
-                    </FormHelperText>
-                    : <></>
-                }
-            </Box>
-        </>
     );
 };
 
@@ -1110,8 +968,11 @@ const CreateOfferForm = () => {
                                             </Collapse>
                                         </Grid>
                                     </Grid>
-                                    <ContactsSelector
-                                        contacts={contacts}
+                                    <MultiOptionTextField
+                                        values={contacts}
+                                        label="Contacts"
+                                        itemLabel="Contact #"
+                                        controllerName="contacts"
                                         onAdd={appendContact}
                                         onRemove={removeContact}
                                         getValues={getValues}
@@ -1119,14 +980,18 @@ const CreateOfferForm = () => {
                                         errors={errors.contacts || requestErrors.contacts}
                                         disabled={disabled}
                                     />
-                                    <RequirementsSelector
-                                        requirements={requirements}
+                                    <MultiOptionTextField
+                                        values={requirements}
+                                        label="Requirements"
+                                        itemLabel="Requirement #"
+                                        controllerName="requirements"
                                         onAdd={appendRequirement}
                                         onRemove={removeRequirement}
                                         getValues={getValues}
                                         control={control}
                                         errors={errors.requirements || requestErrors.requirements}
                                         disabled={disabled}
+                                        textFieldProps={{ multiline: true }}
                                     />
 
                                     <Controller

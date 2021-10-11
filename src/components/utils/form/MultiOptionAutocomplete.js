@@ -90,6 +90,7 @@ MultiOptionAutocomplete.propTypes = {
     chipWrapperProps: PropTypes.any,
     className: PropTypes.any,
     error: PropTypes.any,
+    disabled: PropTypes.bool,
     "error.messages": PropTypes.string,
 
 };

@@ -113,8 +113,6 @@ export const newOffer = async ({
         requirements,
     };
 
-    console.log(JSON.stringify(data));
-
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/new`, {
             method: "POST",
