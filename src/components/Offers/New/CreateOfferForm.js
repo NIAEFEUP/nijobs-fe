@@ -73,7 +73,7 @@ export const CreateOfferController = () => {
     const isLoggedIn = session.isLoggedIn;
 
     // eslint-disable-next-line no-unused-vars
-    const { handleSubmit, formState: { errors }, control, register, setValue, getValues } = useForm({
+    const { handleSubmit, formState: { errors }, control, setValue, getValues } = useForm({
         mode: "all",
         resolver: yupResolver(CreateOfferSchema),
         reValidateMode: "onChange",
@@ -85,7 +85,7 @@ export const CreateOfferController = () => {
             jobStartDate: null,
             description: "",
             descriptionText: "",
-            contacts: [],
+            contacts: [{ value: "" }],
             isPaid: false,
             vacancies: "",
             // https://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
@@ -101,17 +101,11 @@ export const CreateOfferController = () => {
 
     const fields = useWatch({ control });
 
-    const REQUIREMENTS_DEFAULT_VALUE = { value: "" };
-
-    // eslint-disable-next-line no-unused-vars
     const { fields: requirements, append: appendRequirement, remove: removeRequirement } = useFieldArray({
         control,
         name: "requirements",
     });
 
-    const CONTACTS_DEFAULT_VALUE = { value: "" };
-
-    // eslint-disable-next-line no-unused-vars
     const { fields: contacts, append: appendContact, remove: removeContact } = useFieldArray({
         control,
         name: "contacts",
@@ -125,18 +119,19 @@ export const CreateOfferController = () => {
     const submit = useCallback(
         (data) => {
             setLoading(true);
+
             newOffer({
                 ...data,
                 vacancies: data.vacancies || undefined,
-                contacts: contacts.map((val) => val.value),
-                requirements: requirements.map((val) => (val, val.value)),
+                contacts: data.contacts.map((val) => val.value),
+                requirements: data.requirements.map((val) => (val, val.value)),
                 owner: data.owner || company,
             })
                 .then((obj) => {
                     setRequestErrors({});
                     setNewOfferId(obj._id);
-                    setSuccess(true);
                     setLoading(false);
+                    setSuccess(true);
                 })
                 .catch((err) => {
                     const reqErrors = parseRequestErrors(err);
@@ -144,7 +139,7 @@ export const CreateOfferController = () => {
                     setLoading(false);
                 });
         },
-        [company, contacts, requirements],
+        [company],
     );
 
     return {
@@ -157,9 +152,9 @@ export const CreateOfferController = () => {
                 fields,
                 errors,
                 requestErrors,
-                appendContact: () => appendContact({ CONTACTS_DEFAULT_VALUE }),
+                appendContact,
                 removeContact,
-                appendRequirement: () => appendRequirement({ REQUIREMENTS_DEFAULT_VALUE }),
+                appendRequirement,
                 removeRequirement,
                 getValues,
                 setValue,
@@ -490,7 +485,7 @@ const RemoveLineButton = ({ onClick, items, i }) => {
     );
 };
 
-const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors, disabled }) => {
+const ContactsSelector = ({ contacts, onAdd, onRemove, getValues, control, errors, disabled  }) => {
     const isMobile = useMobile();
     const classes = useCreateOfferStyles(isMobile)();
 
@@ -720,7 +715,7 @@ const CreateOfferForm = () => {
     return (
 
         success
-            ? <Redirect to={`/offer/${newOfferId}`} />
+            ? <Redirect to={`/offer/${newOfferId}`} push />
             :
             <div className={classes.formCard}>
                 <CardHeader title={!isMobile && "New Offer" } />
