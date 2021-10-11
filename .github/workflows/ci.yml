@@ -68,4 +68,4 @@ jobs:
       run: npm install
 
     - name: Audit
-      run: npm audit --audit-level=high
+      run: npm run audit

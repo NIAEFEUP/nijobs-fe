@@ -8,13 +8,13 @@ import { connect } from "react-redux";
 import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 
-export const smoothScrollToRef = (ref) => {
+export const smoothScrollToRef = (ref, block = "start") => {
 
     if (!ref || !ref.current) return;
 
     ref.current.scrollIntoView({
         behavior: "smooth",
-        block: "start",
+        block,
     });
 };
 

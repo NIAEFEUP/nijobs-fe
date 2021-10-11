@@ -1,12 +1,13 @@
 /* istanbul ignore file */
 import { makeStyles } from "@material-ui/core/styles";
 
-export default (isMobile) => makeStyles((theme) => ({
+export default ({ isMobile }) => makeStyles((theme) => ({
     productDescription: {
         display: "flex",
         justifyContent: "center",
         width: isMobile ? "100%" : "80%",
-        margin: "5em auto",
+        height: !isMobile && "50vh",
+        margin: "5em auto 10em",
         textAlign: "center",
     },
     productDescriptionSVG: {
