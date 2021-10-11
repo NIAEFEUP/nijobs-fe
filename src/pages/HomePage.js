@@ -37,7 +37,7 @@ export const HomePage = () => {
     useEffect(() => {
         if (showSearchResults && searchResultsRef) smoothScrollToRef(searchResultsRef);
 
-        // It's mandatory to add the scroll-snap-type style property to the html tag in order to use snap-scroll
+        // In order to use snap-scroll, we need to add the scroll-snap-type property to the element which has scrolling
         document.getElementsByTagName("html")[0].style.scrollSnapType = "y proximity";
     }, [searchResultsRef, showSearchResults]);
 
