@@ -83,7 +83,7 @@ export const CreateOfferController = () => {
             description: "",
             descriptionText: "",
             contacts: [{ value: "" }],
-            isPaid: false,
+            isPaid: null,
             vacancies: "",
             // https://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
             jobType: "",
@@ -569,6 +569,11 @@ const CreateOfferForm = () => {
 
     const FieldsSelectorProps = useFieldSelector(fields.fields, (fields) => setValue("fields", fields));
     const TechSelectorProps = useTechSelector(fields.technologies, (fields) => setValue("technologies", fields));
+    const PAID_OPTIONS = [
+        { value: undefined, label: "Unspecified" },
+        { value: true, label: "Paid" },
+        { value: false, label: "Unpaid" },
+    ];
 
     return (
 
@@ -835,30 +840,39 @@ const CreateOfferForm = () => {
                                         </Grid>
 
                                         <Grid item xs={12} lg={6}>
-                                            <FormControl>
-                                                <FormControlLabel
-                                                    label="Paid Job"
-                                                    disabled={disabled}
-                                                    control={
-                                                        <Controller
-                                                            name="isPaid"
-                                                            render={(
-                                                                { field: { onChange, onBlur, name, value } },
-                                                            ) => (
-                                                                // TODO Add unspecified
-                                                                <Checkbox
-                                                                    checked={value}
-                                                                    onChange={onChange}
-                                                                    name={name}
-                                                                    onBlur={onBlur}
-                                                                    disabled={disabled}
-                                                                />
-                                                            )}
-                                                            control={control}
-                                                        />
-                                                    }
-                                                />
-                                            </FormControl>
+                                            <Controller
+                                                name="isPaid"
+                                                render={(
+                                                    { field: { onChange, onBlur, name, value } },
+                                                ) => (
+                                                    <TextField
+                                                        name={name}
+                                                        fullWidth
+                                                        id="is_paid"
+                                                        select
+                                                        label="Paid?"
+                                                        value={value}
+                                                        onChange={onChange}
+                                                        onBlur={onBlur}
+                                                        variant="outlined"
+                                                        disabled={disabled}
+                                                        error={!!errors?.isPaid || !!requestErrors.isPaid}
+                                                        helperText={
+                                                            `${errors.isPaid?.message || requestErrors.isPaid?.message || ""}`
+                                                        }
+                                                    >
+                                                        {PAID_OPTIONS.map(({ value, label }) => (
+                                                            <MenuItem
+                                                                key={value}
+                                                                value={value}
+                                                            >
+                                                                {label}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </TextField>
+                                                )}
+                                                control={control}
+                                            />
                                         </Grid>
 
                                         <Grid item xs={12} lg={12}>

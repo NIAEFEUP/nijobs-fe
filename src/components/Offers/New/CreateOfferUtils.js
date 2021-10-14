@@ -51,7 +51,8 @@ const HumanReadableErrors = Object.freeze({
 
 export const getHumanError = (error) => {
     const [errorId, errorValue] = error.split(":");
-    return HumanReadableErrors[errorId](errorValue) || "An error occurred, please try again.";
+    const errorFunc = HumanReadableErrors[errorId];
+    return (!!errorFunc && errorFunc(errorValue)) || "An error occurred, please try again.";
 };
 
 export const parseRequestErrors = (err) => {
