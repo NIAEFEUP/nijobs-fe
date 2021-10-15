@@ -37,8 +37,4 @@ export default (isMobile) => makeStyles((theme) => ({
             paddingBottom: theme.spacing(4),
         },
     },
-    loginAlert: {
-        left: 0,
-        justifyContent: "flex-start",
-    },
 }));

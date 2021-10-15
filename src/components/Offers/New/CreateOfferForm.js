@@ -1,13 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
-    Box,
     CardContent,
     CardHeader,
     DialogContent,
     FormHelperText,
     Grid,
     TextField,
-    makeStyles,
     FormControl,
     Typography,
     Collapse,
@@ -18,32 +16,19 @@ import {
     MenuItem,
     CircularProgress,
 } from "@material-ui/core";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import Placeholder from "@tiptap/extension-placeholder";
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
 import { useMobile } from "../../../utils/media-queries";
 import CreateOfferSchema from "./CreateOfferSchema";
 import useCreateOfferStyles from "./createOfferStyles";
 import { CreateOfferConstants, defaultDates, parseRequestErrors } from "./CreateOfferUtils";
-import { searchCities } from "../../../services/locationSearchService";
 
 import "./editor.css";
 import {
-    FormatBold,
-    FormatItalic,
-    FormatListBulleted,
-    FormatListNumbered,
-    FormatUnderlined,
-    LocationOn,
     KeyboardArrowDown,
     KeyboardArrowUp,
 } from "@material-ui/icons";
-import { Alert, Autocomplete, ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import { KeyboardDatePicker } from "@material-ui/pickers";
-import { throttle } from "lodash";
 
 import JobOptions from "../../utils/offers/JobOptions";
 import { INITIAL_JOB_DURATION, JOB_MIN_DURATION, JOB_MAX_DURATION } from "../../../reducers/searchOffersReducer";
@@ -52,11 +37,11 @@ import useFieldSelector from "../../utils/offers/useFieldSelector";
 import useTechSelector from "../../utils/offers/useTechSelector";
 import { newOffer } from "../../../services/offerService";
 import useSession from "../../../hooks/useSession";
-import { RouterLink } from "../../../utils";
-import { toggleLoginModal } from "../../../actions/navbarActions";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import MultiOptionTextField from "../../utils/form/MultiOptionTextField";
+import TextEditor from "../../utils/TextEditor";
+import LocationPicker from "../../utils/LocationPicker";
+import ConnectedLoginAlert from "../../utils/LoginAlert";
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -83,9 +68,9 @@ export const CreateOfferController = () => {
             description: "",
             descriptionText: "",
             contacts: [{ value: "" }],
-            isPaid: null,
-            vacancies: "",
+            isPaid: undefined,
             // https://stackoverflow.com/questions/37427508/react-changing-an-uncontrolled-input
+            vacancies: "",
             jobType: "",
             fields: [],
             technologies: [],
@@ -116,7 +101,7 @@ export const CreateOfferController = () => {
     const submit = useCallback(
         (data) => {
             setLoading(true);
-            console.log(data);
+
             newOffer({
                 ...data,
                 vacancies: data.vacancies || undefined,
@@ -169,361 +154,6 @@ export const CreateOfferController = () => {
         },
     };
 };
-
-// TODO MOVE THIS COMPONENT TO UTILS
-
-
-const useStyles = makeStyles((theme) => ({
-    editorToolbar: {
-        marginBottom: theme.spacing(1),
-    },
-}));
-
-
-const EditorToolbar = ({ editor, disabled }) => {
-
-    const [formats, setFormats] = React.useState(() => []);
-    const classes = useStyles();
-
-    useEffect(() => {
-        if (!editor) return;
-
-        const toggleButtonsState = () => {
-            const state = [];
-            if (editor.isActive("bold")) state.push("bold");
-            if (editor.isActive("italic")) state.push("italic");
-            if (editor.isActive("underline")) state.push("underline");
-            if (editor.isActive("bulletList")) state.push("bulletList");
-            if (editor.isActive("orderedList")) state.push("orderedList");
-            setFormats(state);
-        };
-
-        editor.on("transaction", toggleButtonsState);
-
-        // eslint-disable-next-line consistent-return
-        return () => {
-            editor.off("transaction", toggleButtonsState);
-        };
-    }, [editor]);
-
-    return (
-
-        <div className={classes.editorToolbar}>
-            <Box mr={1} display="inline">
-                <ToggleButtonGroup size="small" value={formats} aria-label="text formatting">
-                    <ToggleButton
-                        value="bold"
-                        aria-label="bold"
-                        onClick={() => editor.chain().focus().toggleBold().run()}
-                        disabled={disabled}
-                    >
-                        <FormatBold fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                        value="italic"
-                        aria-label="italic"
-                        onClick={() => editor.chain().focus().toggleItalic().run()}
-                        disabled={disabled}
-                    >
-                        <FormatItalic fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                        value="underline"
-                        aria-label="underline"
-                        onClick={() => editor.chain().focus().toggleUnderline().run()}
-                        disabled={disabled}
-                    >
-                        <FormatUnderlined fontSize="small" />
-                    </ToggleButton>
-                </ToggleButtonGroup>
-            </Box>
-            <Box ml={1} display="inline">
-                <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
-                    <ToggleButton
-                        value="bulletList"
-                        aria-label="bulletList"
-                        onClick={() => editor.chain().focus().toggleBulletList().run()}
-                        disabled={disabled}
-                    >
-                        <FormatListBulleted fontSize="small" />
-                    </ToggleButton>
-                    <ToggleButton
-                        value="orderedList"
-                        aria-label="orderedList"
-                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                        disabled={disabled}
-                    >
-                        <FormatListNumbered fontSize="small" />
-                    </ToggleButton>
-                </ToggleButtonGroup>
-            </Box>
-        </div>
-    );
-};
-
-const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText, disabled }) => {
-
-    const editor = useEditor({
-        extensions: [
-            StarterKit,
-            Underline,
-            Placeholder.configure({
-                placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc.",
-            }),
-        ],
-        content,
-        editable: true,
-        editorProps: {
-
-            attributes: {
-                class: "editor", // Cannot use makeStyles with this since it won't update the class name on re-render :(
-            },
-        },
-    });
-
-    useEffect(() => {
-        if (!editor) return;
-        const updateFn = ({ editor }) => {
-            onChangeDescription(editor.getHTML());
-            onChangeDescriptionText(editor.view.state.doc.textContent);
-        };
-        editor.on("update", updateFn);
-
-        // eslint-disable-next-line consistent-return
-        return () => {
-            editor.off("update", updateFn);
-        };
-
-    }, [editor, onChangeDescription, onChangeDescriptionText]);
-
-    useEffect(() => {
-        if (!editor) return;
-        editor.setEditable(!disabled);
-    }, [disabled, editor]);
-
-    const helperText =
-    `${editor?.view.state.doc.textContent.length}/${CreateOfferConstants.description.maxLength} ${additionalHelperText}`;
-
-    return (
-        <>
-            {!!editor &&
-            <FormControl margin="dense" fullWidth>
-                <EditorToolbar editor={editor} disabled={disabled} />
-                <EditorContent editor={editor} />
-                <FormHelperText error={error}>
-                    {helperText}
-                </FormHelperText>
-            </FormControl>
-            }
-        </>
-    );
-};
-
-
-// Based on https://github.com/lodash/lodash/issues/4700#issuecomment-805439202
-const asyncThrottle = (func, wait) => {
-    const throttled = throttle((resolve, reject, args) => {
-        func(...args).then(resolve).catch(reject);
-    }, wait);
-    return (...args) =>
-        new Promise((resolve, reject) => {
-            throttled(resolve, reject, args);
-        });
-};
-
-
-// Maybe move this to utils
-const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => {
-    const [inputValue, setInputValue] = React.useState("");
-    const [options, setOptions] = React.useState([]);
-    const [loading, setLoading] = React.useState(false);
-
-    const fetchCitiesThrottled = useCallback(
-        asyncThrottle(searchCities, 1500),
-        [],
-    );
-
-    const parseCustomLocation = useCallback(
-        (loc) => loc.trimStart() || null,
-        []
-    );
-
-    const parsePresetLocation = useCallback(
-        (loc) => `${loc.city}, ${loc.country}`,
-        []
-    );
-
-    const isCustomLocation = useCallback(
-        (loc) => typeof loc === "string",
-        []
-    );
-
-    const parseNewLocation = useCallback(
-        (location) => {
-            let value;
-
-            if (!location) {
-                value = location;
-            } else {
-                value = isCustomLocation(location)
-                    ? parseCustomLocation(location)
-                    : parsePresetLocation(location);
-            }
-            return value;
-        },
-        [parseCustomLocation, parsePresetLocation, isCustomLocation]
-    );
-
-    useEffect(() => {
-
-        if (inputValue === "") {
-            setOptions(value ? [value] : []);
-            return undefined;
-        }
-        if (inputValue.length < 3) return undefined;
-
-        setLoading(true);
-        fetchCitiesThrottled(inputValue)
-            .then((results) => {
-                setLoading(false);
-                let newOptions = [];
-
-                if (value) {
-                    newOptions = [value];
-                }
-
-                if (results) {
-                    newOptions = [...newOptions, ...results];
-                }
-
-                setOptions(newOptions);
-
-            })
-            .catch(() => {
-                setLoading(false);
-                setOptions(value);
-            });
-
-        return undefined;
-
-    }, [value, inputValue, fetchCitiesThrottled]);
-
-    return (
-        <Autocomplete
-            getOptionLabel={(option) => parseNewLocation(option)}
-            filterOptions={(x) => x}
-            options={options}
-            autoComplete
-            autoSelect
-            includeInputInList
-            filterSelectedOptions
-            freeSolo
-            loading={loading}
-            value={value}
-            inputValue={inputValue}
-            name={name}
-            disabled={disabled}
-            onBlur={onBlur}
-            onChange={(e, newValue) => {
-                const value = parseNewLocation(newValue);
-                setOptions(value ? [value, ...options] : options);
-                onChange(e, value);
-            }}
-            onInputChange={(e, newInputValue) => {
-                const value = newInputValue.trimStart();
-                setInputValue(value);
-            }}
-            renderInput={(params) => (
-                <TextField
-                    {...params}
-                    label="Choose a location" variant="outlined" fullWidth
-                    error={!!error}
-                    helperText={
-                        `${error?.message || ""}`
-                    }
-                />
-            )}
-            renderOption={(option) => (
-                option.city && option.country
-                    ? (
-                        <Grid container alignItems="center">
-                            <Grid item>
-                                <LocationOn />
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="body1">
-                                    {`${option.city}, ${option.country}`}
-                                </Typography>
-                            </Grid>
-                        </Grid>)
-                    : <></>
-            )}
-        />
-    );
-};
-
-const LoginAlert = React.forwardRef(({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModal }, _) => (
-    <>
-        {!isLoggedIn &&
-        <Box alignContent="flex-start">
-            <Alert
-                className={useCreateOfferStyles().loginAlert}
-                severity="error"
-                action={
-                    <>
-                        <Button
-                            variant="text"
-                            color="primary"
-                            onClick={toggleLoginModal}
-                        >
-                    Login
-                        </Button>
-                        <Button
-                            color="inherit"
-                            size="small"
-                            component={RouterLink}
-                            to="/apply/company"
-                        >
-                    Join us
-                        </Button>
-                    </>
-                }
-            >
-        The user must be logged in to create an offer
-            </Alert>
-        </Box>
-        }
-        {companyUnfinishedRegistration &&
-        <Box alignContent="flex-start">
-            <Alert
-                severity="error"
-                action={
-                    <Button
-                        color="inherit"
-                        size="small"
-                        component={RouterLink}
-                        to="/company/registration/finish"
-                    >
-                Finish Registration
-                    </Button>
-                }
-            >
-            The company must finish their registration
-            </Alert>
-        </Box>
-        }
-    </>
-));
-
-LoginAlert.displayName = "LoginAlert";
-
-const mapStateToProps = () => ({});
-
-const mapDispatchToProps = (dispatch) => ({
-    toggleLoginModal: () => dispatch(toggleLoginModal()),
-});
-
-const ConnectedLoginAlert = connect(mapStateToProps, mapDispatchToProps)(LoginAlert);
 
 
 const CreateOfferForm = () => {
