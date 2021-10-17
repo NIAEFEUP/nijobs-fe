@@ -68,7 +68,7 @@ describe("App", () => {
         ));
 
         // By waiting for act it executes all the async code at once
-        // Need to wrap with BrowserRouter since I have a Link inside
+        // Need to wrap with BrowserRouter since there is a Link inside
         renderWithStore(
             <BrowserRouter>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -126,8 +126,6 @@ describe("App", () => {
             expect(screen.getByText("No offers here.")).toBeInTheDocument();
 
             expect(addSnackbar).toHaveBeenCalledTimes(1);
-
-            // expect(screen.getByText("An unexpected error occurred, please try refreshing the browser window.")).toBeInTheDocument();
         }, {
             timeout: 1000,
         });
