@@ -430,7 +430,7 @@ describe("Application Review Widget", () => {
 
     });
 
-    it("Should default sort by company name asc and sort rows by company name on click", async () => {
+    it("Should default sort by requestedAt desc and sort rows by company name on click", async () => {
         const applications = generateApplications(10);
 
         fetch.mockResponse(JSON.stringify({ applications }));
@@ -445,7 +445,17 @@ describe("Application Review Widget", () => {
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
-        const sorted5 = applications.map((a) => a.companyName).sort().slice(0, 5);
+        const sorted5 = applications
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName).slice(0, 5);
 
         expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
@@ -454,14 +464,11 @@ describe("Application Review Widget", () => {
 
         fireEvent.click(screen.getByRole("button", { name: "Company Name" }));
 
-        const reverseSorted5 = applications.map((a) => a.companyName).sort((a, b) => {
-            if (a === b) return 0; return (a < b) ? 1 : -1;
-        }).slice(0, 5);
-
+        const sortByName = applications.map((a) => a.companyName).sort().slice(0, 5);
 
         expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(reverseSorted5);
+        ).toStrictEqual(sortByName);
 
     });
 
@@ -537,8 +544,6 @@ describe("Application Review Widget", () => {
         expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(4)").textContent)
         ).toStrictEqual(reverseSorted5);
-
-
     });
 
     it("Should filter by company name", async () => {
@@ -560,9 +565,12 @@ describe("Application Review Widget", () => {
 
         fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "1" } });
 
+        // Since applications are ordered by descending date
+        const expectedRes = [...[applications[10].companyName, applications[1].companyName]];
+
         expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual([...[applications[1].companyName, applications[10].companyName]]);
+        ).toStrictEqual(expectedRes);
 
     });
 
@@ -589,7 +597,15 @@ describe("Application Review Widget", () => {
 
         expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").map((a) => a.companyName));
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED").sort((elem1, elem2) => {
+            if (elem2.submittedAt > elem1.submittedAt) {
+                return 1;
+            }
+            if (elem1.submittedAt > elem2.submittedAt) {
+                return -1;
+            }
+            return 0;
+        }).map((a) => a.companyName));
 
 
         // Verify it keeps state even if the filters menu is closed (closes state selector and filters menu)
@@ -603,7 +619,17 @@ describe("Application Review Widget", () => {
 
         expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED").map((a) => a.companyName));
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "REJECTED")
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName));
 
         // De-select rejected option and add pending option
         fireEvent.click(screen.getByLabelText("Rejected"));
@@ -612,7 +638,17 @@ describe("Application Review Widget", () => {
 
         expect((await screen.findAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING").map((a) => a.companyName));
+        ).toStrictEqual(applications.filter((a) => a.state === "APPROVED" || a.state === "PENDING")
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName));
 
 
     });
@@ -641,7 +677,17 @@ describe("Application Review Widget", () => {
 
         expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.slice(1).map((a) => a.companyName));
+        ).toStrictEqual(applications.slice(1)
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            }).
+            map((a) => a.companyName));
 
         fireEvent.change(screen.getByLabelText("Date To..."), {
             target: {
@@ -652,14 +698,33 @@ describe("Application Review Widget", () => {
 
         expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.slice(1, 4).map((a) => a.companyName));
+        ).toStrictEqual(applications.slice(1, 4)
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName));
 
         fireEvent.change(screen.getByLabelText("Date From..."), { target: { value: "" } });
 
         expect((screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.slice(0, 4).map((a) => a.companyName));
-
+        ).toStrictEqual(applications.slice(0, 4)
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName));
     });
 
     it("Should reset filters", async () => {
@@ -704,7 +769,17 @@ describe("Application Review Widget", () => {
 
         expect((await screen.getAllByTestId("application-row"))
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual(applications.map((a) => a.companyName));
+        ).toStrictEqual(applications
+            .sort((elem1, elem2) => {
+                if (elem2.submittedAt > elem1.submittedAt) {
+                    return 1;
+                }
+                if (elem1.submittedAt > elem2.submittedAt) {
+                    return -1;
+                }
+                return 0;
+            })
+            .map((a) => a.companyName));
     });
 
     it("Should cancel request if unmounted", async () => {
