@@ -181,7 +181,8 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                 <FilterableTable
                     title="Review Applications"
                     tableComponent={ControlledSortableSelectableTable}
-                    defaultSort="name"
+                    defaultSort="date"
+                    defaultOrderAscending={false}
                     rows={rows}
                     setInitialRows={setRows}
                     columns={columns}
