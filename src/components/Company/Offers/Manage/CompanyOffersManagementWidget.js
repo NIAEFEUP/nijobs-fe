@@ -30,6 +30,9 @@ const generateRow = ({ title, location, description, publishDate, publishEndDate
 
 const sorters = {
     title: alphabeticalSorter,
+    publishStartDate: alphabeticalSorter,
+    publishEndDate: alphabeticalSorter,
+    location: alphabeticalSorter,
 };
 
 const filters = [
@@ -126,7 +129,8 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
         <FilterableTable
             title="Offers Management"
             tableComponent={ControlledSortableSelectableTable}
-            defaultSort="title"
+            defaultSort="publishStartDate"
+            defaultOrderAscending={false}
             rows={offers}
             setInitialRows={setOffers}
             columns={columns}
