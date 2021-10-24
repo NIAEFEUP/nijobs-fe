@@ -146,6 +146,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
             isSelectableTable={false}
             isLoading={isLoading}
             error={error}
+            hasMaxHeight={false}
         />
     );
 };
