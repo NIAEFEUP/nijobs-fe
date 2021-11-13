@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
 import { UndoableActions } from "../UndoableActionsHandlerProvider";
@@ -6,6 +6,7 @@ import TableContent from "./TableContent";
 import TableHeader from "./TableHeader";
 import TableToolbar from "./TableToolbar";
 import { ColumnPropTypes, RowPropTypes } from "./PropTypes";
+import { smoothScrollToRef } from "..";
 
 const BaseTable = ({
     title,
@@ -45,6 +46,7 @@ const BaseTable = ({
 }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
+    const scrollRef = useRef(null);
 
     // Reset page every time filters change
     useEffect(() => {
@@ -60,6 +62,7 @@ const BaseTable = ({
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
         onPageChange();
+        setTimeout(() => smoothScrollToRef(scrollRef), 200);
     };
 
     const { submitAction } = useContext(UndoableActions);
@@ -80,6 +83,7 @@ const BaseTable = ({
                 hasActiveFilters={hasActiveFilters}
                 setActiveFilters={setActiveFilters}
                 MultiRowActions={MultiRowActions}
+                scrollRef={scrollRef}
                 {...TableToolbarProps}
             />
             <TableContainer component={Paper} style={hasMaxHeight ? { maxHeight: "51vh" } : {}}>
