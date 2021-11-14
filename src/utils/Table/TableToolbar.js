@@ -34,7 +34,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 }));
 
 const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, filtersContext,
-    setFiltersContext, hasActiveFilters, activeFilters, setActiveFilters, MultiRowActions, scrollRef,
+    setFiltersContext, hasActiveFilters, activeFilters, setActiveFilters, MultiRowActions,
 }) => {
 
     const classes = useToolbarStyles();
@@ -53,7 +53,6 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, f
             className={clsx(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}
-            innerRef={scrollRef}
         >
             {numSelected > 0 ? (
                 <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
@@ -118,7 +117,6 @@ TableToolbar.propTypes = {
     activeFilters: PropTypes.object,
     filtersContext: PropTypes.object.isRequired,
     setFiltersContext: PropTypes.func.isRequired,
-    scrollRef: PropTypes.object,
 };
 
 export default TableToolbar;
