@@ -86,7 +86,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
             })
             .catch(() => {
                 setLoading(false);
-                setOptions(value);
+                setOptions(value ? [value] : []);
             });
 
         return undefined;
@@ -124,7 +124,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
                     label="Choose a location" variant="outlined" fullWidth
                     error={!!error}
                     helperText={
-                        `${error?.message || ""}`
+                        `${error?.message || " "}`
                     }
                 />
             )}

@@ -3,7 +3,6 @@ import CreateOfferForm from "../components/Offers/New/CreateOfferForm";
 
 const CreateOfferPage = () => (
     <>
-
         <CreateOfferForm />
     </>
 );

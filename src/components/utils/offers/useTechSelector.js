@@ -12,6 +12,9 @@ export default (value, setValues) => {
         getOptionLabel: (option) => TECH_OPTIONS[option],
         onChange: useCallback((e, value) => value && setValues(value), [setValues]),
         value: value,
+        inputProps: {
+            "data-testid": "tech-selector",
+        },
     };
 
     const TechSelectorProps = {

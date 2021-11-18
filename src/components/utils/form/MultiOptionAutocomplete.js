@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 const MultiOptionAutocomplete = forwardRef(
     ({
+        id,
         label,
         placeholder,
         value,
@@ -18,6 +19,7 @@ const MultiOptionAutocomplete = forwardRef(
         chipWrapperProps,
         className,
         disabled,
+        inputProps,
     },
     ref) => {
 
@@ -35,7 +37,7 @@ const MultiOptionAutocomplete = forwardRef(
             <div className={className}>
                 <Autocomplete
                     multiple
-                    id="tags-filled"
+                    id={id}
                     value={value}
                     options={options}
                     onChange={(e, val) => onChange(e, val)}
@@ -54,8 +56,9 @@ const MultiOptionAutocomplete = forwardRef(
                             inputRef={ref}
                             error={!!error}
                             helperText={
-                                `${error?.message || ""}`
+                                `${error?.message || " "}`
                             }
+                            inputProps={{ ...params.inputProps, ...inputProps }}
                         />
                     )}
                 />
@@ -80,6 +83,7 @@ const MultiOptionAutocomplete = forwardRef(
 
 MultiOptionAutocomplete.displayName = "MultiOptionAutocomplete";
 MultiOptionAutocomplete.propTypes = {
+    id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
     value: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -92,6 +96,7 @@ MultiOptionAutocomplete.propTypes = {
     error: PropTypes.any,
     disabled: PropTypes.bool,
     "error.messages": PropTypes.string,
+    inputProps: PropTypes.object,
 
 };
 

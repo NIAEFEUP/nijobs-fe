@@ -12,6 +12,9 @@ export default (value, setValues) => {
         getOptionLabel: (option) => FIELD_OPTIONS[option],
         onChange: useCallback((e, value) => value && setValues(value), [setValues]),
         value: value,
+        inputProps: {
+            "data-testid": "fields-selector",
+        },
     };
 
     const FieldsSelectorProps = {

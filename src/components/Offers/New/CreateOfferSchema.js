@@ -1,17 +1,19 @@
 /* istanbul ignore file */
+import { format } from "date-fns";
 import * as yup from "yup";
 import { ValidationReasons } from "../../../utils";
 import { generateValidationRule, isValidPublishEndDate } from "./CreateOfferUtils";
-
 
 export default yup.object().shape({
     title: yup.string()
         .required(ValidationReasons.REQUIRED)
         .max(...generateValidationRule("title", "maxLength", ValidationReasons.TOO_LONG)),
     publishDate: yup.date(ValidationReasons.DATE)
+        .min(format(new Date(), "yyyy-MM-dd"), ValidationReasons.DATE_EXPIRED)
         .typeError(ValidationReasons.DATE)
         .required(),
     publishEndDate: yup.date(ValidationReasons.DATE)
+        .min(format(new Date(), "yyyy-MM-dd"), ValidationReasons.DATE_EXPIRED)
         .typeError(ValidationReasons.DATE)
         .nullable(true)
         .required(ValidationReasons.REQUIRED)
@@ -22,7 +24,10 @@ export default yup.object().shape({
 
     jobDuration: yup.array()
         .of(yup.number(ValidationReasons.INT).positive()),
-    jobStartDate: yup.date().nullable(true),
+    jobStartDate: yup.date(ValidationReasons.DATE)
+        .min(format(new Date(), "yyyy-MM-dd"), ValidationReasons.DATE_EXPIRED)
+        .typeError(ValidationReasons.DATE)
+        .nullable(true),
     description: yup.string()
         .required(ValidationReasons.REQUIRED),
     descriptionText: yup.string()
@@ -44,8 +49,7 @@ export default yup.object().shape({
         return yup.number(ValidationReasons.INT);
     }),
     jobType: yup.string()
-        .nullable(true)
-        .required(ValidationReasons.REQUIRED),
+        .nullable(true),
     fields: yup.array()
         .min(...generateValidationRule("fields", "minLength", ValidationReasons.OPTIONS_TOO_SHORT))
         .max(...generateValidationRule("fields", "maxLength", ValidationReasons.OPTIONS_TOO_LONG))

@@ -40,6 +40,8 @@ const MultiOptionTextField = ({
     errors,
     disabled,
     textFieldProps,
+    addEntryBtnTestId,
+
 }) => {
     const classes = useMultiOptionTextFieldStyle();
     return (
@@ -80,6 +82,7 @@ const MultiOptionTextField = ({
                     color="primary"
                     startIcon={<AddCircle />}
                     disabled={disabled}
+                    data-testid={addEntryBtnTestId}
                     onClick={() => onAdd()}
                     className={classes.addEntryBtn}
                 >
@@ -111,6 +114,7 @@ MultiOptionTextField.propTypes = {
     errors: PropTypes.array,
     disabled: PropTypes.bool,
     textFieldProps: PropTypes.object,
+    addEntryBtnTestId: PropTypes.string,
 };
 
 export default MultiOptionTextField;

@@ -22,7 +22,6 @@ import { useMobile } from "../../../utils/media-queries";
 import CreateOfferSchema from "./CreateOfferSchema";
 import useCreateOfferStyles from "./createOfferStyles";
 import { CreateOfferConstants, defaultDates, parseRequestErrors } from "./CreateOfferUtils";
-
 import "./editor.css";
 import {
     KeyboardArrowDown,
@@ -44,6 +43,12 @@ import LocationPicker from "../../utils/LocationPicker";
 import ConnectedLoginAlert from "../../utils/LoginAlert";
 
 export const CreateOfferControllerContext = React.createContext();
+
+export const PAID_OPTIONS = [
+    { value: undefined, label: "Unspecified" },
+    { value: true, label: "Paid" },
+    { value: false, label: "Unpaid" },
+];
 
 export const CreateOfferController = () => {
 
@@ -199,11 +204,6 @@ const CreateOfferForm = () => {
 
     const FieldsSelectorProps = useFieldSelector(fields.fields, (fields) => setValue("fields", fields));
     const TechSelectorProps = useTechSelector(fields.technologies, (fields) => setValue("technologies", fields));
-    const PAID_OPTIONS = [
-        { value: undefined, label: "Unspecified" },
-        { value: true, label: "Paid" },
-        { value: false, label: "Unpaid" },
-    ];
 
     return (
 
@@ -214,7 +214,10 @@ const CreateOfferForm = () => {
                 <CardHeader title={!isMobile && "New Offer" } />
                 {
                     <Content className={classes.formContent}>
-                        <ConnectedLoginAlert isLoggedIn={isLoggedIn} companyUnfinishedRegistration={companyUnfinishedRegistration} />
+                        <ConnectedLoginAlert
+                            isLoggedIn={isLoggedIn}
+                            companyUnfinishedRegistration={companyUnfinishedRegistration}
+                        />
                         <Grid container className={classes.formArea}>
                             <Grid item xs={12}>
                                 <form
@@ -389,7 +392,7 @@ const CreateOfferForm = () => {
                                                             label="Job Start Date"
                                                             id="startDate-input"
                                                             name={name}
-                                                            onChange={(_, value) => onChange(value)}
+                                                            onChange={(_, value) => (onChange(value))}
                                                             onBlur={onBlur}
                                                             variant="inline"
                                                             autoOk
@@ -399,7 +402,7 @@ const CreateOfferForm = () => {
                                                             error={!!errors?.jobStartDate || !!requestErrors.jobStartDate}
                                                             helperText={
                                                                 `${errors.jobStartDate?.message ||
-                                                                    requestErrors.jobStartDate?.message || ""}`
+                                                                    requestErrors.jobStartDate?.message || " "}`
                                                             }
                                                         />)}
                                                     control={control}
@@ -417,6 +420,7 @@ const CreateOfferForm = () => {
                                                     <FormControl
                                                         margin="normal"
                                                         variant="outlined"
+                                                        fullWidth
                                                     >
                                                         <Slider
                                                             name={name}
@@ -431,8 +435,9 @@ const CreateOfferForm = () => {
                                                         />
 
                                                         <FormHelperText>
-                                                            {`Job duration: ${value[0]} - ${value[1]} month(s)`}
+                                                            {!disabled && `Job duration: ${value[0]} - ${value[1]} month(s)`}
                                                         </FormHelperText>
+
                                                     </FormControl>)}
                                                 control={control}
                                             />
@@ -478,9 +483,9 @@ const CreateOfferForm = () => {
                                                     <TextField
                                                         name={name}
                                                         fullWidth
-                                                        id="is_paid"
+                                                        id="is-paid"
                                                         select
-                                                        label="Paid?"
+                                                        label="Compensation"
                                                         value={value}
                                                         onChange={onChange}
                                                         onBlur={onBlur}
@@ -488,7 +493,7 @@ const CreateOfferForm = () => {
                                                         disabled={disabled}
                                                         error={!!errors?.isPaid || !!requestErrors.isPaid}
                                                         helperText={
-                                                            `${errors.isPaid?.message || requestErrors.isPaid?.message || ""}`
+                                                            `${errors.isPaid?.message || requestErrors.isPaid?.message || " "}`
                                                         }
                                                     >
                                                         {PAID_OPTIONS.map(({ value, label }) => (
@@ -547,7 +552,7 @@ const CreateOfferForm = () => {
                                                                     minDate={Date.now()}
                                                                     error={!!errors?.publishDate || !!requestErrors?.publishDate }
                                                                     helperText={errors.publishDate?.message ||
-                                                                    requestErrors.publishDate?.message || ""}
+                                                                    requestErrors.publishDate?.message || " "}
                                                                 />)}
                                                             control={control}
                                                         />
@@ -578,7 +583,7 @@ const CreateOfferForm = () => {
                                                                     minDate={fields.publishDate}
                                                                     error={!!errors?.publishEndDate || !!requestErrors.publishEndDate}
                                                                     helperText={errors.publishEndDate?.message ||
-                                                                    requestErrors.publishEndDate?.message || ""}
+                                                                    requestErrors.publishEndDate?.message || " "}
                                                                 />)}
                                                             control={control}
                                                         />
@@ -623,6 +628,7 @@ const CreateOfferForm = () => {
                                         control={control}
                                         errors={errors.contacts || requestErrors.contacts}
                                         disabled={disabled}
+                                        addEntryBtnTestId="contacts-selector"
                                     />
                                     <MultiOptionTextField
                                         values={requirements}
@@ -636,6 +642,7 @@ const CreateOfferForm = () => {
                                         errors={errors.requirements || requestErrors.requirements}
                                         disabled={disabled}
                                         textFieldProps={{ multiline: true }}
+                                        addEntryBtnTestId="requirements-selector"
                                     />
 
                                     <Controller
@@ -654,7 +661,7 @@ const CreateOfferForm = () => {
                                                         error={!!errors?.descriptionText || !!requestErrors?.descriptionText}
                                                         content={fields.description}
                                                         helperText={errors.descriptionText?.message ||
-                                                        requestErrors.descriptionText?.message || ""}
+                                                        requestErrors.descriptionText?.message || " "}
                                                         disabled={disabled}
                                                     />
                                                 )}
@@ -678,6 +685,7 @@ const CreateOfferForm = () => {
                                     <Button
                                         disabled={loading || disabled}
                                         onClick={submit}
+                                        data-testid="submit-offer"
                                     >
                                 Submit
                                     </Button>
