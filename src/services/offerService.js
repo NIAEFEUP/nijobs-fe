@@ -2,49 +2,65 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-
-
+import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/analytics";
+import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
+const OFFER_SEARCH_METRIC_ID = "offer/search";
+const OFFER_HIDE_METRIC_ID = "offer/hide";
+const OFFER_DISABLE_METRIC_ID = "offer/disable";
+const OFFER_ENABLE_METRIC_ID = "offer/enable";
 
-export const searchOffers = (filters) => buildCancelableRequest(async (dispatch, { signal }) => {
 
-    dispatch(resetOffersFetchError());
-    dispatch(setLoadingOffers(true));
+export const searchOffers = (filters) => buildCancelableRequest(
+    measureTime(TIMED_ACTIONS.OFFER_SEARCH, async (dispatch, { signal }) => {
+        dispatch(resetOffersFetchError());
+        dispatch(setLoadingOffers(true));
 
-    try {
-        const res = await fetch(`${API_HOSTNAME}/offers?${parseFiltersToURL(filters)}`, {
-            method: "GET",
-            credentials: "include",
-            signal,
-        });
-        if (!res.ok) {
+        try {
+            const query = parseFiltersToURL(filters);
+            const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
+                method: "GET",
+                credentials: "include",
+                signal,
+            });
+            if (!res.ok) {
+                dispatch(setOffersFetchError({
+                    cause: ErrorTypes.BAD_RESPONSE,
+                    error: res.status,
+                }));
+                dispatch(setLoadingOffers(false));
+
+                createEvent(EVENT_TYPES.ERROR(
+                    OFFER_SEARCH_METRIC_ID,
+                    ErrorTypes.BAD_RESPONSE,
+                    res.status
+                ));
+                return;
+            }
+            const offers = await res.json();
+            dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
+            dispatch(setLoadingOffers(false));
+
+            createEvent(EVENT_TYPES.SUCCESS(OFFER_SEARCH_METRIC_ID, query));
+
+        } catch (error) {
             dispatch(setOffersFetchError({
-                cause: "BAD_RESPONSE",
-                error: res.status,
+                cause: ErrorTypes.NETWORK_FAILURE,
+                error,
             }));
             dispatch(setLoadingOffers(false));
-            // TODO count metrics
-            return;
+
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_SEARCH_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE
+            ));
         }
-        const offers = await res.json();
-        dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
+    })
+);
 
-        dispatch(setLoadingOffers(false));
-        // TODO count metrics
-
-    } catch (error) {
-        dispatch(setOffersFetchError({
-            cause: "NETWORK_FAILURE",
-            error,
-        }));
-        dispatch(setLoadingOffers(false));
-        // TODO count metrics
-    }
-});
-
-export const hideOffer = async (offerId) => {
-
+export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) => {
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/hide`, {
             method: "POST",
@@ -53,20 +69,35 @@ export const hideOffer = async (offerId) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_HIDE_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            ));
+            isErrorRegistered = true;
+
             throw json.errors;
         }
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_HIDE_METRIC_ID));
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+            OFFER_HIDE_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const disableOffer = async (offerId, adminReason) => {
+export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offerId, adminReason) => {
 
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/disable`, {
             method: "POST",
@@ -79,20 +110,35 @@ export const disableOffer = async (offerId, adminReason) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_DISABLE_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            ));
+            isErrorRegistered = true;
+
             throw json.errors;
         }
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_DISABLE_METRIC_ID));
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+            OFFER_DISABLE_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const enableOffer = async (offerId) => {
+export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerId) => {
 
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/enable`, {
             method: "PUT",
@@ -101,14 +147,28 @@ export const enableOffer = async (offerId) => {
         const json = await res.json();
 
         if (!res.ok) {
+
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_ENABLE_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            ));
+            isErrorRegistered = true;
+
             throw json.errors;
         }
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_ENABLE_METRIC_ID));
         return json;
 
     } catch (error) {
-        // TODO count metrics
+
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
+            OFFER_ENABLE_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});

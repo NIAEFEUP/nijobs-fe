@@ -1,0 +1,5 @@
+export default Object.freeze({
+    BAD_RESPONSE: "BAD_RESPONSE",
+    NETWORK_FAILURE: "NETWORK_FAILURE",
+    UNEXPECTED: "UNEXPECTED",
+});

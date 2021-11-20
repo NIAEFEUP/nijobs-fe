@@ -6,41 +6,57 @@ import {
 
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
+import { TIMED_ACTIONS, createEvent, EVENT_TYPES, measureTime } from "../utils/analytics";
+import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
-export const submitCompanyApplication = (formData) => buildCancelableRequest(async (dispatch, { signal }) => {
-    dispatch(setCompanyApplicationSending(true));
-    dispatch(setCompanyApplicationSubmissionError([]));
+const APPLICATION_SUBMIT_METRIC_ID = "application/submit";
 
-    try {
-        const res = await fetch(`${API_HOSTNAME}/apply/company`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-            signal,
-        });
-        const json = await res.json();
+export const submitCompanyApplication = (formData) => buildCancelableRequest(
+    measureTime(TIMED_ACTIONS.APPLICATION_SUBMIT, async (dispatch, { signal }) => {
+        dispatch(setCompanyApplicationSending(true));
+        dispatch(setCompanyApplicationSubmissionError([]));
 
-        if (!res.ok) {
-            dispatch(setCompanyApplicationSubmissionError(json.errors));
+        try {
+            const res = await fetch(`${API_HOSTNAME}/apply/company`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+                signal,
+            });
+            const json = await res.json();
+
+            if (!res.ok) {
+                dispatch(setCompanyApplicationSubmissionError(json.errors));
+                dispatch(setCompanyApplicationSending(false));
+
+                createEvent(EVENT_TYPES.ERROR(
+                    APPLICATION_SUBMIT_METRIC_ID,
+                    ErrorTypes.BAD_RESPONSE,
+                    res.status
+                ));
+
+                return false;
+            }
+
+            dispatch(setCompanyApplication(json));
             dispatch(setCompanyApplicationSending(false));
-            // TODO count metrics
+
+            createEvent(EVENT_TYPES.SUCCESS(APPLICATION_SUBMIT_METRIC_ID));
+            return true;
+
+        } catch (error) {
+            dispatch(setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
+            dispatch(setCompanyApplicationSending(false));
+
+            createEvent(EVENT_TYPES.ERROR(
+                APPLICATION_SUBMIT_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE
+            ));
+
             return false;
         }
-
-        dispatch(setCompanyApplication(json));
-
-        dispatch(setCompanyApplicationSending(false));
-        // TODO count metrics
-        return true;
-
-    } catch (error) {
-        dispatch(setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
-        dispatch(setCompanyApplicationSending(false));
-        // TODO count metrics
-        return false;
-    }
-
-});
+    })
+);

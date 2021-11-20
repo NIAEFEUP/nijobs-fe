@@ -7,6 +7,7 @@ import { addSnackbar } from "../actions/notificationActions";
 import { connect } from "react-redux";
 import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
+import ReactGa from "react-ga";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -149,21 +150,27 @@ export const Route = ({
     // eslint-disable-next-line react/prop-types
     context,
     ...props
-}) => (
-    <BaseRoute
-        {...props}
-    >
-        <RedirectInfoProvider>
-            <RouteController
-                controller={controller}
-                controllerProps={controllerProps}
-                context={context}
-            >
-                {children}
-            </RouteController>
-        </RedirectInfoProvider>
-    </BaseRoute>
-);
+}) => {
+    useEffect(() => {
+        ReactGa.pageview(window.location.pathname);
+    }, []);
+
+    return (
+        <BaseRoute
+            {...props}
+        >
+            <RedirectInfoProvider>
+                <RouteController
+                    controller={controller}
+                    controllerProps={controllerProps}
+                    context={context}
+                >
+                    {children}
+                </RouteController>
+            </RedirectInfoProvider>
+        </BaseRoute>
+    );
+};
 Route.propTypes = {
     children: PropTypes.element.isRequired,
     controller: PropTypes.func,
