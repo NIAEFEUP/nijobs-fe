@@ -70,7 +70,7 @@ LoginAlert.displayName = "LoginAlert";
 LoginAlert.propTypes = {
     isLoggedIn: PropTypes.bool,
     companyUnfinishedRegistration: PropTypes.bool,
-    toggleLoginModal: PropTypes.func.required,
+    toggleLoginModal: PropTypes.func,
 
 };
 

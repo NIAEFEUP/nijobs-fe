@@ -1,8 +1,9 @@
-import { Box, FormControl, FormHelperText, makeStyles } from "@material-ui/core";
+import { Box, FormControl, FormHelperText, makeStyles, Typography } from "@material-ui/core";
 import { FormatBold, FormatItalic, FormatListBulleted, FormatListNumbered, FormatUnderlined } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
+import Heading from "@tiptap/extension-heading";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, {  useEffect } from "react";
@@ -12,6 +13,11 @@ import { PropTypes } from "prop-types";
 const useStyles = makeStyles((theme) => ({
     editorToolbar: {
         marginBottom: theme.spacing(1),
+        display: "flex",
+    },
+    headingBtn: {
+        width: "36px",
+        height: "36px",
     },
 }));
 
@@ -31,6 +37,9 @@ const EditorToolbar = ({ editor, disabled }) => {
             if (editor.isActive("underline")) state.push("underline");
             if (editor.isActive("bulletList")) state.push("bulletList");
             if (editor.isActive("orderedList")) state.push("orderedList");
+            for (let level = 1; level < 6; level++) {
+                if (editor.isActive("heading", { level })) state.push(`heading${level}`);
+            }
             setFormats(state);
         };
 
@@ -73,7 +82,7 @@ const EditorToolbar = ({ editor, disabled }) => {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
-            <Box ml={1} display="inline">
+            <Box ml={1} mr={1} display="inline">
                 <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
                     <ToggleButton
                         value="bulletList"
@@ -90,6 +99,59 @@ const EditorToolbar = ({ editor, disabled }) => {
                         disabled={disabled}
                     >
                         <FormatListNumbered fontSize="small" />
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Box>
+            <Box ml={1} display="inline">
+                <ToggleButtonGroup size="small" value={formats} aria-label="text lists">
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading1"
+                        aria-label="heading1"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h1</Typography>
+                    </ToggleButton>
+
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading2"
+                        aria-label="heading2"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h2</Typography>
+                    </ToggleButton>
+
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading3"
+                        aria-label="heading3"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h3</Typography>
+                    </ToggleButton>
+
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading4"
+                        aria-label="heading4"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h4</Typography>
+                    </ToggleButton>
+
+                    <ToggleButton
+                        className={classes.headingBtn}
+                        value="heading5"
+                        aria-label="heading5"
+                        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+                        disabled={disabled}
+                    >
+                        <Typography>h5</Typography>
                     </ToggleButton>
                 </ToggleButtonGroup>
             </Box>
@@ -110,6 +172,9 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
             Underline,
             Placeholder.configure({
                 placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc.",
+            }),
+            Heading.configure({
+                levels: [1, 2, 3, 4, 5],
             }),
         ],
         content,
@@ -162,8 +227,8 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 
 TextEditor.propTypes = {
     content: PropTypes.any.isRequired,
-    onChangeDescription: PropTypes.string.isRequired,
-    onChangeDescriptionText: PropTypes.string.isRequired,
+    onChangeDescription: PropTypes.func.isRequired,
+    onChangeDescriptionText: PropTypes.func.isRequired,
     error: PropTypes.any,
     helperText: PropTypes.any,
     disabled: PropTypes.bool,

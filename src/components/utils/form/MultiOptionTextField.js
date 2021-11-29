@@ -6,7 +6,7 @@ import useMultiOptionTextFieldStyle from "./multiOptionTextFieldStyle";
 import PropTypes from "prop-types";
 
 const RemoveLineButton = ({ onClick, items, i }) => {
-    const disabled = Object.keys(items).length <= 0;
+    const disabled = Object.keys(items).length <= 1;
     return (
         <FormControl>
             <span>

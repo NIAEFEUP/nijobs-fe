@@ -12,14 +12,14 @@ describe("Company Application Schema", () => {
                 companyName: "a",
             });
         } catch (err) {
-            expect(err.message).toBe("Must have at least 2 characters.");
+            expect(err.message).toBe("Must have at least 2 character(s).");
         }
         try {
             await CompanyApplicationSchema.validateAt("companyName", {
                 companyName: "a".repeat(51),
             });
         } catch (err) {
-            expect(err.message).toBe("Must not exceed 50 characters.");
+            expect(err.message).toBe("Must not exceed 50 character(s).");
         }
 
         const validResult = await CompanyApplicationSchema.validateAt("companyName", {
@@ -59,7 +59,7 @@ describe("Company Application Schema", () => {
                 password: "a",
             });
         } catch (err) {
-            expect(err.message).toBe("Must have at least 8 characters.");
+            expect(err.message).toBe("Must have at least 8 character(s).");
         }
         try {
             await CompanyApplicationSchema.validateAt("password", {
@@ -103,14 +103,14 @@ describe("Company Application Schema", () => {
                 motivation: "a",
             });
         } catch (err) {
-            expect(err.message).toBe("Must have at least 10 characters.");
+            expect(err.message).toBe("Must have at least 10 character(s).");
         }
         try {
             await CompanyApplicationSchema.validateAt("motivation", {
                 motivation: "a".repeat(1501),
             });
         } catch (err) {
-            expect(err.message).toBe("Must not exceed 1500 characters.");
+            expect(err.message).toBe("Must not exceed 1500 character(s).");
         }
 
         const validResult = await CompanyApplicationSchema.validateAt("motivation", {

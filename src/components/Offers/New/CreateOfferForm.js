@@ -58,6 +58,7 @@ export const CreateOfferController = () => {
     const company = session.data?.company?._id;
     const companyUnfinishedRegistration = session.data?.company?.hasFinishedRegistration === false;
     const isLoggedIn = session.isLoggedIn;
+    const authLoading = session.isValidating;
 
     // eslint-disable-next-line no-unused-vars
     const { handleSubmit, formState: { errors }, control, setValue, getValues } = useForm({
@@ -155,6 +156,7 @@ export const CreateOfferController = () => {
                 company,
                 isLoggedIn,
                 companyUnfinishedRegistration,
+                authLoading,
             },
         },
     };
@@ -183,6 +185,7 @@ const CreateOfferForm = () => {
         isAdmin,
         isLoggedIn,
         companyUnfinishedRegistration,
+        authLoading,
     } = useContext(CreateOfferControllerContext);
 
     const isMobile = useMobile();
@@ -211,494 +214,503 @@ const CreateOfferForm = () => {
             ? <Redirect to={`/offer/${newOfferId}`} push />
             :
             <div className={classes.formCard}>
-                <CardHeader title={!isMobile && "New Offer" } />
                 {
-                    <Content className={classes.formContent}>
-                        <ConnectedLoginAlert
-                            isLoggedIn={isLoggedIn}
-                            companyUnfinishedRegistration={companyUnfinishedRegistration}
-                        />
-                        <Grid container className={classes.formArea}>
-                            <Grid item xs={12}>
-                                <form
-                                    onSubmit={submit}
-                                    aria-label="Create Offer Form"
-                                >
-                                    <Grid container>
-                                        <Grid item xs={12} lg={isAdmin ? 6 : 12}>
-                                            <Controller
-                                                name="title"
-                                                render={(
-                                                    { field: { onChange, onBlur, ref, name, value } },
-                                                ) => (
-                                                    <TextField
-                                                        name={name}
-                                                        value={value}
-                                                        label="Offer Title"
-                                                        id="title"
-                                                        error={!!errors.title || !!requestErrors.title}
-                                                        inputRef={ref}
-                                                        onBlur={onBlur}
-                                                        onChange={onChange}
-                                                        helperText={
-                                                            `${value?.length}/${CreateOfferConstants.title.maxLength} 
-                                                        ${errors.title?.message || requestErrors.title?.message || ""}`
-                                                        }
-                                                        variant="outlined"
-                                                        margin="dense"
-                                                        fullWidth
-                                                        disabled={disabled}
-                                                    />)}
-                                                control={control}
-                                            />
-                                        </Grid>
+                    authLoading ?
+                        <CircularProgress />
+                        :
+                        <>
+                            <CardHeader title={!isMobile && "New Offer" } />
 
-                                        {isAdmin &&
-                                        <Grid item xs={12} lg={6}>
-                                            <Controller
-                                                name="owner"
-                                                render={(
-                                                    { field: { onChange, onBlur, ref, name, value } },
-                                                ) => (
-                                                    <TextField
-                                                        name={name}
-                                                        value={value}
-                                                        label="Owner ID"
-                                                        id="owner"
-                                                        error={!!errors.owner || !!requestErrors.owner}
-                                                        inputRef={ref}
-                                                        onBlur={onBlur}
-                                                        onChange={onChange}
-                                                        helperText={
-                                                            `${errors.owner?.message || requestErrors.owner?.message || ""}`
-                                                        }
-                                                        variant="outlined"
-                                                        margin="dense"
-                                                        fullWidth
-                                                        disabled={disabled}
-                                                    />)}
-                                                control={control}
-                                            />
-                                        </Grid>}
-
-                                        <Grid item xs={12} lg={6}>
-                                            <FormControl fullWidth margin="dense">
-                                                <Controller
-                                                    name="location"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, value } },
-                                                    ) => (
-                                                        <LocationPicker
-                                                            value={value}
-                                                            onChange={(_e, value) => onChange(value)}
-                                                            onBlur={onBlur}
-                                                            name={name}
-                                                            error={errors.location || requestErrors.location}
-                                                            disabled={disabled}
-                                                        />
-                                                    )}
-                                                    control={control}
-                                                />
-
-                                            </FormControl>
-
-                                        </Grid>
-                                        <Grid item xs={12} lg={6}>
-                                            <FormControl fullWidth margin="dense">
-
-                                                <Controller
-                                                    name="jobType"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, value } },
-                                                    ) => (
-                                                        <TextField
-                                                            name={name}
-                                                            fullWidth
-                                                            id="job_type"
-                                                            select
-                                                            label="Job Type"
-                                                            value={value ? value : ""}
-                                                            onChange={onChange}
-                                                            onBlur={onBlur}
-                                                            variant="outlined"
-                                                            disabled={disabled}
-                                                            error={!!errors?.jobType || !!requestErrors.jobType}
-                                                            helperText={
-                                                                `${errors.jobType?.message || requestErrors.jobType?.message || ""}`
-                                                            }
-                                                        >
-                                                            {JobOptions.map(({ value, label }) => (
-                                                                <MenuItem
-                                                                    key={value}
-                                                                    value={value}
-                                                                >
-                                                                    {label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </TextField>
-
-                                                    )}
-                                                    control={control}
-                                                />
-
-                                            </FormControl>
-                                        </Grid>
-
-
-                                        <Grid item xs={12} lg={6}>
-                                            <Controller
-                                                name="fields"
-                                                render={(
-                                                    { field: {  onBlur, name } },
-                                                ) => (
-                                                    <MultiOptionAutocomplete
-                                                        name={name}
-                                                        onBlur={onBlur}
-                                                        error={errors.fields || requestErrors.fields}
-                                                        disabled={disabled}
-                                                        {...FieldsSelectorProps}
-                                                    />
-                                                )}
-                                                control={control}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} lg={6}>
-                                            <Controller
-                                                name="technologies"
-                                                render={(
-                                                    { field: { onBlur, name } },
-                                                ) => (
-                                                    <MultiOptionAutocomplete
-                                                        name={name}
-                                                        onBlur={onBlur}
-                                                        error={errors.technologies || requestErrors.technologies}
-                                                        disabled={disabled}
-                                                        {...TechSelectorProps}
-                                                    />)}
-                                                control={control}
-                                            />
-
-                                        </Grid>
-                                        <Grid item xs={12} lg={6}>
-                                            <FormControl>
-                                                <Controller
-                                                    name="jobStartDate"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, value } },
-                                                    ) => (
-                                                        <KeyboardDatePicker
-                                                            margin="dense"
-                                                            value={value}
-                                                            label="Job Start Date"
-                                                            id="startDate-input"
-                                                            name={name}
-                                                            onChange={(_, value) => (onChange(value))}
-                                                            onBlur={onBlur}
-                                                            variant="inline"
-                                                            autoOk
-                                                            disabled={disabled}
-                                                            format="yyyy-MM-dd"
-                                                            minDate={Date.now()}
-                                                            error={!!errors?.jobStartDate || !!requestErrors.jobStartDate}
-                                                            helperText={
-                                                                `${errors.jobStartDate?.message ||
-                                                                    requestErrors.jobStartDate?.message || " "}`
-                                                            }
-                                                        />)}
-                                                    control={control}
-                                                />
-
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12} lg={6}>
-
-                                            <Controller
-                                                name="jobDuration"
-                                                render={(
-                                                    { field: { onChange, onBlur, name, value } },
-                                                ) => (
-                                                    <FormControl
-                                                        margin="normal"
-                                                        variant="outlined"
-                                                        fullWidth
-                                                    >
-                                                        <Slider
-                                                            name={name}
-                                                            value={value}
-                                                            onChange={(_e, values) => onChange(values)}
-                                                            onBlur={onBlur}
-                                                            valueLabelDisplay="auto"
-                                                            aria-labelledby="range-slider"
-                                                            min={JOB_MIN_DURATION}
-                                                            max={JOB_MAX_DURATION}
-                                                            disabled={disabled}
-                                                        />
-
-                                                        <FormHelperText>
-                                                            {!disabled && `Job duration: ${value[0]} - ${value[1]} month(s)`}
-                                                        </FormHelperText>
-
-                                                    </FormControl>)}
-                                                control={control}
-                                            />
-
-                                        </Grid>
-
-                                        <Grid item xs={12} lg={6}>
-                                            <FormControl>
-                                                <Controller
-                                                    name="vacancies"
-                                                    render={(
-                                                        { field: { onChange, onBlur, name, ref, value } },
-                                                    ) => (
-                                                        <TextField
-                                                            name={name}
-                                                            value={value}
-                                                            label="Vacancies"
-                                                            id="vacancies"
-                                                            disabled={disabled}
-                                                            error={!!errors?.vacancies || !!requestErrors.vacancies}
-                                                            helperText={
-                                                                `${errors.vacancies?.message || requestErrors.vacancies?.message || ""}`
-                                                            }
-                                                            inputRef={ref}
-                                                            onChange={(_e) => {
-                                                                let value = _e.target.value.replace(/[^0-9]/g, "");
-                                                                value = value ? Number.parseInt(value, 10) : "";
-                                                                onChange(value);
-                                                            }}
-                                                            onBlur={onBlur}
-                                                        />)}
-                                                    control={control}
-                                                />
-                                            </FormControl>
-                                        </Grid>
-
-                                        <Grid item xs={12} lg={6}>
-                                            <Controller
-                                                name="isPaid"
-                                                render={(
-                                                    { field: { onChange, onBlur, name, value } },
-                                                ) => (
-                                                    <TextField
-                                                        name={name}
-                                                        fullWidth
-                                                        id="is-paid"
-                                                        select
-                                                        label="Compensation"
-                                                        value={value}
-                                                        onChange={onChange}
-                                                        onBlur={onBlur}
-                                                        variant="outlined"
-                                                        disabled={disabled}
-                                                        error={!!errors?.isPaid || !!requestErrors.isPaid}
-                                                        helperText={
-                                                            `${errors.isPaid?.message || requestErrors.isPaid?.message || " "}`
-                                                        }
-                                                    >
-                                                        {PAID_OPTIONS.map(({ value, label }) => (
-                                                            <MenuItem
-                                                                key={value}
+                            <Content className={classes.formContent}>
+                                <ConnectedLoginAlert
+                                    isLoggedIn={isLoggedIn}
+                                    companyUnfinishedRegistration={companyUnfinishedRegistration}
+                                />
+                                <Grid container className={classes.formArea}>
+                                    <Grid item xs={12}>
+                                        <form
+                                            onSubmit={submit}
+                                            aria-label="Create Offer Form"
+                                        >
+                                            <Grid container>
+                                                <Grid item xs={12} lg={isAdmin ? 6 : 12}>
+                                                    <Controller
+                                                        name="title"
+                                                        render={(
+                                                            { field: { onChange, onBlur, ref, name, value } },
+                                                        ) => (
+                                                            <TextField
+                                                                name={name}
                                                                 value={value}
-                                                            >
-                                                                {label}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </TextField>
-                                                )}
-                                                control={control}
-                                            />
-                                        </Grid>
+                                                                label="Offer Title"
+                                                                id="title"
+                                                                error={!!errors.title || !!requestErrors.title}
+                                                                inputRef={ref}
+                                                                onBlur={onBlur}
+                                                                onChange={onChange}
+                                                                helperText={
+                                                                    `${value?.length}/${CreateOfferConstants.title.maxLength} 
+                                        ${errors.title?.message || requestErrors.title?.message || ""}`
+                                                                }
+                                                                variant="outlined"
+                                                                margin="dense"
+                                                                fullWidth
+                                                                disabled={disabled}
+                                                            />)}
+                                                        control={control}
+                                                    />
+                                                </Grid>
 
-                                        <Grid item xs={12} lg={12}>
-                                            <Button
-                                                onClick={() => setAdvancedOpen(!isAdvancedOpen)}
-                                                size="small"
-                                                margin="dense"
-                                                style={{ marginTop: 10 }}
-                                                endIcon={
-                                                    isAdvancedOpenOrErrors()
-                                                        ? <KeyboardArrowUp />
-                                                        : <KeyboardArrowDown />}
-                                            >
-                                                <Typography>Advanced Settings</Typography>
+                                                {isAdmin &&
+                                                <Grid item xs={12} lg={6}>
+                                                    <Controller
+                                                        name="owner"
+                                                        render={(
+                                                            { field: { onChange, onBlur, ref, name, value } },
+                                                        ) => (
+                                                            <TextField
+                                                                name={name}
+                                                                value={value}
+                                                                label="Owner ID"
+                                                                id="owner"
+                                                                error={!!errors.owner || !!requestErrors.owner}
+                                                                inputRef={ref}
+                                                                onBlur={onBlur}
+                                                                onChange={onChange}
+                                                                helperText={
+                                                                    `${errors.owner?.message || requestErrors.owner?.message || ""}`
+                                                                }
+                                                                variant="outlined"
+                                                                margin="dense"
+                                                                fullWidth
+                                                                disabled={disabled}
+                                                            />)}
+                                                        control={control}
+                                                    />
+                                                </Grid>}
 
-                                            </Button>
-                                        </Grid>
-                                        <Grid item xs={12} lg={12}>
-                                            <Collapse
-                                                in={isAdvancedOpenOrErrors()}
-                                            >
-                                                <Grid container>
-                                                    <Grid item xs={12} lg={6}>
+                                                <Grid item xs={12} lg={6}>
+                                                    <FormControl fullWidth margin="dense">
+                                                        <Controller
+                                                            name="location"
+                                                            render={(
+                                                                { field: { onChange, onBlur, name, value } },
+                                                            ) => (
+                                                                <LocationPicker
+                                                                    value={value}
+                                                                    onChange={(_e, value) => onChange(value)}
+                                                                    onBlur={onBlur}
+                                                                    name={name}
+                                                                    error={errors.location || requestErrors.location}
+                                                                    disabled={disabled}
+                                                                />
+                                                            )}
+                                                            control={control}
+                                                        />
+
+                                                    </FormControl>
+
+                                                </Grid>
+                                                <Grid item xs={12} lg={6}>
+                                                    <FormControl fullWidth margin="dense">
 
                                                         <Controller
-                                                            name="publishDate"
+                                                            name="jobType"
+                                                            render={(
+                                                                { field: { onChange, onBlur, name, value } },
+                                                            ) => (
+                                                                <TextField
+                                                                    name={name}
+                                                                    fullWidth
+                                                                    id="job_type"
+                                                                    select
+                                                                    label="Job Type"
+                                                                    value={value ? value : ""}
+                                                                    onChange={onChange}
+                                                                    onBlur={onBlur}
+                                                                    variant="outlined"
+                                                                    disabled={disabled}
+                                                                    error={!!errors?.jobType || !!requestErrors.jobType}
+                                                                    helperText={
+                                                                        `${errors.jobType?.message || requestErrors.jobType?.message || ""}`
+                                                                    }
+                                                                >
+                                                                    {JobOptions.map(({ value, label }) => (
+                                                                        <MenuItem
+                                                                            key={value}
+                                                                            value={value}
+                                                                        >
+                                                                            {label}
+                                                                        </MenuItem>
+                                                                    ))}
+                                                                </TextField>
+
+                                                            )}
+                                                            control={control}
+                                                        />
+
+                                                    </FormControl>
+                                                </Grid>
+
+
+                                                <Grid item xs={12} lg={6}>
+                                                    <Controller
+                                                        name="fields"
+                                                        render={(
+                                                            { field: {  onBlur, name } },
+                                                        ) => (
+                                                            <MultiOptionAutocomplete
+                                                                name={name}
+                                                                onBlur={onBlur}
+                                                                error={errors.fields || requestErrors.fields}
+                                                                disabled={disabled}
+                                                                {...FieldsSelectorProps}
+                                                            />
+                                                        )}
+                                                        control={control}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} lg={6}>
+                                                    <Controller
+                                                        name="technologies"
+                                                        render={(
+                                                            { field: { onBlur, name } },
+                                                        ) => (
+                                                            <MultiOptionAutocomplete
+                                                                name={name}
+                                                                onBlur={onBlur}
+                                                                error={errors.technologies || requestErrors.technologies}
+                                                                disabled={disabled}
+                                                                {...TechSelectorProps}
+                                                            />)}
+                                                        control={control}
+                                                    />
+
+                                                </Grid>
+                                                <Grid item xs={12} lg={6}>
+                                                    <FormControl>
+                                                        <Controller
+                                                            name="jobStartDate"
                                                             render={(
                                                                 { field: { onChange, onBlur, name, value } },
                                                             ) => (
                                                                 <KeyboardDatePicker
                                                                     margin="dense"
                                                                     value={value}
-                                                                    label="Publication Date"
-                                                                    id="publishDate-input"
+                                                                    label="Job Start Date"
+                                                                    id="startDate-input"
                                                                     name={name}
-                                                                    disabled={disabled}
-                                                                    onChange={(_, value) => onChange(value)}
+                                                                    onChange={(_, value) => (onChange(value))}
                                                                     onBlur={onBlur}
                                                                     variant="inline"
                                                                     autoOk
+                                                                    disabled={disabled}
                                                                     format="yyyy-MM-dd"
                                                                     minDate={Date.now()}
-                                                                    error={!!errors?.publishDate || !!requestErrors?.publishDate }
-                                                                    helperText={errors.publishDate?.message ||
-                                                                    requestErrors.publishDate?.message || " "}
+                                                                    error={!!errors?.jobStartDate || !!requestErrors.jobStartDate}
+                                                                    helperText={
+                                                                        `${errors.jobStartDate?.message ||
+                                                    requestErrors.jobStartDate?.message || " "}`
+                                                                    }
                                                                 />)}
                                                             control={control}
                                                         />
-                                                    </Grid>
-                                                    <Grid item xs={12} lg={6}>
 
-                                                        <Controller
-                                                            name="publishEndDate"
-                                                            render={(
-                                                                { field: { onChange, onBlur, name, value } },
-                                                            ) => (
-                                                                <KeyboardDatePicker
-                                                                    margin="dense"
-                                                                    value={value}
-                                                                    label="Publication End Date"
-                                                                    id="publishEndDate-input"
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid item xs={12} lg={6}>
+
+                                                    <Controller
+                                                        name="jobDuration"
+                                                        render={(
+                                                            { field: { onChange, onBlur, name, value } },
+                                                        ) => (
+                                                            <FormControl
+                                                                margin="normal"
+                                                                variant="outlined"
+                                                                fullWidth
+                                                            >
+                                                                <Slider
                                                                     name={name}
+                                                                    value={value}
+                                                                    onChange={(_e, values) => onChange(values)}
+                                                                    onBlur={onBlur}
+                                                                    valueLabelDisplay="auto"
+                                                                    aria-labelledby="range-slider"
+                                                                    min={JOB_MIN_DURATION}
+                                                                    max={JOB_MAX_DURATION}
                                                                     disabled={disabled}
-                                                                    onChange={(_, value) => {
-                                                                        const date = new Date(value);
-                                                                        date.setHours(23, 59, 59, 0);
-                                                                        onChange(date);
+                                                                />
+
+                                                                <FormHelperText>
+                                                                    {!disabled && `Job duration: ${value[0]} - ${value[1]} month(s)`}
+                                                                </FormHelperText>
+
+                                                            </FormControl>)}
+                                                        control={control}
+                                                    />
+
+                                                </Grid>
+
+                                                <Grid item xs={12} lg={6}>
+                                                    <FormControl>
+                                                        <Controller
+                                                            name="vacancies"
+                                                            render={(
+                                                                { field: { onChange, onBlur, name, ref, value } },
+                                                            ) => (
+                                                                <TextField
+                                                                    name={name}
+                                                                    value={value}
+                                                                    label="Vacancies"
+                                                                    id="vacancies"
+                                                                    disabled={disabled}
+                                                                    error={!!errors?.vacancies || !!requestErrors.vacancies}
+                                                                    helperText={
+                                                                        `${errors.vacancies?.message ||
+                                                                            requestErrors.vacancies?.message || ""}`
+                                                                    }
+                                                                    inputRef={ref}
+                                                                    onChange={(_e) => {
+                                                                        let value = _e.target.value.replace(/[^0-9]/g, "");
+                                                                        value = value ? Number.parseInt(value, 10) : "";
+                                                                        onChange(value);
                                                                     }}
                                                                     onBlur={onBlur}
-                                                                    variant="inline"
-                                                                    autoOk
-                                                                    format="yyyy-MM-dd"
-                                                                    minDate={fields.publishDate}
-                                                                    error={!!errors?.publishEndDate || !!requestErrors.publishEndDate}
-                                                                    helperText={errors.publishEndDate?.message ||
-                                                                    requestErrors.publishEndDate?.message || " "}
                                                                 />)}
                                                             control={control}
                                                         />
-                                                    </Grid>
+                                                    </FormControl>
+                                                </Grid>
 
-                                                    <Grid item xs={12} lg={6}>
-                                                        <FormControlLabel
-                                                            label="Hide offer"
-                                                            disabled={disabled}
-                                                            control={
+                                                <Grid item xs={12} lg={6}>
+                                                    <Controller
+                                                        name="isPaid"
+                                                        render={(
+                                                            { field: { onChange, onBlur, name, value } },
+                                                        ) => (
+                                                            <TextField
+                                                                name={name}
+                                                                fullWidth
+                                                                id="is-paid"
+                                                                select
+                                                                label="Compensation"
+                                                                value={value}
+                                                                onChange={onChange}
+                                                                onBlur={onBlur}
+                                                                variant="outlined"
+                                                                disabled={disabled}
+                                                                error={!!errors?.isPaid || !!requestErrors.isPaid}
+                                                                helperText={
+                                                                    `${errors.isPaid?.message || requestErrors.isPaid?.message || " "}`
+                                                                }
+                                                            >
+                                                                {PAID_OPTIONS.map(({ value, label }) => (
+                                                                    <MenuItem
+                                                                        key={value}
+                                                                        value={value}
+                                                                    >
+                                                                        {label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </TextField>
+                                                        )}
+                                                        control={control}
+                                                    />
+                                                </Grid>
+
+                                                <Grid item xs={12} lg={12}>
+                                                    <Button
+                                                        onClick={() => setAdvancedOpen(!isAdvancedOpen)}
+                                                        size="small"
+                                                        margin="dense"
+                                                        style={{ marginTop: 10 }}
+                                                        endIcon={
+                                                            isAdvancedOpenOrErrors()
+                                                                ? <KeyboardArrowUp />
+                                                                : <KeyboardArrowDown />}
+                                                    >
+                                                        <Typography>Advanced Settings</Typography>
+
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12} lg={12}>
+                                                    <Collapse
+                                                        in={isAdvancedOpenOrErrors()}
+                                                    >
+                                                        <Grid container>
+                                                            <Grid item xs={12} lg={6}>
+
                                                                 <Controller
-                                                                    name="isHidden"
+                                                                    name="publishDate"
                                                                     render={(
                                                                         { field: { onChange, onBlur, name, value } },
                                                                     ) => (
-                                                                        <Checkbox
-                                                                            checked={value}
-                                                                            onChange={onChange}
+                                                                        <KeyboardDatePicker
+                                                                            margin="dense"
+                                                                            value={value}
+                                                                            label="Publication Date"
+                                                                            id="publishDate-input"
                                                                             name={name}
-                                                                            onBlur={onBlur}
                                                                             disabled={disabled}
-                                                                        />
-                                                                    )}
+                                                                            onChange={(_, value) => onChange(value)}
+                                                                            onBlur={onBlur}
+                                                                            variant="inline"
+                                                                            autoOk
+                                                                            format="yyyy-MM-dd"
+                                                                            minDate={Date.now()}
+                                                                            error={!!errors?.publishDate || !!requestErrors?.publishDate }
+                                                                            helperText={errors.publishDate?.message ||
+                                                    requestErrors.publishDate?.message || " "}
+                                                                        />)}
                                                                     control={control}
                                                                 />
-                                                            }
-                                                        />
-                                                    </Grid>
+                                                            </Grid>
+                                                            <Grid item xs={12} lg={6}>
+
+                                                                <Controller
+                                                                    name="publishEndDate"
+                                                                    render={(
+                                                                        { field: { onChange, onBlur, name, value } },
+                                                                    ) => (
+                                                                        <KeyboardDatePicker
+                                                                            margin="dense"
+                                                                            value={value}
+                                                                            label="Publication End Date"
+                                                                            id="publishEndDate-input"
+                                                                            name={name}
+                                                                            disabled={disabled}
+                                                                            onChange={(_, value) => {
+                                                                                const date = new Date(value);
+                                                                                date.setHours(23, 59, 59, 0);
+                                                                                onChange(date);
+                                                                            }}
+                                                                            onBlur={onBlur}
+                                                                            variant="inline"
+                                                                            autoOk
+                                                                            format="yyyy-MM-dd"
+                                                                            minDate={fields.publishDate}
+                                                                            error={!!errors?.publishEndDate ||
+                                                                                 !!requestErrors.publishEndDate}
+                                                                            helperText={errors.publishEndDate?.message ||
+                                                    requestErrors.publishEndDate?.message || " "}
+                                                                        />)}
+                                                                    control={control}
+                                                                />
+                                                            </Grid>
+
+                                                            <Grid item xs={12} lg={6}>
+                                                                <FormControlLabel
+                                                                    label="Hide offer"
+                                                                    disabled={disabled}
+                                                                    control={
+                                                                        <Controller
+                                                                            name="isHidden"
+                                                                            render={(
+                                                                                { field: { onChange, onBlur, name, value } },
+                                                                            ) => (
+                                                                                <Checkbox
+                                                                                    checked={value}
+                                                                                    onChange={onChange}
+                                                                                    name={name}
+                                                                                    onBlur={onBlur}
+                                                                                    disabled={disabled}
+                                                                                />
+                                                                            )}
+                                                                            control={control}
+                                                                        />
+                                                                    }
+                                                                />
+                                                            </Grid>
+                                                        </Grid>
+
+                                                    </Collapse>
                                                 </Grid>
+                                            </Grid>
+                                            <MultiOptionTextField
+                                                values={contacts}
+                                                label="Contacts"
+                                                itemLabel="Contact #"
+                                                controllerName="contacts"
+                                                onAdd={appendContact}
+                                                onRemove={removeContact}
+                                                getValues={getValues}
+                                                control={control}
+                                                errors={errors.contacts || requestErrors.contacts}
+                                                disabled={disabled}
+                                                addEntryBtnTestId="contacts-selector"
+                                            />
+                                            <MultiOptionTextField
+                                                values={requirements}
+                                                label="Requirements"
+                                                itemLabel="Requirement #"
+                                                controllerName="requirements"
+                                                onAdd={appendRequirement}
+                                                onRemove={removeRequirement}
+                                                getValues={getValues}
+                                                control={control}
+                                                errors={errors.requirements || requestErrors.requirements}
+                                                disabled={disabled}
+                                                textFieldProps={{ multiline: true }}
+                                                addEntryBtnTestId="requirements-selector"
+                                            />
 
-                                            </Collapse>
-                                        </Grid>
-                                    </Grid>
-                                    <MultiOptionTextField
-                                        values={contacts}
-                                        label="Contacts"
-                                        itemLabel="Contact #"
-                                        controllerName="contacts"
-                                        onAdd={appendContact}
-                                        onRemove={removeContact}
-                                        getValues={getValues}
-                                        control={control}
-                                        errors={errors.contacts || requestErrors.contacts}
-                                        disabled={disabled}
-                                        addEntryBtnTestId="contacts-selector"
-                                    />
-                                    <MultiOptionTextField
-                                        values={requirements}
-                                        label="Requirements"
-                                        itemLabel="Requirement #"
-                                        controllerName="requirements"
-                                        onAdd={appendRequirement}
-                                        onRemove={removeRequirement}
-                                        getValues={getValues}
-                                        control={control}
-                                        errors={errors.requirements || requestErrors.requirements}
-                                        disabled={disabled}
-                                        textFieldProps={{ multiline: true }}
-                                        addEntryBtnTestId="requirements-selector"
-                                    />
-
-                                    <Controller
-                                        name="descriptionText"
-                                        render={(
-                                            { field: { onChange: onChangeDescriptionText } },
-                                        ) => (
                                             <Controller
-                                                name="description"
+                                                name="descriptionText"
                                                 render={(
-                                                    { field: { onChange: onChangeDescription } },
+                                                    { field: { onChange: onChangeDescriptionText } },
                                                 ) => (
-                                                    <TextEditor
-                                                        onChangeDescription={onChangeDescription}
-                                                        onChangeDescriptionText={onChangeDescriptionText}
-                                                        error={!!errors?.descriptionText || !!requestErrors?.descriptionText}
-                                                        content={fields.description}
-                                                        helperText={errors.descriptionText?.message ||
-                                                        requestErrors.descriptionText?.message || " "}
-                                                        disabled={disabled}
+                                                    <Controller
+                                                        name="description"
+                                                        render={(
+                                                            { field: { onChange: onChangeDescription } },
+                                                        ) => (
+                                                            <TextEditor
+                                                                onChangeDescription={onChangeDescription}
+                                                                onChangeDescriptionText={onChangeDescriptionText}
+                                                                error={!!errors?.descriptionText || !!requestErrors?.descriptionText}
+                                                                content={fields.description}
+                                                                helperText={errors.descriptionText?.message ||
+                                        requestErrors.descriptionText?.message || " "}
+                                                                disabled={disabled}
+                                                            />
+                                                        )}
+                                                        control={control}
                                                     />
                                                 )}
                                                 control={control}
                                             />
-                                        )}
-                                        control={control}
-                                    />
-                                    <Grid item xs={12} lg={12} />
-                                    {requestErrors.generalErrors ?
-                                        requestErrors.generalErrors.map((error, idx) => (
-                                            <FormHelperText key={`${error.message}-${idx}`} error>
-                                                {error.message}
-                                            </FormHelperText>
-                                        ))
-                                        :
-                                        <FormHelperText error={true}>
-                                            {" "}
-                                        </FormHelperText>
-                                    }
-                                    <Button
-                                        disabled={loading || disabled}
-                                        onClick={submit}
-                                        data-testid="submit-offer"
-                                    >
-                                Submit
-                                    </Button>
-                                    {loading &&
-                                    <CircularProgress
-                                        size={24}
-                                        className={classes.finishProgress}
-                                    />
-                                    }
-                                </form>
-                            </Grid>
-                        </Grid>
-                    </Content>}
+                                            <Grid item xs={12} lg={12} />
+                                            {requestErrors.generalErrors ?
+                                                requestErrors.generalErrors.map((error, idx) => (
+                                                    <FormHelperText key={`${error.message}-${idx}`} error>
+                                                        {error.message}
+                                                    </FormHelperText>
+                                                ))
+                                                :
+                                                <FormHelperText error={true}>
+                                                    {" "}
+                                                </FormHelperText>
+                                            }
+                                            <Button
+                                                disabled={loading || disabled}
+                                                onClick={submit}
+                                                data-testid="submit-offer"
+                                            >
+                Submit
+                                            </Button>
+                                            {loading &&
+                                            <CircularProgress
+                                                size={24}
+                                                className={classes.finishProgress}
+                                            />
+                                            }
+                                        </form>
+                                    </Grid>
+                                </Grid>
+                            </Content>
+                        </>
+                }
             </div>
 
 

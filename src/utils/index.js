@@ -9,7 +9,6 @@ import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
-import ReactGa from "react-ga";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 

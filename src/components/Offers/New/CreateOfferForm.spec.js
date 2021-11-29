@@ -1,9 +1,9 @@
 import React from "react";
 import { createTheme } from "@material-ui/core/styles";
 import useComponentController from "../../../hooks/useComponentController";
-import CreateOfferForm, { CreateOfferController, CreateOfferControllerContext, PAID_OPTIONS } from "./CreateOfferForm";
+import { CreateOfferController, CreateOfferControllerContext, PAID_OPTIONS } from "./CreateOfferForm";
 import { BrowserRouter } from "react-router-dom";
-import { renderWithTheme, screen, fireEvent, renderWithStoreAndTheme } from "../../../test-utils";
+import { screen, fireEvent, renderWithStoreAndTheme } from "../../../test-utils";
 import useSession from "../../../hooks/useSession";
 import CreateOfferPage from "../../../pages/CreateOfferPage";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -11,7 +11,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
 import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
 
 jest.mock("../../../hooks/useSession");
@@ -605,7 +604,8 @@ describe("Create Offer Form", () => {
                 await fireEvent.blur(input);
             });
 
-            expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Publication end date should be after Publication date and last less than 6 month(s).");
+            expect(await wrapper.findDescriptionOf(input))
+                .toHaveTextContent("Publication end date should be after Publication date and last less than 6 month(s).");
 
 
             await act (async () => {

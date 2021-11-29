@@ -149,7 +149,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
 
 LocationPicker.propTypes = {
     name: PropTypes.string.isRequired,
-    value: PropTypes.any.isRequired,
+    value: PropTypes.any,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     error: PropTypes.any,

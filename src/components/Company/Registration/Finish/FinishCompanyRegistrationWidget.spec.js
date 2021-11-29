@@ -265,7 +265,7 @@ describe("FinishCompanyRegistrationWidget", () => {
 
         fireEvent.change(bioInput, { target: { value: "f".repeat(1501) } });
         expect(bioInput).toHaveTextContent("f".repeat(1501));
-        expect(await findDescriptionOf(bioInput)).toHaveTextContent("1501/1500 Must not exceed 1500 characters.");
+        expect(await findDescriptionOf(bioInput)).toHaveTextContent("1501/1500 Must not exceed 1500 character(s).");
 
         expect(screen.getByText("Next").parentNode).toBeDisabled();
 
