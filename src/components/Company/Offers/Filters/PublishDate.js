@@ -4,7 +4,7 @@ import { columns } from "../Manage/CompanyOffersManagementSchema";
 
 const Filter = React.forwardRef((props, ref) => (
     <DateFilter
-        label="Date from..."
+        label="Publish Date from..."
         id="publishDate-filter"
         column="publishStartDate"
         columns={columns}
