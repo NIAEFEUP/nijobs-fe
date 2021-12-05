@@ -15,6 +15,7 @@ import {
     FormControlLabel,
     MenuItem,
     CircularProgress,
+    Tooltip,
 } from "@material-ui/core";
 import React, { useCallback, useContext } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
@@ -26,6 +27,7 @@ import "./editor.css";
 import {
     KeyboardArrowDown,
     KeyboardArrowUp,
+    Info,
 } from "@material-ui/icons";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
@@ -539,7 +541,7 @@ const CreateOfferForm = () => {
                                                         in={isAdvancedOpenOrErrors()}
                                                     >
                                                         <Grid container>
-                                                            <Grid item xs={12} lg={6}>
+                                                            <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
 
                                                                 <Controller
                                                                     name="publishDate"
@@ -565,8 +567,15 @@ const CreateOfferForm = () => {
                                                                         />)}
                                                                     control={control}
                                                                 />
+
+                                                                <Tooltip
+                                                                    title="The offer will only be visible after this date"
+                                                                    placement="top"
+                                                                >
+                                                                    <Info fontSize="small" />
+                                                                </Tooltip>
                                                             </Grid>
-                                                            <Grid item xs={12} lg={6}>
+                                                            <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
 
                                                                 <Controller
                                                                     name="publishEndDate"
@@ -597,9 +606,16 @@ const CreateOfferForm = () => {
                                                                         />)}
                                                                     control={control}
                                                                 />
+
+                                                                <Tooltip
+                                                                    title="The offer will only be visible until this date"
+                                                                    placement="top"
+                                                                >
+                                                                    <Info fontSize="small" />
+                                                                </Tooltip>
                                                             </Grid>
 
-                                                            <Grid item xs={12} lg={6}>
+                                                            <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                                 <FormControlLabel
                                                                     label="Hide offer"
                                                                     disabled={disabled}
@@ -621,6 +637,12 @@ const CreateOfferForm = () => {
                                                                         />
                                                                     }
                                                                 />
+                                                                <Tooltip
+                                                                    title="If the offer is hidden, users won't be able to see it"
+                                                                    placement="top"
+                                                                >
+                                                                    <Info fontSize="small" />
+                                                                </Tooltip>
                                                             </Grid>
                                                         </Grid>
 

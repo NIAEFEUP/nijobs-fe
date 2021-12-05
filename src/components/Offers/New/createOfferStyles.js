@@ -37,4 +37,8 @@ export default (isMobile) => makeStyles((theme) => ({
             paddingBottom: theme.spacing(4),
         },
     },
+    gridWithInfo: {
+        display: "flex",
+        alignItems: "center",
+    },
 }));
