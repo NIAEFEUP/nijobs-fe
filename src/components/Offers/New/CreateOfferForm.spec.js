@@ -514,7 +514,10 @@ describe("Create Offer Form", () => {
                     await fireEvent.blur(selector);
                 });
 
-                expect(input.value).toBe(JSON.stringify(value) || "");
+                if (value === "")
+                    expect(input.value).toBe("");
+                else
+                    expect(input.value).toBe(JSON.stringify(value));
             }
 
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("\u200B");

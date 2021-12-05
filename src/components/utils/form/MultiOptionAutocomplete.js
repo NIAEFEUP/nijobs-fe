@@ -74,6 +74,7 @@ const MultiOptionAutocomplete = forwardRef(
                             label={getOptionLabel(option)}
                             data-testid="chip-option"
                             size="medium"
+                            disabled={disabled}
                             onDelete={onRemove(index)}
                         />
                     ))}
