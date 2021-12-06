@@ -10,6 +10,14 @@ const useStyles = makeStyles((theme) => ({
         "&:active, &:hover, &.MuiTableSortLabel-active, &.MuiTableSortLabel-active.MuiTableSortLabel-root.MuiTableSortLabel-active .MuiTableSortLabel-icon": {
             color: "white",
         },
+        paddingLeft: theme.spacing(2),
+    },
+    columnSort: {
+        color: "white",
+        // eslint-disable-next-line max-len
+        "&:active, &:hover, &.MuiTableSortLabel-active, &.MuiTableSortLabel-active.MuiTableSortLabel-root.MuiTableSortLabel-active .MuiTableSortLabel-icon": {
+            color: "white",
+        },
     },
     checkbox: {
         color: "white",
@@ -31,24 +39,26 @@ const TableHeader = ({
     order,
     orderBy,
     handleOrderBy,
+    isSelectableTable,
 }) => {
     const classes = useStyles();
     return (
         <TableHead>
             <TableRow>
-                <TableCell
-                    padding="checkbox"
-                    classes={{ head: classes.headRow }}
-                >
-                    <Checkbox
-                        indeterminate={checkboxIndeterminate}
-                        checked={allChecked}
-                        onChange={handleSelectAllClick}
-                        inputProps={{ "aria-label": "Select all applications on current page" }}
-                        color="default"
-                        classes={{ root: classes.checkbox }}
-                    />
-                </TableCell>
+                {isSelectableTable &&
+                    <TableCell
+                        padding="checkbox"
+                        classes={{ head: classes.headRow }}
+                    >
+                        <Checkbox
+                            indeterminate={checkboxIndeterminate}
+                            checked={allChecked}
+                            onChange={handleSelectAllClick}
+                            inputProps={{ "aria-label": "Select all applications on current page" }}
+                            color="default"
+                            classes={{ root: classes.checkbox }}
+                        />
+                    </TableCell>}
                 {Object.entries(columns).map(([key, { align, disablePadding, disableSorting, label }]) => (
                     <TableCell
                         key={key}
@@ -67,7 +77,7 @@ const TableHeader = ({
                             onClick={() => {
                                 handleOrderBy(key);
                             }}
-                            classes={{ root: classes.columnLabel }}
+                            classes={{ root: classes.columnSort }}
                         >
                             {label}
                         </TableSortLabel>
@@ -87,6 +97,7 @@ TableHeader.propTypes = {
     handleSelectAllClick: PropTypes.func,
     allChecked: PropTypes.bool,
     checkboxIndeterminate: PropTypes.bool,
+    isSelectableTable: PropTypes.bool,
 };
 
 export default TableHeader;

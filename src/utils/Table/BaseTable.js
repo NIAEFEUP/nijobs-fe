@@ -38,6 +38,10 @@ const BaseTable = ({
     context,
     RowContent,
     RowCollapseComponent,
+    isSelectableTable,
+    isLoading,
+    error,
+    hasMaxHeight = true,
 }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
@@ -78,7 +82,7 @@ const BaseTable = ({
                 MultiRowActions={MultiRowActions}
                 {...TableToolbarProps}
             />
-            <TableContainer component={Paper} style={{ maxHeight: "51vh" }}>
+            <TableContainer component={Paper} style={hasMaxHeight ? { maxHeight: "51vh" } : {}}>
                 <Table stickyHeader={stickyHeader}>
                     <TableHeader
                         columns={columns}
@@ -89,6 +93,7 @@ const BaseTable = ({
                         order={order}
                         orderBy={orderBy}
                         handleOrderBy={handleOrderBy}
+                        isSelectableTable={isSelectableTable}
                     />
                     <TableContent
                         numColumns={Object.keys(columns).length}
@@ -104,6 +109,10 @@ const BaseTable = ({
                         context={context}
                         RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
+                        isSelectableTable={isSelectableTable}
+                        isLoading={isLoading}
+                        error={error}
+                        rowsPerPage={rowsPerPage}
                     />
                 </Table>
             </TableContainer>
@@ -117,6 +126,16 @@ const BaseTable = ({
                 onChangeRowsPerPage={handleChangeRowsPerPage}
                 backIconButtonProps={{ color: "secondary" }}
                 nextIconButtonProps={{ color: "secondary" }}
+                {
+                    ...(!hasMaxHeight && {
+                        SelectProps: {
+                            inputProps: {
+                                "aria-label": "Rows per page",
+                            },
+                            native: true,
+                        },
+                    })
+                }
             />
         </>
     );
@@ -160,6 +179,10 @@ BaseTable.propTypes = {
     context: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
+    isSelectableTable: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    error: PropTypes.object,
+    hasMaxHeight: PropTypes.bool,
 };
 
 export default BaseTable;

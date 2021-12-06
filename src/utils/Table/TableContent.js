@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TableBody, TableCell, Checkbox, TableRow as MUITableRow, Collapse, makeStyles } from "@material-ui/core";
+import { TableCell, Checkbox, TableRow as MUITableRow, Collapse, makeStyles } from "@material-ui/core";
 import { RowFields, RowPayload, RowPropTypes } from "./PropTypes";
 import useToggle from "../../hooks/useToggle";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
     rowDetails: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TableRow = ({
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
-    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent,
+    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -29,12 +30,13 @@ const TableRow = ({
                 selected={isRowSelected(rowKey)}
                 data-testid="application-row"
             >
+                {isSelectableTable &&
                 <TableCell padding="checkbox">
                     <Checkbox
                         checked={isRowSelected(rowKey)}
                         inputProps={{ "aria-labelledby": `${labelId}-label` }}
                     />
-                </TableCell>
+                </TableCell>}
                 <RowContent rowKey={rowKey} labelId={labelId} />
                 {RowActions &&
                     <RowActions
@@ -63,7 +65,7 @@ const TableRow = ({
 TableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload.isRequired,     // Need to check what to do with this propTypes (specific to Company Applications)
+    payload: RowPayload,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
@@ -73,19 +75,41 @@ TableRow.propTypes = {
     RowActionsProps: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
+    isSelectableTable: PropTypes.bool,
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent,
-}) => (
-    <TableBody>
-        {Object.keys(rows).length === 0 ?
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage,
+}) => {
+    if (isLoading) {
+        const rowsMock = Array(rowsPerPage).fill(0);
+        const columnsMock = Array(numColumns + (isSelectableTable ? 1 : 0)).fill(0);
+
+        return (
+            rowsMock.map((_, i) => (
+                <MUITableRow data-testid={`tableCellSkeleton-${i}`} key={i}>
+                    {columnsMock.map((_, j) => (
+                        <TableCell
+                            key={j}
+                            align="right"
+                        >
+                            <Skeleton variant="rect" height={30} />
+                        </TableCell>
+                    ))}
+                </MUITableRow>
+            ))
+        );
+    } else if ((Object.keys(rows).length === 0) || error) {
+        return (
             <MUITableRow>
-                <TableCell align="center" colSpan={numColumns + 1 /* This should depend whether this is selectable or not*/}>
+                <TableCell align="center" colSpan={numColumns + (isSelectableTable ? 1 : 0)}>
                     {emptyMessage}
                 </TableCell>
             </MUITableRow>
-            : Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
+        );
+    } else {
+        return (
+            Object.entries(rows).map(([key, { fields, payload, ...rowProps }]) => (
                 <TableRow
                     key={key}
                     rowKey={key}
@@ -100,10 +124,12 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     context={context}
                     RowContent={RowContent}
                     RowCollapseComponent={RowCollapseComponent}
+                    isSelectableTable={isSelectableTable}
                 />
-            ))}
-    </TableBody>
-);
+            ))
+        );
+    }
+};
 
 TableContent.propTypes = {
     rows: PropTypes.objectOf(RowPropTypes),
@@ -117,6 +143,10 @@ TableContent.propTypes = {
     context: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,
     RowCollapseComponent: PropTypes.elementType,
+    isSelectableTable: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    error: PropTypes.object,
+    rowsPerPage: PropTypes.number.isRequired,
 };
 
 export default TableContent;

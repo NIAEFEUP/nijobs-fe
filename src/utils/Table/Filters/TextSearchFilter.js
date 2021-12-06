@@ -5,7 +5,7 @@ import { getFieldValue } from "../utils";
 import ResetableFilter from "./ResetableFilter";
 
 const TextSearchFilter = React.forwardRef(({
-    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, placeholder,
+    value, onChange, onCommitChange, className, label, setActiveFilters, id, column, placeholder, isCaseSensitive = false,
 }, ref) => {
 
     const handleChange = (event) => {
@@ -15,7 +15,7 @@ const TextSearchFilter = React.forwardRef(({
     useEffect(() => {
 
         if (value.length) {
-            const searchRegex = new RegExp(`.*${value}.*`);
+            const searchRegex = new RegExp(`.*${value}.*`, isCaseSensitive ? "" : "i");
             setActiveFilters((filters) => ({
                 ...filters,
                 [id]: (rows) => Object.entries(rows)
@@ -26,7 +26,7 @@ const TextSearchFilter = React.forwardRef(({
             }));
             onCommitChange();
         }
-    }, [column, id, value, setActiveFilters, onCommitChange]);
+    }, [column, id, value, setActiveFilters, onCommitChange, isCaseSensitive]);
 
     return (
         <TextField
@@ -56,6 +56,7 @@ TextSearchFilter.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     onCommitChange: PropTypes.func.isRequired,
+    isCaseSensitive: PropTypes.bool,
 };
 
 const ResetableTextFilter = React.forwardRef((props, ref) => (
