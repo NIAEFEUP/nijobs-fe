@@ -10,7 +10,7 @@ import OfferContentListItem from "./OfferContentListItem";
 
 const OfferContent = ({ classes, offer, loading }) => (
     <div>
-        <Divider className={classes?.offerDivider} />
+        <Divider className={classes.offerDivider} />
         <OfferContentListItem
             title="Requirements"
             items={offer?.requirements}

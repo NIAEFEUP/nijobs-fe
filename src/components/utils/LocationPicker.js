@@ -17,7 +17,6 @@ const asyncThrottle = (func, wait) => {
         });
 };
 
-
 const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => {
     const [inputValue, setInputValue] = useState("");
     const [options, setOptions] = useState([]);

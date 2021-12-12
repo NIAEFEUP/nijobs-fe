@@ -144,12 +144,9 @@ const AppRouter = () => (
             >
                 <PageLayout
                     key="/offers/new"
-                    path="/offers/new"
-                    exact
                     layout={LayoutType.DESKTOP}
                     pageTitle="New Offer"
                     context={CreateOfferControllerContext}
-                    controller={CreateOfferController}
                 >
                     <CreateOfferPage />
                 </PageLayout>

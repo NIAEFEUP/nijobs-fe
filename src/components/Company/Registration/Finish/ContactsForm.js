@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 import { Box, Grid, Typography } from "@material-ui/core";
-import {  useFieldArray, useWatch } from "react-hook-form";
+import { useFieldArray, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";

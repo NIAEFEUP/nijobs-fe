@@ -12,7 +12,7 @@ export const searchCities = async (prefix, limit = 10) => {
             method: "GET",
             headers: {
                 "x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
-                "x-rapidapi-key": "TRpfb7GujpmshTOR1UmR0a0QKER9p1MAzLEjsn58ZsGXD9lPMx",
+                "x-rapidapi-key": process.env.GEO_API_KEY,
             },
         });
 

@@ -21,7 +21,6 @@ export default yup.object().shape({
             test: (publishEndDate) => isValidPublishEndDate(publishDate, publishEndDate),
             message: ValidationReasons.PUBLISH_END_DATE,
         })),
-
     jobDuration: yup.array()
         .of(yup.number(ValidationReasons.INT).positive()),
     jobStartDate: yup.date(ValidationReasons.DATE)

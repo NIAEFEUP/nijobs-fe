@@ -1,4 +1,4 @@
-import { validationRulesGenerator } from "../../../utils";
+import { ValidationReasons, validationRulesGenerator } from "../../../utils";
 import { DAY_IN_MS, MONTH_IN_MS, OFFER_MAX_LIFETIME_MONTHS } from "../../../utils/TimeUtils";
 import { MAX_FIELDS, MIN_FIELDS } from "../../utils/offers/FieldOptions";
 import { MAX_TECHNOLOGIES, MIN_TECHNOLOGIES } from "../../utils/offers/TechOptions";
@@ -35,8 +35,8 @@ export const isValidPublishEndDate = (publishDateRaw, publishEndDateRaw) => {
 };
 
 export const defaultDates = {
-    publishDate: () => new Date(),
-    publishEndDate: () => new Date(Date.parse(new Date()) + (OFFER_MAX_LIFETIME_MONTHS * MONTH_IN_MS) - DAY_IN_MS),
+    getPublishDate: () => new Date(),
+    getPublishEndDate: () => new Date(Date.parse(new Date()) + (OFFER_MAX_LIFETIME_MONTHS * MONTH_IN_MS) - DAY_IN_MS),
 };
 
 export const generateValidationRule = validationRulesGenerator(CreateOfferConstants);
@@ -47,6 +47,7 @@ const HumanReadableErrors = Object.freeze({
     "must-be-int": () => "Must be an integer.",
     "company-blocked": () => "Company is blocked. Please contact the team to review this situation if you think this is a mistake.",
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
+    "must-be-ISO8601-date": () => ValidationReasons.DATE,
 });
 
 export const getHumanError = (error) => {

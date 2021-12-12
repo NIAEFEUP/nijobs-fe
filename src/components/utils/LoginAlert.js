@@ -13,7 +13,7 @@ const style = makeStyles({
     },
 });
 
-const LoginAlert = React.forwardRef(({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModal }, _) => (
+const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModal }) => (
     <>
         {!isLoggedIn &&
         <Box alignContent="flex-start">
@@ -59,12 +59,12 @@ const LoginAlert = React.forwardRef(({ isLoggedIn, companyUnfinishedRegistration
                     </Button>
                 }
             >
-            The company must finish their registration
+            The company must finish its registration
             </Alert>
         </Box>
         }
     </>
-));
+);
 
 LoginAlert.displayName = "LoginAlert";
 LoginAlert.propTypes = {

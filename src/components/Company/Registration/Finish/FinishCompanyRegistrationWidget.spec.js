@@ -321,10 +321,10 @@ describe("FinishCompanyRegistrationWidget", () => {
         expect(screen.getByLabelText("Remove Entry 0")).toBeDisabled();
 
         await act(async () => {
-            await fireEvent.change(screen.getByLabelText("Contact #0"), { target: { value: "" } });
+            await fireEvent.change(screen.getByLabelText("Contact #1"), { target: { value: "" } });
         });
 
-        expect(screen.getByLabelText("Contact #0")).toHaveValue("");
+        expect(screen.getByLabelText("Contact #1")).toHaveValue("");
         expect(screen.getByLabelText("Remove Entry 0")).toBeDisabled();
 
         expect(await screen.findByText("Cannot be empty.")).toBeInTheDocument();

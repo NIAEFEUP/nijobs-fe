@@ -17,9 +17,5 @@ export default (value, setValues) => {
         },
     };
 
-    const TechSelectorProps = {
-        ...TechAutocompleteProps,
-    };
-
-    return TechSelectorProps;
+    return TechAutocompleteProps;
 };

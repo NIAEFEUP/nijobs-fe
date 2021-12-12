@@ -80,8 +80,6 @@ export default ({
     const resetAdvancedSearch = () => {
 
         // Clears the autocomplete and handles the internal state -- CONSISTENCY!!!
-        setFields([]);
-        setTechs([]);
 
         resetAdvancedSearchFields();
     };

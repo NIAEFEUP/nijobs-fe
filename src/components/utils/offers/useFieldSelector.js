@@ -17,9 +17,5 @@ export default (value, setValues) => {
         },
     };
 
-    const FieldsSelectorProps = {
-        ...FieldsAutocompleteProps,
-    };
-
-    return FieldsSelectorProps;
+    return FieldsAutocompleteProps;
 };

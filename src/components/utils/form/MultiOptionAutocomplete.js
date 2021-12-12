@@ -21,8 +21,8 @@ const MultiOptionAutocomplete = forwardRef(
         disabled,
         inputProps,
     },
-    ref) => {
-
+    ref
+    ) => {
         const valueRemover = useCallback((value) => (index) => (e) => {
             const clone = [...value];
             clone.splice(index, 1);

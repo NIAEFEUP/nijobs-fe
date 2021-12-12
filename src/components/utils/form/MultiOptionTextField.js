@@ -60,8 +60,8 @@ const MultiOptionTextField = ({
                             <TextField
                                 name={name}
                                 value={value}
-                                label={`${itemLabel}${i}`}
-                                id={`${itemLabel}${i}`}
+                                label={`${itemLabel}${i + 1}`}
+                                id={`${itemLabel}${i + 1}`}
                                 error={!!errors?.[i]}
                                 inputRef={ref}
                                 onBlur={onBlur}
