@@ -120,7 +120,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Choose a location" variant="outlined" fullWidth
+                    label="Location" variant="outlined" fullWidth
                     error={!!error}
                     helperText={
                         `${error?.message || " "}`

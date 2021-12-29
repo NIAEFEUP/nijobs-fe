@@ -47,7 +47,7 @@ import TextEditorComponent from "./form-components/TextEditorComponent";
 export const CreateOfferControllerContext = React.createContext();
 
 export const PAID_OPTIONS = [
-    { value: "", label: "Unspecified" },
+    { value: "none", label: "Unspecified" },
     { value: true, label: "Paid" },
     { value: false, label: "Unpaid" },
 ];
@@ -74,7 +74,7 @@ export const CreateOfferController = () => {
             description: "",
             descriptionText: "",
             contacts: [{ value: "" }],
-            isPaid: "",
+            isPaid: "none",
             vacancies: "",
             jobType: "",
             fields: [],
@@ -124,7 +124,7 @@ export const CreateOfferController = () => {
                 vacancies: data.vacancies || undefined,
                 contacts: data.contacts.map((val) => val.value),
                 requirements: data.requirements.map((val) => (val, val.value)),
-                isPaid: data.isPaid === "" ? undefined : data.isPaid,
+                isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || company,
             })
@@ -456,6 +456,8 @@ const CreateOfferForm = () => {
                                 }
                                 <Button
                                     disabled={loading || disabled}
+                                    variant="contained"
+                                    color="primary"
                                     onClick={submit}
                                     data-testid="submit-offer"
                                 >
