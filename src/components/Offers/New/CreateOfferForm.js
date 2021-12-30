@@ -102,7 +102,6 @@ export const CreateOfferController = () => {
 
     const handleAppendContact = () => appendContact(DEFAULT_VALUE);
 
-
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const [newOfferId, setNewOfferId] = React.useState();
@@ -223,9 +222,7 @@ const CreateOfferForm = () => {
             ? <Redirect to={`/offer/${newOfferId}`} push />
             :
             <div className={classes.formCard}>
-
                 <CardHeader title={!isMobile && "New Offer" } />
-
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}
@@ -246,7 +243,6 @@ const CreateOfferForm = () => {
                                             control={control}
                                         />
                                     </Grid>
-
                                     {isAdmin &&
                                     <Grid item xs={12} lg={6}>
                                         <OwnerComponent
@@ -256,7 +252,6 @@ const CreateOfferForm = () => {
                                             control={control}
                                         />
                                     </Grid>}
-
                                     <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth margin="dense">
                                             <LocationComponent
@@ -266,7 +261,6 @@ const CreateOfferForm = () => {
                                                 control={control}
                                             />
                                         </FormControl>
-
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth margin="dense">
@@ -278,8 +272,6 @@ const CreateOfferForm = () => {
                                             />
                                         </FormControl>
                                     </Grid>
-
-
                                     <Grid item xs={12} lg={6}>
                                         <Controller
                                             name="fields"
@@ -312,7 +304,6 @@ const CreateOfferForm = () => {
                                                 />)}
                                             control={control}
                                         />
-
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
                                         <FormControl>
@@ -322,7 +313,6 @@ const CreateOfferForm = () => {
                                                 requestErrors={requestErrors}
                                                 control={control}
                                             />
-
                                         </FormControl>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
@@ -333,7 +323,6 @@ const CreateOfferForm = () => {
                                             control={control}
                                         />
                                     </Grid>
-
                                     <Grid item xs={12} lg={6}>
                                         <FormControl>
                                             <VacanciesComponent
@@ -344,7 +333,6 @@ const CreateOfferForm = () => {
                                             />
                                         </FormControl>
                                     </Grid>
-
                                     <Grid item xs={12} lg={6}>
                                         <IsPaidComponent
                                             disabled={disabled}
@@ -353,7 +341,6 @@ const CreateOfferForm = () => {
                                             control={control}
                                         />
                                     </Grid>
-
                                     <Grid item xs={12} lg={12}>
                                         <Button
                                             onClick={() => setAdvancedOpen(!isAdvancedOpen)}
@@ -366,13 +353,10 @@ const CreateOfferForm = () => {
                                                     : <KeyboardArrowDown />}
                                         >
                                             <Typography>Advanced Settings</Typography>
-
                                         </Button>
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
-                                        <Collapse
-                                            in={isAdvancedOpenOrErrors()}
-                                        >
+                                        <Collapse in={isAdvancedOpenOrErrors()}>
                                             <Grid container>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <PublicationDateComponent
@@ -391,7 +375,6 @@ const CreateOfferForm = () => {
                                                         control={control}
                                                     />
                                                 </Grid>
-
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <IsHiddenComponent
                                                         disabled={disabled}
@@ -401,39 +384,40 @@ const CreateOfferForm = () => {
                                                     />
                                                 </Grid>
                                             </Grid>
-
                                         </Collapse>
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <MultiOptionTextField
+                                            values={contacts}
+                                            label="Contacts"
+                                            itemLabelPrefix="Contact #"
+                                            controllerName="contacts"
+                                            onAdd={appendContact}
+                                            onRemove={removeContact}
+                                            getValues={getValues}
+                                            control={control}
+                                            errors={errors.contacts || requestErrors.contacts}
+                                            disabled={disabled}
+                                            addEntryBtnTestId="contacts-selector"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <MultiOptionTextField
+                                            values={requirements}
+                                            label="Requirements"
+                                            itemLabelPrefix="Requirement #"
+                                            controllerName="requirements"
+                                            onAdd={appendRequirement}
+                                            onRemove={removeRequirement}
+                                            getValues={getValues}
+                                            control={control}
+                                            errors={errors.requirements || requestErrors.requirements}
+                                            disabled={disabled}
+                                            textFieldProps={{ multiline: true }}
+                                            addEntryBtnTestId="requirements-selector"
+                                        />
+                                    </Grid>
                                 </Grid>
-
-                                <MultiOptionTextField
-                                    values={contacts}
-                                    label="Contacts"
-                                    itemLabel="Contact #"
-                                    controllerName="contacts"
-                                    onAdd={appendContact}
-                                    onRemove={removeContact}
-                                    getValues={getValues}
-                                    control={control}
-                                    errors={errors.contacts || requestErrors.contacts}
-                                    disabled={disabled}
-                                    addEntryBtnTestId="contacts-selector"
-                                />
-                                <MultiOptionTextField
-                                    values={requirements}
-                                    label="Requirements"
-                                    itemLabel="Requirement #"
-                                    controllerName="requirements"
-                                    onAdd={appendRequirement}
-                                    onRemove={removeRequirement}
-                                    getValues={getValues}
-                                    control={control}
-                                    errors={errors.requirements || requestErrors.requirements}
-                                    disabled={disabled}
-                                    textFieldProps={{ multiline: true }}
-                                    addEntryBtnTestId="requirements-selector"
-                                />
-
                                 <TextEditorComponent
                                     fields={fields}
                                     disabled={disabled}
@@ -441,8 +425,6 @@ const CreateOfferForm = () => {
                                     requestErrors={requestErrors}
                                     control={control}
                                 />
-
-                                <Grid item xs={12} lg={12} />
                                 {requestErrors.generalErrors ?
                                     requestErrors.generalErrors.map((error, idx) => (
                                         <FormHelperText key={`${error.message}-${idx}`} error>
@@ -461,13 +443,12 @@ const CreateOfferForm = () => {
                                     onClick={submit}
                                     data-testid="submit-offer"
                                 >
-                Submit
+                                    Submit
                                 </Button>
                             </form>
                         </Grid>
                     </Grid>
                 </Content>
-
             </div>
     );
 };

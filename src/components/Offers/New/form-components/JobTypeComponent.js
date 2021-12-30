@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { MenuItem, TextField } from "@material-ui/core";
 import JobOptions from "../../../utils/offers/JobOptions";
 
-
 const JobTypeComponent = ({ disabled, errors, requestErrors, control }) => (
     <Controller
         name="jobType"
@@ -36,7 +35,6 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control }) => (
                     </MenuItem>
                 ))}
             </TextField>
-
         )}
         control={control}
     />

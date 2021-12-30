@@ -3,7 +3,6 @@ import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 
-
 const JobStartDateComponent = ({ disabled, errors, requestErrors, control }) => (
     <Controller
         name="jobStartDate"
@@ -26,7 +25,7 @@ const JobStartDateComponent = ({ disabled, errors, requestErrors, control }) => 
                 error={!!errors?.jobStartDate || !!requestErrors.jobStartDate}
                 helperText={
                     `${errors.jobStartDate?.message ||
-                                                    requestErrors.jobStartDate?.message || " "}`
+                        requestErrors.jobStartDate?.message || " "}`
                 }
             />)}
         control={control}

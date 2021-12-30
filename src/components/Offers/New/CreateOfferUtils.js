@@ -1,8 +1,7 @@
-import { ValidationReasons, validationRulesGenerator } from "../../../utils";
+import { HumanValidationReasons, validationRulesGenerator } from "../../../utils";
 import { DAY_IN_MS, MONTH_IN_MS, OFFER_MAX_LIFETIME_MONTHS } from "../../../utils/TimeUtils";
 import { MAX_FIELDS, MIN_FIELDS } from "../../utils/offers/FieldOptions";
 import { MAX_TECHNOLOGIES, MIN_TECHNOLOGIES } from "../../utils/offers/TechOptions";
-
 
 export const CreateOfferConstants = {
     title: {
@@ -25,7 +24,6 @@ export const CreateOfferConstants = {
     requirements: {
         minLength: 1,
     },
-
 };
 
 export const isValidPublishEndDate = (publishDateRaw, publishEndDateRaw) => {
@@ -47,7 +45,7 @@ const HumanReadableErrors = Object.freeze({
     "must-be-int": () => "Must be an integer.",
     "company-blocked": () => "Company is blocked. Please contact the team to review this situation if you think this is a mistake.",
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
-    "must-be-ISO8601-date": () => ValidationReasons.DATE,
+    "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
 });
 
 export const getHumanError = (error) => {

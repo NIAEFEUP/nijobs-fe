@@ -39,7 +39,7 @@ export const parseFiltersToURL = (filters) => Object.keys(filters)
     })
     .join("&");
 
-export const ValidationReasons = Object.freeze({
+export const HumanValidationReasons = Object.freeze({
     DEFAULT: "Invalid value.",
     REQUIRED: "Required field.",
     TOO_LONG: (len) => `Must not exceed ${len} character(s).`,
@@ -60,8 +60,8 @@ export const ValidationReasons = Object.freeze({
     FILE_TOO_BIG: (val) => `File size must be under ${val}.`,
     FILE_TYPE_ALLOWED: (vals) => `File type must be one of the following: ${vals.join(", ")}.`,
     LOCATION_FORMAT: () => "The location format must be <city>, <country>. Beware of extra spaces.",
-    PUBLISH_END_DATE: () => `Publication end date should be after Publication date and last less 
-                                than ${OFFER_MAX_LIFETIME_MONTHS} month(s).`,
+    PUBLISH_END_DATE: () => `Publication end date should be after Publish Date but not 
+                            over ${OFFER_MAX_LIFETIME_MONTHS} month(s) after that.`,
 });
 
 export const validationRulesGenerator = (rules) => (field, rule, reason) => {

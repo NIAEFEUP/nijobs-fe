@@ -19,9 +19,6 @@ const useStyles = makeStyles((theme) => ({
     headingBtn: {
         height: theme.spacing(4.5),
     },
-    section: {
-        fontSize: "5em",
-    },
 }));
 
 

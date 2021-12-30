@@ -5,7 +5,6 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { Tooltip } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
 
-
 const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, control }) => (
     <>
         <Controller
@@ -22,6 +21,8 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                     disabled={disabled}
                     onChange={(_, value) => {
                         const date = new Date(value);
+                        // KeybaordDatePicker defaults its date to midnight. It makes more sense to consider the last hour of the day
+                        // The offer is available between day x (00:00) and day y (23:59)
                         date.setHours(23, 59, 59, 0);
                         onChange(date);
                     }}
@@ -31,13 +32,12 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                     format="yyyy-MM-dd"
                     minDate={fields.publishDate}
                     error={!!errors?.publishEndDate ||
-                                                                                 !!requestErrors.publishEndDate}
+                            !!requestErrors.publishEndDate}
                     helperText={errors.publishEndDate?.message ||
-                                                    requestErrors.publishEndDate?.message || " "}
+                            requestErrors.publishEndDate?.message || " "}
                 />)}
             control={control}
         />
-
         <Tooltip
             title="The offer will only be visible until this date"
             placement="top"

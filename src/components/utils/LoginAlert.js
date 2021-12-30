@@ -27,7 +27,7 @@ const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModa
                             color="primary"
                             onClick={toggleLoginModal}
                         >
-                    Login
+                            Login
                         </Button>
                         <Button
                             color="inherit"
@@ -35,12 +35,12 @@ const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModa
                             component={RouterLink}
                             to="/apply/company"
                         >
-                    Join us
+                            Join us
                         </Button>
                     </>
                 }
             >
-        The user must be logged in to create an offer
+                The user must be logged in to create an offer
             </Alert>
         </Box>
         }
@@ -55,11 +55,11 @@ const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModa
                         component={RouterLink}
                         to="/company/registration/finish"
                     >
-                Finish Registration
+                        Finish Registration
                     </Button>
                 }
             >
-            The company must finish its registration
+                The company must finish its registration
             </Alert>
         </Box>
         }

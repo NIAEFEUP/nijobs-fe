@@ -65,7 +65,7 @@ describe("Create Offer Form", () => {
             expect(screen.getByText("Join us")).toBeInTheDocument();
 
             expect(screen.getByLabelText("Offer Title")).toBeDisabled();
-            expect(screen.getByLabelText("Choose a location")).toBeDisabled();
+            expect(screen.getByLabelText("Location")).toBeDisabled();
             expect(screen.getByLabelText("Job Type")).toHaveAttribute("aria-disabled", "true");
             expect(screen.getByLabelText("Fields")).toBeDisabled();
             expect(screen.getByLabelText("Technologies")).toBeDisabled();
@@ -153,11 +153,11 @@ describe("Create Offer Form", () => {
             );
 
             expect(screen.getByLabelText("Offer Title")).toBeEnabled();
-            expect(screen.getByLabelText("Choose a location")).toBeEnabled();
+            expect(screen.getByLabelText("Location")).toBeEnabled();
             expect(screen.getByLabelText("Job Type")).not.toHaveAttribute("aria-disabled");
             expect(screen.getByLabelText("Fields")).toBeEnabled();
             expect(screen.getByLabelText("Technologies")).toBeEnabled();
-            expect(screen.getByLabelText("Choose a location")).toBeEnabled();
+            expect(screen.getByLabelText("Location")).toBeEnabled();
             expect(screen.getByLabelText("Job Start Date")).toBeEnabled();
             expect(screen.getByLabelText("Vacancies")).toBeEnabled();
             expect(screen.getByLabelText("Compensation")).not.toHaveAttribute("aria-disabled");
@@ -257,7 +257,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Choose a location");
+            const input = screen.getByLabelText("Location");
             fireEvent.focus(input);
             fireEvent.blur(input);
 
@@ -282,7 +282,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Choose a location");
+            const input = screen.getByLabelText("Location");
 
             await act(async () => {
                 await fireEvent.focus(input);
@@ -298,7 +298,7 @@ describe("Create Offer Form", () => {
                 await fireEvent.blur(input);
             });
 
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Choose a location"))).toHaveTextContent("\u200B");
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location"))).toHaveTextContent("\u200B");
         });
 
         it("should fail validation if fields empty", async () => {
@@ -507,15 +507,23 @@ describe("Create Offer Form", () => {
                     await fireEvent.mouseDown(selector);
                 });
 
-                expect(screen.getByText(label)).toBeInTheDocument();
+                if (value === "none") {
+                    expect(screen.getAllByText(label)[1]).toBeInTheDocument();
+                } else {
+                    expect(screen.getByText(label)).toBeInTheDocument();
+                }
 
                 await act(async () => {
-                    await fireEvent.click(screen.getByText(label));
+                    if (value === "none") {
+                        await fireEvent.click(screen.getAllByText(label)[1]);
+                    } else {
+                        await fireEvent.click(screen.getByText(label));
+                    }
                     await fireEvent.blur(selector);
                 });
 
-                if (value === "")
-                    expect(input.value).toBe("");
+                if (value === "none")
+                    expect(input.value).toBe("none");
                 else
                     expect(input.value).toBe(JSON.stringify(value));
             }
@@ -608,7 +616,7 @@ describe("Create Offer Form", () => {
             });
 
             expect(await wrapper.findDescriptionOf(input))
-                .toHaveTextContent("Publication end date should be after Publication date and last less than 6 month(s).");
+                .toHaveTextContent("Publication end date should be after Publish Date but not over 6 month(s) after that.");
 
 
             await act (async () => {

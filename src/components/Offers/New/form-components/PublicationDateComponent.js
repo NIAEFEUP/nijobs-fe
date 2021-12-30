@@ -5,7 +5,6 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { Tooltip } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
 
-
 const PublicationDateComponent = ({ disabled, errors, requestErrors, control }) => (
     <>
         <Controller
@@ -28,11 +27,10 @@ const PublicationDateComponent = ({ disabled, errors, requestErrors, control }) 
                     minDate={Date.now()}
                     error={!!errors?.publishDate || !!requestErrors?.publishDate }
                     helperText={errors.publishDate?.message ||
-                                                    requestErrors.publishDate?.message || " "}
+                                    requestErrors.publishDate?.message || " "}
                 />)}
             control={control}
         />
-
         <Tooltip
             title="The offer will only be visible after this date"
             placement="top"

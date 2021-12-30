@@ -3,7 +3,6 @@ import { Controller } from "react-hook-form";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-
 const VacanciesComponent = ({ disabled, errors, requestErrors, control }) => (
     <Controller
         name="vacancies"

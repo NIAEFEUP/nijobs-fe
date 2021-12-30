@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { FormControl, FormHelperText, Slider } from "@material-ui/core";
 import { JOB_MAX_DURATION, JOB_MIN_DURATION } from "../../../../reducers/searchOffersReducer";
 
-
 const JobDurationComponent = ({ disabled, control }) => (
     <Controller
         name="jobDuration"
@@ -27,11 +26,9 @@ const JobDurationComponent = ({ disabled, control }) => (
                     max={JOB_MAX_DURATION}
                     disabled={disabled}
                 />
-
                 <FormHelperText>
                     {!disabled && `Job duration: ${value[0]} - ${value[1]} month(s)`}
                 </FormHelperText>
-
             </FormControl>)}
         control={control}
     />

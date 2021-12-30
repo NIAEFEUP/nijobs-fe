@@ -3,7 +3,6 @@ import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import TextEditor from "../../../utils/TextEditor";
 
-
 const TextEditorComponent = ({ fields, disabled, errors, requestErrors, control }) => (
     <Controller
         name="descriptionText"
@@ -21,7 +20,7 @@ const TextEditorComponent = ({ fields, disabled, errors, requestErrors, control 
                         error={!!errors?.descriptionText || !!requestErrors?.descriptionText}
                         content={fields.description}
                         helperText={errors.descriptionText?.message ||
-        requestErrors.descriptionText?.message || " "}
+                                        requestErrors.descriptionText?.message || " "}
                         disabled={disabled}
                     />
                 )}

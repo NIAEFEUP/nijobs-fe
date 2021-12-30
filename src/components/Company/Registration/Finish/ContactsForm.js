@@ -62,7 +62,7 @@ const ContactsForm = () => {
                 <MultiOptionTextField
                     values={fields}
                     label="Contacts"
-                    itemLabel="Contact #"
+                    itemLabelPrefix="Contact #"
                     controllerName="contacts"
                     onAdd={append}
                     onRemove={remove}

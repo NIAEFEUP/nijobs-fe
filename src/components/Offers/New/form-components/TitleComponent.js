@@ -4,7 +4,6 @@ import { CreateOfferConstants } from "../CreateOfferUtils";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-
 const TitleComponent = ({ disabled, errors, requestErrors, control }) => (
     <Controller
         name="title"
@@ -22,7 +21,7 @@ const TitleComponent = ({ disabled, errors, requestErrors, control }) => (
                 onChange={onChange}
                 helperText={
                     `${value?.length}/${CreateOfferConstants.title.maxLength} 
-                                        ${errors.title?.message || requestErrors.title?.message || ""}`
+                        ${errors.title?.message || requestErrors.title?.message || ""}`
                 }
                 variant="outlined"
                 margin="dense"

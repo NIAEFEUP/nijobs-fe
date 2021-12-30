@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Checkbox, FormControlLabel, Tooltip } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
 
-
 const IsHiddenComponent = ({ disabled, control }) => (
     <>
         <FormControlLabel

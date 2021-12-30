@@ -30,7 +30,7 @@ RemoveLineButton.propTypes = {
 
 const MultiOptionTextField = ({
     label,
-    itemLabel,
+    itemLabelPrefix,
     controllerName,
     values,
     onAdd,
@@ -41,7 +41,6 @@ const MultiOptionTextField = ({
     disabled,
     textFieldProps,
     addEntryBtnTestId,
-
 }) => {
     const classes = useMultiOptionTextFieldStyle();
     return (
@@ -60,8 +59,8 @@ const MultiOptionTextField = ({
                             <TextField
                                 name={name}
                                 value={value}
-                                label={`${itemLabel}${i + 1}`}
-                                id={`${itemLabel}${i + 1}`}
+                                label={`${itemLabelPrefix}${i + 1}`}
+                                id={`${itemLabelPrefix}${i + 1}`}
                                 error={!!errors?.[i]}
                                 inputRef={ref}
                                 onBlur={onBlur}
@@ -101,7 +100,7 @@ const MultiOptionTextField = ({
 
 MultiOptionTextField.propTypes = {
     label: PropTypes.string.isRequired,
-    itemLabel: PropTypes.string.isRequired,
+    itemLabelPrefix: PropTypes.string.isRequired,
     controllerName: PropTypes.string.isRequired,
     values: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.any.isRequired,
