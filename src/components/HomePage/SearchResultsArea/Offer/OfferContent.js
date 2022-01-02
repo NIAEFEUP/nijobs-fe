@@ -16,7 +16,7 @@ const OfferContent = ({ classes, offer, loading }) => (
             items={offer?.requirements}
             loading={loading}
         />
-        <div className={classes.offerDescription}>
+        <div className={classes?.offerDescription}>
             <Typography
                 component="span" /* if we don't use component="span",
                                                 there is a <p> element inside a <p>,
@@ -26,7 +26,7 @@ const OfferContent = ({ classes, offer, loading }) => (
                 { loading ?
                     <Skeleton variant="rect" height="100px" />
                     :
-                    <OfferDescription content={offer.description} />
+                    <OfferDescription content={offer?.description} />
                 }
             </Typography>
         </div>

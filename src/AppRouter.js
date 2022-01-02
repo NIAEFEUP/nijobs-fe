@@ -20,6 +20,8 @@ import {
 } from "./components/Company/Registration/Finish/FinishCompanyRegistrationWidget";
 import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
+import CreateOfferPage from "./pages/CreateOfferPage";
+import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
 
 /**
  *
@@ -132,6 +134,21 @@ const AppRouter = () => (
                     context={OfferPageControllerContext}
                 >
                     <OfferPage />
+                </PageLayout>
+            </Route>
+            <Route
+                path="/offers/new"
+                key="/offers/new"
+                context={CreateOfferControllerContext}
+                controller={CreateOfferController}
+            >
+                <PageLayout
+                    key="/offers/new"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="New Offer"
+                    context={CreateOfferControllerContext}
+                >
+                    <CreateOfferPage />
                 </PageLayout>
             </Route>
             <Route

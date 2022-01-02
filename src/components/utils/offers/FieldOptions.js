@@ -8,3 +8,6 @@ export default Object.freeze({
     "MACHINE LEARNING": "Machine Learning",
     "OTHER": "Other",
 });
+
+export const MIN_FIELDS = 2;
+export const MAX_FIELDS = 5;

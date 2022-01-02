@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 
 import { Chip, makeStyles } from "@material-ui/core";
 
-import FIELD_OPTIONS from "../../SearchArea/AdvancedSearch/FieldOptions";
-import TECH_OPTIONS from "../../SearchArea/AdvancedSearch/TechOptions";
+import FIELD_OPTIONS from "../../../utils/offers/FieldOptions";
+import TECH_OPTIONS from "../../../utils/offers/TechOptions";
 import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({

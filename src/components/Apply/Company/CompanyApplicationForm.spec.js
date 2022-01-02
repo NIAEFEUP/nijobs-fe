@@ -74,7 +74,7 @@ describe("CompanyApplicationForm", () => {
             fireEvent.change(input, { target: { value: "123" } });
             fireEvent.blur(input);
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Password")))
-                .toHaveTextContent("Must have at least 8 characters.");
+                .toHaveTextContent("Must have at least 8 character(s).");
 
             // Valid value
             fireEvent.change(input, { target: { value: "password123" } });
@@ -125,12 +125,12 @@ describe("CompanyApplicationForm", () => {
             fireEvent.change(input, { target: { value: "f" } });
             fireEvent.blur(input);
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Company Name")))
-                .toHaveTextContent("Must have at least 2 characters.");
+                .toHaveTextContent("Must have at least 2 character(s).");
 
             fireEvent.change(input, { target: { value: "superlongcompanynameholysh1titodesnotendbutstillitgoeson" } });
             fireEvent.blur(input);
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Company Name")))
-                .toHaveTextContent("Must not exceed 50 characters.");
+                .toHaveTextContent("Must not exceed 50 character(s).");
 
             // Valid value
             fireEvent.change(input, { target: { value: "validcompanyname" } });
@@ -155,12 +155,12 @@ describe("CompanyApplicationForm", () => {
             fireEvent.change(input, { target: { value: "tiny" } });
             fireEvent.blur(input);
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
-                .toHaveTextContent("Must have at least 10 characters.");
+                .toHaveTextContent("Must have at least 10 character(s).");
 
             fireEvent.change(input, { target: { value: "f".repeat(1501) } });
             fireEvent.blur(input);
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Motivation")))
-                .toHaveTextContent("1501/1500 Must not exceed 1500 characters.");
+                .toHaveTextContent("1501/1500 Must not exceed 1500 character(s).");
 
             // Valid value
             fireEvent.change(input, { target: { value: "validmotivation" } });

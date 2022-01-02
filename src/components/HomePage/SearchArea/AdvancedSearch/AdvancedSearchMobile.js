@@ -19,9 +19,9 @@ import {
 } from "@material-ui/core";
 import { NavigateBefore } from "@material-ui/icons";
 import SearchBar from "../SearchBar";
-import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
+import MultiOptionAutocomplete from "../../../utils/form/MultiOptionAutocomplete";
 
-import JobOptions from "./JobOptions";
+import JobOptions from "../../../utils/offers/JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 import { AdvancedSearchControllerContext } from "../SearchArea";
 

@@ -1,47 +1,9 @@
 import React, { useCallback, useContext } from "react";
-import PropTypes from "prop-types";
-import { Box, Button, FormControl, Grid, IconButton, makeStyles, TextField, Tooltip, Typography } from "@material-ui/core";
-import { AddCircle, RemoveCircle } from "@material-ui/icons";
-import { Controller, useFieldArray, useWatch } from "react-hook-form";
+import { Box, Grid, Typography } from "@material-ui/core";
+import { useFieldArray, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";
-
-const RemoveContactButton = ({ onClick, contacts, i }) => {
-    const disabled = Object.keys(contacts).length <= FinishCompanyRegistrationConstants.contacts.min;
-    return (
-        <FormControl>
-            <Tooltip
-                title={disabled ? "At least 1 contact required" : "Remove Entry"}
-                aria-label={disabled ? "At least 1 contact required" : "Remove Entry"}
-            >
-                <span>
-                    <IconButton
-                        aria-label={`Remove Entry ${i}`}
-                        onClick={onClick}
-                        disabled={disabled}
-                    >
-                        <RemoveCircle />
-                    </IconButton>
-                </span>
-            </Tooltip>
-        </FormControl>
-    );
-};
-
-RemoveContactButton.propTypes = {
-    onClick: PropTypes.func.isRequired,
-    contacts: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.string,
-    })).isRequired,
-    i: PropTypes.number.isRequired,
-};
-
-const useStyles = makeStyles(() => ({
-    addContactBtn: {
-        width: "max-content",
-    },
-}));
-
+import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
 
 export const useContacts = ({ control }) => {
 
@@ -81,8 +43,6 @@ const ContactsForm = () => {
 
     const { fields, append, remove } = contactsOptions;
 
-    const classes = useStyles();
-
     return (
         <Grid container>
             <Grid item xs={12}>
@@ -98,41 +58,19 @@ const ContactsForm = () => {
                         Smoke signals are currently not supported, though.
                     </Typography>
                 </Box>
-                <Box display="flex" flexDirection="column">
-                    {fields.map(({ id }, i) => (
-                        <Controller
-                            key={id}
-                            name={`contacts.${i}.value`}
-                            render={(
-                                { field: { onChange, onBlur, ref, name, value } },
-                            ) => (
-                                <TextField
-                                    name={name}
-                                    value={value}
-                                    label={`Contact #${i}`}
-                                    id={`Contact #${i}`}
-                                    error={!!errors.contacts?.[i]}
-                                    inputRef={ref}
-                                    onBlur={onBlur}
-                                    onChange={onChange}
-                                    InputProps={{ endAdornment: <RemoveContactButton i={i} contacts={fields} onClick={() => remove(i)} /> }}
-                                    margin="normal"
-                                    helperText={errors.contacts?.[i]?.value?.message || ""}
-                                />)}
-                            control={control}
-                            defaultValue={getValues(`contacts.${i}.value`) || ""}
-                        />
-                    ))}
-                    <Button
-                        color="primary"
-                        startIcon={<AddCircle />}
-                        disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
-                        onClick={append}
-                        className={classes.addContactBtn}
-                    >
-                Add Entry
-                    </Button>
-                </Box>
+
+                <MultiOptionTextField
+                    values={fields}
+                    label="Contacts"
+                    itemLabelPrefix="Contact #"
+                    controllerName="contacts"
+                    onAdd={append}
+                    onRemove={remove}
+                    getValues={getValues}
+                    control={control}
+                    errors={errors.contacts}
+                    disabled={Object.keys(fields).length >= FinishCompanyRegistrationConstants.contacts.max}
+                />
             </Grid>
         </Grid>
     );

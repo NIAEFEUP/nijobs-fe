@@ -10,9 +10,11 @@ import {
 } from "../../../actions/searchOffersActions";
 import SearchBar from "./SearchBar";
 import SubmitSearchButton from "./SubmitSearchButton";
-
-import { Paper, Fab } from "@material-ui/core";
-import { createTheme } from "@material-ui/core/styles";
+import {
+    Paper,
+    Fab,
+    createTheme,
+} from "@material-ui/core";
 import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
 import { mountWithTheme } from "../../../test-utils";

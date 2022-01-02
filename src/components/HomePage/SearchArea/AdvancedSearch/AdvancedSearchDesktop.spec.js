@@ -1,13 +1,13 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import AdvancedSearchDesktop from "./AdvancedSearchDesktop";
-import JobOptions from "./JobOptions";
+import JobOptions from "../../../utils/offers/JobOptions";
 import { render, screen } from "../../../../test-utils";
 import { AdvancedSearchControllerContext, AdvancedSearchController } from "../SearchArea";
 import { fireEvent } from "@testing-library/dom";
 import useComponentController from "../../../../hooks/useComponentController";
-import FieldOptions from "./FieldOptions";
-import TechOptions from "./TechOptions";
+import FieldOptions from "../../../utils/offers/FieldOptions";
+import TechOptions from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 
 const AdvancedSearchWrapper = ({

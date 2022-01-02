@@ -80,7 +80,10 @@ function getClientEnvironment(publicUrl) {
         PUBLIC_URL: publicUrl,
 
         // ID used for Google Analytics.
-        ANALYTICS_ID: process.env.ANALYTICS_ID
+        ANALYTICS_ID: process.env.ANALYTICS_ID,
+
+        // Api key for geolocation
+        GEO_API_KEY: process.env.GEO_API_KEY,
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

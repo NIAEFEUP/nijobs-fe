@@ -265,7 +265,7 @@ describe("FinishCompanyRegistrationWidget", () => {
 
         fireEvent.change(bioInput, { target: { value: "f".repeat(1501) } });
         expect(bioInput).toHaveTextContent("f".repeat(1501));
-        expect(await findDescriptionOf(bioInput)).toHaveTextContent("1501/1500 Must not exceed 1500 characters.");
+        expect(await findDescriptionOf(bioInput)).toHaveTextContent("1501/1500 Must not exceed 1500 character(s).");
 
         expect(screen.getByText("Next").parentNode).toBeDisabled();
 
@@ -321,10 +321,10 @@ describe("FinishCompanyRegistrationWidget", () => {
         expect(screen.getByLabelText("Remove Entry 0")).toBeDisabled();
 
         await act(async () => {
-            await fireEvent.change(screen.getByLabelText("Contact #0"), { target: { value: "" } });
+            await fireEvent.change(screen.getByLabelText("Contact #1"), { target: { value: "" } });
         });
 
-        expect(screen.getByLabelText("Contact #0")).toHaveValue("");
+        expect(screen.getByLabelText("Contact #1")).toHaveValue("");
         expect(screen.getByLabelText("Remove Entry 0")).toBeDisabled();
 
         expect(await screen.findByText("Cannot be empty.")).toBeInTheDocument();

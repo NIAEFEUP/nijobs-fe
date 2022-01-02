@@ -1,27 +1,9 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import useToggle from "../../../../hooks/useToggle";
-import useAutocomplete from "@material-ui/lab/useAutocomplete";
-import { TextField } from "@material-ui/core";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 import useSearchAreaStyles from "../searchAreaStyle";
-
-import FIELD_OPTIONS from "./FieldOptions";
-import TECH_OPTIONS from "./TechOptions";
-
-
-// eslint-disable-next-line react/display-name
-const RenderInput = (label) => (params) => {
-    const inputProps = { ...params.inputProps, "aria-labelledby": `${params.id}-label` };
-    return (
-        <TextField
-            {...params}
-            variant="standard"
-            margin="normal"
-            fullWidth
-            label={label}
-            inputProps={inputProps}
-        />);
-};
+import useTechSelector from "../../../utils/offers/useTechSelector";
+import useFieldSelector from "../../../utils/offers/useFieldSelector";
 
 export default ({
     enableAdvancedSearchDefault,
@@ -82,38 +64,8 @@ export default ({
         onChange: setJobDuration,
     };
 
-    const FieldsAutocompleteProps = {
-        multiple: true,
-        renderInput: RenderInput("Fields"),
-        options: Object.keys(FIELD_OPTIONS),
-        id: "fields-selector",
-        getOptionLabel: (option) => FIELD_OPTIONS[option],
-        onChange: useCallback((e, fields) => fields && setFields(fields), [setFields]),
-        value: fields,
-    };
-    const fieldsAutocompleteProps = useCallback(useAutocomplete({ ...FieldsAutocompleteProps }), [FieldsAutocompleteProps]);
-
-    const FieldsSelectorProps = {
-        ...FieldsAutocompleteProps,
-        autocompleteProps: fieldsAutocompleteProps,
-    };
-
-    const TechsAutocompleteProps = {
-        multiple: true,
-        renderInput: RenderInput("Technologies"),
-        id: "technologies-selector",
-        options: Object.keys(TECH_OPTIONS),
-        getOptionLabel: (option) => TECH_OPTIONS[option],
-        onChange: useCallback((e, technologies) => technologies && setTechs(technologies), [setTechs]),
-        value: technologies,
-    };
-
-    const techsAutocompleteProps = useCallback(useAutocomplete({ ...TechsAutocompleteProps }), [TechsAutocompleteProps]);
-
-    const TechsSelectorProps = {
-        ...TechsAutocompleteProps,
-        autocompleteProps: techsAutocompleteProps,
-    };
+    const FieldsSelectorProps = useFieldSelector(fields, setFields);
+    const TechsSelectorProps = useTechSelector(technologies, setTechs);
 
 
     const advancedOptionsActive = showJobDurationSlider
@@ -128,8 +80,6 @@ export default ({
     const resetAdvancedSearch = () => {
 
         // Clears the autocomplete and handles the internal state -- CONSISTENCY!!!
-        FieldsSelectorProps.autocompleteProps.getClearProps().onClick();
-        TechsSelectorProps.autocompleteProps.getClearProps().onClick();
 
         resetAdvancedSearchFields();
     };

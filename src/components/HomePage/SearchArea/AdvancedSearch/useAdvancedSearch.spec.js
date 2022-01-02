@@ -1,7 +1,7 @@
 import { testHook, act } from "../../../../test-utils";
 import useAdvancedSearch from "./useAdvancedSearch";
-import FIELD_OPTIONS from "./FieldOptions";
-import TECH_OPTIONS from "./TechOptions";
+import FIELD_OPTIONS from "../../../utils/offers/FieldOptions";
+import TECH_OPTIONS from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../../reducers/searchOffersReducer";
 
 describe("useAdvancedSearch", () => {
@@ -57,7 +57,6 @@ describe("useAdvancedSearch", () => {
         expect(FieldsSelectorProps.multiple).toBe(true);
         expect(FieldsSelectorProps.options).toEqual(Object.keys(FIELD_OPTIONS));
         expect(FieldsSelectorProps.value).toEqual(fields);
-        expect(FieldsSelectorProps).toHaveProperty("autocompleteProps");
 
         FieldsSelectorProps.onChange(null, fields);
         expect(setFields).toHaveBeenCalledWith(fields);
@@ -79,7 +78,6 @@ describe("useAdvancedSearch", () => {
         expect(TechsSelectorProps.multiple).toBe(true);
         expect(TechsSelectorProps.options).toEqual(Object.keys(TECH_OPTIONS));
         expect(TechsSelectorProps.value).toEqual(technologies);
-        expect(TechsSelectorProps).toHaveProperty("autocompleteProps");
 
         TechsSelectorProps.onChange(null, technologies);
         expect(setTechs).toHaveBeenCalledWith(technologies);

@@ -172,3 +172,69 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
 });
+
+export const newOffer = async ({
+    title,
+    publishDate,
+    publishEndDate,
+    jobMinDuration,
+    jobMaxDuration,
+    jobStartDate,
+    description,
+    contacts,
+    isPaid,
+    vacancies,
+    jobType,
+    fields,
+    technologies,
+    isHidden,
+    owner,
+    location,
+    coordinates,
+    requirements,
+}) => {
+
+    const data = {
+        title,
+        publishDate,
+        publishEndDate,
+        jobMinDuration,
+        jobMaxDuration,
+        jobStartDate,
+        description,
+        contacts,
+        isPaid,
+        vacancies,
+        jobType,
+        fields,
+        technologies,
+        isHidden,
+        owner,
+        location,
+        coordinates,
+        requirements,
+    };
+
+    try {
+        const res = await fetch(`${API_HOSTNAME}/offers/new`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+            throw json.errors;
+        }
+        // TODO count metrics
+        return json;
+
+    } catch (error) {
+        // TODO count metrics
+        if (Array.isArray(error)) throw error;
+        throw [{ msg: "Unexpected Error. Please try again later." }];
+    }
+};

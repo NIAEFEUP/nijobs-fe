@@ -12,9 +12,9 @@ import {
     Button,
 } from "@material-ui/core";
 
-import JobOptions from "./JobOptions";
+import JobOptions from "../../../utils/offers/JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
-import MultiOptionAutocomplete from "./MultiOptionAutocomplete/MultiOptionAutocomplete";
+import MultiOptionAutocomplete from "../../../utils/form/MultiOptionAutocomplete";
 import { AdvancedSearchControllerContext } from "../SearchArea";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
