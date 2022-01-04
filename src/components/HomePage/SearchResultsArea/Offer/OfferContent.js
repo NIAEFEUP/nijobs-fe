@@ -24,13 +24,13 @@ const OfferContent = ({ classes, offer, loading }) => (
                 variant="body1"
             >
                 {
-                loading ?
-                    <Skeleton variant="rect" height="100px" />
-                    : 
-                    <div>
-                        <Divider className={classes.offerDivider} />  
-                        <OfferDescription content={offer?.description} />
-                    </div>    
+                    loading ?
+                        <Skeleton variant="rect" height="100px" />
+                        :
+                        <div>
+                            <Divider className={classes.offerDivider} />
+                            <OfferDescription content={offer?.description} />
+                        </div>
                 }
             </Typography>
         </div>
