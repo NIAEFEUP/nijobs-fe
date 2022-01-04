@@ -23,10 +23,14 @@ const OfferContent = ({ classes, offer, loading }) => (
                                                 which fails the validateDOMNesting*/
                 variant="body1"
             >
-                { loading ?
+                {
+                loading ?
                     <Skeleton variant="rect" height="100px" />
-                    :
-                    <OfferDescription content={offer?.description} />
+                    : 
+                    <div>
+                        <Divider className={classes.offerDivider} />  
+                        <OfferDescription content={offer?.description} />
+                    </div>    
                 }
             </Typography>
         </div>
