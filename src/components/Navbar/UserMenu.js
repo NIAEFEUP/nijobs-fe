@@ -70,6 +70,14 @@ const AdminMenuOptions = ({ isMobile }) => {
                     Admin
                 </Typography>
             </li>
+            <MenuItem 
+                button
+                disableTouchRipple
+                component={Link}
+                to="/offers/new"
+            >
+                Create Offer
+            </MenuItem>
             <MenuItem
                 button
                 disableTouchRipple
@@ -94,7 +102,10 @@ const CompanyMenuOptions = ({ isMobile, sessionData }) => {
         <>
             {
             sessionData?.company?.hasFinishedRegistration ?
-                <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                <>
+                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                    <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
+                </>
                 :
                 <MenuItem
                     button
