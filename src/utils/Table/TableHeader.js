@@ -40,7 +40,6 @@ const TableHeader = ({
     orderBy,
     handleOrderBy,
     isSelectableTable,
-    isMobile,
 }) => {
     const classes = useStyles();
     return (
@@ -99,7 +98,6 @@ TableHeader.propTypes = {
     allChecked: PropTypes.bool,
     checkboxIndeterminate: PropTypes.bool,
     isSelectableTable: PropTypes.bool,
-    isMobile: PropTypes.bool,
 };
 
 export default TableHeader;

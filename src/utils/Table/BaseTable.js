@@ -7,6 +7,7 @@ import TableHeader from "./TableHeader";
 import TableToolbar from "./TableToolbar";
 import { ColumnPropTypes, RowPropTypes } from "./PropTypes";
 import { useMobile } from "../media-queries";
+import { flow } from "lodash";
 
 const BaseTable = ({
     title,
@@ -43,8 +44,16 @@ const BaseTable = ({
     isLoading,
     error,
     hasMaxHeight = true,
+    mobileColumns,
 }) => {
     const isMobile = useMobile();
+
+    const headerCols = isMobile ? flow([
+        Object.entries,
+        (arr) => arr.filter(([colKey, _]) => mobileColumns.includes(colKey)),
+        Object.fromEntries,
+    ])(columns) : columns;
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
@@ -87,7 +96,7 @@ const BaseTable = ({
             <TableContainer component={Paper} style={hasMaxHeight ? { maxHeight: "51vh" } : {}}>
                 <Table stickyHeader={stickyHeader}>
                     <TableHeader
-                        columns={columns}
+                        columns={headerCols}
                         handleSelectAllClick={handleSelectAll(page, rowsPerPage)}
                         checkboxIndeterminate={numSelected > 0 && numSelected < numRowsCurrentPage}
                         allChecked={Object.keys(rows).length > 0 && numSelected === numRowsCurrentPage}
@@ -95,7 +104,7 @@ const BaseTable = ({
                         order={order}
                         orderBy={orderBy}
                         handleOrderBy={handleOrderBy}
-                        isSelectableTable={isSelectableTable}
+                        isSelectableTable={isSelectableTable && !isMobile}
                         isMobile={isMobile}
                     />
                     <TableContent
@@ -112,11 +121,12 @@ const BaseTable = ({
                         context={context}
                         RowContent={RowContent}
                         RowCollapseComponent={RowCollapseComponent}
-                        isSelectableTable={isSelectableTable}
+                        isSelectableTable={isSelectableTable && !isMobile}
                         isLoading={isLoading}
                         error={error}
                         rowsPerPage={rowsPerPage}
                         isMobile={isMobile}
+                        mobileColumns={mobileColumns}
                     />
                 </Table>
             </TableContainer>
@@ -187,6 +197,7 @@ BaseTable.propTypes = {
     isLoading: PropTypes.bool,
     error: PropTypes.object,
     hasMaxHeight: PropTypes.bool,
+    mobileColumns: PropTypes.array,
 };
 
 export default BaseTable;

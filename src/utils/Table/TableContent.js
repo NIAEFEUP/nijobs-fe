@@ -79,7 +79,7 @@ TableRow.propTypes = {
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage, isMobile,
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage, isMobile, mobileColumns,
 }) => {
     if (isLoading) {
         const rowsMock = Array(rowsPerPage).fill(0);
@@ -148,6 +148,7 @@ TableContent.propTypes = {
     error: PropTypes.object,
     rowsPerPage: PropTypes.number.isRequired,
     isMobile: PropTypes.bool,
+    mobileColumns: PropTypes.array,
 };
 
 export default TableContent;

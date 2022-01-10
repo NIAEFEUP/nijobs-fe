@@ -201,6 +201,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                     isSelectableTable={true}
                     isLoading={isLoading}
                     error={error}
+                    mobileColumns={["name", "state"]}
                 />
             </UndoableActionsHandlerProvider>
         </>
