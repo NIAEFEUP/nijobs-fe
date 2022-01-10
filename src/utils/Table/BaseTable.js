@@ -6,6 +6,7 @@ import TableContent from "./TableContent";
 import TableHeader from "./TableHeader";
 import TableToolbar from "./TableToolbar";
 import { ColumnPropTypes, RowPropTypes } from "./PropTypes";
+import { useMobile } from "../media-queries";
 
 const BaseTable = ({
     title,
@@ -43,6 +44,7 @@ const BaseTable = ({
     error,
     hasMaxHeight = true,
 }) => {
+    const isMobile = useMobile();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(initialRowsPerPage);
 
@@ -94,6 +96,7 @@ const BaseTable = ({
                         orderBy={orderBy}
                         handleOrderBy={handleOrderBy}
                         isSelectableTable={isSelectableTable}
+                        isMobile={isMobile}
                     />
                     <TableContent
                         numColumns={Object.keys(columns).length}
@@ -113,6 +116,7 @@ const BaseTable = ({
                         isLoading={isLoading}
                         error={error}
                         rowsPerPage={rowsPerPage}
+                        isMobile={isMobile}
                     />
                 </Table>
             </TableContainer>
