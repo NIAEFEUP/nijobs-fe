@@ -70,7 +70,7 @@ const AdminMenuOptions = ({ isMobile }) => {
                     Admin
                 </Typography>
             </li>
-            <MenuItem 
+            <MenuItem
                 button
                 disableTouchRipple
                 component={Link}
