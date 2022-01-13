@@ -74,6 +74,14 @@ const AdminMenuOptions = ({ isMobile }) => {
                 button
                 disableTouchRipple
                 component={Link}
+                to="/offers/new"
+            >
+                Create Offer
+            </MenuItem>
+            <MenuItem
+                button
+                disableTouchRipple
+                component={Link}
                 to="/review/applications"
             >
                 Company Applications
@@ -94,7 +102,10 @@ const CompanyMenuOptions = ({ isMobile, sessionData }) => {
         <>
             {
             sessionData?.company?.hasFinishedRegistration ?
-                <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                <>
+                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                    <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
+                </>
                 :
                 <MenuItem
                     button
