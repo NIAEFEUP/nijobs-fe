@@ -1,7 +1,7 @@
 import React from "react";
 import { createTheme } from "@material-ui/core/styles";
 import useComponentController from "../../../hooks/useComponentController";
-import { CreateOfferController, CreateOfferControllerContext, PAID_OPTIONS } from "./CreateOfferForm";
+import { CreateOfferController, CreateOfferControllerContext } from "./CreateOfferForm";
 import { BrowserRouter } from "react-router-dom";
 import { screen, fireEvent, renderWithStoreAndTheme } from "../../../test-utils";
 import useSession from "../../../hooks/useSession";
@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
+import { PAID_OPTIONS } from "./form-components/OfferForm";
 
 jest.mock("../../../hooks/useSession");
 jest.mock("../../../services/locationSearchService");

@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { BrowserRouter, Switch } from "react-router-dom";
+import { BrowserRouter, Switch  } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage, {
     CompanyApplicationPageController,
@@ -24,6 +24,8 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import CreateOfferPage from "./pages/CreateOfferPage";
 import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
 import { CookieConsent } from "./cookieConsent";
+import { EditOfferController, EditOfferControllerContext } from "./components/Offers/EditOfferForm";
+import EditOfferPage from "./pages/EditOfferPage";
 
 /**
  *
@@ -136,6 +138,22 @@ const AppRouter = () => (
                     <CompanyOffersManagementPage />
                 </PageLayout>
             </ProtectedRoute>
+            <Route
+                exact
+                path="/offer/:id/edit"
+                key="/offer/:id/edit"
+                context={EditOfferControllerContext}
+                controller={EditOfferController}
+            >
+                <PageLayout
+                    key="/offer/:id/edit"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Edit Offer"
+                    context={EditOfferControllerContext}
+                >
+                    <EditOfferPage />
+                </PageLayout>
+            </Route>
             <Route
                 path="/offer/:id"
                 key="/offer/:id"
