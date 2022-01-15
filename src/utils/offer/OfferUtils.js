@@ -7,6 +7,8 @@ const HumanReadableErrors = Object.freeze({
     "must-be-admin": "Only admin users can do this action.",
     "login-required": "You must be logged in to do this action.",
     "must-be-company": "You must be a company to do this action.",
+    "max-concurrent-offers-reached:5": "You cannot have more than 5 concurrent visible offers."
 });
 
 export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";
+ 
