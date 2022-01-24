@@ -9,7 +9,7 @@ import { INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
 import useSession from "./useSession";
 
 export default (defaultValues) => {
-    const { handleSubmit, formState: { errors }, control, setValue, getValues, clearErrors } = useForm({
+    const { handleSubmit, formState, control, setValue, getValues, clearErrors, reset } = useForm({
         mode: "all",
         resolver: yupResolver(CreateOfferSchema),
         reValidateMode: "onChange",
@@ -84,11 +84,13 @@ export default (defaultValues) => {
         requestErrors,
         setRequestErrors,
         submit: handleSubmit,
+        reset,
         control,
         contacts,
         requirements,
         fields,
-        errors,
+        formState,
+        errors: formState.errors,
         appendContact: handleAppendContact,
         removeContact,
         appendRequirement: handleAppendRequirement,

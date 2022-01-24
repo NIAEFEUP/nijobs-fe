@@ -145,6 +145,11 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 
     useEffect(() => {
         if (!editor) return;
+        editor.commands.setContent(content);
+    }, [content, editor]);
+
+    useEffect(() => {
+        if (!editor) return;
         const updateFn = ({ editor }) => {
             onChangeDescription(editor.getHTML());
             onChangeDescriptionText(editor.view.state.doc.textContent);

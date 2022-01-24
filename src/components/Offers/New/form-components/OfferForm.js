@@ -41,7 +41,7 @@ export const PAID_OPTIONS = [
     { value: false, label: "Unpaid" },
 ];
 
-const OfferForm = (Context) => {
+const OfferForm = ({ context  }) => {
     const {
         submit,
         errors,
@@ -65,11 +65,11 @@ const OfferForm = (Context) => {
         companyUnfinishedRegistration,
         showCompanyField,
         showHiddenField,
-    } = useContext(Context);
+    } = useContext(context);
 
     const isMobile = useMobile();
 
-    const disabled = !isLoggedIn || companyUnfinishedRegistration;
+    const formDisabled = !isLoggedIn || companyUnfinishedRegistration;
 
     const [isAdvancedOpen, setAdvancedOpen] = useState(false);
 
@@ -113,25 +113,25 @@ const OfferForm = (Context) => {
                                 <Grid container spacing={4}>
                                     <Grid item xs={12} lg={isAdmin ? 6 : 12}>
                                         <TitleComponent
-                                            disabled={disabled}
+                                            disabled={formDisabled}
                                             errors={errors}
                                             requestErrors={requestErrors}
                                             control={control}
                                         />
                                     </Grid>
-                                    {isAdmin && showOwnerComponent &&
-                                        <Grid item xs={12} lg={6}>
-                                            <OwnerComponent
-                                                disabled={disabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                            />
-                                        </Grid>}
+                                    {showOwnerComponent &&
+                                    <Grid item xs={12} lg={6}>
+                                        <OwnerComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                        />
+                                    </Grid>}
                                     <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth margin="dense">
                                             <LocationComponent
-                                                disabled={disabled}
+                                                disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
@@ -141,7 +141,7 @@ const OfferForm = (Context) => {
                                     <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
                                         <FormControl fullWidth margin="dense">
                                             <JobTypeComponent
-                                                disabled={disabled}
+                                                disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
@@ -161,7 +161,7 @@ const OfferForm = (Context) => {
                                                     name={name}
                                                     onBlur={onBlur}
                                                     error={errors.fields || requestErrors.fields}
-                                                    disabled={disabled}
+                                                    disabled={formDisabled}
                                                     chipWrapperProps={{
                                                         className: classes.autocompleteChipWrapper,
                                                     }}
@@ -186,7 +186,7 @@ const OfferForm = (Context) => {
                                                     name={name}
                                                     onBlur={onBlur}
                                                     error={errors.technologies || requestErrors.technologies}
-                                                    disabled={disabled}
+                                                    disabled={formDisabled}
                                                     chipWrapperProps={{
                                                         className: classes.autocompleteChipWrapper,
                                                     }}
@@ -203,7 +203,7 @@ const OfferForm = (Context) => {
                                     <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth>
                                             <JobStartDateComponent
-                                                disabled={disabled}
+                                                disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
@@ -212,7 +212,7 @@ const OfferForm = (Context) => {
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
                                         <JobDurationComponent
-                                            disabled={disabled}
+                                            disabled={formDisabled}
                                             errors={errors}
                                             requestErrors={requestErrors}
                                             control={control}
@@ -221,7 +221,7 @@ const OfferForm = (Context) => {
                                     <Grid item xs={12} lg={6} className={classes.vacanciesGrid}>
                                         <FormControl fullWidth>
                                             <VacanciesComponent
-                                                disabled={disabled}
+                                                disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
@@ -230,7 +230,7 @@ const OfferForm = (Context) => {
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
                                         <IsPaidComponent
-                                            disabled={disabled}
+                                            disabled={formDisabled}
                                             errors={errors}
                                             requestErrors={requestErrors}
                                             control={control}
@@ -257,7 +257,7 @@ const OfferForm = (Context) => {
                                             <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <PublicationDateComponent
-                                                        disabled={disabled}
+                                                        disabled={formDisabled}
                                                         errors={errors}
                                                         requestErrors={requestErrors}
                                                         control={control}
@@ -269,7 +269,7 @@ const OfferForm = (Context) => {
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <PublicationEndDateComponent
                                                         fields={fields}
-                                                        disabled={disabled}
+                                                        disabled={formDisabled}
                                                         errors={errors}
                                                         requestErrors={requestErrors}
                                                         control={control}
@@ -282,7 +282,7 @@ const OfferForm = (Context) => {
                                                     showHiddenField &&
                                                     <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                         <IsHiddenComponent
-                                                            disabled={disabled}
+                                                            disabled={formDisabled}
                                                             errors={errors}
                                                             requestErrors={requestErrors}
                                                             control={control}
@@ -303,7 +303,7 @@ const OfferForm = (Context) => {
                                             getValues={getValues}
                                             control={control}
                                             errors={errors.contacts || requestErrors.contacts}
-                                            disabled={disabled}
+                                            disabled={formDisabled}
                                             addEntryBtnTestId="contacts-selector"
                                         />
                                     </Grid>
@@ -318,7 +318,7 @@ const OfferForm = (Context) => {
                                             getValues={getValues}
                                             control={control}
                                             errors={errors.requirements || requestErrors.requirements}
-                                            disabled={disabled}
+                                            disabled={formDisabled}
                                             textFieldProps={{ multiline: true }}
                                             addEntryBtnTestId="requirements-selector"
                                         />
@@ -326,7 +326,7 @@ const OfferForm = (Context) => {
                                 </Grid>
                                 <TextEditorComponent
                                     fields={fields}
-                                    disabled={disabled}
+                                    disabled={formDisabled}
                                     errors={errors}
                                     requestErrors={requestErrors}
                                     control={control}
@@ -343,7 +343,7 @@ const OfferForm = (Context) => {
                                     </FormHelperText>
                                 }
                                 <Button
-                                    disabled={loading || disabled}
+                                    disabled={loading || formDisabled}
                                     variant="contained"
                                     color="primary"
                                     onClick={submit}
