@@ -138,10 +138,13 @@ const AppRouter = () => (
                     <CompanyOffersManagementPage />
                 </PageLayout>
             </ProtectedRoute>
-            <Route
+            <ProtectedRoute
                 exact
                 path="/offer/:id/edit"
                 key="/offer/:id/edit"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to edit offers"
+                authorize={(user) => !!(user?.company || user?.isAdmin)}
                 context={EditOfferControllerContext}
                 controller={EditOfferController}
             >
@@ -153,7 +156,7 @@ const AppRouter = () => (
                 >
                     <EditOfferPage />
                 </PageLayout>
-            </Route>
+            </ProtectedRoute>
             <Route
                 path="/offer/:id"
                 key="/offer/:id"

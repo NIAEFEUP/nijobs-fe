@@ -52,6 +52,6 @@ export const CreateOfferController = () => {
     };
 };
 
-const CreateOfferForm = () => <OfferForm context={CreateOfferControllerContext} />;
+const CreateOfferForm = () => <OfferForm title={"Create Form"} context={CreateOfferControllerContext} />;
 
 export default CreateOfferForm;

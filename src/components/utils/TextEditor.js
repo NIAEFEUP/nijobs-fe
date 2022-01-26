@@ -145,8 +145,9 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 
     useEffect(() => {
         if (!editor) return;
+        if (content === editor.getHTML()) return;
         editor.commands.setContent(content);
-    }, [content, editor]);
+    }, [content, editor, onChangeDescriptionText]);
 
     useEffect(() => {
         if (!editor) return;

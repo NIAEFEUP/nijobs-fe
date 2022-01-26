@@ -1,5 +1,5 @@
 import React from "react";
-import EditOfferForm from "../components/Offers/EditOfferForm";
+import EditOfferForm from "../components/Offers/Edit/EditOfferForm";
 
 const EditOfferPage = () => (
     <>

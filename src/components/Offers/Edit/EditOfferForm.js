@@ -1,13 +1,20 @@
 import React, { useCallback, useContext, useEffect } from "react";
-import { parseRequestErrors } from "./New/CreateOfferUtils";
-import OfferForm from "./New/form-components/OfferForm";
-import { editOffer } from "../../services/offerService";
+import { parseRequestErrors } from "../New/CreateOfferUtils";
+import OfferForm from "../New/form-components/OfferForm";
+import { editOffer } from "../../../services/offerService";
 import { Redirect, useParams } from "react-router-dom";
-import useOffer from "../../hooks/useOffer";
-import useOfferForm from "../../hooks/useOfferForm";
-import { INITIAL_JOB_DURATION } from "../../reducers/searchOffersReducer";
+import useOffer from "../../../hooks/useOffer";
+import useOfferForm from "../../../hooks/useOfferForm";
+import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
+import useSession from "../../../hooks/useSession";
 
 export const EditOfferControllerContext = React.createContext();
+
+function parseDescription(description) {
+    const temp = document.createElement("span");
+    temp.innerHTML = description;
+    return temp.textContent || temp.innerText;
+}
 
 const parseOfferForm = ({
     jobMinDuration,
@@ -17,6 +24,7 @@ const parseOfferForm = ({
     jobStartDate,
     isPaid,
     vacancies,
+    description,
     ...offer }) => ({
     jobDuration: [
         jobMinDuration || INITIAL_JOB_DURATION,
@@ -27,12 +35,18 @@ const parseOfferForm = ({
     contacts: contacts.map((value) => ({ value })),
     jobStartDate: jobStartDate || null,
     vacancies: vacancies || "",
+    description,
+    descriptionText: parseDescription(description),
     ...offer,
 });
 
 export const EditOfferController = () => {
     const { id } = useParams();
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
+    const { data: user, isValidating } = useSession();
+    console.log(offer, loadingOffer, isValidating, id);
+    const canEdit = offer?.owner === user?.company?._id || user?.isAdmin;
+
     const redirectProps = { to: { pathname: "/not-found" } };
     const {
         reset,
@@ -45,10 +59,10 @@ export const EditOfferController = () => {
     } = useOfferForm();
 
     useEffect(() => {
-        if (offer) {
+        if (offer && !isValidating && canEdit) {
             reset(parseOfferForm(offer));
         }
-    }, [offer, offerFormParams.getValues, reset]);
+    }, [canEdit, isValidating, offer, reset]);
 
     const handleSubmit = useCallback(
         (data) => {
@@ -94,6 +108,9 @@ export const EditOfferController = () => {
                 errorOffer,
                 loadingOffer,
                 redirectProps,
+                user,
+                isValidating,
+                canEdit,
             },
         },
     };
@@ -104,16 +121,17 @@ const EditOfferForm = () => {
         loadingOffer,
         errorOffer,
         redirectProps,
+        isValidating,
+        canEdit,
     } = useContext(EditOfferControllerContext);
 
-
-    if (errorOffer) {
+    if (errorOffer || (!loadingOffer && !isValidating && !canEdit)) {
         return (
             <Redirect {...redirectProps} />
         );
     }
 
-    return <OfferForm disabled={loadingOffer} context={EditOfferControllerContext} />;
+    return <OfferForm title={"Edit Offer"} disabled={loadingOffer} context={EditOfferControllerContext} />;
 };
 
 export default EditOfferForm;

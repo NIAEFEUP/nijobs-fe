@@ -41,7 +41,7 @@ export const PAID_OPTIONS = [
     { value: false, label: "Unpaid" },
 ];
 
-const OfferForm = ({ context  }) => {
+const OfferForm = ({ context, title }) => {
     const {
         submit,
         errors,
@@ -98,7 +98,7 @@ const OfferForm = ({ context  }) => {
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                <CardHeader title={!isMobile && "New Offer" } />
+                <CardHeader title={!isMobile && title } />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}
