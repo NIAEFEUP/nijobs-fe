@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect } from "react";
 import { parseRequestErrors } from "../Form/OfferUtils";
 import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
-import { Redirect, useParams } from "react-router-dom";
+import { Redirect, useLocation, useParams } from "react-router-dom";
 import useOffer from "../../../hooks/useOffer";
 import useOfferForm from "../../../hooks/useOfferForm";
 import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
@@ -47,7 +47,18 @@ export const EditOfferController = () => {
 
     const canEdit = offer?.owner === user?.company?._id || user?.isAdmin;
 
-    const redirectProps = { to: { pathname: "/not-found" } };
+    const location = useLocation();
+
+    const redirectProps = {
+        to: {
+            pathname: "/",
+            state: {
+                from: location,
+                message: "You are not authorized to edit this offer",
+            },
+        },
+    };
+
     const {
         reset,
         submit,
