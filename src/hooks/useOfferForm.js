@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect } from "react";
 import { useFieldArray, useWatch, useForm } from "react-hook-form";
 import CreateOfferSchema from "../components/Offers/New/CreateOfferSchema";
-import { defaultDates } from "../components/Offers/New/CreateOfferUtils";
+import { defaultDates } from "../components/Offers/Form/OfferUtils";
 import useFieldSelector from "../components/utils/offers/useFieldSelector";
 import useTechSelector from "../components/utils/offers/useTechSelector";
 import { INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";

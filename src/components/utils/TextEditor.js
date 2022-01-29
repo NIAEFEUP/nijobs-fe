@@ -7,7 +7,7 @@ import Heading from "@tiptap/extension-heading";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, {  useEffect } from "react";
-import { CreateOfferConstants } from "../Offers/New/CreateOfferUtils";
+import { CreateOfferConstants } from "../Offers/Form/OfferUtils";
 import { PropTypes } from "prop-types";
 
 const useStyles = makeStyles((theme) => ({

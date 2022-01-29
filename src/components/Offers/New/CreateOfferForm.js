@@ -1,9 +1,9 @@
 
 import React, { useCallback } from "react";
-import { parseRequestErrors } from "./CreateOfferUtils";
+import { parseRequestErrors } from "../Form/OfferUtils";
 import { newOffer } from "../../../services/offerService";
 import useOfferForm from "../../../hooks/useOfferForm";
-import OfferForm from "./form-components/OfferForm";
+import OfferForm from "../Form/form-components/OfferForm";
 
 export const CreateOfferControllerContext = React.createContext();
 

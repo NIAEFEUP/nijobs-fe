@@ -2,7 +2,7 @@
 import { format } from "date-fns";
 import * as yup from "yup";
 import { HumanValidationReasons } from "../../../utils";
-import { generateValidationRule, isValidPublishEndDate } from "../New/CreateOfferUtils";
+import { generateValidationRule, isValidPublishEndDate } from "../Form/OfferUtils";
 
 export default yup.object().shape({
     title: yup.string()

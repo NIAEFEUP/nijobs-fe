@@ -280,7 +280,6 @@ export const editOffer = async ({
     };
 
     try {
-        console.log("offerId", offerId);
         const res = await fetch(`${API_HOSTNAME}/offers/edit/${offerId}`, {
             method: "POST",
             headers: {

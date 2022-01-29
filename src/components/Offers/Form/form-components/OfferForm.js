@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import React, { useState, useCallback, useContext } from "react";
 import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
 import MultiOptionAutocomplete from "../../../utils/form/MultiOptionAutocomplete";
 import ConnectedLoginAlert from "../../../utils/LoginAlert";
@@ -75,10 +76,17 @@ const OfferForm = ({ context, title }) => {
 
     const isAdvancedOpenOrErrors = useCallback(() => (
         isAdvancedOpen ||
-        !!errors.publishDate ||
-        !!errors.publishEndDate ||
+        !!errors.publishDate || !!requestErrors.publishDate ||
+        !!errors.publishEndDate || !!requestErrors.publishEndDate ||
         !!errors.isHidden
-    ), [errors.isHidden, errors.publishDate, errors.publishEndDate, isAdvancedOpen]);
+    ), [
+        errors.isHidden,
+        errors.publishDate,
+        errors.publishEndDate,
+        isAdvancedOpen,
+        requestErrors.publishDate,
+        requestErrors.publishEndDate,
+    ]);
 
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
@@ -360,6 +368,11 @@ const OfferForm = ({ context, title }) => {
                 </Content>
             </div>
     );
+};
+
+OfferForm.propTypes = {
+    context: PropTypes.object,
+    title: PropTypes.string,
 };
 
 export default OfferForm;

@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect } from "react";
-import { parseRequestErrors } from "../New/CreateOfferUtils";
-import OfferForm from "../New/form-components/OfferForm";
+import { parseRequestErrors } from "../Form/OfferUtils";
+import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
 import { Redirect, useParams } from "react-router-dom";
 import useOffer from "../../../hooks/useOffer";
@@ -44,7 +44,7 @@ export const EditOfferController = () => {
     const { id } = useParams();
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
     const { data: user, isValidating } = useSession();
-    console.log(offer, loadingOffer, isValidating, id);
+
     const canEdit = offer?.owner === user?.company?._id || user?.isAdmin;
 
     const redirectProps = { to: { pathname: "/not-found" } };

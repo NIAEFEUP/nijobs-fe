@@ -46,8 +46,6 @@ const OfferVisibilityOptions = ({
             });
         }
     };
-    console.log(offer);
-    console.log(`offer/${offer?.id}/edit`);
 
     if (!loading && (sessionData?.isAdmin || sessionData?.company?._id === offer.owner))
         return (
