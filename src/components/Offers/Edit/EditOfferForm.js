@@ -79,11 +79,12 @@ export const EditOfferController = () => {
         (data) => {
             setLoading(true);
             const [jobMinDuration, jobMaxDuration] = data.jobDuration;
-
+            const publishDateChanged = data.publishDate.getTime() !== new Date(offer?.publishDate).getTime();
             editOffer({
                 offerId: id,
                 ...data,
                 vacancies: data.vacancies || undefined,
+                publishDate: publishDateChanged ? data.publishDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
                 requirements: data.requirements.map((val) => (val, val.value)),
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
@@ -103,7 +104,7 @@ export const EditOfferController = () => {
                     setLoading(false);
                 });
         },
-        [id, setLoading, setOfferId, setRequestErrors, setSuccess],
+        [id, offer, setLoading, setOfferId, setRequestErrors, setSuccess],
     );
 
     return {
