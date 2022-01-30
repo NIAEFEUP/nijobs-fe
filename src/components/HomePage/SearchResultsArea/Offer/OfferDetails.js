@@ -17,6 +17,7 @@ import OfferContentListItem from "./OfferContentListItem";
 import JOB_OPTIONS from "../../../utils/offers/JobOptions";
 import useSession from "../../../../hooks/useSession";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
+import { RouterLink } from "../../../../utils";
 
 const defaultLogo = require("./default_icon.svg");
 
@@ -71,7 +72,7 @@ const OfferDetails = ({
                                 isPage ?
                                     offer.title
                                     :
-                                    <Link href={`/offer/${offer._id}`} className={classes.offerTitleLink}>
+                                    <Link to={`/offer/${offer._id}`} component={RouterLink} className={classes.offerTitleLink}>
                                         {offer.title}
                                     </Link>
                         }

@@ -10,6 +10,7 @@ import {
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
 } from "../../../../services/offerService";
+import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../../../../services/offerService");
 jest.mock("../../../../hooks/useSession");
@@ -41,7 +42,9 @@ describe("OfferWidget", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
             renderWithStoreAndTheme(
-                <OfferWidget offer={null} />,
+                <BrowserRouter>
+                    <OfferWidget offer={null} />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -53,7 +56,9 @@ describe("OfferWidget", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
             renderWithStoreAndTheme(
-                <OfferWidget loading />,
+                <BrowserRouter>
+                    <OfferWidget loading />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -68,7 +73,9 @@ describe("OfferWidget", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -89,7 +96,9 @@ describe("OfferWidget", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: false }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -103,7 +112,9 @@ describe("OfferWidget", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -118,7 +129,9 @@ describe("OfferWidget", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -156,7 +169,9 @@ describe("OfferWidget", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -174,7 +189,9 @@ describe("OfferWidget", () => {
                 }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -186,7 +203,9 @@ describe("OfferWidget", () => {
                 useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
                 renderWithStoreAndTheme(
-                    <OfferWidget offer={offer} />,
+                    <BrowserRouter>
+                        <OfferWidget offer={offer} />
+                    </BrowserRouter>,
                     { theme }
                 );
 
@@ -238,13 +257,15 @@ describe("OfferWidget", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -289,13 +310,15 @@ describe("OfferWidget", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -342,13 +365,15 @@ describe("OfferWidget", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -397,13 +422,15 @@ describe("OfferWidget", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -439,13 +466,15 @@ describe("OfferWidget", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -491,13 +520,15 @@ describe("OfferWidget", () => {
             }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
@@ -547,13 +578,15 @@ describe("OfferWidget", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
-                <OfferWidget
-                    offer={anotherOffer}
-                    handleHideOffer={handleHideOffer}
-                    handleDisableOffer={handleDisableOffer}
-                    handleCompanyEnableOffer={handleCompanyEnableOffer}
-                    handleAdminEnableOffer={handleAdminEnableOffer}
-                />,
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={anotherOffer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
                 { theme }
             );
 
