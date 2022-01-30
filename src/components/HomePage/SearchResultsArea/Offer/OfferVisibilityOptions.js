@@ -61,14 +61,15 @@ const OfferVisibilityOptions = ({
                     {
                         (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&
                         <Tooltip title={"Edit Offer"}>
-                            <Link to={`/offer/${offer._id}/edit`}>
-                                <Button
-                                    className={classes.visibilityButton}
-                                    startIcon={(<Edit />)}
-                                >
-                                    { "Edit Offer" }
-                                </Button>
-                            </Link>
+                            <Button
+                                disabled={visibilityState.isDisabled}
+                                className={classes.visibilityButton}
+                                component={Link}
+                                to={`/offer/${offer._id}/edit`}
+                                startIcon={(<Edit />)}
+                            >
+                                Edit Offer
+                            </Button>
                         </Tooltip>
                     }
                     {

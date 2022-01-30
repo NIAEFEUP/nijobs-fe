@@ -45,7 +45,11 @@ export const EditOfferController = () => {
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
     const { data: user, isValidating } = useSession();
 
-    const canEdit = offer?.owner === user?.company?._id || user?.isAdmin;
+    const canEdit = useCallback(() => {
+        const blocked = offer.isHidden && offer.hiddenReason !== "COMPANY_REQUEST";
+        return !blocked && (
+            (offer?.owner === user?.company?._id) || user?.isAdmin);
+    }, [offer, user]);
 
     const location = useLocation();
 
@@ -80,11 +84,13 @@ export const EditOfferController = () => {
             setLoading(true);
             const [jobMinDuration, jobMaxDuration] = data.jobDuration;
             const publishDateChanged = data.publishDate.getTime() !== new Date(offer?.publishDate).getTime();
+            const publishEndDateChanged = data.publishEndDate.getTime() !== new Date(offer?.publishEndDate).getTime();
             editOffer({
                 offerId: id,
                 ...data,
                 vacancies: data.vacancies || undefined,
                 publishDate: publishDateChanged ? data.publishDate : undefined,
+                publishEndDate: publishEndDateChanged ? data.publishEndDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
                 requirements: data.requirements.map((val) => (val, val.value)),
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
@@ -137,7 +143,7 @@ const EditOfferForm = () => {
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (errorOffer || (!loadingOffer && !isValidating && !canEdit)) {
+    if (errorOffer || (!loadingOffer && !isValidating && !canEdit())) {
         return (
             <Redirect {...redirectProps} />
         );
