@@ -7,6 +7,7 @@ import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
+import { BrowserRouter } from "react-router-dom";
 
 describe("SearchResultsMobile", () => {
 
@@ -91,9 +92,11 @@ describe("SearchResultsMobile", () => {
             };
 
             renderWithStoreAndTheme(
-                <SearchResultsControllerContext.Provider value={context}>
-                    <SearchResultsMobile />
-                </SearchResultsControllerContext.Provider>,
+                <BrowserRouter>
+                    <SearchResultsControllerContext.Provider value={context}>
+                        <SearchResultsMobile />
+                    </SearchResultsControllerContext.Provider>
+                </BrowserRouter>,
                 { theme }
             );
 
