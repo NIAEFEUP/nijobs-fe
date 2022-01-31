@@ -1,7 +1,7 @@
 #Based on the template from niployments (https://github.com/NIAEFEUP/niployments) for react applications
 
 # First, building the static files
-FROM node:10.17.0-alpine as build
+FROM 14.18.3-alpine as build
 
 WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
