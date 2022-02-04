@@ -61,6 +61,20 @@ export const createEvent = (event = EVENT_TYPES.OTHER) => {
  * @param {*} queryUrl URL to be used for the pageview
  */
 export const sendSearchReport = (filters, queryUrl) => {
+    const searchDimensions = parseFiltersToDimensions(filters);
+    const parsedUrl = parseSearchUrl(queryUrl);
+
+    ReactGa.set(searchDimensions);
+    ReactGa.pageview(parsedUrl);
+};
+
+/**
+ * Parses search filters to GA dimensions. Joins arrays by commas
+ *
+ * @param {*} filters Original search filters
+ * @returns Parsed search filters
+ */
+export const parseFiltersToDimensions = (filters) => {
     const searchDimensions = {};
 
     Object.keys(filters)
@@ -73,15 +87,24 @@ export const sendSearchReport = (filters, queryUrl) => {
                 filters[key];
         });
 
-    // Needed to register searches without value
+    return searchDimensions;
+};
+
+/**
+ * Parses search URL to register searches without value
+ */
+export const parseSearchUrl = (queryUrl) => {
+    if (queryUrl.includes(QUERY_VALUE_PARAMETER)) return queryUrl;
+
     let parsedUrl = queryUrl;
-    if (!parsedUrl.includes(QUERY_VALUE_PARAMETER)) {
-        if (parsedUrl.slice(-1) !== "?") parsedUrl += "&";
-        parsedUrl += `${QUERY_VALUE_PARAMETER}[EMPTY]`;
+    if (queryUrl.includes("?")) {
+        if (queryUrl.slice(-1) !== "?") parsedUrl += "&";
+    } else {
+        parsedUrl += "?";
     }
 
-    ReactGa.set(searchDimensions);
-    ReactGa.pageview(parsedUrl);
+    parsedUrl += `${QUERY_VALUE_PARAMETER}[EMPTY]`;
+    return parsedUrl;
 };
 
 export const EVENT_TYPES = Object.freeze({
@@ -160,7 +183,7 @@ export const TIMED_ACTIONS = Object.freeze({
 /**
  * Object mapping search filters to GA dimensions' indexes
  */
-const DIMENSION_IDS = Object.freeze({
+export const DIMENSION_IDS = Object.freeze({
     jobType: "dimension1",
     jobMinDuration: "dimension2",
     jobMaxDuration: "dimension3",
