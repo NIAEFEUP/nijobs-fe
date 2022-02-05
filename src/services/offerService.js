@@ -2,7 +2,7 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/analytics";
+import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime, sendSearchReport } from "../utils/analytics";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -42,6 +42,7 @@ export const searchOffers = (filters) => buildCancelableRequest(
             dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
             dispatch(setLoadingOffers(false));
 
+            sendSearchReport(filters, `/offers?${query}`);
             createEvent(EVENT_TYPES.SUCCESS(OFFER_SEARCH_METRIC_ID, query));
 
         } catch (error) {

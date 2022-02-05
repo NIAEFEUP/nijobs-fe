@@ -1,4 +1,5 @@
 import ReactGa from "react-ga";
+const QUERY_VALUE_PARAMETER = "value=";
 
 /**
  * Initializes Google Analytics.
@@ -50,6 +51,60 @@ export const recordTime = (action = TIMED_ACTIONS.UNKNOWN, t0, t1, label) => {
  */
 export const createEvent = (event = EVENT_TYPES.OTHER) => {
     ReactGa.event(event);
+};
+
+/**
+ * Sends a search report to Google Analytics.
+ * Filters are recorded using custom dimensions, except for value which is the main parameter.
+ *
+ * @param {*} filters Object with the search filters
+ * @param {*} queryUrl URL to be used for the pageview
+ */
+export const sendSearchReport = (filters, queryUrl) => {
+    const searchDimensions = parseFiltersToDimensions(filters);
+    const parsedUrl = parseSearchUrl(queryUrl);
+
+    ReactGa.set(searchDimensions);
+    ReactGa.pageview(parsedUrl);
+};
+
+/**
+ * Parses search filters to GA dimensions. Joins arrays by commas
+ *
+ * @param {*} filters Original search filters
+ * @returns Parsed search filters
+ */
+export const parseFiltersToDimensions = (filters) => {
+    const searchDimensions = {};
+
+    Object.keys(filters)
+        .filter((key) => Array.isArray(filters[key]) ? filters[key].length : !!filters[key] // Remove falsy values
+            && DIMENSION_IDS[key]) // Check if filter should be recorded
+        .forEach((key) => {
+            searchDimensions[DIMENSION_IDS[key]] = Array.isArray(filters[key]) ?
+                filters[key].join()
+                :
+                filters[key];
+        });
+
+    return searchDimensions;
+};
+
+/**
+ * Parses search URL to register searches without value
+ */
+export const parseSearchUrl = (queryUrl) => {
+    if (queryUrl.includes(QUERY_VALUE_PARAMETER)) return queryUrl;
+
+    let parsedUrl = queryUrl;
+    if (queryUrl.includes("?")) {
+        if (queryUrl.slice(-1) !== "?") parsedUrl += "&";
+    } else {
+        parsedUrl += "?";
+    }
+
+    parsedUrl += `${QUERY_VALUE_PARAMETER}[EMPTY]`;
+    return parsedUrl;
 };
 
 export const EVENT_TYPES = Object.freeze({
@@ -123,4 +178,15 @@ export const TIMED_ACTIONS = Object.freeze({
         category: "unknown",
         variable: "unknown",
     },
+});
+
+/**
+ * Object mapping search filters to GA dimensions' indexes
+ */
+export const DIMENSION_IDS = Object.freeze({
+    jobType: "dimension1",
+    jobMinDuration: "dimension2",
+    jobMaxDuration: "dimension3",
+    fields: "dimension4",
+    technologies: "dimension5",
 });
