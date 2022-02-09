@@ -5,17 +5,18 @@ import { useMobile } from "../utils/media-queries";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
-        padding: isMobile ? theme.spacing(2, 4) : theme.spacing(3, 9),
+        padding: isMobile ? theme.spacing(2, 5) : theme.spacing(3, 9),
         boxSizing: "content-box",
     },
 }));
 
 const ApplicationsReviewPage = () => {
-    const classes = useStyles(useMobile())();
+    const isMobile = useMobile();
+    const classes = useStyles(isMobile)();
 
     return (
         <CardContent className={classes.content}>
-            <ApplicationsReviewWidget />
+            <ApplicationsReviewWidget isMobile={isMobile} />
         </CardContent>
     );
 };

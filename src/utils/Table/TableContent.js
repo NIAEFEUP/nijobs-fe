@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TableRow = ({
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
-    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable,
+    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable, isMobile, mobileColumns,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -125,6 +125,8 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     RowContent={RowContent}
                     RowCollapseComponent={RowCollapseComponent}
                     isSelectableTable={isSelectableTable}
+                    isMobile={isMobile}
+                    mobileColumns={mobileColumns}
                 />
             ))
         );
@@ -152,3 +154,9 @@ TableContent.propTypes = {
 };
 
 export default TableContent;
+
+/*
+TO-DO:
+- Change TableContent to display only the mobile columns when not collapsed.
+- Increase table width in mobile view
+*/

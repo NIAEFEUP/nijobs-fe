@@ -57,10 +57,11 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
     },
 });
 
-const ApplicationsReviewWidget = ({ addSnackbar }) => {
+const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
     const [rows, setRows] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const mobileCols = ["name", "state"];
 
     useEffect(() => {
         const request = searchApplications()
@@ -116,7 +117,9 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
 
         return (
             <>
-                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
                     GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
@@ -201,7 +204,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                     isSelectableTable={true}
                     isLoading={isLoading}
                     error={error}
-                    mobileColumns={["name", "state"]}
+                    mobileColumns={mobileCols}
                 />
             </UndoableActionsHandlerProvider>
         </>
