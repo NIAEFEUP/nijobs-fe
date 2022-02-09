@@ -15,6 +15,7 @@ import { approveApplication, rejectApplication } from "../../../services/applica
 import { addSnackbar } from "../../../actions/notificationActions";
 import { connect } from "react-redux";
 import ConfirmRejectDialog from "./ConfirmRejectDialog";
+import { useMobile } from "../../../utils/media-queries";
 
 const useStyles = makeStyles(() => ({
     tableRowActions: {
@@ -129,11 +130,12 @@ RowActionsContainer.propTypes = {
 const BaseRowActions = ({
     addSnackbar, row, submitUndoableAction, context = {}, isCollapseOpen, toggleCollapse,
 }) => {
-
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [rejectReason, setRejectReason] = useState("");
     const [executingAction, setExecutingAction] = useState(false);
     const { approveApplicationRow, rejectApplicationRow } = context;
+    const isMobile = useMobile();
+
 
     const handleApprove = useCallback(
         () => {
@@ -212,18 +214,30 @@ const BaseRowActions = ({
                 cancelAction={cancelAction}
             />
             <TableCell align="right">
-                <RowActionsContainer
-                    row={row}
-                    actionToConfirm={actionToConfirm}
-                    confirmAction={confirmAction}
-                    cancelAction={cancelAction}
-                    handleAction={handleAction}
-                    handleApprove={handleApprove}
-                    handleReject={handleReject}
-                    isCollapseOpen={isCollapseOpen}
-                    toggleCollapse={toggleCollapse}
-                    executingAction={executingAction}
-                />
+                { !isMobile ? (
+                    <RowActionsContainer
+                        row={row}
+                        actionToConfirm={actionToConfirm}
+                        confirmAction={confirmAction}
+                        cancelAction={cancelAction}
+                        handleAction={handleAction}
+                        handleApprove={handleApprove}
+                        handleReject={handleReject}
+                        isCollapseOpen={isCollapseOpen}
+                        toggleCollapse={toggleCollapse}
+                        executingAction={executingAction}
+                    />
+                ) : (
+                    <IconButton
+                        aria-label="More Actions"
+                        edge="end"
+                        onClick={(e) => {
+                            e.stopPropagation(); toggleCollapse();
+                        }}
+                    >
+                        {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
+                    </IconButton>
+                )}
             </TableCell>
         </>
     );

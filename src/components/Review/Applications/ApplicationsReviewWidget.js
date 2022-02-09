@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
     Divider,
+    Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core";
@@ -61,7 +62,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
     const [rows, setRows] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const mobileCols = ["name", "state"];
+    const mobileCols = ["name", "state", "actions"];
 
     useEffect(() => {
         const request = searchApplications()
@@ -133,6 +134,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
 
     const useRowCollapseStyles = makeStyles((theme) => ({
         payloadSection: {
+            overflowWrap: "break-word",
             "&:not(:first-child)": {
                 paddingTop: theme.spacing(2),
             },
@@ -145,32 +147,61 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
     const RowCollapseComponent = ({ rowKey }) => {
         const row = rows[rowKey];
         const classes = useRowCollapseStyles();
-        return (
-            <>
-                <Typography variant="subtitle2">
-                    {row.payload.email}
-                </Typography>
-                <div className={classes.payloadSection}>
-                    <Typography variant="body1">
-                            Motivation
-                    </Typography>
-                    <Typography variant="body2">
-                        {row.payload.motivation}
-                    </Typography>
-                </div>
+        const mobileKeys = ["email", "motivation"];
+        if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push(["rejectReason", "rejectedAt"]);
 
-                {row.fields.state.value === ApplicationStateLabel.REJECTED &&
-                <div className={classes.payloadSection}>
-                    <Divider />
-                    <Typography variant="body1">
-                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+        return (
+            !isMobile ? (
+                <>
+                    <Typography variant="subtitle2">
+                        {row.payload.email}
                     </Typography>
-                    <Typography variant="body2">
-                        {row.payload.rejectReason}
-                    </Typography>
-                </div>
-                }
-            </>
+                    <div className={classes.payloadSection}>
+                        <Typography variant="body1">
+                            Motivation
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.payload.motivation}
+                        </Typography>
+                    </div>
+
+                    {row.fields.state.value === ApplicationStateLabel.REJECTED &&
+                    <div className={classes.payloadSection}>
+                        <Divider />
+                        <Typography variant="body1">
+                            {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.payload.rejectReason}
+                        </Typography>
+                    </div>
+                    }
+                </>
+            ) : (
+                <>
+                    <div className={classes.payloadSection}>
+                        <Typography variant="body1">
+                        Requested At
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.fields.date.value}
+                        </Typography>
+                    </div>
+
+                    {mobileKeys.map((colKey) => (
+                        <div key={colKey} className={classes.payloadSection}>
+                            <Divider />
+                            <Typography variant="body1">
+                                {colKey}
+                            </Typography>
+                            <Typography variant="body2">
+                                {row.payload[colKey]}
+                            </Typography>
+                        </div>
+                    ))}
+                </>
+            )
+
         );
     };
 
@@ -213,6 +244,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
 
 ApplicationsReviewWidget.propTypes = {
     addSnackbar: PropTypes.func,
+    isMobile: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

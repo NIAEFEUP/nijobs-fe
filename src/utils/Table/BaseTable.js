@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
+import { makeStyles, Paper, Table, TableContainer, TablePagination } from "@material-ui/core";
 import { UndoableActions } from "../UndoableActionsHandlerProvider";
 import TableContent from "./TableContent";
 import TableHeader from "./TableHeader";
@@ -8,6 +8,14 @@ import TableToolbar from "./TableToolbar";
 import { ColumnPropTypes, RowPropTypes } from "./PropTypes";
 import { useMobile } from "../media-queries";
 import { flow } from "lodash";
+
+const useStyles = (hasMaxheight) => makeStyles(() => ({
+    tableContainer: {
+        ...(hasMaxheight ? {
+            maxHeight: "51vh",
+        } : {}),
+    },
+}));
 
 const BaseTable = ({
     title,
@@ -47,6 +55,7 @@ const BaseTable = ({
     mobileColumns,
 }) => {
     const isMobile = useMobile();
+    const classes = useStyles(hasMaxHeight)();
 
     const headerCols = isMobile ? flow([
         Object.entries,
@@ -93,7 +102,7 @@ const BaseTable = ({
                 MultiRowActions={MultiRowActions}
                 {...TableToolbarProps}
             />
-            <TableContainer component={Paper} style={hasMaxHeight ? { maxHeight: "51vh" } : {}}>
+            <TableContainer component={Paper} className={classes.tableContainer}>
                 <Table stickyHeader={stickyHeader}>
                     <TableHeader
                         columns={headerCols}

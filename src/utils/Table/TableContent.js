@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TableRow = ({
     rowKey, fields, payload, rowProps, handleSelect, isRowSelected, RowActions,
-    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable, isMobile, mobileColumns,
+    submitUndoableAction, RowActionsProps, context, RowContent, RowCollapseComponent, isSelectableTable,
 }) => {
     const [open, toggleOpen] = useToggle(false);
     const labelId = `table-checkbox-${rowKey}`;
@@ -79,7 +79,7 @@ TableRow.propTypes = {
 };
 
 const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUndoableAction,
-    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage, isMobile, mobileColumns,
+    RowActionsProps, emptyMessage, numColumns, context, RowContent, RowCollapseComponent, isSelectableTable, isLoading, error, rowsPerPage,
 }) => {
     if (isLoading) {
         const rowsMock = Array(rowsPerPage).fill(0);
@@ -125,8 +125,6 @@ const TableContent = ({ rows, handleSelect, isRowSelected, RowActions, submitUnd
                     RowContent={RowContent}
                     RowCollapseComponent={RowCollapseComponent}
                     isSelectableTable={isSelectableTable}
-                    isMobile={isMobile}
-                    mobileColumns={mobileColumns}
                 />
             ))
         );
