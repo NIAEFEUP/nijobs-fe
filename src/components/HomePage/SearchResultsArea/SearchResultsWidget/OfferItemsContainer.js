@@ -1,19 +1,14 @@
-import React from "react";
+import React, { useRef, useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import Offer from "../Offer/Offer";
 import OfferItem from "../Offer/OfferItem";
 
-import {
-    Button,
-    Divider,
-    List,
-    ListItem,
-    makeStyles,
-} from "@material-ui/core";
+import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
 
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { Tune } from "@material-ui/icons";
 import clsx from "clsx";
+import LoadingOfferIcon from "./LoadingOfferItem";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -52,27 +47,44 @@ ToggleFiltersButton.propTypes = {
     enabled: PropTypes.bool,
 };
 
-const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOfferIdx, showSearchFilters, toggleShowSearchFilters }) => {
+const OfferItemsContainer = ({
+    offers,
+    loading,
+    selectedOfferIdx,
+    setSelectedOfferIdx,
+    showSearchFilters,
+    toggleShowSearchFilters,
+}) => {
     const classes = useSearchResultsWidgetStyles();
 
-    if (loading) return (
-        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
-            <List disablePadding>
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-            </List>
-        </div>
-    );
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [infiniteScrollLoading, setInfiniteScrollLoading] = useState(false);
+    const observer = useRef();
+    const lastOfferElementRef = useCallback((node) => {
+        if (loading) return;
+        if (infiniteScrollLoading) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore) {
+                setOffset((previousOffset) => previousOffset + 5);
+                setInfiniteScrollLoading(true);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [hasMore, infiniteScrollLoading, loading]);
+
+    console.log(`Offset: ${offset}`);
+
+    if (loading)
+        return (
+            <div
+                data-testid="offer-items-container"
+                className={`${classes.fullHeight} ${classes.fullWidth}`}
+            >
+                <LoadingOfferIcon />
+            </div>
+        );
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
@@ -80,7 +92,10 @@ const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOff
     };
 
     return (
-        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
+        <div
+            data-testid="offer-items-container"
+            className={`${classes.fullHeight} ${classes.fullWidth}`}
+        >
             <List disablePadding>
                 <ToggleFiltersButton
                     key="toggle-filters-button"
@@ -88,7 +103,7 @@ const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOff
                     onClick={() => toggleShowSearchFilters()}
                 />
                 {offers.map((offer, i) => (
-                    <React.Fragment key={offer._id}>
+                    <div key={offer._id} ref={lastOfferElementRef}>
                         {i !== 0 && <Divider component="li" />}
                         <OfferItem
                             offer={offer}
@@ -97,8 +112,9 @@ const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOff
                             setSelectedOfferIdx={handleOfferSelection}
                             loading={loading}
                         />
-                    </React.Fragment>
+                    </div>
                 ))}
+                {infiniteScrollLoading && <LoadingOfferIcon dividerOnTop />}
             </List>
         </div>
     );
