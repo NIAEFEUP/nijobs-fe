@@ -11,7 +11,7 @@ import ErrorTypes from "../utils/ErrorTypes";
 
 const { API_HOSTNAME } = config;
 
-export default ({ offset }) => {
+export default ({ offset, fetchMoreOffers }) => {
 
     const dispatch = useDispatch();
     const offerSearch = useSelector(({ offerSearch }) => ({
@@ -25,7 +25,7 @@ export default ({ offset }) => {
 
     const filters = {
         offset,
-        limit: 3,
+        limit: 5,
         ...offerSearch,
     };
 
@@ -42,15 +42,11 @@ export default ({ offset }) => {
         setOffers(oldOffers);
     }
 
-    const [counter, setCounter] = useState(0);
-
     useEffect(() => {
 
         const fetchOffers = async () => {
-            // TODO: solve this
-            if (initialOffersLoading || loading || oldOffers?.length === 0 || offset === 0 || counter > 5) return;
 
-            setCounter((counter) => counter + 1);
+            if (!fetchMoreOffers || error) return;
 
             try {
                 const query = parseFiltersToURL(filters);
@@ -68,10 +64,14 @@ export default ({ offset }) => {
                     return;
                 }
                 const offersData = await res.json();
-                const newOffers = [
-                    ...oldOffers,
-                    ...offersData.map((offerData) => new Offer(offerData)),
-                ];
+
+                const oldOfferIds = [...oldOffers.map((oldOffer) => oldOffer._id)];
+                const newOffers = [...oldOffers];
+
+                offersData.forEach((offerData) => {
+                    if (!oldOfferIds.includes(offerData._id))
+                        newOffers.push(new Offer(offerData));
+                });
 
                 setHasMore(offersData.length > 0);
                 dispatch(setSearchOffers(newOffers));
@@ -95,7 +95,7 @@ export default ({ offset }) => {
             });
         });
 
-    }, [dispatch, filters, initialOffersLoading, oldOffers, offset, loading, counter, error]);
+    }, [dispatch, filters, initialOffersLoading, oldOffers, offset, loading, error, fetchMoreOffers]);
 
 
     return { offers, hasMore, loading, error };

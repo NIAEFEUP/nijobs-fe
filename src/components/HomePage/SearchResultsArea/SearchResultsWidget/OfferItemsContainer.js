@@ -61,13 +61,14 @@ const OfferItemsContainer = ({
     const classes = useSearchResultsWidgetStyles();
 
     const [offset, setOffset] = useState(0);
+    const [fetchMoreOffers, setFetchMoreOffers] = useState(false);
 
     const {
         offers,
         hasMore,
         loading: infiniteScrollLoading,
         error: infiniteScrollError,
-    } = useLoadMoreOffers({ offset });
+    } = useLoadMoreOffers({ offset, fetchMoreOffers });
 
     const observer = useRef();
     const lastOfferElementRef = useCallback((node) => {
@@ -76,14 +77,17 @@ const OfferItemsContainer = ({
         if (infiniteScrollError) {
             addSnackbar({
                 message: "An error occurred while fetching new offers",
-                key: `${Date.now()}-fetch-new-offers`,
+                key: "fetch-new-offers",
             });
         }
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasMore) {
-                setOffset((previousOffset) => previousOffset + 3);
+            if (entries[0].isIntersecting && hasMore && !loading && !infiniteScrollLoading) {
+                setOffset((previousOffset) => previousOffset + 5);
+                setFetchMoreOffers(true);
+            } else {
+                setFetchMoreOffers(false);
             }
         });
         if (node) observer.current.observe(node);
@@ -135,6 +139,7 @@ const OfferItemsContainer = ({
 
 OfferItemsContainer.propTypes = {
     // offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    addSnackbar: PropTypes.func,
     loading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
