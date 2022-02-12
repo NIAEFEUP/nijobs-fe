@@ -22,7 +22,7 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                 </div>
                 :
                 <OfferItemsContainer
-                    offers={offers}
+                    // offers={offers}
                     loading={offersLoading}
                     setSelectedOfferIdx={showOfferDetails}
                     noOffers={noOffers}

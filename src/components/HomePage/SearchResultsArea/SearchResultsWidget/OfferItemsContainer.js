@@ -1,6 +1,5 @@
 import React, { useRef, useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import Offer from "../Offer/Offer";
 import OfferItem from "../Offer/OfferItem";
 
 import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
@@ -9,6 +8,7 @@ import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { Tune } from "@material-ui/icons";
 import clsx from "clsx";
 import LoadingOfferIcon from "./LoadingOfferItem";
+import useLoadMoreOffers from "../../../../hooks/useLoadMoreOffers";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -48,7 +48,7 @@ ToggleFiltersButton.propTypes = {
 };
 
 const OfferItemsContainer = ({
-    offers,
+    // offers,
     loading,
     selectedOfferIdx,
     setSelectedOfferIdx,
@@ -58,23 +58,34 @@ const OfferItemsContainer = ({
     const classes = useSearchResultsWidgetStyles();
 
     const [offset, setOffset] = useState(0);
-    const [hasMore, setHasMore] = useState(true);
-    const [infiniteScrollLoading, setInfiniteScrollLoading] = useState(false);
+
+    const {
+        offers,
+        hasMore,
+        loading: infiniteScrollLoading,
+        error: infiniteScrollError,
+    } = useLoadMoreOffers({ offset });
+
     const observer = useRef();
     const lastOfferElementRef = useCallback((node) => {
-        if (loading) return;
-        if (infiniteScrollLoading) return;
+        if (loading || infiniteScrollLoading) return;
+
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasMore) {
-                setOffset((previousOffset) => previousOffset + 5);
-                setInfiniteScrollLoading(true);
+                setOffset((previousOffset) => previousOffset + 3);
             }
         });
         if (node) observer.current.observe(node);
     }, [hasMore, infiniteScrollLoading, loading]);
 
-    console.log(`Offset: ${offset}`);
+    const handleOfferSelection = (...args) => {
+        toggleShowSearchFilters(false);
+        setSelectedOfferIdx(...args);
+    };
+
+    // BUG: the new offers are not being added
+    console.log(`Length: ${offers?.length}`);
 
     if (loading)
         return (
@@ -85,11 +96,6 @@ const OfferItemsContainer = ({
                 <LoadingOfferIcon />
             </div>
         );
-
-    const handleOfferSelection = (...args) => {
-        toggleShowSearchFilters(false);
-        setSelectedOfferIdx(...args);
-    };
 
     return (
         <div
@@ -121,7 +127,7 @@ const OfferItemsContainer = ({
 };
 
 OfferItemsContainer.propTypes = {
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    // offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
