@@ -14,8 +14,21 @@ const { API_HOSTNAME } = config;
 export default ({ offset }) => {
 
     const dispatch = useDispatch();
-    const offerSearch = useSelector((state) => state.offerSearch);
-    const filters = { ...offerSearch, offset, limit: 3 };
+    const offerSearch = useSelector(({ offerSearch }) => ({
+        value: offerSearch.searchValue,
+        jobType: offerSearch.jobType,
+        jobMinDuration: offerSearch.jobDuration[0],
+        jobMaxDuration: offerSearch.jobDuration[1],
+        fields: offerSearch.fields,
+        technologies: offerSearch.technologies,
+    }));
+
+    const filters = {
+        offset,
+        limit: 3,
+        ...offerSearch,
+    };
+
     const oldOffers = useSelector((state) => state.offerSearch.offers);
     const initialOffersLoading = useSelector((state) => state.offerSearch.loading);
 
@@ -33,45 +46,56 @@ export default ({ offset }) => {
 
     useEffect(() => {
 
-        // TODO: solve this
-        if (initialOffersLoading || loading || oldOffers?.length === 0 || offset === 0 || counter > 5) return;
+        const fetchOffers = async () => {
+            // TODO: solve this
+            if (initialOffersLoading || loading || oldOffers?.length === 0 || offset === 0 || counter > 5) return;
 
-        setCounter((counter) => counter + 1);
+            setCounter((counter) => counter + 1);
 
-        try {
-            const query = parseFiltersToURL(filters);
-            const res = fetch(`${API_HOSTNAME}/offers?${query}`, {
-                method: "GET",
-                credentials: "include",
-            });
-            if (!res.ok) {
+            try {
+                const query = parseFiltersToURL(filters);
+                const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
+                    method: "GET",
+                    credentials: "include",
+                });
+                if (!res.ok) {
+                    setError({
+                        cause: ErrorTypes.BAD_RESPONSE,
+                        error: res.status,
+                    });
+                    setLoading(false);
+
+                    return;
+                }
+                const offersData = await res.json();
+                const newOffers = [
+                    ...oldOffers,
+                    ...offersData.map((offerData) => new Offer(offerData)),
+                ];
+
+                setHasMore(offersData.length > 0);
+                dispatch(setSearchOffers(newOffers));
+                setOffers(newOffers);
+                setLoading(false);
+                setError(null);
+
+            } catch (error) {
                 setError({
-                    cause: ErrorTypes.BAD_RESPONSE,
-                    error: res.status,
+                    cause: ErrorTypes.NETWORK_FAILURE,
+                    error,
                 });
                 setLoading(false);
-
-                return;
             }
-            const offersData = res.json();
-            const newOffers = [
-                ...oldOffers,
-                ...offersData.map((offerData) => new Offer(offerData)),
-            ];
+        };
 
-            setHasMore(offersData.length > 0);
-            dispatch(setSearchOffers(newOffers));
-            setOffers(newOffers);
-            setLoading(false);
-
-        } catch (error) {
+        fetchOffers().catch((error) => {
             setError({
-                cause: ErrorTypes.NETWORK_FAILURE,
+                cause: ErrorTypes.UNEXPECTED,
                 error,
             });
-            setLoading(false);
-        }
-    }, [dispatch, filters, initialOffersLoading, oldOffers, offset, loading, counter]);
+        });
+
+    }, [dispatch, filters, initialOffersLoading, oldOffers, offset, loading, counter, error]);
 
 
     return { offers, hasMore, loading, error };

@@ -7,8 +7,10 @@ import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { Tune } from "@material-ui/icons";
 import clsx from "clsx";
-import LoadingOfferIcon from "./LoadingOfferItem";
+import LoadingOfferItem from "./LoadingOfferItem";
 import useLoadMoreOffers from "../../../../hooks/useLoadMoreOffers";
+import { connect } from "react-redux";
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -49,6 +51,7 @@ ToggleFiltersButton.propTypes = {
 
 const OfferItemsContainer = ({
     // offers,
+    addSnackbar,
     loading,
     selectedOfferIdx,
     setSelectedOfferIdx,
@@ -70,6 +73,13 @@ const OfferItemsContainer = ({
     const lastOfferElementRef = useCallback((node) => {
         if (loading || infiniteScrollLoading) return;
 
+        if (infiniteScrollError) {
+            addSnackbar({
+                message: "An error occurred while fetching new offers",
+                key: `${Date.now()}-fetch-new-offers`,
+            });
+        }
+
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasMore) {
@@ -77,15 +87,12 @@ const OfferItemsContainer = ({
             }
         });
         if (node) observer.current.observe(node);
-    }, [hasMore, infiniteScrollLoading, loading]);
+    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, loading]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
         setSelectedOfferIdx(...args);
     };
-
-    // BUG: the new offers are not being added
-    console.log(`Length: ${offers?.length}`);
 
     if (loading)
         return (
@@ -93,7 +100,7 @@ const OfferItemsContainer = ({
                 data-testid="offer-items-container"
                 className={`${classes.fullHeight} ${classes.fullWidth}`}
             >
-                <LoadingOfferIcon />
+                <LoadingOfferItem />
             </div>
         );
 
@@ -120,7 +127,7 @@ const OfferItemsContainer = ({
                         />
                     </div>
                 ))}
-                {infiniteScrollLoading && <LoadingOfferIcon dividerOnTop />}
+                {infiniteScrollLoading && <LoadingOfferItem dividerOnTop />}
             </List>
         </div>
     );
@@ -135,4 +142,8 @@ OfferItemsContainer.propTypes = {
     toggleShowSearchFilters: PropTypes.func.isRequired,
 };
 
-export default OfferItemsContainer;
+const mapDispatchToProps = (dispatch) => ({
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+});
+
+export default connect(null, mapDispatchToProps)(OfferItemsContainer);
