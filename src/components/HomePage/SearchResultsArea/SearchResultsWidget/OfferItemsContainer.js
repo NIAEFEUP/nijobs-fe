@@ -79,7 +79,11 @@ const OfferItemsContainer = ({
                 message: "An error occurred while fetching new offers",
                 key: "fetch-new-offers",
             });
+            return;
         }
+
+        // TODO:
+        // Problem: when we change the search query, the infinite scrolling does not work sometimes
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {

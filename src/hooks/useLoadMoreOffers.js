@@ -37,10 +37,9 @@ export default ({ offset, fetchMoreOffers }) => {
     const [error, setError] = useState(null);
     const [offers, setOffers] = useState(oldOffers);
 
-    // TODO: Find why I need this
-    if (offers.length === 0 && oldOffers.length > 0) {
+    useEffect(() => {
         setOffers(oldOffers);
-    }
+    }, [offerSearch, oldOffers]);
 
     useEffect(() => {
 
