@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { initAnalytics } from "./utils/analytics";
 import PropTypes from "prop-types";
 
-const COOKIE_LIFETIME_DAYS = 15;
+export const COOKIE_LIFETIME_DAYS = 15;
 
 export const CookieConsent = () => {
     const [open, setOpen] = useState(false);
