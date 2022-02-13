@@ -5,31 +5,53 @@ import Cookies from "js-cookie";
 import { initAnalytics } from "./utils/analytics";
 import PropTypes from "prop-types";
 
-export const COOKIE_LIFETIME_DAYS = 15;
+export const COOKIE_ACCEPT_LIFETIME_DAYS = 30;
+export const COOKIE_REJECT_LIFETIME_DAYS = 5;
 
 export const CookieConsent = () => {
     const [open, setOpen] = useState(false);
 
+    const handle = (accepted) => {
+        if (accepted) {
+            initAnalytics();
+        } else {
+            Cookies.remove("_ga");
+            Cookies.remove("_gat");
+            Cookies.remove("_gid");
+        }
+    };
+
     useEffect(() => {
-        const date = localStorage.getItem("cookies-accepted");
-        if (!date) {
+        const cookies = localStorage.getItem("cookies-accepted");
+        if (!cookies) {
             setOpen(true);
             return;
         }
-        setOpen(Date.now() > date);
+
+        const expired = Date.now() > cookies.expires;
+        setOpen(expired);
+        if (!expired) {
+            handle(cookies.accepted);
+        }
     }, []);
 
     const handleAccept = () => {
-        const newDate = Date.now() + (COOKIE_LIFETIME_DAYS * DAY_IN_MS);
-        localStorage.setItem("cookies-accepted", newDate);
-        initAnalytics();
+        const expires = Date.now() + (COOKIE_ACCEPT_LIFETIME_DAYS * DAY_IN_MS);
+        localStorage.setItem("cookies-accepted", {
+            "accepted": true,
+            expires,
+        });
+        handle(true);
         setOpen(false);
     };
 
     const handleReject = () => {
-        Cookies.remove("_ga");
-        Cookies.remove("_gat");
-        Cookies.remove("_gid");
+        const expires = Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS);
+        localStorage.setItem("cookies-accepted", {
+            "accepted": false,
+            expires,
+        });
+        handle(false);
         setOpen(false);
     };
 

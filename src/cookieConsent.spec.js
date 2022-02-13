@@ -1,6 +1,6 @@
 import { act, fireEvent, render } from "@testing-library/react";
 import React from "react";
-import { CookieConsent, COOKIE_LIFETIME_DAYS } from "./cookieConsent";
+import { CookieConsent, COOKIE_ACCEPT_LIFETIME_DAYS, COOKIE_REJECT_LIFETIME_DAYS } from "./cookieConsent";
 import { initAnalytics } from "./utils/analytics";
 import { DAY_IN_MS } from "./utils/TimeUtils";
 import Cookies from "js-cookie";
@@ -41,7 +41,10 @@ describe("Cookie Consent", () => {
     });
 
     it("should open if accepted date already past", () => {
-        localStorage.getItem.mockReturnValue(Date.now() - 1000);
+        localStorage.getItem.mockReturnValue({
+            accepted: true,
+            expires: Date.now() - 1000,
+        });
         const wrapper = render(
             <CookieConsent />
         );
@@ -50,12 +53,57 @@ describe("Cookie Consent", () => {
     });
 
     it("should not open if accepted date not past", () => {
-        localStorage.getItem.mockReturnValue(Date.now() + 1000);
+        localStorage.getItem.mockReturnValue({
+            accepted: true,
+            expires: Date.now() + 1000,
+        });
         const wrapper = render(
             <CookieConsent />
         );
 
         expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
+    });
+
+    it("should not open if rejection date not past", () => {
+        localStorage.getItem.mockReturnValue({
+            accepted: false,
+            expires: Date.now() + 1000,
+        });
+        const wrapper = render(
+            <CookieConsent />
+        );
+
+        expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
+    });
+
+    it("should initialize google analytics if accepted", () => {
+        localStorage.getItem.mockReturnValue({
+            accepted: true,
+            expires: Date.now() + 1000,
+        });
+
+        render(
+            <CookieConsent />
+        );
+
+        expect(initAnalytics).toHaveBeenCalledTimes(1);
+        expect(Cookies.remove).toHaveBeenCalledTimes(0);
+    });
+
+    it("should remove cookies if already rejected", () => {
+        localStorage.getItem.mockReturnValue({
+            accepted: false,
+            expires: Date.now() + 1000,
+        });
+
+        render(
+            <CookieConsent />
+        );
+
+        expect(initAnalytics).toHaveBeenCalledTimes(0);
+        expect(Cookies.remove).toHaveBeenCalledWith("_ga");
+        expect(Cookies.remove).toHaveBeenCalledWith("_gat");
+        expect(Cookies.remove).toHaveBeenCalledWith("_gid");
     });
 
     it("should accept cookies and initialize google analytics", async () => {
@@ -71,8 +119,15 @@ describe("Cookie Consent", () => {
             await fireEvent.click(acceptButton);
         });
 
+        expect(Cookies.remove).toHaveBeenCalledTimes(0);
         expect(initAnalytics).toHaveBeenCalledTimes(1);
-        expect(localStorage.setItem).toHaveBeenCalledWith("cookies-accepted", Date.now() + (COOKIE_LIFETIME_DAYS * DAY_IN_MS));
+        expect(localStorage.setItem).toHaveBeenCalledWith(
+            "cookies-accepted",
+            {
+                accepted: true,
+                expires: Date.now() + (COOKIE_ACCEPT_LIFETIME_DAYS * DAY_IN_MS),
+            }
+        );
     });
 
     it("should remove cookies and not initialize google analytics", async () => {
@@ -89,7 +144,13 @@ describe("Cookie Consent", () => {
         });
 
         expect(initAnalytics).toHaveBeenCalledTimes(0);
-        expect(localStorage.setItem).toHaveBeenCalledTimes(0);
+        expect(localStorage.setItem).toHaveBeenCalledWith(
+            "cookies-accepted",
+            {
+                accepted: false,
+                expires: Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS),
+            }
+        );
         expect(Cookies.remove).toHaveBeenCalledWith("_ga");
         expect(Cookies.remove).toHaveBeenCalledWith("_gat");
         expect(Cookies.remove).toHaveBeenCalledWith("_gid");
