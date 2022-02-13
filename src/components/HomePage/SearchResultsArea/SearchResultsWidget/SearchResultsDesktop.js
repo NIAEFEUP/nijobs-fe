@@ -10,7 +10,7 @@ import { WorkOff } from "@material-ui/icons";
 import clsx from "clsx";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
-const OffersList = ({ noOffers, classes, offers, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
+const OffersList = ({ noOffers, classes, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
     showSearchFilters, toggleShowSearchFilters,
 }) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
@@ -23,7 +23,6 @@ const OffersList = ({ noOffers, classes, offers, selectedOfferIdx, offersLoading
                     </div>
                     :
                     <OfferItemsContainer
-                        // offers={offers}
                         selectedOfferIdx={selectedOfferIdx}
                         loading={offersLoading}
                         setSelectedOfferIdx={setSelectedOfferIdx}
@@ -51,7 +50,6 @@ OffersList.propTypes = {
         noOffersColumn: PropTypes.string.isRequired,
         errorLoadingOffersIcon: PropTypes.string.isRequired,
     }),
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
@@ -148,7 +146,6 @@ const SearchResultsDesktop = () => {
             <OffersList
                 classes={offersListClasses}
                 noOffers={noOffers}
-                offers={offers}
                 offersLoading={offersLoading}
                 selectedOfferIdx={selectedOfferIdx}
                 setSelectedOfferIdx={setSelectedOfferIdx}

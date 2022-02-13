@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
@@ -11,6 +11,7 @@ import {
     setFields,
     setShowJobDurationSlider,
     setTechs,
+    setSubmitNumber,
 } from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 
@@ -32,6 +33,7 @@ export const AdvancedSearchController = ({
     enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
     jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
+    submitNumber, setSubmitNumber,
 }) => {
 
     const advancedSearchProps = useAdvancedSearch({
@@ -52,17 +54,20 @@ export const AdvancedSearchController = ({
 
     const submitForm = useCallback((e) => {
         if (e) e.preventDefault();
-        searchOffers({
-            value: searchValue,
+        searchOffers({ value: searchValue,
             jobMinDuration: showJobDurationSlider && jobMinDuration,
             jobMaxDuration: showJobDurationSlider && jobMaxDuration,
             jobType,
             fields,
             technologies,
         });
+        setSubmitNumber(submitNumber + 1);
 
         if (onSubmit) onSubmit();
-    }, [fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue, showJobDurationSlider, technologies]);
+    }, [
+        fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue,
+        setSubmitNumber, showJobDurationSlider, submitNumber, technologies,
+    ]);
 
     return {
         ...advancedSearchProps,
@@ -79,7 +84,7 @@ export const AdvancedSearchController = ({
     };
 };
 
-export const SearchArea = ({ onSubmit, searchOffers, searchValue,
+export const SearchArea = ({ onSubmit, searchOffers, searchValue, submitNumber, setSubmitNumber,
     jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
     fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
     setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose }) => {
@@ -98,6 +103,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
             resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, searchOffers, onMobileClose,
+            submitNumber, setSubmitNumber,
         },
         AdvancedSearchControllerContext
     );
@@ -146,6 +152,7 @@ SearchArea.propTypes = {
     jobMinDuration: PropTypes.number,
     jobMaxDuration: PropTypes.number,
     jobType: PropTypes.string,
+    setSubmitNumber: PropTypes.func,
     setSearchValue: PropTypes.func.isRequired,
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
@@ -161,6 +168,7 @@ SearchArea.propTypes = {
 };
 
 export const mapStateToProps = ({ offerSearch }) => ({
+    submitNumber: offerSearch.submitNumber,
     searchValue: offerSearch.searchValue,
     jobType: offerSearch.jobType,
     jobMinDuration: offerSearch.jobDuration[0],
@@ -172,6 +180,7 @@ export const mapStateToProps = ({ offerSearch }) => ({
 
 export const mapDispatchToProps = (dispatch) => ({
     searchOffers: (filters) => dispatch(searchOffers(filters)),
+    setSubmitNumber: (submitNumber) => dispatch((setSubmitNumber(submitNumber))),
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
     setJobType: (e) => dispatch(setJobType(e.target.value)),

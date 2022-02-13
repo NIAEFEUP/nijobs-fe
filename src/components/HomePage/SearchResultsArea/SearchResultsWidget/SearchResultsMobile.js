@@ -10,7 +10,7 @@ import useToggle from "../../../../hooks/useToggle";
 import { NavigateBefore, WorkOff } from "@material-ui/icons";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
+const OffersList = ({ noOffers, classes, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
             {noOffers ?
@@ -22,7 +22,6 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                 </div>
                 :
                 <OfferItemsContainer
-                    // offers={offers}
                     loading={offersLoading}
                     setSelectedOfferIdx={showOfferDetails}
                     noOffers={noOffers}
@@ -43,7 +42,6 @@ OffersList.propTypes = {
         noOffersColumn: PropTypes.string.isRequired,
         offerItemsContainer: PropTypes.string.isRequired,
     }),
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     showOfferDetails: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool.isRequired,
@@ -141,7 +139,6 @@ const SearchResultsMobile = () => {
             <OffersList
                 classes={offerListClasses}
                 noOffers={noOffers}
-                offers={offers}
                 offersLoading={offersLoading}
                 showOfferDetails={showOfferDetails}
                 showSearchFilters={showSearchFilters}

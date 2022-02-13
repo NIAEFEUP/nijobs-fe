@@ -1,6 +1,7 @@
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION, INITIAL_ERROR } from "../reducers/searchOffersReducer";
 
 export const OfferSearchTypes = Object.freeze({
+    SET_SUBMIT_NUMBER: "SET_SUBMIT_NUMBER",
     SET_SEARCH_VALUE: "SET_SEARCH_VALUE",
     SET_JOB_DURATION: "SET_JOB_DURATION",
     SET_JOB_TYPE: "SET_JOB_TYPE",
@@ -14,6 +15,11 @@ export const OfferSearchTypes = Object.freeze({
     DISABLE_OFFER: "DISABLE_OFFER",
     COMPANY_ENABLE_OFFER: "COMPANY_ENABLE_OFFER",
     ADMIN_ENABLE_OFFER: "ADMIN_ENABLE_OFFER",
+});
+
+export const setSubmitNumber = (submitNumber) => ({
+    type: OfferSearchTypes.SET_SUBMIT_NUMBER,
+    submitNumber,
 });
 
 export const setLoadingOffers = (loading) => ({

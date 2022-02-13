@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import OfferItem from "../Offer/OfferItem";
 
@@ -50,7 +50,6 @@ ToggleFiltersButton.propTypes = {
 };
 
 const OfferItemsContainer = ({
-    // offers,
     addSnackbar,
     loading,
     selectedOfferIdx,
@@ -62,17 +61,26 @@ const OfferItemsContainer = ({
 
     const [offset, setOffset] = useState(0);
     const [fetchMoreOffers, setFetchMoreOffers] = useState(false);
+    const [lastOfferNode, setLastOfferNode] = useState(null);
 
     const {
         offers,
         hasMore,
         loading: infiniteScrollLoading,
         error: infiniteScrollError,
-    } = useLoadMoreOffers({ offset, fetchMoreOffers });
+    } = useLoadMoreOffers({ offset, setOffset, fetchMoreOffers });
 
     const observer = useRef();
     const lastOfferElementRef = useCallback((node) => {
-        if (loading || infiniteScrollLoading) return;
+        if (node) setLastOfferNode(node);
+    }, []);
+
+    useEffect(() => {
+
+        if (loading || infiniteScrollLoading) {
+            setFetchMoreOffers(false);
+            return;
+        }
 
         if (infiniteScrollError) {
             addSnackbar({
@@ -82,20 +90,17 @@ const OfferItemsContainer = ({
             return;
         }
 
-        // TODO:
-        // Problem: when we change the search query, the infinite scrolling does not work sometimes
-
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasMore && !loading && !infiniteScrollLoading) {
+            if (entries[0].isIntersecting && hasMore) {
                 setOffset((previousOffset) => previousOffset + 5);
                 setFetchMoreOffers(true);
             } else {
                 setFetchMoreOffers(false);
             }
         });
-        if (node) observer.current.observe(node);
-    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, loading]);
+        if (lastOfferNode) observer.current.observe(lastOfferNode);
+    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading, offers]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
@@ -142,7 +147,6 @@ const OfferItemsContainer = ({
 };
 
 OfferItemsContainer.propTypes = {
-    // offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     addSnackbar: PropTypes.func,
     loading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,

@@ -11,7 +11,7 @@ import ErrorTypes from "../utils/ErrorTypes";
 
 const { API_HOSTNAME } = config;
 
-export default ({ offset, fetchMoreOffers }) => {
+export default ({ offset, setOffset, fetchMoreOffers }) => {
 
     const dispatch = useDispatch();
     const offerSearch = useSelector(({ offerSearch }) => ({
@@ -31,6 +31,7 @@ export default ({ offset, fetchMoreOffers }) => {
 
     const oldOffers = useSelector((state) => state.offerSearch.offers);
     const initialOffersLoading = useSelector((state) => state.offerSearch.loading);
+    const submitNumber = useSelector((state) => state.offerSearch.submitNumber);
 
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -39,7 +40,13 @@ export default ({ offset, fetchMoreOffers }) => {
 
     useEffect(() => {
         setOffers(oldOffers);
-    }, [offerSearch, oldOffers]);
+    }, [oldOffers]);
+
+    useEffect(() => {
+        setOffset(0);
+        setError(null);
+        setLoading(false);
+    }, [setOffset, submitNumber]);
 
     useEffect(() => {
 
