@@ -134,7 +134,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
 
     const useRowCollapseStyles = makeStyles((theme) => ({
         payloadSection: {
-            overflowWrap: "break-word",
+            wordBreak: "break-all",
             "&:not(:first-child)": {
                 paddingTop: theme.spacing(2),
             },
@@ -142,13 +142,16 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
                 paddingTop: theme.spacing(2),
             },
         },
+        collapsableTitles: {
+            fontWeight: 500,
+        },
     }));
 
     const RowCollapseComponent = ({ rowKey }) => {
         const row = rows[rowKey];
         const classes = useRowCollapseStyles();
         const mobileKeys = ["email", "motivation"];
-        if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push(["rejectReason", "rejectedAt"]);
+        if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push("rejectReason", "rejectedAt");
 
         return (
             !isMobile ? (
@@ -180,7 +183,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
             ) : (
                 <>
                     <div className={classes.payloadSection}>
-                        <Typography variant="body1">
+                        <Typography className={classes.collapsableTitles} variant="body1">
                         Requested At
                         </Typography>
                         <Typography variant="body2">
@@ -191,7 +194,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
                     {mobileKeys.map((colKey) => (
                         <div key={colKey} className={classes.payloadSection}>
                             <Divider />
-                            <Typography variant="body1">
+                            <Typography className={classes.collapsableTitles} variant="body1">
                                 {colKey}
                             </Typography>
                             <Typography variant="body2">
