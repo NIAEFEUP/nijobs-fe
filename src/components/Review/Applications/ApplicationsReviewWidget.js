@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
     Divider,
-    Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core";
@@ -151,6 +150,8 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
         const row = rows[rowKey];
         const classes = useRowCollapseStyles();
         const mobileKeys = ["email", "motivation"];
+        const showActions = row.fields.state.value === ApplicationStateLabel.PENDING;
+
         if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push("rejectReason", "rejectedAt");
 
         return (
@@ -182,7 +183,18 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
                 </>
             ) : (
                 <>
+                    {showActions && (
+                        <div className={classes.payloadSection}>
+                            <Typography className={classes.collapsableTitles} variant="body1">
+                        Actions
+                            </Typography>
+                            <Typography variant="body2">
+                                {/* ADD ACTION BUTTONS */}
+                            </Typography>
+                        </div>
+                    )}
                     <div className={classes.payloadSection}>
+                        {showActions && <Divider />}
                         <Typography className={classes.collapsableTitles} variant="body1">
                         Requested At
                         </Typography>
