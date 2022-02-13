@@ -37,6 +37,7 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [offers, setOffers] = useState(oldOffers);
+    const [fetchedOffsets, setFetchedOffsets] = useState([]);
 
     useEffect(() => {
         setOffers(oldOffers);
@@ -44,17 +45,18 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
 
     useEffect(() => {
         setOffset(0);
+        setHasMore(true);
         setError(null);
         setLoading(false);
+        setFetchedOffsets([]);
     }, [setOffset, submitNumber]);
 
     useEffect(() => {
 
         const fetchOffers = async () => {
 
-            if (!fetchMoreOffers || error) return;
-
             try {
+                setFetchedOffsets((offsets) => [...offsets, filters.offset]);
                 const query = parseFiltersToURL(filters);
                 const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
                     method: "GET",
@@ -66,7 +68,6 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
                         error: res.status,
                     });
                     setLoading(false);
-
                     return;
                 }
                 const offersData = await res.json();
@@ -91,18 +92,23 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
                     error,
                 });
                 setLoading(false);
+                return;
             }
         };
 
-        fetchOffers().catch((error) => {
-            setError({
-                cause: ErrorTypes.UNEXPECTED,
-                error,
+        if (fetchMoreOffers && !fetchedOffsets.includes(filters.offset) && !initialOffersLoading && !loading) {
+            fetchOffers().catch((error) => {
+                setError({
+                    cause: ErrorTypes.UNEXPECTED,
+                    error,
+                });
             });
-        });
+        }
 
-    }, [dispatch, filters, initialOffersLoading, oldOffers, offset, loading, error, fetchMoreOffers]);
-
+    }, [
+        dispatch, fetchMoreOffers, filters, oldOffers, initialOffersLoading, offset,
+        fetchedOffsets, submitNumber, hasMore, loading, offers,
+    ]);
 
     return { offers, hasMore, loading, error };
 };

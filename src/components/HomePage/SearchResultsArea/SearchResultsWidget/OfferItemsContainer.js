@@ -76,6 +76,10 @@ const OfferItemsContainer = ({
     }, []);
 
     useEffect(() => {
+        setOffset(offers?.length);
+    }, [offers]);
+
+    useEffect(() => {
 
         if (loading || infiniteScrollLoading) {
             setFetchMoreOffers(false);
@@ -100,7 +104,7 @@ const OfferItemsContainer = ({
             }
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading, offers]);
+    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
