@@ -8,6 +8,9 @@ import {
     Twitter,
     Language,
     Email,
+    Gavel,
+    Storage,
+    ListAlt,
 } from "@material-ui/icons";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -18,6 +21,7 @@ import {
     Button,
     Typography,
 } from "@material-ui/core";
+import { RouterLink } from "../../utils";
 
 const useStyles = makeStyles((theme) => ({
     parentContainer: {
@@ -45,7 +49,7 @@ const ContactSection = () => {
     return (
         <div className={classes.parentContainer} data-testid="contactSection">
             <Grid container spacing={0}>
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={12} md={3}>
                     <List>
                         <ListItem>
                             <Typography variant="h5">Contact us</Typography>
@@ -62,7 +66,7 @@ const ContactSection = () => {
                         </ListItem>
                     </List>
                 </Grid>
-                <Grid item xs={12} sm={6} md={9}>
+                <Grid item xs={12} md={6}>
                     <Grid container spacing={0}>
                         <Grid item xs={6} md={3}>
                             <List>
@@ -139,6 +143,46 @@ const ContactSection = () => {
                             </List>
                         </Grid>
                     </Grid>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <List>
+                        <ListItem>
+                            <Typography variant="h5">Guidelines</Typography>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                to="rules"
+                                startIcon={<ListAlt htmlColor={theme.palette.tertiary.main} />}
+                                className={classes.colorText}
+                                component={RouterLink}
+                                title="rules"
+                            >
+                                <Typography variant="button">Rules</Typography>
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                to="privacy"
+                                startIcon={<Storage htmlColor={theme.palette.tertiary.main} />}
+                                className={classes.colorText}
+                                component={RouterLink}
+                                title="privacy"
+                            >
+                                <Typography variant="button">Privacy Policy</Typography>
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                to="terms"
+                                startIcon={<Gavel htmlColor={theme.palette.tertiary.main} />}
+                                className={classes.colorText}
+                                component={RouterLink}
+                                title="terms"
+                            >
+                                <Typography variant="button">Terms and Conditions</Typography>
+                            </Button>
+                        </ListItem>
+                    </List>
                 </Grid>
             </Grid>
         </div>
