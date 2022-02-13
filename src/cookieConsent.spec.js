@@ -1,18 +1,17 @@
 import { act, fireEvent, render } from "@testing-library/react";
 import React from "react";
 import { CookieConsent, COOKIE_ACCEPT_LIFETIME_DAYS, COOKIE_REJECT_LIFETIME_DAYS } from "./cookieConsent";
-import { initAnalytics } from "./utils/analytics";
+import { initAnalytics, clearAnalytics } from "./utils/analytics";
 import { DAY_IN_MS } from "./utils/TimeUtils";
-import Cookies from "js-cookie";
 
 jest.mock("./utils/analytics", () => {
-    const original = jest.requireActual("./utils/analytics"); // Step 2.
+    const original = jest.requireActual("./utils/analytics");
     return {
         ...original,
         initAnalytics: jest.fn(),
+        clearAnalytics: jest.fn(),
     };
 });
-jest.mock("js-cookie");
 
 describe("Cookie Consent", () => {
     let dateNow;
@@ -87,7 +86,7 @@ describe("Cookie Consent", () => {
         );
 
         expect(initAnalytics).toHaveBeenCalledTimes(1);
-        expect(Cookies.remove).toHaveBeenCalledTimes(0);
+        expect(clearAnalytics).toHaveBeenCalledTimes(0);
     });
 
     it("should remove cookies if already rejected", () => {
@@ -101,9 +100,7 @@ describe("Cookie Consent", () => {
         );
 
         expect(initAnalytics).toHaveBeenCalledTimes(0);
-        expect(Cookies.remove).toHaveBeenCalledWith("_ga");
-        expect(Cookies.remove).toHaveBeenCalledWith("_gat");
-        expect(Cookies.remove).toHaveBeenCalledWith("_gid");
+        expect(clearAnalytics).toHaveBeenCalledTimes(1);
     });
 
     it("should accept cookies and initialize google analytics", async () => {
@@ -119,10 +116,10 @@ describe("Cookie Consent", () => {
             await fireEvent.click(acceptButton);
         });
 
-        expect(Cookies.remove).toHaveBeenCalledTimes(0);
+        expect(clearAnalytics).toHaveBeenCalledTimes(0);
         expect(initAnalytics).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith(
-            "cookies-accepted",
+            "non-essential-cookies-enablement",
             {
                 accepted: true,
                 expires: Date.now() + (COOKIE_ACCEPT_LIFETIME_DAYS * DAY_IN_MS),
@@ -137,23 +134,21 @@ describe("Cookie Consent", () => {
             <CookieConsent />
         );
 
-        const acceptButton = wrapper.getByText("Reject");
+        const acceptButton = wrapper.getByText("Use only essential cookies");
 
         await act(async () => {
             await fireEvent.click(acceptButton);
         });
 
         expect(initAnalytics).toHaveBeenCalledTimes(0);
+        expect(clearAnalytics).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith(
-            "cookies-accepted",
+            "non-essential-cookies-enablement",
             {
                 accepted: false,
                 expires: Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS),
             }
         );
-        expect(Cookies.remove).toHaveBeenCalledWith("_ga");
-        expect(Cookies.remove).toHaveBeenCalledWith("_gat");
-        expect(Cookies.remove).toHaveBeenCalledWith("_gid");
     });
 
     it("should close snackbar after accepting cookies", async () => {
@@ -176,17 +171,17 @@ describe("Cookie Consent", () => {
     });
 
 
-    it("should close snackbar after accepting cookies", async () => {
+    it("should close snackbar after rejecting cookies", async () => {
         localStorage.getItem.mockReturnValue(null);
 
         const wrapper = render(
             <CookieConsent />
         );
 
-        const acceptButton = wrapper.getByText("Reject");
+        const rejectButton = wrapper.getByText("Use only essential cookies");
 
         await act(async () => {
-            await fireEvent.click(acceptButton);
+            await fireEvent.click(rejectButton);
         });
 
         await new Promise((r) => setTimeout(r, 500));

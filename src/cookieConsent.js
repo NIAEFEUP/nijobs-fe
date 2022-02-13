@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Snackbar } from "@material-ui/core";
+import { Button, Box, Snackbar } from "@material-ui/core";
 import { DAY_IN_MS } from "./utils/TimeUtils";
-import Cookies from "js-cookie";
-import { initAnalytics } from "./utils/analytics";
+import { clearAnalytics, initAnalytics } from "./utils/analytics";
 import PropTypes from "prop-types";
 
 export const COOKIE_ACCEPT_LIFETIME_DAYS = 30;
@@ -15,14 +14,12 @@ export const CookieConsent = () => {
         if (accepted) {
             initAnalytics();
         } else {
-            Cookies.remove("_ga");
-            Cookies.remove("_gat");
-            Cookies.remove("_gid");
+            clearAnalytics();
         }
     };
 
     useEffect(() => {
-        const cookies = localStorage.getItem("cookies-accepted");
+        const cookies = localStorage.getItem("non-essential-cookies-enablement");
         if (!cookies) {
             setOpen(true);
             return;
@@ -37,7 +34,7 @@ export const CookieConsent = () => {
 
     const handleAccept = () => {
         const expires = Date.now() + (COOKIE_ACCEPT_LIFETIME_DAYS * DAY_IN_MS);
-        localStorage.setItem("cookies-accepted", {
+        localStorage.setItem("non-essential-cookies-enablement", {
             "accepted": true,
             expires,
         });
@@ -47,7 +44,7 @@ export const CookieConsent = () => {
 
     const handleReject = () => {
         const expires = Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS);
-        localStorage.setItem("cookies-accepted", {
+        localStorage.setItem("non-essential-cookies-enablement", {
             "accepted": false,
             expires,
         });
@@ -66,14 +63,14 @@ export const CookieConsent = () => {
 
 const CookieComponent = ({ open, handleAccept, handleReject }) => {
     const action = (
-        <Grid container spacing={2}>
-            <Grid item xs={6}>
+        <>
+            <Box marginRight={2}>
                 <Button color="primary" onClick={handleAccept}>Accept</Button>
-            </Grid>
-            <Grid item xs={6}>
-                <Button color="primary" onClick={handleReject}>Reject</Button>
-            </Grid>
-        </Grid>
+            </Box>
+            <Box>
+                <Button color="primary" onClick={handleReject}>Use only essential cookies</Button>
+            </Box>
+        </>
     );
 
     return (
