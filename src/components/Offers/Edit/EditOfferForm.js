@@ -7,13 +7,16 @@ import useOffer from "../../../hooks/useOffer";
 import useOfferForm from "../../../hooks/useOfferForm";
 import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 import useSession from "../../../hooks/useSession";
+import EditOfferSchema from "./EditOfferSchema";
 
 export const EditOfferControllerContext = React.createContext();
 
-function parseDescription(description) {
+function parseDescription(rawDescription) {
     const temp = document.createElement("span");
-    temp.innerHTML = description;
-    return temp.textContent || temp.innerText;
+    temp.innerHTML = rawDescription;
+    const description = temp.textContent || temp.innerText;
+    temp.remove();
+    return description;
 }
 
 const parseOfferForm = ({
@@ -25,7 +28,8 @@ const parseOfferForm = ({
     isPaid,
     vacancies,
     description,
-    ...offer }) => ({
+    ...offer
+}) => ({
     jobDuration: [
         jobMinDuration || INITIAL_JOB_DURATION,
         jobMaxDuration || INITIAL_JOB_DURATION + 1,
@@ -71,7 +75,7 @@ export const EditOfferController = () => {
         setOfferId,
         setSuccess,
         ...offerFormParams
-    } = useOfferForm();
+    } = useOfferForm(EditOfferSchema);
 
     useEffect(() => {
         if (offer && !isValidating && canEdit) {

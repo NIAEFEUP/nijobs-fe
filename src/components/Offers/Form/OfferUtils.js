@@ -47,13 +47,6 @@ const HumanReadableErrors = Object.freeze({
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
     "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
     "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
-    "offer-edit-period-over": (val) => {
-        const hours = Math.round(parseInt(val.split("-")[0], 10));
-        if (hours === 0) {
-            return "Offer edit period was over less than an hour ago.";
-        }
-        return `Offer edit period was over ${hours} hour(s) ago.`;
-    },
 });
 
 export const getHumanError = (error) => {

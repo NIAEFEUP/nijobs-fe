@@ -32,7 +32,6 @@ const TextEditorComponent = ({  disabled, errors, requestErrors, control }) => (
 );
 
 TextEditorComponent.propTypes = {
-    // fields: PropTypes.object.isRequired,
     disabled: PropTypes.bool,
     errors: PropTypes.object,
     requestErrors: PropTypes.object,

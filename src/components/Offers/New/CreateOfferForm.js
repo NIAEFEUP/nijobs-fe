@@ -4,11 +4,12 @@ import { parseRequestErrors } from "../Form/OfferUtils";
 import { newOffer } from "../../../services/offerService";
 import useOfferForm from "../../../hooks/useOfferForm";
 import OfferForm from "../Form/form-components/OfferForm";
+import CreateOfferSchema from "./CreateOfferSchema";
 
 export const CreateOfferControllerContext = React.createContext();
 
 export const CreateOfferController = () => {
-    const params = useOfferForm();
+    const params = useOfferForm(CreateOfferSchema);
 
     const submit = useCallback(
         (data) => {

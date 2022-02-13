@@ -1,17 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useEffect } from "react";
 import { useFieldArray, useWatch, useForm } from "react-hook-form";
-import CreateOfferSchema from "../components/Offers/New/CreateOfferSchema";
 import { defaultDates } from "../components/Offers/Form/OfferUtils";
 import useFieldSelector from "../components/utils/offers/useFieldSelector";
 import useTechSelector from "../components/utils/offers/useTechSelector";
 import { INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
 import useSession from "./useSession";
 
-export default (defaultValues) => {
+export default (schema) => {
     const { handleSubmit, formState, control, setValue, getValues, clearErrors, reset } = useForm({
         mode: "all",
-        resolver: yupResolver(CreateOfferSchema),
+        resolver: yupResolver(schema),
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
@@ -31,7 +30,6 @@ export default (defaultValues) => {
             requirements: [{ value: "" }],
             isHidden: false,
             owner: "",
-            ...defaultValues,
         },
     });
 

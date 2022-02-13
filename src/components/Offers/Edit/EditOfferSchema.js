@@ -9,7 +9,6 @@ export default yup.object().shape({
         .required(HumanValidationReasons.REQUIRED)
         .max(...generateValidationRule("title", "maxLength", HumanValidationReasons.TOO_LONG)),
     publishDate: yup.date(HumanValidationReasons.DATE)
-        .min(format(new Date(), "yyyy-MM-dd"), HumanValidationReasons.DATE_EXPIRED)
         .typeError(HumanValidationReasons.DATE)
         .required(),
     publishEndDate: yup.date(HumanValidationReasons.DATE)

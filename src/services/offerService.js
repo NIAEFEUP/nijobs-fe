@@ -8,6 +8,8 @@ import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
 const OFFER_SEARCH_METRIC_ID = "offer/search";
+const OFFER_NEW_METRIC_ID = "offer/new";
+const OFFER_EDIT_METRIC_ID = "offer/edit";
 const OFFER_HIDE_METRIC_ID = "offer/hide";
 const OFFER_DISABLE_METRIC_ID = "offer/disable";
 const OFFER_ENABLE_METRIC_ID = "offer/enable";
@@ -231,11 +233,16 @@ export const newOffer = async ({
         if (!res.ok) {
             throw json.errors;
         }
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_NEW_METRIC_ID));
         return json;
 
     } catch (error) {
-        // TODO count metrics
+        createEvent(EVENT_TYPES.ERROR(
+            OFFER_NEW_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
@@ -293,11 +300,16 @@ export const editOffer = async ({
         if (!res.ok) {
             throw json.errors;
         }
-        // TODO count metrics
+
+        createEvent(EVENT_TYPES.SUCCESS(OFFER_EDIT_METRIC_ID));
         return json;
 
     } catch (error) {
-        // TODO count metrics
+        createEvent(EVENT_TYPES.ERROR(
+            OFFER_EDIT_METRIC_ID,
+            ErrorTypes.NETWORK_FAILURE
+        ));
+
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }

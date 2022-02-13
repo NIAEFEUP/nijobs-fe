@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { BrowserRouter, Switch  } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CompanyApplicationPage, {
     CompanyApplicationPageController,
@@ -143,7 +143,7 @@ const AppRouter = () => (
                 path="/offer/:id/edit"
                 key="/offer/:id/edit"
                 unauthorizedRedirectPath="/"
-                unauthorizedRedirectMessage="You are not allowed to edit offers"
+                unauthorizedRedirectMessage="You are not allowed to edit this offer."
                 authorize={(user) => !!(user?.company || user?.isAdmin)}
                 context={EditOfferControllerContext}
                 controller={EditOfferController}
