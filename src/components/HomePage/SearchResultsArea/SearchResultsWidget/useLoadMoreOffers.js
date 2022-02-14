@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import {
-    setSearchOffers,
-} from "../actions/searchOffersActions";
-import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
-import { parseFiltersToURL } from "../utils";
-import config from "../config";
-import ErrorTypes from "../utils/ErrorTypes";
+import { setSearchOffers } from "../../../../actions/searchOffersActions";
+import Offer from "../Offer/Offer";
+import { parseFiltersToURL } from "../../../../utils";
+import config from "../../../../config";
+import ErrorTypes from "../../../../utils/ErrorTypes";
+import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const { API_HOSTNAME } = config;
 
@@ -25,31 +24,27 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
 
     const filters = {
         offset,
-        limit: 5,
+        limit: SearchResultsConstants.fetchNewOffersLimit,
         ...offerSearch,
     };
 
-    const oldOffers = useSelector((state) => state.offerSearch.offers);
+    const offers = useSelector((state) => state.offerSearch.offers);
     const initialOffersLoading = useSelector((state) => state.offerSearch.loading);
-    const submitNumber = useSelector((state) => state.offerSearch.submitNumber);
 
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [offers, setOffers] = useState(oldOffers);
     const [fetchedOffsets, setFetchedOffsets] = useState([]);
 
     useEffect(() => {
-        setOffers(oldOffers);
-    }, [oldOffers]);
-
-    useEffect(() => {
-        setOffset(0);
-        setHasMore(true);
-        setError(null);
-        setLoading(false);
-        setFetchedOffsets([]);
-    }, [setOffset, submitNumber]);
+        if (initialOffersLoading) {
+            setOffset(0);
+            setHasMore(true);
+            setError(null);
+            setLoading(false);
+            setFetchedOffsets([]);
+        }
+    }, [setOffset, initialOffersLoading]);
 
     useEffect(() => {
 
@@ -72,17 +67,16 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
                 }
                 const offersData = await res.json();
 
-                const oldOfferIds = [...oldOffers.map((oldOffer) => oldOffer._id)];
-                const newOffers = [...oldOffers];
+                const offerIds = [...offers.map((offer) => offer._id)];
+                const newOffers = [...offers];
 
                 offersData.forEach((offerData) => {
-                    if (!oldOfferIds.includes(offerData._id))
+                    if (!offerIds.includes(offerData._id))
                         newOffers.push(new Offer(offerData));
                 });
 
                 setHasMore(offersData.length > 0);
                 dispatch(setSearchOffers(newOffers));
-                setOffers(newOffers);
                 setLoading(false);
                 setError(null);
 
@@ -106,8 +100,8 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
         }
 
     }, [
-        dispatch, fetchMoreOffers, filters, oldOffers, initialOffersLoading, offset,
-        fetchedOffsets, submitNumber, hasMore, loading, offers,
+        dispatch, fetchMoreOffers, filters, initialOffersLoading,
+        fetchedOffsets, loading, offers,
     ]);
 
     return { offers, hasMore, loading, error };

@@ -8,9 +8,10 @@ import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import { Tune } from "@material-ui/icons";
 import clsx from "clsx";
 import LoadingOfferItem from "./LoadingOfferItem";
-import useLoadMoreOffers from "../../../../hooks/useLoadMoreOffers";
+import useLoadMoreOffers from "./useLoadMoreOffers";
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../../actions/notificationActions";
+import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -76,10 +77,6 @@ const OfferItemsContainer = ({
     }, []);
 
     useEffect(() => {
-        setOffset(offers?.length);
-    }, [offers]);
-
-    useEffect(() => {
 
         if (loading || infiniteScrollLoading) {
             setFetchMoreOffers(false);
@@ -97,7 +94,7 @@ const OfferItemsContainer = ({
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasMore) {
-                setOffset((previousOffset) => previousOffset + 5);
+                setOffset((previousOffset) => previousOffset + SearchResultsConstants.fetchNewOffersLimit);
                 setFetchMoreOffers(true);
             } else {
                 setFetchMoreOffers(false);

@@ -9,7 +9,6 @@ export const JOB_MIN_DURATION = 1;
 export const JOB_MAX_DURATION = 12;
 
 const initialState = {
-    submitNumber: 0,
     searchValue: "",
     jobType: INITIAL_JOB_TYPE,
     filterJobDuration: false,
@@ -24,11 +23,6 @@ const initialState = {
 export default (state = initialState, action) => {
 
     switch (action.type) {
-        case OfferSearchTypes.SET_SUBMIT_NUMBER:
-            return {
-                ...state,
-                submitNumber: action.submitNumber,
-            };
         case OfferSearchTypes.SET_OFFERS_SEARCH_RESULT:
             return {
                 ...state,
