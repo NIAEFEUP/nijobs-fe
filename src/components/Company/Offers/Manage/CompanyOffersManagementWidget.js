@@ -79,11 +79,12 @@ RowActions.propTypes = {
 };
 
 
-const CompanyOffersManagementWidget = ({ addSnackbar }) => {
+const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const { data, isLoggedIn } = useSession();
     const [offers, setOffers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const mobileCols = ["title", "publishStartDate", "actions"];
 
     useEffect(() => {
         if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
@@ -113,7 +114,9 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
         return (
             <>
-                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
                     GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
@@ -146,6 +149,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
             isSelectableTable={false}
             isLoading={isLoading}
             error={error}
+            mobileColumns={mobileCols}
             hasMaxHeight={false}
         />
     );
@@ -153,6 +157,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
 CompanyOffersManagementWidget.propTypes = {
     addSnackbar: PropTypes.func,
+    isMobile: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

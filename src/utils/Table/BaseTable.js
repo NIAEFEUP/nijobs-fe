@@ -206,7 +206,7 @@ BaseTable.propTypes = {
     isLoading: PropTypes.bool,
     error: PropTypes.object,
     hasMaxHeight: PropTypes.bool,
-    mobileColumns: PropTypes.array,
+    mobileColumns: PropTypes.array.isRequired,
 };
 
 export default BaseTable;

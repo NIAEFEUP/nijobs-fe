@@ -152,9 +152,3 @@ TableContent.propTypes = {
 };
 
 export default TableContent;
-
-/*
-TO-DO:
-- Change TableContent to display only the mobile columns when not collapsed.
-- Increase table width in mobile view
-*/
