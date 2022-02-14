@@ -108,8 +108,10 @@ export default makeStyles((theme) => ({
         marginRight: theme.spacing(1),
     },
     offerDivider: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
+        "&&": {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+        },
     },
     offerDetails: ({ isMobile }) => ({
         backgroundColor: "white",
