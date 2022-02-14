@@ -27,7 +27,9 @@ const JobDurationComponent = ({ disabled, control }) => (
                     disabled={disabled}
                 />
                 <FormHelperText>
-                    {!disabled && `Job duration: ${value[0]} - ${value[1]} month(s)`}
+                    { value[0] === value[1] ?
+                        `Job duration: ${value[0]} ${value[0] === 1 ? "month" : "months"}`
+                        : `Job duration: ${value[0]} - ${value[1]} months`}
                 </FormHelperText>
             </FormControl>)}
         control={control}

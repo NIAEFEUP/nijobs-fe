@@ -6,8 +6,7 @@ export default (isMobile) => makeStyles((theme) => ({
         flexGrow: 1,
     },
     formCard: {
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
-        paddingBottom: !isMobile && theme.spacing(2),
+        padding: isMobile ? theme.spacing(0, 1, 10) : theme.spacing(10),
         display: isMobile && "flex",
         flexDirection: isMobile &&  "column",
         height: isMobile && "100%",
@@ -16,6 +15,7 @@ export default (isMobile) => makeStyles((theme) => ({
         display: !isMobile && "flex",
         flexDirection: !isMobile && "column",
         alignItems: "center",
+        marginTop: theme.spacing(4),
     },
     buttonsArea: {
         display: "flex",
@@ -40,5 +40,32 @@ export default (isMobile) => makeStyles((theme) => ({
     gridWithInfo: {
         display: "flex",
         alignItems: "center",
+    },
+    autocompleteChipWrapper: {
+        minHeight: "40px",
+    },
+    advancedSettingsDatePicker: {
+        width: "100%",
+        marginRight: theme.spacing(2),
+    },
+    menuSelect: {
+        "&:focus": {
+            backgroundColor: "inherit",
+        },
+    },
+    vacanciesGrid: {
+        marginBottom: theme.spacing(5),
+    },
+    advancedSettingsCollapse: {
+        marginBottom: theme.spacing(4),
+    },
+    jobTypeGrid: {
+        marginBottom: theme.spacing(4),
+    },
+    jobDurationGrid: {
+        marginTop: theme.spacing(2),
+    },
+    multiTextOptionGrid: {
+        marginBottom: theme.spacing(4),
     },
 }));

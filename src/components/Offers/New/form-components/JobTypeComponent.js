@@ -1,10 +1,10 @@
 import React from "react";
 import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
-import { MenuItem, TextField } from "@material-ui/core";
+import { TextField, MenuItem } from "@material-ui/core";
 import JobOptions from "../../../utils/offers/JobOptions";
 
-const JobTypeComponent = ({ disabled, errors, requestErrors, control }) => (
+const JobTypeComponent = ({ disabled, errors, requestErrors, control, textFieldProps }) => (
     <Controller
         name="jobType"
         render={(
@@ -19,12 +19,12 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control }) => (
                 value={value ? value : ""}
                 onChange={onChange}
                 onBlur={onBlur}
-                variant="outlined"
                 disabled={disabled}
                 error={!!errors?.jobType || !!requestErrors.jobType}
                 helperText={
                     `${errors.jobType?.message || requestErrors.jobType?.message || ""}`
                 }
+                {...textFieldProps}
             >
                 {JobOptions.map(({ value, label }) => (
                     <MenuItem
@@ -45,6 +45,7 @@ JobTypeComponent.propTypes = {
     errors: PropTypes.object,
     requestErrors: PropTypes.object,
     control: PropTypes.object.isRequired,
+    textFieldProps: PropTypes.object,
 };
 
 export default JobTypeComponent;

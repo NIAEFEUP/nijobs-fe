@@ -5,7 +5,7 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { Tooltip } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
 
-const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, control }) => (
+const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, control, datePickerProps }) => (
     <>
         <Controller
             name="publishEndDate"
@@ -35,6 +35,7 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                             !!requestErrors.publishEndDate}
                     helperText={errors.publishEndDate?.message ||
                             requestErrors.publishEndDate?.message || " "}
+                    {...datePickerProps}
                 />)}
             control={control}
         />
@@ -53,6 +54,7 @@ PublicationEndDateComponent.propTypes = {
     errors: PropTypes.object,
     requestErrors: PropTypes.object,
     control: PropTypes.object.isRequired,
+    datePickerProps: PropTypes.object,
 };
 
 export default PublicationEndDateComponent;

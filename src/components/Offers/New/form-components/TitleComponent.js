@@ -23,8 +23,6 @@ const TitleComponent = ({ disabled, errors, requestErrors, control }) => (
                     `${value?.length}/${CreateOfferConstants.title.maxLength} 
                         ${errors.title?.message || requestErrors.title?.message || ""}`
                 }
-                variant="outlined"
-                margin="dense"
                 fullWidth
                 disabled={disabled}
             />)}

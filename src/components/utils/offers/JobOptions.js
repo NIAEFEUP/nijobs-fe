@@ -2,10 +2,6 @@
 
 export default Object.freeze([
     {
-        value: null,
-        label: "Any",
-    },
-    {
         value: "SUMMER INTERNSHIP",
         label: "Summer Internship",
     },

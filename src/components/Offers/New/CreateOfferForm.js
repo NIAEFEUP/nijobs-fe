@@ -76,7 +76,7 @@ export const CreateOfferController = () => {
             contacts: [{ value: "" }],
             isPaid: "none",
             vacancies: "",
-            jobType: "",
+            jobType: "SUMMER INTERNSHIP",
             fields: [],
             technologies: [],
             location: null,
@@ -234,7 +234,7 @@ const CreateOfferForm = () => {
                                 onSubmit={submit}
                                 aria-label="Create Offer Form"
                             >
-                                <Grid container>
+                                <Grid container spacing={4}>
                                     <Grid item xs={12} lg={isAdmin ? 6 : 12}>
                                         <TitleComponent
                                             disabled={disabled}
@@ -262,13 +262,20 @@ const CreateOfferForm = () => {
                                             />
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12} lg={6}>
+                                    <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
                                         <FormControl fullWidth margin="dense">
                                             <JobTypeComponent
                                                 disabled={disabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
+                                                textFieldProps={{
+                                                    SelectProps: {
+                                                        classes: {
+                                                            select: classes.menuSelect,
+                                                        },
+                                                    },
+                                                }}
                                             />
                                         </FormControl>
                                     </Grid>
@@ -283,6 +290,12 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     error={errors.fields || requestErrors.fields}
                                                     disabled={disabled}
+                                                    chipWrapperProps={{
+                                                        className: classes.autocompleteChipWrapper,
+                                                    }}
+                                                    textFieldProps={{
+                                                        margin: "none",
+                                                    }}
                                                     {...FieldsSelectorProps}
                                                 />
                                             )}
@@ -300,13 +313,19 @@ const CreateOfferForm = () => {
                                                     onBlur={onBlur}
                                                     error={errors.technologies || requestErrors.technologies}
                                                     disabled={disabled}
+                                                    chipWrapperProps={{
+                                                        className: classes.autocompleteChipWrapper,
+                                                    }}
+                                                    textFieldProps={{
+                                                        margin: "none",
+                                                    }}
                                                     {...TechSelectorProps}
                                                 />)}
                                             control={control}
                                         />
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <FormControl>
+                                        <FormControl fullWidth>
                                             <JobStartDateComponent
                                                 disabled={disabled}
                                                 errors={errors}
@@ -315,7 +334,7 @@ const CreateOfferForm = () => {
                                             />
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12} lg={6}>
+                                    <Grid item xs={12} lg={6} className={classes.jobDurationGrid}>
                                         <JobDurationComponent
                                             disabled={disabled}
                                             errors={errors}
@@ -323,8 +342,8 @@ const CreateOfferForm = () => {
                                             control={control}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <FormControl>
+                                    <Grid item xs={12} lg={6} className={classes.vacanciesGrid}>
+                                        <FormControl fullWidth>
                                             <VacanciesComponent
                                                 disabled={disabled}
                                                 errors={errors}
@@ -339,6 +358,13 @@ const CreateOfferForm = () => {
                                             errors={errors}
                                             requestErrors={requestErrors}
                                             control={control}
+                                            textFieldProps={{
+                                                SelectProps: {
+                                                    classes: {
+                                                        select: classes.menuSelect,
+                                                    },
+                                                },
+                                            }}
                                         />
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
@@ -346,7 +372,6 @@ const CreateOfferForm = () => {
                                             onClick={() => setAdvancedOpen(!isAdvancedOpen)}
                                             size="small"
                                             margin="dense"
-                                            style={{ marginTop: 10 }}
                                             endIcon={
                                                 isAdvancedOpenOrErrors()
                                                     ? <KeyboardArrowUp />
@@ -357,13 +382,16 @@ const CreateOfferForm = () => {
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
                                         <Collapse in={isAdvancedOpenOrErrors()}>
-                                            <Grid container>
+                                            <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <PublicationDateComponent
                                                         disabled={disabled}
                                                         errors={errors}
                                                         requestErrors={requestErrors}
                                                         control={control}
+                                                        datePickerProps={{
+                                                            className: classes.advancedSettingsDatePicker,
+                                                        }}
                                                     />
                                                 </Grid>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
@@ -373,6 +401,9 @@ const CreateOfferForm = () => {
                                                         errors={errors}
                                                         requestErrors={requestErrors}
                                                         control={control}
+                                                        datePickerProps={{
+                                                            className: classes.advancedSettingsDatePicker,
+                                                        }}
                                                     />
                                                 </Grid>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
@@ -386,7 +417,7 @@ const CreateOfferForm = () => {
                                             </Grid>
                                         </Collapse>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
                                         <MultiOptionTextField
                                             values={contacts}
                                             label="Contacts"
@@ -401,7 +432,7 @@ const CreateOfferForm = () => {
                                             addEntryBtnTestId="contacts-selector"
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
                                         <MultiOptionTextField
                                             values={requirements}
                                             label="Requirements"
