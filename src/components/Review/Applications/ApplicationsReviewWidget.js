@@ -251,6 +251,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
                     isLoading={isLoading}
                     error={error}
                     mobileColumns={mobileCols}
+                    hasMaxHeight={false}
                 />
             </UndoableActionsHandlerProvider>
         </>

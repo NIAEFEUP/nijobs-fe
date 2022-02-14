@@ -51,7 +51,7 @@ const BaseTable = ({
     isSelectableTable,
     isLoading,
     error,
-    hasMaxHeight = true,
+    hasMaxHeight = false,
     mobileColumns,
 }) => {
     const isMobile = useMobile();
