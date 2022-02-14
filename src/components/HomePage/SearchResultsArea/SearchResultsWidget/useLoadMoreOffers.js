@@ -52,6 +52,7 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
 
             try {
                 setFetchedOffsets((offsets) => [...offsets, filters.offset]);
+                setLoading(true);
                 const query = parseFiltersToURL(filters);
                 const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
                     method: "GET",
