@@ -124,7 +124,7 @@ RowActionsContainer.propTypes = {
     row: RowPropTypes,
     isCollapseOpen: PropTypes.bool.isRequired,
     toggleCollapse: PropTypes.func.isRequired,
-    actionToConfirm: PropTypes.func.isRequired,
+    actionToConfirm: PropTypes.string.isRequired,
     confirmAction: PropTypes.func.isRequired,
     cancelAction: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,
