@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
     Divider,
+    Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core";
@@ -8,7 +9,7 @@ import {
 import { alphabeticalSorter, GenerateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./Filters";
-import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
+import UndoableActionsHandlerProvider, { UndoableActions } from "../../../utils/UndoableActionsHandlerProvider";
 import ControlledSortableSelectableTable from "../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
@@ -17,6 +18,7 @@ import { format, parseISO } from "date-fns";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
+
 
 const sorters = {
     name: alphabeticalSorter,
@@ -154,6 +156,9 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
 
         if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push("rejectReason", "rejectedAt");
 
+        const { submitAction } = useContext(UndoableActions);
+
+
         return (
             !isMobile ? (
                 <>
@@ -185,12 +190,25 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
                 <>
                     {showActions && (
                         <div className={classes.payloadSection}>
-                            <Typography className={classes.collapsableTitles} variant="body1">
-                        Actions
-                            </Typography>
-                            <Typography variant="body2">
-                                {/* ADD ACTION BUTTONS */}
-                            </Typography>
+                            <Grid container alignItems="center">
+                                <Grid item xs={5}>
+                                    <Typography className={classes.collapsableTitles} variant="body1">
+                                         Actions
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={7} justifyContent="center">
+                                    <RowActions
+                                        forceDesktop={true}
+                                        row={{ key: rowKey, fields: row.fields, payload: row.payload }}
+                                        context={{
+                                            approveApplicationRow,
+                                            rejectApplicationRow,
+                                        }}
+                                        submitUndoableAction={submitAction}
+                                        insideCollapsable={true}
+                                    />
+                                </Grid>
+                            </Grid>
                         </div>
                     )}
                     <div className={classes.payloadSection}>
