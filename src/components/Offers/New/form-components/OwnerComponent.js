@@ -22,7 +22,6 @@ const OwnerComponent = ({ disabled, errors, requestErrors, control }) => (
                 helperText={
                     `${errors.owner?.message || requestErrors.owner?.message || ""}`
                 }
-                margin="dense"
                 fullWidth
                 disabled={disabled}
             />)}
