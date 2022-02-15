@@ -13,7 +13,7 @@ const TitleComponent = ({ disabled, errors, requestErrors, control }) => (
             <TextField
                 name={name}
                 value={value}
-                label="Offer Title"
+                label="Offer Title *"
                 id="title"
                 error={!!errors.title || !!requestErrors.title}
                 inputRef={ref}

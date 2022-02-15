@@ -68,4 +68,8 @@ export default (isMobile) => makeStyles((theme) => ({
     multiTextOptionGrid: {
         marginBottom: theme.spacing(4),
     },
+    requiredFields: {
+        marginTop: theme.spacing(2),
+        color: "rgba(0, 0, 0, 0.54)",
+    },
 }));

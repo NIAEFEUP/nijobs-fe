@@ -12,6 +12,7 @@ const LocationComponent = ({ disabled, errors, requestErrors, control }) => (
         ) => (
             <LocationPicker
                 value={value}
+                label="Location *"
                 onChange={(_e, value) => onChange(value)}
                 onBlur={onBlur}
                 name={name}

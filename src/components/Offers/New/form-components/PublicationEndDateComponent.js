@@ -15,7 +15,7 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                 <KeyboardDatePicker
                     margin="dense"
                     value={value}
-                    label="Publication End Date"
+                    label="Publication End Date *"
                     id="publishEndDate-input"
                     name={name}
                     disabled={disabled}

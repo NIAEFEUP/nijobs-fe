@@ -15,7 +15,7 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control, textFieldP
                 fullWidth
                 id="job_type"
                 select
-                label="Job Type"
+                label="Job Type *"
                 value={value ? value : ""}
                 onChange={onChange}
                 onBlur={onBlur}

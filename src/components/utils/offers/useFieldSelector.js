@@ -4,8 +4,8 @@ import { useCallback } from "react";
 
 export default (value, setValues) => {
     const FieldsAutocompleteProps = {
-        label: "Fields",
-        placeholder: "Fields",
+        label: "Fields *",
+        placeholder: "Fields *",
         multiple: true,
         options: Object.keys(FIELD_OPTIONS),
         id: "fields-selector",

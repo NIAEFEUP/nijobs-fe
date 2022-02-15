@@ -128,7 +128,7 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
             StarterKit,
             Underline,
             Placeholder.configure({
-                placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc.",
+                placeholder: "Write a description for this offer. You can specify goals, project and daily work details, etc. *",
             }),
             Heading.configure({
                 levels: [1],

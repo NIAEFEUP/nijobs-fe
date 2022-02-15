@@ -420,7 +420,7 @@ const CreateOfferForm = () => {
                                     <Grid item xs={12} className={classes.multiTextOptionGrid}>
                                         <MultiOptionTextField
                                             values={contacts}
-                                            label="Contacts"
+                                            label="Contacts *"
                                             itemLabelPrefix="Contact #"
                                             controllerName="contacts"
                                             onAdd={appendContact}
@@ -435,7 +435,7 @@ const CreateOfferForm = () => {
                                     <Grid item xs={12} className={classes.multiTextOptionGrid}>
                                         <MultiOptionTextField
                                             values={requirements}
-                                            label="Requirements"
+                                            label="Requirements *"
                                             itemLabelPrefix="Requirement #"
                                             controllerName="requirements"
                                             onAdd={appendRequirement}
@@ -476,6 +476,9 @@ const CreateOfferForm = () => {
                                 >
                                     Submit
                                 </Button>
+                                <div className={classes.requiredFields}>
+                                    <p>* Required fields</p>
+                                </div>
                             </form>
                         </Grid>
                     </Grid>
