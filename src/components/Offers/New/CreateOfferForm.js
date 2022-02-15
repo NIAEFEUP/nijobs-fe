@@ -217,6 +217,14 @@ const CreateOfferForm = () => {
     const FieldsSelectorProps = useFieldSelector(fields.fields, (fields) => setValue("fields", fields));
     const TechSelectorProps = useTechSelector(fields.technologies, (fields) => setValue("technologies", fields));
 
+    const SelectStylingProps = {
+        SelectProps: {
+            classes: {
+                select: classes.menuSelect,
+            },
+        },
+    };
+
     return (
         success
             ? <Redirect to={`/offer/${newOfferId}`} push />
@@ -270,11 +278,7 @@ const CreateOfferForm = () => {
                                                 requestErrors={requestErrors}
                                                 control={control}
                                                 textFieldProps={{
-                                                    SelectProps: {
-                                                        classes: {
-                                                            select: classes.menuSelect,
-                                                        },
-                                                    },
+                                                    ...SelectStylingProps,
                                                 }}
                                             />
                                         </FormControl>
@@ -359,11 +363,7 @@ const CreateOfferForm = () => {
                                             requestErrors={requestErrors}
                                             control={control}
                                             textFieldProps={{
-                                                SelectProps: {
-                                                    classes: {
-                                                        select: classes.menuSelect,
-                                                    },
-                                                },
+                                                ...SelectStylingProps,
                                             }}
                                         />
                                     </Grid>
