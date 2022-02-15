@@ -28,6 +28,10 @@
   border-color: #f44336;
 }
 
+.editor[contenteditable="false"]:hover, .editor[contenteditable="false"]:focus {
+  border-color: #c4c4c4;
+}
+
 /* Placeholder (at the top) */
 .editor p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
