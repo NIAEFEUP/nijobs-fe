@@ -76,7 +76,7 @@ export const CreateOfferController = () => {
             contacts: [{ value: "" }],
             isPaid: "none",
             vacancies: "",
-            jobType: "SUMMER INTERNSHIP",
+            jobType: "",
             fields: [],
             technologies: [],
             location: null,

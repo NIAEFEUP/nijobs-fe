@@ -48,7 +48,7 @@ export default yup.object().shape({
         return yup.number(HumanValidationReasons.INT);
     }),
     jobType: yup.string()
-        .nullable(true),
+        .required(HumanValidationReasons.REQUIRED),
     fields: yup.array()
         .min(...generateValidationRule("fields", "minLength", HumanValidationReasons.OPTIONS_TOO_SHORT))
         .max(...generateValidationRule("fields", "maxLength", HumanValidationReasons.OPTIONS_TOO_LONG))
