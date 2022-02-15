@@ -4,8 +4,8 @@ import { useCallback } from "react";
 
 export default (value, setValues) => {
     const TechAutocompleteProps = {
-        label: "Technologies *",
-        placeholder: "Technologies *",
+        label: "Technologies",
+        placeholder: "Technologies",
         multiple: true,
         options: Object.keys(TECH_OPTIONS),
         id: "tech-selector",

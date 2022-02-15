@@ -301,6 +301,8 @@ const CreateOfferForm = () => {
                                                         margin: "none",
                                                     }}
                                                     {...FieldsSelectorProps}
+                                                    label="Fields *"
+                                                    placeholder="Fields *"
                                                 />
                                             )}
                                             control={control}
@@ -324,6 +326,8 @@ const CreateOfferForm = () => {
                                                         margin: "none",
                                                     }}
                                                     {...TechSelectorProps}
+                                                    label="Technologies *"
+                                                    placeholder="Technologies *"
                                                 />)}
                                             control={control}
                                         />
