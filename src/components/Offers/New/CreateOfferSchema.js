@@ -11,7 +11,7 @@ export default yup.object().shape({
     publishDate: yup.date(HumanValidationReasons.DATE)
         .min(format(new Date(), "yyyy-MM-dd"), HumanValidationReasons.DATE_EXPIRED)
         .typeError(HumanValidationReasons.DATE)
-        .required(),
+        .required(HumanValidationReasons.REQUIRED),
     publishEndDate: yup.date(HumanValidationReasons.DATE)
         .min(format(new Date(), "yyyy-MM-dd"), HumanValidationReasons.DATE_EXPIRED)
         .typeError(HumanValidationReasons.DATE)
