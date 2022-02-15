@@ -3,7 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
     divider: {
-        margin: 0,
+        "&&": {
+            margin: 0,
+        },
     },
     fullHeight: {
         height: "100%",
@@ -70,8 +72,11 @@ export default makeStyles((theme) => ({
 
     },
     verticalDivider: {
-        height: "auto",
-        marginRight: theme.spacing(2),
+        "&&": {
+            height: "auto",
+            marginRight: theme.spacing(2),
+            width: 0,
+        },
     },
     offerOptions: ({ isMobile }) => ({
         display: "flex",

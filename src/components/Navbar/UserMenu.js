@@ -42,11 +42,15 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: "10px 10px 0px 0px",
     },
     divider: {
-        margin: theme.spacing(1),
-        width: "80%",
+        "&&": {
+            margin: theme.spacing(1),
+            width: "80%",
+        },
     },
     labelledDivider: {
-        marginTop: theme.spacing(2),
+        "&&": {
+            marginTop: theme.spacing(2),
+        },
     },
     dividerLabel: {
         padding: theme.spacing(1, 2),
