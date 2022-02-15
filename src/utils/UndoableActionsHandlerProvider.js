@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar, closeSnackbar } from "../actions/notificationActions";
 import { useTimeout } from "../hooks/useTimeout";
-import Notification from "../components/Notifications/Notification";
 
 const initialActions = {};
 export const UndoableActions = React.createContext(initialActions);
@@ -55,16 +54,13 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
             key: action.id,
             options: {
                 persist: true,
-                // eslint-disable-next-line react/display-name
-                content: (key, message) =>
-                    <Notification
-                        message={message}
-                        actionText="Undo"
-                        actionHandler={handleCancel(key)}
-                        handleClose={handleClose(key)}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                    />,
+            },
+            contentOptions: {
+                actionText: "Undo",
+                actionHandler: handleCancel(action.id),
+                handleClose: handleClose(action.id),
+                onMouseEnter: handleMouseEnter,
+                onMouseLeave: handleMouseLeave,
             },
         });
     }, [addSnackbar, action.id, handleCancel, action.message, closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave]);

@@ -19,7 +19,7 @@ const Notifier = ({ notifications, removeSnackbar }) => {
     };
 
     React.useEffect(() => {
-        notifications.forEach(({ key, message, options = {}, dismissed = false }) => {
+        notifications.forEach(({ key, message, options = {}, contentOptions = {}, dismissed = false }) => {
             if (dismissed) {
                 // dismiss snackbar using notistack
                 closeSnackbar(key);
@@ -29,13 +29,14 @@ const Notifier = ({ notifications, removeSnackbar }) => {
             // do nothing if snackbar is already displayed
             if (displayed.current.includes(key)) return;
 
-            const defaultContent = (key, message) =>
+            const configuredContent = (key, message) =>
                 <Notification
-                    message={message}
-                    handleClose={() => closeSnackbar(key)}
+                    {...contentOptions}
+                    message={contentOptions.message || message}
+                    handleClose={contentOptions.handleClose || (() => closeSnackbar(key))}
                 />;
 
-            if (!options.content) options.content = defaultContent;
+            if (!options.content) options.content = configuredContent;
             // display snackbar using notistack
             enqueueSnackbar(message, {
                 key,
