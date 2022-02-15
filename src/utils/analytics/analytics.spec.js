@@ -1,4 +1,5 @@
-import { parseFiltersToDimensions, parseSearchUrl, DIMENSION_IDS } from "./analytics";
+import { parseFiltersToDimensions, parseSearchUrl } from "./index";
+import { DIMENSION_IDS } from "./constants";
 
 describe("analytics", () => {
     describe("parse search filters to dimensions", () => {

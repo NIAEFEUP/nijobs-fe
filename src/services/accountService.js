@@ -1,5 +1,6 @@
 import config from "../config";
-import { measureTime, createEvent, TIMED_ACTIONS, EVENT_TYPES } from "../utils/analytics";
+import { measureTime, createEvent } from "../utils/analytics";
+import { TIMED_ACTIONS, EVENT_TYPES } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
