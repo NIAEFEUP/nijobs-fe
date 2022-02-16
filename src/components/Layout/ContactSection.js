@@ -162,11 +162,11 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="privacy"
+                                to="privacy-policy"
                                 startIcon={<Storage htmlColor={theme.palette.tertiary.main} />}
                                 className={classes.colorText}
                                 component={RouterLink}
-                                title="privacy"
+                                title="privacy-policy"
                             >
                                 <Typography variant="button">Privacy Policy</Typography>
                             </Button>
