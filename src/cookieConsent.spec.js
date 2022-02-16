@@ -1,9 +1,11 @@
-import { act, fireEvent, render } from "@testing-library/react";
+import { createTheme } from "@material-ui/core";
+import { act, fireEvent } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { CookieConsent, COOKIE_ACCEPT_LIFETIME_DAYS, COOKIE_REJECT_LIFETIME_DAYS } from "./cookieConsent";
+import { CookieConsent, COOKIE_ACCEPT_LIFETIME_MONTHS, COOKIE_REJECT_LIFETIME_DAYS } from "./cookieConsent";
+import { renderWithTheme } from "./test-utils";
 import { initAnalytics, clearAnalytics } from "./utils/analytics";
-import { DAY_IN_MS } from "./utils/TimeUtils";
+import { DAY_IN_MS, MONTH_IN_MS } from "./utils/TimeUtils";
 
 jest.mock("./utils/analytics", () => {
     const original = jest.requireActual("./utils/analytics");
@@ -16,6 +18,7 @@ jest.mock("./utils/analytics", () => {
 
 describe("Cookie Consent", () => {
     let dateNow;
+    const theme = createTheme();
 
     const COOKIE_MESSAGE = "This website uses optional cookies to improve user experience";
 
@@ -33,8 +36,9 @@ describe("Cookie Consent", () => {
     it("should open if not present in local storage", () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(wrapper.getByText(COOKIE_MESSAGE));
@@ -45,8 +49,9 @@ describe("Cookie Consent", () => {
             accepted: true,
             expires: Date.now() - 1000,
         });
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(wrapper.getByText(COOKIE_MESSAGE));
@@ -57,8 +62,9 @@ describe("Cookie Consent", () => {
             accepted: true,
             expires: Date.now() + 1000,
         });
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
@@ -69,8 +75,9 @@ describe("Cookie Consent", () => {
             accepted: false,
             expires: Date.now() + 1000,
         });
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
@@ -82,8 +89,9 @@ describe("Cookie Consent", () => {
             expires: Date.now() + 1000,
         });
 
-        render(
-            <CookieConsent />
+        renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(initAnalytics).toHaveBeenCalledTimes(1);
@@ -96,8 +104,9 @@ describe("Cookie Consent", () => {
             expires: Date.now() + 1000,
         });
 
-        render(
-            <CookieConsent />
+        renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         expect(initAnalytics).toHaveBeenCalledTimes(0);
@@ -107,8 +116,9 @@ describe("Cookie Consent", () => {
     it("should accept cookies and initialize google analytics", async () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         const acceptButton = wrapper.getByText("Accept");
@@ -123,7 +133,7 @@ describe("Cookie Consent", () => {
             "non-essential-cookies-enablement",
             {
                 accepted: true,
-                expires: Date.now() + (COOKIE_ACCEPT_LIFETIME_DAYS * DAY_IN_MS),
+                expires: Date.now() + (COOKIE_ACCEPT_LIFETIME_MONTHS * MONTH_IN_MS),
             }
         );
     });
@@ -131,10 +141,11 @@ describe("Cookie Consent", () => {
     it("should open cookies usage", async () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
+        const wrapper = renderWithTheme(
             <BrowserRouter>
                 <CookieConsent />
-            </BrowserRouter>
+            </BrowserRouter>,
+            { theme }
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
@@ -154,10 +165,11 @@ describe("Cookie Consent", () => {
     it("should remove cookies and not initialize google analytics", async () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
+        const wrapper = renderWithTheme(
             <BrowserRouter>
                 <CookieConsent />
-            </BrowserRouter>
+            </BrowserRouter>,
+            { theme }
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
@@ -186,8 +198,9 @@ describe("Cookie Consent", () => {
     it("should close snackbar after accepting cookies", async () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
-            <CookieConsent />
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
         );
 
         const acceptButton = wrapper.getByText("Accept");
@@ -207,10 +220,11 @@ describe("Cookie Consent", () => {
     it("should close dialog after rejecting cookies", async () => {
         localStorage.getItem.mockReturnValue(null);
 
-        const wrapper = render(
+        const wrapper = renderWithTheme(
             <BrowserRouter>
                 <CookieConsent />
-            </BrowserRouter>
+            </BrowserRouter>,
+            { theme }
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
