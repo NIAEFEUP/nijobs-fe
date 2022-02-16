@@ -96,6 +96,9 @@ export default makeStyles((theme) => ({
     offerTitleLink: {
         color: "inherit",
     },
+    offerContainer: {
+        paddingBottom: theme.spacing(3),
+    },
     hiddenOfferInfo: {
         color: "grey",
         marginBottom: theme.spacing(1),

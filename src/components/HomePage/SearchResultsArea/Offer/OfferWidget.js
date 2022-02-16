@@ -89,7 +89,7 @@ const OfferWidget = ({
                         </Typography>
                     </div>
                     :
-                    <div>
+                    <div className={!isPage && classes.offerContainer}>
                         <OfferDetails
                             offer={offer}
                             handleHideOffer={handleHideOffer}
