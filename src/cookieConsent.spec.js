@@ -127,6 +127,27 @@ describe("Cookie Consent", () => {
         );
     });
 
+    it("should open cookies usage", async () => {
+        localStorage.getItem.mockReturnValue(null);
+
+        const wrapper = render(
+            <CookieConsent />
+        );
+
+        const cookiesButton = wrapper.getByText("Learn how we use cookies");
+
+        await act(async () => {
+            await fireEvent.click(cookiesButton);
+        });
+
+        await new Promise((r) => setTimeout(r, 200));
+
+
+        expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
+
+        expect(wrapper.getByText("Why do we use cookies?"));
+    });
+
     it("should remove cookies and not initialize google analytics", async () => {
         localStorage.getItem.mockReturnValue(null);
 
@@ -134,10 +155,16 @@ describe("Cookie Consent", () => {
             <CookieConsent />
         );
 
-        const acceptButton = wrapper.getByText("Use only essential cookies");
+        const cookiesButton = wrapper.getByText("Learn how we use cookies");
 
         await act(async () => {
-            await fireEvent.click(acceptButton);
+            await fireEvent.click(cookiesButton);
+        });
+
+        const rejectButton = wrapper.getByText("Use only essential cookies");
+
+        await act(async () => {
+            await fireEvent.click(rejectButton);
         });
 
         expect(initAnalytics).toHaveBeenCalledTimes(0);
@@ -165,18 +192,25 @@ describe("Cookie Consent", () => {
         });
 
         // Snackbar takes some time to close after closing because of animation
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 200));
+
 
         expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
     });
 
 
-    it("should close snackbar after rejecting cookies", async () => {
+    it("should close dialog after rejecting cookies", async () => {
         localStorage.getItem.mockReturnValue(null);
 
         const wrapper = render(
             <CookieConsent />
         );
+
+        const cookiesButton = wrapper.getByText("Learn how we use cookies");
+
+        await act(async () => {
+            await fireEvent.click(cookiesButton);
+        });
 
         const rejectButton = wrapper.getByText("Use only essential cookies");
 
@@ -184,7 +218,7 @@ describe("Cookie Consent", () => {
             await fireEvent.click(rejectButton);
         });
 
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 200));
 
         expect(wrapper.queryByText(COOKIE_MESSAGE)).not.toBeInTheDocument();
     });
