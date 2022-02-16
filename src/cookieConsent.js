@@ -51,10 +51,10 @@ const CookiesUsageDialog = ({ open, handleAccept, handleReject }) => {
             </DialogContent>
             <DialogActions className={classes.buttonsArea}>
                 <Box marginRight={2}>
-                    <Button color="primary" onClick={handleAccept}>Accept</Button>
+                    <Button onClick={handleReject}>Use only essential cookies</Button>
                 </Box>
                 <Box>
-                    <Button color="primary" onClick={handleReject}>Use only essential cookies</Button>
+                    <Button color="primary" variant="contained" onClick={handleAccept}>Accept</Button>
                 </Box>
             </DialogActions>
         </Dialog>

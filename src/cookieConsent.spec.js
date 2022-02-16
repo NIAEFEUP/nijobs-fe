@@ -1,5 +1,6 @@
 import { act, fireEvent, render } from "@testing-library/react";
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 import { CookieConsent, COOKIE_ACCEPT_LIFETIME_DAYS, COOKIE_REJECT_LIFETIME_DAYS } from "./cookieConsent";
 import { initAnalytics, clearAnalytics } from "./utils/analytics";
 import { DAY_IN_MS } from "./utils/TimeUtils";
@@ -131,7 +132,9 @@ describe("Cookie Consent", () => {
         localStorage.getItem.mockReturnValue(null);
 
         const wrapper = render(
-            <CookieConsent />
+            <BrowserRouter>
+                <CookieConsent />
+            </BrowserRouter>
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
@@ -152,7 +155,9 @@ describe("Cookie Consent", () => {
         localStorage.getItem.mockReturnValue(null);
 
         const wrapper = render(
-            <CookieConsent />
+            <BrowserRouter>
+                <CookieConsent />
+            </BrowserRouter>
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
@@ -203,7 +208,9 @@ describe("Cookie Consent", () => {
         localStorage.getItem.mockReturnValue(null);
 
         const wrapper = render(
-            <CookieConsent />
+            <BrowserRouter>
+                <CookieConsent />
+            </BrowserRouter>
         );
 
         const cookiesButton = wrapper.getByText("Learn how we use cookies");
