@@ -80,4 +80,6 @@ export const DIMENSION_IDS = Object.freeze({
     jobMaxDuration: "dimension3",
     fields: "dimension4",
     technologies: "dimension5",
+    offerTitle: "dimension6",
+    companyName: "dimension7",
 });

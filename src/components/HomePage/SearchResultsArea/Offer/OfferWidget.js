@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 
+import { recordOfferVisit } from "../../../../utils/analytics";
+
 import Offer from "./Offer";
 import UnselectedOffer from "./UnselectedOffer";
 import AdminReasonModal from "./AdminReasonModal";
@@ -44,6 +46,12 @@ const OfferWidget = ({
             isBlocked: isHiddenOffer && offerHiddenReason === "COMPANY_BLOCKED",
         });
     }, [isHiddenOffer, offerHiddenReason]);
+
+    useEffect(() => {
+        if (offer) {
+            recordOfferVisit(offer._id, offer.title, offer.ownerName);
+        }
+    }, [offer]);
 
     const [showAdminReasonModal, setShowAdminReasonModal] = useState(false);
 

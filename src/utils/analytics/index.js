@@ -108,3 +108,21 @@ export const parseSearchUrl = (queryUrl) => {
     parsedUrl += `${QUERY_VALUE_PARAMETER}[EMPTY]`;
     return parsedUrl;
 };
+
+/**
+ * Records a visit to an offer's page
+ *
+ * @param {*} companyName Name of the company who owns the offer
+ * @param {*} offerTitle Title of the offer
+ * @param {*} offerId ID of the offer
+ */
+export const recordOfferVisit = (offerId, offerTitle, companyName) => {
+    if (!offerId) return; // Invalid offer, do not set dimensions
+
+    ReactGa.set({
+        [DIMENSION_IDS.companyName]: companyName,
+        [DIMENSION_IDS.offerTitle]: offerTitle,
+    });
+
+    ReactGa.pageview(`/offer/${offerId}`);
+};
