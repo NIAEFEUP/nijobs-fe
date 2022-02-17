@@ -177,7 +177,7 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
     }
 });
 
-export const newOffer = async ({
+export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
     title,
     publishDate,
     publishEndDate,
@@ -231,6 +231,12 @@ export const newOffer = async ({
         const json = await res.json();
 
         if (!res.ok) {
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_NEW_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            ));
+
             throw json.errors;
         }
 
@@ -246,9 +252,9 @@ export const newOffer = async ({
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});
 
-export const editOffer = async ({
+export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     offerId,
     title,
     publishDate,
@@ -298,6 +304,12 @@ export const editOffer = async ({
         const json = await res.json();
 
         if (!res.ok) {
+            createEvent(EVENT_TYPES.ERROR(
+                OFFER_NEW_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            ));
+
             throw json.errors;
         }
 
@@ -313,4 +325,4 @@ export const editOffer = async ({
         if (Array.isArray(error)) throw error;
         throw [{ msg: "Unexpected Error. Please try again later." }];
     }
-};
+});

@@ -12,7 +12,7 @@ import { format } from "date-fns";
 import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
-import { PAID_OPTIONS } from "./form-components/OfferForm";
+import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
 
 jest.mock("../../../hooks/useSession");
 jest.mock("../../../services/locationSearchService");
