@@ -27,6 +27,7 @@ import BackButton from "./BackButton";
 import NextButton from "./NextButton";
 import useSession from "../../../../hooks/useSession";
 import useFinishCompanyRegistrationStyles from "./finishCompanyRegistrationStyles";
+import Constants from "../../../../utils/Constants";
 
 
 function getStepContent(step) {
@@ -44,7 +45,9 @@ function getStepContent(step) {
                 <Typography>
                     There has been an error. Please report this to
                     {" "}
-                    <Link color="secondary" href="mailto:ni@aefeup.pt">ni@aefeup.pt</Link>
+                    <Link color="secondary" href={`mailto:${Constants.CONTACT_US_EMAIL}`}>
+                        {Constants.CONTACT_US_EMAIL}
+                    </Link>
                 </Typography>
             );
     }

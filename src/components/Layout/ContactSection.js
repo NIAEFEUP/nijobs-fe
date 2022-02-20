@@ -22,6 +22,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import { RouterLink } from "../../utils";
+import Constants from "../../utils/Constants";
 
 const useStyles = makeStyles((theme) => ({
     parentContainer: {
@@ -56,12 +57,14 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                href="mailto:ni@aefeup.pt"
+                                href={`mailto:${Constants.CONTACT_US_EMAIL}`}
                                 startIcon={<Email htmlColor={theme.palette.primary.main} />}
                                 className={classes.primaryColor}
                                 title="email"
                             >
-                                <Typography variant="subtitle1">ni@aefeup.pt</Typography>
+                                <Typography variant="subtitle1">
+                                    {Constants.CONTACT_US_EMAIL}
+                                </Typography>
                             </Button>
                         </ListItem>
                     </List>

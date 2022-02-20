@@ -4,6 +4,7 @@ import { render } from "@testing-library/react";
 import { ThemeProvider } from "@material-ui/core";
 import AppTheme from "../../AppTheme";
 import { BrowserRouter } from "react-router-dom";
+import Constants from "../../utils/Constants";
 
 describe("ContactSection", () => {
     describe("render", () => {
@@ -16,7 +17,7 @@ describe("ContactSection", () => {
                 </BrowserRouter>);
 
             const btn = queryByTitle("email");
-            expect(btn.getAttribute("href")).toBe("mailto:ni@aefeup.pt");
+            expect(btn.getAttribute("href")).toBe(`mailto:${Constants.CONTACT_US_EMAIL}`);
         });
 
         it("check website button link", () => {
@@ -123,8 +124,8 @@ describe("ContactSection", () => {
                     </ThemeProvider>
                 </BrowserRouter>);
 
-            const btn = queryByTitle("privacy");
-            expect(btn.getAttribute("href")).toBe("/privacy");
+            const btn = queryByTitle("privacy-policy");
+            expect(btn.getAttribute("href")).toBe("/privacy-policy");
         });
     });
 });

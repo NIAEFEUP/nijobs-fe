@@ -3,6 +3,7 @@ import { createTheme } from "@material-ui/core/styles";
 
 import { renderWithTheme } from "../test-utils";
 import ErrorPage from "./ErrorPage";
+import Constants from "../utils/Constants";
 
 const theme = createTheme({});
 
@@ -15,6 +16,6 @@ describe("NotFound page", () => {
         expect(wrapper.queryByText("Unexpected error")).toBeInTheDocument();
         expect(wrapper.queryByText("Something unexpected prevented us from fulfilling your request.")).toBeInTheDocument();
         expect(wrapper.queryByText("Please try again later, and if the problem persists, contact us at")).toBeInTheDocument();
-        expect(wrapper.queryByText("ni@aefeup.pt")).toBeInTheDocument();
+        expect(wrapper.queryByText(Constants.CONTACT_US_EMAIL)).toBeInTheDocument();
     });
 });
