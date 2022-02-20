@@ -59,7 +59,7 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
     },
 });
 
-const ApplicationsReviewWidget = ({ addSnackbar, isMobile }) => {
+const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
     const [rows, setRows] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);

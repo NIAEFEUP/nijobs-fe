@@ -134,8 +134,6 @@ const BaseTable = ({
                         isLoading={isLoading}
                         error={error}
                         rowsPerPage={rowsPerPage}
-                        isMobile={isMobile}
-                        mobileColumns={mobileColumns}
                     />
                 </Table>
             </TableContainer>

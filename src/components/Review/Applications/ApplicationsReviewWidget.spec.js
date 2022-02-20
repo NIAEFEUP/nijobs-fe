@@ -10,7 +10,7 @@ import React from "react";
 import { Simulate } from "react-dom/test-utils";
 import config from "../../../config";
 
-import { renderWithStore, renderWithStoreAndTheme } from "../../../test-utils";
+import { renderWithStoreAndTheme } from "../../../test-utils";
 import Notifier from "../../Notifications/Notifier";
 import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
 import ApplicationsReviewWidget from "./ApplicationsReviewWidget";
@@ -80,12 +80,12 @@ describe("Application Review Widget", () => {
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () => { // Necessary since the component auto mutates its state when loading the rows
-            renderWithStore(
+            renderWithStoreAndTheme(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { initialState: {} });
+                </MuiPickersUtilsProvider>, { initialState: {}, theme });
         });
 
         for (const application of applications) {
@@ -122,12 +122,12 @@ describe("Application Review Widget", () => {
 
         // Necessary to wrap in act() since the component auto-mutates its state when loading the rows
         await act(async () =>
-            renderWithStore(
+            renderWithStoreAndTheme(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { initialState: {} })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         const numRowsOptions = [5, 10, 25];

@@ -147,8 +147,6 @@ TableContent.propTypes = {
     isLoading: PropTypes.bool,
     error: PropTypes.object,
     rowsPerPage: PropTypes.number.isRequired,
-    isMobile: PropTypes.bool,
-    mobileColumns: PropTypes.array,
 };
 
 export default TableContent;
