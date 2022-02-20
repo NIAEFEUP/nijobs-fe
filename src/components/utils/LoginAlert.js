@@ -6,20 +6,22 @@ import { toggleLoginModal } from "../../actions/navbarActions";
 import { RouterLink } from "../../utils";
 import { PropTypes } from "prop-types";
 
+const useStyles = makeStyles((theme) => ({
+    mainBox: {
+        width: "100%",
+        marginBottom: theme.spacing(6),
+    },
+    loginAlert: {
+        width: "100%",
+        justifyContent: "center",
+    },
+    actionButtons: {
+        marginLeft: "initial",
+    },
+}));
+
 const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModal }) => {
-    const style = makeStyles((theme) => ({
-        mainBox: {
-            width: "100%",
-            marginBottom: theme.spacing(6),
-        },
-        loginAlert: {
-            width: "100%",
-            justifyContent: "center",
-        },
-        actionButtons: {
-            marginLeft: "initial",
-        },
-    }))();
+    const style = useStyles();
 
     return (
         <>
