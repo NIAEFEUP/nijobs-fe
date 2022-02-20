@@ -26,14 +26,17 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control, textFieldP
                 }
                 {...textFieldProps}
             >
-                {JobOptions.map(({ value, label }) => (
-                    <MenuItem
-                        key={value}
-                        value={value}
-                    >
-                        {label}
-                    </MenuItem>
-                ))}
+                {JobOptions
+                    .filter((option) => option.value !== null)
+                    .map(({ value, label }) => (
+                        <MenuItem
+                            key={value}
+                            value={value}
+                        >
+                            {label}
+                        </MenuItem>
+                    ))
+                }
             </TextField>
         )}
         control={control}
