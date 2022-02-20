@@ -9,29 +9,34 @@ const JobDurationComponent = ({ disabled, control }) => (
         name="jobDuration"
         render={(
             { field: { onChange, onBlur, name, value } },
-        ) => (
-            <FormControl
-                margin="normal"
-                variant="outlined"
-                fullWidth
-            >
-                <Slider
-                    name={name}
-                    value={value}
-                    onChange={(_e, values) => onChange(values)}
-                    onBlur={onBlur}
-                    valueLabelDisplay="auto"
-                    aria-labelledby="range-slider"
-                    min={JOB_MIN_DURATION}
-                    max={JOB_MAX_DURATION}
-                    disabled={disabled}
-                />
-                <FormHelperText>
-                    { value[0] === value[1] ?
-                        `Job duration: ${value[0]} ${value[0] === 1 ? "month" : "months"}`
-                        : `Job duration: ${value[0]} - ${value[1]} months`}
-                </FormHelperText>
-            </FormControl>)}
+        ) => {
+            const lastValueText = `${value[1]}${value[1] === JOB_MAX_DURATION ? "+" : ""}`;
+
+            return (
+                <FormControl
+                    margin="normal"
+                    variant="outlined"
+                    fullWidth
+                >
+                    <Slider
+                        name={name}
+                        value={value}
+                        onChange={(_e, values) => onChange(values)}
+                        onBlur={onBlur}
+                        valueLabelDisplay="auto"
+                        aria-labelledby="range-slider"
+                        min={JOB_MIN_DURATION}
+                        max={JOB_MAX_DURATION}
+                        disabled={disabled}
+                    />
+                    <FormHelperText>
+                        { value[0] === value[1] ?
+                            `Job duration: ${lastValueText} ${value[0] === 1 ? "month" : "months"}`
+                            : `Job duration: ${value[0]} - ${lastValueText} months`}
+                    </FormHelperText>
+                </FormControl>
+            );
+        }}
         control={control}
     />
 );
