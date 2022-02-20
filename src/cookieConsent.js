@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { Button, Box, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles, Grid } from "@material-ui/core";
+import { Button, Box, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles, Grid, Link } from "@material-ui/core";
 import { DAY_IN_MS, MONTH_IN_MS } from "./utils/TimeUtils";
 import { clearAnalytics, initAnalytics } from "./utils/analytics";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import { RouterLink } from "./utils";
 import { useMobile } from "./utils/media-queries";
 import useToggle from "./hooks/useToggle";
@@ -50,7 +49,7 @@ const CookiesUsageDialog = ({ open, handleAccept, handleReject, handleToggle }) 
                 </p>
                 <p>
                     {"For more information, consult our "}
-                    <Link component={RouterLink} to="privacy">
+                    <Link component={RouterLink} to="/privacy-policy" onClick={handleToggle}>
                         {"Privacy Policy"}
                     </Link>
                     {"!"}
@@ -74,7 +73,7 @@ const CookiesUsageDialog = ({ open, handleAccept, handleReject, handleToggle }) 
 };
 
 export const CookieConsent = () => {
-    const [open, toggleOpen, setClosed] = useToggle(false);
+    const [open, toggleOpen, resetConsentOpeningState] = useToggle(false);
 
     const [showWhyModal, toggleWhyModal, setClosedWhyModal] = useToggle(false);
 
@@ -104,22 +103,22 @@ export const CookieConsent = () => {
     const handleAccept = () => {
         const expires = Date.now() + (COOKIE_ACCEPT_LIFETIME_MONTHS * MONTH_IN_MS);
         localStorage.setItem("non-essential-cookies-enablement", {
-            "accepted": true,
+            accepted: true,
             expires,
         });
         handle(true);
-        setClosed();
+        resetConsentOpeningState();
         setClosedWhyModal();
     };
 
     const handleReject = () => {
         const expires = Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS);
         localStorage.setItem("non-essential-cookies-enablement", {
-            "accepted": false,
+            accepted: false,
             expires,
         });
         handle(false);
-        setClosed();
+        resetConsentOpeningState();
         setClosedWhyModal();
     };
 

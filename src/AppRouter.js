@@ -22,6 +22,7 @@ import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage
 import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import CreateOfferPage from "./pages/CreateOfferPage";
 import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
+import { CookieConsent } from "./cookieConsent";
 
 /**
  *
@@ -37,6 +38,7 @@ const shouldShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSiz
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
+        <CookieConsent />
         <Switch>
             <Route
                 exact
