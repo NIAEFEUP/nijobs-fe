@@ -26,6 +26,7 @@ import { CreateOfferController, CreateOfferControllerContext } from "./component
 import { CookieConsent } from "./cookieConsent";
 import { EditOfferController, EditOfferControllerContext } from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 
 /**
  *
@@ -55,6 +56,32 @@ const AppRouter = () => (
                     layout={LayoutType.NONE}
                 >
                     <HomePage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/privacy-policy"
+                key="/privacy-policy"
+            >
+                <PageLayout
+                    key="/privacy-policy"
+                    pageTitle="Privacy and Policy"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <PrivacyPolicyPage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/termsandcond"
+                key="/termsandcond"
+            >
+                <PageLayout
+                    key="/termsandcond"
+                    pageTitle="Terms and Conditions"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <TermsPage />
                 </PageLayout>
             </Route>
             <Route
