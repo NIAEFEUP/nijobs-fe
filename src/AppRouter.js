@@ -81,7 +81,7 @@ const AppRouter = () => (
                     pageTitle="Terms and Conditions"
                     layout={LayoutType.DESKTOP}
                 >
-                    <TermsPage />
+                    <TermsCondPage />
                 </PageLayout>
             </Route>
             <Route
