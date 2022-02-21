@@ -5,7 +5,7 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import { useMobile } from "../../utils/media-queries";
-import PrivacyPolicyContent from "./PrivacyPolicyContent";
+import TermsAndConditionsContent from "./TermsAndConditionsContent";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const PrivacyPolicyComponent = () => {
+const TermsAndConditionsComponent = () => {
     const classes = useStyles();
     const isMobile = useMobile();
     const ContentComponent = isMobile ? DialogContent : CardContent;
@@ -23,9 +23,9 @@ const PrivacyPolicyComponent = () => {
     return (
         <div className={classes.content}>
             <ContentComponent>
-                <PrivacyPolicyContent />
+                <TermsAndConditionsContent />
             </ContentComponent>
         </div>
     );
 };
-export default PrivacyPolicyComponent;
+export default TermsAndConditionsComponent;

@@ -27,6 +27,7 @@ import { CookieConsent } from "./cookieConsent";
 import { EditOfferController, EditOfferControllerContext } from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 
 /**
  *
@@ -73,15 +74,15 @@ const AppRouter = () => (
             </Route>
             <Route
                 exact
-                path="/termsandcond"
-                key="/termsandcond"
+                path="/terms-and-conditions"
+                key="/terms-and-conditions"
             >
                 <PageLayout
-                    key="/termsandcond"
+                    key="/terms-and-conditions"
                     pageTitle="Terms and Conditions"
                     layout={LayoutType.DESKTOP}
                 >
-                    <TermsCondPage />
+                    <TermsAndConditionsPage />
                 </PageLayout>
             </Route>
             <Route
