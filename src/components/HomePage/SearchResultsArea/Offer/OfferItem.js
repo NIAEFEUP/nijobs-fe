@@ -11,7 +11,7 @@ import {
 import Offer from "./Offer";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Skeleton from "react-loading-skeleton";
+import { Skeleton } from "@material-ui/lab";
 import { LocationCity } from "@material-ui/icons";
 import clsx from "clsx";
 
