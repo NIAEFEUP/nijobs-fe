@@ -8,9 +8,9 @@ import { Tune } from "@material-ui/icons";
 import OfferItem from "../Offer/OfferItem";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
-import useLoadMoreOffers from "./useLoadMoreOffers";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { SearchResultsConstants } from "./SearchResultsUtils";
+import Offer from "../Offer/Offer";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -56,19 +56,16 @@ const OfferItemsContainer = ({
     setSelectedOfferIdx,
     showSearchFilters,
     toggleShowSearchFilters,
+    offers,
+    setOfferOffset,
+    setShouldFetchMoreOffers,
+    hasMoreOffers,
+    infiniteScrollLoading,
+    infiniteScrollError,
 }) => {
     const classes = useSearchResultsWidgetStyles();
 
-    const [offerOffset, setOfferOffset] = useState(0);
-    const [shouldFetchMoreOffers, setShouldFetchMoreOffers] = useState(false);
     const [lastOfferNode, setLastOfferNode] = useState(null);
-
-    const {
-        offers,
-        hasMoreOffers,
-        loading: infiniteScrollLoading,
-        error: infiniteScrollError,
-    } = useLoadMoreOffers({ offerOffset, setOfferOffset, shouldFetchMoreOffers });
 
     const observer = useRef();
     const lastOfferElementRef = useCallback((node) => {
@@ -100,7 +97,10 @@ const OfferItemsContainer = ({
             }
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [addSnackbar, hasMoreOffers, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading]);
+    }, [
+        addSnackbar, hasMoreOffers, infiniteScrollError, infiniteScrollLoading,
+        lastOfferNode, loading, setOfferOffset, setShouldFetchMoreOffers,
+    ]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
@@ -153,6 +153,12 @@ OfferItemsContainer.propTypes = {
     setSelectedOfferIdx: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool,
     toggleShowSearchFilters: PropTypes.func.isRequired,
+    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    setOfferOffset: PropTypes.func,
+    setShouldFetchMoreOffers: PropTypes.func,
+    hasMoreOffers: PropTypes.bool,
+    infiniteScrollLoading: PropTypes.bool,
+    infiniteScrollError: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => ({

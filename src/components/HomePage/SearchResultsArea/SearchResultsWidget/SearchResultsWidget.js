@@ -22,13 +22,13 @@ import {
     disableOffer,
     hideOffer,
 } from "../../../../actions/searchOffersActions";
+import useLoadMoreOffers from "./useLoadMoreOffers";
 
 export const SearchResultsControllerContext = React.createContext({});
 
 const SearchResultsController = ({
     offersSearchError,
     offersLoading,
-    offers,
     hideOffer,
     disableOffer,
     companyEnableOffer,
@@ -36,11 +36,20 @@ const SearchResultsController = ({
 }) => {
 
     const [selectedOfferIdx, setSelectedOfferIdx] = useState(null);
+    const [offerOffset, setOfferOffset] = useState(0);
+    const [shouldFetchMoreOffers, setShouldFetchMoreOffers] = useState(false);
 
     // Reset the selected offer on every "loading", so that it does not show up after finished loading
     useEffect(() => {
         if (offersLoading) setSelectedOfferIdx(null);
     }, [offersLoading]);
+
+    const {
+        offers,
+        hasMoreOffers,
+        loading: infiniteScrollLoading,
+        error: infiniteScrollError,
+    } = useLoadMoreOffers({ offerOffset, setOfferOffset, shouldFetchMoreOffers });
 
     const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
         disableOfferService(offer._id, adminReason).then(() => {
@@ -112,6 +121,11 @@ const SearchResultsController = ({
                 handleAdminEnableOffer,
                 showSearchFilters,
                 toggleShowSearchFilters,
+                setOfferOffset,
+                setShouldFetchMoreOffers,
+                hasMoreOffers,
+                infiniteScrollLoading,
+                infiniteScrollError,
             },
         },
     };
@@ -173,7 +187,6 @@ SearchResultsWidget.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-    offers: state.offerSearch.offers,
     offersLoading: state.offerSearch.loading,
     offersSearchError: state.offerSearch.error,
 });
