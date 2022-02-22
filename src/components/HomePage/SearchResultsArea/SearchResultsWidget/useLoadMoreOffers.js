@@ -10,7 +10,7 @@ import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const { API_HOSTNAME } = config;
 
-export default ({ offset, setOffset, fetchMoreOffers }) => {
+export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
 
     const dispatch = useDispatch();
     const offerSearch = useSelector(({ offerSearch }) => ({
@@ -23,7 +23,7 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
     }));
 
     const filters = {
-        offset,
+        offset: offerOffset,
         limit: SearchResultsConstants.fetchNewOffersLimit,
         ...offerSearch,
     };
@@ -31,20 +31,20 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
     const offers = useSelector((state) => state.offerSearch.offers);
     const initialOffersLoading = useSelector((state) => state.offerSearch.loading);
 
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMoreOffers, setHasMoreOffers] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [fetchedOffsets, setFetchedOffsets] = useState([]);
 
     useEffect(() => {
         if (initialOffersLoading) {
-            setOffset(0);
-            setHasMore(true);
+            setOfferOffset(0);
+            setHasMoreOffers(true);
             setError(null);
             setLoading(false);
             setFetchedOffsets([]);
         }
-    }, [setOffset, initialOffersLoading]);
+    }, [setOfferOffset, initialOffersLoading]);
 
     useEffect(() => {
 
@@ -76,7 +76,7 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
                         newOffers.push(new Offer(offerData));
                 });
 
-                setHasMore(offersData.length > 0);
+                setHasMoreOffers(offersData.length > 0);
                 dispatch(setSearchOffers(newOffers));
                 setLoading(false);
                 setError(null);
@@ -91,7 +91,7 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
             }
         };
 
-        if (fetchMoreOffers && !fetchedOffsets.includes(filters.offset) && !initialOffersLoading && !loading) {
+        if (shouldFetchMoreOffers && !fetchedOffsets.includes(filters.offset) && !initialOffersLoading && !loading) {
             fetchOffers().catch((error) => {
                 setError({
                     cause: ErrorTypes.UNEXPECTED,
@@ -101,9 +101,9 @@ export default ({ offset, setOffset, fetchMoreOffers }) => {
         }
 
     }, [
-        dispatch, fetchMoreOffers, filters, initialOffersLoading,
+        dispatch, shouldFetchMoreOffers, filters, initialOffersLoading,
         fetchedOffsets, loading, offers,
     ]);
 
-    return { offers, hasMore, loading, error };
+    return { offers, hasMoreOffers, loading, error };
 };

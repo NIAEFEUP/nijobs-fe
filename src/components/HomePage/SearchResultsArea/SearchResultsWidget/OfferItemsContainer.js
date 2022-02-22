@@ -1,15 +1,14 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import OfferItem from "../Offer/OfferItem";
-
-import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
-
-import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
-import { Tune } from "@material-ui/icons";
+import { connect } from "react-redux";
 import clsx from "clsx";
+import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
+import { Tune } from "@material-ui/icons";
+
+import OfferItem from "../Offer/OfferItem";
+import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
 import useLoadMoreOffers from "./useLoadMoreOffers";
-import { connect } from "react-redux";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { SearchResultsConstants } from "./SearchResultsUtils";
 
@@ -60,16 +59,16 @@ const OfferItemsContainer = ({
 }) => {
     const classes = useSearchResultsWidgetStyles();
 
-    const [offset, setOffset] = useState(0);
-    const [fetchMoreOffers, setFetchMoreOffers] = useState(false);
+    const [offerOffset, setOfferOffset] = useState(0);
+    const [shouldFetchMoreOffers, setShouldFetchMoreOffers] = useState(false);
     const [lastOfferNode, setLastOfferNode] = useState(null);
 
     const {
         offers,
-        hasMore,
+        hasMoreOffers,
         loading: infiniteScrollLoading,
         error: infiniteScrollError,
-    } = useLoadMoreOffers({ offset, setOffset, fetchMoreOffers });
+    } = useLoadMoreOffers({ offerOffset, setOfferOffset, shouldFetchMoreOffers });
 
     const observer = useRef();
     const lastOfferElementRef = useCallback((node) => {
@@ -79,7 +78,7 @@ const OfferItemsContainer = ({
     useEffect(() => {
 
         if (loading || infiniteScrollLoading) {
-            setFetchMoreOffers(false);
+            setShouldFetchMoreOffers(false);
             return;
         }
 
@@ -93,15 +92,15 @@ const OfferItemsContainer = ({
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasMore) {
-                setOffset((previousOffset) => previousOffset + SearchResultsConstants.fetchNewOffersLimit);
-                setFetchMoreOffers(true);
+            if (entries[0].isIntersecting && hasMoreOffers) {
+                setOfferOffset((previousOffset) => previousOffset + SearchResultsConstants.fetchNewOffersLimit);
+                setShouldFetchMoreOffers(true);
             } else {
-                setFetchMoreOffers(false);
+                setShouldFetchMoreOffers(false);
             }
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [addSnackbar, hasMore, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading]);
+    }, [addSnackbar, hasMoreOffers, infiniteScrollError, infiniteScrollLoading, lastOfferNode, loading]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
