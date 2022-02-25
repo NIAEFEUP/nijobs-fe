@@ -342,7 +342,7 @@ const CreateOfferForm = () => {
                                             />
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={12} lg={6} className={classes.jobDurationGrid}>
+                                    <Grid item xs={12} lg={6}>
                                         <JobDurationComponent
                                             disabled={disabled}
                                             errors={errors}

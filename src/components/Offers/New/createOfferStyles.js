@@ -62,9 +62,6 @@ export default (isMobile) => makeStyles((theme) => ({
     jobTypeGrid: {
         marginBottom: theme.spacing(4),
     },
-    jobDurationGrid: {
-        marginTop: theme.spacing(2),
-    },
     multiTextOptionGrid: {
         marginBottom: theme.spacing(4),
     },
