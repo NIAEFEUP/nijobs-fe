@@ -33,11 +33,11 @@ const generateApplication = (id, state) => {
 
     if (state === "REJECTED") {
         application.rejectReason = "asjdnasjnlasndklnaslkdnlasd\n\n\nasdjbasljdjasdnalsnd\n\n\nasdhsakdas";
-        application.rejectedAt = addDays(new Date(Date.now() + 100), id).toISOString();
+        application.rejectedAt = addDays(new Date(Date.now() + 100), id + 1).toISOString();
     }
 
     if (state === "APPROVED") {
-        application.approvedAt = addDays(new Date(Date.now() + 100), id).toISOString();
+        application.approvedAt = addDays(new Date(Date.now() + 100), id + 1).toISOString();
     }
 
     return application;
@@ -456,6 +456,52 @@ describe("Application Review Widget", () => {
                 expect(screen.getByRole("button", { name: val.label })).toBeInTheDocument();
             } else {
                 expect(screen.queryByRole("button", { name: val.label })).not.toBeInTheDocument();
+            }
+        }
+    });
+
+    it("Should render mobile collapsable content on mobile device", async () => {
+        const MOBILE_WIDTH_PX = 360;
+        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
+
+        const applications = generateApplications(3);
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () => { // Necessary since the component auto mutates its state when loading the rows
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <ApplicationsReviewWidget isMobile={true} />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme });
+        });
+
+        for (const application of applications) {
+            try {
+                const applicationRow = screen.queryByText(application.companyName).closest("tr");
+                expect(queryByText(applicationRow, application.companyName)).toBeInTheDocument();
+                expect(queryByText(applicationRow, ApplicationStateLabel[application.state])).toBeInTheDocument();
+
+                fireEvent.click(getByLabelText(applicationRow, "More Actions"));
+
+                expect(queryByText(applicationRow.nextElementSibling, format(parseISO(application.submittedAt), "yyyy-MM-dd")))
+                    .toBeInTheDocument();
+                expect(queryByText(applicationRow.nextElementSibling, application.email)).toBeInTheDocument();
+
+                expect(queryByText(applicationRow.nextElementSibling, application.motivation)).toBeInTheDocument();
+
+                if (application.state === "REJECTED") {
+                    expect(queryByText(applicationRow.nextElementSibling, format(parseISO(application.rejectedAt), "yyyy-MM-dd")
+                    )).toBeInTheDocument();
+                    expect(queryByText(applicationRow.nextElementSibling, application.rejectReason, {
+                        normalizer: getDefaultNormalizer({ collapseWhitespace: false }), // Necessary to prevent RTL from collapsing \n
+                    })).toBeInTheDocument();
+                } else if (application.state === "PENDING") {
+                    expect(getByLabelText(applicationRow.nextElementSibling, "Approve Application")).toBeInTheDocument();
+                    expect(getByLabelText(applicationRow.nextElementSibling, "Reject Application")).toBeInTheDocument();
+                }
+            } catch (e) {
+                throw new Error(`Failed checking company ${application.companyName}\n\n${e}`);
             }
         }
     });
