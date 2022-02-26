@@ -117,7 +117,7 @@ describe("Application Review Widget", () => {
 
     });
 
-    /* it("Should change number of rows visible", async () => {
+    it("Should change number of rows visible", async () => {
         const applications = generateApplications(25);
         fetch.mockResponse(JSON.stringify({ applications }));
 
@@ -135,16 +135,16 @@ describe("Application Review Widget", () => {
 
         for (let i = 0; i < numRowsOptions.length; i++) {
             if (i !== 0)
-                fireEvent.click(screen.getByText(`${numRowsOptions[i]}`)); // Show num pages select box
+                userEvent.selectOptions(    // select and choose rows per page option
+                    screen.getByLabelText("Rows per page"),
+                    screen.getByRole("option", { name: `${numRowsOptions[i]}` })
+                );
+
 
             const expectedNumRows = numRowsOptions[i];
             expect(screen.getAllByTestId("application-row").length).toBe(expectedNumRows);
-
-            // screen.debug();
-
-            fireEvent.mouseDown(screen.getByLabelText(`Rows per page: ${numRowsOptions[i]}`)); // Show num pages select box
         }
-    }); */
+    });
 
     it("Should approve an application", async () => {
         const applications = generateApplications(1, "PENDING");
