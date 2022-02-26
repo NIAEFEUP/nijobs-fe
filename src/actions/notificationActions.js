@@ -4,6 +4,14 @@ export const NotificationTypes = {
     CLOSE_SNACKBAR: "CLOSE_SNACKBAR",
 };
 
+/**
+ * Possible notification properties:
+ * - key: key of the snackbar component
+ * - message: notification's message
+ * - options: options for the enqueueSnackbar function
+ * - contentOptions: object specifying the specific props to add to the default content (Notification)
+ * These props are ignored if options.content is set
+ */
 export const addSnackbar = (notification) => {
 
     if (typeof notification.message !== "string" || notification.message.length === 0) {

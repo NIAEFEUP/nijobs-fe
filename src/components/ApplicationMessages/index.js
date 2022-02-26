@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { addSnackbar } from "../../actions/notificationActions";
 import useSession from "../../hooks/useSession";
 import { connect } from "react-redux";
-import Notification from "../Notifications/Notification";
 import { useHistory } from "react-router";
 
 const ApplicationMessageNotifier = ({ addSnackbar }) => {
@@ -21,16 +20,11 @@ const ApplicationMessageNotifier = ({ addSnackbar }) => {
             setHasShownCompleteRegistrationMessage(true);
             addSnackbar({
                 message: "In order to fully use NIJobs, you still need to finish your registration.",
-                options: {
-                    // eslint-disable-next-line react/display-name
-                    content: (key, message) =>
-                        <Notification
-                            message={message}
-                            actionText="Show me"
-                            actionHandler={() => {
-                                history.push("/company/registration/finish");
-                            }}
-                        />,
+                contentOptions: {
+                    actionText: "Show me",
+                    actionHandler: () => {
+                        history.push("/company/registration/finish");
+                    },
                 },
             });
         }
