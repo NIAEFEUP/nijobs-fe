@@ -86,26 +86,33 @@ export const CookieConsent = () => {
     };
 
     useEffect(() => {
-        const cookies = localStorage.getItem("non-essential-cookies-enablement");
-        if (!cookies) {
+        const rawCookies = localStorage.getItem("non-essential-cookies-enablement");
+        if (!rawCookies) {
             toggleOpen();
             return;
         }
 
-        const expired = Date.now() > cookies.expires;
-        if (!expired) {
-            handle(cookies.accepted);
-        } else {
+        try {
+            const cookies = JSON.parse(rawCookies);
+
+            const expired = Date.now() > cookies.expires;
+            if (!expired) {
+                handle(cookies.accepted);
+            } else {
+                toggleOpen();
+            }
+        } catch {
             toggleOpen();
         }
+
     }, [toggleOpen]);
 
     const handleAccept = () => {
         const expires = Date.now() + (COOKIE_ACCEPT_LIFETIME_MONTHS * MONTH_IN_MS);
-        localStorage.setItem("non-essential-cookies-enablement", {
+        localStorage.setItem("non-essential-cookies-enablement", JSON.stringify({
             accepted: true,
             expires,
-        });
+        }));
         handle(true);
         resetConsentOpeningState();
         setClosedWhyModal();
@@ -113,10 +120,10 @@ export const CookieConsent = () => {
 
     const handleReject = () => {
         const expires = Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS);
-        localStorage.setItem("non-essential-cookies-enablement", {
+        localStorage.setItem("non-essential-cookies-enablement", JSON.stringify({
             accepted: false,
             expires,
-        });
+        }));
         handle(false);
         resetConsentOpeningState();
         setClosedWhyModal();

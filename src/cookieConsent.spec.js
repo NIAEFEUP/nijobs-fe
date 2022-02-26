@@ -44,11 +44,22 @@ describe("Cookie Consent", () => {
         expect(wrapper.getByText(COOKIE_MESSAGE));
     });
 
+    it("should open if invalid value in local storage", () => {
+        localStorage.getItem.mockReturnValue("\"");
+
+        const wrapper = renderWithTheme(
+            <CookieConsent />,
+            { theme }
+        );
+
+        expect(wrapper.getByText(COOKIE_MESSAGE));
+    });
+
     it("should open if accepted date already past", () => {
-        localStorage.getItem.mockReturnValue({
+        localStorage.getItem.mockReturnValue(JSON.stringify({
             accepted: true,
             expires: Date.now() - 1000,
-        });
+        }));
         const wrapper = renderWithTheme(
             <CookieConsent />,
             { theme }
@@ -58,10 +69,10 @@ describe("Cookie Consent", () => {
     });
 
     it("should not open if accepted date not past", () => {
-        localStorage.getItem.mockReturnValue({
+        localStorage.getItem.mockReturnValue(JSON.stringify({
             accepted: true,
             expires: Date.now() + 1000,
-        });
+        }));
         const wrapper = renderWithTheme(
             <CookieConsent />,
             { theme }
@@ -71,10 +82,10 @@ describe("Cookie Consent", () => {
     });
 
     it("should not open if rejection date not past", () => {
-        localStorage.getItem.mockReturnValue({
+        localStorage.getItem.mockReturnValue(JSON.stringify({
             accepted: false,
             expires: Date.now() + 1000,
-        });
+        }));
         const wrapper = renderWithTheme(
             <CookieConsent />,
             { theme }
@@ -84,10 +95,10 @@ describe("Cookie Consent", () => {
     });
 
     it("should initialize google analytics if accepted", () => {
-        localStorage.getItem.mockReturnValue({
+        localStorage.getItem.mockReturnValue(JSON.stringify({
             accepted: true,
             expires: Date.now() + 1000,
-        });
+        }));
 
         renderWithTheme(
             <CookieConsent />,
@@ -99,10 +110,10 @@ describe("Cookie Consent", () => {
     });
 
     it("should remove cookies if already rejected", () => {
-        localStorage.getItem.mockReturnValue({
+        localStorage.getItem.mockReturnValue(JSON.stringify({
             accepted: false,
             expires: Date.now() + 1000,
-        });
+        }));
 
         renderWithTheme(
             <CookieConsent />,
@@ -131,10 +142,10 @@ describe("Cookie Consent", () => {
         expect(initAnalytics).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith(
             "non-essential-cookies-enablement",
-            {
+            JSON.stringify({
                 accepted: true,
                 expires: Date.now() + (COOKIE_ACCEPT_LIFETIME_MONTHS * MONTH_IN_MS),
-            }
+            })
         );
     });
 
@@ -188,10 +199,10 @@ describe("Cookie Consent", () => {
         expect(clearAnalytics).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith(
             "non-essential-cookies-enablement",
-            {
+            JSON.stringify({
                 accepted: false,
                 expires: Date.now() + (COOKIE_REJECT_LIFETIME_DAYS * DAY_IN_MS),
-            }
+            })
         );
     });
 
