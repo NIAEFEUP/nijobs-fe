@@ -2,7 +2,8 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime, sendSearchReport } from "../utils/analytics";
+import { createEvent, measureTime, sendSearchReport } from "../utils/analytics";
+import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 

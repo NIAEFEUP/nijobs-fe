@@ -1,5 +1,6 @@
 import config from "../config";
-import { createEvent, EVENT_TYPES, TIMED_ACTIONS, measureTime } from "../utils/analytics";
+import { createEvent, measureTime } from "../utils/analytics";
+import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 import { buildCancelableRequest, parseFiltersToURL } from "../utils";
 
