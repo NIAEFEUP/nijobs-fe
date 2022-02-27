@@ -15,14 +15,12 @@ import { create } from "jss";
 import { StylesProvider, jssPreset } from "@material-ui/core/styles";
 import compose from "jss-plugin-compose";
 import { loadDevTools } from "./devTools.js";
-import { initAnalytics } from "./utils/analytics";
 
 const jss = create({
     plugins: [...jssPreset().plugins, compose()],
 });
 
 loadDevTools().then(() => {
-    initAnalytics();
     ReactDOM.render(
         <StylesProvider jss={jss}>
             <ThemeProvider theme={AppTheme}>

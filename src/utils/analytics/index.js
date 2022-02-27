@@ -3,6 +3,10 @@ import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS } from "./constants";
 
 const QUERY_VALUE_PARAMETER = "value=";
 
+export const removeCookie = (cookie) => {
+    document.cookie = `${cookie}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
+};
+
 /**
  * Initializes Google Analytics.
  */
@@ -12,6 +16,15 @@ export const initAnalytics = () => {
             siteSpeedSampleRate: 100,
         },
     });
+};
+
+/**
+ * Clears cookies relative to analytics
+ */
+export const clearAnalytics = () => {
+    removeCookie("_ga");
+    removeCookie("_gat");
+    removeCookie("_gid");
 };
 
 /**

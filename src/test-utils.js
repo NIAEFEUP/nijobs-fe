@@ -132,6 +132,13 @@ export const renderWithStoreAndTheme = (
     return customRender(ui, { wrapper, ...renderOptions });
 };
 
+const localStorageMock = {
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    clear: jest.fn(),
+};
+global.localStorage = localStorageMock;
+
 // re-export everything
 export * from "@testing-library/react";
 
