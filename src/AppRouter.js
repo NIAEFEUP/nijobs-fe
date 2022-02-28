@@ -66,7 +66,7 @@ const AppRouter = () => (
             >
                 <PageLayout
                     key="/privacy-policy"
-                    pageTitle="Privacy and Policy"
+                    pageTitle="Privacy Policy"
                     layout={LayoutType.DESKTOP}
                 >
                     <PrivacyPolicyPage />
