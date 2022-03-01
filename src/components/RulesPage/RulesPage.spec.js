@@ -33,3 +33,16 @@ describe("Rules Page", () => {
         expect(wrapper.getByText("Main Page").getAttribute("href")).toBe("/");
     });
 });
+
+describe("Rules Page test", () => {
+    it("Should show Rules Page text", () => {
+        const wrapper = render(
+            <BrowserRouter>
+                <ThemeProvider theme={AppTheme}>
+                    <RulesPage />
+                </ThemeProvider>
+            </BrowserRouter>
+        );
+        expect(wrapper.queryByText("For further clarification contact us via:")).toBeInTheDocument();
+    });
+});
