@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { parseRequestErrors } from "../Form/OfferUtils";
 import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
@@ -48,12 +48,13 @@ export const EditOfferController = () => {
     const { id } = useParams();
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
     const { data: user, isValidating } = useSession();
+    const [canEdit, setCanEdit] = useState(false);
 
-    const canEdit = useCallback(() => {
-        const blocked = offer.isHidden && offer.hiddenReason !== "COMPANY_REQUEST";
-        return !blocked && (
-            (offer?.owner === user?.company?._id) || user?.isAdmin);
-    }, [offer, user]);
+    useEffect(() => {
+        const blocked = offer?.isHidden && offer?.hiddenReason !== "COMPANY_REQUEST";
+        setCanEdit(!blocked && (
+            (offer?.owner === user?.company?._id) || user?.isAdmin));
+    }, [loadingOffer, offer, user]);
 
     const location = useLocation();
 
@@ -147,7 +148,8 @@ const EditOfferForm = () => {
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (errorOffer || (!loadingOffer && !isValidating && !canEdit())) {
+    if (errorOffer || (!loadingOffer && !isValidating && !canEdit)) {
+
         return (
             <Redirect {...redirectProps} />
         );

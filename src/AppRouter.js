@@ -24,7 +24,7 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import CreateOfferPage from "./pages/CreateOfferPage";
 import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
 import { CookieConsent } from "./cookieConsent";
-import { EditOfferController, EditOfferControllerContext } from "./components/Offers/EditOfferForm";
+import { EditOfferController, EditOfferControllerContext } from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
 
 /**
