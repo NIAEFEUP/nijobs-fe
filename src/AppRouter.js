@@ -12,6 +12,7 @@ import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
 import OfferPage, { OfferPageController, OfferPageControllerContext } from "./pages/OfferPage";
+import RulesPage from "./pages/RulesPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
 import {
@@ -70,6 +71,18 @@ const AppRouter = () => (
                     context={CompanyApplicationPageControllerContext}
                 >
                     <CompanyApplicationPage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/rules"
+            >
+                <PageLayout
+                    key="/rules"
+                    pageTitle="Rules"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <RulesPage />
                 </PageLayout>
             </Route>
             <ProtectedRoute

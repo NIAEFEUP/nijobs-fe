@@ -1,6 +1,7 @@
 import React from "react";
 import { RouterLink } from "../../../utils";
 import { CardHeader, CardContent, CardActions, Link, Typography, makeStyles } from "@material-ui/core";
+import Constants from "../../../utils/Constants";
 
 const useStyles = makeStyles((theme) => ({
     content: {
@@ -23,7 +24,9 @@ const ApplicationConfirmation = () => {
                 <Typography variant="body2">
                     Application Submitted, you should receive a confirmation email shortly. If not, please contact us:
                     {" "}
-                    <Link color="secondary" href="mailto:ni@aefeup.pt">ni@aefeup.pt</Link>
+                    <Link color="secondary" href={`mailto:${Constants.CONTACT_US_EMAIL}`}>
+                        {Constants.CONTACT_US_EMAIL}
+                    </Link>
                 </Typography>
                 <Typography variant="body2" className={classes.secondText}>
                     {"Once you're approved, you will receive an email, and then you can log into NIJobs! "}
