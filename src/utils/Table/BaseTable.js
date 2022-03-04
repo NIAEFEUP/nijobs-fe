@@ -53,6 +53,7 @@ const BaseTable = ({
     error,
     hasMaxHeight = false,
     mobileColumns,
+    hideMobileTitle = true,
 }) => {
     const isMobile = useMobile();
     const classes = useStyles(hasMaxHeight)();
@@ -100,6 +101,8 @@ const BaseTable = ({
                 hasActiveFilters={hasActiveFilters}
                 setActiveFilters={setActiveFilters}
                 MultiRowActions={MultiRowActions}
+                hideMobileTitle={hideMobileTitle}
+                isMobile={isMobile}
                 {...TableToolbarProps}
             />
             <TableContainer component={Paper} className={classes.tableContainer}>
@@ -205,6 +208,7 @@ BaseTable.propTypes = {
     error: PropTypes.object,
     hasMaxHeight: PropTypes.bool,
     mobileColumns: PropTypes.array.isRequired,
+    hideMobileTitle: PropTypes.bool,
 };
 
 export default BaseTable;
