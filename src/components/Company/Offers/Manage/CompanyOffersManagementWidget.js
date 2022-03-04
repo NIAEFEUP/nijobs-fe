@@ -1,4 +1,4 @@
-import { Divider, IconButton, makeStyles, TableCell, Tooltip, Typography } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -24,8 +24,8 @@ const generateRow = ({ title, location, description, publishDate, publishEndDate
         location: { value: location },
     },
     payload: {
-        companyName: { value: ownerName },
-        description: { value: description },
+        companyName: { value: ownerName, label: "Company Name" },
+        description: { value: description, label: "Description" },
     },
 });
 
@@ -146,7 +146,6 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
 
     const RowCollapseComponent = ({ rowKey }) => {
         const row = offers[rowKey];
-        console.log("row ==>", row);
         const offerRoute = `/offer/${rowKey}`;
         const classes = useRowCollapseStyles();
         const mobileFieldKeys = ["location", "publishEndDate"];
@@ -157,28 +156,32 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
             ) : (
                 <>
                     <div className={classes.payloadSection}>
-                        <Typography className={classes.collapsableTitles} variant="body1">
-                            Edit Offer
-                        </Typography>
-                        <Typography variant="body2">
-                            <Tooltip title="Edit Offer">
-                                <Link to={offerRoute}>
-                                    <IconButton>
-                                        <EditIcon color="secondary" fontSize="default" />
-                                    </IconButton>
-                                </Link>
-                            </Tooltip>
-                        </Typography>
+                        <Grid container alignItems="center">
+                            <Grid item xs={6}>
+                                <Typography className={classes.collapsableTitles} variant="body1">
+                                         Actions
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center">
+                                <Tooltip title="Edit Offer">
+                                    <Link to={offerRoute}>
+                                        <IconButton>
+                                            <EditIcon color="secondary" fontSize="default" />
+                                        </IconButton>
+                                    </Link>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
                     </div>
 
                     {mobileFieldKeys.map((colKey) => (
                         <div key={colKey} className={classes.payloadSection}>
                             <Divider />
                             <Typography className={classes.collapsableTitles} variant="body1">
-                                {colKey}
+                                {columns[colKey]?.label}
                             </Typography>
                             <Typography variant="body2">
-                                {row.fields[colKey]}
+                                {row.fields[colKey].value}
                             </Typography>
                         </div>
                     ))}

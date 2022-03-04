@@ -52,10 +52,10 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
         state: { value: ApplicationStateLabel[state] },
     },
     payload: {
-        email,
-        motivation,
-        rejectReason,
-        rejectedAt: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "",
+        email: { value: email, label: "Email" },
+        motivation: { value: motivation, label: "Motivation" },
+        rejectReason: { value: rejectReason, label: "Reject Reason" },
+        rejectedAt: { value: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "", label: "Rejected At" },
     },
 });
 
@@ -163,14 +163,14 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
             !isMobile ? (
                 <>
                     <Typography variant="subtitle2">
-                        {row.payload.email}
+                        {row.payload.email.value}
                     </Typography>
                     <div className={classes.payloadSection}>
                         <Typography variant="body1">
                             Motivation
                         </Typography>
                         <Typography variant="body2">
-                            {row.payload.motivation}
+                            {row.payload.motivation.value}
                         </Typography>
                     </div>
 
@@ -178,10 +178,10 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
                     <div className={classes.payloadSection}>
                         <Divider />
                         <Typography variant="body1">
-                            {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+                            {`Reject Reason (Rejected at ${row.payload.rejectedAt.value})`}
                         </Typography>
                         <Typography variant="body2">
-                            {row.payload.rejectReason}
+                            {row.payload.rejectReason.value}
                         </Typography>
                     </div>
                     }
@@ -225,10 +225,10 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
                         <div key={colKey} className={classes.payloadSection}>
                             <Divider />
                             <Typography className={classes.collapsableTitles} variant="body1">
-                                {colKey}
+                                {row.payload[colKey].label}
                             </Typography>
                             <Typography variant="body2">
-                                {row.payload[colKey]}
+                                {row.payload[colKey].value}
                             </Typography>
                         </div>
                     ))}
