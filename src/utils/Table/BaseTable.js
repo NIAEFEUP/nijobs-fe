@@ -146,10 +146,11 @@ const BaseTable = ({
                 count={Object.keys(rows).length} // TODO change this to have total number of rows, even the ones not fetched yet
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
                 backIconButtonProps={{ color: "secondary" }}
                 nextIconButtonProps={{ color: "secondary" }}
+                labelRowsPerPage={<span>Nº Rows:</span>}
                 {
                     ...(!hasMaxHeight && {
                         SelectProps: {

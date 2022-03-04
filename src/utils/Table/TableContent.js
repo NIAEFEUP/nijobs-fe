@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { TableCell, Checkbox, TableRow as MUITableRow, Collapse, makeStyles } from "@material-ui/core";
-import { RowFields, RowPayload, RowPropTypes } from "./PropTypes";
+import { RowFields, RowPropTypes } from "./PropTypes";
 import useToggle from "../../hooks/useToggle";
 import { Skeleton } from "@material-ui/lab";
 
@@ -65,12 +65,12 @@ const TableRow = ({
 TableRow.propTypes = {
     rowKey: PropTypes.string.isRequired,
     fields: RowFields.isRequired,
-    payload: RowPayload,     // Need to check what to do with this propTypes (specific to Company Applications)
+    payload: PropTypes.object,     // Need to check what to do with this propTypes (specific to Company Applications)
     rowProps: PropTypes.object.isRequired,
     handleSelect: PropTypes.func.isRequired,
     isRowSelected: PropTypes.func.isRequired,
     RowActions: PropTypes.elementType,
-    submitUndoableAction: PropTypes.func.isRequired,
+    submitUndoableAction: PropTypes.func,
     context: PropTypes.object,
     RowActionsProps: PropTypes.object,
     RowContent: PropTypes.elementType.isRequired,

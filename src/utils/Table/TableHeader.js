@@ -63,7 +63,7 @@ const TableHeader = ({
                     <TableCell
                         key={key}
                         align={align}
-                        padding={disablePadding ? "none" : "default"}
+                        padding={disablePadding ? "none" : "normal"}
                         classes={{
                             head: classes.headRow,
                         }}

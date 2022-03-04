@@ -5,7 +5,7 @@ import { useMobile } from "../utils/media-queries";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
-        padding: isMobile ? theme.spacing(2, 4) : theme.spacing(3, 9),
+        padding: isMobile ? theme.spacing(2, 2) : theme.spacing(3, 9),
     },
 }));
 

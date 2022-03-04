@@ -23,8 +23,8 @@ const CompanyOffersActions = ({
                 { !isMobile ? (
                     <Tooltip title="Edit Offer">
                         <Link to={offerRoute}>
-                            <IconButton>
-                                <EditIcon color="secondary" fontSize="default" />
+                            <IconButton aria-label="Edit Offer">
+                                <EditIcon color="secondary" fontSize="medium" />
                             </IconButton>
                         </Link>
                     </Tooltip>

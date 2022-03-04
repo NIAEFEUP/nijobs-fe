@@ -57,32 +57,10 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-/* const RowActions = ({ row }) => {
-    const offerRoute = `/offer/${row?.key}`;
-
-    // Need to change the route from View Offer to Edit Offer (After Edit Offer page is done)
-
-    return (
-        <TableCell align="right">
-            <Tooltip title="Edit Offer">
-                <Link to={offerRoute}>
-                    <IconButton>
-                        <EditIcon color="secondary" fontSize="default" />
-                    </IconButton>
-                </Link>
-            </Tooltip>
-        </TableCell>
-    );
-};
-
-RowActions.propTypes = {
-    row: PropTypes.object.isRequired,
-}; */
-
 
 const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const { data, isLoggedIn } = useSession();
-    const [offers, setOffers] = useState([]);
+    const [offers, setOffers] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const mobileCols = ["title", "publishStartDate", "actions"];
@@ -97,7 +75,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
 
                 setOffers(fetchedRows);
             } else {
-                setOffers([]);
+                setOffers({});
             }
             setIsLoading(false);
         }).catch((err) => {
@@ -151,9 +129,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         const mobileFieldKeys = ["location", "publishEndDate"];
 
         return (
-            !isMobile ? (
-                <div />
-            ) : (
+            isMobile && (
                 <>
                     <div className={classes.payloadSection}>
                         <Grid container alignItems="center">
@@ -165,8 +141,8 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                             <Grid item xs={6} justifyContent="center">
                                 <Tooltip title="Edit Offer">
                                     <Link to={offerRoute}>
-                                        <IconButton>
-                                            <EditIcon color="secondary" fontSize="default" />
+                                        <IconButton aria-label="Edit Offer">
+                                            <EditIcon color="secondary" fontSize="medium" />
                                         </IconButton>
                                     </Link>
                                 </Tooltip>
@@ -187,7 +163,6 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                     ))}
                 </>
             )
-
         );
     };
 

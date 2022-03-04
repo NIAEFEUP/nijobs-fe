@@ -1,5 +1,5 @@
 import React from "react";
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, queryByText, getByLabelText, fireEvent, act } from "@testing-library/react";
 
 import CompanyOffersManagementWidget from "./CompanyOffersManagementWidget";
 import { renderWithStoreAndTheme } from "../../../../test-utils";
@@ -14,6 +14,7 @@ import { columns } from "./CompanyOffersManagementSchema";
 import { createTheme } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import Notifier from "../../../Notifications/Notifier";
+import { format, parseISO } from "date-fns";
 
 jest.mock("../../../../hooks/useSession");
 jest.mock("../../../../services/companyOffersService");
@@ -37,13 +38,13 @@ describe("App", () => {
         {
             _id: "random uuid5",
             owner: "company_id",
-            title: "Guy in the background",
+            title: "Girl in the background",
             ownerName: "Reddit",
-            ownerLogo: "logo.com",
-            location: "Porto",
-            publishDate: "2019-06",
-            publishEndDate: "2020-09",
-            description: "kek",
+            ownerLogo: "logo.com2",
+            location: "Lisbon",
+            publishDate: "2021-06",
+            publishEndDate: "2021-09",
+            description: "kekw",
         },
     ];
 
@@ -52,7 +53,7 @@ describe("App", () => {
     });
 
     it("Renders Loading", () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => {}));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => { }));
 
         renderWithStoreAndTheme(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -70,7 +71,7 @@ describe("App", () => {
     });
 
     it("Loads Valid Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve(MOCK_OFFERS)
         ));
 
@@ -87,14 +88,27 @@ describe("App", () => {
         // wait for the wrapped assertions to pass within a certain timeout window (wait for all updates to complete)
         await waitFor(() => {
             expect(screen.getByText("Offers Management")).toBeInTheDocument();
-            expect(screen.getAllByText("Guy in the background")).toHaveLength(2);
+
+            for (const offer of MOCK_OFFERS) {
+                try {
+                    const offerRow = screen.queryByText(offer.title).closest("tr");
+
+                    expect(queryByText(offerRow, format(parseISO(offer.publishDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                    expect(queryByText(offerRow, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                    expect(queryByText(offerRow, offer.location)).toBeInTheDocument();
+
+                    expect(getByLabelText(offerRow, "Edit Offer")).toBeInTheDocument();
+                } catch (e) {
+                    throw new Error(`Failed checking Offer ${offer.title}\n\n${e}`);
+                }
+            }
         }, {
             timeout: 1000,
         });
     });
 
     it("Loads Empty Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve([])
         ));
         // By waiting for act it executes all the async code at once
@@ -144,7 +158,7 @@ describe("App", () => {
         const MOBILE_WIDTH_PX = 360;
         window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
 
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() =>  new Promise((resolve) =>
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve(MOCK_OFFERS)
         ));
 
@@ -169,5 +183,46 @@ describe("App", () => {
         }, {
             timeout: 1000,
         });
+    });
+
+    it("Should render mobile collapsable content on mobile device", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+
+        const MOBILE_WIDTH_PX = 360;
+        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
+
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve(MOCK_OFFERS)
+        ));
+
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <SnackbarProvider maxSnack={3}>
+                            <Notifier />
+                            <CompanyOffersManagementWidget isMobile={true} />
+                        </SnackbarProvider>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme })
+        );
+
+        for (const offer of MOCK_OFFERS) {
+            try {
+                const offerRow = screen.queryByText(offer.title)?.closest("tr");
+
+                expect(queryByText(offerRow, format(parseISO(offer.publishDate), "yyyy-MM-dd"))).toBeInTheDocument();
+
+                fireEvent.click(getByLabelText(offerRow, "More Actions"));
+
+                expect(getByLabelText(offerRow.nextElementSibling, "Edit Offer")).toBeInTheDocument();
+                expect(queryByText(offerRow.nextElementSibling, offer.location)).toBeInTheDocument();
+                expect(queryByText(offerRow.nextElementSibling, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
+            } catch (e) {
+                throw new Error(`Failed checking Offer ${offer.title}\n\n${e}`);
+            }
+        }
+
     });
 });
