@@ -1,4 +1,4 @@
-import { IconButton, TableCell, Tooltip } from "@material-ui/core";
+import { Divider, IconButton, makeStyles, TableCell, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -13,6 +13,7 @@ import { Edit as EditIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
+import { RowActions } from "./CompanyOffersActions";
 
 const generateRow = ({ title, location, description, publishDate, publishEndDate,
     ownerName, _id }) => ({
@@ -56,7 +57,7 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-const RowActions = ({ row }) => {
+/* const RowActions = ({ row }) => {
     const offerRoute = `/offer/${row?.key}`;
 
     // Need to change the route from View Offer to Edit Offer (After Edit Offer page is done)
@@ -76,7 +77,7 @@ const RowActions = ({ row }) => {
 
 RowActions.propTypes = {
     row: PropTypes.object.isRequired,
-};
+}; */
 
 
 const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
@@ -128,6 +129,70 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         labelId: PropTypes.string.isRequired,
     };
 
+    const useRowCollapseStyles = makeStyles((theme) => ({
+        payloadSection: {
+            wordBreak: "break-all",
+            "&:not(:first-child)": {
+                paddingTop: theme.spacing(2),
+            },
+            "&:not(:first-child) p:first-of-type": {
+                paddingTop: theme.spacing(2),
+            },
+        },
+        collapsableTitles: {
+            fontWeight: 500,
+        },
+    }));
+
+    const RowCollapseComponent = ({ rowKey }) => {
+        const row = offers[rowKey];
+        console.log("row ==>", row);
+        const offerRoute = `/offer/${rowKey}`;
+        const classes = useRowCollapseStyles();
+        const mobileFieldKeys = ["location", "publishEndDate"];
+
+        return (
+            !isMobile ? (
+                <div />
+            ) : (
+                <>
+                    <div className={classes.payloadSection}>
+                        <Typography className={classes.collapsableTitles} variant="body1">
+                            Edit Offer
+                        </Typography>
+                        <Typography variant="body2">
+                            <Tooltip title="Edit Offer">
+                                <Link to={offerRoute}>
+                                    <IconButton>
+                                        <EditIcon color="secondary" fontSize="default" />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+                        </Typography>
+                    </div>
+
+                    {mobileFieldKeys.map((colKey) => (
+                        <div key={colKey} className={classes.payloadSection}>
+                            <Divider />
+                            <Typography className={classes.collapsableTitles} variant="body1">
+                                {colKey}
+                            </Typography>
+                            <Typography variant="body2">
+                                {row.fields[colKey]}
+                            </Typography>
+                        </div>
+                    ))}
+                </>
+            )
+
+        );
+    };
+
+    RowCollapseComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+    };
+
+
     return (
         <FilterableTable
             title="Offers Management"
@@ -144,6 +209,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
             stickyHeader
             emptyMessage="No offers here."
             RowContent={RowContent}
+            RowCollapseComponent={RowCollapseComponent}
             handleSelect={() => {}}
             handleSelectAll={() => {}}
             isSelectableTable={false}
