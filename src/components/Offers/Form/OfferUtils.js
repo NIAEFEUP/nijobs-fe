@@ -1,4 +1,4 @@
-import { HumanValidationReasons, validationRulesGenerator } from "../../../utils";
+import { generalHumanError, HumanValidationReasons, validationRulesGenerator } from "../../../utils";
 import { DAY_IN_MS, MONTH_IN_MS, OFFER_MAX_LIFETIME_MONTHS } from "../../../utils/TimeUtils";
 import { MAX_FIELDS, MIN_FIELDS } from "../../utils/offers/FieldOptions";
 import { MAX_TECHNOLOGIES, MIN_TECHNOLOGIES } from "../../utils/offers/TechOptions";
@@ -49,11 +49,7 @@ const HumanReadableErrors = Object.freeze({
     "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
 });
 
-export const getHumanError = (error) => {
-    const [errorId, errorValue] = error.split(":");
-    const errorFunc = HumanReadableErrors[errorId];
-    return (!!errorFunc && errorFunc(errorValue)) || "An error occurred, please try again.";
-};
+export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
 
 export const parseRequestErrors = (err) => {
     const generalErrors = err.filter((error) => !error.param).map((error) => ({ message: getHumanError(error.msg) }));

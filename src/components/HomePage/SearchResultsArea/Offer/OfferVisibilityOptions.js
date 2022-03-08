@@ -83,7 +83,7 @@ const OfferVisibilityOptions = ({
                                 onClick={handleOfferVisibility}
                                 className={classes.visibilityButton}
                                 role="hideEnableOfferButton"
-                                disabled={visibilityState.isDisabled}
+                                disabled={false}
                                 startIcon={visibilityState.isVisible ? <VisibilityOff /> : <Visibility />}
                             >
                                 { visibilityState.isVisible ? "Hide Offer" : "Enable Offer" }

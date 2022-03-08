@@ -56,6 +56,7 @@ const OfferWidget = ({
     const [showAdminReasonModal, setShowAdminReasonModal] = useState(false);
 
     const handleError = useCallback((err) => {
+        console.log(Object.prototype.hasOwnProperty.call(err[0], "msg"));
         if (Array.isArray(err) && err.length > 0) {
             let visibilityError = null;
             if (Object.prototype.hasOwnProperty.call(err[0], "msg"))
