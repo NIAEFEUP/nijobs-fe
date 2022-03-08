@@ -9,6 +9,7 @@ import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
+import { string } from "yup";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -353,11 +354,12 @@ export const buildCancelableRequest = (promiseFn) => (...args) => new Cancelable
 
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
 
-export const HumanReadableErrors = Object.freeze({
-    "no-company-found-with-id": (id) => `No company found with given ID: ${id}.`,
-    "max-concurrent-offers-reached": (val) => `Maximum concurrent offers exceeded. You cannot have more than ${val} offers at a time.`,
-    "must-be-int": () => "Must be an integer.",
-    "company-blocked": () => "Company is blocked. Please contact the team to review this situation if you think this is a mistake.",
-    "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
-    "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
-});
+export const getHumanError = (error, HumanReadableErrors) => {
+    const rawHumanReadableErrors = HumanReadableErrors;
+    if(typeof rawHumanReadableErrors === string){
+        
+    }
+    const [errorId, errorValue] = error.split(":");
+    const errorFunc = HumanReadableErrors[errorId];
+    return (!!errorFunc && errorFunc(errorValue)) || "An error occurred, please try again.";
+};
