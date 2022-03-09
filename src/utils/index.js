@@ -9,7 +9,6 @@ import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
-import { string } from "yup";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -355,12 +354,11 @@ export const buildCancelableRequest = (promiseFn) => (...args) => new Cancelable
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
 
 export const generalHumanError = (error, HumanReadableErrors) => {
-    console.log(error);
     const [errorId, errorValue] = error.split(":");
     const rawError = HumanReadableErrors[errorId];
     if (typeof rawError === "string") {
         return rawError;
-    } else if (typeof rawError === "function"){
+    } else if (typeof rawError === "function") {
         return (!!rawError && rawError(errorValue)) || "An error occurred, please try again.";
     }
     return "An error occurred, please try again.";

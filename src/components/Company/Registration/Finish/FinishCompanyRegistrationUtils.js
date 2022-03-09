@@ -1,4 +1,4 @@
-import { validationRulesGenerator } from "../../../../utils";
+import { validationRulesGenerator, generalHumanError } from "../../../../utils";
 
 export const FinishCompanyRegistrationConstants = {
     bio: {
@@ -20,4 +20,4 @@ const HumanReadableErrors = Object.freeze({
     "registration-already-finished": "This company is already registered.",
 });
 
-export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";
+export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
