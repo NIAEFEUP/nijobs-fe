@@ -219,6 +219,8 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
         requirements,
     };
 
+    let isErrorRegistered = false;
+
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/new`, {
             method: "POST",
@@ -237,6 +239,8 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
                 res.status
             ));
 
+            isErrorRegistered = true;
+
             throw json.errors;
         }
 
@@ -244,7 +248,7 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
         return json;
 
     } catch (error) {
-        createEvent(EVENT_TYPES.ERROR(
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
             OFFER_NEW_METRIC_ID,
             ErrorTypes.NETWORK_FAILURE
         ));
@@ -321,7 +325,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         return json;
 
     } catch (error) {
-        if (!isErrorRegistered)  createEvent(EVENT_TYPES.ERROR(
+        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
             OFFER_EDIT_METRIC_ID,
             ErrorTypes.NETWORK_FAILURE
         ));
