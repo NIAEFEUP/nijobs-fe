@@ -30,6 +30,7 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control, textFieldP
                     .filter((option) => option.value !== null)
                     .map(({ value, label }) => (
                         <MenuItem
+                            data-testid="job-type-item"
                             key={value}
                             value={value}
                         >

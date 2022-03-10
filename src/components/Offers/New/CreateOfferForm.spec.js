@@ -208,8 +208,32 @@ describe("Create Offer Form", () => {
             expect(screen.queryByText("Hide offer")).toBeVisible();
         });
 
-    });
+        it("should not have job type options with null value", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
 
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            await act(async () => {
+                const button = await screen.findByLabelText("Job Type *");
+                fireEvent.mouseDown(button);
+            });
+
+            const elements = await screen.findAllByTestId("job-type-item");
+            elements.forEach((element) => {
+                expect(element).toHaveAttribute("data-value");
+                expect(element).toBeVisible();
+            });
+        });
+    });
 
     describe("Should validate Form", () => {
         it("should fail validation if empty title", async () => {
