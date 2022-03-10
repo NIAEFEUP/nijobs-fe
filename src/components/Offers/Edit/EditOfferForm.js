@@ -48,13 +48,21 @@ export const EditOfferController = () => {
     const { id } = useParams();
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
     const { data: user, isValidating } = useSession();
-    const [canEdit, setCanEdit] = useState(false);
+
+    // This portion of code is used to remove race conditions between useState of canEdit and useEffect
+    // If the value of useState is false by default, this condition will be wrongly verified, resulting in unwanted redirects
+    const condition = useCallback(() => {
+        const blocked = offer?.isHidden && offer?.hiddenReason !== "COMPANY_REQUEST";
+        return !blocked && (
+            (offer?.owner === user?.company?._id) || user?.isAdmin);
+    }, [offer, user]);
+
+    const [canEdit, setCanEdit] = useState(condition());
+
 
     useEffect(() => {
-        const blocked = offer?.isHidden && offer?.hiddenReason !== "COMPANY_REQUEST";
-        setCanEdit(!blocked && (
-            (offer?.owner === user?.company?._id) || user?.isAdmin));
-    }, [loadingOffer, offer, user]);
+        setCanEdit(condition());
+    }, [condition, loadingOffer, offer, user]);
 
     const location = useLocation();
 

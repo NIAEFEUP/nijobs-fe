@@ -292,6 +292,8 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         requirements,
     };
 
+    let isErrorRegistered = false;
+
     try {
         const res = await fetch(`${API_HOSTNAME}/offers/edit/${offerId}`, {
             method: "POST",
@@ -310,6 +312,8 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
                 res.status
             ));
 
+            isErrorRegistered = true;
+
             throw json.errors;
         }
 
@@ -317,7 +321,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         return json;
 
     } catch (error) {
-        createEvent(EVENT_TYPES.ERROR(
+        if (!isErrorRegistered)  createEvent(EVENT_TYPES.ERROR(
             OFFER_EDIT_METRIC_ID,
             ErrorTypes.NETWORK_FAILURE
         ));

@@ -354,7 +354,7 @@ const OfferForm = ({ context, title }) => {
                                     disabled={loading || formDisabled}
                                     variant="contained"
                                     color="primary"
-                                    onClick={submit}
+                                    type="submit"
                                     data-testid="submit-offer"
                                 >
                                         Submit
