@@ -20,6 +20,7 @@ const MultiOptionAutocomplete = forwardRef(
         className,
         disabled,
         inputProps,
+        textFieldProps,
     },
     ref
     ) => {
@@ -59,6 +60,7 @@ const MultiOptionAutocomplete = forwardRef(
                                 `${error?.message || " "}`
                             }
                             inputProps={{ ...params.inputProps, ...inputProps }}
+                            {...textFieldProps}
                         />
                     )}
                 />
@@ -98,7 +100,7 @@ MultiOptionAutocomplete.propTypes = {
     disabled: PropTypes.bool,
     "error.messages": PropTypes.string,
     inputProps: PropTypes.object,
-
+    textFieldProps: PropTypes.object,
 };
 
 export default MultiOptionAutocomplete;

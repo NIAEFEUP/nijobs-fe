@@ -4,7 +4,7 @@ import { MenuItem, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { PAID_OPTIONS } from "../CreateOfferForm";
 
-const IsPaidComponent = ({ disabled, errors, requestErrors, control }) => (
+const IsPaidComponent = ({ disabled, errors, requestErrors, control, textFieldProps }) => (
 
     <Controller
         name="isPaid"
@@ -20,12 +20,12 @@ const IsPaidComponent = ({ disabled, errors, requestErrors, control }) => (
                 value={value}
                 onChange={onChange}
                 onBlur={onBlur}
-                variant="outlined"
                 disabled={disabled}
                 error={!!errors?.isPaid || !!requestErrors.isPaid}
                 helperText={
                     `${errors.isPaid?.message || requestErrors.isPaid?.message || " "}`
                 }
+                {...textFieldProps}
             >
                 {PAID_OPTIONS.map(({ value, label }) => (
                     <MenuItem
@@ -46,6 +46,7 @@ IsPaidComponent.propTypes = {
     errors: PropTypes.object,
     requestErrors: PropTypes.object,
     control: PropTypes.object.isRequired,
+    textFieldProps: PropTypes.object,
 };
 
 export default IsPaidComponent;

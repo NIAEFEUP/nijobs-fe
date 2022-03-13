@@ -64,16 +64,16 @@ describe("Create Offer Form", () => {
             expect(screen.getByText("Login")).toBeInTheDocument();
             expect(screen.getByText("Join us")).toBeInTheDocument();
 
-            expect(screen.getByLabelText("Offer Title")).toBeDisabled();
-            expect(screen.getByLabelText("Location")).toBeDisabled();
-            expect(screen.getByLabelText("Job Type")).toHaveAttribute("aria-disabled", "true");
-            expect(screen.getByLabelText("Fields")).toBeDisabled();
-            expect(screen.getByLabelText("Technologies")).toBeDisabled();
+            expect(screen.getByLabelText("Offer Title *")).toBeDisabled();
+            expect(screen.getByLabelText("Location *")).toBeDisabled();
+            expect(screen.getByLabelText("Job Type *")).toHaveAttribute("aria-disabled", "true");
+            expect(screen.getByLabelText("Fields *")).toBeDisabled();
+            expect(screen.getByLabelText("Technologies *")).toBeDisabled();
             expect(screen.getByLabelText("Job Start Date")).toBeDisabled();
             expect(screen.getByLabelText("Vacancies")).toBeDisabled();
             expect(screen.getByLabelText("Compensation")).toHaveAttribute("aria-disabled", "true");
-            expect(screen.getByLabelText("Publication Date")).toBeDisabled();
-            expect(screen.getByLabelText("Publication End Date")).toBeDisabled();
+            expect(screen.getByLabelText("Publication Date *")).toBeDisabled();
+            expect(screen.getByLabelText("Publication End Date *")).toBeDisabled();
             expect(screen.getByTestId("contacts-selector")).toBeDisabled();
             expect(screen.getByTestId("requirements-selector")).toBeDisabled();
             expect(screen.getByText("Submit").parentNode).toBeDisabled();
@@ -96,7 +96,7 @@ describe("Create Offer Form", () => {
 
             expect(screen.queryByText("Login")).not.toBeInTheDocument();
             expect(screen.queryByText("Join us")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Owner ID")).toBeInTheDocument();
+            expect(screen.queryByLabelText("Owner ID *")).toBeInTheDocument();
         });
 
         it("should not render owner id text field if company logged in", () => {
@@ -116,7 +116,7 @@ describe("Create Offer Form", () => {
 
             expect(screen.queryByText("Login")).not.toBeInTheDocument();
             expect(screen.queryByText("Join us")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Owner ID")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
         });
 
         it("should not render owner id text field if company logged in", () => {
@@ -135,7 +135,7 @@ describe("Create Offer Form", () => {
 
             expect(screen.queryByText("Login")).not.toBeInTheDocument();
             expect(screen.queryByText("Join us")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Owner ID")).not.toBeInTheDocument();
+            expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
         });
 
         it("should render enabled form", () => {
@@ -152,17 +152,16 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            expect(screen.getByLabelText("Offer Title")).toBeEnabled();
-            expect(screen.getByLabelText("Location")).toBeEnabled();
-            expect(screen.getByLabelText("Job Type")).not.toHaveAttribute("aria-disabled");
-            expect(screen.getByLabelText("Fields")).toBeEnabled();
-            expect(screen.getByLabelText("Technologies")).toBeEnabled();
-            expect(screen.getByLabelText("Location")).toBeEnabled();
+            expect(screen.getByLabelText("Offer Title *")).toBeEnabled();
+            expect(screen.getByLabelText("Location *")).toBeEnabled();
+            expect(screen.getByLabelText("Job Type *")).not.toHaveAttribute("aria-disabled");
+            expect(screen.getByLabelText("Fields *")).toBeEnabled();
+            expect(screen.getByLabelText("Technologies *")).toBeEnabled();
             expect(screen.getByLabelText("Job Start Date")).toBeEnabled();
             expect(screen.getByLabelText("Vacancies")).toBeEnabled();
             expect(screen.getByLabelText("Compensation")).not.toHaveAttribute("aria-disabled");
-            expect(screen.getByLabelText("Publication Date")).toBeEnabled();
-            expect(screen.getByLabelText("Publication End Date")).toBeEnabled();
+            expect(screen.getByLabelText("Publication Date *")).toBeEnabled();
+            expect(screen.getByLabelText("Publication End Date *")).toBeEnabled();
             expect(screen.getByLabelText("Hide offer")).toBeEnabled();
             expect(screen.getByTestId("contacts-selector")).toBeEnabled();
             expect(screen.getByTestId("requirements-selector")).toBeEnabled();
@@ -183,8 +182,8 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            expect(screen.queryByText("Publication Date")).not.toBeVisible();
-            expect(screen.queryByText("Publication End Date")).not.toBeVisible();
+            expect(screen.queryByText("Publication Date *")).not.toBeVisible();
+            expect(screen.queryByText("Publication End Date *")).not.toBeVisible();
             expect(screen.queryByText("Hide offer")).not.toBeVisible();
         });
 
@@ -204,13 +203,37 @@ describe("Create Offer Form", () => {
 
             await fireEvent.click(screen.getByText("Advanced Settings"));
 
-            expect(screen.queryByText("Publication Date")).toBeVisible();
-            expect(screen.queryByText("Publication End Date")).toBeVisible();
+            expect(screen.queryByText("Publication Date *")).toBeVisible();
+            expect(screen.queryByText("Publication End Date *")).toBeVisible();
             expect(screen.queryByText("Hide offer")).toBeVisible();
         });
 
-    });
+        it("should not have job type options with null value", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
 
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            await act(async () => {
+                const button = await screen.findByLabelText("Job Type *");
+                fireEvent.mouseDown(button);
+            });
+
+            const elements = await screen.findAllByTestId("job-type-item");
+            elements.forEach((element) => {
+                expect(element).toHaveAttribute("data-value");
+                expect(element).toBeVisible();
+            });
+        });
+    });
 
     describe("Should validate Form", () => {
         it("should fail validation if empty title", async () => {
@@ -227,7 +250,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Offer Title");
+            const input = screen.getByLabelText("Offer Title *");
             fireEvent.focus(input);
             fireEvent.blur(input);
 
@@ -257,7 +280,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Location");
+            const input = screen.getByLabelText("Location *");
             fireEvent.focus(input);
             fireEvent.blur(input);
 
@@ -282,7 +305,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Location");
+            const input = screen.getByLabelText("Location *");
 
             await act(async () => {
                 await fireEvent.focus(input);
@@ -298,7 +321,7 @@ describe("Create Offer Form", () => {
                 await fireEvent.blur(input);
             });
 
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location"))).toHaveTextContent("\u200B");
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location *"))).toHaveTextContent("\u200B");
         });
 
         it("should fail validation if fields empty", async () => {
@@ -315,7 +338,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Fields");
+            const input = screen.getByLabelText("Fields *");
             fireEvent.focus(input);
             fireEvent.blur(input);
 
@@ -336,7 +359,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Fields");
+            const input = screen.getByLabelText("Fields *");
             await act(async () => {
                 await fireEvent.mouseDown(input);
                 await fireEvent.click(screen.getByText("Back-End"));
@@ -545,7 +568,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Publication Date");
+            const input = screen.getByLabelText("Publication Date *");
             fireEvent.focus(input);
 
             fireEvent.change(input, { target: { value: "12" } });
@@ -586,7 +609,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByLabelText("Publication End Date");
+            const input = screen.getByLabelText("Publication End Date *");
             fireEvent.focus(input);
 
             fireEvent.change(input, { target: { value: "12" } });
@@ -604,7 +627,7 @@ describe("Create Offer Form", () => {
 
 
             await act (async () => {
-                const publishDateInput = screen.getByLabelText("Publication Date");
+                const publishDateInput = screen.getByLabelText("Publication Date *");
                 await fireEvent.focus(publishDateInput);
                 await fireEvent.change(publishDateInput, { target: { value: format(Date.now() + (2 * DAY_IN_MS), "yyyyMMdd") } });
                 await fireEvent.blur(publishDateInput);
@@ -643,7 +666,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const pubDateInput = screen.getByLabelText("Publication Date");
+            const pubDateInput = screen.getByLabelText("Publication Date *");
 
             await act(async () => {
                 await fireEvent.focus(pubDateInput);
@@ -654,8 +677,8 @@ describe("Create Offer Form", () => {
             expect(await wrapper.findDescriptionOf(pubDateInput)).toHaveTextContent("Must be a valid ISO8601 date.");
 
 
-            expect(screen.queryByText("Publication Date")).toBeVisible();
-            expect(screen.queryByText("Publication End Date")).toBeVisible();
+            expect(screen.queryByText("Publication Date *")).toBeVisible();
+            expect(screen.queryByText("Publication End Date *")).toBeVisible();
             expect(screen.queryByText("Hide offer")).toBeVisible();
         });
 
@@ -673,7 +696,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const pubDateInput = screen.getByLabelText("Publication End Date");
+            const pubDateInput = screen.getByLabelText("Publication End Date *");
 
             await act(async () => {
                 await fireEvent.focus(pubDateInput);
@@ -684,8 +707,8 @@ describe("Create Offer Form", () => {
             expect(await wrapper.findDescriptionOf(pubDateInput)).toHaveTextContent("Must be a valid ISO8601 date.");
 
 
-            expect(screen.queryByText("Publication Date")).toBeVisible();
-            expect(screen.queryByText("Publication End Date")).toBeVisible();
+            expect(screen.queryByText("Publication Date *")).toBeVisible();
+            expect(screen.queryByText("Publication End Date *")).toBeVisible();
             expect(screen.queryByText("Hide offer")).toBeVisible();
         });
     });

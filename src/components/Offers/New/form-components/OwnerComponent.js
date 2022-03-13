@@ -13,7 +13,7 @@ const OwnerComponent = ({ disabled, errors, requestErrors, control }) => (
             <TextField
                 name={name}
                 value={value}
-                label="Owner ID"
+                label="Owner ID *"
                 id="owner"
                 error={!!errors.owner || !!requestErrors.owner}
                 inputRef={ref}
@@ -22,8 +22,6 @@ const OwnerComponent = ({ disabled, errors, requestErrors, control }) => (
                 helperText={
                     `${errors.owner?.message || requestErrors.owner?.message || ""}`
                 }
-                variant="outlined"
-                margin="dense"
                 fullWidth
                 disabled={disabled}
             />)}

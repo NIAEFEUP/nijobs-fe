@@ -17,7 +17,7 @@ const asyncThrottle = (func, wait) => {
         });
 };
 
-const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => {
+const LocationPicker = ({ name, label, value, onChange, onBlur,  error, disabled }) => {
     const [inputValue, setInputValue] = useState("");
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -120,7 +120,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
             renderInput={(params) => (
                 <TextField
                     {...params}
-                    label="Location" variant="outlined" fullWidth
+                    label={label} fullWidth
                     error={!!error}
                     helperText={
                         `${error?.message || " "}`
@@ -148,6 +148,7 @@ const LocationPicker = ({ name, value, onChange, onBlur,  error, disabled }) => 
 
 LocationPicker.propTypes = {
     name: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
     value: PropTypes.any,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
