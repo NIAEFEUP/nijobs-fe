@@ -1,15 +1,8 @@
 /* eslint-disable max-len */
-import { makeStyles, Typography } from "@material-ui/core";
+import { Typography, Link } from "@material-ui/core";
+import { useStyles } from "./PoliciesStyle";
 import React from "react";
 
-const useStyles = makeStyles({
-    bold: {
-        fontWeight: 500,
-    },
-    gray: {
-        color: "rgba(0, 0, 0, 0.54)",
-    },
-});
 
 const PrivacyPolicyContent = () => {
     const classes = useStyles();
@@ -48,82 +41,70 @@ const PrivacyPolicyContent = () => {
                         <Typography className={ classes.bold } display="inline">
                         Account
                         </Typography>
-                        {" "}
-                        means a unique account created for You to access our Service or parts of our Service.
+                        {" means a unique account created for You to access our Service or parts of our Service."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Organization
                         </Typography>
-                        {" "}
-                        (referred to as either “the Organization”, “We”, “Us” or “Our” in this Agreement) refers to NIAEFEUP, Rua Dr. Roberto Frias 4200-465, Porto Sala B315.
+                        {" (referred to as either “the Organization”, “We”, “Us” or “Our” in this Agreement) refers to NIAEFEUP, Rua Dr. Roberto Frias 4200-465, Porto Sala B315."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Cookies
                         </Typography>
-                        {" "}
-                        are small files that are placed on Your computer, mobile device or any other device by a website, containing the details of Your browsing history on that website among its many uses.
+                        {" are small files that are placed on Your computer, mobile device or any other device by a website, containing the details of Your browsing history on that website among its many uses."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Country
                         </Typography>
-                        {" "}
-                        refers to:  Portugal
+                        {" refers to:  Portugal"}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Device
                         </Typography>
-                        {" "}
-                        means any device that can access the Service such as a computer, a cellphone or a digital tablet.
+                        {" means any device that can access the Service such as a computer, a cellphone or a digital tablet."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Personal Data
                         </Typography>
-                        {" "}
-                        is any information that relates to an identified or identifiable individual.
+                        {" is any information that relates to an identified or identifiable individual."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Service
                         </Typography>
-                        {" "}
-                        refers to the Website.
+                        {" refers to the Website."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Service Provider
                         </Typography>
-                        {" "}
-                        means any natural or legal person who processes the data on behalf of the Organization. It refers to third-party companies or individuals employed by the Organization to facilitate the Service, to provide the Service on behalf of the Organization, to perform services related to the Service or to assist the Organization in analyzing how the Service is used.
+                        {" means any natural or legal person who processes the data on behalf of the Organization. It refers to third-party companies or individuals employed by the Organization to facilitate the Service, to provide the Service on behalf of the Organization, to perform services related to the Service or to assist the Organization in analyzing how the Service is used."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Usage Data
                         </Typography>
-                        {" "}
-                        refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a page visit).
+                        {" refers to data collected automatically, either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a page visit)."}
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         Website
                         </Typography>
-                        {" "}
-                        refers to NIJobs, accessible from
-                        {" "}
-                        <a href="https://ni.fe.up.pt/nijobs" target="_blank" rel="noopener noreferrer">
+                        {" refers to NIJobs, accessible from "}
+                        <Link href="https://ni.fe.up.pt/nijobs" target="_blank" rel="noopener noreferrer">
                         https://ni.fe.up.pt/nijobs
-                        </a>
+                        </Link>
                     </li>
                     <li>
                         <Typography className={ classes.bold } display="inline">
                         You
                         </Typography>
-                        {" "}
-                        means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable.
+                        {" means the individual accessing or using the Service, or the company, or other legal entity on behalf of which such individual is accessing or using the Service, as applicable."}
                     </li>
                 </ul>
             </Typography>
@@ -133,23 +114,6 @@ const PrivacyPolicyContent = () => {
             <Typography className={ classes.bold } variant="h5" id="Types-of-Data-Collected" data-id="Types-of-Data-Collected" gutterBottom>
             Types of Data Collected
             </Typography>
-            <Typography className={ classes.bold } id="Personal-Data" data-id="Personal-Data" gutterBottom>
-            Personal Data
-            </Typography>
-            <Typography paragraph={true}>
-            While using Our Service, We may ask You to provide Us with certain personally identifiable information that can be used to contact or identify You. Personally identifiable information may include, but is not limited to:
-            </Typography>
-            <ul>
-                <li>
-                Email address
-                </li>
-                <li>
-                Phone number
-                </li>
-                <li>
-                Usage Data
-                </li>
-            </ul>
             <Typography className={ classes.bold } id="Usage-Data" data-id="Usage-Data" gutterBottom>
             Usage Data
             </Typography>
@@ -183,9 +147,9 @@ const PrivacyPolicyContent = () => {
             </Typography>
             <Typography paragraph={true}>
             Cookies can be “Persistent” or “Session” Cookies. Persistent Cookies remain on Your personal computer or mobile device when You go offline, while Session Cookies are deleted as soon as You close Your web browser. Learn more about cookies:&nbsp;
-                <a href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking" target="_blank" rel="noopener noreferrer">
+                <Link href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking" target="_blank" rel="noopener noreferrer">
                 Use of Cookies by Free Privacy Policy
-                </a>
+                </Link>
                 .
             </Typography>
             <Typography paragraph={true}>
@@ -246,13 +210,13 @@ const PrivacyPolicyContent = () => {
                     </Typography>
                     <Typography paragraph={true}>
                     Purpose: We use a tool called “Google Analytics” to collect information about use of this site. Google Analytics collects information such as how often users visit this site, what pages they visit when they do so, and what other sites they used prior to coming to this site. We use the information we get from Google Analytics only to improve this site. Google Analytics collects only the IP address assigned to you on the date you visit this site, rather than your name or other identifying information. We do not combine the information collected through the use of Google Analytics with personally identifiable information. Although Google Analytics plants a permanent cookie on your web browser to identify you as a unique user the next time you visit this site, the cookie cannot be used by anyone but Google. Google’s ability to use and share information collected by Google Analytics about your visits to this site is restricted by the&nbsp;
-                        <a href="https://www.google.com/analytics/terms/" target="_blank" rel="noopener noreferrer">
+                        <Link href="https://www.google.com/analytics/terms/" target="_blank" rel="noopener noreferrer">
                         Google Analytics Terms of Use
-                        </a>
+                        </Link>
                     &nbsp;(as amended for government websites) and the&nbsp;
-                        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
+                        <Link href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">
                         Google Privacy Policy
-                        </a>
+                        </Link>
                     . You can prevent Google Analytics from recognizing you on return visits to this site by disabling cookies on your browser.
                     </Typography>
                 </li>
@@ -368,15 +332,6 @@ const PrivacyPolicyContent = () => {
             <Typography paragraph={true}>
             The security of Your Personal Data is important to Us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure. While We strive to use commercially acceptable means to protect Your Personal Data, We cannot guarantee its absolute security.
             </Typography>
-            <Typography variant="h4" id="Children’s-Privacy" data-id="Children’s-Privacy" gutterBottom>
-            Children’s Privacy
-            </Typography>
-            <Typography paragraph={true}>
-            Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from anyone under the age of 13. If You are a parent or guardian and You are aware that Your child has provided Us with Personal Data, please contact Us. If We become aware that We have collected Personal Data from anyone under the age of 13 without verification of parental consent, We take steps to remove that information from Our servers.
-            </Typography>
-            <Typography paragraph={true}>
-            If We need to rely on consent as a legal basis for processing Your information and Your country requires consent from a parent, We may require Your parent’s consent before We collect and use that information.
-            </Typography>
             <Typography variant="h4" id="Links-to-Other-Websites" data-id="Links-to-Other-Websites" gutterBottom>
             Links to Other Websites
             </Typography>
@@ -407,9 +362,9 @@ const PrivacyPolicyContent = () => {
             <ul>
                 <li>
                 By email:&nbsp;
-                    <a href="mailto:nijobs@aefeup.pt" target="_blank" rel="noopener noreferrer">
+                    <Link href="mailto:nijobs@aefeup.pt" target="_blank" rel="noopener noreferrer">
                     nijobs@aefeup.pt
-                    </a>
+                    </Link>
                 </li>
             </ul>
         </div>
