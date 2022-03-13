@@ -67,6 +67,6 @@ export default (isMobile) => makeStyles((theme) => ({
     },
     requiredFields: {
         marginTop: theme.spacing(2),
-        color: "rgba(0, 0, 0, 0.54)",
+        color: "#9E9E9E",
     },
 }));

@@ -119,7 +119,7 @@ const OfferForm = ({ context, title }) => {
                                 aria-label="Create Offer Form"
                             >
                                 <Grid container spacing={4}>
-                                    <Grid item xs={12} lg={isAdmin ? 6 : 12}>
+                                    <Grid item xs={12} lg={showOwnerComponent ? 6 : 12}>
                                         <TitleComponent
                                             disabled={formDisabled}
                                             errors={errors}
@@ -360,7 +360,7 @@ const OfferForm = ({ context, title }) => {
                                         Submit
                                 </Button>
                                 <div className={classes.requiredFields}>
-                                    <p>* Required fields</p>
+                                    <Typography>* Required fields</Typography>
                                 </div>
                             </form>
                         </Grid>
