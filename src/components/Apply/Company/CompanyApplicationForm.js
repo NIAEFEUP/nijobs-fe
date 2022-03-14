@@ -293,7 +293,7 @@ CompanyApplicationForm.propTypes = {
 };
 
 export const mapStateToProps = ({ companyApplication }) => ({
-    submittingApplication: companyApplication.submittingApplication,
+    submittingApplication: companyApplication.sendingApplication,
     submissionErrors: companyApplication.errors,
 });
 
