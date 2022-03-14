@@ -152,15 +152,15 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.email}
             </Typography>
-            <Divider className={classes.divider} />
             <MenuList
                 className={classes.menuList}
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
                 {sessionData?.company && <CompanyMenuOptions isMobile={isMobile} sessionData={sessionData} />}
-                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
+                <Divider className={classes.divider} />
+                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
         </div>
     );
