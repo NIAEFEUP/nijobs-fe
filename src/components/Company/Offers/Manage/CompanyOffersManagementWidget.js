@@ -1,4 +1,4 @@
-import { IconButton, TableCell, Tooltip } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -13,6 +13,7 @@ import { Edit as EditIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
+import { RowActions } from "./CompanyOffersActions";
 
 const generateRow = ({ title, location, description, publishDate, publishEndDate,
     ownerName, _id }) => ({
@@ -23,8 +24,8 @@ const generateRow = ({ title, location, description, publishDate, publishEndDate
         location: { value: location },
     },
     payload: {
-        companyName: { value: ownerName },
-        description: { value: description },
+        companyName: { value: ownerName, label: "Company Name" },
+        description: { value: description, label: "Description" },
     },
 });
 
@@ -56,34 +57,13 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-const RowActions = ({ row }) => {
-    const offerRoute = `/offer/${row?.key}`;
 
-    // Need to change the route from View Offer to Edit Offer (After Edit Offer page is done)
-
-    return (
-        <TableCell align="right">
-            <Tooltip title="Edit Offer">
-                <Link to={offerRoute}>
-                    <IconButton>
-                        <EditIcon color="secondary" fontSize="default" />
-                    </IconButton>
-                </Link>
-            </Tooltip>
-        </TableCell>
-    );
-};
-
-RowActions.propTypes = {
-    row: PropTypes.object.isRequired,
-};
-
-
-const CompanyOffersManagementWidget = ({ addSnackbar }) => {
+const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const { data, isLoggedIn } = useSession();
-    const [offers, setOffers] = useState([]);
+    const [offers, setOffers] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const mobileCols = ["title", "publishStartDate", "actions"];
 
     useEffect(() => {
         if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
@@ -95,7 +75,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
                 setOffers(fetchedRows);
             } else {
-                setOffers([]);
+                setOffers({});
             }
             setIsLoading(false);
         }).catch((err) => {
@@ -113,7 +93,9 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
         return (
             <>
-                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
                     GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
@@ -124,6 +106,70 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
         rowKey: PropTypes.string.isRequired,
         labelId: PropTypes.string.isRequired,
     };
+
+    const useRowCollapseStyles = makeStyles((theme) => ({
+        payloadSection: {
+            wordBreak: "break-all",
+            "&:not(:first-child)": {
+                paddingTop: theme.spacing(2),
+            },
+            "&:not(:first-child) p:first-of-type": {
+                paddingTop: theme.spacing(2),
+            },
+        },
+        collapsableTitles: {
+            fontWeight: 500,
+        },
+    }));
+
+    const RowCollapseComponent = ({ rowKey }) => {
+        const row = offers[rowKey];
+        const offerRoute = `/offer/${rowKey}`;
+        const classes = useRowCollapseStyles();
+        const mobileFieldKeys = ["location", "publishEndDate"];
+
+        return (
+            isMobile && (
+                <>
+                    <div className={classes.payloadSection}>
+                        <Grid container alignItems="center">
+                            <Grid item xs={6}>
+                                <Typography className={classes.collapsableTitles} variant="body1">
+                                         Actions
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6} justifyContent="center">
+                                <Tooltip title="Edit Offer">
+                                    <Link to={offerRoute}>
+                                        <IconButton aria-label="Edit Offer">
+                                            <EditIcon color="secondary" fontSize="medium" />
+                                        </IconButton>
+                                    </Link>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
+                    </div>
+
+                    {mobileFieldKeys.map((colKey) => (
+                        <div key={colKey} className={classes.payloadSection}>
+                            <Divider />
+                            <Typography className={classes.collapsableTitles} variant="body1">
+                                {columns[colKey]?.label}
+                            </Typography>
+                            <Typography variant="body2">
+                                {row.fields[colKey].value}
+                            </Typography>
+                        </div>
+                    ))}
+                </>
+            )
+        );
+    };
+
+    RowCollapseComponent.propTypes = {
+        rowKey: PropTypes.string.isRequired,
+    };
+
 
     return (
         <FilterableTable
@@ -141,11 +187,13 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
             stickyHeader
             emptyMessage="No offers here."
             RowContent={RowContent}
+            RowCollapseComponent={RowCollapseComponent}
             handleSelect={() => {}}
             handleSelectAll={() => {}}
             isSelectableTable={false}
             isLoading={isLoading}
             error={error}
+            mobileColumns={mobileCols}
             hasMaxHeight={false}
         />
     );
@@ -153,6 +201,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar }) => {
 
 CompanyOffersManagementWidget.propTypes = {
     addSnackbar: PropTypes.func,
+    isMobile: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

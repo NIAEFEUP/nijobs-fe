@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
     Divider,
+    Grid,
     makeStyles,
     Typography,
 } from "@material-ui/core";
@@ -8,7 +9,7 @@ import {
 import { alphabeticalSorter, GenerateTableCellFromField } from "../../../utils/Table/utils";
 import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import { CompanyNameFilter, StateFilter, DateFromFilter, DateToFilter } from "./Filters";
-import UndoableActionsHandlerProvider from "../../../utils/UndoableActionsHandlerProvider";
+import UndoableActionsHandlerProvider, { UndoableActions } from "../../../utils/UndoableActionsHandlerProvider";
 import ControlledSortableSelectableTable from "../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../utils/Table/FilterableTable";
 import { RowActions } from "./Actions";
@@ -17,6 +18,7 @@ import { format, parseISO } from "date-fns";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
+
 
 const sorters = {
     name: alphabeticalSorter,
@@ -50,17 +52,18 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
         state: { value: ApplicationStateLabel[state] },
     },
     payload: {
-        email,
-        motivation,
-        rejectReason,
-        rejectedAt: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "",
+        email: { value: email, label: "Email" },
+        motivation: { value: motivation, label: "Motivation" },
+        rejectReason: { value: rejectReason, label: "Reject Reason" },
+        rejectedAt: { value: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "", label: "Rejected At" },
     },
 });
 
-const ApplicationsReviewWidget = ({ addSnackbar }) => {
+const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
     const [rows, setRows] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const mobileCols = ["name", "state", "actions"];
 
     useEffect(() => {
         const request = searchApplications()
@@ -116,7 +119,9 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
 
         return (
             <>
-                {Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
                     GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
                 ))}
             </>
@@ -130,6 +135,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
 
     const useRowCollapseStyles = makeStyles((theme) => ({
         payloadSection: {
+            wordBreak: "break-all",
             "&:not(:first-child)": {
                 paddingTop: theme.spacing(2),
             },
@@ -137,37 +143,98 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                 paddingTop: theme.spacing(2),
             },
         },
+        collapsableTitles: {
+            fontWeight: 500,
+        },
     }));
 
     const RowCollapseComponent = ({ rowKey }) => {
         const row = rows[rowKey];
         const classes = useRowCollapseStyles();
-        return (
-            <>
-                <Typography variant="subtitle2">
-                    {row.payload.email}
-                </Typography>
-                <div className={classes.payloadSection}>
-                    <Typography variant="body1">
-                            Motivation
-                    </Typography>
-                    <Typography variant="body2">
-                        {row.payload.motivation}
-                    </Typography>
-                </div>
+        const mobileKeys = ["email", "motivation"];
+        const showActions = row.fields.state.value === ApplicationStateLabel.PENDING;
 
-                {row.fields.state.value === ApplicationStateLabel.REJECTED &&
-                <div className={classes.payloadSection}>
-                    <Divider />
-                    <Typography variant="body1">
-                        {`Reject Reason (Rejected at ${row.payload.rejectedAt})`}
+        if (row.fields.state.value === ApplicationStateLabel.REJECTED) mobileKeys.push("rejectReason", "rejectedAt");
+
+        const { submitAction } = useContext(UndoableActions);
+
+
+        return (
+            !isMobile ? (
+                <>
+                    <Typography variant="subtitle2">
+                        {row.payload.email.value}
                     </Typography>
-                    <Typography variant="body2">
-                        {row.payload.rejectReason}
-                    </Typography>
-                </div>
-                }
-            </>
+                    <div className={classes.payloadSection}>
+                        <Typography variant="body1">
+                            Motivation
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.payload.motivation.value}
+                        </Typography>
+                    </div>
+
+                    {row.fields.state.value === ApplicationStateLabel.REJECTED &&
+                    <div className={classes.payloadSection}>
+                        <Divider />
+                        <Typography variant="body1">
+                            {`Reject Reason (Rejected at ${row.payload.rejectedAt.value})`}
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.payload.rejectReason.value}
+                        </Typography>
+                    </div>
+                    }
+                </>
+            ) : (
+                <>
+                    {showActions && (
+                        <div className={classes.payloadSection}>
+                            <Grid container alignItems="center">
+                                <Grid item xs={5}>
+                                    <Typography className={classes.collapsableTitles} variant="body1">
+                                         Actions
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={7} justifyContent="center">
+                                    <RowActions
+                                        forceDesktop={true}
+                                        row={{ key: rowKey, fields: row.fields, payload: row.payload }}
+                                        context={{
+                                            approveApplicationRow,
+                                            rejectApplicationRow,
+                                        }}
+                                        submitUndoableAction={submitAction}
+                                        insideCollapsable={true}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </div>
+                    )}
+                    <div className={classes.payloadSection}>
+                        {showActions && <Divider />}
+                        <Typography className={classes.collapsableTitles} variant="body1">
+                        Requested At
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.fields.date.value}
+                        </Typography>
+                    </div>
+
+                    {mobileKeys.map((colKey) => (
+                        <div key={colKey} className={classes.payloadSection}>
+                            <Divider />
+                            <Typography className={classes.collapsableTitles} variant="body1">
+                                {row.payload[colKey].label}
+                            </Typography>
+                            <Typography variant="body2">
+                                {row.payload[colKey].value}
+                            </Typography>
+                        </div>
+                    ))}
+                </>
+            )
+
         );
     };
 
@@ -201,6 +268,8 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
                     isSelectableTable={true}
                     isLoading={isLoading}
                     error={error}
+                    mobileColumns={mobileCols}
+                    hasMaxHeight={false}
                 />
             </UndoableActionsHandlerProvider>
         </>
@@ -209,6 +278,7 @@ const ApplicationsReviewWidget = ({ addSnackbar }) => {
 
 ApplicationsReviewWidget.propTypes = {
     addSnackbar: PropTypes.func,
+    isMobile: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -15,6 +15,7 @@ import { approveApplication, rejectApplication } from "../../../services/applica
 import { addSnackbar } from "../../../actions/notificationActions";
 import { connect } from "react-redux";
 import ConfirmRejectDialog from "./ConfirmRejectDialog";
+import { useMobile } from "../../../utils/media-queries";
 
 const useStyles = makeStyles(() => ({
     tableRowActions: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse, disabled }) => (
+const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse, disabled, insideCollapsable }) => (
     <>
         {getFieldValue(row, "state") === ApplicationStateLabel.PENDING &&
             <>
@@ -52,15 +53,17 @@ const ActionButtons = ({ row, handleAction, isCollapseOpen, toggleCollapse, disa
                 </Tooltip>
             </>
         }
-        <IconButton
-            aria-label="More Actions"
-            edge="end"
-            onClick={(e) => {
-                e.stopPropagation(); toggleCollapse();
-            }}
-        >
-            {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
-        </IconButton>
+        {!insideCollapsable && (
+            <IconButton
+                aria-label="More Actions"
+                edge="end"
+                onClick={(e) => {
+                    e.stopPropagation(); toggleCollapse();
+                }}
+            >
+                {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
+            </IconButton>
+        )}
     </>
 );
 
@@ -70,10 +73,12 @@ ActionButtons.propTypes = {
     toggleCollapse: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,
     disabled: PropTypes.bool.isRequired,
+    insideCollapsable: PropTypes.bool,
 };
 
 const RowActionsContainer = ({
     row, actionToConfirm, confirmAction, cancelAction, handleAction, handleApprove, isCollapseOpen, toggleCollapse, executingAction,
+    insideCollapsable,
 }) => {
     const classes = useStyles();
 
@@ -108,6 +113,7 @@ const RowActionsContainer = ({
                     isCollapseOpen={isCollapseOpen}
                     toggleCollapse={toggleCollapse}
                     disabled={executingAction}
+                    insideCollapsable={insideCollapsable}
                 />
             }
         </div>
@@ -118,22 +124,24 @@ RowActionsContainer.propTypes = {
     row: RowPropTypes,
     isCollapseOpen: PropTypes.bool.isRequired,
     toggleCollapse: PropTypes.func.isRequired,
-    actionToConfirm: PropTypes.func.isRequired,
+    actionToConfirm: PropTypes.string,
     confirmAction: PropTypes.func.isRequired,
     cancelAction: PropTypes.func.isRequired,
     handleAction: PropTypes.func.isRequired,
     handleApprove: PropTypes.func.isRequired,
     executingAction: PropTypes.bool.isRequired,
+    insideCollapsable: PropTypes.bool,
 };
 
 const BaseRowActions = ({
-    addSnackbar, row, submitUndoableAction, context = {}, isCollapseOpen, toggleCollapse,
+    addSnackbar, row, submitUndoableAction, context = {}, isCollapseOpen, toggleCollapse, insideCollapsable = false,
 }) => {
-
     const [actionToConfirm, setActionToConfirm] = useState(null);
     const [rejectReason, setRejectReason] = useState("");
     const [executingAction, setExecutingAction] = useState(false);
     const { approveApplicationRow, rejectApplicationRow } = context;
+    const isMobile = useMobile();
+
 
     const handleApprove = useCallback(
         () => {
@@ -211,7 +219,7 @@ const BaseRowActions = ({
                 handleReject={handleReject}
                 cancelAction={cancelAction}
             />
-            <TableCell align="right">
+            {insideCollapsable ?
                 <RowActionsContainer
                     row={row}
                     actionToConfirm={actionToConfirm}
@@ -223,8 +231,37 @@ const BaseRowActions = ({
                     isCollapseOpen={isCollapseOpen}
                     toggleCollapse={toggleCollapse}
                     executingAction={executingAction}
-                />
-            </TableCell>
+                    insideCollapsable={insideCollapsable}
+                /> : (
+                    <TableCell align="right">
+                        { !isMobile ? (
+                            <RowActionsContainer
+                                row={row}
+                                actionToConfirm={actionToConfirm}
+                                confirmAction={confirmAction}
+                                cancelAction={cancelAction}
+                                handleAction={handleAction}
+                                handleApprove={handleApprove}
+                                handleReject={handleReject}
+                                isCollapseOpen={isCollapseOpen}
+                                toggleCollapse={toggleCollapse}
+                                executingAction={executingAction}
+                                insideCollapsable={insideCollapsable}
+                            />
+                        ) : (
+                            <IconButton
+                                aria-label="More Actions"
+                                edge="end"
+                                onClick={(e) => {
+                                    e.stopPropagation(); toggleCollapse();
+                                }}
+                            >
+                                {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
+                            </IconButton>
+                        )}
+                    </TableCell>
+                )}
+
         </>
     );
 };
@@ -239,6 +276,7 @@ BaseRowActions.propTypes = {
     toggleCollapse: PropTypes.func.isRequired,
     row: RowPropTypes,
     submitUndoableAction: PropTypes.func,
+    insideCollapsable: PropTypes.bool,
 };
 
 const mapStateToProps = () => ({});

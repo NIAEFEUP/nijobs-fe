@@ -10,9 +10,10 @@ import React from "react";
 import { Simulate } from "react-dom/test-utils";
 import config from "../../../config";
 
-import { renderWithStore, renderWithStoreAndTheme } from "../../../test-utils";
+import { renderWithStoreAndTheme } from "../../../test-utils";
+import { createMatchMedia } from "../../../utils/media-queries";
 import Notifier from "../../Notifications/Notifier";
-import { ApplicationStateLabel } from "./ApplicationsReviewTableSchema";
+import { ApplicationStateLabel, columns } from "./ApplicationsReviewTableSchema";
 import ApplicationsReviewWidget from "./ApplicationsReviewWidget";
 const { API_HOSTNAME } = config;
 
@@ -32,11 +33,11 @@ const generateApplication = (id, state) => {
 
     if (state === "REJECTED") {
         application.rejectReason = "asjdnasjnlasndklnaslkdnlasd\n\n\nasdjbasljdjasdnalsnd\n\n\nasdhsakdas";
-        application.rejectedAt = addDays(new Date(Date.now() + 100), id).toISOString();
+        application.rejectedAt = addDays(new Date(Date.now() + 100), id + 1).toISOString();
     }
 
     if (state === "APPROVED") {
-        application.approvedAt = addDays(new Date(Date.now() + 100), id).toISOString();
+        application.approvedAt = addDays(new Date(Date.now() + 100), id + 1).toISOString();
     }
 
     return application;
@@ -80,12 +81,12 @@ describe("Application Review Widget", () => {
         fetch.mockResponse(JSON.stringify({ applications }));
 
         await act(async () => { // Necessary since the component auto mutates its state when loading the rows
-            renderWithStore(
+            renderWithStoreAndTheme(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { initialState: {} });
+                </MuiPickersUtilsProvider>, { initialState: {}, theme });
         });
 
         for (const application of applications) {
@@ -122,24 +123,26 @@ describe("Application Review Widget", () => {
 
         // Necessary to wrap in act() since the component auto-mutates its state when loading the rows
         await act(async () =>
-            renderWithStore(
+            renderWithStoreAndTheme(
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <SnackbarProvider maxSnack={3}>
                         <ApplicationsReviewWidget />
                     </SnackbarProvider>
-                </MuiPickersUtilsProvider>, { initialState: {} })
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
 
         const numRowsOptions = [5, 10, 25];
 
         for (let i = 0; i < numRowsOptions.length; i++) {
             if (i !== 0)
-                fireEvent.click(screen.getByText(`${numRowsOptions[i]}`)); // Show num pages select box
+                userEvent.selectOptions(    // select and choose rows per page option
+                    screen.getByLabelText("Rows per page"),
+                    screen.getByRole("option", { name: `${numRowsOptions[i]}` })
+                );
+
 
             const expectedNumRows = numRowsOptions[i];
             expect(screen.getAllByTestId("application-row").length).toBe(expectedNumRows);
-
-            fireEvent.mouseDown(screen.getByLabelText(`Rows per page: ${numRowsOptions[i]}`)); // Show num pages select box
         }
     });
 
@@ -428,6 +431,79 @@ describe("Application Review Widget", () => {
         fireEvent.click(screen.getByRole("button", { name: "Previous page" }));
         expect(screen.getByRole("checkbox", { name: "Select all applications on current page" })).not.toBeChecked();
 
+    });
+
+    it("Should only render mobile columns on mobile device", async () => {
+        const MOBILE_WIDTH_PX = 360;
+        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
+
+        const applications = generateApplications(6);
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () =>
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget isMobile={true} />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
+        );
+
+        const mobileCols = ["name", "state", "actions"];
+        for (const [col, val] of Object.entries(columns)) {
+            if (mobileCols.includes(col)) {
+                expect(screen.getByRole("button", { name: val.label })).toBeInTheDocument();
+            } else {
+                expect(screen.queryByRole("button", { name: val.label })).not.toBeInTheDocument();
+            }
+        }
+    });
+
+    it("Should render mobile collapsable content on mobile device", async () => {
+        const MOBILE_WIDTH_PX = 360;
+        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
+
+        const applications = generateApplications(3);
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () => { // Necessary since the component auto mutates its state when loading the rows
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <ApplicationsReviewWidget isMobile={true} />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme });
+        });
+
+        for (const application of applications) {
+            try {
+                const applicationRow = screen.queryByText(application.companyName).closest("tr");
+                expect(queryByText(applicationRow, application.companyName)).toBeInTheDocument();
+                expect(queryByText(applicationRow, ApplicationStateLabel[application.state])).toBeInTheDocument();
+
+                fireEvent.click(getByLabelText(applicationRow, "More Actions"));
+
+                expect(queryByText(applicationRow.nextElementSibling, format(parseISO(application.submittedAt), "yyyy-MM-dd")))
+                    .toBeInTheDocument();
+                expect(queryByText(applicationRow.nextElementSibling, application.email)).toBeInTheDocument();
+
+                expect(queryByText(applicationRow.nextElementSibling, application.motivation)).toBeInTheDocument();
+
+                if (application.state === "REJECTED") {
+                    expect(queryByText(applicationRow.nextElementSibling, format(parseISO(application.rejectedAt), "yyyy-MM-dd")
+                    )).toBeInTheDocument();
+                    expect(queryByText(applicationRow.nextElementSibling, application.rejectReason, {
+                        normalizer: getDefaultNormalizer({ collapseWhitespace: false }), // Necessary to prevent RTL from collapsing \n
+                    })).toBeInTheDocument();
+                } else if (application.state === "PENDING") {
+                    expect(getByLabelText(applicationRow.nextElementSibling, "Approve Application")).toBeInTheDocument();
+                    expect(getByLabelText(applicationRow.nextElementSibling, "Reject Application")).toBeInTheDocument();
+                }
+            } catch (e) {
+                throw new Error(`Failed checking company ${application.companyName}\n\n${e}`);
+            }
+        }
     });
 
     it("Should default sort by requestedAt desc and sort rows by company name on click", async () => {

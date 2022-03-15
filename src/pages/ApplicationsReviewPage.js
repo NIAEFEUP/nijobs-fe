@@ -1,19 +1,21 @@
 import { CardContent, makeStyles } from "@material-ui/core";
 import React from "react";
 import ApplicationsReviewWidget from "../components/Review/Applications/ApplicationsReviewWidget";
+import { useMobile } from "../utils/media-queries";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
-        padding: theme.spacing(3, 9),
-        boxSizing: "content-box",
+        padding: isMobile ? theme.spacing(2, 2) : theme.spacing(3, 9),
     },
 }));
 
 const ApplicationsReviewPage = () => {
-    const classes = useStyles();
+    const isMobile = useMobile();
+    const classes = useStyles(isMobile)();
+
     return (
         <CardContent className={classes.content}>
-            <ApplicationsReviewWidget />
+            <ApplicationsReviewWidget isMobile={isMobile} />
         </CardContent>
     );
 };
