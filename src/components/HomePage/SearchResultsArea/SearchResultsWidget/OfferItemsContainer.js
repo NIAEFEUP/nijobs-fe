@@ -19,7 +19,9 @@ const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
         top: "0",
         position: "sticky",
-        padding: theme.spacing(3, "25%", 1, "25%"),
+        padding: theme.spacing(3, "25%", 3, "25%"),
+        zIndex: 1,
+        backgroundColor: "white",
     },
     filtersButtonEnabled: {
         backgroundColor: theme.palette.secondary.main,
