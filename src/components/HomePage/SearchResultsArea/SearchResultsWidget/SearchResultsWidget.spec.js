@@ -47,7 +47,7 @@ describe("SearchResults", () => {
             { initialState, theme }
         );
 
-        expect(screen.getByRole("button", { name: "Show Filters" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
         expect(screen.getByText("position1")).toBeInTheDocument();
         expect(screen.getByText("position2")).toBeInTheDocument();
     });
@@ -119,7 +119,7 @@ describe("SearchResults", () => {
 
     });
 
-    it("should toggle searchArea when 'show filters' is toggled", () => {
+    it("should toggle searchArea when 'adjust filters' is toggled", () => {
         renderWithStoreAndTheme(
             <SearchResultsControllerContext.Provider>
                 <SearchResultsWidget />
@@ -127,10 +127,10 @@ describe("SearchResults", () => {
             { initialState, theme }
         );
 
-        expect(screen.getByRole("button", { name: "Show Filters" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
         expect(screen.queryByLabelText("Search", { selector: "input" })).not.toBeInTheDocument();
 
-        fireEvent.click(screen.getByRole("button", { name: "Show Filters" }));
+        fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
         expect(screen.getByLabelText("Search", { selector: "input" })).toBeInTheDocument();
 
         fireEvent.click(screen.getByRole("button", { name: "Hide Filters" }));
@@ -157,7 +157,7 @@ describe("SearchResults", () => {
             }
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Show Filters" }));
+        fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
 
         expect(screen.getAllByTestId("offer-item")).toHaveLength(1);
         fireEvent.submit(screen.getByRole("form"));
@@ -165,7 +165,7 @@ describe("SearchResults", () => {
         // must wait response from server, otherwise it will be 'loading', hence the await + find
         expect(await screen.findAllByTestId("offer-item")).toHaveLength(2);
 
-        expect(screen.getByRole("button", { name: "Show Filters" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
         expect(screen.queryByLabelText("Search", { selector: "input" })).not.toBeInTheDocument();
 
     });
