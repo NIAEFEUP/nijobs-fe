@@ -48,7 +48,7 @@ describe("SearchResultsMobile", () => {
                     <SearchResultsMobile offers={offers} />
                 </SearchResultsControllerContext.Provider>
             );
-            expect(screen.getByRole("button", { name: "Show Filters" })).toBeInTheDocument();
+            expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
             expect(screen.getByText("position1")).toBeInTheDocument();
             expect(screen.getByText("position2")).toBeInTheDocument();
             expect(screen.getByText("location1")).toBeInTheDocument();

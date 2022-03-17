@@ -17,7 +17,11 @@ import clsx from "clsx";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
-        padding: theme.spacing(3, "25%", 1, "25%"),
+        top: "0",
+        position: "sticky",
+        padding: theme.spacing(3, "25%", 3, "25%"),
+        zIndex: 1,
+        backgroundColor: "white",
     },
     filtersButtonEnabled: {
         backgroundColor: theme.palette.secondary.main,
@@ -37,7 +41,7 @@ const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
                 onClick={onClick}
                 {...props}
             >
-                {`${!enabled ? "Show" : "Hide"} Filters`}
+                {`${!enabled ? "Adjust" : "Hide"} Filters`}
             </Button>
         </ListItem>
     );
