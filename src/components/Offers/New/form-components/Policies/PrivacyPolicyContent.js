@@ -2,12 +2,13 @@
 import { Typography, Link } from "@material-ui/core";
 import { useStyles } from "./PoliciesStyle";
 import React from "react";
+import { useMobile } from "../../../../../utils/media-queries";
 
 
 const PrivacyPolicyContent = () => {
-    const classes = useStyles();
+    const classes = useStyles({ isMobile: useMobile() });
     return (
-        <div id="doc">
+        <div id="doc" className={classes.content}>
             <Typography variant="h2" id="Privacy-Policy" data-id="Privacy-Policy" gutterBottom>
             Privacy Policy
             </Typography>

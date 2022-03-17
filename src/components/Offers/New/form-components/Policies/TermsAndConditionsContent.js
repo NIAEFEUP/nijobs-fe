@@ -1,13 +1,14 @@
 /* eslint-disable max-len */
 import { Typography, Link } from "@material-ui/core";
 import React from "react";
+import { useMobile } from "../../../../../utils/media-queries";
 import { useStyles } from "./PoliciesStyle";
 
 
 const TermsAndConditionsContent = () => {
-    const classes = useStyles();
+    const classes = useStyles({ isMobile: useMobile() });
     return (
-        <div id="doc">
+        <div id="doc" className={classes.content}>
             <Typography variant="h2" id="Terms-and-Conditions" data-id="Terms-and-Conditions" gutterBottom>
             Terms and Conditions
             </Typography>
