@@ -9,9 +9,8 @@ export default yup.object().shape({
         .required(HumanValidationReasons.REQUIRED)
         .max(...generateValidationRule("title", "maxLength", HumanValidationReasons.TOO_LONG)),
     publishDate: yup.date(HumanValidationReasons.DATE)
-        .min(format(new Date(), "yyyy-MM-dd"), HumanValidationReasons.DATE_EXPIRED)
         .typeError(HumanValidationReasons.DATE)
-        .required(HumanValidationReasons.REQUIRED),
+        .required(),
     publishEndDate: yup.date(HumanValidationReasons.DATE)
         .min(format(new Date(), "yyyy-MM-dd"), HumanValidationReasons.DATE_EXPIRED)
         .typeError(HumanValidationReasons.DATE)
@@ -48,7 +47,7 @@ export default yup.object().shape({
         return yup.number(HumanValidationReasons.INT);
     }),
     jobType: yup.string()
-        .required(HumanValidationReasons.REQUIRED),
+        .nullable(true),
     fields: yup.array()
         .min(...generateValidationRule("fields", "minLength", HumanValidationReasons.OPTIONS_TOO_SHORT))
         .max(...generateValidationRule("fields", "maxLength", HumanValidationReasons.OPTIONS_TOO_LONG))

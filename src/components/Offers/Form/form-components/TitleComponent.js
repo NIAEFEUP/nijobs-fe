@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import { CreateOfferConstants } from "../CreateOfferUtils";
+import { CreateOfferConstants } from "../OfferUtils";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 

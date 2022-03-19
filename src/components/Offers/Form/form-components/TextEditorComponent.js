@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 import PropTypes from "prop-types";
 import TextEditor from "../../../utils/TextEditor";
 
-const TextEditorComponent = ({ fields, disabled, errors, requestErrors, control }) => (
+const TextEditorComponent = ({  disabled, errors, requestErrors, control }) => (
     <Controller
         name="descriptionText"
         render={(
@@ -12,13 +12,13 @@ const TextEditorComponent = ({ fields, disabled, errors, requestErrors, control 
             <Controller
                 name="description"
                 render={(
-                    { field: { onChange: onChangeDescription } },
+                    { field: { onChange: onChangeDescription, value } },
                 ) => (
                     <TextEditor
                         onChangeDescription={onChangeDescription}
                         onChangeDescriptionText={onChangeDescriptionText}
                         error={!!errors?.descriptionText || !!requestErrors?.descriptionText}
-                        content={fields.description}
+                        content={value}
                         helperText={errors.descriptionText?.message ||
                                         requestErrors.descriptionText?.message || " "}
                         disabled={disabled}
@@ -32,7 +32,6 @@ const TextEditorComponent = ({ fields, disabled, errors, requestErrors, control 
 );
 
 TextEditorComponent.propTypes = {
-    fields: PropTypes.object.isRequired,
     disabled: PropTypes.bool,
     errors: PropTypes.object,
     requestErrors: PropTypes.object,

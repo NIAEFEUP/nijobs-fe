@@ -10,19 +10,18 @@ import { useMobile } from "../../../../utils/media-queries";
 import { Link } from "react-router-dom";
 import { RowPropTypes } from "../../../../utils/Table/PropTypes";
 
-
 const CompanyOffersActions = ({
     isCollapseOpen, toggleCollapse, row,
 }) => {
     const isMobile = useMobile();
-    const offerRoute = `/offer/${row?.key}`;
+    const editOfferRoute = `/offer/${row?.key}/edit`;
 
     return (
         <>
             <TableCell align="right">
                 { !isMobile ? (
                     <Tooltip title="Edit Offer">
-                        <Link to={offerRoute}>
+                        <Link to={editOfferRoute}>
                             <IconButton aria-label="Edit Offer">
                                 <EditIcon color="secondary" fontSize="medium" />
                             </IconButton>

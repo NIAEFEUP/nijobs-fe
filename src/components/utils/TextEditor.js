@@ -7,7 +7,7 @@ import Heading from "@tiptap/extension-heading";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import React, {  useEffect } from "react";
-import { CreateOfferConstants } from "../Offers/New/CreateOfferUtils";
+import { CreateOfferConstants } from "../Offers/Form/OfferUtils";
 import { PropTypes } from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
@@ -142,6 +142,12 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
             },
         },
     });
+
+    useEffect(() => {
+        if (!editor) return;
+        if (content === editor.getHTML()) return;
+        editor.commands.setContent(content);
+    }, [content, editor]);
 
     useEffect(() => {
         if (!editor) return;

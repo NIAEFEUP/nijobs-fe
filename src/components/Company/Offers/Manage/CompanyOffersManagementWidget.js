@@ -57,7 +57,6 @@ const filters = [
     { id: "location-filter", render: LocationFilter },
 ];
 
-
 const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const { data, isLoggedIn } = useSession();
     const [offers, setOffers] = useState({});

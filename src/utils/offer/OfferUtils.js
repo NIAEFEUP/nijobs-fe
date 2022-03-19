@@ -7,6 +7,8 @@ const HumanReadableErrors = Object.freeze({
     "must-be-admin": "Only admin users can do this action.",
     "login-required": "You must be logged in to do this action.",
     "must-be-company": "You must be a company to do this action.",
+    "company-blocked": "An error occurred, because your account was blocked by an admin.",
+    "company-disabled": "An error occurred, because your account is disabled.",
 });
 
 export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";

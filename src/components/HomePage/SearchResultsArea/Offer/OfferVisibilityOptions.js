@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
-import { Visibility, VisibilityOff, Block } from "@material-ui/icons";
+import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 const OfferVisibilityOptions = ({
     loading,
@@ -57,6 +58,20 @@ const OfferVisibilityOptions = ({
                         className={classes.verticalDivider}
                     /> }
                 <div className={classes.offerOptionsButtons}>
+                    {
+                        (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&
+                        <Tooltip title={"Edit Offer"}>
+                            <Button
+                                disabled={visibilityState.isDisabled}
+                                className={classes.visibilityButton}
+                                component={Link}
+                                to={`/offer/${offer._id}/edit`}
+                                startIcon={(<Edit />)}
+                            >
+                                Edit Offer
+                            </Button>
+                        </Tooltip>
+                    }
                     {
                         (
                             visibilityState.isVisible ||

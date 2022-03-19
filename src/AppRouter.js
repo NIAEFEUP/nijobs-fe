@@ -24,6 +24,8 @@ import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import CreateOfferPage from "./pages/CreateOfferPage";
 import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
 import { CookieConsent } from "./cookieConsent";
+import { EditOfferController, EditOfferControllerContext } from "./components/Offers/Edit/EditOfferForm";
+import EditOfferPage from "./pages/EditOfferPage";
 
 /**
  *
@@ -134,6 +136,25 @@ const AppRouter = () => (
                     layout={LayoutType.DESKTOP}
                 >
                     <CompanyOffersManagementPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                path="/offer/:id/edit"
+                key="/offer/:id/edit"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to edit this offer."
+                authorize={(user) => !!(user?.company || user?.isAdmin)}
+                context={EditOfferControllerContext}
+                controller={EditOfferController}
+            >
+                <PageLayout
+                    key="/offer/:id/edit"
+                    layout={LayoutType.DESKTOP}
+                    pageTitle="Edit Offer"
+                    context={EditOfferControllerContext}
+                >
+                    <EditOfferPage />
                 </PageLayout>
             </ProtectedRoute>
             <Route

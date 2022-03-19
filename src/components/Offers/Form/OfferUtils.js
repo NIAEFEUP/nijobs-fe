@@ -46,6 +46,7 @@ const HumanReadableErrors = Object.freeze({
     "company-blocked": () => "Company is blocked. Please contact the team to review this situation if you think this is a mistake.",
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
     "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
+    "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
 });
 
 export const getHumanError = (error) => {

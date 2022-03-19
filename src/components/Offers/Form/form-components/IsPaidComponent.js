@@ -2,7 +2,7 @@ import React from "react";
 import { Controller } from "react-hook-form";
 import { MenuItem, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
-import { PAID_OPTIONS } from "../CreateOfferForm";
+import { PAID_OPTIONS } from "./OfferForm";
 
 const IsPaidComponent = ({ disabled, errors, requestErrors, control, textFieldProps }) => (
 

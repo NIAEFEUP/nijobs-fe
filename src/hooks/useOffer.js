@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import useSWR from "swr";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 
@@ -29,9 +30,11 @@ export default (id) => {
     };
 
     const { data, error, mutate } = useSWR(`${API_HOSTNAME}/offers/${id}`, getOffer);
+    const offer = useMemo(() => data ? new Offer(data) : null, [data]);
+
 
     return {
-        offer: data ? new Offer(data) : null,
+        offer,
         error,
         loading: !data,
         mutate,
