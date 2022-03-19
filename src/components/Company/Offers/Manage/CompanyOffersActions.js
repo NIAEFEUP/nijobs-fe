@@ -10,7 +10,6 @@ import { useMobile } from "../../../../utils/media-queries";
 import { Link } from "react-router-dom";
 import { RowPropTypes } from "../../../../utils/Table/PropTypes";
 
-
 const CompanyOffersActions = ({
     isCollapseOpen, toggleCollapse, row,
 }) => {

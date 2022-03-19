@@ -74,7 +74,7 @@ const OfferForm = ({ context, title }) => {
 
     const [isAdvancedOpen, setAdvancedOpen] = useState(false);
 
-    const isAdvancedOpenOrErrors = useCallback(() => (
+    const shouldShowAdvancedOptions = useCallback(() => (
         isAdvancedOpen ||
         !!errors.publishDate || !!requestErrors.publishDate ||
         !!errors.publishEndDate || !!requestErrors.publishEndDate ||
@@ -253,7 +253,7 @@ const OfferForm = ({ context, title }) => {
                                             size="small"
                                             margin="dense"
                                             endIcon={
-                                                isAdvancedOpenOrErrors()
+                                                shouldShowAdvancedOptions()
                                                     ? <KeyboardArrowUp />
                                                     : <KeyboardArrowDown />}
                                         >
@@ -261,7 +261,7 @@ const OfferForm = ({ context, title }) => {
                                         </Button>
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
-                                        <Collapse in={isAdvancedOpenOrErrors()}>
+                                        <Collapse in={shouldShowAdvancedOptions()}>
                                             <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
                                                     <PublicationDateComponent

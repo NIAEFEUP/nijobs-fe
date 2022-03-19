@@ -19,7 +19,7 @@ export const CreateOfferController = () => {
                 ...data,
                 vacancies: data.vacancies || undefined,
                 contacts: data.contacts.map((val) => val.value),
-                requirements: data.requirements.map((val) => (val, val.value)),
+                requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || params.company,

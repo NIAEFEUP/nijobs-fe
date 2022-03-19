@@ -51,18 +51,17 @@ export const EditOfferController = () => {
 
     // This portion of code is used to remove race conditions between useState of canEdit and useEffect
     // If the value of useState is false by default, this condition will be wrongly verified, resulting in unwanted redirects
-    const condition = useCallback(() => {
+    const shouldRevalidateEditingPermissions = useCallback(() => {
         const blocked = offer?.isHidden && offer?.hiddenReason !== "COMPANY_REQUEST";
         return !blocked && (
             (offer?.owner === user?.company?._id) || user?.isAdmin);
     }, [offer, user]);
 
-    const [canEdit, setCanEdit] = useState(condition());
-
+    const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
 
     useEffect(() => {
-        setCanEdit(condition());
-    }, [condition, loadingOffer, offer, user]);
+        setCanEdit(shouldRevalidateEditingPermissions());
+    }, [shouldRevalidateEditingPermissions, loadingOffer, offer, user]);
 
     const location = useLocation();
 
@@ -71,7 +70,7 @@ export const EditOfferController = () => {
             pathname: "/",
             state: {
                 from: location,
-                message: "You are not authorized to edit this offer",
+                message: "You are not authorized to edit this offer.",
             },
         },
     };
@@ -105,7 +104,7 @@ export const EditOfferController = () => {
                 publishDate: publishDateChanged ? data.publishDate : undefined,
                 publishEndDate: publishEndDateChanged ? data.publishEndDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
-                requirements: data.requirements.map((val) => (val, val.value)),
+                requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 jobMinDuration,
@@ -157,10 +156,7 @@ const EditOfferForm = () => {
     } = useContext(EditOfferControllerContext);
 
     if (errorOffer || (!loadingOffer && !isValidating && !canEdit)) {
-
-        return (
-            <Redirect {...redirectProps} />
-        );
+        return <Redirect {...redirectProps} />;
     }
 
     return <OfferForm title={"Edit Offer"} disabled={loadingOffer} context={EditOfferControllerContext} />;
