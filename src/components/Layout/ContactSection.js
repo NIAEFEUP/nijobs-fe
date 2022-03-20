@@ -154,7 +154,7 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="rules"
+                                to="/rules"
                                 startIcon={<ListAlt htmlColor={theme.palette.tertiary.main} />}
                                 className={classes.colorText}
                                 component={RouterLink}
@@ -165,7 +165,7 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="privacy-policy"
+                                to="/privacy-policy"
                                 startIcon={<Storage htmlColor={theme.palette.tertiary.main} />}
                                 className={classes.colorText}
                                 component={RouterLink}
@@ -176,7 +176,7 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="terms"
+                                to="/terms-and-conditions"
                                 startIcon={<Gavel htmlColor={theme.palette.tertiary.main} />}
                                 className={classes.colorText}
                                 component={RouterLink}

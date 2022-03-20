@@ -113,7 +113,7 @@ describe("ContactSection", () => {
                 </BrowserRouter>);
 
             const btn = queryByTitle("terms");
-            expect(btn.getAttribute("href")).toBe("/terms");
+            expect(btn.getAttribute("href")).toBe("/terms-and-conditions");
         });
 
         it("check privacy policy button link", () => {
