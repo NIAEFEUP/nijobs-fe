@@ -155,7 +155,7 @@ const EditOfferForm = () => {
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (errorOffer || (!loadingOffer && !isValidating && !canEdit)) {
+    if (errorOffer || (!loadingOffer && !isValidating && canEdit === false)) {
         return <Redirect {...redirectProps} />;
     }
 
