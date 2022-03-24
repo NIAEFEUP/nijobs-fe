@@ -105,7 +105,7 @@ const OfferWidgetSection = ({
 );
 
 OfferWidgetSection.propTypes = {
-    noOffers: PropTypes.bool.isRequired,
+    noOffers: PropTypes.bool,
     classes: PropTypes.shape({
         searchOfferErrorContainer: PropTypes.string.isRequired,
         reviseCriteriaErrorMessage: PropTypes.string.isRequired,

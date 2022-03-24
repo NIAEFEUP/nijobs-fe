@@ -38,6 +38,17 @@ describe("SearchResults", () => {
         },
     };
 
+    beforeEach(() => {
+        // IntersectionObserver isn't available in test environment
+        const mockIntersectionObserver = jest.fn();
+        mockIntersectionObserver.mockReturnValue({
+            observe: () => null,
+            unobserve: () => null,
+            disconnect: () => null,
+        });
+        window.IntersectionObserver = mockIntersectionObserver;
+    });
+
     it("should display OfferItemsContainer", () => {
 
         renderWithStoreAndTheme(
@@ -139,7 +150,7 @@ describe("SearchResults", () => {
 
     it("should search with updated filters and hide filters on fetch", async () => {
 
-        fetch.mockResponse(JSON.stringify(initialState.offerSearch.offers));
+        fetch.mockResponse(JSON.stringify({ results: initialState.offerSearch.offers, queryToken: "123" }));
 
         renderWithStoreAndTheme(
             <SearchResultsControllerContext.Provider>

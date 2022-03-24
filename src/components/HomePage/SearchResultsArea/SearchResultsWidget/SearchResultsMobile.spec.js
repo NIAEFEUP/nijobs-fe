@@ -2,7 +2,7 @@ import React from "react";
 import SearchResultsMobile from "./SearchResultsMobile";
 import Offer from "../Offer/Offer";
 import { createTheme } from "@material-ui/core/styles";
-import { render, renderWithStoreAndTheme, screen } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
@@ -39,14 +39,27 @@ describe("SearchResultsMobile", () => {
         }),
     ];
 
+    beforeEach(() => {
+        // IntersectionObserver isn't available in test environment
+        const mockIntersectionObserver = jest.fn();
+        mockIntersectionObserver.mockReturnValue({
+            observe: () => null,
+            unobserve: () => null,
+            disconnect: () => null,
+        });
+        window.IntersectionObserver = mockIntersectionObserver;
+    });
+
     describe("render", () => {
         it("Should render offers if present", () => {
 
+            const initialState = {};
+
             const context = { offers };
-            render(
+            renderWithStoreAndTheme(
                 <SearchResultsControllerContext.Provider value={context}>
                     <SearchResultsMobile offers={offers} />
-                </SearchResultsControllerContext.Provider>
+                </SearchResultsControllerContext.Provider>, { initialState, theme }
             );
             expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
             expect(screen.getByText("position1")).toBeInTheDocument();

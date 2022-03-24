@@ -29,19 +29,10 @@ export default ({ shouldFetchMoreOffers }) => {
     };
 
     const offers = useSelector((state) => state.offerSearch.offers);
-    const initialOffersLoading = useSelector((state) => state.offerSearch.loading);
 
     const [hasMoreOffers, setHasMoreOffers] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
-    useEffect(() => {
-        if (initialOffersLoading) {
-            setHasMoreOffers(true);
-            setError(null);
-            setLoading(false);
-        }
-    }, [initialOffersLoading]);
 
     useEffect(() => {
 
@@ -90,7 +81,7 @@ export default ({ shouldFetchMoreOffers }) => {
             }
         };
 
-        if (shouldFetchMoreOffers && !initialOffersLoading && !loading) {
+        if (shouldFetchMoreOffers) {
             fetchOffers().catch((error) => {
                 setError({
                     cause: ErrorTypes.UNEXPECTED,
@@ -99,10 +90,7 @@ export default ({ shouldFetchMoreOffers }) => {
             });
         }
 
-    }, [
-        dispatch, shouldFetchMoreOffers, filters, initialOffersLoading,
-        loading, offers,
-    ]);
+    }, [dispatch, shouldFetchMoreOffers, filters, loading, offers, hasMoreOffers]);
 
     return { offers, hasMoreOffers, loading, error };
 };

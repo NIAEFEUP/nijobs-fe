@@ -87,11 +87,7 @@ const OfferItemsContainer = ({
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting && hasMoreOffers) {
-                setShouldFetchMoreOffers(true);
-            } else {
-                setShouldFetchMoreOffers(false);
-            }
+            setShouldFetchMoreOffers(entries[0].isIntersecting && hasMoreOffers);
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
     }, [
