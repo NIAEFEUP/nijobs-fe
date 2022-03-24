@@ -36,7 +36,6 @@ const SearchResultsController = ({
 }) => {
 
     const [selectedOfferIdx, setSelectedOfferIdx] = useState(null);
-    const [offerOffset, setOfferOffset] = useState(0);
     const [shouldFetchMoreOffers, setShouldFetchMoreOffers] = useState(false);
 
     // Reset the selected offer on every "loading", so that it does not show up after finished loading
@@ -49,7 +48,7 @@ const SearchResultsController = ({
         hasMoreOffers,
         loading: infiniteScrollLoading,
         error: infiniteScrollError,
-    } = useLoadMoreOffers({ offerOffset, setOfferOffset, shouldFetchMoreOffers });
+    } = useLoadMoreOffers({ shouldFetchMoreOffers });
 
     const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
         disableOfferService(offer._id, adminReason).then(() => {
@@ -121,7 +120,6 @@ const SearchResultsController = ({
                 handleAdminEnableOffer,
                 showSearchFilters,
                 toggleShowSearchFilters,
-                setOfferOffset,
                 setShouldFetchMoreOffers,
                 hasMoreOffers,
                 infiniteScrollLoading,

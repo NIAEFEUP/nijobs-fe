@@ -1,4 +1,10 @@
-import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetchError } from "../actions/searchOffersActions";
+import {
+    setLoadingOffers,
+    setSearchOffers,
+    setSearchQueryToken,
+    setOffersFetchError,
+    resetOffersFetchError,
+} from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
@@ -46,7 +52,10 @@ export const searchOffers = (filters) => buildCancelableRequest(
                 return;
             }
 
-            dispatch(setSearchOffers(json.map((offerData) => new Offer(offerData))));
+            const offers = json.results;
+            const queryToken = json.queryToken;
+            dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
+            dispatch(setSearchQueryToken(queryToken));
             dispatch(setLoadingOffers(false));
 
             sendSearchReport(filters, `/offers?${query}`);

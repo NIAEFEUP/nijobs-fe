@@ -28,6 +28,11 @@ export default (state = initialState, action) => {
                 ...state,
                 offers: action.offers,
             };
+        case OfferSearchTypes.SET_SEARCH_QUERY_TOKEN:
+            return {
+                ...state,
+                queryToken: action.queryToken,
+            };
         case OfferSearchTypes.SET_OFFERS_LOADING:
             return {
                 ...state,

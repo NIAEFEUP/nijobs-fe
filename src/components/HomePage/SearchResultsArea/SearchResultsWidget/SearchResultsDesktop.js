@@ -12,8 +12,8 @@ import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({
     noOffers, classes, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
-    showSearchFilters, toggleShowSearchFilters, offers, setOfferOffset,
-    setShouldFetchMoreOffers, hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
+    showSearchFilters, toggleShowSearchFilters, offers, setShouldFetchMoreOffers,
+    hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
 }) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
@@ -32,7 +32,6 @@ const OffersList = ({
                         showSearchFilters={showSearchFilters}
                         toggleShowSearchFilters={toggleShowSearchFilters}
                         offers={offers}
-                        setOfferOffset={setOfferOffset}
                         setShouldFetchMoreOffers={setShouldFetchMoreOffers}
                         hasMoreOffers={hasMoreOffers}
                         infiniteScrollLoading={infiniteScrollLoading}
@@ -64,7 +63,6 @@ OffersList.propTypes = {
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setOfferOffset: PropTypes.func,
     setShouldFetchMoreOffers: PropTypes.func,
     hasMoreOffers: PropTypes.bool,
     infiniteScrollLoading: PropTypes.bool,
@@ -136,7 +134,6 @@ const SearchResultsDesktop = () => {
         handleAdminEnableOffer,
         showSearchFilters,
         toggleShowSearchFilters,
-        setOfferOffset,
         setShouldFetchMoreOffers,
         hasMoreOffers,
         infiniteScrollLoading,
@@ -171,7 +168,6 @@ const SearchResultsDesktop = () => {
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
                 offers={offers}
-                setOfferOffset={setOfferOffset}
                 setShouldFetchMoreOffers={setShouldFetchMoreOffers}
                 hasMoreOffers={hasMoreOffers}
                 infiniteScrollLoading={infiniteScrollLoading}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { setSearchOffers } from "../../../../actions/searchOffersActions";
+import { setSearchOffers, setSearchQueryToken } from "../../../../actions/searchOffersActions";
 import Offer from "../Offer/Offer";
 import { parseFiltersToURL } from "../../../../utils";
 import config from "../../../../config";
@@ -10,10 +10,11 @@ import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const { API_HOSTNAME } = config;
 
-export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
+export default ({ shouldFetchMoreOffers }) => {
 
     const dispatch = useDispatch();
     const offerSearch = useSelector(({ offerSearch }) => ({
+        queryToken: offerSearch.queryToken,
         value: offerSearch.searchValue,
         jobType: offerSearch.jobType,
         jobMinDuration: offerSearch.jobDuration[0],
@@ -23,7 +24,6 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
     }));
 
     const filters = {
-        offset: offerOffset,
         limit: SearchResultsConstants.fetchNewOffersLimit,
         ...offerSearch,
     };
@@ -34,24 +34,20 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
     const [hasMoreOffers, setHasMoreOffers] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [fetchedOffsets, setFetchedOffsets] = useState([]);
 
     useEffect(() => {
         if (initialOffersLoading) {
-            setOfferOffset(0);
             setHasMoreOffers(true);
             setError(null);
             setLoading(false);
-            setFetchedOffsets([]);
         }
-    }, [setOfferOffset, initialOffersLoading]);
+    }, [initialOffersLoading]);
 
     useEffect(() => {
 
         const fetchOffers = async () => {
 
             try {
-                setFetchedOffsets((offsets) => [...offsets, filters.offset]);
                 setLoading(true);
                 const query = parseFiltersToURL(filters);
                 const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
@@ -66,7 +62,9 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
                     setLoading(false);
                     return;
                 }
-                const offersData = await res.json();
+                const data = await res.json();
+                const offersData = data.results;
+                const queryToken = data.queryToken;
 
                 const offerIds = [...offers.map((offer) => offer._id)];
                 const newOffers = [...offers];
@@ -78,6 +76,7 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
 
                 setHasMoreOffers(offersData.length > 0);
                 dispatch(setSearchOffers(newOffers));
+                dispatch(setSearchQueryToken(queryToken));
                 setLoading(false);
                 setError(null);
 
@@ -91,7 +90,7 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
             }
         };
 
-        if (shouldFetchMoreOffers && !fetchedOffsets.includes(filters.offset) && !initialOffersLoading && !loading) {
+        if (shouldFetchMoreOffers && !initialOffersLoading && !loading) {
             fetchOffers().catch((error) => {
                 setError({
                     cause: ErrorTypes.UNEXPECTED,
@@ -102,7 +101,7 @@ export default ({ offerOffset, setOfferOffset, shouldFetchMoreOffers }) => {
 
     }, [
         dispatch, shouldFetchMoreOffers, filters, initialOffersLoading,
-        fetchedOffsets, loading, offers,
+        loading, offers,
     ]);
 
     return { offers, hasMoreOffers, loading, error };

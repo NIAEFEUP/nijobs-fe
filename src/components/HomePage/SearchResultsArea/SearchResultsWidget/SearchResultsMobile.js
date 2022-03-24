@@ -12,7 +12,7 @@ import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({
     noOffers, classes, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters, offers,
-    setOfferOffset, setShouldFetchMoreOffers, hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
+    setShouldFetchMoreOffers, hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
 }) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
@@ -31,7 +31,6 @@ const OffersList = ({
                     showSearchFilters={showSearchFilters}
                     toggleShowSearchFilters={toggleShowSearchFilters}
                     offers={offers}
-                    setOfferOffset={setOfferOffset}
                     setShouldFetchMoreOffers={setShouldFetchMoreOffers}
                     hasMoreOffers={hasMoreOffers}
                     infiniteScrollLoading={infiniteScrollLoading}
@@ -56,7 +55,6 @@ OffersList.propTypes = {
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setOfferOffset: PropTypes.func,
     setShouldFetchMoreOffers: PropTypes.func,
     hasMoreOffers: PropTypes.bool,
     infiniteScrollLoading: PropTypes.bool,

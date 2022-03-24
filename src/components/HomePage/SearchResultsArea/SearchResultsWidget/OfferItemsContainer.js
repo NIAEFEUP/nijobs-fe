@@ -9,7 +9,6 @@ import OfferItem from "../Offer/OfferItem";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
 import { addSnackbar } from "../../../../actions/notificationActions";
-import { SearchResultsConstants } from "./SearchResultsUtils";
 import Offer from "../Offer/Offer";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
@@ -57,7 +56,6 @@ const OfferItemsContainer = ({
     showSearchFilters,
     toggleShowSearchFilters,
     offers,
-    setOfferOffset,
     setShouldFetchMoreOffers,
     hasMoreOffers,
     infiniteScrollLoading,
@@ -90,7 +88,6 @@ const OfferItemsContainer = ({
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && hasMoreOffers) {
-                setOfferOffset((previousOffset) => previousOffset + SearchResultsConstants.fetchNewOffersLimit);
                 setShouldFetchMoreOffers(true);
             } else {
                 setShouldFetchMoreOffers(false);
@@ -99,7 +96,7 @@ const OfferItemsContainer = ({
         if (lastOfferNode) observer.current.observe(lastOfferNode);
     }, [
         addSnackbar, hasMoreOffers, infiniteScrollError, infiniteScrollLoading,
-        lastOfferNode, loading, setOfferOffset, setShouldFetchMoreOffers,
+        lastOfferNode, loading, setShouldFetchMoreOffers,
     ]);
 
     const handleOfferSelection = (...args) => {
@@ -154,7 +151,6 @@ OfferItemsContainer.propTypes = {
     showSearchFilters: PropTypes.bool,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setOfferOffset: PropTypes.func,
     setShouldFetchMoreOffers: PropTypes.func,
     hasMoreOffers: PropTypes.bool,
     infiniteScrollLoading: PropTypes.bool,
