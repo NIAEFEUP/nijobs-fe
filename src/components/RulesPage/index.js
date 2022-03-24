@@ -8,7 +8,7 @@ import {
     makeStyles,
     Link,
 } from "@material-ui/core";
-import * as data from "./rules.json";
+import data from "./rules";
 import { RouterLink } from "../../utils";
 import { useMobile } from "../../utils/media-queries";
 import Constants from "../../utils/Constants";
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-// Writing on rules.json adds "Accordions" with json's data. You may add a title, a description,
+// Writing on rules.js adds "Accordions" with json's data. You may add a title, a description,
 // a link and a linkName, if link is different than "", a button appears, this button will have, linkName's
 // text, clicking it will take you to a page inside NIJobs as the link is just the path part of router-dom's
 // <Link> component.
