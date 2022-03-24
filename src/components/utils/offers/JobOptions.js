@@ -22,6 +22,10 @@ export default Object.freeze([
         label: "Full-Time",
     },
     {
+        value: "RESEARCH GRANT",
+        label: "Research Grant",
+    },
+    {
         value: "OTHER",
         label: "Other",
     },
