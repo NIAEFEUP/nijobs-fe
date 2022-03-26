@@ -1,4 +1,4 @@
 export const SearchResultsConstants = {
-    initialLimit: 5,
-    fetchNewOffersLimit: 5,
+    INITIAL_LIMIT: 15,
+    FETCH_NEW_OFFERS_LIMIT: 10,
 };

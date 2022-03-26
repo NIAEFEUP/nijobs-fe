@@ -24,7 +24,7 @@ export default ({ shouldFetchMoreOffers }) => {
     }));
 
     const filters = {
-        limit: SearchResultsConstants.fetchNewOffersLimit,
+        limit: SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT,
         ...offerSearch,
     };
 
@@ -90,7 +90,7 @@ export default ({ shouldFetchMoreOffers }) => {
             });
         }
 
-    }, [dispatch, shouldFetchMoreOffers, filters, loading, offers, hasMoreOffers]);
+    }, [dispatch, shouldFetchMoreOffers, filters, offers]);
 
     return { offers, hasMoreOffers, loading, error };
 };

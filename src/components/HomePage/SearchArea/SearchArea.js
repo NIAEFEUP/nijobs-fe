@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
 import { searchOffers } from "../../../services/offerService";
+import { SearchResultsConstants } from "../SearchResultsArea/SearchResultsWidget/SearchResultsUtils";
 import {
     setSearchValue,
     setJobDuration,
@@ -58,6 +59,7 @@ export const AdvancedSearchController = ({
             jobType,
             fields,
             technologies,
+            limit: SearchResultsConstants.INITIAL_LIMIT,
         });
 
         if (onSubmit) onSubmit();
