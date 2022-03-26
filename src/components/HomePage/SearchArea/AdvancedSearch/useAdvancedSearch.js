@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import useToggle from "../../../../hooks/useToggle";
-import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
+import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE, JOB_MAX_DURATION } from "../../../../reducers/searchOffersReducer";
 import useSearchAreaStyles from "../searchAreaStyle";
 import useTechSelector from "../../../utils/offers/useTechSelector";
 import useFieldSelector from "../../../utils/offers/useFieldSelector";
@@ -23,7 +23,10 @@ export default ({
 
     const jobDuration = [jobMinDuration, jobMaxDuration];
 
-    const JobDurationSliderText = `Job Duration - ${jobMinDuration}-${jobMaxDuration} month(s)`;
+    const jobMaxDurationParsed = `${jobMaxDuration}${jobMaxDuration === JOB_MAX_DURATION ? "+" : ""}`;
+    const JobDurationSliderText = jobMinDuration === jobMaxDuration ?
+        `Job Duration: ${jobMaxDurationParsed} ${jobMinDuration === 1 ? "month" : "months"}`
+        : `Job Duration: ${jobMinDuration} - ${jobMaxDurationParsed} months`;
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 

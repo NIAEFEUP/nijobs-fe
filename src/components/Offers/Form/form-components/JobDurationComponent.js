@@ -41,8 +41,8 @@ const JobDurationComponent = ({ disabled, control }) => {
                         />
                         <FormHelperText className={styles.helperText}>
                             { value[0] === value[1] ?
-                                `Job duration: ${lastValueText} ${value[0] === 1 ? "month" : "months"}`
-                                : `Job duration: ${value[0]} - ${lastValueText} months`}
+                                `Job Duration: ${lastValueText} ${value[0] === 1 ? "month" : "months"}`
+                                : `Job Duration: ${value[0]} - ${lastValueText} months`}
                         </FormHelperText>
                     </FormControl>
                 );
