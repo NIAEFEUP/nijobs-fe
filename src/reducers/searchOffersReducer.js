@@ -24,10 +24,16 @@ export default (state = initialState, action) => {
 
     switch (action.type) {
         case OfferSearchTypes.SET_OFFERS_SEARCH_RESULT:
+        {
+            let offers = action.offers;
+            if (action.accumulate) {
+                offers = [...state.offers, offers];
+            }
             return {
                 ...state,
-                offers: action.offers,
+                offers,
             };
+        }
         case OfferSearchTypes.SET_SEARCH_QUERY_TOKEN:
             return {
                 ...state,

@@ -1,6 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
 import clsx from "clsx";
 import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
 import { Tune } from "@material-ui/icons";
@@ -8,7 +7,6 @@ import { Tune } from "@material-ui/icons";
 import OfferItem from "../Offer/OfferItem";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
-import { addSnackbar } from "../../../../actions/notificationActions";
 import Offer from "../Offer/Offer";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
@@ -49,17 +47,14 @@ ToggleFiltersButton.propTypes = {
 };
 
 const OfferItemsContainer = ({
-    addSnackbar,
-    loading,
+    initialOffersLoading,
     selectedOfferIdx,
     setSelectedOfferIdx,
     showSearchFilters,
     toggleShowSearchFilters,
     offers,
-    setShouldFetchMoreOffers,
-    hasMoreOffers,
-    infiniteScrollLoading,
-    infiniteScrollError,
+    moreOffersLoading,
+    loadMoreOffers,
 }) => {
     const classes = useSearchResultsWidgetStyles();
 
@@ -72,35 +67,23 @@ const OfferItemsContainer = ({
 
     useEffect(() => {
 
-        if (loading || infiniteScrollLoading) {
-            setShouldFetchMoreOffers(false);
-            return;
-        }
-
-        if (infiniteScrollError) {
-            addSnackbar({
-                message: "An error occurred while fetching new offers",
-                key: "fetch-new-offers",
-            });
+        if (initialOffersLoading || moreOffersLoading) {
             return;
         }
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            setShouldFetchMoreOffers(entries[0].isIntersecting && hasMoreOffers);
+            if (entries[0].isIntersecting) loadMoreOffers();
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [
-        addSnackbar, hasMoreOffers, infiniteScrollError, infiniteScrollLoading,
-        lastOfferNode, loading, setShouldFetchMoreOffers,
-    ]);
+    }, [initialOffersLoading, lastOfferNode, loadMoreOffers, moreOffersLoading]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
         setSelectedOfferIdx(...args);
     };
 
-    if (loading)
+    if (initialOffersLoading)
         return (
             <div
                 data-testid="offer-items-container"
@@ -129,32 +112,26 @@ const OfferItemsContainer = ({
                             offerIdx={i}
                             selectedOfferIdx={selectedOfferIdx}
                             setSelectedOfferIdx={handleOfferSelection}
-                            loading={loading}
+                            loading={initialOffersLoading}
                         />
                     </div>
                 ))}
-                {infiniteScrollLoading && <LoadingOfferItem dividerOnTop />}
+                {moreOffersLoading && <LoadingOfferItem dividerOnTop />}
             </List>
         </div>
     );
 };
 
 OfferItemsContainer.propTypes = {
-    addSnackbar: PropTypes.func,
-    loading: PropTypes.bool,
+    initialOffersLoading: PropTypes.bool,
+    moreOffersLoading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setShouldFetchMoreOffers: PropTypes.func,
-    hasMoreOffers: PropTypes.bool,
-    infiniteScrollLoading: PropTypes.bool,
-    infiniteScrollError: PropTypes.bool,
+    loadMoreOffers: PropTypes.func,
 };
 
-const mapDispatchToProps = (dispatch) => ({
-    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
-});
 
-export default connect(null, mapDispatchToProps)(OfferItemsContainer);
+export default OfferItemsContainer;

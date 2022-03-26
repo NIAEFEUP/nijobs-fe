@@ -22,33 +22,31 @@ import {
     disableOffer,
     hideOffer,
 } from "../../../../actions/searchOffersActions";
-import useLoadMoreOffers from "./useLoadMoreOffers";
+import useOffersSearcher from "./useOffersSearcher";
+import { SearchResultsConstants } from "./SearchResultsUtils";
 
 export const SearchResultsControllerContext = React.createContext({});
 
 const SearchResultsController = ({
+    offers,
     offersSearchError,
     offersLoading,
     hideOffer,
     disableOffer,
     companyEnableOffer,
     adminEnableOffer,
+    searchFilters,
+    searchQueryToken,
 }) => {
 
     const [selectedOfferIdx, setSelectedOfferIdx] = useState(null);
-    const [shouldFetchMoreOffers, setShouldFetchMoreOffers] = useState(false);
 
     // Reset the selected offer on every "loading", so that it does not show up after finished loading
     useEffect(() => {
         if (offersLoading) setSelectedOfferIdx(null);
     }, [offersLoading]);
 
-    const {
-        offers,
-        hasMoreOffers,
-        loading: infiniteScrollLoading,
-        error: infiniteScrollError,
-    } = useLoadMoreOffers({ shouldFetchMoreOffers });
+    const { loadMoreOffers, moreOffersLoading } = useOffersSearcher(searchFilters);
 
     const handleDisableOffer = useCallback(({ offer, adminReason, onSuccess, onError }) => {
         disableOfferService(offer._id, adminReason).then(() => {
@@ -120,10 +118,8 @@ const SearchResultsController = ({
                 handleAdminEnableOffer,
                 showSearchFilters,
                 toggleShowSearchFilters,
-                setShouldFetchMoreOffers,
-                hasMoreOffers,
-                infiniteScrollLoading,
-                infiniteScrollError,
+                moreOffersLoading,
+                loadMoreOffers: () => loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT),
             },
         },
     };
@@ -137,6 +133,8 @@ export const SearchResultsWidget = React.forwardRef(({
     disableOffer,
     companyEnableOffer,
     adminEnableOffer,
+    searchFilters,
+    searchQueryToken,
 }, ref) => {
 
     const classes = useSearchResultsWidgetStyles();
@@ -150,6 +148,8 @@ export const SearchResultsWidget = React.forwardRef(({
             disableOffer,
             companyEnableOffer,
             adminEnableOffer,
+            searchFilters,
+            searchQueryToken,
         }, SearchResultsControllerContext);
 
     return (
@@ -182,11 +182,23 @@ SearchResultsWidget.propTypes = {
     disableOffer: PropTypes.func,
     companyEnableOffer: PropTypes.func,
     adminEnableOffer: PropTypes.func,
+    searchFilters: PropTypes.object,
+    searchQueryToken: PropTypes.string,
 };
 
-const mapStateToProps = (state) => ({
-    offersLoading: state.offerSearch.loading,
-    offersSearchError: state.offerSearch.error,
+const mapStateToProps = ({ offerSearch }) => ({
+    offers: offerSearch.offers,
+    offersLoading: offerSearch.loading,
+    offersSearchError: offerSearch.error,
+    searchFilters: {
+        value: offerSearch.value,
+        jobMinDuration: offerSearch.jobMinDuration,
+        jobMaxDuration: offerSearch.jobMaxDuration,
+        jobType: offerSearch.jobType,
+        fields: offerSearch.fields,
+        technologies: offerSearch.technologies,
+    },
+    searchQueryToken: offerSearch.queryToken,
 });
 
 const mapDispatchToProps = (dispatch) => ({

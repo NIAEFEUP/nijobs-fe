@@ -22,9 +22,10 @@ export const setLoadingOffers = (loading) => ({
     loading,
 });
 
-export const setSearchOffers = (offers) => ({
+export const setSearchOffers = (offers, accumulate) => ({
     type: OfferSearchTypes.SET_OFFERS_SEARCH_RESULT,
     offers,
+    accumulate,
 });
 
 export const setSearchQueryToken = (queryToken) => ({

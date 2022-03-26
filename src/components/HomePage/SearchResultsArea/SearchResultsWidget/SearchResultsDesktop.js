@@ -12,8 +12,7 @@ import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({
     noOffers, classes, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
-    showSearchFilters, toggleShowSearchFilters, offers, setShouldFetchMoreOffers,
-    hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
+    showSearchFilters, toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers,
 }) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
@@ -26,16 +25,14 @@ const OffersList = ({
                     :
                     <OfferItemsContainer
                         selectedOfferIdx={selectedOfferIdx}
-                        loading={offersLoading}
+                        initialOffersLoading={offersLoading}
                         setSelectedOfferIdx={setSelectedOfferIdx}
                         noOffers={noOffers}
                         showSearchFilters={showSearchFilters}
                         toggleShowSearchFilters={toggleShowSearchFilters}
                         offers={offers}
-                        setShouldFetchMoreOffers={setShouldFetchMoreOffers}
-                        hasMoreOffers={hasMoreOffers}
-                        infiniteScrollLoading={infiniteScrollLoading}
-                        infiniteScrollError={infiniteScrollError}
+                        moreOffersLoading={moreOffersLoading}
+                        loadMoreOffers={loadMoreOffers}
                     />
                 }
                 <Divider
@@ -63,10 +60,6 @@ OffersList.propTypes = {
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setShouldFetchMoreOffers: PropTypes.func,
-    hasMoreOffers: PropTypes.bool,
-    infiniteScrollLoading: PropTypes.bool,
-    infiniteScrollError: PropTypes.bool,
 };
 
 const OfferWidgetSection = ({
@@ -134,10 +127,8 @@ const SearchResultsDesktop = () => {
         handleAdminEnableOffer,
         showSearchFilters,
         toggleShowSearchFilters,
-        setShouldFetchMoreOffers,
-        hasMoreOffers,
-        infiniteScrollLoading,
-        infiniteScrollError,
+        moreOffersLoading,
+        loadMoreOffers,
     } = useContext(SearchResultsControllerContext);
     const classes = useSearchResultsWidgetStyles();
 
@@ -168,10 +159,8 @@ const SearchResultsDesktop = () => {
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
                 offers={offers}
-                setShouldFetchMoreOffers={setShouldFetchMoreOffers}
-                hasMoreOffers={hasMoreOffers}
-                infiniteScrollLoading={infiniteScrollLoading}
-                infiniteScrollError={infiniteScrollError}
+                moreOffersLoading={moreOffersLoading}
+                loadMoreOffers={loadMoreOffers}
             />
             {showSearchFilters ?
                 <Grid

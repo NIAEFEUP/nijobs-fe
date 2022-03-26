@@ -11,8 +11,8 @@ import { NavigateBefore, WorkOff } from "@material-ui/icons";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({
-    noOffers, classes, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters, offers,
-    setShouldFetchMoreOffers, hasMoreOffers, infiniteScrollLoading, infiniteScrollError,
+    noOffers, classes, offersLoading, showOfferDetails, showSearchFilters,
+    toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers,
 }) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
@@ -25,16 +25,14 @@ const OffersList = ({
                 </div>
                 :
                 <OfferItemsContainer
-                    loading={offersLoading}
+                    initialOffersLoading={offersLoading}
                     setSelectedOfferIdx={showOfferDetails}
                     noOffers={noOffers}
                     showSearchFilters={showSearchFilters}
                     toggleShowSearchFilters={toggleShowSearchFilters}
                     offers={offers}
-                    setShouldFetchMoreOffers={setShouldFetchMoreOffers}
-                    hasMoreOffers={hasMoreOffers}
-                    infiniteScrollLoading={infiniteScrollLoading}
-                    infiniteScrollError={infiniteScrollError}
+                    moreOffersLoading={moreOffersLoading}
+                    loadMoreOffers={loadMoreOffers}
                 />
             }
         </Grid>
@@ -55,10 +53,7 @@ OffersList.propTypes = {
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    setShouldFetchMoreOffers: PropTypes.func,
-    hasMoreOffers: PropTypes.bool,
-    infiniteScrollLoading: PropTypes.bool,
-    infiniteScrollError: PropTypes.bool,
+    moreOffersLoading: PropTypes.bool,
 };
 
 export const OfferViewer = ({
@@ -129,11 +124,8 @@ const SearchResultsMobile = () => {
         handleAdminEnableOffer,
         showSearchFilters,
         toggleShowSearchFilters,
-        shouldFetchMoreOffers,
-        setShouldFetchMoreOffers,
-        hasMoreOffers,
-        infiniteScrollLoading,
-        infiniteScrollError,
+        moreOffersLoading,
+        loadMoreOffers,
     } = useContext(SearchResultsControllerContext);
 
     const showOfferDetails = (offerIdx) => {
@@ -162,11 +154,8 @@ const SearchResultsMobile = () => {
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
                 offers={offers}
-                shouldFetchMoreOffers={shouldFetchMoreOffers}
-                setShouldFetchMoreOffers={setShouldFetchMoreOffers}
-                hasMoreOffers={hasMoreOffers}
-                infiniteScrollLoading={infiniteScrollLoading}
-                infiniteScrollError={infiniteScrollError}
+                moreOffersLoading={moreOffersLoading}
+                loadMoreOffers={loadMoreOffers}
             />
             {showSearchFilters ?
                 <SearchArea
