@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
@@ -60,12 +60,29 @@ const OfferItemsContainer = ({
 }) => {
     const classes = useSearchResultsWidgetStyles();
 
-    const [lastOfferNode, setLastOfferNode] = useState(null);
+    const [offerResultsWrapperNode, setOfferResultsWrapperNode] = useState(null);
+    const [scrollPercentage, setScrollPercentage] = useState(0);
 
-    const observer = useRef();
-    const lastOfferElementRef = useCallback((node) => {
-        if (node) setLastOfferNode(node);
+    // BUG: there is no refetching of new offers when the initial_limit is not enough
+
+    const refetchTriggerRef = useCallback((node) => {
+        if (node) setOfferResultsWrapperNode(node.parentElement);
     }, []);
+
+    const onScroll = useCallback(() => {
+        if (offerResultsWrapperNode)
+            setScrollPercentage(
+                100 * offerResultsWrapperNode.scrollTop
+                / (offerResultsWrapperNode.scrollHeight - offerResultsWrapperNode.clientHeight)
+            );
+    }, [offerResultsWrapperNode]);
+
+    useEffect(() => {
+        if (!offerResultsWrapperNode) return;
+        offerResultsWrapperNode.addEventListener("scroll", onScroll);
+        // eslint-disable-next-line consistent-return
+        return () => offerResultsWrapperNode.removeEventListener("scroll", onScroll);
+    }, [offerResultsWrapperNode, onScroll]);
 
     useEffect(() => {
 
@@ -73,12 +90,8 @@ const OfferItemsContainer = ({
             return;
         }
 
-        if (observer.current) observer.current.disconnect();
-        observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
-        });
-        if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [initialOffersLoading, lastOfferNode, loadMoreOffers, moreOffersLoading, searchQueryToken]);
+        if (scrollPercentage > 80) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
+    }, [initialOffersLoading, loadMoreOffers, moreOffersLoading, scrollPercentage, searchQueryToken]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
@@ -99,6 +112,7 @@ const OfferItemsContainer = ({
         <div
             data-testid="offer-items-container"
             className={`${classes.fullHeight} ${classes.fullWidth}`}
+            ref={refetchTriggerRef}
         >
             <List disablePadding>
                 <ToggleFiltersButton
@@ -106,18 +120,20 @@ const OfferItemsContainer = ({
                     enabled={showSearchFilters}
                     onClick={() => toggleShowSearchFilters()}
                 />
-                {offers.map((offer, i) => (
-                    <div key={offer._id} ref={lastOfferElementRef}>
-                        {i !== 0 && <Divider component="li" />}
-                        <OfferItem
-                            offer={offer}
-                            offerIdx={i}
-                            selectedOfferIdx={selectedOfferIdx}
-                            setSelectedOfferIdx={handleOfferSelection}
-                            loading={initialOffersLoading}
-                        />
-                    </div>
-                ))}
+                <div>
+                    {offers.map((offer, i) => (
+                        <div key={offer._id}>
+                            {i !== 0 && <Divider component="li" />}
+                            <OfferItem
+                                offer={offer}
+                                offerIdx={i}
+                                selectedOfferIdx={selectedOfferIdx}
+                                setSelectedOfferIdx={handleOfferSelection}
+                                loading={initialOffersLoading}
+                            />
+                        </div>
+                    ))}
+                </div>
                 {moreOffersLoading && <LoadingOfferItem dividerOnTop />}
             </List>
         </div>
@@ -133,6 +149,7 @@ OfferItemsContainer.propTypes = {
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
 
 
