@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
         {
             let offers = action.offers;
             if (action.accumulate) {
-                offers = [...state.offers, offers];
+                offers = [...state.offers, ...offers];
             }
             return {
                 ...state,

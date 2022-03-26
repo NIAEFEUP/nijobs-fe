@@ -35,7 +35,7 @@ export default (filters) => {
         }
 
         try {
-            const { queryToken: updatedQueryToken, results } = await searchOffers({ queryToken, limit, ...filters });
+            const { updatedQueryToken, results } = await searchOffers({ queryToken, limit, ...filters });
             dispatch(setSearchQueryToken((updatedQueryToken)));
             dispatch(setSearchOffers(results, !isInitialRequest));
 
@@ -71,7 +71,7 @@ export default (filters) => {
 
     return {
         search: (...args) => loadOffers(true)(null, ...args),
-        loadMoreOffers: loadOffers(false),
+        loadMoreOffers: (queryToken, ...args) => loadOffers(false)(queryToken, ...args),
         moreOffersLoading,
         moreOffersFetchError,
     };

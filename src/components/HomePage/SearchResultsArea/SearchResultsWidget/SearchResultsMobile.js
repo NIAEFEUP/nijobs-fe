@@ -12,7 +12,7 @@ import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
 const OffersList = ({
     noOffers, classes, offersLoading, showOfferDetails, showSearchFilters,
-    toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers,
+    toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers, searchQueryToken,
 }) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
@@ -33,6 +33,7 @@ const OffersList = ({
                     offers={offers}
                     moreOffersLoading={moreOffersLoading}
                     loadMoreOffers={loadMoreOffers}
+                    searchQueryToken={searchQueryToken}
                 />
             }
         </Grid>
@@ -126,6 +127,7 @@ const SearchResultsMobile = () => {
         toggleShowSearchFilters,
         moreOffersLoading,
         loadMoreOffers,
+        searchQueryToken,
     } = useContext(SearchResultsControllerContext);
 
     const showOfferDetails = (offerIdx) => {
@@ -156,6 +158,7 @@ const SearchResultsMobile = () => {
                 offers={offers}
                 moreOffersLoading={moreOffersLoading}
                 loadMoreOffers={loadMoreOffers}
+                searchQueryToken={searchQueryToken}
             />
             {showSearchFilters ?
                 <SearchArea

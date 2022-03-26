@@ -29,10 +29,10 @@ export class NetworkFailureException extends Error {
 }
 
 export const searchOffers = buildCancelableRequest(
-    measureTime(TIMED_ACTIONS.OFFER_SEARCH, async ({ queryToken, ...filters }, { signal }) => {
+    measureTime(TIMED_ACTIONS.OFFER_SEARCH, async ({ queryToken, limit, ...filters }, { signal }) => {
         let isErrorRegistered = false;
         try {
-            const query = queryToken ? `queryToken=${queryToken}` : parseFiltersToURL(filters);
+            const query = parseFiltersToURL(queryToken ? { queryToken, limit } : { ...filters, limit });
             const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
                 method: "GET",
                 credentials: "include",

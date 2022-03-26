@@ -8,6 +8,7 @@ import OfferItem from "../Offer/OfferItem";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
 import Offer from "../Offer/Offer";
+import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -55,6 +56,7 @@ const OfferItemsContainer = ({
     offers,
     moreOffersLoading,
     loadMoreOffers,
+    searchQueryToken,
 }) => {
     const classes = useSearchResultsWidgetStyles();
 
@@ -73,10 +75,10 @@ const OfferItemsContainer = ({
 
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
-            if (entries[0].isIntersecting) loadMoreOffers();
+            if (entries[0].isIntersecting) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
         });
         if (lastOfferNode) observer.current.observe(lastOfferNode);
-    }, [initialOffersLoading, lastOfferNode, loadMoreOffers, moreOffersLoading]);
+    }, [initialOffersLoading, lastOfferNode, loadMoreOffers, moreOffersLoading, searchQueryToken]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);

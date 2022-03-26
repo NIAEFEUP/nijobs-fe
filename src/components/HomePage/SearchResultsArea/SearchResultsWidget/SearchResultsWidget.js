@@ -119,6 +119,7 @@ const SearchResultsController = ({
                 showSearchFilters,
                 toggleShowSearchFilters,
                 moreOffersLoading,
+                searchQueryToken,
                 loadMoreOffers: () => loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT),
             },
         },
