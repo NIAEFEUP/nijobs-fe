@@ -11,7 +11,7 @@ describe("analytics", () => {
             const filters = {
                 jobType: "FULL-TIME",
                 jobMinDuration: 10,
-                technologies: ["React", "Vue"],
+                technologies: ["React", "VueJS"],
             };
             const searchDimensions = parseFiltersToDimensions(filters);
 
@@ -21,7 +21,7 @@ describe("analytics", () => {
             expect(searchDimensions[jobMinDurationId]).toBe(filters.jobMinDuration);
 
             expect(searchDimensions).toHaveProperty(technologiesId);
-            expect(searchDimensions[technologiesId]).toBe("React,Vue");
+            expect(searchDimensions[technologiesId]).toBe("React,VueJS");
         });
 
         it("should not include untracked search filters", () => {

@@ -22,11 +22,11 @@ describe("ChipList", () => {
             render(
                 <ChipList
                     type="Fields"
-                    values={["MACHINE LEARNING", "FRONTEND", "DEVOPS"]}
+                    values={["ARTIFICIAL INTELLIGENCE", "FRONTEND", "DEVOPS"]}
                 />
             );
 
-            expect(screen.queryByText("Machine Learning")).toBeInTheDocument();
+            expect(screen.queryByText("Artificial Intelligence")).toBeInTheDocument();
             expect(screen.queryByText("Front-End")).toBeInTheDocument();
             expect(screen.queryByText("Dev-Ops")).toBeInTheDocument();
             expect(screen.queryByText("Fields")).not.toBeInTheDocument();
