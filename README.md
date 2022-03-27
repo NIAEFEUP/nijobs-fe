@@ -48,6 +48,7 @@ If you have already built the images/containers before you can simply run:
 ```bash
 docker-compose up
 ```
+> If you are developing in VS Code, ESLint (the linter and formatter used in this project) might flag an error in `/src/components/RulesPage/rules.js`. If that happens you should add the following line to your `settings.json` file: `"eslint.nodeEnv": "development"`
 
 #### Using custom API Backends
 
