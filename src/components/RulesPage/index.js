@@ -8,7 +8,7 @@ import {
     makeStyles,
     Link,
 } from "@material-ui/core";
-import data from "./rules";
+import { rules } from "./rules";
 import { RouterLink } from "../../utils";
 import { useMobile } from "../../utils/media-queries";
 import Constants from "../../utils/Constants";
@@ -39,7 +39,7 @@ const RulesComponent = () => {
                         {Constants.CONTACT_US_EMAIL}
                     </Link>
                 </Typography>
-                {data.rules.map(({ title, description, link, linkName }, i) => (
+                {rules.map(({ title, description, link, linkName }, i) => (
                     <Card key={i} className={classes.ruleCard}>
                         <CardHeader title={title} titleTypographyProps={{ variant: "body1" }} />
                         <CardContent>

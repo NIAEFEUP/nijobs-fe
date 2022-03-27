@@ -28,7 +28,7 @@ const IsHiddenComponent = ({ disabled, control }) => (
             }
         />
         <Tooltip
-            title="If the offer is hidden, users won't be able to see it"
+            title="If the offer is hidden, it won't appear on searches and can only be accessed by you."
             placement="top"
         >
             <Info fontSize="small" />
