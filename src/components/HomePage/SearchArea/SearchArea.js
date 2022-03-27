@@ -19,7 +19,7 @@ import SearchBar from "./SearchBar";
 import SubmitSearchButton from "./SubmitSearchButton";
 
 import useSearchAreaStyles from "./searchAreaStyle";
-import { useMobile } from "../../../utils/media-queries";
+import { useDesktop } from "../../../utils/media-queries";
 import useAdvancedSearch from "./AdvancedSearch/useAdvancedSearch";
 import AdvancedOptionsToggle from "./AdvancedOptionsToggle";
 import AdvancedSearchMobile from "./AdvancedSearch/AdvancedSearchMobile";
@@ -118,7 +118,7 @@ export const SearchArea = ({ onSubmit, searchOffers, searchValue,
                         advancedOptionsActive={advancedOptionsActive}
                         handleAdvancedOptionsButtonClick={toggleAdvancedOptions}
                     />
-                    {useMobile() ?
+                    {!useDesktop() ?
                         <AdvancedSearchMobile />
                         :
                         <AdvancedSearchDesktop />
