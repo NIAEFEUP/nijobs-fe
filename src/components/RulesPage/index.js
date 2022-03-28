@@ -17,6 +17,10 @@ const useStyles = makeStyles((theme) => ({
     ruleCard: {
         marginBottom: theme.spacing(2),
     },
+    cardLink: {
+        display: "inline-block",
+        marginTop: theme.spacing(1),
+    },
 }));
 
 // Writing on rules.js adds "Accordions" with json's data. You may add a title, a description,
@@ -47,7 +51,7 @@ const RulesComponent = () => {
                                 {description}
                             </Typography>
                             {link &&
-                                <RouterLink to={link}>
+                                <RouterLink to={link} className={classes.cardLink}>
                                     {linkName}
                                 </RouterLink>
                             }

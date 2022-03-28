@@ -26,6 +26,7 @@ export const rules = Object.freeze([
     },
     {
         "title": "Managing your company account",
-        "description": "If you wish, you can disable you company account, leaving you unable to perform any action when logged in. This state is temporary as you or anyone with administrator privileges can re-enable your account at any time. If rules are broken too many times, your account may be blocked, which is a more severe state than being disabled. Only administrators can un-block a given company account. I you think there has been a mistake blocking your account, please contact us and we will look into it.",
+        "description": "If you wish, you can request to disable your company account, leaving you unable to perform any action when logged in. This state is temporary as you or anyone with administrator privileges can re-enable your account at any time. If rules are broken too many times, your account may be blocked. Only administrators can un-block a given company account. I you think there has been a mistake blocking your account, please contact us and we will look into it.",
+        // once a "My Personal Page" gets added to the FE, change this last sentence to be "..., you can disable your company account, ..."
     },
 ]);
