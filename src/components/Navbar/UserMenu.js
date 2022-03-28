@@ -55,6 +55,14 @@ const useStyles = makeStyles((theme) => ({
     dividerLabel: {
         padding: theme.spacing(1, 2),
     },
+    menuDivider: {
+        "&&": {
+            margin: theme.spacing(1),
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+            width: "80%",
+        },
+    }
 }));
 
 const AdminMenuOptions = ({ isMobile }) => {
@@ -152,6 +160,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.email}
             </Typography>
+            {sessionData?.company && <Divider className={classes.divider} />}
             <MenuList
                 className={classes.menuList}
                 autoFocusItem={open}
@@ -159,9 +168,10 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.company && <CompanyMenuOptions isMobile={isMobile} sessionData={sessionData} />}
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
-                <Divider className={classes.divider} />
-                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+
             </MenuList>
+            <Divider className={classes.menuDivider} />
+            <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
         </div>
     );
 });
