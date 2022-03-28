@@ -74,7 +74,7 @@ describe("Edit Offer Form", () => {
             "BACKEND",
         ],
         technologies: [
-            "Vue",
+            "VueJS",
         ],
         requirements: [
             "requirement1",

@@ -343,7 +343,7 @@ describe("Create Offer Form", () => {
             fireEvent.focus(input);
             fireEvent.blur(input);
 
-            expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Must have at least 2 option(s)");
+            expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Must have at least 1 option");
         });
 
         it("should fail validation if fields not minimum size", async () => {
@@ -363,13 +363,10 @@ describe("Create Offer Form", () => {
             const input = screen.getByLabelText("Fields *");
             await act(async () => {
                 await fireEvent.mouseDown(input);
-                await fireEvent.click(screen.getByText("Back-End"));
                 await fireEvent.blur(input);
             });
 
-            expect(screen.getByText("Back-End")).toBeInTheDocument();
-
-            expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Must have at least 2 option(s)");
+            expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Must have at least 1 option");
 
             await act(async () => {
                 await fireEvent.mouseDown(input);
