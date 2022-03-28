@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
             marginBottom: theme.spacing(1),
             width: "80%",
         },
-    }
+    },
 }));
 
 const AdminMenuOptions = ({ isMobile }) => {
