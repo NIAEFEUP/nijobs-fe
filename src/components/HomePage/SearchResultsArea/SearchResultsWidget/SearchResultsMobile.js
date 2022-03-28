@@ -55,6 +55,8 @@ OffersList.propTypes = {
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     moreOffersLoading: PropTypes.bool,
+    loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
 
 export const OfferViewer = ({

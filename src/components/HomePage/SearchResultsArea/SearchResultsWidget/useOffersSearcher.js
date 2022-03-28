@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
     resetOffersFetchError,
     setLoadingOffers,
@@ -16,11 +16,25 @@ import {
 export default (filters) => {
 
     const dispatch = useDispatch();
+    const searchQueryToken = useSelector((state) => state.offerSearch.queryToken);
 
-    // TODO: Move this to redux!!!
     const [hasMoreOffers, setHasMoreOffers] = useState(true);
     const [moreOffersFetchError, setMoreOffersFetchError] = useState(null);
     const [moreOffersLoading, setMoreOffersLoading] = useState(false);
+
+    // The "search" and "loadMoreOffers" functions do not share the same state;
+    // When we run "setHasMoreOffers(false)" on the "loadMoreOffers" function,
+    // the "search" function does not know that the "hasMoreOffers" variable has changed;
+    // In the same way, when we run "setHasMoreOffers(true) on the "search" function,
+    // the "loadMoreOffers" function does not know that the "hasMoreOffers" variable has changed;
+    // Then, when the "loadMoreOffers" function is executed after a previous execution where the
+    // "hasMoreOffers" variable became "false", the state of this variable is still false, which
+    // prevents the fetching of new offers.
+    // Knowing that, I needed a way to set the "hasMoreOffers" variable to "true" when the previous fact
+    // happens: setting the "hasMoreOffers" to true when the "queryToken" (which is stored in redux) changes
+    useEffect(() => {
+        setHasMoreOffers(true);
+    }, [searchQueryToken]);
 
     // isInitialRequest = true on the first time the search request is made
     // the following request will have isInitialRequest = false

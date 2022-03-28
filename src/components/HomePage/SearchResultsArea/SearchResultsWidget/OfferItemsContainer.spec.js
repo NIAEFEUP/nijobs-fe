@@ -1,35 +1,20 @@
-import { createTheme } from "@material-ui/core";
 import { getByRole, getByText, screen } from "@testing-library/react";
 import React from "react";
-import { renderWithStoreAndTheme } from "../../../../test-utils";
+import { render } from "../../../../test-utils";
 import Offer from "../Offer/Offer";
 import OfferItemsContainer from "./OfferItemsContainer";
 
 describe("OfferItemsContainer", () => {
 
-    const theme = createTheme();
-    const initialState = {};
-
-    beforeEach(() => {
-        // IntersectionObserver isn't available in test environment
-        const mockIntersectionObserver = jest.fn();
-        mockIntersectionObserver.mockReturnValue({
-            observe: () => null,
-            unobserve: () => null,
-            disconnect: () => null,
-        });
-        window.IntersectionObserver = mockIntersectionObserver;
-    });
-
     describe("render", () => {
         it("should show loading state when loading", () => {
-            renderWithStoreAndTheme(
+            render(
                 <OfferItemsContainer
                     loading
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
                     setShouldFetchMoreOffers={() => {}}
-                />, { initialState, theme }
+                />
             );
             expect(screen.getAllByTestId("offer-item-loading")).toHaveLength(3);
         });
@@ -60,13 +45,13 @@ describe("OfferItemsContainer", () => {
                 }),
             ];
 
-            renderWithStoreAndTheme(
+            render(
                 <OfferItemsContainer
                     offers={offers}
                     loading={false}
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
-                />, { initialState, theme }
+                />
             );
             const items = await screen.findAllByTestId("offer-item");
             expect(items).toHaveLength(2);

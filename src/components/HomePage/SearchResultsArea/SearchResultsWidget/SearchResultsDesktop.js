@@ -61,6 +61,9 @@ OffersList.propTypes = {
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
     offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    moreOffersLoading: PropTypes.bool,
+    loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
 
 const OfferWidgetSection = ({

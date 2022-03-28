@@ -69,8 +69,6 @@ const OfferItemsContainer = ({
         return (overflowY === "scroll" || overflowY === "auto") && node.scrollHeight > node.clientHeight;
     }, []);
 
-    // BUG: there is no refetching of new offers when the initial_limit is not enough
-
     const refetchTriggerRef = useCallback((node) => {
         if (node) setOfferResultsWrapperNode(node.parentElement);
     }, []);
