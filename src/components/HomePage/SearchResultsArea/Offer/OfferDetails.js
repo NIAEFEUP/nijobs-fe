@@ -40,10 +40,10 @@ const OfferDetails = ({
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading });
 
-    const jobMaxDuration = `${offer.jobMaxDuration}${offer.jobMaxDuration === JOB_MAX_DURATION ? "+" : ""}`;
-    const jobDurationText = offer.jobMinDuration === offer.jobMaxDuration ?
-        `${jobMaxDuration} ${offer.jobMinDuration === 1 ? "month" : "months"}`
-        : `${offer.jobMinDuration}-${jobMaxDuration} months`;
+    const jobMaxDuration = `${offer?.jobMaxDuration}${offer?.jobMaxDuration === JOB_MAX_DURATION ? "+" : ""}`;
+    const jobDurationText = offer?.jobMinDuration === offer?.jobMaxDuration ?
+        `${jobMaxDuration} ${offer?.jobMinDuration === 1 ? "month" : "months"}`
+        : `${offer?.jobMinDuration}-${jobMaxDuration} months`;
 
     const getDisabledOfferMessage = useCallback(() => (
         (sessionData?.isAdmin) ?
