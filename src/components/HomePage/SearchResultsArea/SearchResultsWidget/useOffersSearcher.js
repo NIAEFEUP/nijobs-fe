@@ -16,6 +16,8 @@ import {
 export default (filters) => {
 
     const dispatch = useDispatch();
+
+    // TODO: Move this to redux!!!
     const [hasMoreOffers, setHasMoreOffers] = useState(true);
     const [moreOffersFetchError, setMoreOffersFetchError] = useState(null);
     const [moreOffersLoading, setMoreOffersLoading] = useState(false);
@@ -24,12 +26,13 @@ export default (filters) => {
     // the following request will have isInitialRequest = false
     const loadOffers = useCallback((isInitialRequest) => async (queryToken, limit) => {
 
-        if (!hasMoreOffers) return;
-
         if (isInitialRequest) {
             dispatch(resetOffersFetchError());
             dispatch(setLoadingOffers(true));
+            setHasMoreOffers(true);
         } else {
+            if (!hasMoreOffers) return;
+
             setMoreOffersFetchError(null);
             setMoreOffersLoading(true);
         }

@@ -62,6 +62,12 @@ const OfferItemsContainer = ({
 
     const [offerResultsWrapperNode, setOfferResultsWrapperNode] = useState(null);
     const [scrollPercentage, setScrollPercentage] = useState(0);
+    const [hasScroll, setHasScroll] = useState(undefined);
+
+    const isVerticalScrollable = useCallback((node) => {
+        const overflowY = window.getComputedStyle(node)["overflow-y"];
+        return (overflowY === "scroll" || overflowY === "auto") && node.scrollHeight > node.clientHeight;
+    }, []);
 
     // BUG: there is no refetching of new offers when the initial_limit is not enough
 
@@ -70,19 +76,35 @@ const OfferItemsContainer = ({
     }, []);
 
     const onScroll = useCallback(() => {
-        if (offerResultsWrapperNode)
+        if (offerResultsWrapperNode) {
             setScrollPercentage(
                 100 * offerResultsWrapperNode.scrollTop
                 / (offerResultsWrapperNode.scrollHeight - offerResultsWrapperNode.clientHeight)
             );
+
+        }
     }, [offerResultsWrapperNode]);
 
     useEffect(() => {
         if (!offerResultsWrapperNode) return;
+
         offerResultsWrapperNode.addEventListener("scroll", onScroll);
         // eslint-disable-next-line consistent-return
         return () => offerResultsWrapperNode.removeEventListener("scroll", onScroll);
     }, [offerResultsWrapperNode, onScroll]);
+
+    useEffect(() => {
+        if (!offerResultsWrapperNode) return;
+
+        setHasScroll(isVerticalScrollable(offerResultsWrapperNode));
+    }, [isVerticalScrollable, offerResultsWrapperNode, offers, initialOffersLoading, scrollPercentage, moreOffersLoading]);
+
+    useEffect(() => {
+        if (initialOffersLoading) {
+            setHasScroll(undefined);
+            setScrollPercentage(0);
+        }
+    }, [initialOffersLoading]);
 
     useEffect(() => {
 
@@ -90,8 +112,8 @@ const OfferItemsContainer = ({
             return;
         }
 
-        if (scrollPercentage > 80) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
-    }, [initialOffersLoading, loadMoreOffers, moreOffersLoading, scrollPercentage, searchQueryToken]);
+        if (scrollPercentage > 80 || hasScroll === false) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
+    }, [hasScroll, initialOffersLoading, loadMoreOffers, moreOffersLoading, scrollPercentage, searchQueryToken]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
