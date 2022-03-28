@@ -4,21 +4,19 @@ import * as Constants from "@niaefeup/nijobs-commons";
 export const rules = Object.freeze([
     {
         "title": "Using NIJobs (as a company)",
-        "description": "As a company, you must first apply for an account.The application will be reviewed and, if accepted, you will have an account registered in NIJobs. After that, you can finish you company registration to be able to start posting job offers. Please remember that your offers should be aimed at college students (still graduating or recently graduated).",
+        "description": "As a company, you must first apply for an account. The application will be reviewed and, if accepted, you will have an account registered in NIJobs. After that, you need to finish your company registration to be able to start posting job offers.",
         "link": "/apply/company",
         "linkName": "Apply as a company",
     },
     {
         "title": "Creating an offer",
-        "description": `To create an offer you must first log in to your company account, then you can create an offer by pressing the "Create Offer" button. There is a limit of ${Constants.Company.offers.max_concurrent} active offers you can have at a time. However, you can continue creating offers as long as they are hidden - you can set this in the advanced options when creating the offers. Your offers may be reviewed and removed in case they do not comply with the offer rules (see below). Creating duplicate entries will result in a penalty, and offer removal. Too many penalties and your account will be blocked. If you believe you should have not received a penalty, please contact us with your problem and we will look into it. Offer creation can also be performed by a plaftorm administrator at a company's request.`,
+        "description": `To create an offer you must first log in to your company account, then you can create an offer by pressing the "Create Offer" button. In order to avoid spam, and to ensure the greatest quality of offers to the students, a company cannot have more than ${Constants.Company.offers.max_concurrent} active offers at the same time. However, you can continue creating offers as long as they are hidden - you can set this in the advanced options when creating the offers. Your offers may be reviewed and removed in case they do not comply with the offer rules (see below). Creating duplicate entries will result in offer removal. If you believe you should have not received a penalty, please contact us with your problem and we will look into it. Offer creation can also be performed by a plaftorm administrator at a company's request.`,
         "link": "/offers/new",
         "linkName": "Create an offer (company)",
     },
     {
         "title": "Offer Rules",
-        "description": "Offers must refer to a real job posting. They should not contain any hate speech, violence appealing or refer to any illegal activity. Breaking this rule will get your offers removed and your account banned from NIJobs.",
-        "link": "/offers/new",
-        "linkName": "Create an offer (company)",
+        "description": "Offers must refer to a real job offer. They should be aimed at college students and not contain any hate speech, violence appealing or refer to any illegal activity. Breaking this rule will get your offers removed and your account banned from NIJobs.",
     },
     {
         "title": "Managing offers",
