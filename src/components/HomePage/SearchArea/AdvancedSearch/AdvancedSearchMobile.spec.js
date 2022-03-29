@@ -97,7 +97,7 @@ describe("AdvancedSearchMobile", () => {
                 </AdvancedSearchWrapper>
             );
 
-            expect(screen.getByText("Job Duration - 1-2 month(s)")).not.toBeVisible();
+            expect(screen.getByText("Job Duration: 1 - 2 months")).not.toBeVisible();
             fireEvent.click(screen.getByLabelText("Filter Job Duration"));
             expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(true);
             // Can't test that element is visible now (after toggling), since we can't emulate redux logic, wihtout having the whole tree,
@@ -119,7 +119,7 @@ describe("AdvancedSearchMobile", () => {
             );
 
 
-            expect(screen.getByText("Job Duration - 1-2 month(s)")).toBeVisible();
+            expect(screen.getByText("Job Duration: 1 - 2 months")).toBeVisible();
             fireEvent.click(screen.getByLabelText("Filter Job Duration"));
             expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(false);
         });

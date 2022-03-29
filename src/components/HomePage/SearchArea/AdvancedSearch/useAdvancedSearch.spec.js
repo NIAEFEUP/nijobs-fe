@@ -31,7 +31,7 @@ describe("useAdvancedSearch", () => {
             JobDurationSliderProps,
             JobDurationSliderText,
         } = useAdvancedSearchProps;
-        expect(JobDurationSliderText).toBe("Job Duration - 0-1 month(s)");
+        expect(JobDurationSliderText).toBe("Job Duration: 0 - 1 months");
         expect(JobDurationSwitchProps.checked).toBe(showJobDurationSlider);
         expect(JobDurationCollapseProps.in).toBe(showJobDurationSlider);
         expect(JobDurationSliderProps.onChange).toBe(setJobDuration);

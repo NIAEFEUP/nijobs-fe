@@ -18,6 +18,7 @@ import JOB_OPTIONS from "../../../utils/offers/JobOptions";
 import useSession from "../../../../hooks/useSession";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import { RouterLink } from "../../../../utils";
+import { JOB_MAX_DURATION } from "../../../../reducers/searchOffersReducer";
 
 const defaultLogo = require("./default_icon.svg");
 
@@ -38,6 +39,11 @@ const OfferDetails = ({
     const { data, isValidating, error, isLoggedIn } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading });
+
+    const jobMaxDuration = `${offer?.jobMaxDuration}${offer?.jobMaxDuration === JOB_MAX_DURATION ? "+" : ""}`;
+    const jobDurationText = offer?.jobMinDuration === offer?.jobMaxDuration ?
+        `${jobMaxDuration} ${offer?.jobMinDuration === 1 ? "month" : "months"}`
+        : `${offer?.jobMinDuration}-${jobMaxDuration} months`;
 
     const getDisabledOfferMessage = useCallback(() => (
         (sessionData?.isAdmin) ?
@@ -178,11 +184,9 @@ const OfferDetails = ({
                                 <>
                                     <Typography display="inline" variant="body1" color="secondary">
                                         {offer.jobStartDate && " • "}
-                                        {offer.jobMinDuration}
                                     </Typography>
                                     <Typography display="inline" variant="body1" color="secondary">
-                                        {offer.jobMaxDuration ? `-${offer.jobMaxDuration}` : "+"}
-                                        {offer.jobMinDuration && " months"}
+                                        {jobDurationText}
                                     </Typography>
                                 </>
                             }
