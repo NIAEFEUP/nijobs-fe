@@ -21,9 +21,6 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-block",
         marginTop: theme.spacing(1),
     },
-    content: ({ isMobile }) => ({
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
-    }),
 }));
 
 // Writing on rules.js adds "Accordions" with json's data. You may add a title, a description,
