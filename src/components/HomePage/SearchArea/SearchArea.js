@@ -52,10 +52,17 @@ export const AdvancedSearchController = ({
 
     const submitForm = useCallback((e) => {
         if (e) e.preventDefault();
-        searchOffers({ value: searchValue, jobMinDuration, jobMaxDuration, jobType, fields, technologies });
+        searchOffers({
+            value: searchValue,
+            jobMinDuration: showJobDurationSlider && jobMinDuration,
+            jobMaxDuration: showJobDurationSlider && jobMaxDuration,
+            jobType,
+            fields,
+            technologies,
+        });
 
         if (onSubmit) onSubmit();
-    }, [fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue, technologies]);
+    }, [fields, jobMaxDuration, jobMinDuration, jobType, onSubmit, searchOffers, searchValue, showJobDurationSlider, technologies]);
 
     return {
         ...advancedSearchProps,
