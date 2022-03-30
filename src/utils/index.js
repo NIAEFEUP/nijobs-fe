@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Link as ReactRouterLink, Route as BaseRoute, Redirect, useLocation  } from "react-router-dom";
+import { Link as ReactRouterLink, Route as BaseRoute, Redirect, useLocation } from "react-router-dom";
 import { Link, LinearProgress } from "@material-ui/core";
 import useSession from "../hooks/useSession";
 import { addSnackbar } from "../actions/notificationActions";
@@ -35,7 +35,7 @@ export const parseFiltersToURL = (filters) => Object.keys(filters)
                     .map((val) => `${key}=${encodeURIComponent(val)}`)
                     .join("&");
             } else return `${key}=${encodeURIComponent(filters[key])}`;
-        } else return  "";
+        } else return "";
     })
     .join("&");
 
@@ -81,7 +81,7 @@ export const Wrap = ({ Wrapper, on, children }) => (
             </Wrapper>
             :
             <>
-                { children }
+                {children}
             </>
         }
     </>
@@ -352,3 +352,14 @@ export const buildCancelableRequest = (promiseFn) => (...args) => new Cancelable
 });
 
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
+
+export const generalHumanError = (error, HumanReadableErrors) => {
+    const [errorId, errorValue] = error.split(":");
+    const rawError = HumanReadableErrors[errorId];
+    if (typeof rawError === "string") {
+        return rawError;
+    } else if (typeof rawError === "function") {
+        return (!!rawError && rawError(errorValue)) || "An error occurred, please try again.";
+    }
+    return "An error occurred, please try again.";
+};

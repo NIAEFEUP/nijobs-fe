@@ -1,4 +1,4 @@
-import { validationRulesGenerator } from "../../../utils";
+import { validationRulesGenerator, generalHumanError } from "../../../utils";
 
 
 export const CompanyApplicationConstants = {
@@ -23,4 +23,4 @@ const HumanReadableErrors = Object.freeze({
     "company-application-duplicate-email": "There is already an application associated with that email.",
 });
 
-export const getHumanError = (error) => HumanReadableErrors[error] || "An error occurred, please try again.";
+export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
