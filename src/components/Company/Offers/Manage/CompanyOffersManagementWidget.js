@@ -14,9 +14,11 @@ import { Link } from "react-router-dom";
 import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
 import { RowActions } from "./CompanyOffersActions";
+import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 
-const generateRow = ({ title, location, description, publishDate, publishEndDate,
-    ownerName, _id }) => ({
+const generateRow = ({
+    title, location, publishDate, publishEndDate,
+    ownerName, _id, ...args }) => ({
     fields: {
         title: { value: title, align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
@@ -24,8 +26,10 @@ const generateRow = ({ title, location, description, publishDate, publishEndDate
         location: { value: location },
     },
     payload: {
-        companyName: { value: ownerName, label: "Company Name" },
-        description: { value: description, label: "Description" },
+        offer: new Offer({
+            title, location, publishDate, publishEndDate,
+            ownerName, _id, ...args,
+        }),
     },
 });
 
