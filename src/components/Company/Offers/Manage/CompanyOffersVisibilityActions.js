@@ -82,15 +82,15 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         }
     }, [addSnackbar, offer._id]);
 
-    const handleOfferVisibility = async () => {
+    const handleOfferVisibility = () => {
         if (offerVisibilityState.isVisible) {
-            await handleHideOffer({
+            handleHideOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
                 onError: handleOfferVisibilityError,
             });
         } else  {
-            await handleEnableOffer({
+            handleEnableOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
                 onError: handleOfferVisibilityError,
@@ -102,10 +102,10 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         <Tooltip title={ offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
             <IconButton
                 onClick={handleOfferVisibility}
-                disabled={offerVisibilityState.isDisabled}
+                disabled={offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
             >
-                {offerVisibilityState.isVisible ? <VisibilityOffIcon color="secondary" fontSize="medium" />
-                    : <VisibilityIcon color="secondary" fontSize="medium" />}
+                {offerVisibilityState.isVisible ? <VisibilityOffIcon data-testid="HideOffer" color="secondary" fontSize="medium" />
+                    : <VisibilityIcon data-testid="EnableOffer" color="secondary" fontSize="medium" />}
             </IconButton>
         </Tooltip>
     );
