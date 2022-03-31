@@ -15,6 +15,7 @@ import { addSnackbar } from "../../../../actions/notificationActions";
 import { connect } from "react-redux";
 import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
+import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 
 const generateRow = ({
     title, location, publishDate, publishEndDate,
@@ -142,6 +143,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center">
+                                <CompanyOffersVisibilityActions offer={row?.payload.offer} />
                                 <Tooltip title="Edit Offer">
                                     <Link to={offerRoute}>
                                         <IconButton aria-label="Edit Offer">
