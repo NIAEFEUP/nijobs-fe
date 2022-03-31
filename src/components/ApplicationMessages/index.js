@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { addSnackbar } from "../../actions/notificationActions";
+import { useSnackbar } from "notistack";
 import useSession from "../../hooks/useSession";
 import { connect } from "react-redux";
 import { useHistory } from "react-router";
@@ -13,23 +14,29 @@ const ApplicationMessageNotifier = ({ addSnackbar }) => {
     const history = useHistory();
 
     const { data, isLoggedIn, revalidate, isValidating } = useSession();
+    const { closeSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!hasRevalidated || isValidating) return;
         if (isLoggedIn && !data.isAdmin && !data.company?.hasFinishedRegistration && !hasShownCompleteRegistrationMessage) {
             setHasShownCompleteRegistrationMessage(true);
+
+            // Overrides key from addSnackbar()
+            const key = Date.now() + Math.random();
             addSnackbar({
                 message: "In order to fully use NIJobs, you still need to finish your registration.",
+                key,
                 contentOptions: {
                     actionText: "Show me",
                     actionHandler: () => {
                         history.push("/company/registration/finish");
+                        closeSnackbar(key);
                     },
                 },
             });
         }
         if (hasShownCompleteRegistrationMessage && !isLoggedIn) setHasShownCompleteRegistrationMessage(false);
-    }, [addSnackbar, data, hasRevalidated, hasShownCompleteRegistrationMessage, history, isLoggedIn, isValidating]);
+    }, [addSnackbar, closeSnackbar, data, hasRevalidated, hasShownCompleteRegistrationMessage, history, isLoggedIn, isValidating]);
 
     // Revalidate user session on mount to avoid showing outdated messages
     // It's important to keep this hook after every other, so that they can safely rely on hasRevalidated being false on first render

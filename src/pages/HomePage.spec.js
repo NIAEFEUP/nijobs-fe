@@ -29,7 +29,9 @@ describe("HomePage", () => {
 
             renderWithStoreAndTheme(
                 <Router>
-                    <HomePage />
+                    <SnackbarProvider maxSnack={3}>
+                        <HomePage />
+                    </SnackbarProvider>
                 </Router>,
                 { initialState, theme: AppTheme }
             );
@@ -52,7 +54,9 @@ describe("HomePage", () => {
 
             renderWithStoreAndTheme(
                 <Router>
-                    <HomePage />
+                    <SnackbarProvider maxSnack={3}>
+                        <HomePage />
+                    </SnackbarProvider>
                 </Router>,
                 { initialState, theme: AppTheme }
             );
