@@ -16,6 +16,7 @@ import { getHumanError } from "../../../../utils/offer/OfferUtils";
 import { useDispatch } from "react-redux";
 import { addSnackbar as addSnackbarAction } from "../../../../actions/notificationActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
+import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
 const CompanyOffersVisibilityActions = ({ offer }) => {
 
@@ -33,9 +34,9 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 
     useEffect(() => {
         setOfferVisibilityState({
-            isDisabled: isHiddenOffer && offerHiddenReason === "ADMIN_REQUEST",
+            isDisabled: isHiddenOffer && offerHiddenReason === OfferConstants.ADMIN_REQUEST,
             isVisible: !isHiddenOffer,
-            isBlocked: isHiddenOffer && offerHiddenReason === "COMPANY_BLOCKED",
+            isBlocked: isHiddenOffer && offerHiddenReason === OfferConstants.COMPANY_BLOCKED,
         });
     }, [isHiddenOffer, offerHiddenReason]);
 

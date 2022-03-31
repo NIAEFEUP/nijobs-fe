@@ -1,5 +1,6 @@
 import { OfferSearchTypes } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
+import { OfferConstants } from "../components/Offers/Form/OfferUtils";
 
 export const INITIAL_JOB_TYPE = null;
 export const INITIAL_JOB_DURATION = 1;
@@ -71,14 +72,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
-                    new Offer({ ...offer, isHidden: true, hiddenReason: "COMPANY_REQUEST" })
+                    new Offer({ ...offer, isHidden: true, hiddenReason: OfferConstants.COMPANY_REQUEST })
                     : offer
                 ) };
         case OfferSearchTypes.DISABLE_OFFER:
             return {
                 ...state,
                 offers: state.offers.map((offer, idx) => action.offerIdx === idx ?
-                    new Offer({ ...offer, isHidden: true, hiddenReason: "ADMIN_REQUEST", adminReason: action.adminReason })
+                    new Offer({ ...offer, isHidden: true, hiddenReason: OfferConstants.ADMIN_REQUEST, adminReason: action.adminReason })
                     : offer
                 ) };
         case OfferSearchTypes.COMPANY_ENABLE_OFFER:

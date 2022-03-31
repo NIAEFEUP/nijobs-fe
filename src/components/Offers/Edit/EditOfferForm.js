@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { parseRequestErrors } from "../Form/OfferUtils";
+import { OfferConstants, parseRequestErrors } from "../Form/OfferUtils";
 import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
 import { Redirect, useLocation, useParams } from "react-router-dom";
@@ -52,7 +52,7 @@ export const EditOfferController = () => {
     // This portion of code is used to remove race conditions between useState of canEdit and useEffect
     // If the value of useState is false by default, this condition will be wrongly verified, resulting in unwanted redirects
     const shouldRevalidateEditingPermissions = useCallback(() => {
-        const blocked = offer?.isHidden && offer?.hiddenReason !== "COMPANY_REQUEST";
+        const blocked = offer?.isHidden && offer?.hiddenReason !== OfferConstants.COMPANY_REQUEST;
         return !blocked && (
             (offer?.owner === user?.company?._id) || user?.isAdmin);
     }, [offer, user]);

@@ -26,6 +26,12 @@ export const CreateOfferConstants = {
     },
 };
 
+export const OfferConstants = {
+    ADMIN_REQUEST: "ADMIN_REQUEST",
+    COMPANY_BLOCKED: "COMPANY_BLOCKED",
+    COMPANY_REQUEST: "COMPANY_REQUEST",
+};
+
 export const isValidPublishEndDate = (publishDateRaw, publishEndDateRaw) => {
     const publishDate = Date.parse(publishDateRaw);
     const publishEndDate = Date.parse(publishEndDateRaw);
