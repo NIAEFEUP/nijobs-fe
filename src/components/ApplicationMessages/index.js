@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { addSnackbar } from "../../actions/notificationActions";
-import { useSnackbar } from "notistack";
+import { addSnackbar, closeSnackbar } from "../../actions/notificationActions";
 import useSession from "../../hooks/useSession";
 import { connect } from "react-redux";
 import { useHistory } from "react-router";
 
-const ApplicationMessageNotifier = ({ addSnackbar }) => {
+const ApplicationMessageNotifier = ({ addSnackbar, closeSnackbar }) => {
 
     const [hasShownCompleteRegistrationMessage, setHasShownCompleteRegistrationMessage] = useState(false);
     const [hasRevalidated, setHasRevalidated] = useState(false);
@@ -56,6 +55,7 @@ ApplicationMessageNotifier.propTypes = {
 const mapStateToProps = () => ({});
 const mapDispatchToProps = (dispatch) => ({
     addSnackbar: (notification) => dispatch(addSnackbar(notification)),
+    closeSnackbar: (key) => dispatch(closeSnackbar(key)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApplicationMessageNotifier);
