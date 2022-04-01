@@ -75,6 +75,10 @@ describe("App", () => {
         useSession.mockReturnValue({ data: { company: { name: "company1", _id: "company_id" } }, isLoggedIn: true });
     });
 
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
     it("Renders Loading", () => {
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => { }));
 
@@ -264,12 +268,12 @@ describe("App", () => {
                         <CompanyOffersManagementWidget />
                     </MuiPickersUtilsProvider>
                 </BrowserRouter>, { initialState: {}, theme }
-            ));
-
+            )
+        );
 
         const offerRow = screen.queryByText(offer.title).closest("tr");
 
-        const visibilityButton = getByTestId(offerRow, "HideOffer");
+        let visibilityButton = getByTestId(offerRow, "HideOffer");
         expect(visibilityButton).toBeInTheDocument();
 
         await act(async () => {
@@ -278,6 +282,15 @@ describe("App", () => {
 
         expect(queryByTestId(offerRow, "HideOffer")).not.toBeInTheDocument();
         expect(getByTestId(offerRow, "EnableOffer")).toBeInTheDocument();
+
+        visibilityButton = getByTestId(offerRow, "EnableOffer");
+
+        await act(async () => {
+            await fireEvent.click(visibilityButton);
+        });
+
+        expect(getByTestId(offerRow, "HideOffer")).toBeInTheDocument();
+        expect(queryByTestId(offerRow, "EnableOffer")).not.toBeInTheDocument();
     });
 
     it("Should disable hide/enable offer button when the offer is disabled by an admin", async () => {
@@ -295,8 +308,8 @@ describe("App", () => {
                         <CompanyOffersManagementWidget />
                     </MuiPickersUtilsProvider>
                 </BrowserRouter>, { initialState: {}, theme }
-            ));
-
+            )
+        );
 
         const offerRow = screen.queryByText(offer.title).closest("tr");
 
@@ -309,5 +322,37 @@ describe("App", () => {
 
         expect(getByTestId(offerRow, "EnableOffer")).toBeInTheDocument();
         expect(queryByTestId(offerRow, "HideOffer")).not.toBeInTheDocument();
+    });
+
+    it("Should show snackbar when hide/enable offer service fails when clicking the respective button", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+
+        const offer = MOCK_OFFERS[0];
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve([offer])
+        ));
+
+        hideOfferService.mockImplementationOnce(() => new Promise((resolve, reject) =>
+            reject([{ msg: "Error fetching offers" }])
+        ));
+        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CompanyOffersManagementWidget />
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme }
+            )
+        );
+
+        const offerRow = screen.queryByText(offer.title).closest("tr");
+
+        await act(async () => {
+            await fireEvent.click(getByTestId(offerRow, "HideOffer"));
+        });
+
+        expect(addSnackbar).toHaveBeenCalledTimes(1);
     });
 });
