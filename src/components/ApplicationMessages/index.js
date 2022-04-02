@@ -13,7 +13,6 @@ const ApplicationMessageNotifier = ({ addSnackbar, closeSnackbar }) => {
     const history = useHistory();
 
     const { data, isLoggedIn, revalidate, isValidating } = useSession();
-    const { closeSnackbar } = useSnackbar();
 
     useEffect(() => {
         if (!hasRevalidated || isValidating) return;
