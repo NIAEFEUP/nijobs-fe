@@ -1,5 +1,5 @@
 import config from "../config";
-import { createEvent, measureTime } from "../utils/analytics";
+import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 import { buildCancelableRequest, parseFiltersToURL } from "../utils";
@@ -21,11 +21,12 @@ export const fetchCompanyOffers = measureTime(TIMED_ACTIONS.COMPANY_OFFERS_FETCH
 
             if (!res.ok) {
 
-                createEvent(EVENT_TYPES.ERROR(
+                createErrorEvent(
                     COMPANY_OFFERS_FETCH_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
+                    json.errors,
                     res.status
-                ));
+                );
                 isErrorRegistered = true;
 
                 throw json.errors;
@@ -35,12 +36,15 @@ export const fetchCompanyOffers = measureTime(TIMED_ACTIONS.COMPANY_OFFERS_FETCH
             return json;
         } catch (error) {
 
-            if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-                COMPANY_OFFERS_FETCH_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE
-            ));
+            const errorArray = Array.isArray(error) ? error :
+                [{ msg: "Unexpected Error. Please try again later." }];
 
-            if (Array.isArray(error)) throw error;
-            throw [{ msg: "Unexpected Error" }];
+            if (!isErrorRegistered) createErrorEvent(
+                COMPANY_OFFERS_FETCH_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+
+            throw errorArray;
         }
     }));

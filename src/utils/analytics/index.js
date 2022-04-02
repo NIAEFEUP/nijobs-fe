@@ -61,12 +61,30 @@ export const recordTime = (action = TIMED_ACTIONS.UNKNOWN, t0, t1, label) => {
     });
 };
 
-/** Creates a new event.
+/**
+ * Sends an event to Google Analytics
  *
  * @param event Type of event, from {@link EVENT_TYPES}.
  */
 export const createEvent = (event = EVENT_TYPES.OTHER) => {
     ReactGa.event(event);
+};
+
+/**
+ * Constructs an error event and sends it to Google Analytics
+ *
+ * @param {*} metricId Identifier of the metric where the error occurred
+ * @param {*} type Type of error
+ * @param {*} errors Array of error objects with a 'msg' property defined
+ * @param {*} status HTTP status
+ */
+export const createErrorEvent = (metricId, type, errors, status = 500) => {
+    const label = errors.reduce(
+        (acc, err) => err.param ? `${acc}: ${err.param}-${err.msg}` : `${acc}: ${err.msg}`,
+        type
+    );
+
+    createEvent(EVENT_TYPES.ERROR(metricId, label, status));
 };
 
 /**

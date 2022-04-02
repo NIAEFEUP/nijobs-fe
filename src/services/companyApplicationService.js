@@ -6,7 +6,7 @@ import {
 
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
-import { createEvent, measureTime } from "../utils/analytics";
+import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
@@ -33,11 +33,12 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(
                 dispatch(setCompanyApplicationSubmissionError(json.errors));
                 dispatch(setCompanyApplicationSending(false));
 
-                createEvent(EVENT_TYPES.ERROR(
+                createErrorEvent(
                     APPLICATION_SUBMIT_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
+                    json.errors,
                     res.status
-                ));
+                );
 
                 return false;
             }
@@ -49,13 +50,17 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(
             return true;
 
         } catch (error) {
-            dispatch(setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
+
+            const errorArray = [{ msg: "Unexpected Error" }];
+
+            dispatch(setCompanyApplicationSubmissionError(errorArray));
             dispatch(setCompanyApplicationSending(false));
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 APPLICATION_SUBMIT_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE
-            ));
+                ErrorTypes.BAD_RESPONSE,
+                errorArray
+            );
 
             return false;
         }
