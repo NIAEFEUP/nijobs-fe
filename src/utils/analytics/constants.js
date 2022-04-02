@@ -1,3 +1,5 @@
+export const QUERY_VALUE_PARAMETER = "value=";
+
 export const EVENT_TYPES = Object.freeze({
     ERROR: (action, type, status = 500) => ({
         category: "error",

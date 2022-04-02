@@ -1,8 +1,9 @@
 import ReactGa from "react-ga";
-import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS } from "./constants";
+import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS, QUERY_VALUE_PARAMETER } from "./constants";
 
-const QUERY_VALUE_PARAMETER = "value=";
-
+/**
+ * Removed the given cookie from the user's browser
+ */
 export const removeCookie = (cookie) => {
     document.cookie = `${cookie}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
 };
