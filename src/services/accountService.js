@@ -1,7 +1,7 @@
 import config from "../config";
 import { measureTime, createEvent, createErrorEvent } from "../utils/analytics";
 import { TIMED_ACTIONS, EVENT_TYPES } from "../utils/analytics/constants";
-import { UNEXPECTED_ERROR_MESSAGE } from "../utils/Constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -46,7 +46,7 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(

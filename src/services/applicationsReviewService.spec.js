@@ -1,6 +1,7 @@
 import config from "../config";
 
 import { searchApplications, approveApplication, rejectApplication } from "./applicationsReviewService";
+import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
@@ -42,19 +43,19 @@ describe("Company Application Service", () => {
         try {
             await searchApplications();
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await approveApplication("id1");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await rejectApplication("id1", "rejectReason");
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
 
     });

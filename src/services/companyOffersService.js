@@ -1,7 +1,7 @@
 import config from "../config";
 import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
-import { UNEXPECTED_ERROR_MESSAGE } from "../utils/Constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 import { buildCancelableRequest, parseFiltersToURL } from "../utils";
 
@@ -38,7 +38,7 @@ export const fetchCompanyOffers = measureTime(TIMED_ACTIONS.COMPANY_OFFERS_FETCH
         } catch (error) {
 
             const errorArray = Array.isArray(error) ? error :
-                [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+                [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
             if (!isErrorRegistered) {
                 createErrorEvent(

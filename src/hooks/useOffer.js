@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import useSWR from "swr";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
+import Constants from "../utils/Constants";
 
 import config from "../config";
 const { API_HOSTNAME } = config;
@@ -24,7 +25,7 @@ export default (id) => {
 
         } catch (error) {
             if (Array.isArray(error)) throw error;
-            throw [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            throw [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
         }
 
     };

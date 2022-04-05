@@ -4,7 +4,7 @@ import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
 import { createEvent, measureTime, sendSearchReport, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
-import { UNEXPECTED_ERROR_MESSAGE } from "../utils/Constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -62,7 +62,7 @@ export const searchOffers = (filters) => buildCancelableRequest(
             createErrorEvent(
                 OFFER_SEARCH_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
-                Array.isArray(error) ? error : [{ msg: UNEXPECTED_ERROR_MESSAGE }],
+                Array.isArray(error) ? error : [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }],
             );
         }
     })
@@ -96,7 +96,7 @@ export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) =
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(
@@ -143,7 +143,7 @@ export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offe
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(
@@ -186,7 +186,7 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(
@@ -274,7 +274,7 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(
@@ -358,7 +358,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
         if (!isErrorRegistered) {
             createErrorEvent(

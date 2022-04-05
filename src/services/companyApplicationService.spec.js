@@ -6,6 +6,7 @@ import {
     setCompanyApplicationSubmissionError,
     setCompanyApplication,
 } from "../actions/companyApplicationActions";
+import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
@@ -47,7 +48,9 @@ describe("Company Application Service", () => {
 
         expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
         expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
-        expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError([{ msg: "Unexpected Error" }]));
+        expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError([
+            { msg: Constants.UNEXPECTED_ERROR_MESSAGE },
+        ]));
         expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
     });
 

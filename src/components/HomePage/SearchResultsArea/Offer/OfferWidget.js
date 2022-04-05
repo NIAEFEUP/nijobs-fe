@@ -5,6 +5,7 @@ import { Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 
 import { recordOfferVisit } from "../../../../utils/analytics";
+import Constants from "../../../../utils/Constants";
 
 import Offer from "./Offer";
 import UnselectedOffer from "./UnselectedOffer";
@@ -65,7 +66,7 @@ const OfferWidget = ({
                 visibilityError = getHumanError(err[0]);
 
             addSnackbar({
-                message: visibilityError ? visibilityError : UNEXPECTED_ERROR_MESSAGE,
+                message: visibilityError ? visibilityError : Constants.UNEXPECTED_ERROR_MESSAGE,
                 key: `${Date.now()}-visibilityError`,
             });
         }

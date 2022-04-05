@@ -80,8 +80,8 @@ export const createEvent = (event = EVENT_TYPES.OTHER) => {
  */
 export const createErrorEvent = (metricId, type, errors, status = 500) => {
     const label = errors.reduce(
-        (acc, err) => err.param ? `${acc}: ${err.param}-${err.msg}` : `${acc}: ${err.msg}`,
-        type
+        (acc, err) => err.param ? `${acc} ${err.param}-${err.msg};` : `${acc} ${err.msg};`,
+        `${type}:`
     );
 
     createEvent(EVENT_TYPES.ERROR(metricId, label, status));
