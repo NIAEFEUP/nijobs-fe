@@ -8,6 +8,7 @@ import config from "../config";
 import { buildCancelableRequest } from "../utils";
 import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
+import { UNEXPECTED_ERROR_MESSAGE } from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -51,7 +52,7 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(
 
         } catch (error) {
 
-            const errorArray = [{ msg: "Unexpected Error" }];
+            const errorArray = [{ msg: UNEXPECTED_ERROR_MESSAGE }];
 
             dispatch(setCompanyApplicationSubmissionError(errorArray));
             dispatch(setCompanyApplicationSending(false));

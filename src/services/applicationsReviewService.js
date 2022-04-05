@@ -2,6 +2,7 @@ import config from "../config";
 import { buildCancelableRequest } from "../utils";
 import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
+import { UNEXPECTED_ERROR_MESSAGE } from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -57,13 +58,15 @@ export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIO
     } catch (error) {
 
         const errorArray = Array.isArray(error) ? error :
-            [{ msg: "Unexpected Error. Please try again later." }];
+            [{ msg: UNEXPECTED_ERROR_MESSAGE }];
 
-        if (!isErrorRegistered) createErrorEvent(
-            APPLICATION_SEARCH_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE,
-            errorArray,
-        );
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                APPLICATION_SEARCH_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
 
         throw errorArray;
     }
@@ -100,13 +103,15 @@ export const approveApplication = buildCancelableRequest(
         } catch (error) {
 
             const errorArray = Array.isArray(error) ? error :
-                [{ msg: "Unexpected Error. Please try again later." }];
+                [{ msg: UNEXPECTED_ERROR_MESSAGE }];
 
-            if (!isErrorRegistered) createErrorEvent(
-                APPLICATION_APPROVE_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE,
-                errorArray,
-            );
+            if (!isErrorRegistered) {
+                createErrorEvent(
+                    APPLICATION_APPROVE_METRIC_ID,
+                    ErrorTypes.NETWORK_FAILURE,
+                    errorArray,
+                );
+            }
 
             throw errorArray;
         }
@@ -147,13 +152,15 @@ export const rejectApplication = buildCancelableRequest(
         } catch (error) {
 
             const errorArray = Array.isArray(error) ? error :
-                [{ msg: "Unexpected Error. Please try again later." }];
+                [{ msg: UNEXPECTED_ERROR_MESSAGE }];
 
-            if (!isErrorRegistered) createErrorEvent(
-                APPLICATION_REJECT_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE,
-                errorArray,
-            );
+            if (!isErrorRegistered) {
+                createErrorEvent(
+                    APPLICATION_REJECT_METRIC_ID,
+                    ErrorTypes.NETWORK_FAILURE,
+                    errorArray,
+                );
+            }
 
             throw errorArray;
         }

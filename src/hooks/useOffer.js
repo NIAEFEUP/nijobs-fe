@@ -24,7 +24,7 @@ export default (id) => {
 
         } catch (error) {
             if (Array.isArray(error)) throw error;
-            throw [{ msg: "Unexpected Error. Please try again later." }];
+            throw [{ msg: UNEXPECTED_ERROR_MESSAGE }];
         }
 
     };

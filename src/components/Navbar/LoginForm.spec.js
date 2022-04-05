@@ -140,13 +140,13 @@ describe("Navbar - LoginForm", () => {
             await act(async () => {
                 await fireEvent.click(wrapper.getByRole("button", { name: "Login" }));
             });
-            expect(await wrapper.queryByText("Unexpected Error. Please try again later.")).toBeInTheDocument();
+            expect(await wrapper.queryByText(UNEXPECTED_ERROR_MESSAGE)).toBeInTheDocument();
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "acsd@email.com" } });
             });
 
-            expect(await wrapper.queryByText("Unexpected Error. Please try again later.")).not.toBeInTheDocument();
+            expect(await wrapper.queryByText(UNEXPECTED_ERROR_MESSAGE)).not.toBeInTheDocument();
         });
     });
 });

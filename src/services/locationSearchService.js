@@ -22,7 +22,7 @@ export const searchCities = async (prefix, limit = 10) => {
         return data.map(({ city, country, latitude, longitude }) => ({ city, country, latitude, longitude }));
 
     } catch (err) {
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        throw [{ msg: UNEXPECTED_ERROR_MESSAGE }];
     }
 
 };

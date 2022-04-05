@@ -88,19 +88,19 @@ describe("Offer Service", () => {
         try {
             await hideOffer(id);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await disableOffer(id, adminReason);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await enableOffer(id);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: UNEXPECTED_ERROR_MESSAGE }]);
         }
     });
 });
