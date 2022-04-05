@@ -45,7 +45,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
                 addSnackbar({
-                    message: `The offer with the title "${offer.title}" was hidden`,
+                    message: "The offer was hidden",
                     key: `${Date.now()}-${offer._id}-hidden`,
                 });
             })
@@ -59,7 +59,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
                 addSnackbar({
-                    message: `The offer with the title "${offer.title}" was enabled`,
+                    message: "The offer was enabled",
                     key: `${Date.now()}-${offer._id}-enabled`,
                 });
             })
@@ -70,7 +70,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 
     const handleOfferVisibilityError = useCallback((err) => {
         if (Array.isArray(err) && err.length > 0) {
-            let visibilityError = null;
+            let visibilityError;
             if (Object.prototype.hasOwnProperty.call(err[0], "msg"))
                 visibilityError = getHumanError(err[0]?.msg);
             else
@@ -90,7 +90,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
                 addSnackbar: addSnackbar,
                 onError: handleOfferVisibilityError,
             });
-        } else  {
+        } else {
             handleEnableOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
@@ -100,7 +100,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
     };
 
     return (
-        <Tooltip title={ offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
+        <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
             <IconButton
                 onClick={handleOfferVisibility}
                 disabled={offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}

@@ -58,7 +58,7 @@ const OfferWidget = ({
 
     const handleError = useCallback((err) => {
         if (Array.isArray(err) && err.length > 0) {
-            let visibilityError = null;
+            let visibilityError;
             if (Object.prototype.hasOwnProperty.call(err[0], "msg"))
                 visibilityError = getHumanError(err[0]?.msg);
             else
