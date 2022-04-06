@@ -158,3 +158,17 @@ export const recordOfferVisit = (offerId, offerTitle, companyName) => {
 
     ReactGa.pageview(`/offer/${offerId}`);
 };
+
+export const recordOfferImpression = (offerId, offerTitle, companyName) => {
+    if (!offerId) return;
+
+    ReactGa.set({
+        [DIMENSION_IDS.companyName]: companyName,
+        [DIMENSION_IDS.offerTitle]: offerTitle,
+    });
+
+    ReactGa.event({
+        category: "Offer Search",
+        action: "Displayed in Search",
+    });
+};

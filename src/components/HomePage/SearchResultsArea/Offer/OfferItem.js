@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -55,6 +55,13 @@ const defaultLogo = require("./default_icon.svg");
 const OfferItem = ({ offer, offerIdx, selectedOfferIdx, setSelectedOfferIdx, loading }) => {
     const isCurrentlySelected = selectedOfferIdx === offerIdx;
     const classes = useStyles();
+
+    useEffect(() => {
+        if (offer && !loading) {
+            console.log("Impression on ", offer, { loading });
+        }
+    }, [offer, loading]);
+
     return (
         <div className={classes.itemWrapper}>
             {!loading && <div className={clsx(classes.hoverMask, { [classes.maskActive]: isCurrentlySelected })} />}
