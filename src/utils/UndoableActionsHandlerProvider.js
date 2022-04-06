@@ -26,12 +26,11 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
 
     const { cancel, pause, resume } = useTimeout(handleTimeout, action.timeout);
 
-    const handleCancel = useCallback((key) => () => {
+    const handleCancel = useCallback(() => {
         cancel();
-        closeSnackbar(key);
         action.onCancel();
         removeAction(action.id);
-    }, [action, cancel, closeSnackbar, removeAction]);
+    }, [action, cancel, removeAction]);
 
     const handleClose = useCallback((key) => () => {
         cancel();
@@ -57,7 +56,7 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
             },
             contentOptions: {
                 actionText: "Undo",
-                actionHandler: handleCancel(action.id),
+                actionHandler: handleCancel,
                 handleClose: handleClose(action.id),
                 onMouseEnter: handleMouseEnter,
                 onMouseLeave: handleMouseLeave,
