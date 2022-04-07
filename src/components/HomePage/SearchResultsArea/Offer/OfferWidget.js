@@ -15,6 +15,7 @@ import { addSnackbar } from "../../../../actions/notificationActions";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import { useDesktop } from "../../../../utils/media-queries";
 import OfferContent from "./OfferContent";
+import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
 const OfferWidget = ({
     addSnackbar,
@@ -41,9 +42,9 @@ const OfferWidget = ({
 
     useEffect(() => {
         setVisibilityState({
-            isDisabled: isHiddenOffer && offerHiddenReason === "ADMIN_REQUEST",
+            isDisabled: isHiddenOffer && offerHiddenReason === OfferConstants.ADMIN_REQUEST,
             isVisible: !isHiddenOffer,
-            isBlocked: isHiddenOffer && offerHiddenReason === "COMPANY_BLOCKED",
+            isBlocked: isHiddenOffer && offerHiddenReason === OfferConstants.COMPANY_BLOCKED,
         });
     }, [isHiddenOffer, offerHiddenReason]);
 
@@ -57,7 +58,7 @@ const OfferWidget = ({
 
     const handleError = useCallback((err) => {
         if (Array.isArray(err) && err.length > 0) {
-            let visibilityError = null;
+            let visibilityError;
             if (Object.prototype.hasOwnProperty.call(err[0], "msg"))
                 visibilityError = getHumanError(err[0]?.msg);
             else

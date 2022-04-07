@@ -11,6 +11,7 @@ import {
     enableOffer as enableOfferService,
 } from "../services/offerService";
 import useOffer from "../hooks/useOffer";
+import { OfferConstants } from "../components/Offers/Form/OfferUtils";
 
 export const OfferPageControllerContext = React.createContext();
 
@@ -24,7 +25,7 @@ export const OfferPageController = () => {
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    hiddenReason: "ADMIN_REQUEST",
+                    hiddenReason: OfferConstants.ADMIN_REQUEST,
                     isHidden: true,
                     adminReason,
                 }));
@@ -40,7 +41,7 @@ export const OfferPageController = () => {
             .then(() => {
                 mutate(new Offer({
                     ...offer,
-                    hiddenReason: "COMPANY_REQUEST",
+                    hiddenReason: OfferConstants.COMPANY_REQUEST,
                     isHidden: true,
                 }));
                 addSnackbar({

@@ -5,10 +5,15 @@ import {
     TableCell,
     Tooltip,
 } from "@material-ui/core";
-import { ExpandMore, ExpandLess, Edit as EditIcon } from "@material-ui/icons";
+import {
+    ExpandMore,
+    ExpandLess,
+    Edit as EditIcon,
+} from "@material-ui/icons";
 import { useMobile } from "../../../../utils/media-queries";
 import { Link } from "react-router-dom";
 import { RowPropTypes } from "../../../../utils/Table/PropTypes";
+import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 
 const CompanyOffersActions = ({
     isCollapseOpen, toggleCollapse, row,
@@ -20,13 +25,16 @@ const CompanyOffersActions = ({
         <>
             <TableCell align="right">
                 { !isMobile ? (
-                    <Tooltip title="Edit Offer">
-                        <Link to={editOfferRoute}>
-                            <IconButton aria-label="Edit Offer">
-                                <EditIcon color="secondary" fontSize="medium" />
-                            </IconButton>
-                        </Link>
-                    </Tooltip>
+                    <>
+                        <CompanyOffersVisibilityActions offer={row?.payload.offer} />
+                        <Tooltip title="Edit Offer">
+                            <Link to={editOfferRoute}>
+                                <IconButton aria-label="Edit Offer">
+                                    <EditIcon color="secondary" fontSize="medium" />
+                                </IconButton>
+                            </Link>
+                        </Tooltip>
+                    </>
                 ) : (
                     <IconButton
                         aria-label="More Actions"

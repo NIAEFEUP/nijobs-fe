@@ -1,11 +1,18 @@
 import React from "react";
-import { screen, waitFor, queryByText, getByLabelText, fireEvent, act } from "@testing-library/react";
+import {
+    screen, waitFor, queryByText, getByLabelText,
+    fireEvent, act, getByTestId, queryByTestId,
+} from "@testing-library/react";
 
 import CompanyOffersManagementWidget from "./CompanyOffersManagementWidget";
 import { renderWithStoreAndTheme } from "../../../../test-utils";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import * as companyOffersService from "../../../../services/companyOffersService";
+import {
+    hideOffer as hideOfferService,
+    enableOffer as enableOfferService,
+} from "../../../../services/offerService";
 import useSession from "../../../../hooks/useSession";
 import { BrowserRouter } from "react-router-dom";
 import { addSnackbar } from "../../../../actions/notificationActions";
@@ -18,6 +25,7 @@ import { format, parseISO } from "date-fns";
 
 jest.mock("../../../../hooks/useSession");
 jest.mock("../../../../services/companyOffersService");
+jest.mock("../../../../services/offerService");
 jest.mock("../../../../actions/notificationActions");
 
 describe("App", () => {
@@ -27,29 +35,48 @@ describe("App", () => {
         {
             _id: "random uuid4",
             owner: "company_id",
-            title: "Guy in the background",
+            title: "Offer title 1",
             ownerName: "Reddit",
             ownerLogo: "logo.com",
             location: "Porto",
             publishDate: "2019-06",
             publishEndDate: "2020-09",
-            description: "kek",
+            description: "Offer description 1",
+            isHidden: false,
         },
         {
             _id: "random uuid5",
             owner: "company_id",
-            title: "Girl in the background",
+            title: "Offer title 2",
             ownerName: "Reddit",
             ownerLogo: "logo.com2",
             location: "Lisbon",
             publishDate: "2021-06",
             publishEndDate: "2021-09",
-            description: "kekw",
+            description: "Offer description 2",
+            isHidden: true,
+        },
+        {
+            _id: "random uuid6",
+            owner: "company_id",
+            title: "Offer title 3",
+            ownerName: "Reddit",
+            ownerLogo: "logo.com2",
+            location: "Lisbon",
+            publishDate: "2021-06",
+            publishEndDate: "2021-09",
+            description: "Offer description 3",
+            isHidden: true,
+            hiddenReason: "ADMIN_REQUEST",
         },
     ];
 
     beforeEach(() => {
         useSession.mockReturnValue({ data: { company: { name: "company1", _id: "company_id" } }, isLoggedIn: true });
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
     });
 
     it("Renders Loading", () => {
@@ -224,5 +251,108 @@ describe("App", () => {
             }
         }
 
+    });
+
+    it("Should hide/enable offer when clicking the hide/enable offer button", async () => {
+        const offer = MOCK_OFFERS[0];
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve([offer])
+        ));
+        hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CompanyOffersManagementWidget />
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme }
+            )
+        );
+
+        const offerRow = screen.queryByText(offer.title).closest("tr");
+
+        let visibilityButton = getByTestId(offerRow, "HideOffer");
+        expect(visibilityButton).toBeInTheDocument();
+
+        await act(async () => {
+            await fireEvent.click(visibilityButton);
+        });
+
+        expect(queryByTestId(offerRow, "HideOffer")).not.toBeInTheDocument();
+        expect(getByTestId(offerRow, "EnableOffer")).toBeInTheDocument();
+
+        visibilityButton = getByTestId(offerRow, "EnableOffer");
+
+        await act(async () => {
+            await fireEvent.click(visibilityButton);
+        });
+
+        expect(getByTestId(offerRow, "HideOffer")).toBeInTheDocument();
+        expect(queryByTestId(offerRow, "EnableOffer")).not.toBeInTheDocument();
+    });
+
+    it("Should disable hide/enable offer button when the offer is disabled by an admin", async () => {
+        const offer = MOCK_OFFERS[2];
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve([offer])
+        ));
+        hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CompanyOffersManagementWidget />
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme }
+            )
+        );
+
+        const offerRow = screen.queryByText(offer.title).closest("tr");
+
+        const visibilityButton = getByTestId(offerRow, "EnableOffer");
+        expect(visibilityButton.closest("button")).toBeDisabled();
+
+        await act(async () => {
+            await fireEvent.click(visibilityButton);
+        });
+
+        expect(getByTestId(offerRow, "EnableOffer")).toBeInTheDocument();
+        expect(queryByTestId(offerRow, "HideOffer")).not.toBeInTheDocument();
+    });
+
+    it("Should show snackbar when hide/enable offer service fails when clicking the respective button", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+
+        const offer = MOCK_OFFERS[0];
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve([offer])
+        ));
+
+        hideOfferService.mockImplementationOnce(() => new Promise((resolve, reject) =>
+            reject([{ msg: "Error fetching offers" }])
+        ));
+        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CompanyOffersManagementWidget />
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme }
+            )
+        );
+
+        const offerRow = screen.queryByText(offer.title).closest("tr");
+
+        await act(async () => {
+            await fireEvent.click(getByTestId(offerRow, "HideOffer"));
+        });
+
+        expect(addSnackbar).toHaveBeenCalledTimes(1);
     });
 });
