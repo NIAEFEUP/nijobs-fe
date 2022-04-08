@@ -1,7 +1,0 @@
-{
-    "rules": [
-        {"title" : "Applying to an offer", "description" : "In order to apply to an offer you must first sign in, after signing in ", "link": "/", "linkName": "Main Page"},
-        {"title" : "Creating an offer", "description" : "To create an offer you must first log in as a company, then you can create an offer by pressing the \"Create Offer\" button, there is a limit of x offers, your offers may be reviewed and their exposure will decay over time.\n Creating to many of the same offer may result in a penalty, if you believe you should have not received a penalty, please contact us with your problem and we will look into it. \n Press the button to apply as a company if you have not already.", "link":"/apply/company", "linkName": "Apply as a company"},
-        {"title" : "This is a rule's title", "description" : "Here goes the description."}
-    ]
-}

@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import AppTheme from "../../AppTheme";
 import RulesPage from "../../pages/RulesPage";
 
-jest.mock("./rules.json", () => ({
+jest.mock("./rules.js", () => ({
     "rules": [
         { "title": "Rule 1", "description": "Description 1", "link": "/", "linkName": "Main Page" },
         { "title": "Rule 2", "description": "Description 2" },
