@@ -55,8 +55,8 @@ export const searchOffers = buildCancelableRequest(
             }
 
             const offers = json.results;
-            const queryToken = json.queryToken;
-            
+            const updatedQueryToken = json.queryToken;
+
             sendSearchReport(filters, `/offers?${query}`);
             createEvent(EVENT_TYPES.SUCCESS(OFFER_SEARCH_METRIC_ID, query));
 

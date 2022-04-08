@@ -110,12 +110,14 @@ export const SearchArea = ({ onSubmit, searchValue,
             <Paper
                 className={classes.searchArea}
                 elevation={8}
+                data-testid="search-area-paper"
             >
                 <form
                     aria-label="Search Area"
                     onSubmit={submitForm}
                     autoComplete="off"
-                    id={"search_form"}
+                    id="search_form"
+                    data-testid="search_form"
                 >
                     <SearchBar
                         className={classes.searchBar}
@@ -129,9 +131,9 @@ export const SearchArea = ({ onSubmit, searchValue,
                         handleAdvancedOptionsButtonClick={toggleAdvancedOptions}
                     />
                     {!useDesktop() ?
-                        <AdvancedSearchMobile />
+                        <AdvancedSearchMobile aria-label="Advanced Search Mobile" />
                         :
-                        <AdvancedSearchDesktop />
+                        <AdvancedSearchDesktop aria-label="Advanced Search Desktop" />
                     }
                 </form>
                 <SubmitSearchButton

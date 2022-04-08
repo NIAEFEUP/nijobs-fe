@@ -53,7 +53,8 @@ export default (filters) => {
 
         try {
             const { updatedQueryToken, results } = await searchOffers({ queryToken, limit, ...filters });
-            dispatch(setSearchQueryToken((updatedQueryToken)));
+
+            dispatch(setSearchQueryToken(updatedQueryToken));
             dispatch(setSearchOffers(results, !isInitialRequest));
 
             if (results.length === 0) setHasMoreOffers(false);

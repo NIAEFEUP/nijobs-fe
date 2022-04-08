@@ -141,7 +141,7 @@ const OfferItemsContainer = ({
                     onClick={() => toggleShowSearchFilters()}
                 />
                 <div>
-                    {offers.map((offer, i) => (
+                    {offers?.map((offer, i) => (
                         <div key={offer._id}>
                             {i !== 0 && <Divider component="li" />}
                             <OfferItem

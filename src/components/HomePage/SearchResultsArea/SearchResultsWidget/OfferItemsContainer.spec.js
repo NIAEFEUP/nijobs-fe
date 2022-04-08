@@ -10,10 +10,10 @@ describe("OfferItemsContainer", () => {
         it("should show loading state when loading", () => {
             render(
                 <OfferItemsContainer
-                    loading
+                    initialOffersLoading
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
-                    setShouldFetchMoreOffers={() => {}}
+                    loadMoreOffers={() => {}}
                 />
             );
             expect(screen.getAllByTestId("offer-item-loading")).toHaveLength(3);
@@ -48,9 +48,10 @@ describe("OfferItemsContainer", () => {
             render(
                 <OfferItemsContainer
                     offers={offers}
-                    loading={false}
+                    initialOffersLoading={false}
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
+                    loadMoreOffers={() => {}}
                 />
             );
             const items = await screen.findAllByTestId("offer-item");

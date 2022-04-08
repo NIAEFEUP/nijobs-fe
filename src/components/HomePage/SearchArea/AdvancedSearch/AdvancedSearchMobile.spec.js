@@ -8,7 +8,8 @@ import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/sea
 import { fireEvent } from "@testing-library/dom";
 import FieldOptions from "../../../utils/offers/FieldOptions";
 import TechOptions from "../../../utils/offers/TechOptions";
-import { render, screen } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
+import { createTheme } from "@material-ui/core/styles";
 
 const AdvancedSearchWrapper = ({
     children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
@@ -38,13 +39,18 @@ const AdvancedSearchWrapper = ({
 };
 
 describe("AdvancedSearchMobile", () => {
+
+    const theme = createTheme();
+    const initialState = {};
+
     describe("render", () => {
 
         it("should render a dialog title with a button to close", () => {
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByText("Advanced Search")).toBeInTheDocument();
@@ -53,10 +59,11 @@ describe("AdvancedSearchMobile", () => {
         });
 
         it("should render a SearchBar", () => {
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByLabelText("Search")).toBeInTheDocument();
@@ -64,10 +71,11 @@ describe("AdvancedSearchMobile", () => {
 
         it("should render a job selector with all job types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Job Type"));
@@ -85,7 +93,7 @@ describe("AdvancedSearchMobile", () => {
 
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     jobMinDuration={1}
@@ -94,7 +102,8 @@ describe("AdvancedSearchMobile", () => {
                     setShowJobDurationSlider={setShowJobDurationSliderMock}
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByText("Job Duration: 1 - 2 months")).not.toBeVisible();
@@ -106,7 +115,7 @@ describe("AdvancedSearchMobile", () => {
 
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     jobMinDuration={1}
@@ -115,7 +124,8 @@ describe("AdvancedSearchMobile", () => {
                     setShowJobDurationSlider={setShowJobDurationSliderMock}
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
 
@@ -126,10 +136,11 @@ describe("AdvancedSearchMobile", () => {
 
         it("should render a fields selector with all field types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
@@ -151,10 +162,11 @@ describe("AdvancedSearchMobile", () => {
 
         it("should render a technologies selector with all technology types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
@@ -176,12 +188,13 @@ describe("AdvancedSearchMobile", () => {
 
         it("should disable reset button if no advanced field is set", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByRole("button", { name: "Reset" })).toBeDisabled();
@@ -189,13 +202,14 @@ describe("AdvancedSearchMobile", () => {
 
         it("should enable reset button if some advanced field is set", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     fields={[Object.keys(FieldOptions)[0]]}
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByRole("button", { name: "Reset" })).not.toBeDisabled();
@@ -208,14 +222,15 @@ describe("AdvancedSearchMobile", () => {
 
             const setFieldsMock = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     fields={[Object.keys(FieldOptions)[0]]}
                     setFields={setFieldsMock}
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
@@ -237,14 +252,15 @@ describe("AdvancedSearchMobile", () => {
 
             const setTechsMock = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     technologies={[Object.keys(TechOptions)[0]]}
                     setTechs={setTechsMock}
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
@@ -265,7 +281,7 @@ describe("AdvancedSearchMobile", () => {
         it("should call resetAdvancedSearch when Reset button is clicked", () => {
             const resetFn = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     setSearchValue={() => {}}
@@ -278,7 +294,8 @@ describe("AdvancedSearchMobile", () => {
                     technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
                 >
                     <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.click(screen.getByRole("button", { name: "Reset" }));

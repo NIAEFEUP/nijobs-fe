@@ -155,7 +155,7 @@ describe("Search Offers Reducer", () => {
                     adminReason: null,
                 }),
                 new Offer({
-                    _id: "id1",
+                    _id: "id2",
                     title: "position1",
                     owner: "company_id",
                     ownerName: "company1",
@@ -170,7 +170,7 @@ describe("Search Offers Reducer", () => {
                     adminReason: null,
                 }),
                 new Offer({
-                    _id: "id1",
+                    _id: "id3",
                     title: "position1",
                     owner: "company_id",
                     ownerName: "company1",

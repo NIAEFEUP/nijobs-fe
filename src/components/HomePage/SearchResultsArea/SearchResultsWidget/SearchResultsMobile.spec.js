@@ -42,7 +42,7 @@ describe("SearchResultsMobile", () => {
     describe("render", () => {
         it("Should render offers if present", () => {
 
-            const context = { offers };
+            const context = { offers, loadMoreOffers: () => {} };
             render(
                 <SearchResultsControllerContext.Provider value={context}>
                     <SearchResultsMobile offers={offers} />
@@ -89,6 +89,7 @@ describe("SearchResultsMobile", () => {
                 setSelectedOfferIdx: setSelectedOfferIdxMock,
                 selectedOfferIdx: 0,
                 toggleShowSearchFilters: () => {},
+                loadMoreOffers: () => {},
             };
 
             renderWithStoreAndTheme(
