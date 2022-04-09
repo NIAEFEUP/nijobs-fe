@@ -35,7 +35,7 @@
     "dotenv-expand": "4.2.0",
     "jss-plugin-compose": "^10.8.2",
     "lodash": "^4.17.21",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "notistack": "^1.0.0",
     "react": "^16.12.0",
     "react-app-polyfill": "^1.0.4",
