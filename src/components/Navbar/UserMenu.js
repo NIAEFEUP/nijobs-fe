@@ -115,29 +115,29 @@ const CompanyMenuOptions = ({ isMobile, sessionData }) => {
     return (
         <>
             {
-            sessionData?.company?.hasFinishedRegistration ?
-                <>
-                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
-                    <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
-                </>
-                :
-                <MenuItem
-                    button
-                    className={classes.highlightedMenuItem}
-                    component={Link}
-                    to="/company/registration/finish"
-                    disableTouchRipple
-                >
-                    <Badge
-                        variant="dot"
-                        color="primary"
-                        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                sessionData?.company?.hasFinishedRegistration ?
+                    <>
+                        <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                        <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
+                    </>
+                    :
+                    <MenuItem
+                        button
+                        className={classes.highlightedMenuItem}
+                        component={Link}
+                        to="/company/registration/finish"
+                        disableTouchRipple
                     >
-                        <Box pl={2}>
-                        Finish Registration
-                        </Box>
-                    </Badge>
-                </MenuItem>
+                        <Badge
+                            variant="dot"
+                            color="primary"
+                            anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                        >
+                            <Box pl={2}>
+                                Finish Registration
+                            </Box>
+                        </Badge>
+                    </MenuItem>
             }
         </>
     );
@@ -177,7 +177,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 className={classes.menuList}
                 autoFocusItem={open}
             >
-            <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
         </div>
     );
@@ -262,7 +262,7 @@ const MobileUserMenu = ({ open, handleClose, sessionData, handleLogout }) => {
         <SwipeableDrawer
             anchor="bottom"
             open={open}
-            onOpen={() => {}}
+            onOpen={() => { }}
             onClose={handleClose}
             disableSwipeToOpen
             classes={{ paper: classes.userMenuPaper }}
