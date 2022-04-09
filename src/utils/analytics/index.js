@@ -1,8 +1,9 @@
 import ReactGa from "react-ga";
-import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS } from "./constants";
+import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS, QUERY_VALUE_PARAMETER } from "./constants";
 
-const QUERY_VALUE_PARAMETER = "value=";
-
+/**
+ * Removed the given cookie from the user's browser
+ */
 export const removeCookie = (cookie) => {
     document.cookie = `${cookie}= ; expires = Thu, 01 Jan 1970 00:00:00 GMT`;
 };
@@ -60,12 +61,30 @@ export const recordTime = (action = TIMED_ACTIONS.UNKNOWN, t0, t1, label) => {
     });
 };
 
-/** Creates a new event.
+/**
+ * Sends an event to Google Analytics
  *
  * @param event Type of event, from {@link EVENT_TYPES}.
  */
 export const createEvent = (event = EVENT_TYPES.OTHER) => {
     ReactGa.event(event);
+};
+
+/**
+ * Constructs an error event and sends it to Google Analytics
+ *
+ * @param {*} metricId Identifier of the metric where the error occurred
+ * @param {*} type Type of error
+ * @param {*} errors Array of error objects with a 'msg' property defined
+ * @param {*} status HTTP status
+ */
+export const createErrorEvent = (metricId, type, errors, status = 500) => {
+    const label = errors.reduce(
+        (acc, err) => err.param ? `${acc} ${err.param}-${err.msg};` : `${acc} ${err.msg};`,
+        `${type}:`
+    );
+
+    createEvent(EVENT_TYPES.ERROR(metricId, label, status));
 };
 
 /**

@@ -1,8 +1,10 @@
+export const QUERY_VALUE_PARAMETER = "value=";
+
 export const EVENT_TYPES = Object.freeze({
-    ERROR: (action, type, status = 500) => ({
+    ERROR: (action, label, status) => ({
         category: "error",
         action: `error-${action}`,
-        label: `ERROR: ${type}`,
+        label,
         value: status,
     }),
     SUCCESS: (action, label) => ({

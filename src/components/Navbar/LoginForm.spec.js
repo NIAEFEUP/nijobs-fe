@@ -4,6 +4,7 @@ import { login } from "../../services/auth";
 
 import LoginForm from "./LoginForm";
 import { render, fireEvent, act } from "../../test-utils";
+import Constants from "../../utils/Constants";
 
 jest.mock("../../services/auth");
 
@@ -140,13 +141,13 @@ describe("Navbar - LoginForm", () => {
             await act(async () => {
                 await fireEvent.click(wrapper.getByRole("button", { name: "Login" }));
             });
-            expect(await wrapper.queryByText("Unexpected Error. Please try again later.")).toBeInTheDocument();
+            expect(await wrapper.queryByText(Constants.UNEXPECTED_ERROR_MESSAGE)).toBeInTheDocument();
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "acsd@email.com" } });
             });
 
-            expect(await wrapper.queryByText("Unexpected Error. Please try again later.")).not.toBeInTheDocument();
+            expect(await wrapper.queryByText(Constants.UNEXPECTED_ERROR_MESSAGE)).not.toBeInTheDocument();
         });
     });
 });

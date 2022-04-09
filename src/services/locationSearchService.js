@@ -1,3 +1,5 @@
+import Constants from "../utils/Constants";
+
 export const searchCities = async (prefix, limit = 10) => {
 
     const API_ENDPOINT = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities";
@@ -22,7 +24,7 @@ export const searchCities = async (prefix, limit = 10) => {
         return data.map(({ city, country, latitude, longitude }) => ({ city, country, latitude, longitude }));
 
     } catch (err) {
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        throw [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
     }
 
 };

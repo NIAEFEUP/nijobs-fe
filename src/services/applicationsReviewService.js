@@ -1,7 +1,8 @@
 import config from "../config";
 import { buildCancelableRequest } from "../utils";
-import { createEvent, measureTime } from "../utils/analytics";
+import { createEvent, measureTime, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -40,11 +41,12 @@ export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIO
 
         if (!res.ok) {
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 APPLICATION_SEARCH_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
             isErrorRegistered = true;
 
             throw json.errors;
@@ -55,13 +57,18 @@ export const searchApplications = buildCancelableRequest(measureTime(TIMED_ACTIO
 
     } catch (error) {
 
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            APPLICATION_SEARCH_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                APPLICATION_SEARCH_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 }));
 
@@ -79,11 +86,12 @@ export const approveApplication = buildCancelableRequest(
 
             if (!res.ok) {
 
-                createEvent(EVENT_TYPES.ERROR(
+                createErrorEvent(
                     APPLICATION_APPROVE_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
+                    json.errors,
                     res.status
-                ));
+                );
                 isErrorRegistered = true;
 
                 throw json.errors;
@@ -94,13 +102,18 @@ export const approveApplication = buildCancelableRequest(
 
         } catch (error) {
 
-            if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-                APPLICATION_APPROVE_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE
-            ));
+            const errorArray = Array.isArray(error) ? error :
+                [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-            if (Array.isArray(error)) throw error;
-            throw [{ msg: "Unexpected Error. Please try again later." }];
+            if (!isErrorRegistered) {
+                createErrorEvent(
+                    APPLICATION_APPROVE_METRIC_ID,
+                    ErrorTypes.NETWORK_FAILURE,
+                    errorArray,
+                );
+            }
+
+            throw errorArray;
         }
     })
 );
@@ -122,11 +135,12 @@ export const rejectApplication = buildCancelableRequest(
 
             if (!res.ok) {
 
-                createEvent(EVENT_TYPES.ERROR(
+                createErrorEvent(
                     APPLICATION_REJECT_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
+                    json.errors,
                     res.status
-                ));
+                );
                 isErrorRegistered = true;
 
                 throw json.errors;
@@ -137,13 +151,18 @@ export const rejectApplication = buildCancelableRequest(
 
         } catch (error) {
 
-            if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-                APPLICATION_REJECT_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE
-            ));
+            const errorArray = Array.isArray(error) ? error :
+                [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-            if (Array.isArray(error)) throw error;
-            throw [{ msg: "Unexpected Error. Please try again later." }];
+            if (!isErrorRegistered) {
+                createErrorEvent(
+                    APPLICATION_REJECT_METRIC_ID,
+                    ErrorTypes.NETWORK_FAILURE,
+                    errorArray,
+                );
+            }
+
+            throw errorArray;
         }
     })
 );

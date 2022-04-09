@@ -1,6 +1,7 @@
 import config from "../config";
 
 import { hideOffer, disableOffer, enableOffer } from "./offerService";
+import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
 describe("Offer Service", () => {
@@ -88,19 +89,19 @@ describe("Offer Service", () => {
         try {
             await hideOffer(id);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await disableOffer(id, adminReason);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
 
         try {
             await enableOffer(id);
         } catch (e) {
-            expect(e).toStrictEqual([{ msg: "Unexpected Error. Please try again later." }]);
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
     });
 });

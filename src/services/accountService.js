@@ -1,6 +1,7 @@
 import config from "../config";
-import { measureTime, createEvent } from "../utils/analytics";
+import { measureTime, createEvent, createErrorEvent } from "../utils/analytics";
 import { TIMED_ACTIONS, EVENT_TYPES } from "../utils/analytics/constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -28,11 +29,12 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
 
         if (!res.ok) {
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 COMPLETE_REGISTRATION_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
             isErrorRegistered = true;
 
             throw json.errors;
@@ -43,12 +45,17 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
 
     } catch (error) {
 
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            COMPLETE_REGISTRATION_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                COMPLETE_REGISTRATION_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });

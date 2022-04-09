@@ -2,8 +2,9 @@ import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetc
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-import { createEvent, measureTime, sendSearchReport } from "../utils/analytics";
+import { createEvent, measureTime, sendSearchReport, createErrorEvent } from "../utils/analytics";
 import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
+import Constants from "../utils/Constants";
 import ErrorTypes from "../utils/ErrorTypes";
 const { API_HOSTNAME } = config;
 
@@ -27,6 +28,8 @@ export const searchOffers = (filters) => buildCancelableRequest(
                 credentials: "include",
                 signal,
             });
+            const json = await res.json();
+
             if (!res.ok) {
                 dispatch(setOffersFetchError({
                     cause: ErrorTypes.BAD_RESPONSE,
@@ -34,15 +37,16 @@ export const searchOffers = (filters) => buildCancelableRequest(
                 }));
                 dispatch(setLoadingOffers(false));
 
-                createEvent(EVENT_TYPES.ERROR(
+                createErrorEvent(
                     OFFER_SEARCH_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
+                    json.errors,
                     res.status
-                ));
+                );
                 return;
             }
-            const offers = await res.json();
-            dispatch(setSearchOffers(offers.map((offerData) => new Offer(offerData))));
+
+            dispatch(setSearchOffers(json.map((offerData) => new Offer(offerData))));
             dispatch(setLoadingOffers(false));
 
             sendSearchReport(filters, `/offers?${query}`);
@@ -55,10 +59,11 @@ export const searchOffers = (filters) => buildCancelableRequest(
             }));
             dispatch(setLoadingOffers(false));
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 OFFER_SEARCH_METRIC_ID,
-                ErrorTypes.NETWORK_FAILURE
-            ));
+                ErrorTypes.BAD_RESPONSE,
+                Array.isArray(error) ? error : [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }],
+            );
         }
     })
 );
@@ -74,11 +79,12 @@ export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) =
 
         if (!res.ok) {
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 OFFER_HIDE_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
             isErrorRegistered = true;
 
             throw json.errors;
@@ -89,13 +95,18 @@ export const hideOffer = measureTime(TIMED_ACTIONS.OFFER_HIDE, async (offerId) =
 
     } catch (error) {
 
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            OFFER_HIDE_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                OFFER_HIDE_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });
 
@@ -115,11 +126,12 @@ export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offe
 
         if (!res.ok) {
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 OFFER_DISABLE_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
             isErrorRegistered = true;
 
             throw json.errors;
@@ -130,13 +142,18 @@ export const disableOffer = measureTime(TIMED_ACTIONS.OFFER_DISABLE, async (offe
 
     } catch (error) {
 
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            OFFER_DISABLE_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                OFFER_DISABLE_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });
 
@@ -152,11 +169,12 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
 
         if (!res.ok) {
 
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 OFFER_ENABLE_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
             isErrorRegistered = true;
 
             throw json.errors;
@@ -167,13 +185,18 @@ export const enableOffer = measureTime(TIMED_ACTIONS.OFFER_ENABLE, async (offerI
 
     } catch (error) {
 
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            OFFER_ENABLE_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                OFFER_ENABLE_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });
 
@@ -233,11 +256,12 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
         const json = await res.json();
 
         if (!res.ok) {
-            createEvent(EVENT_TYPES.ERROR(
+            createErrorEvent(
                 OFFER_NEW_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
 
             isErrorRegistered = true;
 
@@ -248,13 +272,19 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
         return json;
 
     } catch (error) {
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            OFFER_NEW_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                OFFER_NEW_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });
 
@@ -310,11 +340,12 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         const json = await res.json();
 
         if (!res.ok) {
-            createEvent(EVENT_TYPES.ERROR(
-                OFFER_NEW_METRIC_ID,
+            createErrorEvent(
+                OFFER_EDIT_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
+                json.errors,
                 res.status
-            ));
+            );
 
             isErrorRegistered = true;
 
@@ -325,12 +356,18 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         return json;
 
     } catch (error) {
-        if (!isErrorRegistered) createEvent(EVENT_TYPES.ERROR(
-            OFFER_EDIT_METRIC_ID,
-            ErrorTypes.NETWORK_FAILURE
-        ));
 
-        if (Array.isArray(error)) throw error;
-        throw [{ msg: "Unexpected Error. Please try again later." }];
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                OFFER_EDIT_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
     }
 });
