@@ -29,6 +29,8 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         isBlocked: undefined,
     });
 
+    const [inMiddleOfRequest, setInMiddleOfRequest] = useState(false);
+
     const isHiddenOffer = offer?.isHidden;
     const offerHiddenReason = offer?.hiddenReason;
 
@@ -40,7 +42,9 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         });
     }, [isHiddenOffer, offerHiddenReason]);
 
+
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        setInMiddleOfRequest(true);
         hideOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
@@ -51,10 +55,11 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            }).finally(() => setInMiddleOfRequest(false));
     }, []);
 
     const handleEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        setInMiddleOfRequest(true);
         enableOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
@@ -65,7 +70,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            }).finally(() => setInMiddleOfRequest(false));
     }, []);
 
     const handleOfferVisibilityError = useCallback((err) => {
@@ -101,13 +106,18 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 
     return (
         <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-            <IconButton
-                onClick={handleOfferVisibility}
-                disabled={offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
-            >
-                {offerVisibilityState.isVisible ? <VisibilityOffIcon data-testid="HideOffer" color="secondary" fontSize="medium" />
-                    : <VisibilityIcon data-testid="EnableOffer" color="secondary" fontSize="medium" />}
-            </IconButton>
+            <>
+                <IconButton
+                    onClick={handleOfferVisibility}
+                    disabled={inMiddleOfRequest || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
+                >
+                    {offerVisibilityState.isVisible ?
+                        <VisibilityOffIcon data-testid="HideOffer" color={!inMiddleOfRequest ? "secondary" : undefined} fontSize="medium" />
+                        :
+                        <VisibilityIcon data-testid="EnableOffer" color={!inMiddleOfRequest ? "secondary" : undefined} fontSize="medium" />
+                    }
+                </IconButton>
+            </>
         </Tooltip>
     );
 };
