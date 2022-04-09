@@ -31,17 +31,17 @@ const Notifier = ({ notifications, removeSnackbar }) => {
             // do nothing if snackbar is already displayed
             if (displayed.current.includes(key)) return;
 
-            const closableActionHandler = contentOptions.actionHandler ? () => {
+            const actionHandler = contentOptions.actionHandler ? () => {
                 contentOptions.actionHandler();
-                closeSnackbar(key);
-            } : null;
+                if (closeOnAction) closeSnackbar(key);
+            } : (() => {});
 
             const configuredContent = (key, message) =>
                 <Notification
                     {...contentOptions}
                     message={contentOptions.message || message}
                     handleClose={contentOptions.handleClose || (() => closeSnackbar(key))}
-                    actionHandler={closeOnAction ? closableActionHandler : contentOptions.actionHandler}
+                    actionHandler={actionHandler}
                 />;
 
             if (!options.content) options.content = configuredContent;

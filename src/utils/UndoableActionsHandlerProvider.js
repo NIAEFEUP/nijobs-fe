@@ -62,7 +62,7 @@ const BaseActionNotification = ({ action, removeAction, closeSnackbar, addSnackb
                 onMouseLeave: handleMouseLeave,
             },
         });
-    }, [addSnackbar, action.id, handleCancel, action.message, closeSnackbar, handleClose, handleMouseEnter, handleMouseLeave]);
+    }, [addSnackbar, action.id, handleCancel, action.message, handleClose, handleMouseEnter, handleMouseLeave]);
 
     useEffect(
         () => () => {
