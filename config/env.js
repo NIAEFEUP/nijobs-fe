@@ -84,6 +84,9 @@ function getClientEnvironment(publicUrl) {
 
         // Api key for geolocation
         GEO_API_KEY: process.env.GEO_API_KEY,
+
+        // Sentry dsn
+        SENTRY_DSN: process.env.SENTRY_DSN
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin

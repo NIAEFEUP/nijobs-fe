@@ -15,9 +15,20 @@ import { create } from "jss";
 import { StylesProvider, jssPreset } from "@material-ui/core/styles";
 import compose from "jss-plugin-compose";
 import { loadDevTools } from "./devTools.js";
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
 
 const jss = create({
     plugins: [...jssPreset().plugins, compose()],
+});
+
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [new BrowserTracing()],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
 });
 
 loadDevTools().then(() => {
