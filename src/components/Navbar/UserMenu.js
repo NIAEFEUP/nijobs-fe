@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
         overflowWrap: "anywhere",
     }),
     menuList: {
+        width: "80%",
         "& > *": {
             justifyContent: "flex-end",
         },
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
     labelledDivider: {
         "&&": {
             marginTop: theme.spacing(2),
+            marginRight: theme.spacing(1),
         },
     },
     dividerLabel: {
@@ -171,7 +173,12 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
 
             </MenuList>
             <Divider className={classes.menuDivider} />
+            <MenuList
+                className={classes.menuList}
+                autoFocusItem={open}
+            >
             <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
+            </MenuList>
         </div>
     );
 });
