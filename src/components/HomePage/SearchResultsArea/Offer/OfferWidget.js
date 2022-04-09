@@ -66,7 +66,7 @@ const OfferWidget = ({
                 visibilityError = getHumanError(err[0]);
 
             addSnackbar({
-                message: visibilityError ? visibilityError : Constants.UNEXPECTED_ERROR_MESSAGE,
+                message: visibilityError || Constants.UNEXPECTED_ERROR_MESSAGE,
                 key: `${Date.now()}-visibilityError`,
             });
         }
