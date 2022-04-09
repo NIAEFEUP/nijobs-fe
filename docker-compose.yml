@@ -1,0 +1,12 @@
+version: "3"
+services:
+  nijobs-frontend:
+    build:
+      context: .
+    volumes:
+      - ./src:/usr/src/nijobs-fe/src
+      - ./public:/usr/src/nijobs-fe/public
+    ports:
+      - ${HOST_PORT}:3000
+    environment:
+      - PORT=3000

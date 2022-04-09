@@ -1,0 +1,158 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "jest/globals": true,
+        "es6": true
+    },
+
+    "globals": {
+        "jsdom": true,
+        "shallow": true,
+        "render": true,
+        "rtlRender": true,
+        "mount": true,
+        "fetchMock": true
+    },
+
+    "parser": "@babel/eslint-parser",
+
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+
+    "plugins": [
+        "react",
+        "import",
+        "react-hooks",
+        "jest",
+        "babel"
+    ],
+
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+
+    "settings": {
+        "react": {
+          "version": "detect"
+        }
+    },
+    
+    "rules": {
+        "no-misleading-character-class": "error",
+        "no-template-curly-in-string": "error",
+        "no-console": "warn",
+        "linebreak-style": ["error", "unix"],
+        "import/first": "error",
+
+        // Best practices
+        "array-callback-return": "error",
+        "consistent-return": "error",
+        "default-case": "error",
+        "eqeqeq": "error",
+        "no-eq-null": "error",
+        "no-param-reassign": "error",
+        "no-return-assign": "error",
+        "no-return-await": "error",
+        "babel/no-unused-expressions": "error",
+        "require-await": "error",
+        "radix": "error",
+
+        // Variables
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+        "no-shadow-restricted-names": "error",
+
+        // Style
+        "array-bracket-spacing": "error",
+        "block-spacing": ["error", "always"],
+        "comma-dangle": ["error", "always-multiline"],
+        "comma-spacing": ["error", { "before": false, "after": true }],
+        "comma-style": ["error", "last"],
+        "computed-property-spacing": ["error", "never"],
+        "eol-last": ["error", "always"],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
+        "jsx-quotes": ["error", "prefer-double"],
+        "key-spacing": ["error", { "beforeColon": false, "afterColon": true }],
+        "keyword-spacing": "error",
+        "max-len": ["error", { "code": 140 }], // Being lenient here
+        "new-parens": "error",
+        "no-mixed-operators": "error",
+        "no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 0 }],
+        "no-nested-ternary": "error",
+        "no-trailing-spaces": "error",
+        "no-tabs": "error",
+        "object-curly-spacing": ["error", "always"],
+        "prefer-object-spread": "error",
+        "quotes": ["error", "double", { "avoidEscape": true }],
+        "semi": ["error", "always", { "omitLastInOneLineBlock": true }],
+        "semi-spacing": ["error", { "before": false, "after": true }],
+        "space-before-blocks": ["error", "always"],
+        "space-before-function-paren": ["error", {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+        "space-in-parens": "error",
+        "space-infix-ops": "error",
+        "space-unary-ops": ["error", {
+            "words": true,
+            "nonwords": false
+        }],
+        "spaced-comment": ["error", "always", { "exceptions": ["-"] }],
+        "switch-colon-spacing": ["error", {
+            "after": true,
+            "before": false
+        }],
+        "brace-style": ["error", "1tbs"],
+        "camelcase": "error",
+
+        // ES6
+        "arrow-spacing": "error",
+        "arrow-body-style": ["error", "as-needed"],
+        "arrow-parens": ["error", "always"],
+        "no-duplicate-imports": "error",
+        "no-var": "error",
+        "prefer-const": ["error", { "destructuring": "all" }],
+        "prefer-template": "error",
+        "template-curly-spacing": "error",
+
+        // React
+        "react/prop-types": "warn", // Will be annoying to maintain so will just leave it as a warning
+        "react/no-unescaped-entities": "error",
+        "react/no-children-prop": "error",
+        "react/no-deprecated": "error",
+        "react/no-direct-mutation-state": "error",
+        "react/no-unknown-property": "error",
+        "react/require-render-return": "error",
+        "react/no-unused-prop-types": "error",
+        "react/no-unused-state": "error",
+        "react/self-closing-comp": "error",
+        "react/void-dom-elements-no-children": "error",
+        "react/jsx-closing-tag-location": "error",
+        "react/jsx-closing-bracket-location": "error",
+        "react/jsx-equals-spacing": "error",
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-one-expression-per-line": ["error", {
+            "allow": "literal"
+        }],
+        "react/jsx-first-prop-new-line": ["error", "multiline"],
+        "react/jsx-no-comment-textnodes": "error",
+        "react/jsx-no-duplicate-props": "error",
+        "react/jsx-no-target-blank": "error",
+        "react/jsx-no-undef": "error",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error",
+        "react/jsx-pascal-case": "error",
+        "react/jsx-tag-spacing": ["error", {
+            "beforeClosing": "never"
+        }],
+        // React Hooks
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn"
+    }
+}

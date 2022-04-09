@@ -1,0 +1,42 @@
+.editor {
+  outline: 0px solid transparent;
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+  padding: 16px;
+  height: 300px;
+  resize: vertical;
+  overflow: auto;
+  max-width: 100%;
+}
+
+.editor h1 {
+  font-size: 1.2em;
+}
+
+.editor > * {
+  margin-top: 0;
+}
+.editor > *:last-child {
+  margin-bottom: 0;
+}
+
+.editor:hover {
+  border-color: #212121;
+}
+
+.editor:focus {
+  border-color: #f44336;
+}
+
+.editor[contenteditable="false"]:hover, .editor[contenteditable="false"]:focus {
+  border-color: #c4c4c4;
+}
+
+/* Placeholder (at the top) */
+.editor p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #ced4da;
+  pointer-events: none;
+  height: 0;
+}
