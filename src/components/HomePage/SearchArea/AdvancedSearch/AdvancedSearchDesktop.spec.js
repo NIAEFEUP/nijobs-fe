@@ -108,13 +108,17 @@ describe("AdvancedSearchDesktop", () => {
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
-            expect(screen.getAllByRole("option")).toHaveLength(Object.keys(FieldOptions).length);
-            Object.values(FieldOptions).forEach((fieldOption) => {
+
+            const fieldOptionsValues = Object.values(FieldOptions);
+            const screenFieldOptions = screen.getAllByRole("option");
+
+            expect(screenFieldOptions).toHaveLength(fieldOptionsValues.length);
+            screenFieldOptions.forEach((fieldOption) => {
                 try {
-                    expect(screen.getByRole("option", { name: fieldOption })).toBeInTheDocument();
+                    expect(fieldOptionsValues).toContain(fieldOption.textContent);
                 } catch (err) {
                     // eslint-disable-next-line no-console
-                    console.error(`Could not find option: ${fieldOption}`);
+                    console.error(`Could not find option: ${fieldOption.textContent}`);
                     throw err;
                 }
             });
@@ -129,13 +133,17 @@ describe("AdvancedSearchDesktop", () => {
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
-            expect(screen.getAllByRole("option")).toHaveLength(Object.keys(TechOptions).length);
-            Object.values(TechOptions).forEach((technologyOption) => {
+
+            const techOptionsValues = Object.values(TechOptions);
+            const screenTechnologyOptions = screen.getAllByRole("option");
+
+            expect(screenTechnologyOptions).toHaveLength(techOptionsValues.length);
+            screenTechnologyOptions.forEach((technologyOption) => {
                 try {
-                    expect(screen.getByRole("option", { name: technologyOption })).toBeInTheDocument();
+                    expect(techOptionsValues).toContain(technologyOption.textContent);
                 } catch (err) {
                     // eslint-disable-next-line no-console
-                    console.error(`Could not find option: ${technologyOption}`);
+                    console.error(`Could not find option: ${technologyOption.textContent}`);
                     throw err;
                 }
             });
