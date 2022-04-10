@@ -19,10 +19,10 @@ const OfferVisibilityOptions = ({
     handleAdminEnableOffer,
 }) => {
 
-    const [inMiddleOfRequest, setInMiddleOfRequest] = useState(false);
+    const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
 
     const handleOfferVisibility = async () => {
-        setInMiddleOfRequest(true);
+        setLoadingOfferVisibility(true);
         if (visibilityState.isVisible) {
             await handleHideOffer({
                 offer: offer,
@@ -36,7 +36,7 @@ const OfferVisibilityOptions = ({
                 onError: onError,
             });
         }
-        setInMiddleOfRequest(false);
+        setLoadingOfferVisibility(false);
     };
 
     const handleEnableDisableOffer = async () => {
@@ -88,7 +88,7 @@ const OfferVisibilityOptions = ({
                                     onClick={handleOfferVisibility}
                                     className={classes.visibilityButton}
                                     role="hideEnableOfferButton"
-                                    disabled={inMiddleOfRequest || visibilityState.isDisabled}
+                                    disabled={loadingOfferVisibility || visibilityState.isDisabled}
                                     startIcon={visibilityState.isVisible ? <VisibilityOff /> : <Visibility />}
                                 >
                                     {visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}

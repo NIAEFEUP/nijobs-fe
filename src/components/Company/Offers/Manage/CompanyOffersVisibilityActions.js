@@ -29,7 +29,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         isBlocked: undefined,
     });
 
-    const [inMiddleOfRequest, setInMiddleOfRequest] = useState(false);
+    const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
 
     const isHiddenOffer = offer?.isHidden;
     const offerHiddenReason = offer?.hiddenReason;
@@ -44,7 +44,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 
 
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        setInMiddleOfRequest(true);
+        setLoadingOfferVisibility(true);
         hideOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
@@ -55,11 +55,11 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            }).finally(() => setInMiddleOfRequest(false));
+            }).finally(() => setLoadingOfferVisibility(false));
     }, []);
 
     const handleEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
-        setInMiddleOfRequest(true);
+        setLoadingOfferVisibility(true);
         enableOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
@@ -70,7 +70,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            }).finally(() => setInMiddleOfRequest(false));
+            }).finally(() => setLoadingOfferVisibility(false));
     }, []);
 
     const handleOfferVisibilityError = useCallback((err) => {
@@ -109,12 +109,14 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             <>
                 <IconButton
                     onClick={handleOfferVisibility}
-                    disabled={inMiddleOfRequest || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
+                    disabled={loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
                 >
                     {offerVisibilityState.isVisible ?
-                        <VisibilityOffIcon data-testid="HideOffer" color={!inMiddleOfRequest ? "secondary" : undefined} fontSize="medium" />
+                        // eslint-disable-next-line
+                        <VisibilityOffIcon data-testid="HideOffer" color={!loadingOfferVisibility ? "secondary" : undefined} fontSize="medium" />
                         :
-                        <VisibilityIcon data-testid="EnableOffer" color={!inMiddleOfRequest ? "secondary" : undefined} fontSize="medium" />
+                        // eslint-disable-next-line
+                        <VisibilityIcon data-testid="EnableOffer" color={!loadingOfferVisibility ? "secondary" : undefined} fontSize="medium" />
                     }
                 </IconButton>
             </>
