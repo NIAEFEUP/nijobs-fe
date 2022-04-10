@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
 import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
@@ -19,20 +19,24 @@ const OfferVisibilityOptions = ({
     handleAdminEnableOffer,
 }) => {
 
+    const [inMiddleOfRequest, setInMiddleOfRequest] = useState(false);
+
     const handleOfferVisibility = async () => {
+        setInMiddleOfRequest(true);
         if (visibilityState.isVisible) {
             await handleHideOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
                 onError: onError,
             });
-        } else  {
+        } else {
             await handleCompanyEnableOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
                 onError: onError,
             });
         }
+        setInMiddleOfRequest(false);
     };
 
     const handleEnableDisableOffer = async () => {
@@ -56,7 +60,7 @@ const OfferVisibilityOptions = ({
                         orientation="vertical"
                         variant="middle"
                         className={classes.verticalDivider}
-                    /> }
+                    />}
                 <div className={classes.offerOptionsButtons}>
                     {
                         (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&
@@ -75,31 +79,33 @@ const OfferVisibilityOptions = ({
                     {
                         (
                             visibilityState.isVisible ||
-                        !visibilityState.isDisabled ||
-                        sessionData?.company?._id === offer.owner
+                            !visibilityState.isDisabled ||
+                            sessionData?.company?._id === offer.owner
                         ) &&
-                        <Tooltip title={ visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-                            <Button
-                                onClick={handleOfferVisibility}
-                                className={classes.visibilityButton}
-                                role="hideEnableOfferButton"
-                                disabled={visibilityState.isDisabled}
-                                startIcon={visibilityState.isVisible ? <VisibilityOff /> : <Visibility />}
-                            >
-                                { visibilityState.isVisible ? "Hide Offer" : "Enable Offer" }
-                            </Button>
+                        <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
+                            <>
+                                <Button
+                                    onClick={handleOfferVisibility}
+                                    className={classes.visibilityButton}
+                                    role="hideEnableOfferButton"
+                                    disabled={inMiddleOfRequest || visibilityState.isDisabled}
+                                    startIcon={visibilityState.isVisible ? <VisibilityOff /> : <Visibility />}
+                                >
+                                    {visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}
+                                </Button>
+                            </>
                         </Tooltip>
                     }
                     {
                         (sessionData?.isAdmin) &&
-                        <Tooltip title={ (!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer"}>
+                        <Tooltip title={(!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer"}>
                             <Button
                                 onClick={handleEnableDisableOffer}
                                 className={classes.visibilityButton}
                                 role="disableEnableOfferButton"
                                 startIcon={(!visibilityState.isDisabled) ? <Block /> : <Visibility />}
                             >
-                                { (!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer" }
+                                {(!visibilityState.isDisabled) ? "Disable Offer" : "Enable Offer"}
                             </Button>
                         </Tooltip>
                     }
