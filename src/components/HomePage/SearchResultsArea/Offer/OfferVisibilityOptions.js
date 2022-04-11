@@ -22,21 +22,15 @@ const OfferVisibilityOptions = ({
     const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
 
     const handleOfferVisibility = async () => {
-        setLoadingOfferVisibility(true);
-        if (visibilityState.isVisible) {
-            await handleHideOffer({
-                offer: offer,
-                addSnackbar: addSnackbar,
-                onError: onError,
-            });
-        } else {
-            await handleCompanyEnableOffer({
-                offer: offer,
-                addSnackbar: addSnackbar,
-                onError: onError,
-            });
-        }
-        setLoadingOfferVisibility(false);
+
+        const handler = visibilityState.isVisible ? handleHideOffer : handleCompanyEnableOffer;
+
+        await handler({
+            offer: offer,
+            addSnackbar: addSnackbar,
+            onError: onError,
+            setDisableAction: setLoadingOfferVisibility,
+        });
     };
 
     const handleEnableDisableOffer = async () => {

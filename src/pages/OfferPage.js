@@ -36,7 +36,8 @@ export const OfferPageController = () => {
             });
     }, [mutate]);
 
-    const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
+    const handleHideOffer = useCallback(({ offer, addSnackbar, onError, setDisableAction = (_state) => { } }) => {
+        setDisableAction(true);
         hideOfferService(offer._id)
             .then(() => {
                 mutate(new Offer({
@@ -51,10 +52,12 @@ export const OfferPageController = () => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            })
+            .finally(() => setDisableAction(false));
     }, [mutate]);
 
-    const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+    const handleCompanyEnableOffer = useCallback(({ offer, addSnackbar, onError, setDisableAction = (_state) => { } }) => {
+        setDisableAction(true);
         enableOfferService(offer._id)
             .then(() => {
                 mutate(new Offer({
@@ -68,7 +71,8 @@ export const OfferPageController = () => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            })
+            .finally(() => setDisableAction(false));
     }, [mutate]);
 
     const handleAdminEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
