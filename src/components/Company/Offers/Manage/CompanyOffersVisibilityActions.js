@@ -104,19 +104,27 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         }
     };
 
+    const offerVisibilityButtonDisabled = loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked;
+
     return (
         <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
             <>
                 <IconButton
                     onClick={handleOfferVisibility}
-                    disabled={loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
+                    disabled={offerVisibilityButtonDisabled}
                 >
                     {offerVisibilityState.isVisible ?
-                        // eslint-disable-next-line
-                        <VisibilityOffIcon data-testid="HideOffer" color={!loadingOfferVisibility ? "secondary" : undefined} fontSize="medium" />
+                        <VisibilityOffIcon
+                            data-testid="HideOffer"
+                            color={offerVisibilityButtonDisabled ? undefined : "secondary"}
+                            fontSize="medium"
+                        />
                         :
-                        // eslint-disable-next-line
-                        <VisibilityIcon data-testid="EnableOffer" color={!loadingOfferVisibility ? "secondary" : undefined} fontSize="medium" />
+                        <VisibilityIcon
+                            data-testid="EnableOffer"
+                            color={!offerVisibilityButtonDisabled ? undefined : "secondary"}
+                            fontSize="medium"
+                        />
                     }
                 </IconButton>
             </>
