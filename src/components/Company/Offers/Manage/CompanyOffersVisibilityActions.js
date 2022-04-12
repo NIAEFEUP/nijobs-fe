@@ -122,7 +122,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
                         :
                         <VisibilityIcon
                             data-testid="EnableOffer"
-                            color={!offerVisibilityButtonDisabled ? undefined : "secondary"}
+                            color={offerVisibilityButtonDisabled ? undefined : "secondary"}
                             fontSize="medium"
                         />
                     }

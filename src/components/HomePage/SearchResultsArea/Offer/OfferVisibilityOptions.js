@@ -26,10 +26,10 @@ const OfferVisibilityOptions = ({
         const handler = visibilityState.isVisible ? handleHideOffer : handleCompanyEnableOffer;
 
         await handler({
-            offer: offer,
-            addSnackbar: addSnackbar,
-            onError: onError,
-            setDisableAction: setLoadingOfferVisibility,
+            offer,
+            addSnackbar,
+            onError,
+            setLoadingOfferVisibility,
         });
     };
 
