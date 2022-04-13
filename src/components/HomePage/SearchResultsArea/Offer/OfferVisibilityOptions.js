@@ -77,7 +77,7 @@ const OfferVisibilityOptions = ({
                             sessionData?.company?._id === offer.owner
                         ) &&
                         <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-                            <>
+                            <span>
                                 <Button
                                     onClick={handleOfferVisibility}
                                     className={classes.visibilityButton}
@@ -87,7 +87,7 @@ const OfferVisibilityOptions = ({
                                 >
                                     {visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}
                                 </Button>
-                            </>
+                            </span>
                         </Tooltip>
                     }
                     {

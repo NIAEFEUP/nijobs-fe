@@ -108,7 +108,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 
     return (
         <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-            <>
+            <span>
                 <IconButton
                     onClick={handleOfferVisibility}
                     disabled={offerVisibilityButtonDisabled}
@@ -127,7 +127,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
                         />
                     }
                 </IconButton>
-            </>
+            </span>
         </Tooltip>
     );
 };
