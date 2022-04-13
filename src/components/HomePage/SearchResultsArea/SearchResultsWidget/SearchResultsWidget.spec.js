@@ -185,4 +185,52 @@ describe("SearchResults", () => {
         expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
         expect(screen.queryByLabelText("Search", { selector: "input" })).not.toBeInTheDocument();
     });
+
+    it("should fetch initial offers and load more until there are no more", async () => {
+
+        // TODO: discover why the last loadMoreOffers was called with the first mock implementation
+
+        searchOffers
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "123",
+                results: [],
+            }))
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "456",
+                results: [initialState.offerSearch.offers[0]],
+            }))
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "90",
+                results: [initialState.offerSearch.offers[1]],
+            }));
+
+        renderWithStoreAndTheme(
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
+            {
+                initialState: {
+                    ...initialState,
+                    offerSearch: {
+                        ...initialState.offerSearch,
+                        offers: [initialState.offerSearch.offers[0]],
+                    },
+                },
+                theme,
+            }
+        );
+
+        await act(async () => {
+            await fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
+        });
+
+        await act(async () => {
+            await fireEvent.submit(screen.getByLabelText("Search Area"));
+        });
+
+        await new Promise((r) => setTimeout(r, 2000));
+
+        // must wait response from server, otherwise it will be 'loading', hence the await + find
+        expect(await screen.findAllByTestId("offer-item")).toHaveLength(2);
+    });
 });
