@@ -16,7 +16,7 @@ export const rules = Object.freeze([
     },
     {
         "title": "Offer Rules",
-        "description": "Offers must refer to a real job offer. They should be aimed at college students and not contain any hate speech, violence appealing or refer to any illegal activity. Breaking this rule will get your offers disabled and your account banned from NIJobs. Creating duplicate entries will result in offer removal.",
+        "description": "Offers must refer to a real job offer. They should be aimed at college students and related with computer science fields. They must not contain any hate speech, violence appealing or refer to any illegal activity. Breaking this rule will get your offers disabled and your account banned from NIJobs. Creating duplicate entries will result in offer removal.",
     },
     {
         "title": "Managing offers",

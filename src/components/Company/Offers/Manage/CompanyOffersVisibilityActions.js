@@ -29,6 +29,8 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         isBlocked: undefined,
     });
 
+    const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
+
     const isHiddenOffer = offer?.isHidden;
     const offerHiddenReason = offer?.hiddenReason;
 
@@ -40,7 +42,9 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         });
     }, [isHiddenOffer, offerHiddenReason]);
 
+
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        setLoadingOfferVisibility(true);
         hideOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
@@ -51,10 +55,11 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            }).finally(() => setLoadingOfferVisibility(false));
     }, []);
 
     const handleEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
+        setLoadingOfferVisibility(true);
         enableOfferService(offer._id)
             .then(() => {
                 setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
@@ -65,7 +70,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             })
             .catch((err) => {
                 if (onError) onError(err);
-            });
+            }).finally(() => setLoadingOfferVisibility(false));
     }, []);
 
     const handleOfferVisibilityError = useCallback((err) => {
@@ -99,15 +104,30 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         }
     };
 
+    const offerVisibilityButtonDisabled = loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked;
+
     return (
         <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
-            <IconButton
-                onClick={handleOfferVisibility}
-                disabled={offerVisibilityState.isDisabled || offerVisibilityState.isBlocked}
-            >
-                {offerVisibilityState.isVisible ? <VisibilityOffIcon data-testid="HideOffer" color="secondary" fontSize="medium" />
-                    : <VisibilityIcon data-testid="EnableOffer" color="secondary" fontSize="medium" />}
-            </IconButton>
+            <span>
+                <IconButton
+                    onClick={handleOfferVisibility}
+                    disabled={offerVisibilityButtonDisabled}
+                >
+                    {offerVisibilityState.isVisible ?
+                        <VisibilityOffIcon
+                            data-testid="HideOffer"
+                            color={offerVisibilityButtonDisabled ? undefined : "secondary"}
+                            fontSize="medium"
+                        />
+                        :
+                        <VisibilityIcon
+                            data-testid="EnableOffer"
+                            color={offerVisibilityButtonDisabled ? undefined : "secondary"}
+                            fontSize="medium"
+                        />
+                    }
+                </IconButton>
+            </span>
         </Tooltip>
     );
 };
