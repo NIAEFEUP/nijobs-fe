@@ -145,22 +145,36 @@ export default makeStyles((theme) => ({
         display: "inline",
         marginRight: theme.spacing(1),
     },
-    offerWidget: ({ isMobile, isPage }) => {
+    offerWidget: ({ isMobile, isPage, hasApplyButton }) => {
         let paddingValue = !isMobile ? theme.spacing(3) : 0;
         let paddingTopValue = 0;
+        let paddingBotValue = paddingValue;
+
         if (isPage) {
             paddingValue = isMobile ? theme.spacing(3) : theme.spacing(10);
             paddingTopValue = !isMobile && theme.spacing(5);
+            if (!hasApplyButton) paddingBotValue = paddingValue;
         }
+
         return {
             paddingTop: paddingTopValue,
             paddingRight: paddingValue,
-            paddingBottom: paddingValue,
+            paddingBottom: paddingBotValue, // TODO Try to adjust this padding
             paddingLeft: paddingValue,
             height: "100%",
         };
     },
     offerDescription: {
         marginTop: theme.spacing(3),
+    },
+    offerApplyButton: ({ isPage }) => {
+
+        const paddingValue = isPage ? theme.spacing(1) : theme.spacing(3);
+
+        return {
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: paddingValue,
+        };
     },
 }));

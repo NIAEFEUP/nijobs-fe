@@ -17,6 +17,7 @@ import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWi
 import { useDesktop } from "../../../../utils/media-queries";
 import OfferContent from "./OfferContent";
 import { OfferConstants } from "../../../Offers/Form/OfferUtils";
+import OfferApplyButton from "./OfferApplyButton";
 
 const OfferWidget = ({
     addSnackbar,
@@ -30,7 +31,7 @@ const OfferWidget = ({
 }) => {
 
     const isMobile = !useDesktop();
-    const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading });
+    const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading, hasApplyButton: true });
 
     const [visibilityState, setVisibilityState] = useState({
         isVisible: undefined,
@@ -75,6 +76,7 @@ const OfferWidget = ({
     if (loading && !isPage) {
         return <UnselectedOffer classes={classes} />;
     } else {
+        // TODO Only put icon when applyURL exists
         return (
             <div className={classes.offerWidget} data-testid="offer-content">
                 <AdminReasonModal
@@ -110,6 +112,9 @@ const OfferWidget = ({
                             offer={offer}
                             loading={loading}
                         />
+                        <div className={classes.offerApplyButton}>
+                            <OfferApplyButton />
+                        </div>
                     </div>
                 }
             </div>
