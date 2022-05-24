@@ -2,13 +2,14 @@
 import React from "react";
 import AdvancedSearchDesktop from "./AdvancedSearchDesktop";
 import JobOptions from "../../../utils/offers/JobOptions";
-import { render, screen } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { AdvancedSearchControllerContext, AdvancedSearchController } from "../SearchArea";
 import { fireEvent } from "@testing-library/dom";
 import useComponentController from "../../../../hooks/useComponentController";
 import FieldOptions from "../../../utils/offers/FieldOptions";
 import TechOptions from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
+import { createTheme } from "@material-ui/core/styles";
 
 const AdvancedSearchWrapper = ({
     children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
@@ -36,13 +37,18 @@ const AdvancedSearchWrapper = ({
 };
 
 describe("AdvancedSearchDesktop", () => {
+
+    const theme = createTheme();
+    const initialState = {};
+
     describe("render", () => {
         it("should render a job selector with all job types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Job Type"));
@@ -60,7 +66,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     jobMinDuration={1}
@@ -69,7 +75,8 @@ describe("AdvancedSearchDesktop", () => {
                     setShowJobDurationSlider={setShowJobDurationSliderMock}
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByText("Job Duration: 1 - 2 months")).not.toBeVisible();
@@ -81,7 +88,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     jobMinDuration={1}
@@ -90,7 +97,8 @@ describe("AdvancedSearchDesktop", () => {
                     setShowJobDurationSlider={setShowJobDurationSliderMock}
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
 
@@ -101,10 +109,11 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should render a fields selector with all field types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
@@ -126,10 +135,11 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should render a technologies selector with all technology types", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper enableAdvancedSearchDefault>
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
@@ -151,12 +161,13 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should disable reset button if no advanced field is set", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByRole("button", { name: "Reset Advanced Fields" })).toBeDisabled();
@@ -164,13 +175,14 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should enable reset button if some advanced field is set", () => {
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     fields={[Object.keys(FieldOptions)[0]]}
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getByRole("button", { name: "Reset Advanced Fields" })).not.toBeDisabled();
@@ -184,14 +196,15 @@ describe("AdvancedSearchDesktop", () => {
 
             const setFieldsMock = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     fields={[Object.keys(FieldOptions)[0]]}
                     setFields={setFieldsMock}
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
@@ -213,14 +226,15 @@ describe("AdvancedSearchDesktop", () => {
 
             const setTechsMock = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     technologies={[Object.keys(TechOptions)[0]]}
                     setTechs={setTechsMock}
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
@@ -241,7 +255,7 @@ describe("AdvancedSearchDesktop", () => {
         it("should call resetAdvancedSearch when Reset button is clicked", () => {
             const resetFn = jest.fn();
 
-            render(
+            renderWithStoreAndTheme(
                 <AdvancedSearchWrapper
                     enableAdvancedSearchDefault
                     setJobType={() => {}}
@@ -253,7 +267,8 @@ describe("AdvancedSearchDesktop", () => {
                     technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
                 >
                     <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>
+                </AdvancedSearchWrapper>,
+                { initialState, theme }
             );
 
             fireEvent.click(screen.getByRole("button", { name: "Reset Advanced Fields" }));

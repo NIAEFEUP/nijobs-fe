@@ -1,4 +1,3 @@
-import { setLoadingOffers, setSearchOffers, setOffersFetchError, resetOffersFetchError } from "../actions/searchOffersActions";
 import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
 import { parseFiltersToURL, buildCancelableRequest } from "../utils";
@@ -15,14 +14,25 @@ const OFFER_HIDE_METRIC_ID = "offer/hide";
 const OFFER_DISABLE_METRIC_ID = "offer/disable";
 const OFFER_ENABLE_METRIC_ID = "offer/enable";
 
+export class BadResponseException extends Error {
+    constructor(error) {
+        super("Bad Response");
+        this.error = error;
+    }
+}
 
-export const searchOffers = (filters) => buildCancelableRequest(
-    measureTime(TIMED_ACTIONS.OFFER_SEARCH, async (dispatch, { signal }) => {
-        dispatch(resetOffersFetchError());
-        dispatch(setLoadingOffers(true));
+export class NetworkFailureException extends Error {
+    constructor(error) {
+        super("Network Failure");
+        this.error = error;
+    }
+}
 
+export const searchOffers = buildCancelableRequest(
+    measureTime(TIMED_ACTIONS.OFFER_SEARCH, async ({ queryToken, limit, ...filters }, { signal }) => {
+        let isErrorRegistered = false;
         try {
-            const query = parseFiltersToURL(filters);
+            const query = parseFiltersToURL(queryToken ? { queryToken, limit } : { ...filters, limit });
             const res = await fetch(`${API_HOSTNAME}/offers?${query}`, {
                 method: "GET",
                 credentials: "include",
@@ -31,39 +41,42 @@ export const searchOffers = (filters) => buildCancelableRequest(
             const json = await res.json();
 
             if (!res.ok) {
-                dispatch(setOffersFetchError({
-                    cause: ErrorTypes.BAD_RESPONSE,
-                    error: res.status,
-                }));
-                dispatch(setLoadingOffers(false));
-
+                isErrorRegistered = true;
                 createErrorEvent(
                     OFFER_SEARCH_METRIC_ID,
                     ErrorTypes.BAD_RESPONSE,
                     json.errors,
                     res.status
                 );
-                return;
+                throw new BadResponseException({
+                    cause: ErrorTypes.BAD_RESPONSE,
+                    error: res.status,
+                });
             }
 
-            dispatch(setSearchOffers(json.map((offerData) => new Offer(offerData))));
-            dispatch(setLoadingOffers(false));
+            const offers = json.results;
+            const updatedQueryToken = json.queryToken;
 
             sendSearchReport(filters, `/offers?${query}`);
             createEvent(EVENT_TYPES.SUCCESS(OFFER_SEARCH_METRIC_ID, query));
 
-        } catch (error) {
-            dispatch(setOffersFetchError({
-                cause: ErrorTypes.NETWORK_FAILURE,
-                error,
-            }));
-            dispatch(setLoadingOffers(false));
+            return {
+                updatedQueryToken,
+                results: offers.map((offerData) => new Offer(offerData)),
+            };
 
-            createErrorEvent(
-                OFFER_SEARCH_METRIC_ID,
-                ErrorTypes.BAD_RESPONSE,
-                Array.isArray(error) ? error : [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }],
-            );
+        } catch (error) {
+            if (!isErrorRegistered) {
+                createErrorEvent(
+                    OFFER_SEARCH_METRIC_ID,
+                    ErrorTypes.BAD_RESPONSE,
+                    Array.isArray(error) ? error : [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }],
+                );
+                throw new NetworkFailureException({
+                    cause: ErrorTypes.NETWORK_FAILURE,
+                    error,
+                });
+            } else throw error;
         }
     })
 );

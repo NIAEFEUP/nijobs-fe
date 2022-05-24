@@ -10,8 +10,9 @@ import { WorkOff } from "@material-ui/icons";
 import clsx from "clsx";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
-const OffersList = ({ noOffers, classes, offers, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
-    showSearchFilters, toggleShowSearchFilters,
+const OffersList = ({
+    noOffers, classes, selectedOfferIdx, offersLoading, setSelectedOfferIdx,
+    showSearchFilters, toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers, searchQueryToken,
 }) => (
     <Grid item md={4} id="offer_list" className={classes.fullHeight}>
         <Grid container className={classes.fullHeight}>
@@ -23,13 +24,16 @@ const OffersList = ({ noOffers, classes, offers, selectedOfferIdx, offersLoading
                     </div>
                     :
                     <OfferItemsContainer
-                        offers={offers}
                         selectedOfferIdx={selectedOfferIdx}
-                        loading={offersLoading}
+                        initialOffersLoading={offersLoading}
                         setSelectedOfferIdx={setSelectedOfferIdx}
                         noOffers={noOffers}
                         showSearchFilters={showSearchFilters}
                         toggleShowSearchFilters={toggleShowSearchFilters}
+                        offers={offers}
+                        moreOffersLoading={moreOffersLoading}
+                        loadMoreOffers={loadMoreOffers}
+                        searchQueryToken={searchQueryToken}
                     />
                 }
                 <Divider
@@ -51,12 +55,15 @@ OffersList.propTypes = {
         noOffersColumn: PropTypes.string.isRequired,
         errorLoadingOffersIcon: PropTypes.string.isRequired,
     }),
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
+    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    moreOffersLoading: PropTypes.bool,
+    loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
 
 const OfferWidgetSection = ({
@@ -95,7 +102,7 @@ const OfferWidgetSection = ({
 );
 
 OfferWidgetSection.propTypes = {
-    noOffers: PropTypes.bool.isRequired,
+    noOffers: PropTypes.bool,
     classes: PropTypes.shape({
         searchOfferErrorContainer: PropTypes.string.isRequired,
         reviseCriteriaErrorMessage: PropTypes.string.isRequired,
@@ -124,6 +131,9 @@ const SearchResultsDesktop = () => {
         handleAdminEnableOffer,
         showSearchFilters,
         toggleShowSearchFilters,
+        moreOffersLoading,
+        loadMoreOffers,
+        searchQueryToken,
     } = useContext(SearchResultsControllerContext);
     const classes = useSearchResultsWidgetStyles();
 
@@ -148,12 +158,15 @@ const SearchResultsDesktop = () => {
             <OffersList
                 classes={offersListClasses}
                 noOffers={noOffers}
-                offers={offers}
                 offersLoading={offersLoading}
                 selectedOfferIdx={selectedOfferIdx}
                 setSelectedOfferIdx={setSelectedOfferIdx}
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
+                offers={offers}
+                moreOffersLoading={moreOffersLoading}
+                loadMoreOffers={loadMoreOffers}
+                searchQueryToken={searchQueryToken}
             />
             {showSearchFilters ?
                 <Grid
