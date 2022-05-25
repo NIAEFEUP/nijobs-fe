@@ -10,7 +10,10 @@ import useToggle from "../../../../hooks/useToggle";
 import { NavigateBefore, WorkOff } from "@material-ui/icons";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 
-const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails, showSearchFilters, toggleShowSearchFilters }) => (
+const OffersList = ({
+    noOffers, classes, offersLoading, showOfferDetails, showSearchFilters,
+    toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers, searchQueryToken,
+}) => (
     <Grid container className={classes.fullHeight}>
         <Grid xs={12} item className={classes.offerItemsContainer}>
             {noOffers ?
@@ -22,12 +25,15 @@ const OffersList = ({ noOffers, classes, offers, offersLoading, showOfferDetails
                 </div>
                 :
                 <OfferItemsContainer
-                    offers={offers}
-                    loading={offersLoading}
+                    initialOffersLoading={offersLoading}
                     setSelectedOfferIdx={showOfferDetails}
                     noOffers={noOffers}
                     showSearchFilters={showSearchFilters}
                     toggleShowSearchFilters={toggleShowSearchFilters}
+                    offers={offers}
+                    moreOffersLoading={moreOffersLoading}
+                    loadMoreOffers={loadMoreOffers}
+                    searchQueryToken={searchQueryToken}
                 />
             }
         </Grid>
@@ -43,11 +49,14 @@ OffersList.propTypes = {
         noOffersColumn: PropTypes.string.isRequired,
         offerItemsContainer: PropTypes.string.isRequired,
     }),
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
     offersLoading: PropTypes.bool,
     showOfferDetails: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool.isRequired,
     toggleShowSearchFilters: PropTypes.func.isRequired,
+    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    moreOffersLoading: PropTypes.bool,
+    loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
 
 export const OfferViewer = ({
@@ -118,6 +127,9 @@ const SearchResultsMobile = () => {
         handleAdminEnableOffer,
         showSearchFilters,
         toggleShowSearchFilters,
+        moreOffersLoading,
+        loadMoreOffers,
+        searchQueryToken,
     } = useContext(SearchResultsControllerContext);
 
     const showOfferDetails = (offerIdx) => {
@@ -141,11 +153,14 @@ const SearchResultsMobile = () => {
             <OffersList
                 classes={offerListClasses}
                 noOffers={noOffers}
-                offers={offers}
                 offersLoading={offersLoading}
                 showOfferDetails={showOfferDetails}
                 showSearchFilters={showSearchFilters}
                 toggleShowSearchFilters={toggleShowSearchFilters}
+                offers={offers}
+                moreOffersLoading={moreOffersLoading}
+                loadMoreOffers={loadMoreOffers}
+                searchQueryToken={searchQueryToken}
             />
             {showSearchFilters ?
                 <SearchArea

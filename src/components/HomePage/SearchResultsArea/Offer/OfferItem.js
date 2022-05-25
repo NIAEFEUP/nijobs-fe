@@ -67,7 +67,7 @@ const OfferItem = ({ offer, offerIdx, selectedOfferIdx, setSelectedOfferIdx, loa
                 <ListItemAvatar>
                     {loading ?
                         <Avatar data-testid="avatar-skeleton" variant="circular" classes={{ colorDefault: "transparent" }}>
-                            <Skeleton circle width={100} height={100} />
+                            <Skeleton circle="true" width={100} height={100} />
                         </Avatar>
                         :
                         <Avatar

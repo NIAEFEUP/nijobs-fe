@@ -7,6 +7,7 @@ export const OfferSearchTypes = Object.freeze({
     SET_JOB_FIELDS: "SET_JOB_FIELDS",
     SET_JOB_TECHS: "SET_JOB_TECHS",
     SET_OFFERS_SEARCH_RESULT: "SET_OFFERS_SEARCH_RESULT",
+    SET_SEARCH_QUERY_TOKEN: "SET_SEARCH_QUERY_TOKEN",
     SET_OFFERS_LOADING: "SET_OFFERS_LOADING",
     SET_SEARCH_OFFERS_ERROR: "SET_SEARCH_OFFERS_ERROR",
     SET_JOB_DURATION_TOGGLE: "SET_JOB_DURATION_TOGGLE",
@@ -21,9 +22,15 @@ export const setLoadingOffers = (loading) => ({
     loading,
 });
 
-export const setSearchOffers = (offers) => ({
+export const setSearchOffers = (offers, accumulate) => ({
     type: OfferSearchTypes.SET_OFFERS_SEARCH_RESULT,
     offers,
+    accumulate,
+});
+
+export const setSearchQueryToken = (queryToken) => ({
+    type: OfferSearchTypes.SET_SEARCH_QUERY_TOKEN,
+    queryToken,
 });
 
 export const setOffersFetchError = (error) => ({

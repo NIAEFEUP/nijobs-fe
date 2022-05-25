@@ -1,9 +1,11 @@
 import React from "react";
 import SearchResultsWidget, { SearchResultsControllerContext } from "./SearchResultsWidget";
-import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
+import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../../test-utils";
 import { createTheme } from "@material-ui/core/styles";
 import Offer from "../Offer/Offer";
-import { fireEvent } from "@testing-library/dom";
+import { searchOffers } from "../../../../services/offerService";
+
+jest.mock("../../../../services/offerService");
 
 describe("SearchResults", () => {
     const theme = createTheme();
@@ -37,6 +39,8 @@ describe("SearchResults", () => {
             ],
         },
     };
+
+    afterEach(() => jest.clearAllMocks());
 
     it("should display OfferItemsContainer", () => {
 
@@ -139,7 +143,15 @@ describe("SearchResults", () => {
 
     it("should search with updated filters and hide filters on fetch", async () => {
 
-        fetch.mockResponse(JSON.stringify(initialState.offerSearch.offers));
+        searchOffers.mockImplementation(({ queryToken }) => {
+            let offers = [];
+            if (queryToken === null)
+                offers = initialState.offerSearch.offers;
+            return {
+                updatedQueryToken: "123",
+                results: offers,
+            };
+        });
 
         renderWithStoreAndTheme(
             <SearchResultsControllerContext.Provider>
@@ -157,16 +169,68 @@ describe("SearchResults", () => {
             }
         );
 
-        fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
+        await act(async () => {
+            await fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
+        });
 
         expect(screen.getAllByTestId("offer-item")).toHaveLength(1);
-        fireEvent.submit(screen.getByRole("form"));
+
+        await act(async () => {
+            await fireEvent.submit(screen.getByLabelText("Search Area"));
+        });
 
         // must wait response from server, otherwise it will be 'loading', hence the await + find
         expect(await screen.findAllByTestId("offer-item")).toHaveLength(2);
 
         expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
         expect(screen.queryByLabelText("Search", { selector: "input" })).not.toBeInTheDocument();
+    });
 
+    it("should fetch initial offers and load more until there are no more", async () => {
+
+        // TODO: discover why the last loadMoreOffers was called with the first mock implementation
+
+        searchOffers
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "123",
+                results: [],
+            }))
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "456",
+                results: [initialState.offerSearch.offers[0]],
+            }))
+            .mockImplementationOnce(() => ({
+                updatedQueryToken: "90",
+                results: [initialState.offerSearch.offers[1]],
+            }));
+
+        renderWithStoreAndTheme(
+            <SearchResultsControllerContext.Provider>
+                <SearchResultsWidget />
+            </SearchResultsControllerContext.Provider>,
+            {
+                initialState: {
+                    ...initialState,
+                    offerSearch: {
+                        ...initialState.offerSearch,
+                        offers: [initialState.offerSearch.offers[0]],
+                    },
+                },
+                theme,
+            }
+        );
+
+        await act(async () => {
+            await fireEvent.click(screen.getByRole("button", { name: "Adjust Filters" }));
+        });
+
+        await act(async () => {
+            await fireEvent.submit(screen.getByLabelText("Search Area"));
+        });
+
+        await new Promise((r) => setTimeout(r, 2000));
+
+        // must wait response from server, otherwise it will be 'loading', hence the await + find
+        expect(await screen.findAllByTestId("offer-item")).toHaveLength(2);
     });
 });

@@ -1,5 +1,6 @@
-import { getByRole, getByText, render, screen } from "@testing-library/react";
+import { getByRole, getByText, screen } from "@testing-library/react";
 import React from "react";
+import { render } from "../../../../test-utils";
 import Offer from "../Offer/Offer";
 import OfferItemsContainer from "./OfferItemsContainer";
 
@@ -9,9 +10,10 @@ describe("OfferItemsContainer", () => {
         it("should show loading state when loading", () => {
             render(
                 <OfferItemsContainer
-                    loading
+                    initialOffersLoading
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
+                    loadMoreOffers={() => {}}
                 />
             );
             expect(screen.getAllByTestId("offer-item-loading")).toHaveLength(3);
@@ -46,10 +48,12 @@ describe("OfferItemsContainer", () => {
             render(
                 <OfferItemsContainer
                     offers={offers}
-                    loading={false}
+                    initialOffersLoading={false}
                     setSelectedOfferIdx={() => {}}
                     toggleShowSearchFilters={() => {}}
-                />);
+                    loadMoreOffers={() => {}}
+                />
+            );
             const items = await screen.findAllByTestId("offer-item");
             expect(items).toHaveLength(2);
             expect(getByText(items[0], offers[0].title)).toBeInTheDocument();

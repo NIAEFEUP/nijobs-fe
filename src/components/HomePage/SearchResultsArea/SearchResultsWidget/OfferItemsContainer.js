@@ -1,19 +1,14 @@
-import React from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import Offer from "../Offer/Offer";
-import OfferItem from "../Offer/OfferItem";
-
-import {
-    Button,
-    Divider,
-    List,
-    ListItem,
-    makeStyles,
-} from "@material-ui/core";
-
-import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
-import { Tune } from "@material-ui/icons";
 import clsx from "clsx";
+import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
+import { Tune } from "@material-ui/icons";
+
+import OfferItem from "../Offer/OfferItem";
+import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
+import LoadingOfferItem from "./LoadingOfferItem";
+import Offer from "../Offer/Offer";
+import { SearchResultsConstants } from "./SearchResultsUtils";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -52,65 +47,130 @@ ToggleFiltersButton.propTypes = {
     enabled: PropTypes.bool,
 };
 
-const OfferItemsContainer = ({ offers, loading, selectedOfferIdx, setSelectedOfferIdx, showSearchFilters, toggleShowSearchFilters }) => {
+const OfferItemsContainer = ({
+    initialOffersLoading,
+    selectedOfferIdx,
+    setSelectedOfferIdx,
+    showSearchFilters,
+    toggleShowSearchFilters,
+    offers,
+    moreOffersLoading,
+    loadMoreOffers,
+    searchQueryToken,
+}) => {
     const classes = useSearchResultsWidgetStyles();
 
-    if (loading) return (
-        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
-            <List disablePadding>
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-                <OfferItem
-                    loading={loading}
-                />
-                <Divider component="li" />
-            </List>
-        </div>
-    );
+    const [offerResultsWrapperNode, setOfferResultsWrapperNode] = useState(null);
+    const [scrollPercentage, setScrollPercentage] = useState(0);
+    const [hasScroll, setHasScroll] = useState(undefined);
+
+    const isVerticalScrollable = useCallback((node) => {
+        const overflowY = window.getComputedStyle(node)["overflow-y"];
+        return (overflowY === "scroll" || overflowY === "auto") && node.scrollHeight > node.clientHeight;
+    }, []);
+
+    const refetchTriggerRef = useCallback((node) => {
+        if (node) setOfferResultsWrapperNode(node.parentElement);
+    }, []);
+
+    const onScroll = useCallback(() => {
+        if (offerResultsWrapperNode) {
+            setScrollPercentage(
+                100 * offerResultsWrapperNode.scrollTop
+                / (offerResultsWrapperNode.scrollHeight - offerResultsWrapperNode.clientHeight)
+            );
+
+        }
+    }, [offerResultsWrapperNode]);
+
+    useEffect(() => {
+        if (!offerResultsWrapperNode) return;
+
+        offerResultsWrapperNode.addEventListener("scroll", onScroll);
+        // eslint-disable-next-line consistent-return
+        return () => offerResultsWrapperNode.removeEventListener("scroll", onScroll);
+    }, [offerResultsWrapperNode, onScroll]);
+
+    useEffect(() => {
+        if (!offerResultsWrapperNode) return;
+
+        setHasScroll(isVerticalScrollable(offerResultsWrapperNode));
+    }, [isVerticalScrollable, offerResultsWrapperNode, offers, initialOffersLoading, scrollPercentage, moreOffersLoading]);
+
+    useEffect(() => {
+        if (initialOffersLoading) {
+            setHasScroll(undefined);
+            setScrollPercentage(0);
+        }
+    }, [initialOffersLoading]);
+
+    useEffect(() => {
+
+        if (initialOffersLoading || moreOffersLoading) {
+            return;
+        }
+
+        if (scrollPercentage > 80 || hasScroll === false) loadMoreOffers(searchQueryToken, SearchResultsConstants.FETCH_NEW_OFFERS_LIMIT);
+    }, [hasScroll, initialOffersLoading, loadMoreOffers, moreOffersLoading, scrollPercentage, searchQueryToken]);
 
     const handleOfferSelection = (...args) => {
         toggleShowSearchFilters(false);
         setSelectedOfferIdx(...args);
     };
 
+    if (initialOffersLoading)
+        return (
+            <div
+                data-testid="offer-items-container"
+                className={`${classes.fullHeight} ${classes.fullWidth}`}
+            >
+                <LoadingOfferItem />
+            </div>
+        );
+
     return (
-        <div data-testid="offer-items-container" className={`${classes.fullHeight} ${classes.fullWidth}`}>
+        <div
+            data-testid="offer-items-container"
+            className={`${classes.fullHeight} ${classes.fullWidth}`}
+            ref={refetchTriggerRef}
+        >
             <List disablePadding>
                 <ToggleFiltersButton
                     key="toggle-filters-button"
                     enabled={showSearchFilters}
                     onClick={() => toggleShowSearchFilters()}
                 />
-                {offers.map((offer, i) => (
-                    <React.Fragment key={offer._id}>
-                        {i !== 0 && <Divider component="li" />}
-                        <OfferItem
-                            offer={offer}
-                            offerIdx={i}
-                            selectedOfferIdx={selectedOfferIdx}
-                            setSelectedOfferIdx={handleOfferSelection}
-                            loading={loading}
-                        />
-                    </React.Fragment>
-                ))}
+                <div>
+                    {offers?.map((offer, i) => (
+                        <div key={offer._id}>
+                            {i !== 0 && <Divider component="li" />}
+                            <OfferItem
+                                offer={offer}
+                                offerIdx={i}
+                                selectedOfferIdx={selectedOfferIdx}
+                                setSelectedOfferIdx={handleOfferSelection}
+                                loading={initialOffersLoading}
+                            />
+                        </div>
+                    ))}
+                </div>
+                {moreOffersLoading && <LoadingOfferItem dividerOnTop />}
             </List>
         </div>
     );
 };
 
 OfferItemsContainer.propTypes = {
-    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
-    loading: PropTypes.bool,
+    initialOffersLoading: PropTypes.bool,
+    moreOffersLoading: PropTypes.bool,
     selectedOfferIdx: PropTypes.number,
     setSelectedOfferIdx: PropTypes.func.isRequired,
     showSearchFilters: PropTypes.bool,
     toggleShowSearchFilters: PropTypes.func.isRequired,
+    offers: PropTypes.arrayOf(PropTypes.instanceOf(Offer)),
+    loadMoreOffers: PropTypes.func,
+    searchQueryToken: PropTypes.string,
 };
+
 
 export default OfferItemsContainer;
