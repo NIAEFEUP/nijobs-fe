@@ -159,7 +159,7 @@ export default makeStyles((theme) => ({
         return {
             paddingTop: paddingTopValue,
             paddingRight: paddingValue,
-            paddingBottom: paddingBotValue, // TODO Try to adjust this padding
+            paddingBottom: paddingBotValue,
             paddingLeft: paddingValue,
             height: "100%",
         };
@@ -167,14 +167,7 @@ export default makeStyles((theme) => ({
     offerDescription: {
         marginTop: theme.spacing(3),
     },
-    offerApplyButton: ({ isPage }) => {
-
-        const paddingValue = isPage ? theme.spacing(1) : theme.spacing(3);
-
-        return {
-            display: "flex",
-            justifyContent: "flex-end",
-            paddingTop: paddingValue,
-        };
-    },
+    offerApplyButton: () => ({
+        marginBottom: theme.spacing(1),
+    }),
 }));

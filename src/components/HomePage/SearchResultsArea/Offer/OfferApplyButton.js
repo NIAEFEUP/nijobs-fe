@@ -1,10 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Fab, Grid, Tooltip } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, makeStyles, Tooltip } from "@material-ui/core";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+const useStyles = makeStyles((theme) => ({
+    dialog: {
+        padding: theme.spacing(2),
+        textAlign: "center",
+    },
+    buttonsArea: {
+        display: "flex",
+        justifyContent: "flex-end",
+        padding: theme.spacing(2),
+    },
+}));
 
 const OfferApplyButton = ({ open, handleAccept, handleToggle, applyURL }) =>
     <>
@@ -12,13 +21,9 @@ const OfferApplyButton = ({ open, handleAccept, handleToggle, applyURL }) =>
             title="Apply to this offer"
             placement="top"
         >
-            <Fab
-                color="primary"
-                aria-label="Search"
-                onClick={handleToggle}
-            >
-                <FontAwesomeIcon size="lg" icon={faArrowUpRightFromSquare} />
-            </Fab>
+            <Button variant="contained" color="primary" onClick={handleToggle}>
+                Apply
+            </Button>
         </Tooltip>
         <OfferApplyDialog
             open={open}
@@ -29,31 +34,34 @@ const OfferApplyButton = ({ open, handleAccept, handleToggle, applyURL }) =>
     </>
 ;
 
-const OfferApplyDialog = ({ open, handleAccept, handleToggle, applyURL }) =>
-    <>
+const OfferApplyDialog = ({ open, handleAccept, handleToggle, applyURL }) => {
+    const classes = useStyles();
+
+    return (
         <Dialog
             open={open}
             onClose={handleToggle}
+            classes={{ paper: classes.dialog }}
         >
             <DialogTitle>
                 You&apos;re being redirected to the following website:
             </DialogTitle>
-            <DialogContent style={{ textAlign: "center" }}>
+            <DialogContent>
                 { applyURL }
             </DialogContent>
-            <DialogActions>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm="auto" marginRight={2}>
+            <DialogActions className={classes.buttonsArea}>
+                <Grid container spacing={2} justifyContent="flex-end">
+                    <Grid item xs={5} sm="auto">
                         <Button onClick={handleToggle}>Go back</Button>
                     </Grid>
-                    <Grid item xs={12} sm="auto">
+                    <Grid item xs={5} sm="auto">
                         <Button color="primary" variant="contained" onClick={handleAccept}>Continue</Button>
                     </Grid>
                 </Grid>
             </DialogActions>
         </Dialog>
-    </>
-;
+    );
+};
 
 OfferApplyButton.propTypes = {
     open: PropTypes.bool.isRequired,

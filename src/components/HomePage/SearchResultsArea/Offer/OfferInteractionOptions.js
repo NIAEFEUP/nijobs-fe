@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
 import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import OfferApplyButton from "./OfferApplyButton";
+import useToggle from "../../../../hooks/useToggle";
 
-const OfferVisibilityOptions = ({
+const OfferInteractionOptions = ({
     loading,
     sessionData,
     classes,
@@ -20,6 +22,7 @@ const OfferVisibilityOptions = ({
 }) => {
 
     const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
+    const [showRedirectDialog, toggleRedirectDialog, setClosedRedirectDialog] = useToggle(false);
 
     const handleOfferVisibility = async () => {
 
@@ -45,7 +48,12 @@ const OfferVisibilityOptions = ({
         }
     };
 
-    if (!loading && (sessionData?.isAdmin || sessionData?.company?._id === offer.owner))
+    const handleApplyURLRedirect = () => {
+        setClosedRedirectDialog();
+        window.open(offer.applyURL, "_blank", "noopener,noreferrer");
+    };
+
+    if (!loading)
         return (
             <Grid item xs={12} md={3} className={classes.offerOptions}>
                 {
@@ -56,6 +64,17 @@ const OfferVisibilityOptions = ({
                         className={classes.verticalDivider}
                     />}
                 <div className={classes.offerOptionsButtons}>
+                    {
+                    offer?.applyURL &&
+                    <div className={classes.offerApplyButton}>
+                        <OfferApplyButton
+                            open={showRedirectDialog}
+                            handleAccept={handleApplyURLRedirect}
+                            handleToggle={toggleRedirectDialog}
+                            applyURL={offer.applyURL}
+                        />
+                    </div>
+                    }
                     {
                         (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&
                         <Tooltip title={"Edit Offer"}>
@@ -72,9 +91,10 @@ const OfferVisibilityOptions = ({
                     }
                     {
                         (
-                            visibilityState.isVisible ||
-                            !visibilityState.isDisabled ||
-                            sessionData?.company?._id === offer.owner
+                            (visibilityState.isVisible ||
+                            !visibilityState.isDisabled) && (
+                            sessionData?.company?._id === offer.owner ||
+                            sessionData?.isAdmin)
                         ) &&
                         <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
                             <span>
@@ -110,4 +130,4 @@ const OfferVisibilityOptions = ({
         return null;
 };
 
-export default OfferVisibilityOptions;
+export default OfferInteractionOptions;
