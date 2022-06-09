@@ -35,6 +35,7 @@ import useOfferFormStyles from "./offerStyles";
 import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
+import ApplyURLComponent from "./ApplyURLComponent";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -226,7 +227,7 @@ const OfferForm = ({ context, title }) => {
                                             control={control}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} lg={6} className={classes.vacanciesGrid}>
+                                    <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth>
                                             <VacanciesComponent
                                                 disabled={formDisabled}
@@ -247,7 +248,7 @@ const OfferForm = ({ context, title }) => {
                                             }}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} lg={12}>
+                                    <Grid item xs={12} lg={6}>
                                         <Button
                                             onClick={() => setAdvancedOpen(!isAdvancedOpen)}
                                             size="small"
@@ -259,6 +260,14 @@ const OfferForm = ({ context, title }) => {
                                         >
                                             <Typography>Advanced Settings</Typography>
                                         </Button>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <ApplyURLComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
                                         <Collapse in={shouldShowAdvancedOptions()}>

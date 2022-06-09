@@ -71,4 +71,5 @@ export default yup.object().shape({
         ),
     isHidden: yup.boolean(HumanValidationReasons.BOOLEAN),
     owner: yup.string(),
+    applyURL: yup.string().nullable(true),
 });

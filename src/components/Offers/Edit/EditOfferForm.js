@@ -107,6 +107,7 @@ export const EditOfferController = () => {
                 requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
+                applyURL: data.applyURL || undefined,
                 jobMinDuration,
                 jobMaxDuration,
             })
