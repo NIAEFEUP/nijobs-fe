@@ -79,6 +79,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# .vscode directory
+# IDE directories
 .vscode/
 .idea/
