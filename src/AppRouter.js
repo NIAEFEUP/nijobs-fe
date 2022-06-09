@@ -28,6 +28,7 @@ import { EditOfferController, EditOfferControllerContext } from "./components/Of
 import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
+import ChangeLogPage from "./pages/ChangeLogPage";
 
 /**
  *
@@ -213,6 +214,18 @@ const AppRouter = () => (
                     context={CreateOfferControllerContext}
                 >
                     <CreateOfferPage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/changeLog"
+            >
+                <PageLayout
+                    key="/changeLog"
+                    pageTitle="Change Log"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <ChangeLogPage />
                 </PageLayout>
             </Route>
             <Route

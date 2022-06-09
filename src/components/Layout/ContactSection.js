@@ -11,6 +11,7 @@ import {
     Gavel,
     Storage,
     ListAlt,
+    Autorenew,
 } from "@material-ui/icons";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
@@ -65,6 +66,17 @@ const ContactSection = () => {
                                 <Typography variant="subtitle1">
                                     {Constants.CONTACT_US_EMAIL}
                                 </Typography>
+                            </Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                to="/changeLog"
+                                startIcon={<Autorenew htmlColor={theme.palette.tertiary.main} />}
+                                className={classes.colorText}
+                                component={RouterLink}
+                                title="change log"
+                            >
+                                <Typography variant="button">Latest Changes</Typography>
                             </Button>
                         </ListItem>
                     </List>
