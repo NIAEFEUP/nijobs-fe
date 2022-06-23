@@ -92,9 +92,10 @@ const OfferInteractionOptions = ({
                     {
                         (
                             (visibilityState.isVisible ||
-                            !visibilityState.isDisabled) && (
-                            sessionData?.company?._id === offer.owner ||
-                            sessionData?.isAdmin)
+                                !visibilityState.isDisabled ||
+                                sessionData?.company?._id === offer.owner) &&
+                            (sessionData?.company?._id === offer.owner ||
+                                sessionData?.isAdmin)
                         ) &&
                         <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
                             <span>
