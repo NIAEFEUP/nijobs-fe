@@ -120,25 +120,6 @@ describe("Create Offer Form", () => {
             expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
         });
 
-        it("should not render owner id text field if company logged in", () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
-
-            renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <CreateOfferWrapper>
-                            <CreateOfferPage />
-                        </CreateOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            expect(screen.queryByText("Login")).not.toBeInTheDocument();
-            expect(screen.queryByText("Join us")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
-        });
-
         it("should render enabled form", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true }));
 
