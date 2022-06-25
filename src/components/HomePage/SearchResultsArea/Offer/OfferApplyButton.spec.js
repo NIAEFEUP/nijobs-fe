@@ -25,12 +25,12 @@ describe("OfferApplyButton", () => {
     });
 
     describe("OfferApplyDialog", () => {
-       it("dialog should be closed", () => {
-           expect(
-               shallow(<OfferApplyButton />)
-                   .find(Dialog).exists()
-           ).toBe(false);
-       });
+        it("dialog should be closed", () => {
+            expect(
+                shallow(<OfferApplyButton />)
+                    .find(Dialog).exists()
+            ).toBe(false);
+        });
 
         it("dialog should be open", () => {
             expect(
@@ -42,7 +42,7 @@ describe("OfferApplyButton", () => {
         it("dialog should display the given URL", () => {
             const applyURL = "www.test.com";
             const wrapper = renderWithTheme(
-                <OfferApplyButton open={true} applyURL={applyURL}/>,
+                <OfferApplyButton open={true} applyURL={applyURL} />,
                 { theme }
             );
 
@@ -71,7 +71,7 @@ describe("OfferApplyButton", () => {
             );
 
             const goBackButton = wrapper.queryByText("Go back");
-            await act(async () => fireEvent.click(goBackButton));
+            await act(() => fireEvent.click(goBackButton));
 
             expect(handleToggle).toHaveBeenCalledTimes(1);
         });
@@ -86,7 +86,7 @@ describe("OfferApplyButton", () => {
             );
 
             const continueButton = wrapper.queryByText("Continue");
-            await act(async () => fireEvent.click(continueButton));
+            await act(() => fireEvent.click(continueButton));
 
             expect(handleAccept).toHaveBeenCalledTimes(1);
         });

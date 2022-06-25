@@ -75,7 +75,6 @@ const OfferWidget = ({
     if (loading && !isPage) {
         return <UnselectedOffer classes={classes} />;
     } else {
-        // TODO Only put icon when applyURL exists
         return (
             <div className={classes.offerWidget} data-testid="offer-content">
                 <AdminReasonModal

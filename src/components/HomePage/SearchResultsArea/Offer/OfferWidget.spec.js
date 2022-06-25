@@ -16,8 +16,9 @@ jest.mock("../../../../services/offerService");
 jest.mock("../../../../hooks/useSession");
 
 describe("OfferWidget", () => {
+    const applyURL = "www.test.com";
 
-    let offer = new Offer({
+    const offer = new Offer({
         _id: "id1",
         title: "position1",
         owner: "company_id",
@@ -32,6 +33,7 @@ describe("OfferWidget", () => {
         isPaid: false,
         vacancies: 2,
         description: "description1",
+        applyURL: applyURL,
     });
     const theme = createTheme();
 
@@ -142,7 +144,7 @@ describe("OfferWidget", () => {
 
         describe("hidden offer", () => {
 
-            offer = new Offer({
+            const hiddenOffer = new Offer({
                 _id: "id1",
                 title: "position1",
                 owner: "company_id",
@@ -170,7 +172,7 @@ describe("OfferWidget", () => {
 
                 renderWithStoreAndTheme(
                     <BrowserRouter>
-                        <OfferWidget offer={offer} />
+                        <OfferWidget offer={hiddenOffer} />
                     </BrowserRouter>,
                     { theme }
                 );
@@ -190,12 +192,12 @@ describe("OfferWidget", () => {
 
                 renderWithStoreAndTheme(
                     <BrowserRouter>
-                        <OfferWidget offer={offer} />
+                        <OfferWidget offer={hiddenOffer} />
                     </BrowserRouter>,
                     { theme }
                 );
 
-                expect(screen.queryByText(offer.adminReason, { exact: false })).not.toBeInTheDocument();
+                expect(screen.queryByText(hiddenOffer.adminReason, { exact: false })).not.toBeInTheDocument();
             });
 
             it("should show admin reason to admins", () => {
@@ -204,13 +206,13 @@ describe("OfferWidget", () => {
 
                 renderWithStoreAndTheme(
                     <BrowserRouter>
-                        <OfferWidget offer={offer} />
+                        <OfferWidget offer={hiddenOffer} />
                     </BrowserRouter>,
                     { theme }
                 );
 
                 expect(screen.queryByText("Offer disabled by an admin. Reason:", { exact: false })).toBeInTheDocument();
-                expect(screen.queryByText(offer.adminReason, { exact: false })).toBeInTheDocument();
+                expect(screen.queryByText(hiddenOffer.adminReason, { exact: false })).toBeInTheDocument();
             });
         });
     });
@@ -601,6 +603,32 @@ describe("OfferWidget", () => {
             });
 
             expect(handleAdminEnableOffer).toHaveBeenCalled();
+        });
+
+        it("should open offer application's dialog by clicking the 'apply' button", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: false }));
+
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <OfferWidget
+                        offer={offer}
+                        handleHideOffer={handleHideOffer}
+                        handleDisableOffer={handleDisableOffer}
+                        handleCompanyEnableOffer={handleCompanyEnableOffer}
+                        handleAdminEnableOffer={handleAdminEnableOffer}
+                    />
+                </BrowserRouter>,
+                { theme }
+            );
+
+            const applyButton = screen.queryByText("Apply");
+            expect(applyButton).toBeInTheDocument();
+
+            await act(() => fireEvent.click(applyButton));
+
+            expect(screen.queryByText(applyURL)).toBeInTheDocument();
+            expect(screen.queryByText("Go back")).toBeInTheDocument();
+            expect(screen.queryByText("Continue")).toBeInTheDocument();
         });
     });
 });
