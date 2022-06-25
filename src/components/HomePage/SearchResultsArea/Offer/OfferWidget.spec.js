@@ -16,7 +16,7 @@ jest.mock("../../../../services/offerService");
 jest.mock("../../../../hooks/useSession");
 
 describe("OfferWidget", () => {
-    const applyURL = "www.test.com";
+    const applyURL = "https://www.test.com";
 
     const offer = new Offer({
         _id: "id1",

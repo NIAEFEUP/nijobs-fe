@@ -44,7 +44,7 @@ const OfferApplyDialog = ({ open, handleAccept, handleToggle, applyURL }) => {
             classes={{ paper: classes.dialog }}
         >
             <DialogTitle>
-                You&apos;re being redirected to the following website:
+                {"You're being redirected to the following website:"}
             </DialogTitle>
             <DialogContent>
                 { applyURL }

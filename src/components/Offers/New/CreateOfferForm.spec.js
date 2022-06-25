@@ -147,6 +147,7 @@ describe("Create Offer Form", () => {
             expect(screen.getByLabelText("Hide offer")).toBeEnabled();
             expect(screen.getByTestId("contacts-selector")).toBeEnabled();
             expect(screen.getByTestId("requirements-selector")).toBeEnabled();
+            expect(screen.getByLabelText("Application URL")).toBeEnabled();
             expect(screen.getByText("Submit").parentNode).toBeEnabled();
         });
 

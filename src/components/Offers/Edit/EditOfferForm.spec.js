@@ -84,6 +84,7 @@ describe("Edit Offer Form", () => {
             "contact1",
             "contact2",
         ],
+        applyURL: "https://www.test.com",
     });
 
     const initialState = {};
@@ -213,6 +214,7 @@ describe("Edit Offer Form", () => {
             expect(screen.getByLabelText("Publication End Date *")).toBeEnabled();
             expect(screen.getByTestId("contacts-selector")).toBeEnabled();
             expect(screen.getByTestId("requirements-selector")).toBeEnabled();
+            expect(screen.getByLabelText("Application URL")).toBeEnabled();
             expect(screen.getByText("Submit").parentNode).toBeEnabled();
         });
 
@@ -240,6 +242,7 @@ describe("Edit Offer Form", () => {
             offer.technologies.forEach((tech) => screen.findByText(TechOptions[tech]));
             offer.requirements.forEach((requirement) => expect(screen.getByDisplayValue(requirement)).toBeInTheDocument());
             offer.contacts.forEach((contact) => expect(screen.getByDisplayValue(contact)).toBeInTheDocument());
+            expect(screen.getByLabelText("Application URL").getAttribute("value")).toBe(offer.applyURL);
         });
 
         it("should not be visible advanced settings", () => {
@@ -323,6 +326,7 @@ describe("Edit Offer Form", () => {
                 technologies,
                 location,
                 requirements,
+                applyURL,
             } = offer;
 
             expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/edit\/test123/), expect.objectContaining({
@@ -340,6 +344,7 @@ describe("Edit Offer Form", () => {
                     technologies,
                     location,
                     requirements,
+                    applyURL,
                 }),
             }));
 
@@ -400,6 +405,7 @@ describe("Edit Offer Form", () => {
                 technologies,
                 location,
                 requirements,
+                applyURL,
             } = offer;
 
 
@@ -420,6 +426,7 @@ describe("Edit Offer Form", () => {
                     technologies,
                     location,
                     requirements,
+                    applyURL,
                 }),
             }));
 
