@@ -1,5 +1,5 @@
 import { Divider, makeStyles, Typography } from "@material-ui/core";
-import { format, parseISO } from "date-fns";
+import { format, isAfter, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { addSnackbar } from "../actions/notificationActions";
@@ -24,18 +24,32 @@ export const ChangeLogPage = ({ addSnackbar }) => {
     const classes = useStyles({ isMobile: isMobile });
 
     const [releases, setReleases] = useState([]);
+    const [lastUpdateTS, setLastUpdateTS] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             const releases = await fetchReleases().then((releases) => {
-                console.log("Releases -> ", releases);
+                let lastTS = lastUpdateTS;
+                const filteredReleases = releases.map((release, idx) => {
+                    const publishDate = parseISO(release.published_at);
+                    const formattedPublishDate = format(
+                        publishDate,
+                        "dd-MM-yyyy"
+                    );
+                    const prevDate = new Date(lastUpdateTS);
 
-                return releases.map((release, idx) => ({
-                    id: `release-${idx}`,
-                    name: release.name,
-                    date: format(parseISO(release.published_at), "dd-MM-yyyy"),
-                    body: release.body,
-                }));
+                    if (isAfter(publishDate, prevDate))
+                        lastTS = formattedPublishDate;
+
+                    return {
+                        id: `release-${idx}`,
+                        name: release.name,
+                        date: formattedPublishDate,
+                        body: release.body,
+                    };
+                });
+                setLastUpdateTS(lastTS);
+                return filteredReleases;
             });
             setReleases(releases);
         };
@@ -65,8 +79,9 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             </Typography>
 
             <Typography className={classes.gray} paragraph={true}>
-                Last updated: March 1, 2022
-                {/* GET FROM THE MOST UPDATED RELEASE */}
+                {lastUpdateTS !== null
+                    ? `Last updated: ${lastUpdateTS}`
+                    : "No Releases available"}
             </Typography>
 
             {releases.map((release) => (
