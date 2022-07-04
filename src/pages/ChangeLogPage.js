@@ -1,4 +1,5 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { Divider, makeStyles, Typography } from "@material-ui/core";
+import { format, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { addSnackbar } from "../actions/notificationActions";
@@ -12,6 +13,10 @@ const useStyles = makeStyles((theme) => ({
     gray: {
         color: "rgba(0, 0, 0, 0.54)",
     },
+    releaseDate: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
 }));
 
 export const ChangeLogPage = ({ addSnackbar }) => {
@@ -22,9 +27,17 @@ export const ChangeLogPage = ({ addSnackbar }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const releases = await fetchReleases();
+            const releases = await fetchReleases().then((releases) => {
+                console.log("Releases -> ", releases);
+
+                return releases.map((release, idx) => ({
+                    id: `release-${idx}`,
+                    name: release.name,
+                    date: format(parseISO(release.published_at), "dd-MM-yyyy"),
+                    body: release.body,
+                }));
+            });
             setReleases(releases);
-            console.log("Releases -> ", releases);
         };
 
         fetchData().catch((err) => {
@@ -55,6 +68,25 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                 Last updated: March 1, 2022
                 {/* GET FROM THE MOST UPDATED RELEASE */}
             </Typography>
+
+            {releases.map((release) => (
+                <div key={release.id}>
+                    <Typography variant="h5" gutterBottom>
+                        {release.name}
+                    </Typography>
+
+                    <Divider />
+
+                    <Typography
+                        variant="subtitle2"
+                        className={classes.releaseDate}
+                    >
+                        {release.date}
+                    </Typography>
+
+                    <Typography variant="body1">{release.body}</Typography>
+                </div>
+            ))}
         </div>
     );
 };
