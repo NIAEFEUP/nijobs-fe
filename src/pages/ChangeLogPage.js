@@ -1,4 +1,4 @@
-import { Divider, makeStyles, Typography } from "@material-ui/core";
+import { makeStyles, Typography } from "@material-ui/core";
 import { format, isAfter, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -15,9 +15,21 @@ const useStyles = makeStyles((theme) => ({
     gray: {
         color: "rgba(0, 0, 0, 0.54)",
     },
+    releaseContainer: {
+        marginBottom: theme.spacing(4),
+    },
+    releaseHeader: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
     releaseDate: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
+        marginRight: theme.spacing(2),
+        color: theme.palette.primary.dark,
+    },
+    releaseContent: {
+        padding: theme.spacing(2),
     },
 }));
 
@@ -31,26 +43,23 @@ export const ChangeLogPage = ({ addSnackbar }) => {
     useEffect(() => {
         const fetchData = async () => {
             const releases = await fetchReleases().then((releases) => {
-                let lastTS = lastUpdateTS;
+                let lastTS = null;
                 const filteredReleases = releases.map((release, idx) => {
                     const publishDate = parseISO(release.published_at);
-                    const formattedPublishDate = format(
-                        publishDate,
-                        "dd-MM-yyyy"
-                    );
-                    const prevDate = new Date(lastUpdateTS);
 
-                    if (isAfter(publishDate, prevDate))
-                        lastTS = formattedPublishDate;
+                    if (lastTS === null || isAfter(publishDate, lastTS))
+                        lastTS = publishDate;
 
                     return {
                         id: `release-${idx}`,
                         name: release.name,
-                        date: formattedPublishDate,
+                        date: format(publishDate, "dd-MM-yyyy"),
                         body: release.body,
                     };
                 });
-                setLastUpdateTS(lastTS);
+
+                if (lastTS !== null)
+                    setLastUpdateTS(format(lastTS, "dd-MM-yyyy"));
                 return filteredReleases;
             });
             setReleases(releases);
@@ -77,7 +86,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                 data-id="Change-Log"
                 gutterBottom
             >
-                Change Log
+                Changelog
             </Typography>
 
             <Typography className={classes.gray} paragraph={true}>
@@ -87,24 +96,22 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             </Typography>
 
             {releases.map((release) => (
-                <div key={release.id}>
-                    <Typography variant="h5" gutterBottom>
-                        {release.name}
-                    </Typography>
+                <div key={release.id} className={classes.releaseContainer}>
+                    <div className={classes.releaseHeader}>
+                        <Typography variant="h5">{release.name}</Typography>
+                        <Typography
+                            variant="subtitle1"
+                            className={classes.releaseDate}
+                        >
+                            {release.date}
+                        </Typography>
+                    </div>
 
-                    <Divider />
-
-                    <Typography
-                        variant="subtitle2"
-                        className={classes.releaseDate}
-                    >
-                        {release.date}
-                    </Typography>
-
-                    <ReactMarkdown
-                        children={release.body}
-                        remarkPlugins={[remarkGfm]}
-                    />
+                    <div className={classes.releaseContent}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {release.body}
+                        </ReactMarkdown>
+                    </div>
                 </div>
             ))}
         </div>
