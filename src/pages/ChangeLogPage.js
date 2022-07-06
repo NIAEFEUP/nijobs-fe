@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { addSnackbar } from "../actions/notificationActions";
 import { fetchReleases } from "../services/changeLogService";
 import { useMobile } from "../utils/media-queries";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const useStyles = makeStyles((theme) => ({
     content: ({ isMobile }) => ({
@@ -99,7 +101,10 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                         {release.date}
                     </Typography>
 
-                    <Typography variant="body1">{release.body}</Typography>
+                    <ReactMarkdown
+                        children={release.body}
+                        remarkPlugins={[remarkGfm]}
+                    />
                 </div>
             ))}
         </div>
