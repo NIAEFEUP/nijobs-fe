@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import PropTypes from "prop-types";
 
 import { useLocation, useHistory } from "react-router-dom";
@@ -43,11 +43,10 @@ export const AdvancedSearchController = ({
     const location = useLocation();
     const history = useHistory();
 
-    // since we are always changing the URL (and therefore window.location), there is no point in memoizing this value
-    const queryParams = qs.parse(location.search, {
+    const queryParams = useMemo(() => qs.parse(location.search, {
         ignoreQueryPrefix: true,
         arrayFormat: "brackets",
-    });
+    }), [location]);
 
     // need to throttle down calling 'history.replace' because
     // too many invocations might cause the browser to stop responding
@@ -92,7 +91,7 @@ export const AdvancedSearchController = ({
         if (!showJobDurationSlider) {
             changeURLFilters(location, history, queryParams, { jobMinDuration: null, jobMaxDuration: null });
 
-            setJobDuration(null, [null, null]);
+            setJobDuration(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]);
         }
 
         setShowJobDurationSlider(showJobDurationSlider);
@@ -118,18 +117,29 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields();
     }, [clearURLFilters, history, location, resetAdvancedSearchFields]);
 
+    useEffect(() => {
+        if (queryParams.jobType) setJobType(queryParams.jobType);
+        if (queryParams.fields) setFields(queryParams.fields);
+        if (queryParams.technologies) setTechs(queryParams.technologies);
+
+        // problem when first loading the page: slider ref is not set
+        /* if (queryParams.jobMinDuration && queryParams.jobMaxDuration)
+            setJobDuration(null, [queryParams.jobMinDuration, queryParams.jobMaxDuration]); */
+
+    }, [queryParams, resetAdvancedSearchFields, setFields, setJobDuration, setJobType, setTechs]);
+
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
-        jobMinDuration, // TODO: make it so this fields reflect the respective duration
-        jobMaxDuration, // TODO: make it so this fields reflect the respective duration
+        jobMinDuration,
+        jobMaxDuration,
         setJobDuration: actualSetJobDuration,
-        showJobDurationSlider: showJobDurationSlider, // TODO: make so this reflects weathere there are job durations or not
+        showJobDurationSlider,
         setShowJobDurationSlider: actualSetShowJobDurationSlider,
-        jobType: queryParams.jobType ?? jobType,
+        jobType,
         setJobType: actualSetJobType,
-        fields: queryParams.fields ?? fields,
+        fields,
         setFields: actualSetFields,
-        technologies: queryParams.technologies ?? technologies,
+        technologies,
         setTechs: actualSetTechs,
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
     });
