@@ -1,6 +1,9 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 
+import { useLocation, useHistory } from "react-router-dom";
+import qs from "qs";
+
 import { connect } from "react-redux";
 import { SearchResultsConstants } from "../SearchResultsArea/SearchResultsWidget/SearchResultsUtils";
 import {
@@ -27,6 +30,8 @@ import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import useComponentController from "../../../hooks/useComponentController";
 import useOffersSearcher from "../SearchResultsArea/SearchResultsWidget/useOffersSearcher";
 
+import { throttle } from "lodash";
+
 export const AdvancedSearchControllerContext = React.createContext({});
 
 export const AdvancedSearchController = ({
@@ -35,20 +40,98 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
+    const location = useLocation();
+    const history = useHistory();
+
+    // since we are always changing the URL (and therefore window.location), there is no point in memoizing this value
+    const queryParams = qs.parse(location.search, {
+        ignoreQueryPrefix: true,
+        arrayFormat: "brackets",
+    });
+
+    // need to throttle down calling 'history.replace' because
+    // too many invocations might cause the browser to stop responding
+    // value of 350 derived from https://github.com/PoorBillyPilgrim/artcrawl-digital-exhibit/issues/20#issue-761626379
+    // according to this 1000/3 is the lower bound for the 'wait' value
+    const changeURLFilters = useCallback(throttle((location, history, queryParams, changes) => {
+        const newQueryParams = {
+            ...queryParams,
+            ...changes,
+        };
+
+        history.replace({
+            ...location, search: qs.stringify(newQueryParams, {
+                skipNulls: true,
+                arrayFormat: "brackets",
+            }),
+        });
+    }, 350), []);
+
+    const clearURLFilters = useCallback(
+        throttle(
+            (location, history) => history.replace({ ...location, search: "" }),
+            350
+        ), []);
+
+    const actualSetJobType = useCallback(({ target: { value: jobType } }) => {
+        changeURLFilters(location, history, queryParams, { jobType });
+
+        setJobType(jobType);
+    }, [changeURLFilters, location, history, queryParams, setJobType]);
+
+    const actualSetJobDuration = useCallback((unused, duration) => {
+
+        const [jobMinDuration, jobMaxDuration] = duration;
+
+        changeURLFilters(location, history, queryParams, { jobMinDuration, jobMaxDuration });
+
+        setJobDuration(unused, duration);
+    }, [changeURLFilters, location, history, queryParams, setJobDuration]);
+
+    const actualSetShowJobDurationSlider = useCallback((showJobDurationSlider) => {
+        if (!showJobDurationSlider) {
+            changeURLFilters(location, history, queryParams, { jobMinDuration: null, jobMaxDuration: null });
+
+            setJobDuration(null, [null, null]);
+        }
+
+        setShowJobDurationSlider(showJobDurationSlider);
+    }, [changeURLFilters, history, location, queryParams, setJobDuration, setShowJobDurationSlider]);
+
+    const actualSetFields = useCallback((fields) => {
+
+        changeURLFilters(location, history, queryParams, { fields });
+
+        setFields(fields);
+    }, [changeURLFilters, history, location, queryParams, setFields]);
+
+    const actualSetTechs = useCallback((technologies) => {
+
+        changeURLFilters(location, history, queryParams, { technologies });
+
+        setTechs(technologies);
+    }, [changeURLFilters, history, location, queryParams, setTechs]);
+
+    const actualResetAdvancedSearchFields = useCallback(() => {
+        clearURLFilters(location, history);
+
+        resetAdvancedSearchFields();
+    }, [clearURLFilters, history, location, resetAdvancedSearchFields]);
+
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
-        jobMinDuration,
-        jobMaxDuration,
-        setJobDuration,
-        showJobDurationSlider,
-        setShowJobDurationSlider,
-        jobType,
-        setJobType,
-        fields,
-        setFields,
-        technologies,
-        setTechs,
-        resetAdvancedSearchFields,
+        jobMinDuration, // TODO: make it so this fields reflect the respective duration
+        jobMaxDuration, // TODO: make it so this fields reflect the respective duration
+        setJobDuration: actualSetJobDuration,
+        showJobDurationSlider: showJobDurationSlider, // TODO: make so this reflects weathere there are job durations or not
+        setShowJobDurationSlider: actualSetShowJobDurationSlider,
+        jobType: queryParams.jobType ?? jobType,
+        setJobType: actualSetJobType,
+        fields: queryParams.fields ?? fields,
+        setFields: actualSetFields,
+        technologies: queryParams.technologies ?? technologies,
+        setTechs: actualSetTechs,
+        resetAdvancedSearchFields: actualResetAdvancedSearchFields,
     });
 
     const { search: searchOffers } = useOffersSearcher({
@@ -64,8 +147,10 @@ export const AdvancedSearchController = ({
         if (e) e.preventDefault();
         searchOffers(SearchResultsConstants.INITIAL_LIMIT);
 
+        changeURLFilters(location, history, queryParams, { searchValue });
+
         if (onSubmit) onSubmit();
-    }, [onSubmit, searchOffers]);
+    }, [changeURLFilters, history, location, onSubmit, queryParams, searchOffers, searchValue]);
 
     return {
         ...advancedSearchProps,
@@ -177,7 +262,7 @@ export const mapStateToProps = ({ offerSearch }) => ({
 export const mapDispatchToProps = (dispatch) => ({
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
-    setJobType: (e) => dispatch(setJobType(e.target.value)),
+    setJobType: (jobType) => dispatch(setJobType(jobType)),
     setFields: (fields) => dispatch(setFields(fields)),
     setTechs: (technologies) => dispatch(setTechs(technologies)),
     setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
