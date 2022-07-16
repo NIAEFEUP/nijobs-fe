@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import PropTypes from "prop-types";
 
 import { useLocation, useHistory } from "react-router-dom";
@@ -45,7 +45,6 @@ export const AdvancedSearchController = ({
 
     const queryParams = useMemo(() => qs.parse(location.search, {
         ignoreQueryPrefix: true,
-        arrayFormat: "brackets",
     }), [location]);
 
     // need to throttle down calling 'history.replace' because
@@ -61,7 +60,7 @@ export const AdvancedSearchController = ({
         history.replace({
             ...location, search: qs.stringify(newQueryParams, {
                 skipNulls: true,
-                arrayFormat: "brackets",
+                arrayFormat: "repeat", // to match what gets sent to the API
             }),
         });
     }, 350), []);
@@ -72,6 +71,7 @@ export const AdvancedSearchController = ({
             350
         ), []);
 
+    // destructure input here so mapDispatchToProps.setJobType is 'normalized' with respect to the other dispatch functions
     const actualSetJobType = useCallback(({ target: { value: jobType } }) => {
         changeURLFilters(location, history, queryParams, { jobType });
 
@@ -117,16 +117,25 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields();
     }, [clearURLFilters, history, location, resetAdvancedSearchFields]);
 
+    const firstRender = useRef(true);
     useEffect(() => {
+
+        if (!firstRender.current) return;
+
+        if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
+            setShowJobDurationSlider(true);
+            setJobDuration(null, [
+                parseInt(queryParams.jobMinDuration, 10),
+                parseInt(queryParams.jobMaxDuration, 10),
+            ]);
+        }
+
         if (queryParams.jobType) setJobType(queryParams.jobType);
         if (queryParams.fields) setFields(queryParams.fields);
         if (queryParams.technologies) setTechs(queryParams.technologies);
 
-        // problem when first loading the page: slider ref is not set
-        /* if (queryParams.jobMinDuration && queryParams.jobMaxDuration)
-            setJobDuration(null, [queryParams.jobMinDuration, queryParams.jobMaxDuration]); */
-
-    }, [queryParams, resetAdvancedSearchFields, setFields, setJobDuration, setJobType, setTechs]);
+        firstRender.current = false;
+    });
 
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
