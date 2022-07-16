@@ -99,13 +99,7 @@ describe("SearchArea", () => {
             props.setJobDuration(null, [1, 2]);
             expect(dispatch).toHaveBeenCalledWith(setJobDuration(1, 2));
 
-            const jobType = {
-                target: {
-                    value: "jobType",
-                },
-            };
-
-            props.setJobType(jobType);
+            props.setJobType("jobType");
             expect(dispatch).toHaveBeenCalledWith(setJobType("jobType"));
 
             const fields = ["field1", "field2"];
