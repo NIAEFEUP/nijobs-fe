@@ -40,8 +40,18 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
+    // FIXME: mock useLocation and useHistory in tests
     const location = useLocation();
+
+    /* const location = {
+        search: "",
+    }; */
+
     const history = useHistory();
+
+    /* const history = {
+        replace: (_unused) => {},
+    }; */
 
     const queryParams = useMemo(() => qs.parse(location.search, {
         ignoreQueryPrefix: true,
@@ -88,14 +98,11 @@ export const AdvancedSearchController = ({
     }, [changeURLFilters, location, history, queryParams, setJobDuration]);
 
     const actualSetShowJobDurationSlider = useCallback((showJobDurationSlider) => {
-        if (!showJobDurationSlider) {
+        if (!showJobDurationSlider)
             changeURLFilters(location, history, queryParams, { jobMinDuration: null, jobMaxDuration: null });
 
-            setJobDuration(null, [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1]);
-        }
-
         setShowJobDurationSlider(showJobDurationSlider);
-    }, [changeURLFilters, history, location, queryParams, setJobDuration, setShowJobDurationSlider]);
+    }, [changeURLFilters, history, location, queryParams, setShowJobDurationSlider]);
 
     const actualSetFields = useCallback((fields) => {
 
