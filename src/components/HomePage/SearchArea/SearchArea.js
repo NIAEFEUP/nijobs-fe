@@ -141,6 +141,8 @@ export const AdvancedSearchController = ({
         if (queryParams.fields) setFields(queryParams.fields);
         if (queryParams.technologies) setTechs(queryParams.technologies);
 
+        if (queryParams.searchValue) setSearchValue(queryParams.searchValue);
+
         firstRender.current = false;
     });
 
