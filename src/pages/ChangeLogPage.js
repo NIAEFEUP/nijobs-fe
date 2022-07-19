@@ -102,6 +102,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                         <Typography
                             variant="subtitle1"
                             className={classes.releaseDate}
+                            data-testid="releaseDate"
                         >
                             {release.date}
                         </Typography>
