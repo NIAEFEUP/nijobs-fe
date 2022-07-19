@@ -5,14 +5,21 @@ import { renderWithStoreAndTheme } from "../test-utils";
 import ChangeLogPage from "./ChangeLogPage";
 import * as changeLogService from "../services/changeLogService";
 import { act } from "@testing-library/react";
+import { isAfter } from "date-fns";
+import PropTypes from "prop-types";
 
-jest.mock(
-    "react-markdown",
-    () =>
-        function ReactMarkdown({ children }) {
-            return <>{children}</>;
-        }
-);
+/* eslint-disable camelcase */
+
+const MockedReactMarkdown = ({ children }) =>
+    <>
+        {children}
+    </>;
+
+MockedReactMarkdown.propTypes = {
+    children: PropTypes.any,
+};
+
+jest.mock("react-markdown", () => MockedReactMarkdown);
 jest.mock("remark-gfm", () => null);
 jest.mock("../services/changeLogService.js");
 
@@ -30,12 +37,30 @@ const mockedResponse = [
         name: "Testing GitHub API",
         created_at: "2022-05-24T18:23:20Z",
         published_at: "2022-05-26T10:02:09Z",
-        body: "### This is a test to verify if GitHub API can fetch releases\r\n\r\n_Boas amigo__\r\n\r\n`console.log('hello')`\r\n\r\n`console.log('world')`\r\n\r\n- [ ] Destensar\r\n- [X] We\r\n- [ ] le\r\n- [ ] le\r\n- [ ] le\r\n\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \r\n\r\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. \r\n\r\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. \r\n\r\nExcepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\r\n\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \r\n\r\nDui nunc mattis enim ut tellus elementum sagittis vitae et. Ante in nibh mauris cursus mattis. \r\n\r\nFaucibus vitae aliquet nec ullamcorper sit amet. Fusce id velit ut tortor pretium viverra suspendisse potenti.\r\n",
+        body: "### This is a test to verify if GitHub API can fetch releases\r\n",
     },
 ];
 
 describe("Changelog Page", () => {
-    it("Should show Changelog text", async () => {
+    it("Should show Changelog text", () => {
+        changeLogService.fetchReleases.mockImplementationOnce(
+            () =>
+                new Promise((resolve, _) => {
+                    resolve(mockedResponse);
+                })
+        );
+
+        const wrapper = renderWithStoreAndTheme(
+            <BrowserRouter>
+                <ChangeLogPage />
+            </BrowserRouter>,
+            { theme: AppTheme }
+        );
+
+        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+    });
+
+    it("Last Updated text should have the most recent date", async () => {
         changeLogService.fetchReleases.mockImplementationOnce(
             () =>
                 new Promise((resolve, _) => {
@@ -55,7 +80,28 @@ describe("Changelog Page", () => {
 
         expect(wrapper.getByText("Changelog")).toBeInTheDocument();
 
-        const components = await wrapper.getAllByTestId("releaseDate");
-        console.log("components -> ", components);
+        const releaseDates = wrapper
+            .getAllByTestId("releaseDate")
+            .map((release) => release.innerHTML);
+
+        let mostRecentDate = null;
+        let mostRecentText = "";
+        for (const releaseDate of releaseDates) {
+            const formattedDate = new Date(
+                `${releaseDate.substring(3, 5)}-${releaseDate.substring(
+                    0,
+                    2
+                )}-${releaseDate.substring(6)}`
+            );
+            if (
+                mostRecentDate === null ||
+                isAfter(formattedDate, mostRecentDate)
+            ) {
+                mostRecentDate = formattedDate;
+                mostRecentText = releaseDate;
+            }
+        }
+
+        expect(wrapper.getByText(`Last updated: ${mostRecentText}`));
     });
 });

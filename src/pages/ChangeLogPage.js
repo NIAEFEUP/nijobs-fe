@@ -7,6 +7,7 @@ import { fetchReleases } from "../services/changeLogService";
 import { useMobile } from "../utils/media-queries";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
     content: ({ isMobile }) => ({
@@ -65,8 +66,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             setReleases(releases);
         };
 
-        fetchData().catch((err) => {
-            console.error(err);
+        fetchData().catch((_) => {
             // setError(err[0]);
             // setIsLoading(false);
 
@@ -76,7 +76,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                 key: `${Date.now()}-fetchReleasesError`,
             });
         });
-    }, []);
+    }, [addSnackbar]);
 
     return (
         <div className={classes.content}>
@@ -98,7 +98,9 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             {releases.map((release) => (
                 <div key={release.id} className={classes.releaseContainer}>
                     <div className={classes.releaseHeader}>
-                        <Typography variant="h5">{release.name}</Typography>
+                        <Typography variant="h5">
+                            {release.name}
+                        </Typography>
                         <Typography
                             variant="subtitle1"
                             className={classes.releaseDate}
@@ -117,6 +119,10 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             ))}
         </div>
     );
+};
+
+ChangeLogPage.propTypes = {
+    addSnackbar: PropTypes.func,
 };
 
 const mapDispatchToProps = (dispatch) => ({
