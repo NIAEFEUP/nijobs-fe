@@ -6,18 +6,9 @@ import ChangeLogPage from "./ChangeLogPage";
 import * as changeLogService from "../services/changeLogService";
 import { act } from "@testing-library/react";
 import { isAfter } from "date-fns";
-import PropTypes from "prop-types";
+import { MockedReactMarkdown } from "../components/utils/MockedReactMarkdown";
 
 /* eslint-disable camelcase */
-
-const MockedReactMarkdown = ({ children }) =>
-    <>
-        {children}
-    </>;
-
-MockedReactMarkdown.propTypes = {
-    children: PropTypes.any,
-};
 
 jest.mock("react-markdown", () => function rmMock(props) {
     return <MockedReactMarkdown {...props} />;
