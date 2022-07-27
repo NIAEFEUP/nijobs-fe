@@ -19,8 +19,10 @@ MockedReactMarkdown.propTypes = {
     children: PropTypes.any,
 };
 
-jest.mock("react-markdown", () => MockedReactMarkdown);
-jest.mock("remark-gfm", () => null);
+jest.mock("react-markdown", () => function rmMock(props) {
+    return <MockedReactMarkdown {...props} />;
+});
+jest.mock("remark-gfm", () => () => null);
 jest.mock("../services/changeLogService.js");
 
 const mockedResponse = [
