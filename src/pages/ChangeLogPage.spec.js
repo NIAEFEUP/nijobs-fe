@@ -4,9 +4,11 @@ import AppTheme from "../AppTheme";
 import { renderWithStoreAndTheme } from "../test-utils";
 import ChangeLogPage from "./ChangeLogPage";
 import * as changeLogService from "../services/changeLogService";
-import { act } from "@testing-library/react";
+import { act, waitFor } from "@testing-library/react";
 import { isAfter } from "date-fns";
 import { MockedReactMarkdown } from "../components/utils/MockedReactMarkdown";
+import { createMatchMedia } from "../utils/media-queries";
+import { addSnackbar } from "../actions/notificationActions";
 
 /* eslint-disable camelcase */
 
@@ -15,6 +17,7 @@ jest.mock("react-markdown", () => function rmMock(props) {
 });
 jest.mock("remark-gfm", () => () => null);
 jest.mock("../services/changeLogService.js");
+jest.mock("../actions/notificationActions");
 
 const mockedResponse = [
     {
@@ -39,7 +42,7 @@ describe("Changelog Page", () => {
         changeLogService.fetchReleases.mockImplementationOnce(
             () =>
                 new Promise((resolve, _) => {
-                    resolve(mockedResponse);
+                    resolve([]);
                 })
         );
 
@@ -96,5 +99,51 @@ describe("Changelog Page", () => {
         }
 
         expect(wrapper.getByText(`Last updated: ${mostRecentText}`));
+    });
+
+    it("Should show snackbar message", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+        changeLogService.fetchReleases.mockImplementationOnce(
+            () =>
+                new Promise((_, reject) => {
+                    reject("Error fetching the releases");
+                })
+        );
+
+        const wrapper = renderWithStoreAndTheme(
+            <BrowserRouter>
+                <ChangeLogPage />
+            </BrowserRouter>,
+            { theme: AppTheme }
+        );
+
+        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(addSnackbar).toHaveBeenCalledTimes(1);
+        }, {
+            timeout: 1000,
+        });
+    });
+
+    it("Should show Changelog text in Mobile", () => {
+        const MOBILE_WIDTH_PX = 360;
+        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
+
+        changeLogService.fetchReleases.mockImplementationOnce(
+            () =>
+                new Promise((resolve, _) => {
+                    resolve([]);
+                })
+        );
+
+        const wrapper = renderWithStoreAndTheme(
+            <BrowserRouter>
+                <ChangeLogPage />
+            </BrowserRouter>,
+            { theme: AppTheme }
+        );
+
+        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
     });
 });
