@@ -59,7 +59,6 @@ const OfferItem = ({ offer, offerIdx, selectedOfferIdx, setSelectedOfferIdx, loa
 
     useEffect(() => {
         if (offer && !loading) {
-            console.log("Impression on ", offer, { loading });
             recordOfferImpression(offer._id, offer.title, offer.ownerName);
         }
     }, [offer, loading]);
