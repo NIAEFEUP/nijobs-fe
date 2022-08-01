@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 
 const useStyles = makeStyles((theme) => ({
     content: ({ isMobile }) => ({
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(5),
+        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
     }),
     gray: {
         color: "rgba(0, 0, 0, 0.54)",
@@ -67,9 +67,6 @@ export const ChangeLogPage = ({ addSnackbar }) => {
         };
 
         fetchData().catch((_) => {
-            // setError(err[0]);
-            // setIsLoading(false);
-
             addSnackbar({
                 message:
                     "An unexpected error occurred, please try refreshing the browser window.",
@@ -98,7 +95,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
             {releases.map((release) => (
                 <div key={release.id} className={classes.releaseContainer}>
                     <div className={classes.releaseHeader}>
-                        <Typography variant="h5">
+                        <Typography variant="h4">
                             {release.name}
                         </Typography>
                         <Typography

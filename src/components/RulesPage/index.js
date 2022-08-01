@@ -34,7 +34,7 @@ const RulesComponent = () => {
     const ContentComponent = isMobile ? DialogContent : CardContent;
     return (
         <>
-            {!isMobile && <CardHeader title="Rules" />}
+            {!isMobile && <CardHeader title="Rules" titleTypographyProps={{ variant: "h3" }} />}
             <ContentComponent>
                 <Typography variant="body2" paragraph gutterBottom>
                     For further clarification contact us via:

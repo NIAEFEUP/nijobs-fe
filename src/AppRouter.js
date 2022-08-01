@@ -222,7 +222,7 @@ const AppRouter = () => (
             >
                 <PageLayout
                     key="/changeLog"
-                    pageTitle="Change Log"
+                    pageTitle="Changelog"
                     layout={LayoutType.DESKTOP}
                 >
                     <ChangeLogPage />
