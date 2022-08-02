@@ -248,7 +248,7 @@ const OfferForm = ({ context, title }) => {
                                             }}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} lg={6}>
+                                    <Grid item xs={12} lg={12}>
                                         <Button
                                             onClick={() => setAdvancedOpen(!isAdvancedOpen)}
                                             size="small"
@@ -260,14 +260,6 @@ const OfferForm = ({ context, title }) => {
                                         >
                                             <Typography>Advanced Settings</Typography>
                                         </Button>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <ApplyURLComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                        />
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
                                         <Collapse in={shouldShowAdvancedOptions()}>
@@ -309,7 +301,16 @@ const OfferForm = ({ context, title }) => {
                                             </Grid>
                                         </Collapse>
                                     </Grid>
-                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
+                                        <ApplyURLComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                            classes={classes}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <MultiOptionTextField
                                             values={contacts}
                                             label="Contacts *"
@@ -324,7 +325,7 @@ const OfferForm = ({ context, title }) => {
                                             addEntryBtnTestId="contacts-selector"
                                         />
                                     </Grid>
-                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <MultiOptionTextField
                                             values={requirements}
                                             label="Requirements *"

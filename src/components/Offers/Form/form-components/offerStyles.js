@@ -62,11 +62,15 @@ export default (isMobile) => makeStyles((theme) => ({
     jobTypeGrid: {
         marginBottom: theme.spacing(4),
     },
-    multiTextOptionGrid: {
+    highlightOptionGrid: {
         marginBottom: theme.spacing(4),
     },
     requiredFields: {
         marginTop: theme.spacing(2),
         color: "#9E9E9E",
+    },
+    applyURlInput: {
+        paddingTop: theme.spacing(2),
+        marginTop: theme.spacing(2),
     },
 }));

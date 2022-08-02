@@ -1,6 +1,6 @@
 import React from "react";
 import OfferApplyButton from "./OfferApplyButton";
-import { Button, createTheme, Dialog, DialogTitle } from "@material-ui/core";
+import { Button, createTheme, DialogTitle } from "@material-ui/core";
 import { renderWithTheme } from "../../../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
 
