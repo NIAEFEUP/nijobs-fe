@@ -168,7 +168,7 @@ export const recordOfferImpression = (offerId, offerTitle, companyName) => {
     });
 
     ReactGa.event({
-        category: "Offer Search",
-        action: "Displayed in Search",
+        category: "Success",
+        action: "Offer/impression",
     });
 };
