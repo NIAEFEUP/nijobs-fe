@@ -25,7 +25,6 @@ describe("OfferApplyButton", () => {
     });
 
     describe("OfferApplyDialog", () => {
-        // TODO O Dialog esta la na mesma
         it("dialog should be closed", () => {
             const wrapper = mount(<OfferApplyButton />);
             expect(wrapper.find(DialogTitle).exists()).toBe(false);
@@ -50,13 +49,15 @@ describe("OfferApplyButton", () => {
     });
 
     describe("interaction", () => {
-        it("should call handleToggle when apply button is clicked", () => {
+        it("should call handleToggle when apply button is clicked", async () => {
             const handleToggle = jest.fn();
-            const wrapper = shallow(
+            const wrapper = renderWithTheme(
                 <OfferApplyButton
                     handleToggle={handleToggle}
-                />);
-            wrapper.find(Button).first().simulate("click");
+                />, { theme });
+            const applyButton = wrapper.queryByText("Apply");
+            await act(() => fireEvent.click(applyButton));
+
             expect(handleToggle).toHaveBeenCalledTimes(1);
         });
 
