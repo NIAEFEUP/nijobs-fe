@@ -20,6 +20,7 @@ import JobOptions from "../../utils/offers/JobOptions";
 import FieldOptions from "../../utils/offers/FieldOptions";
 import TechOptions from "../../utils/offers/TechOptions";
 import { Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
+import { HumanValidationReasons } from "../../../utils";
 
 jest.mock("../../../hooks/useOffer");
 jest.mock("react-router-dom", () => {
@@ -610,6 +611,40 @@ describe("Edit Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("\u200B");
 
+        });
+
+        it("should fail validation if applyURL not following the regex", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <EditOfferWrapper>
+                            <EditOfferPage />
+                        </EditOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            const input = screen.getByLabelText("Application URL");
+
+            await act(() => {
+                fireEvent.focus(input);
+                fireEvent.change(input, { target: { value: "invalid" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(input))
+                .toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+
+            await act(() =>  {
+                fireEvent.change(input, { target: { value: "https://valid.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
         });
 
         it("should allow any compensation value", async () => {

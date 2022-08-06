@@ -62,6 +62,7 @@ export const HumanValidationReasons = Object.freeze({
     LOCATION_FORMAT: () => "The location format must be <city>, <country>. Beware of extra spaces.",
     PUBLISH_END_DATE: () => `Publication end date should be after Publish Date but not 
                             over ${OFFER_MAX_LIFETIME_MONTHS} month(s) after that.`,
+    BAD_APPLY_URL: "Invalid application URL. Ensure your URL starts with 'http(s):' or 'mailto:'",
 });
 
 export const validationRulesGenerator = (rules) => (field, rule, reason) => {
