@@ -1,6 +1,6 @@
 import React from "react";
 import OfferApplyButton from "./OfferApplyButton";
-import { Button, createTheme, DialogTitle } from "@material-ui/core";
+import { Button, createTheme } from "@material-ui/core";
 import { renderWithTheme } from "../../../../test-utils";
 import { act, fireEvent } from "@testing-library/react";
 
@@ -26,15 +26,21 @@ describe("OfferApplyButton", () => {
 
     describe("OfferApplyDialog", () => {
         it("dialog should be closed", () => {
-            const wrapper = mount(<OfferApplyButton />);
-            expect(wrapper.find(DialogTitle).exists()).toBe(false);
-            wrapper.unmount();
+            const title = "test title";
+            const wrapper = renderWithTheme(
+                <OfferApplyButton title={title} />,
+                { theme }
+            );
+            expect(wrapper.queryByText(title)).not.toBeInTheDocument();
         });
 
         it("dialog should be open", () => {
-            const wrapper = mount(<OfferApplyButton open={true} />);
-            expect(wrapper.find(DialogTitle).exists()).toBe(true);
-            wrapper.unmount();
+            const title = "test title";
+            const wrapper = renderWithTheme(
+                <OfferApplyButton title={title} open={true} />,
+                { theme }
+            );
+            expect(wrapper.queryByText(title)).toBeInTheDocument();
         });
 
         it("dialog should display the given URL", () => {

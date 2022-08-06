@@ -72,6 +72,7 @@ const OfferInteractionOptions = ({
                             handleAccept={handleApplyURLRedirect}
                             handleToggle={toggleRedirectDialog}
                             applyURL={offer.applyURL}
+                            title="You're being redirected to the following website:"
                         />
                     </div>
                     }
