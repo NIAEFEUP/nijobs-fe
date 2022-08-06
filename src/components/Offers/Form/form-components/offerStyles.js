@@ -69,7 +69,7 @@ export default (isMobile) => makeStyles((theme) => ({
         marginTop: theme.spacing(2),
         color: "#9E9E9E",
     },
-    applyURlInput: {
+    applyURLInput: {
         paddingTop: theme.spacing(2),
         marginTop: theme.spacing(2),
     },

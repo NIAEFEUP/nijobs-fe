@@ -15,7 +15,7 @@ const ApplyURLComponent = ({ disabled, errors, requestErrors, control, classes }
             ) => (
                 <TextField
                     name={name}
-                    className={classes.applyURlInput}
+                    className={classes.applyURLInput}
                     value={value}
                     label="Application URL"
                     id="applyURL"
@@ -25,7 +25,7 @@ const ApplyURLComponent = ({ disabled, errors, requestErrors, control, classes }
                     onChange={onChange}
                     helperText={
                         `${errors.applyURL?.message ||
-                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s)' or 'mailto'."}`
+                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s):' or 'mailto:'."}`
                     }
                     fullWidth
                     disabled={disabled}
@@ -41,7 +41,7 @@ ApplyURLComponent.propTypes = {
     requestErrors: PropTypes.object,
     control: PropTypes.object.isRequired,
     classes: PropTypes.shape({
-        applyURlInput: PropTypes.string.isRequired,
+        applyURLInput: PropTypes.string.isRequired,
     }),
 };
 

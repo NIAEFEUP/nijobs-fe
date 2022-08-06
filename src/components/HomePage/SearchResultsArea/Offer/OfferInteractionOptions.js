@@ -50,8 +50,14 @@ const OfferInteractionOptions = ({
 
     const handleApplyURLRedirect = () => {
         setClosedRedirectDialog();
-        window.open(offer.applyURL, "_blank", "noopener,noreferrer");
+        window.open(offer.applyURL, "_blank", "noopener");
     };
+
+    const canChangeOfferVisibility = (visibilityState.isVisible ||
+            !visibilityState.isDisabled ||
+            sessionData?.company?._id === offer.owner) &&
+        (sessionData?.company?._id === offer.owner ||
+            sessionData?.isAdmin);
 
     if (!loading)
         return (
@@ -91,13 +97,7 @@ const OfferInteractionOptions = ({
                         </Tooltip>
                     }
                     {
-                        (
-                            (visibilityState.isVisible ||
-                                !visibilityState.isDisabled ||
-                                sessionData?.company?._id === offer.owner) &&
-                            (sessionData?.company?._id === offer.owner ||
-                                sessionData?.isAdmin)
-                        ) &&
+                        canChangeOfferVisibility &&
                         <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
                             <span>
                                 <Button
