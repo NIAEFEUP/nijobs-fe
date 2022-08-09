@@ -63,6 +63,10 @@ export const TIMED_ACTIONS = Object.freeze({
         category: "company_offers",
         variable: "company_offers/fetch",
     },
+    PASSWORD_RECOVERY_REQUEST: {
+        category: "password_recovery",
+        variable: "password_recovery/request",
+    },
     OTHER: {
         category: "other",
         variable: "other",

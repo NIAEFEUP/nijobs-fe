@@ -18,6 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import LoginSchema from "./LoginSchema";
 
 import useLoginStyles from "./loginStyles";
+import { RouterLink } from "../../utils";
 
 const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, updateSessionInfo }) => {
 
@@ -101,6 +102,15 @@ const LoginForm = ({ open, toggleLoginModal, loginPending, toggleLoginPending, u
                     </FormHelperText>
                 </DialogContent>
                 <DialogActions>
+                    <Button
+                        variant="text"
+                        disabled={loginPending}
+                        color="secondary"
+                        component={RouterLink}
+                        to="/auth/recover/request"
+                    >
+                        Lost password?
+                    </Button>
                     <Button
                         onClick={toggleLoginModal}
                         variant="text"
