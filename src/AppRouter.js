@@ -38,6 +38,13 @@ import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import ChangeLogPage from "./pages/ChangeLogPage";
+import
+PasswordRecoveryRequestPage,
+{
+    PasswordRecoveryRequestContext,
+    PasswordRecoveryRequestController,
+}
+    from "./pages/PasswordRecoveryRequestPage";
 
 /**
  *
@@ -108,7 +115,28 @@ const AppRouter = () => (
                     <CompanyApplicationPage />
                 </PageLayout>
             </Route>
-            <Route exact path="/rules">
+            <Route
+                exact
+                key="/auth/recover/request"
+                path="/auth/recover/request"
+                context={PasswordRecoveryRequestContext}
+                controller={PasswordRecoveryRequestController}
+                controllerProps={{ showConfirmation: false }}
+            >
+                <PageLayout
+                    key="/auth/recover/request"
+                    pageTitle="Password Recovery"
+                    layout={LayoutType.DESKTOP}
+                    shouldShowMobile={shouldShowCompanyApplicationMobile}
+                    context={PasswordRecoveryRequestContext}
+                >
+                    <PasswordRecoveryRequestPage />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/rules"
+            >
                 <PageLayout
                     key="/rules"
                     pageTitle="Rules"
