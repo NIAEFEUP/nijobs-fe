@@ -1,4 +1,4 @@
-# niJobs - FrontEnd
+# NIJobs - FrontEnd
 
 
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/NIAEFEUP/nijobs-fe/CI/master?label=BUILD%20-%20Master&style=for-the-badge)
