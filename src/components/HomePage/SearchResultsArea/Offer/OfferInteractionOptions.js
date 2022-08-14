@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
 import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
@@ -48,16 +48,18 @@ const OfferInteractionOptions = ({
         }
     };
 
-    const handleApplyURLRedirect = () => {
+    const handleApplyURLRedirect = useCallback(() => {
         setClosedRedirectDialog();
         window.open(offer.applyURL, "_blank", "noopener");
-    };
+    }, [offer, setClosedRedirectDialog]);
 
-    const canChangeOfferVisibility = (visibilityState.isVisible ||
+    const canChangeOfferVisibility = useMemo(() => (
+        visibilityState.isVisible ||
             !visibilityState.isDisabled ||
-            sessionData?.company?._id === offer.owner) &&
-        (sessionData?.company?._id === offer.owner ||
-            sessionData?.isAdmin);
+            sessionData?.company?._id === offer?.owner) &&
+        (sessionData?.company?._id === offer?.owner ||
+            sessionData?.isAdmin
+        ), [offer, sessionData, visibilityState.isDisabled, visibilityState.isVisible]);
 
     if (!loading)
         return (

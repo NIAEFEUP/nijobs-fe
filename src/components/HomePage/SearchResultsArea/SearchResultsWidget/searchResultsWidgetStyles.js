@@ -148,18 +148,18 @@ export default makeStyles((theme) => ({
     offerWidget: ({ isMobile, isPage, hasApplyButton }) => {
         let paddingValue = !isMobile ? theme.spacing(3) : 0;
         let paddingTopValue = 0;
-        let paddingBotValue = paddingValue;
+        let paddingBottomValue = paddingValue;
 
         if (isPage) {
             paddingValue = isMobile ? theme.spacing(3) : theme.spacing(10);
             paddingTopValue = !isMobile && theme.spacing(5);
-            if (!hasApplyButton) paddingBotValue = paddingValue;
+            if (!hasApplyButton) paddingBottomValue = paddingValue;
         }
 
         return {
             paddingTop: paddingTopValue,
             paddingRight: paddingValue,
-            paddingBottom: paddingBotValue,
+            paddingBottom: paddingBottomValue,
             paddingLeft: paddingValue,
             height: "100%",
         };
