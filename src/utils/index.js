@@ -33,7 +33,7 @@ export const parseFiltersToURL = (filters) => Object.keys(filters)
         if (filters[key]) {
             if (Array.isArray(filters[key])) {
                 return filters[key]
-                    .map((val) => `${key}=${encodeURIComponent(val)}`)
+                    .map((val) => `${key}[]=${encodeURIComponent(val)}`)
                     .join("&");
             } else return `${key}=${encodeURIComponent(filters[key])}`;
         } else return "";
