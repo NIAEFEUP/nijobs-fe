@@ -13,9 +13,11 @@ import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../test-u
 
 import { MemoryRouter } from "react-router-dom";
 
+import qs from "qs";
+
 // eslint-disable-next-line react/prop-types
-const RouteWrappedContent = ({ children }) => (
-    <MemoryRouter initialEntries={["/"]}>
+const RouteWrappedContent = ({ children, url = "/" }) => (
+    <MemoryRouter initialEntries={[url]}>
         {children}
     </MemoryRouter>
 );
@@ -79,6 +81,63 @@ describe("SearchArea", () => {
             expect(onSubmit).toHaveBeenCalledTimes(1);
         });
 
+        it("should fill in search filters if they are present in the URL", () => {
+
+            const urlParams = {
+                searchValue: "test-search-value",
+                jobMinDuration: 2,
+                jobMaxDuration: 9,
+                fields: ["TEST-FIELD1", "TEST-FIELD2"],
+                technologies: ["TEST-TECH"],
+                jobType: "test-job-type",
+            };
+
+            const urlSearchQuery = qs.stringify(urlParams, {
+                skipNulls: true,
+                arrayFormat: "brackets",
+            });
+            const url = `/?${urlSearchQuery}`;
+
+            const onSubmit = jest.fn();
+            const setFields = jest.fn();
+            const setTechs = jest.fn();
+            const setJobType = jest.fn();
+            const setJobDuration = jest.fn();
+            const setShowJobDurationSlider = jest.fn();
+            const setSearchValue = jest.fn();
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
+            renderWithStoreAndTheme(
+                <RouteWrappedContent url={url}>
+                    <SearchArea
+                        onSubmit={onSubmit}
+                        setSearchValue={setSearchValue}
+                        setJobType={setJobType}
+                        setJobDuration={setJobDuration}
+                        setShowJobDurationSlider={setShowJobDurationSlider}
+                        fields={[]}
+                        setFields={setFields}
+                        technologies={[]}
+                        setTechs={setTechs}
+                    />
+                </RouteWrappedContent>,
+                { initialState, theme }
+            );
+
+            act(() => {
+                fireEvent.click(screen.getByRole("button", { name: "Toggle Advanced Search" }));
+            });
+
+            // expect(screen.getByLabelText(/Advanced Search \w+/)).toBeInTheDocument();
+            expect(setJobType).toHaveBeenCalledWith("test-job-type");
+            expect(setShowJobDurationSlider).toHaveBeenCalledWith(true);
+            expect(setJobDuration).toHaveBeenCalledWith(null, [2, 9]);
+            expect(setTechs).toHaveBeenCalledWith(["TEST-TECH"]);
+            expect(setFields).toHaveBeenCalledWith(["TEST-FIELD1", "TEST-FIELD2"]);
+            expect(setSearchValue).toHaveBeenCalledWith("test-search-value");
+        });
     });
 
     describe("redux", () => {
