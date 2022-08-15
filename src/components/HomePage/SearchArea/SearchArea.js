@@ -65,9 +65,6 @@ export const AdvancedSearchController = ({
             ...location, search: qs.stringify(newQueryParams, {
                 skipNulls: true,
                 arrayFormat: "brackets",
-                // previously used "repeat" to match what gets sent to the API
-                // however, when there would only be one item in the array (fields/techs),
-                // the field would be parsed as a string and would cause an error
             }),
         });
     }, 350), []);
