@@ -11,6 +11,15 @@ import {
 import { createTheme } from "@material-ui/core";
 import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../test-utils";
 
+import { MemoryRouter } from "react-router-dom";
+
+// eslint-disable-next-line react/prop-types
+const RouteWrappedContent = ({ children }) => (
+    <MemoryRouter initialEntries={["/"]}>
+        {children}
+    </MemoryRouter>
+);
+
 describe("SearchArea", () => {
     let onSubmit;
     const theme = createTheme();
@@ -22,7 +31,9 @@ describe("SearchArea", () => {
     describe("render", () => {
         it("should render a Paper, a Form, a Search Bar, a Search Button and Advanced Options Button", () => {
             renderWithStoreAndTheme(
-                <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />,
+                <RouteWrappedContent>
+                    <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />
+                </RouteWrappedContent>,
                 { initialState, theme }
             );
 
@@ -37,23 +48,25 @@ describe("SearchArea", () => {
     describe("interaction", () => {
         it("should call onSubmit callback on search button click", async () => {
             const searchValue = "test";
-            const setSearchValue = () => {};
+            const setSearchValue = () => { };
 
             const onSubmit = jest.fn();
-            const addSnackbar = () => {};
+            const addSnackbar = () => { };
 
             // Simulate request success
             fetch.mockResponse(JSON.stringify({ mockData: true }));
 
             renderWithStoreAndTheme(
-                <SearchArea
-                    searchValue={searchValue}
-                    setSearchValue={setSearchValue}
-                    addSnackbar={addSnackbar}
-                    onSubmit={onSubmit}
-                    fields={[]}
-                    technologies={[]}
-                />,
+                <RouteWrappedContent>
+                    <SearchArea
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                        addSnackbar={addSnackbar}
+                        onSubmit={onSubmit}
+                        fields={[]}
+                        technologies={[]}
+                    />
+                </RouteWrappedContent>,
                 { initialState, theme }
             );
 

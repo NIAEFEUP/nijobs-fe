@@ -40,18 +40,12 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
+    // TODO: make it so form is auto-submitted if searchValue present in query
+
     // FIXME: mock useLocation and useHistory in tests
     const location = useLocation();
 
-    /* const location = {
-        search: "",
-    }; */
-
     const history = useHistory();
-
-    /* const history = {
-        replace: (_unused) => {},
-    }; */
 
     const queryParams = useMemo(() => qs.parse(location.search, {
         ignoreQueryPrefix: true,

@@ -5,6 +5,15 @@ import { createTheme } from "@material-ui/core/styles";
 import Offer from "../Offer/Offer";
 import { searchOffers } from "../../../../services/offerService";
 
+import { MemoryRouter } from "react-router-dom";
+
+// eslint-disable-next-line react/prop-types
+const RouteWrappedContent = ({ children }) => (
+    <MemoryRouter>
+        {children}
+    </MemoryRouter>
+);
+
 jest.mock("../../../../services/offerService");
 
 describe("SearchResults", () => {
@@ -45,9 +54,11 @@ describe("SearchResults", () => {
     it("should display OfferItemsContainer", () => {
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             { initialState, theme }
         );
 
@@ -66,9 +77,11 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             { initialState: initialStateWithError, theme }
         );
 
@@ -87,9 +100,11 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             { initialState: initialStateWithError, theme }
         );
 
@@ -110,9 +125,11 @@ describe("SearchResults", () => {
         };
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             { initialState: initialStateWithoutOffers, theme }
         );
 
@@ -125,9 +142,11 @@ describe("SearchResults", () => {
 
     it("should toggle searchArea when 'adjust filters' is toggled", () => {
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             { initialState, theme }
         );
 
@@ -154,9 +173,11 @@ describe("SearchResults", () => {
         });
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             {
                 initialState: {
                     ...initialState,
@@ -205,9 +226,11 @@ describe("SearchResults", () => {
             }));
 
         renderWithStoreAndTheme(
-            <SearchResultsControllerContext.Provider>
-                <SearchResultsWidget />
-            </SearchResultsControllerContext.Provider>,
+            <RouteWrappedContent>
+                <SearchResultsControllerContext.Provider>
+                    <SearchResultsWidget />
+                </SearchResultsControllerContext.Provider>
+            </RouteWrappedContent>,
             {
                 initialState: {
                     ...initialState,
