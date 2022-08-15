@@ -64,7 +64,10 @@ export const AdvancedSearchController = ({
         history.replace({
             ...location, search: qs.stringify(newQueryParams, {
                 skipNulls: true,
-                arrayFormat: "repeat", // to match what gets sent to the API
+                arrayFormat: "brackets",
+                // previously used "repeat" to match what gets sent to the API
+                // however, when there would only be one item in the array (fields/techs),
+                // the field would be parsed as a string and would cause an error
             }),
         });
     }, 350), []);
@@ -118,28 +121,6 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields();
     }, [clearURLFilters, history, location, resetAdvancedSearchFields]);
 
-    const firstRender = useRef(true);
-    useEffect(() => {
-
-        if (!firstRender.current) return;
-
-        if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
-            setShowJobDurationSlider(true);
-            setJobDuration(null, [
-                parseInt(queryParams.jobMinDuration, 10),
-                parseInt(queryParams.jobMaxDuration, 10),
-            ]);
-        }
-
-        if (queryParams.jobType) setJobType(queryParams.jobType);
-        if (queryParams.fields) setFields(queryParams.fields);
-        if (queryParams.technologies) setTechs(queryParams.technologies);
-
-        if (queryParams.searchValue) setSearchValue(queryParams.searchValue);
-
-        firstRender.current = false;
-    });
-
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
         jobMinDuration,
@@ -169,10 +150,35 @@ export const AdvancedSearchController = ({
         if (e) e.preventDefault();
         searchOffers(SearchResultsConstants.INITIAL_LIMIT);
 
-        changeURLFilters(location, history, queryParams, { searchValue });
+        changeURLFilters(location, history, queryParams, { searchValue: queryParams.searchValue ?? searchValue });
 
         if (onSubmit) onSubmit();
     }, [changeURLFilters, history, location, onSubmit, queryParams, searchOffers, searchValue]);
+
+    const firstRender = useRef(true);
+    useEffect(() => {
+
+        if (!firstRender.current) return;
+
+        if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
+            setShowJobDurationSlider(true);
+            setJobDuration(null, [
+                parseInt(queryParams.jobMinDuration, 10),
+                parseInt(queryParams.jobMaxDuration, 10),
+            ]);
+        }
+
+        if (queryParams.jobType) setJobType(queryParams.jobType);
+        if (queryParams.fields) setFields(queryParams.fields);
+        if (queryParams.technologies) setTechs(queryParams.technologies);
+
+        if (queryParams.searchValue) {
+            setSearchValue(queryParams.searchValue);
+            // submitForm(); this line causes infinite requests
+        }
+
+        firstRender.current = false;
+    });
 
     return {
         ...advancedSearchProps,
