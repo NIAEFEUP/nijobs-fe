@@ -66,7 +66,6 @@ export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRAT
 export const submitPasswordRequest = (email) => buildCancelableRequest(
     measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY_REQUEST, async (dispatch, { signal }) => {
         let isErrorRegistered = false;
-        console.log("email", email);
         dispatch(setSendingRequest(true));
         try {
             const res = await fetch(`${API_HOSTNAME}/auth/recover/request`, {
