@@ -1,8 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-
-import { useLocation, useHistory } from "react-router-dom";
-import qs from "qs";
 
 import { connect } from "react-redux";
 import { SearchResultsConstants } from "../SearchResultsArea/SearchResultsWidget/SearchResultsUtils";
@@ -30,7 +27,7 @@ import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import useComponentController from "../../../hooks/useComponentController";
 import useOffersSearcher from "../SearchResultsArea/SearchResultsWidget/useOffersSearcher";
 
-import { throttle } from "lodash";
+import useSearchParams from "./useUrlSearchParams";
 
 export const AdvancedSearchControllerContext = React.createContext({});
 
@@ -42,81 +39,23 @@ export const AdvancedSearchController = ({
 
     // TODO: make it so form is auto-submitted if searchValue present in query
 
-    // FIXME: mock useLocation and useHistory in tests
-    const location = useLocation();
-
-    const history = useHistory();
-
-    const queryParams = useMemo(() => qs.parse(location.search, {
-        ignoreQueryPrefix: true,
-    }), [location]);
-
-    // need to throttle down calling 'history.replace' because
-    // too many invocations might cause the browser to stop responding
-    // value of 350 derived from https://github.com/PoorBillyPilgrim/artcrawl-digital-exhibit/issues/20#issue-761626379
-    // according to this 1000/3 is the lower bound for the 'wait' value
-    const changeURLFilters = useCallback(throttle((location, history, queryParams, changes) => {
-        const newQueryParams = {
-            ...queryParams,
-            ...changes,
-        };
-
-        history.replace({
-            ...location, search: qs.stringify(newQueryParams, {
-                skipNulls: true,
-                arrayFormat: "brackets",
-            }),
-        });
-    }, 350), []);
-
-    const clearURLFilters = useCallback(
-        throttle(
-            (location, history) => history.replace({ ...location, search: "" }),
-            350
-        ), []);
-
-    // destructure input here so mapDispatchToProps.setJobType is 'normalized' with respect to the other dispatch functions
-    const actualSetJobType = useCallback(({ target: { value: jobType } }) => {
-        changeURLFilters(location, history, queryParams, { jobType });
-
-        setJobType(jobType);
-    }, [changeURLFilters, location, history, queryParams, setJobType]);
-
-    const actualSetJobDuration = useCallback((unused, duration) => {
-
-        const [jobMinDuration, jobMaxDuration] = duration;
-
-        changeURLFilters(location, history, queryParams, { jobMinDuration, jobMaxDuration });
-
-        setJobDuration(unused, duration);
-    }, [changeURLFilters, location, history, queryParams, setJobDuration]);
-
-    const actualSetShowJobDurationSlider = useCallback((showJobDurationSlider) => {
-        if (!showJobDurationSlider)
-            changeURLFilters(location, history, queryParams, { jobMinDuration: null, jobMaxDuration: null });
-
-        setShowJobDurationSlider(showJobDurationSlider);
-    }, [changeURLFilters, history, location, queryParams, setShowJobDurationSlider]);
-
-    const actualSetFields = useCallback((fields) => {
-
-        changeURLFilters(location, history, queryParams, { fields });
-
-        setFields(fields);
-    }, [changeURLFilters, history, location, queryParams, setFields]);
-
-    const actualSetTechs = useCallback((technologies) => {
-
-        changeURLFilters(location, history, queryParams, { technologies });
-
-        setTechs(technologies);
-    }, [changeURLFilters, history, location, queryParams, setTechs]);
-
-    const actualResetAdvancedSearchFields = useCallback(() => {
-        clearURLFilters(location, history);
-
-        resetAdvancedSearchFields();
-    }, [clearURLFilters, history, location, resetAdvancedSearchFields]);
+    const {
+        queryParams,
+        setJobType: actualSetJobType,
+        setJobDuration: actualSetJobDuration,
+        setFields: actualSetFields,
+        setShowJobDurationSlider: actualSetShowJobDurationSlider,
+        setTechs: actualSetTechs,
+        resetAdvancedSearchFields: actualResetAdvancedSearchFields,
+        setSearchValue: setUrlSearchValue,
+    } = useSearchParams({
+        setJobDuration,
+        setShowJobDurationSlider,
+        setJobType,
+        setFields,
+        setTechs,
+        resetAdvancedSearchFields,
+    });
 
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
@@ -143,20 +82,16 @@ export const AdvancedSearchController = ({
         technologies,
     });
 
-    const submitForm = useCallback((e) => {
+    const submitForm = useCallback((e, updateUrl = true) => {
         if (e) e.preventDefault();
         searchOffers(SearchResultsConstants.INITIAL_LIMIT);
 
-        changeURLFilters(location, history, queryParams, { searchValue: queryParams.searchValue ?? searchValue });
+        if (updateUrl) setUrlSearchValue(searchValue);
 
         if (onSubmit) onSubmit();
-    }, [changeURLFilters, history, location, onSubmit, queryParams, searchOffers, searchValue]);
+    }, [onSubmit, searchOffers, searchValue, setUrlSearchValue]);
 
-    const firstRender = useRef(true);
     useEffect(() => {
-
-        if (!firstRender.current) return;
-
         if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
             setShowJobDurationSlider(true);
             setJobDuration(null, [
@@ -173,9 +108,8 @@ export const AdvancedSearchController = ({
             setSearchValue(queryParams.searchValue);
             // submitForm(); this line causes infinite requests
         }
-
-        firstRender.current = false;
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return {
         ...advancedSearchProps,
