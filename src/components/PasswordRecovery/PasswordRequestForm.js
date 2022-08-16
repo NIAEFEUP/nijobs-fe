@@ -27,7 +27,6 @@ const PasswordRequestForm = ({ submitPasswordRequest, submittingRequest }) => {
     } = useContext(PasswordRecoveryRequestContext);
 
     const onSubmit = useCallback(async (data) => {
-        console.log("data", data);
         if (await submitPasswordRequest(data.email))
             toggleConfirmationModal();
     }, [submitPasswordRequest, toggleConfirmationModal]);
