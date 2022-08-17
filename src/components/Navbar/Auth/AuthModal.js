@@ -23,7 +23,7 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
     ] = useAuthPageSwitcher();
 
     return (
-        <Dialog open={open} className={classes.modal} fullWidth aria-labelledby="form-dialog-title" onClose={toggleAuthModal}>
+        <Dialog open={open} fullWidth aria-labelledby="form-dialog-title" onClose={toggleAuthModal}>
             {loginActive &&
                 <LoginForm
                     toggleAuthModal={toggleAuthModal}
