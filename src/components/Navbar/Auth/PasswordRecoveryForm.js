@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { login } from "../../../services/auth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import LoginSchema from "./LoginSchema";
+import PasswordRecoverySchema from "./PasswordRecoverSchema";
 import useAuthStyles from "./authStyles";
 import {
     CircularProgress,
@@ -16,51 +16,49 @@ import {
 } from "@material-ui/core";
 import useToggle from "../../../hooks/useToggle";
 
-const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage }) => {
+// eslint-disable-next-line no-unused-vars
+const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinishPage }) => {
     const classes = useAuthStyles();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
-        resolver: yupResolver(LoginSchema),
+        resolver: yupResolver(PasswordRecoverySchema),
         reValidateMode: "onChange",
     });
 
-    const [loginPending, toggleLoginPending] = useToggle(false);
+    const [requestPending, togglerequestPending] = useToggle(false);
 
     const [errorCleared, setErrorCleared] = useState(true);
 
-    const [loginError, setLoginError] = React.useState(null);
+    const [requestError, setrequestError] = React.useState(null);
     const resetError = () => {
         if (!errorCleared) {
-            setLoginError([]);
+            setrequestError([]);
             setErrorCleared(true);
         }
     };
 
-    const handleLogin = async (data) => {
-        toggleLoginPending();
+    const requestRecover = async (data) => {
+        togglerequestPending();
         try {
             await login(data.email, data.password);
-            updateSessionInfo();
-            toggleLoginPending();
-            toggleAuthModal();
         } catch (e) {
-            toggleLoginPending();
-            setLoginError(e.status === 401 ? "Email/Password combination is invalid." : "Unexpected Error. Please try again later.");
+            togglerequestPending();
+            setrequestError("Unexpected Error. Please try again later.");
         }
     };
 
     const onSubmit = async (data) => {
         setErrorCleared(false);
-        await handleLogin(data);
+        await requestRecover(data);
     };
 
     return (
         <form
-            aria-label="Login"
+            aria-label="Recover Password"
             onSubmit={handleSubmit(onSubmit)}
         >
-            <DialogTitle id="form-dialog-title">Login</DialogTitle>
+            <DialogTitle id="form-dialog-title">Recover Password</DialogTitle>
             <DialogContent>
                 <TextField
                     id="email"
@@ -74,36 +72,24 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                     error={!!errors.email}
                     helperText={errors.email ? errors.email.message : <span />}
                 />
-                <TextField
-                    id="password"
-                    name="password"
-                    label="Password"
-                    type="password"
-                    onChange={resetError}
-                    margin="normal"
-                    fullWidth
-                    inputProps={{ ...register("password") }}
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password.message : <span />}
-                />
-                <FormHelperText error={!!loginError}>
-                    {loginError || " "}
+                <FormHelperText error={!!requestError}>
+                    {requestError || " "}
                 </FormHelperText>
             </DialogContent>
             <DialogActions>
                 <Button
-                    onClick={setRecoveryRequestPage}
+                    onClick={setLoginPage}
                     variant="text"
-                    disabled={loginPending}
+                    disabled={requestPending}
                     color="secondary"
                 >
-                        Lost password?
+                        Login
                 </Button>
                 <Button
                     onClick={toggleAuthModal}
                     variant="text"
                     color="secondary"
-                    disabled={loginPending}
+                    disabled={requestPending}
                 >
                         Cancel
                 </Button>
@@ -113,11 +99,11 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                         className={classes.loginBtn}
                         color="primary"
                         variant="contained"
-                        disabled={loginPending}
+                        disabled={requestPending}
                     >
                             Login
                     </Button>
-                    {loginPending &&
+                    {requestPending &&
                     <CircularProgress
                         size={24}
                         className={classes.loginProgressRed}
@@ -129,10 +115,10 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
     );
 };
 
-LoginForm.propTypes = {
+PasswordRecoveryForm.propTypes = {
     toggleAuthModal: PropTypes.func.isRequired,
-    updateSessionInfo: PropTypes.func.isRequired,
-    setRecoveryRequestPage: PropTypes.func.isRequired,
+    setLoginPage: PropTypes.func.isRequired,
+    setRecoveryFinishPage: PropTypes.func.isRequired,
 };
 
-export default LoginForm;
+export default PasswordRecoveryForm;
