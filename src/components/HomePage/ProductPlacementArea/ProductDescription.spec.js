@@ -20,7 +20,7 @@ describe("ProductDescription", () => {
 
             renderWithTheme(
                 <Router>
-                    <ProductDescription toggleLoginModal={toggleLoginModalMock} />
+                    <ProductDescription toggleAuthModal={toggleLoginModalMock} />
                 </Router>,
                 { theme }
             );
@@ -34,7 +34,7 @@ describe("ProductDescription", () => {
 
             renderWithTheme(
                 <Router>
-                    <ProductDescription toggleLoginModal={toggleLoginModalMock} />
+                    <ProductDescription toggleAuthModal={toggleLoginModalMock} />
                 </Router>,
                 { theme }
             );
@@ -48,7 +48,7 @@ describe("ProductDescription", () => {
 
             renderWithTheme(
                 <Router>
-                    <ProductDescription toggleLoginModal={toggleLoginModalMock} />
+                    <ProductDescription toggleAuthModal={toggleLoginModalMock} />
                 </Router>,
                 { theme }
             );
@@ -65,7 +65,7 @@ describe("ProductDescription", () => {
 
             renderWithTheme(
                 <Router>
-                    <ProductDescription toggleLoginModal={toggleLoginModalMock} />
+                    <ProductDescription toggleAuthModal={toggleLoginModalMock} />
                 </Router>,
                 { theme }
             );
