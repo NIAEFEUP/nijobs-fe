@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { RouterLink } from "../../../utils";
 import { connect } from "react-redux";
-import { toggleLoginModal } from "../../../actions/navbarActions";
+import { toggleAuthModal } from "../../../actions/navbarActions";
 
 import useProductDescriptionStyles from "./productDescriptionStyles.js";
 
@@ -19,7 +19,7 @@ import {
 
 import useSession from "../../../hooks/useSession";
 
-export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) => {
+export const ProductDescription = React.forwardRef(({ toggleAuthModal }, ref) => {
     const { isLoggedIn, data } = useSession();
 
     const classes = useProductDescriptionStyles({ isMobile: !useDesktop() })();
@@ -85,7 +85,7 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
                                 <Button
                                     variant="text"
                                     color="primary"
-                                    onClick={toggleLoginModal}
+                                    onClick={toggleAuthModal}
                                 >
                                 Login
                                 </Button>
@@ -111,13 +111,13 @@ export const ProductDescription = React.forwardRef(({ toggleLoginModal }, ref) =
 ProductDescription.displayName = "ProductDescription";
 
 ProductDescription.propTypes = {
-    toggleLoginModal: PropTypes.func.isRequired,
+    toggleAuthModal: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = () => ({});
 
 export const mapDispatchToProps = (dispatch) => ({
-    toggleLoginModal: () => dispatch(toggleLoginModal()),
+    toggleAuthModal: () => dispatch(toggleAuthModal()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(ProductDescription);

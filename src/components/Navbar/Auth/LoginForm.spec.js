@@ -1,17 +1,17 @@
 import React from "react";
 
-import { login } from "../../services/auth";
+import { login } from "../../../services/auth";
 
-import LoginForm from "./LoginForm";
-import { render, fireEvent, act } from "../../test-utils";
-import Constants from "../../utils/Constants";
+import AuthModal from "./AuthModal";
+import { render, fireEvent, act } from "../../../test-utils";
+import Constants from "../../../utils/Constants";
 
 jest.mock("../../services/auth");
 
-describe("Navbar - LoginForm", () => {
+describe("Navbar - AuthModal", () => {
     describe("render", () => {
         it("Should not appear as default", () => {
-            const wrapper = render(<LoginForm />);
+            const wrapper = render(<AuthModal />);
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).not.toBeInTheDocument();
         });
@@ -19,15 +19,15 @@ describe("Navbar - LoginForm", () => {
     describe("interaction", () => {
         it("Should toggle the modal visibility when clicking Cancel button", () => {
 
-            const toggleLoginModal = jest.fn();
+            const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<LoginForm open toggleLoginModal={toggleLoginModal} />);
+            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} />);
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
 
             fireEvent.click(wrapper.getByText("Cancel"));
 
-            expect(toggleLoginModal).toHaveBeenCalledTimes(1);
+            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
         });
 
         it("Should login correctly and toggle Modal visibility", async () => {
@@ -35,12 +35,12 @@ describe("Navbar - LoginForm", () => {
             // Making sure that the login service allows the login
             login.mockImplementationOnce(() => true);
 
-            const toggleLoginModal = jest.fn();
+            const toggleAuthModal = jest.fn();
 
             const { getByRole, getByLabelText } = render(
-                <LoginForm
+                <AuthModal
                     open
-                    toggleLoginModal={toggleLoginModal}
+                    toggleAuthModal={toggleAuthModal}
                     toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
                 />);
@@ -55,15 +55,15 @@ describe("Navbar - LoginForm", () => {
                 await fireEvent.click(getByRole("button", { name: "Login" }));
             });
 
-            expect(toggleLoginModal).toHaveBeenCalledTimes(1);
+            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
         });
 
         it("Should not allow invalid email", async () => {
 
             const wrapper = render(
-                <LoginForm
+                <AuthModal
                     open
-                    toggleLoginModal={() => {}}
+                    toggleAuthModal={() => {}}
                     toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
                 />);
@@ -99,9 +99,9 @@ describe("Navbar - LoginForm", () => {
         it("Should require password", async () => {
 
             const wrapper = render(
-                <LoginForm
+                <AuthModal
                     open
-                    toggleLoginModal={() => {}}
+                    toggleAuthModal={() => {}}
                     toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
                 />);
@@ -122,12 +122,12 @@ describe("Navbar - LoginForm", () => {
                 throw new Error();
             });
 
-            // const toggleLoginModal = jest.fn();
+            // const toggleAuthModal = jest.fn();
 
             const wrapper = render(
-                <LoginForm
+                <AuthModal
                     open
-                    toggleLoginModal={() => {}}
+                    toggleAuthModal={() => {}}
                     toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
                 />);

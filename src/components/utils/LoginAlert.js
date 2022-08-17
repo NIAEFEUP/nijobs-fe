@@ -2,7 +2,7 @@ import { Box, Button, makeStyles } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import React from "react";
 import { connect } from "react-redux";
-import { toggleLoginModal } from "../../actions/navbarActions";
+import { toggleAuthModal } from "../../actions/navbarActions";
 import { RouterLink } from "../../utils";
 import { PropTypes } from "prop-types";
 
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModal }) => {
+const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleAuthModal }) => {
     const style = useStyles();
 
     return (
@@ -38,7 +38,7 @@ const LoginAlert = ({ isLoggedIn, companyUnfinishedRegistration, toggleLoginModa
                             <Button
                                 variant="text"
                                 color="primary"
-                                onClick={toggleLoginModal}
+                                onClick={toggleAuthModal}
                             >
                                 Login
                             </Button>
@@ -88,14 +88,14 @@ LoginAlert.displayName = "LoginAlert";
 LoginAlert.propTypes = {
     isLoggedIn: PropTypes.bool,
     companyUnfinishedRegistration: PropTypes.bool,
-    toggleLoginModal: PropTypes.func,
+    toggleAuthModal: PropTypes.func,
 
 };
 
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = (dispatch) => ({
-    toggleLoginModal: () => dispatch(toggleLoginModal()),
+    toggleAuthModal: () => dispatch(toggleAuthModal()),
 });
 
 const ConnectedLoginAlert = connect(mapStateToProps, mapDispatchToProps)(LoginAlert);

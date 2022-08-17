@@ -10,7 +10,7 @@ import { BrowserRouter } from "react-router-dom";
 
 jest.mock("../../services/auth");
 
-describe("Navbar - LoginForm", () => {
+describe("Navbar - AuthModal", () => {
     const theme = createTheme({});
     describe("render", () => {
         it("Should not appear as default", () => {
