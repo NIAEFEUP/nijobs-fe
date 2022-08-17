@@ -16,10 +16,9 @@ export default ({
     setTechs,
     setSearchValue,
     resetAdvancedSearchFields,
-}) => {
+} = {}) => {
 
     const location = useLocation();
-
     const history = useHistory();
 
     const queryParams = useMemo(() => qs.parse(location.search, {

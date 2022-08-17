@@ -25,7 +25,7 @@ export const mountWithStore = (component, initialState, theme) => {
                 </ThemeProvider>
                 :
                 <>
-                    { component }
+                    {component}
                 </>
             }
         </Provider>
@@ -43,10 +43,13 @@ export const TestComponent = ({ callback }) => {
     return null;
 };
 
-export const testHook = (callback) => {
-    mount(<TestComponent callback={callback} />);
+export const testHook = (callback, Wrapper = React.Fragment, wrapperProps = {}) => {
+    mount(
+        <Wrapper {...wrapperProps}>
+            <TestComponent callback={callback} />
+        </Wrapper>
+    );
 };
-
 
 const [queryDescriptionOf, , getDescriptionOf, , findDescriptionOf] = buildQueries(
     function queryAllDescriptionsOf(container, element) {

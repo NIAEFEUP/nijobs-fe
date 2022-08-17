@@ -106,9 +106,6 @@ describe("SearchArea", () => {
             const setShowJobDurationSlider = jest.fn();
             const setSearchValue = jest.fn();
 
-            // Simulate request success
-            fetch.mockResponse(JSON.stringify({ mockData: true }));
-
             renderWithStoreAndTheme(
                 <RouteWrappedContent url={url}>
                     <SearchArea
@@ -126,11 +123,6 @@ describe("SearchArea", () => {
                 { initialState, theme }
             );
 
-            act(() => {
-                fireEvent.click(screen.getByRole("button", { name: "Toggle Advanced Search" }));
-            });
-
-            // expect(screen.getByLabelText(/Advanced Search \w+/)).toBeInTheDocument();
             expect(setJobType).toHaveBeenCalledWith("test-job-type");
             expect(setShowJobDurationSlider).toHaveBeenCalledWith(true);
             expect(setJobDuration).toHaveBeenCalledWith(null, [2, 9]);
