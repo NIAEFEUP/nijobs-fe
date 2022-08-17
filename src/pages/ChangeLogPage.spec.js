@@ -12,9 +12,13 @@ import { addSnackbar } from "../actions/notificationActions";
 
 /* eslint-disable camelcase */
 
-jest.mock("react-markdown", () => function rmMock(props) {
-    return <MockedReactMarkdown {...props} />;
-});
+jest.mock(
+    "react-markdown",
+    () =>
+        function rmMock(props) {
+            return <MockedReactMarkdown {...props} />;
+        }
+);
 jest.mock("remark-gfm", () => () => null);
 jest.mock("../services/changeLogService.js");
 jest.mock("../actions/notificationActions");
@@ -53,7 +57,7 @@ describe("Changelog Page", () => {
             { theme: AppTheme }
         );
 
-        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+        expect(wrapper.getByText("What's new?")).toBeInTheDocument();
     });
 
     it("Last Updated text should have the most recent date", async () => {
@@ -74,7 +78,7 @@ describe("Changelog Page", () => {
             );
         });
 
-        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+        expect(wrapper.getByText("What's new?")).toBeInTheDocument();
 
         const releaseDates = wrapper
             .getAllByTestId("releaseDate")
@@ -117,13 +121,16 @@ describe("Changelog Page", () => {
             { theme: AppTheme }
         );
 
-        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+        expect(wrapper.getByText("What's new?")).toBeInTheDocument();
 
-        await waitFor(() => {
-            expect(addSnackbar).toHaveBeenCalledTimes(1);
-        }, {
-            timeout: 1000,
-        });
+        await waitFor(
+            () => {
+                expect(addSnackbar).toHaveBeenCalledTimes(1);
+            },
+            {
+                timeout: 1000,
+            }
+        );
     });
 
     it("Should show Changelog text in Mobile", () => {
@@ -144,6 +151,6 @@ describe("Changelog Page", () => {
             { theme: AppTheme }
         );
 
-        expect(wrapper.getByText("Changelog")).toBeInTheDocument();
+        expect(wrapper.getByText("What's new?")).toBeInTheDocument();
     });
 });

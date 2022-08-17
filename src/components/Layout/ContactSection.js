@@ -11,17 +11,11 @@ import {
     Gavel,
     Storage,
     ListAlt,
-    Autorenew,
+    NewReleases,
 } from "@material-ui/icons";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 
-import {
-    Grid,
-    List,
-    ListItem,
-    Button,
-    Typography,
-} from "@material-ui/core";
+import { Grid, List, ListItem, Button, Typography } from "@material-ui/core";
 import { RouterLink } from "../../utils";
 import Constants from "../../utils/Constants";
 
@@ -42,9 +36,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 const ContactSection = () => {
-
     const classes = useStyles();
     const theme = useTheme();
 
@@ -59,7 +51,11 @@ const ContactSection = () => {
                         <ListItem>
                             <Button
                                 href={`mailto:${Constants.CONTACT_US_EMAIL}`}
-                                startIcon={<Email htmlColor={theme.palette.primary.main} />}
+                                startIcon={
+                                    <Email
+                                        htmlColor={theme.palette.primary.main}
+                                    />
+                                }
                                 className={classes.primaryColor}
                                 title="email"
                             >
@@ -70,13 +66,19 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="/changeLog"
-                                startIcon={<Autorenew htmlColor={theme.palette.tertiary.main} />}
+                                to="/whatsNew"
+                                startIcon={
+                                    <NewReleases
+                                        htmlColor={theme.palette.tertiary.main}
+                                    />
+                                }
                                 className={classes.colorText}
                                 component={RouterLink}
-                                title="change log"
+                                title="what's new"
                             >
-                                <Typography variant="button">Latest Changes</Typography>
+                                <Typography variant="button">
+                                    What&apos;s new?
+                                </Typography>
                             </Button>
                         </ListItem>
                     </List>
@@ -91,31 +93,55 @@ const ContactSection = () => {
                                 <ListItem dense>
                                     <Button
                                         href="https://ni.fe.up.pt"
-                                        startIcon={<Language htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <Language
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="website"
                                     >
-                                        <Typography variant="button">Website</Typography>
+                                        <Typography variant="button">
+                                            Website
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                                 <ListItem>
                                     <Button
                                         href="https://facebook.com/NIAEFEUP/"
-                                        startIcon={<Facebook htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <Facebook
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="facebook"
                                     >
-                                        <Typography variant="button">Facebook</Typography>
+                                        <Typography variant="button">
+                                            Facebook
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                                 <ListItem dense>
                                     <Button
                                         href="https://github.com/NIAEFEUP"
-                                        startIcon={<GitHub htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <GitHub
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="github"
                                     >
-                                        <Typography variant="button">Github</Typography>
+                                        <Typography variant="button">
+                                            Github
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                             </List>
@@ -123,36 +149,65 @@ const ContactSection = () => {
                         <Grid item xs={6} md={3}>
                             <List>
                                 <ListItem>
-                                    <Typography variant="h5" className={classes.backgroundColor}>.</Typography>
+                                    <Typography
+                                        variant="h5"
+                                        className={classes.backgroundColor}
+                                    >
+                                        .
+                                    </Typography>
                                 </ListItem>
                                 <ListItem dense>
                                     <Button
                                         href="https://www.instagram.com/niaefeup/"
-                                        startIcon={<Instagram htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <Instagram
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="instagram"
                                     >
-                                        <Typography variant="button">Instagram</Typography>
+                                        <Typography variant="button">
+                                            Instagram
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                                 <ListItem>
                                     <Button
                                         href="https://twitter.com/niaefeup"
-                                        startIcon={<Twitter htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <Twitter
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="twitter"
                                     >
-                                        <Typography variant="button">Twitter</Typography>
+                                        <Typography variant="button">
+                                            Twitter
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                                 <ListItem dense>
                                     <Button
                                         href="https://pt.linkedin.com/company/nifeup"
-                                        startIcon={<LinkedIn htmlColor={theme.palette.tertiary.main} />}
+                                        startIcon={
+                                            <LinkedIn
+                                                htmlColor={
+                                                    theme.palette.tertiary.main
+                                                }
+                                            />
+                                        }
                                         className={classes.colorText}
                                         title="linkedin"
                                     >
-                                        <Typography variant="button">LinkedIn</Typography>
+                                        <Typography variant="button">
+                                            LinkedIn
+                                        </Typography>
                                     </Button>
                                 </ListItem>
                             </List>
@@ -167,7 +222,11 @@ const ContactSection = () => {
                         <ListItem>
                             <Button
                                 to="/rules"
-                                startIcon={<ListAlt htmlColor={theme.palette.tertiary.main} />}
+                                startIcon={
+                                    <ListAlt
+                                        htmlColor={theme.palette.tertiary.main}
+                                    />
+                                }
                                 className={classes.colorText}
                                 component={RouterLink}
                                 title="rules"
@@ -178,23 +237,35 @@ const ContactSection = () => {
                         <ListItem>
                             <Button
                                 to="/privacy-policy"
-                                startIcon={<Storage htmlColor={theme.palette.tertiary.main} />}
+                                startIcon={
+                                    <Storage
+                                        htmlColor={theme.palette.tertiary.main}
+                                    />
+                                }
                                 className={classes.colorText}
                                 component={RouterLink}
                                 title="privacy-policy"
                             >
-                                <Typography variant="button">Privacy Policy</Typography>
+                                <Typography variant="button">
+                                    Privacy Policy
+                                </Typography>
                             </Button>
                         </ListItem>
                         <ListItem>
                             <Button
                                 to="/terms-and-conditions"
-                                startIcon={<Gavel htmlColor={theme.palette.tertiary.main} />}
+                                startIcon={
+                                    <Gavel
+                                        htmlColor={theme.palette.tertiary.main}
+                                    />
+                                }
                                 className={classes.colorText}
                                 component={RouterLink}
                                 title="terms"
                             >
-                                <Typography variant="button">Terms and Conditions</Typography>
+                                <Typography variant="button">
+                                    Terms and Conditions
+                                </Typography>
                             </Button>
                         </ListItem>
                     </List>

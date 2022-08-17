@@ -83,7 +83,7 @@ export const ChangeLogPage = ({ addSnackbar }) => {
                 data-id="Change-Log"
                 gutterBottom
             >
-                Changelog
+                What&apos;s new?
             </Typography>
 
             <Typography className={classes.gray} paragraph={true}>
