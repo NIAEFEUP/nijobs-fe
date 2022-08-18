@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import PasswordRecoverySchema from "./PasswordRecoverySchema";
+import PasswordRecoveryFinishSchema from "./PasswordRecoveryFinishSchema";
 import useAuthStyles from "./authStyles";
 import {
     CircularProgress,
@@ -14,14 +14,15 @@ import {
     FormHelperText,
 } from "@material-ui/core";
 import useToggle from "../../../hooks/useToggle";
-import { submitPasswordRecoverRequest } from "../../../services/auth";
+import { submitFinishPasswordRecover } from "../../../services/auth";
+import { parseRequestErrors } from "./AuthUtils";
 
-const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinishPage }) => {
+const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage }) => {
     const classes = useAuthStyles();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
-        resolver: yupResolver(PasswordRecoverySchema),
+        resolver: yupResolver(PasswordRecoveryFinishSchema),
         reValidateMode: "onChange",
     });
 
@@ -29,29 +30,31 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
 
     const [errorCleared, setErrorCleared] = useState(true);
 
-    const [requestError, setRequestError] = React.useState(null);
+    const [requestErrors, setRequestErrors] = React.useState({});
     const resetError = () => {
         if (!errorCleared) {
-            setRequestError([]);
+            setRequestErrors({});
             setErrorCleared(true);
         }
     };
 
-    const requestRecover = async (data) => {
+    const finishRecover = async (data) => {
         toggleRequestPending();
         try {
-            await submitPasswordRecoverRequest(data.email);
+            await submitFinishPasswordRecover(data.token, data.password);
             toggleRequestPending();
-            setRecoveryFinishPage();
-        } catch (e) {
+            setLoginPage();
+        } catch (err) {
             toggleRequestPending();
-            setRequestError("Unexpected Error. Please try again later.");
+            console.log("errors", err);
+            const errors = parseRequestErrors(err);
+            setRequestErrors(errors);
         }
     };
 
     const onSubmit = async (data) => {
         setErrorCleared(false);
-        await requestRecover(data);
+        await finishRecover(data);
     };
 
     return (
@@ -62,20 +65,37 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
             <DialogTitle id="form-dialog-title">Recover Password</DialogTitle>
             <DialogContent>
                 <TextField
-                    id="email"
-                    name="email"
-                    label="Email"
-                    type="email"
+                    id="token"
+                    name="token"
+                    label="Token"
+                    type="password"
                     onChange={resetError}
                     margin="normal"
                     fullWidth
-                    inputProps={{ ...register("email") }}
-                    error={!!errors.email}
-                    helperText={errors.email ? errors.email.message : <span />}
+                    inputProps={{ ...register("token") }}
+                    error={!!errors.token || !!requestErrors.token}
+                    helperText={errors.token?.message || requestErrors.token?.message || " "}
                 />
-                <FormHelperText error={!!requestError}>
-                    {requestError || " "}
-                </FormHelperText>
+                <TextField
+                    id="password"
+                    name="password"
+                    label="New Password"
+                    type="password"
+                    onChange={resetError}
+                    margin="normal"
+                    fullWidth
+                    inputProps={{ ...register("password") }}
+                    error={!!errors.password || !!requestErrors.password}
+                    helperText={errors.password?.message || requestErrors.password?.message || " "}
+                />
+                {
+                    requestErrors?.generalErrors &&
+                        requestErrors.generalErrors.map((error, idx) => (
+                            <FormHelperText key={`${error.message}-${idx}`} error>
+                                {error.message}
+                            </FormHelperText>
+                        ))
+                }
             </DialogContent>
             <DialogActions>
                 <Button
@@ -116,10 +136,9 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
     );
 };
 
-PasswordRecoveryForm.propTypes = {
+PasswordRecoveryFinishForm.propTypes = {
     toggleAuthModal: PropTypes.func.isRequired,
     setLoginPage: PropTypes.func.isRequired,
-    setRecoveryFinishPage: PropTypes.func.isRequired,
 };
 
-export default PasswordRecoveryForm;
+export default PasswordRecoveryFinishForm;
