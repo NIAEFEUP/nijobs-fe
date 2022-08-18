@@ -1,17 +1,14 @@
 /* eslint-disable no-constant-condition */
-import React from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
     Dialog,
 } from "@material-ui/core";
 import LoginForm from "./LoginForm";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
-import useAuthStyles from "./authStyles";
 import useAuthPageSwitcher from "../../../hooks/useAuthPageSwitcher";
 
 const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
-    const classes = useAuthStyles();
-
     const [
         loginActive,
         recoveryRequestActive,
@@ -22,8 +19,18 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
         switchRecoveryFinish,
     ] = useAuthPageSwitcher();
 
+    const onClose = useCallback(
+        () => {
+            toggleAuthModal();
+            // Add setTimeout
+            switchLogin();
+        },
+        [switchLogin, toggleAuthModal],
+    );
+
+
     return (
-        <Dialog open={open} fullWidth aria-labelledby="form-dialog-title" onClose={toggleAuthModal}>
+        <Dialog open={open} fullWidth aria-labelledby="form-dialog-title" onClose={onClose}>
             {loginActive &&
                 <LoginForm
                     toggleAuthModal={toggleAuthModal}
