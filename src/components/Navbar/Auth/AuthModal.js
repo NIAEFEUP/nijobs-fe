@@ -7,12 +7,12 @@ import {
 import LoginForm from "./LoginForm";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
 import useAuthPageSwitcher from "../../../hooks/useAuthPageSwitcher";
+import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
 
 const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
     const [
         loginActive,
         recoveryRequestActive,
-        // eslint-disable-next-line no-unused-vars
         recoveryFinishActive,
         switchLogin,
         switchRecoveryRequest,
@@ -39,6 +39,12 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
                 />}
             {recoveryRequestActive &&
                 <PasswordRecoveryForm
+                    toggleAuthModal={toggleAuthModal}
+                    setLoginPage={switchLogin}
+                    setRecoveryFinishPage={switchRecoveryFinish}
+                />}
+            {recoveryFinishActive &&
+                <PasswordRecoveryFinishForm
                     toggleAuthModal={toggleAuthModal}
                     setLoginPage={switchLogin}
                     setRecoveryFinishPage={switchRecoveryFinish}

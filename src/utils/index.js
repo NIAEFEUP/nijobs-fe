@@ -364,3 +364,13 @@ export const generalHumanError = (error, HumanReadableErrors) => {
     }
     return "An error occurred, please try again.";
 };
+
+export const generalParseRequestErrors = (err, getHumanError) => {
+    const generalErrors = err.filter((error) => !error.param).map((error) => ({ message: getHumanError(error.msg) }));
+    const paramErrors = err.filter((error) => !!error.param)
+        .reduce((obj, cur) => ({ ...obj, [cur.param]: { message: getHumanError(cur.msg) } }), {});
+    return {
+        ...paramErrors,
+        generalErrors,
+    };
+};

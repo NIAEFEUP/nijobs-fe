@@ -32,7 +32,7 @@ export const logout = buildCancelableRequest(({ signal }) =>
         signal,
     }));
 
-export const submitPasswordRequest = measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY_REQUEST, async (email) => {
+export const submitPasswordRecoverRequest = measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY_REQUEST, async (email) => {
     let isErrorRegistered = false;
 
     try {
@@ -42,6 +42,52 @@ export const submitPasswordRequest = measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ email }),
+            credentials: "include",
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+
+            createErrorEvent(
+                PASSWORD_RECOVERY_REQUEST_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                json.errors,
+                res.status
+            );
+            isErrorRegistered = true;
+
+            throw json.errors;
+        }
+
+        createEvent(EVENT_TYPES.SUCCESS(PASSWORD_RECOVERY_REQUEST_METRIC_ID));
+        return json;
+
+    } catch (error) {
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                PASSWORD_RECOVERY_REQUEST_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
+    }
+});
+
+export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY_REQUEST, async (token, password) => {
+    let isErrorRegistered = false;
+
+    try {
+        const res = await fetch(`${API_HOSTNAME}/auth//recover/${token}/confirm`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ password }),
             credentials: "include",
         });
         const json = await res.json();
