@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { login } from "../../../services/auth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import PasswordRecoverySchema from "./PasswordRecoverSchema";
@@ -15,6 +14,7 @@ import {
     FormHelperText,
 } from "@material-ui/core";
 import useToggle from "../../../hooks/useToggle";
+import { submitPasswordRequest } from "../../../services/auth";
 
 // eslint-disable-next-line no-unused-vars
 const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinishPage }) => {
@@ -26,25 +26,27 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
         reValidateMode: "onChange",
     });
 
-    const [requestPending, togglerequestPending] = useToggle(false);
+    const [requestPending, toggleRequestPending] = useToggle(false);
 
     const [errorCleared, setErrorCleared] = useState(true);
 
-    const [requestError, setrequestError] = React.useState(null);
+    const [requestError, setRequestError] = React.useState(null);
     const resetError = () => {
         if (!errorCleared) {
-            setrequestError([]);
+            setRequestError([]);
             setErrorCleared(true);
         }
     };
 
     const requestRecover = async (data) => {
-        togglerequestPending();
+        toggleRequestPending();
         try {
-            await login(data.email, data.password);
+            await submitPasswordRequest(data.email);
+            toggleRequestPending();
+            setRecoveryFinishPage();
         } catch (e) {
-            togglerequestPending();
-            setrequestError("Unexpected Error. Please try again later.");
+            toggleRequestPending();
+            setRequestError("Unexpected Error. Please try again later.");
         }
     };
 
