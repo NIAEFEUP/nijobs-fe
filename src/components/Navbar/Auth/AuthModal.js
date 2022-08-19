@@ -9,7 +9,7 @@ import PasswordRecoveryForm from "./PasswordRecoveryForm";
 import useAuthPageSwitcher from "../../../hooks/useAuthPageSwitcher";
 import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
 
-const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
+const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage }) => {
     const [
         loginActive,
         recoveryRequestActive,
@@ -17,7 +17,8 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
         switchLogin,
         switchRecoveryRequest,
         switchRecoveryFinish,
-    ] = useAuthPageSwitcher();
+        reset,
+    ] = useAuthPageSwitcher(initialPage);
 
     const onClose = useCallback(
         () => {
@@ -29,9 +30,9 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
     // Reset to login page on opening
     useEffect(() => {
         if (open) {
-            switchLogin();
+            reset();
         }
-    }, [open, switchLogin]);
+    }, [open, reset, switchLogin]);
 
 
     return (
@@ -62,6 +63,7 @@ AuthModal.propTypes = {
     open: PropTypes.bool.isRequired,
     toggleAuthModal: PropTypes.func.isRequired,
     updateSessionInfo: PropTypes.func.isRequired,
+    initialPage: PropTypes.number,
 };
 
 export default AuthModal;

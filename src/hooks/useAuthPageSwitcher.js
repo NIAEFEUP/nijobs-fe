@@ -2,12 +2,14 @@
 import { useState, useCallback } from "react";
 
 /**
- * Custom hook for state variables that have a special boolean state only
+ * Custom hook for managing which page is active
+ *
+ * @param initialPage - initial page number
  */
-const useAuthPageSwitcher = () => {
-    const [loginActive, setLoginActive] = useState(true);
-    const [recoveryRequestActive, setRecoveryRequestActive] = useState(false);
-    const [recoveryFinishActive, setRecoveryFinishActive] = useState(false);
+const useAuthPageSwitcher = (initialPage = 0) => {
+    const [loginActive, setLoginActive] = useState(initialPage === 0);
+    const [recoveryRequestActive, setRecoveryRequestActive] = useState(initialPage === 1);
+    const [recoveryFinishActive, setRecoveryFinishActive] = useState(initialPage === 2);
 
     const switchLogin = useCallback(
         () => {
@@ -33,6 +35,15 @@ const useAuthPageSwitcher = () => {
         }, []
     );
 
+    const reset = useCallback(
+        () => {
+            setLoginActive(initialPage === 0);
+            setRecoveryRequestActive(initialPage === 1);
+            setRecoveryFinishActive(initialPage === 2);
+        },
+        [initialPage],
+    );
+
 
     return [
         loginActive,
@@ -41,6 +52,7 @@ const useAuthPageSwitcher = () => {
         switchLogin,
         switchRecoveryRequest,
         switchRecoveryFinish,
+        reset,
     ];
 };
 
