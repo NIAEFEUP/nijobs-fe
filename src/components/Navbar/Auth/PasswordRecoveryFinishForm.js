@@ -46,7 +46,6 @@ const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage }) => {
             setLoginPage();
         } catch (err) {
             toggleRequestPending();
-            console.log("errors", err);
             const errors = parseRequestErrors(err);
             setRequestErrors(errors);
         }

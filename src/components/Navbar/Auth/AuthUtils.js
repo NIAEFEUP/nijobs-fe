@@ -15,6 +15,6 @@ const HumanReadableErrors = Object.freeze({
     "invalid-token": "The token provided is invalid or has expired.",
 });
 
-export const getHumanError = (error) => (console.log("crrent", error), generalHumanError(error, HumanReadableErrors));
+export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
 
 export const parseRequestErrors = (error) => generalParseRequestErrors(error, getHumanError);
