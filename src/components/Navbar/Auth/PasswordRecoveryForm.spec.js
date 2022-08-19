@@ -1,6 +1,6 @@
 import React from "react";
 
-import { login } from "../../../services/auth";
+import { login, submitPasswordRecoverRequest } from "../../../services/auth";
 
 import AuthModal from "./AuthModal";
 import { render, fireEvent, act } from "../../../test-utils";
@@ -8,11 +8,11 @@ import Constants from "../../../utils/Constants";
 
 jest.mock("../../../services/auth");
 
-describe("Navbar - AuthModal - LoginForm", () => {
+describe("Navbar - AuthModal", () => {
     describe("render", () => {
         it("Should not appear as default", () => {
-            const wrapper = render(<AuthModal />);
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
+            const wrapper = render(<AuthModal initialPage={1} />);
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).not.toBeInTheDocument();
         });
     });
@@ -21,8 +21,8 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} />);
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
+            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />);
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).toBeInTheDocument();
 
             fireEvent.click(wrapper.getByText("Cancel"));
@@ -30,43 +30,45 @@ describe("Navbar - AuthModal - LoginForm", () => {
             expect(toggleAuthModal).toHaveBeenCalledTimes(1);
         });
 
-        it("Should change to the recovery page when clicking Lost Password button", () => {
+        it("Should change to the login page when clicking Login button", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} />);
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />);
+            fireEvent.click(wrapper.getByText("Login"));
 
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
         });
 
-        it("Should login correctly and toggle Modal visibility", async () => {
+        it("Should request correctly and change to finish recovery page", async () => {
 
             // Making sure that the login service allows the login
             login.mockImplementationOnce(() => true);
 
             const toggleAuthModal = jest.fn();
 
-            const { getByRole, getByLabelText } = render(
+            const { getByRole, getByLabelText, queryByRole } = render(
                 <AuthModal
                     open
                     toggleAuthModal={toggleAuthModal}
-                    toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
+                    initialPage={1}
                 />);
 
             await act(async () => {
                 await fireEvent.change(getByLabelText("Email"), { target: { value: "asd@email.com" } });
             });
             await act(async () => {
-                await fireEvent.change(getByLabelText("Password"), { target: { value: "asdahsdj" } });
-            });
-            await act(async () => {
-                await fireEvent.click(getByRole("button", { name: "Login" }));
+                await fireEvent.click(getByRole("button", { name: "Recover Password" }));
             });
 
-            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
+            const dialogTitle = queryByRole("heading", { level: 2, name: "Recover Password" });
+            expect(dialogTitle).toBeInTheDocument();
+
+            const tokenField = getByLabelText("Token");
+            expect(tokenField).toBeInTheDocument();
+
         });
 
         it("Should not allow invalid email", async () => {
@@ -75,7 +77,7 @@ describe("Navbar - AuthModal - LoginForm", () => {
                 <AuthModal
                     open
                     toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
+                    initialPage={1}
                     updateSessionInfo={() => {}}
                 />);
 
@@ -107,50 +109,26 @@ describe("Navbar - AuthModal - LoginForm", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Email"))).toHaveTextContent("");
         });
 
-        it("Should require password", async () => {
-
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
-
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("Password"), { target: { value: "" } });
-            });
-            await act(async () => {
-                await fireEvent.blur(wrapper.getByLabelText("Password"));
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Password"))).toHaveTextContent("Please fill in your password.");
-        });
-
-        it("Should show general error on login fail, and clear on input change", async () => {
+        it("Should show general error on request fail, and clear on input change", async () => {
             // Making sure that the login service denies the login
-            login.mockImplementationOnce(() => {
+            submitPasswordRecoverRequest.mockImplementationOnce(() => {
                 throw new Error();
             });
 
-            // const toggleAuthModal = jest.fn();
-
             const wrapper = render(
                 <AuthModal
                     open
                     toggleAuthModal={() => {}}
                     toggleLoginPending={() => {}}
                     updateSessionInfo={() => {}}
+                    initialPage={1}
                 />);
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });
             });
             await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("Password"), { target: { value: "asdahsdj" } });
-            });
-            await act(async () => {
-                await fireEvent.click(wrapper.getByRole("button", { name: "Login" }));
+                await fireEvent.click(wrapper.getByRole("button", { name: "Recover Password" }));
             });
             expect(await wrapper.queryByText(Constants.UNEXPECTED_ERROR_MESSAGE)).toBeInTheDocument();
 
