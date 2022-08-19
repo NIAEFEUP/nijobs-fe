@@ -6,19 +6,23 @@ import {
 } from "@material-ui/core";
 import LoginForm from "./LoginForm";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
-import useAuthPageSwitcher from "../../../hooks/useAuthPageSwitcher";
+import usePageSwitcher from "../../../hooks/usePageSwitcher";
 import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
 
 const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage }) => {
     const [
-        loginActive,
-        recoveryRequestActive,
-        recoveryFinishActive,
-        switchLogin,
-        switchRecoveryRequest,
-        switchRecoveryFinish,
+        [
+            loginActive,
+            recoveryRequestActive,
+            recoveryFinishActive,
+        ],
+        [
+            switchLogin,
+            switchRecoveryRequest,
+            switchRecoveryFinish,
+        ],
         reset,
-    ] = useAuthPageSwitcher(initialPage);
+    ] = usePageSwitcher(3, initialPage);
 
     const onClose = useCallback(
         () => {
