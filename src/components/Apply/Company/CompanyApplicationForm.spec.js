@@ -5,6 +5,7 @@ import CompanyApplicationForm from "./CompanyApplicationForm";
 import { createTheme } from "@material-ui/core/styles";
 import { CompanyApplicationPageController, CompanyApplicationPageControllerContext } from "../../../pages/CompanyApplicationPage";
 import useComponentController from "../../../hooks/useComponentController";
+import Constants from "../../../utils/Constants";
 
 // eslint-disable-next-line react/prop-types
 const CompanyApplicationFormWrapper = ({ children, showConfirmation = false }) => {
@@ -216,7 +217,7 @@ describe("CompanyApplicationForm", () => {
                 await fireEvent.click(applyButton);
             });
 
-            expect(await wrapper.findByTestId("submission-error")).toHaveTextContent("An error occurred, please try again.");
+            expect(await wrapper.findByTestId("submission-error")).toHaveTextContent(Constants.UNEXPECTED_ERROR_MESSAGE);
         });
 
         it("should reset fields and errors on reset button press", async () => {
@@ -320,7 +321,7 @@ describe("CompanyApplicationForm", () => {
             await fireEvent.click(applyButton);
         });
 
-        expect(await wrapper.findByTestId("submission-error")).toHaveTextContent("An error occurred, please try again.");
+        expect(await wrapper.findByTestId("submission-error")).toHaveTextContent(Constants.UNEXPECTED_ERROR_MESSAGE);
 
         const testFieldChangeEffect = async (input, value) => {
             // eslint-disable-next-line no-console
@@ -336,7 +337,7 @@ describe("CompanyApplicationForm", () => {
                 await fireEvent.click(applyButton);
             });
 
-            expect(await wrapper.findByTestId("submission-error")).toHaveTextContent("An error occurred, please try again.");
+            expect(await wrapper.findByTestId("submission-error")).toHaveTextContent(Constants.UNEXPECTED_ERROR_MESSAGE);
         };
 
         await testFieldChangeEffect(companyNameInput, companyName);
