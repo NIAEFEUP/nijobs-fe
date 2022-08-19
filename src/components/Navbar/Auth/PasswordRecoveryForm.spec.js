@@ -8,7 +8,7 @@ import Constants from "../../../utils/Constants";
 
 jest.mock("../../../services/auth");
 
-describe("Navbar - AuthModal", () => {
+describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
     describe("render", () => {
         it("Should not appear as default", () => {
             const wrapper = render(<AuthModal initialPage={1} />);

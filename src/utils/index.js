@@ -9,6 +9,7 @@ import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
+import Constants from "./Constants";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -355,19 +356,23 @@ export const buildCancelableRequest = (promiseFn) => (...args) => new Cancelable
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
 
 export const generalHumanError = (error, HumanReadableErrors) => {
+    if (!error) {
+        return Constants.UNEXPECTED_ERROR_MESSAGE;
+    }
     const [errorId, errorValue] = error.split(":");
     const rawError = HumanReadableErrors[errorId];
     if (typeof rawError === "string") {
         return rawError;
     } else if (typeof rawError === "function") {
-        return (!!rawError && rawError(errorValue)) || "An error occurred, please try again.";
+        return (!!rawError && rawError(errorValue)) || Constants.UNEXPECTED_ERROR_MESSAGE;
     }
-    return "An error occurred, please try again.";
+    return Constants.UNEXPECTED_ERROR_MESSAGE;
 };
 
 export const generalParseRequestErrors = (err, getHumanError) => {
-    const generalErrors = err.filter((error) => !error.param).map((error) => ({ message: getHumanError(error.msg) }));
-    const paramErrors = err.filter((error) => !!error.param)
+    const errors = Array.isArray(err) ? err : [err];
+    const generalErrors = errors.filter((error) => !error?.param).map((error) => ({ message: getHumanError(error?.msg) }));
+    const paramErrors = errors.filter((error) => !!error?.param)
         .reduce((obj, cur) => ({ ...obj, [cur.param]: { message: getHumanError(cur.msg) } }), {});
     return {
         ...paramErrors,
