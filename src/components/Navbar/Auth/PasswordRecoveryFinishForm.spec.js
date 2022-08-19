@@ -1,6 +1,6 @@
 import React from "react";
 
-import { login, submitFinishPasswordRecover } from "../../../services/auth";
+import { submitFinishPasswordRecover } from "../../../services/auth";
 
 import AuthModal from "./AuthModal";
 import { render, fireEvent, act } from "../../../test-utils";
