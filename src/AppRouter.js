@@ -219,10 +219,10 @@ const AppRouter = () => (
                     <CreateOfferPage />
                 </PageLayout>
             </Route>
-            <Route exact path="/whatsNew">
+            <Route exact path="/whats-new">
                 <PageLayout
-                    key="/changeLog"
-                    pageTitle="Changelog"
+                    key="/whats-new"
+                    pageTitle="What's new?"
                     layout={LayoutType.DESKTOP}
                 >
                     <ChangeLogPage />

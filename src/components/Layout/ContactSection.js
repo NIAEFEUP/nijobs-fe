@@ -66,7 +66,7 @@ const ContactSection = () => {
                         </ListItem>
                         <ListItem>
                             <Button
-                                to="/whatsNew"
+                                to="/whats-new"
                                 startIcon={
                                     <NewReleases
                                         htmlColor={theme.palette.tertiary.main}
@@ -77,7 +77,7 @@ const ContactSection = () => {
                                 title="what's new"
                             >
                                 <Typography variant="button">
-                                    What&apos;s new?
+                                    {"What's new?"}
                                 </Typography>
                             </Button>
                         </ListItem>
