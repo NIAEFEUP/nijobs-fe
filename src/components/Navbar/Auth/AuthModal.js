@@ -1,5 +1,5 @@
 /* eslint-disable no-constant-condition */
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
     Dialog,
@@ -22,11 +22,16 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo }) => {
     const onClose = useCallback(
         () => {
             toggleAuthModal();
-            // Add setTimeout
-            switchLogin();
         },
-        [switchLogin, toggleAuthModal],
+        [toggleAuthModal],
     );
+
+    // Reset to login page on opening
+    useEffect(() => {
+        if (open) {
+            switchLogin();
+        }
+    }, [open, switchLogin]);
 
 
     return (
