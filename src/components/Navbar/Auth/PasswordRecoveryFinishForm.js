@@ -17,7 +17,7 @@ import useToggle from "../../../hooks/useToggle";
 import { submitFinishPasswordRecover } from "../../../services/auth";
 import { parseRequestErrors } from "./AuthUtils";
 
-const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage }) => {
+const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage, addSnackbar }) => {
     const classes = useAuthStyles();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -44,6 +44,10 @@ const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage }) => {
             await submitFinishPasswordRecover(data.token, data.password);
             toggleRequestPending();
             setLoginPage();
+            addSnackbar({
+                message: "The password was updated",
+                key: "password-updated",
+            });
         } catch (err) {
             toggleRequestPending();
             const errors = parseRequestErrors(err);
@@ -138,6 +142,7 @@ const PasswordRecoveryFinishForm = ({ toggleAuthModal, setLoginPage }) => {
 PasswordRecoveryFinishForm.propTypes = {
     toggleAuthModal: PropTypes.func.isRequired,
     setLoginPage: PropTypes.func.isRequired,
+    addSnackbar: PropTypes.func.isRequired,
 };
 
 export default PasswordRecoveryFinishForm;

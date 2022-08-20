@@ -50,6 +50,7 @@ describe("Navbar - AuthModal", () => {
             submitFinishPasswordRecover.mockImplementationOnce(() => true);
 
             const toggleAuthModal = jest.fn();
+            const addSnackbar = jest.fn();
 
             const { getByRole, getByLabelText, queryByRole } = render(
                 <AuthModal
@@ -57,6 +58,7 @@ describe("Navbar - AuthModal", () => {
                     toggleAuthModal={toggleAuthModal}
                     updateSessionInfo={() => {}}
                     initialPage={2}
+                    addSnackbar={addSnackbar}
                 />);
 
             await act(async () => {
@@ -72,6 +74,10 @@ describe("Navbar - AuthModal", () => {
             const dialogTitle = queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
 
+            expect(addSnackbar).toHaveBeenCalledWith(expect.objectContaining({
+                message: "The password was updated",
+                key: "password-updated",
+            }));
         });
 
         it("should fail validation if invalid password", async () => {
