@@ -23,8 +23,9 @@ import { MenuRounded, Home } from "@material-ui/icons";
 import useNavbarStyles from "./navbarStyles";
 import { Wrap } from "../../utils";
 import AuthModal from "./Auth/AuthModal";
+import { addSnackbar } from "../../actions/notificationActions";
 
-const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desktopLayout, title, position }) => {
+const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desktopLayout, title, position, addSnackbar }) => {
 
     const { data,
         isValidating,
@@ -121,6 +122,7 @@ const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desk
                     open={showLoginModal}
                     updateSessionInfo={updateSessionInfo}
                     toggleAuthModal={toggleAuthModal}
+                    addSnackbar={addSnackbar}
                 />
             </Toolbar>
         </AppBar>
@@ -134,6 +136,7 @@ Navbar.propTypes = {
     desktopLayout: PropTypes.bool,
     title: PropTypes.string,
     position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
+    addSnackbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ navbar }) => ({
@@ -142,6 +145,7 @@ const mapStateToProps = ({ navbar }) => ({
 
 export const mapDispatchToProps = (dispatch) => ({
     toggleAuthModal: () => dispatch(toggleAuthModal()),
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

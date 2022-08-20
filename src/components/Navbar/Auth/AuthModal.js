@@ -9,7 +9,7 @@ import PasswordRecoveryForm from "./PasswordRecoveryForm";
 import usePageSwitcher from "../../../hooks/usePageSwitcher";
 import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
 
-const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage }) => {
+const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage, addSnackbar }) => {
     const [
         [
             loginActive,
@@ -58,6 +58,7 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage }) =>
                     toggleAuthModal={toggleAuthModal}
                     setLoginPage={switchLogin}
                     setRecoveryFinishPage={switchRecoveryFinish}
+                    addSnackbar={addSnackbar}
                 />}
         </Dialog>
     );
@@ -68,6 +69,7 @@ AuthModal.propTypes = {
     toggleAuthModal: PropTypes.func.isRequired,
     updateSessionInfo: PropTypes.func.isRequired,
     initialPage: PropTypes.number,
+    addSnackbar: PropTypes.func.isRequired,
 };
 
 export default AuthModal;
