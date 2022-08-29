@@ -1,4 +1,10 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import {
+    CardContent,
+    CardHeader,
+    DialogContent,
+    makeStyles,
+    Typography,
+} from "@material-ui/core";
 import { format, isAfter, parseISO } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -9,34 +15,35 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import PropTypes from "prop-types";
 
-const useStyles = makeStyles((theme) => ({
-    content: ({ isMobile }) => ({
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
-    }),
-    gray: {
-        color: "rgba(0, 0, 0, 0.54)",
-    },
-    releaseContainer: {
-        marginBottom: theme.spacing(4),
-    },
-    releaseHeader: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-    },
-    releaseDate: {
-        marginRight: theme.spacing(2),
-        color: theme.palette.primary.dark,
-    },
-    releaseContent: {
-        padding: theme.spacing(2),
-    },
-}));
+const useStyles = (isMobile) =>
+    makeStyles((theme) => ({
+        content: {
+            padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
+        },
+        gray: {
+            color: "rgba(0, 0, 0, 0.54)",
+        },
+        releaseContainer: {
+            marginBottom: theme.spacing(4),
+        },
+        releaseHeader: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+        },
+        releaseDate: {
+            marginRight: theme.spacing(2),
+            color: theme.palette.primary.dark,
+        },
+        releaseContent: {
+            padding: theme.spacing(2),
+        },
+    }));
 
 export const ChangeLogPage = ({ addSnackbar }) => {
     const isMobile = useMobile();
-    const classes = useStyles({ isMobile: isMobile });
+    const classes = useStyles(isMobile)();
 
     const [releases, setReleases] = useState([]);
     const [lastUpdateTS, setLastUpdateTS] = useState(null);
@@ -75,45 +82,45 @@ export const ChangeLogPage = ({ addSnackbar }) => {
         });
     }, [addSnackbar]);
 
+    const ContentComponent = isMobile ? DialogContent : CardContent;
     return (
         <div className={classes.content}>
-            <Typography
-                variant="h3"
-                id="Change-Log"
-                data-id="Change-Log"
-                gutterBottom
-            >
-                {"What's new?"}
-            </Typography>
+            {!isMobile && (
+                <CardHeader
+                    title="What's new?"
+                    titleTypographyProps={{ variant: "h3" }}
+                />
+            )}
+            <ContentComponent>
+                <Typography className={classes.gray} paragraph={true}>
+                    {lastUpdateTS !== null
+                        ? `Last updated: ${lastUpdateTS}`
+                        : "No Releases available"}
+                </Typography>
 
-            <Typography className={classes.gray} paragraph={true}>
-                {lastUpdateTS !== null
-                    ? `Last updated: ${lastUpdateTS}`
-                    : "No Releases available"}
-            </Typography>
+                {releases.map((release) => (
+                    <div key={release.id} className={classes.releaseContainer}>
+                        <div className={classes.releaseHeader}>
+                            <Typography variant="h4">
+                                {release.name}
+                            </Typography>
+                            <Typography
+                                variant="subtitle1"
+                                className={classes.releaseDate}
+                                data-testid="releaseDate"
+                            >
+                                {release.date}
+                            </Typography>
+                        </div>
 
-            {releases.map((release) => (
-                <div key={release.id} className={classes.releaseContainer}>
-                    <div className={classes.releaseHeader}>
-                        <Typography variant="h4">
-                            {release.name}
-                        </Typography>
-                        <Typography
-                            variant="subtitle1"
-                            className={classes.releaseDate}
-                            data-testid="releaseDate"
-                        >
-                            {release.date}
-                        </Typography>
+                        <div className={classes.releaseContent}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {release.body}
+                            </ReactMarkdown>
+                        </div>
                     </div>
-
-                    <div className={classes.releaseContent}>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {release.body}
-                        </ReactMarkdown>
-                    </div>
-                </div>
-            ))}
+                ))}
+            </ContentComponent>
         </div>
     );
 };

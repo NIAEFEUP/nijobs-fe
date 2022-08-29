@@ -7,7 +7,6 @@ import * as changeLogService from "../services/changeLogService";
 import { act, waitFor } from "@testing-library/react";
 import { isAfter } from "date-fns";
 import { MockedReactMarkdown } from "../components/utils/MockedReactMarkdown";
-import { createMatchMedia } from "../utils/media-queries";
 import { addSnackbar } from "../actions/notificationActions";
 
 /* eslint-disable camelcase */
@@ -131,26 +130,5 @@ describe("Changelog Page", () => {
                 timeout: 1000,
             }
         );
-    });
-
-    it("Should show Changelog text in Mobile", () => {
-        const MOBILE_WIDTH_PX = 360;
-        window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
-
-        changeLogService.fetchReleases.mockImplementationOnce(
-            () =>
-                new Promise((resolve, _) => {
-                    resolve([]);
-                })
-        );
-
-        const wrapper = renderWithStoreAndTheme(
-            <BrowserRouter>
-                <ChangeLogPage />
-            </BrowserRouter>,
-            { theme: AppTheme }
-        );
-
-        expect(wrapper.getByText("What's new?")).toBeInTheDocument();
     });
 });
