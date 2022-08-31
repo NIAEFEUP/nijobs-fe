@@ -1,5 +1,7 @@
 /* istanbul ignore file */
-import { useState, useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthPage } from "../actions/navbarActions";
 
 /**
  * Custom hook for managing which page is active
@@ -7,14 +9,18 @@ import { useState, useCallback, useMemo } from "react";
  * @param numPages - number of pages
  * @param initialPage - initial page number
  */
-const usePageSwitcher = (numPages, initialPage = 0) => {
-    const [activePage, setActivePage] = useState(initialPage);
-    const activePages = useMemo(() => Array.from(Array(numPages)).map((_, idx) => idx === activePage), [activePage, numPages]);
-    const setActivePages = useMemo(() => Array.from(Array(numPages)).map((_, idx) => () => setActivePage(idx)), [numPages]);
+const usePageSwitcher = (numPages, initialPage) => {
+    const dispatch = useDispatch();
+    const modalPage = useSelector((state) => state.navbar.authModalPage);
+
+    const activePages = useMemo(() => Array.from(Array(numPages)).map((_, idx) => idx === modalPage),
+        [modalPage, numPages]);
+    const setActivePages = useMemo(() => Array.from(Array(numPages)).map((_, idx) => () => dispatch(setAuthPage(idx))),
+        [dispatch, numPages]);
 
     const reset = useCallback(
-        () => setActivePage(initialPage),
-        [initialPage],
+        () => dispatch(setAuthPage(initialPage)),
+        [dispatch, initialPage],
     );
 
     return [

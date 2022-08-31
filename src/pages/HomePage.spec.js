@@ -19,7 +19,7 @@ describe("HomePage", () => {
             technologies: [],
         },
         navbar: {
-            showLoginModal: false,
+            showAuthModal: false,
         },
     };
     useSession.mockImplementation(() => ({ isLoggedIn: false, revalidate: () => {} }));

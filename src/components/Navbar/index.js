@@ -25,7 +25,8 @@ import { Wrap } from "../../utils";
 import AuthModal from "./Auth/AuthModal";
 import { addSnackbar } from "../../actions/notificationActions";
 
-const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desktopLayout, title, position, addSnackbar }) => {
+const Navbar = ({
+    showAuthModal, toggleAuthModal, showHomePageLink = true, desktopLayout, title, position, addSnackbar }) => {
 
     const { data,
         isValidating,
@@ -119,7 +120,7 @@ const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desk
                     }}
                 />
                 <AuthModal
-                    open={showLoginModal}
+                    open={showAuthModal}
                     updateSessionInfo={updateSessionInfo}
                     toggleAuthModal={toggleAuthModal}
                     addSnackbar={addSnackbar}
@@ -130,7 +131,7 @@ const Navbar = ({ showLoginModal, toggleAuthModal, showHomePageLink = true, desk
 };
 
 Navbar.propTypes = {
-    showLoginModal: PropTypes.bool.isRequired,
+    showAuthModal: PropTypes.bool.isRequired,
     toggleAuthModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
     desktopLayout: PropTypes.bool,
@@ -140,7 +141,7 @@ Navbar.propTypes = {
 };
 
 const mapStateToProps = ({ navbar }) => ({
-    showLoginModal: navbar.showLoginModal,
+    showAuthModal: navbar.showAuthModal,
 });
 
 export const mapDispatchToProps = (dispatch) => ({

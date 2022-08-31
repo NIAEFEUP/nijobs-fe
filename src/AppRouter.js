@@ -68,7 +68,25 @@ const AppRouter = () => (
                     <HomePage />
                 </PageLayout>
             </Route>
-            <Route exact path="/privacy-policy" key="/privacy-policy">
+            <Route
+                exact
+                path="/recover/:token"
+                key="/recover/:token"
+            >
+                <PageLayout
+                    key="/recover/:token"
+                    showHomePageLink={false}
+                    forceDesktopLayout
+                    layout={LayoutType.NONE}
+                >
+                    <HomePage openPasswordRecoveryModal />
+                </PageLayout>
+            </Route>
+            <Route
+                exact
+                path="/privacy-policy"
+                key="/privacy-policy"
+            >
                 <PageLayout
                     key="/privacy-policy"
                     pageTitle="Privacy Policy"

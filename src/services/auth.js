@@ -8,6 +8,8 @@ const { API_HOSTNAME } = config;
 
 const AUTH_ENDPOINT = `${API_HOSTNAME}/auth/login`;
 const PASSWORD_RECOVERY_REQUEST_METRIC_ID = "password_recovery/request";
+const FINISH_PASSWORD_RECOVERY_REQUEST_METRIC_ID = "password_recovery/finish";
+const VERIFY_PASSWORD_RECOVERY_TOKEN_METRIC_ID = "password_recovery/token";
 
 export const login = buildCancelableRequest(async (email, password, { signal }) => {
 
@@ -78,11 +80,11 @@ export const submitPasswordRecoverRequest = measureTime(TIMED_ACTIONS.PASSWORD_R
     }
 });
 
-export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.PASSWORD_RECOVERY_REQUEST, async (token, password) => {
+export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.FINISH_PASSWORD_RECOVERY_REQUEST, async (token, password) => {
     let isErrorRegistered = false;
 
     try {
-        const res = await fetch(`${API_HOSTNAME}/auth//recover/${token}/confirm`, {
+        const res = await fetch(`${API_HOSTNAME}/auth/recover/${token}/confirm`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -95,7 +97,7 @@ export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.PASSWORD_RE
         if (!res.ok) {
 
             createErrorEvent(
-                PASSWORD_RECOVERY_REQUEST_METRIC_ID,
+                FINISH_PASSWORD_RECOVERY_REQUEST_METRIC_ID,
                 ErrorTypes.BAD_RESPONSE,
                 json.errors,
                 res.status
@@ -105,7 +107,7 @@ export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.PASSWORD_RE
             throw json.errors;
         }
 
-        createEvent(EVENT_TYPES.SUCCESS(PASSWORD_RECOVERY_REQUEST_METRIC_ID));
+        createEvent(EVENT_TYPES.SUCCESS(FINISH_PASSWORD_RECOVERY_REQUEST_METRIC_ID));
         return json;
 
     } catch (error) {
@@ -114,7 +116,49 @@ export const submitFinishPasswordRecover = measureTime(TIMED_ACTIONS.PASSWORD_RE
 
         if (!isErrorRegistered) {
             createErrorEvent(
-                PASSWORD_RECOVERY_REQUEST_METRIC_ID,
+                FINISH_PASSWORD_RECOVERY_REQUEST_METRIC_ID,
+                ErrorTypes.NETWORK_FAILURE,
+                errorArray,
+            );
+        }
+
+        throw errorArray;
+    }
+});
+
+export const verifyPasswordRecoveryToken = measureTime(TIMED_ACTIONS.VERIFY_PASSWORD_RECOVERY_TOKEN, async (token) => {
+    let isErrorRegistered = false;
+
+    try {
+        const res = await fetch(`${API_HOSTNAME}/auth/recover/${token}/confirm`, {
+            method: "GET",
+            credentials: "include",
+        });
+        const json = await res.json();
+
+        if (!res.ok) {
+
+            createErrorEvent(
+                VERIFY_PASSWORD_RECOVERY_TOKEN_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                json.errors,
+                res.status
+            );
+            isErrorRegistered = true;
+
+            throw json.errors;
+        }
+
+        createEvent(EVENT_TYPES.SUCCESS(VERIFY_PASSWORD_RECOVERY_TOKEN_METRIC_ID));
+        return json;
+
+    } catch (error) {
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                VERIFY_PASSWORD_RECOVERY_TOKEN_METRIC_ID,
                 ErrorTypes.NETWORK_FAILURE,
                 errorArray,
             );
