@@ -1,5 +1,5 @@
 /* eslint-disable no-constant-condition */
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import PropTypes from "prop-types";
 import {
     Dialog,
@@ -9,7 +9,7 @@ import PasswordRecoveryForm from "./PasswordRecoveryForm";
 import usePageSwitcher from "../../../hooks/usePageSwitcher";
 import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
 
-const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage, addSnackbar }) => {
+const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar }) => {
     const [
         [
             loginActive,
@@ -21,8 +21,8 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage, addS
             switchRecoveryRequest,
             switchRecoveryFinish,
         ],
-        reset,
-    ] = usePageSwitcher(3, initialPage);
+        // reset,
+    ] = usePageSwitcher(3, 0);
 
     const onClose = useCallback(
         () => {
@@ -32,11 +32,11 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, initialPage, addS
     );
 
     // Reset to login page on opening
-    useEffect(() => {
-        if (open) {
-            reset();
-        }
-    }, [open, reset, switchLogin]);
+    // useEffect(() => {
+    //     if (open) {
+    //         reset();
+    //     }
+    // }, [open, reset, switchLogin]);
 
 
     return (
@@ -68,7 +68,6 @@ AuthModal.propTypes = {
     open: PropTypes.bool.isRequired,
     toggleAuthModal: PropTypes.func.isRequired,
     updateSessionInfo: PropTypes.func.isRequired,
-    initialPage: PropTypes.number,
     addSnackbar: PropTypes.func.isRequired,
 };
 
