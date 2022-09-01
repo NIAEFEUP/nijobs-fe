@@ -11,7 +11,10 @@ import CompanyApplicationPage, {
 import ApplicationsReviewPage from "./pages/ApplicationsReviewPage";
 import NotFound from "./pages/NotFound";
 import ErrorPage from "./pages/ErrorPage";
-import OfferPage, { OfferPageController, OfferPageControllerContext } from "./pages/OfferPage";
+import OfferPage, {
+    OfferPageController,
+    OfferPageControllerContext,
+} from "./pages/OfferPage";
 import RulesPage from "./pages/RulesPage";
 import { ProtectedRoute, Route } from "./utils";
 import PageLayout, { LayoutType } from "./components/Layout/PageLayout";
@@ -22,12 +25,19 @@ import {
 import FinishCompanyRegistrationPage from "./pages/FinishCompanyRegistrationPage";
 import CompanyOffersManagementPage from "./pages/CompanyOffersManagementPage";
 import CreateOfferPage from "./pages/CreateOfferPage";
-import { CreateOfferController, CreateOfferControllerContext } from "./components/Offers/New/CreateOfferForm";
+import {
+    CreateOfferController,
+    CreateOfferControllerContext,
+} from "./components/Offers/New/CreateOfferForm";
 import { CookieConsent } from "./cookieConsent";
-import { EditOfferController, EditOfferControllerContext } from "./components/Offers/Edit/EditOfferForm";
+import {
+    EditOfferController,
+    EditOfferControllerContext,
+} from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
+import ChangeLogPage from "./pages/ChangeLogPage";
 
 /**
  *
@@ -39,17 +49,16 @@ import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
  *
  */
 
-const shouldShowCompanyApplicationMobile = ({ showConfirmationModal, isMobileSize }) => !showConfirmationModal && isMobileSize;
+const shouldShowCompanyApplicationMobile = ({
+    showConfirmationModal,
+    isMobileSize,
+}) => !showConfirmationModal && isMobileSize;
 
 const AppRouter = () => (
     <BrowserRouter basename={`${process.env.REACT_APP_BASE_ROUTE || "/"}`}>
         <CookieConsent />
         <Switch>
-            <Route
-                exact
-                path="/"
-                key="/"
-            >
+            <Route exact path="/" key="/">
                 <PageLayout
                     key="/"
                     showHomePageLink={false}
@@ -59,11 +68,7 @@ const AppRouter = () => (
                     <HomePage />
                 </PageLayout>
             </Route>
-            <Route
-                exact
-                path="/privacy-policy"
-                key="/privacy-policy"
-            >
+            <Route exact path="/privacy-policy" key="/privacy-policy">
                 <PageLayout
                     key="/privacy-policy"
                     pageTitle="Privacy Policy"
@@ -103,10 +108,7 @@ const AppRouter = () => (
                     <CompanyApplicationPage />
                 </PageLayout>
             </Route>
-            <Route
-                exact
-                path="/rules"
-            >
+            <Route exact path="/rules">
                 <PageLayout
                     key="/rules"
                     pageTitle="Rules"
@@ -121,7 +123,7 @@ const AppRouter = () => (
                 path="/review/applications"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to access the applications review page."
-                authorize={(user) => (user.isAdmin)}
+                authorize={(user) => user.isAdmin}
             >
                 <PageLayout
                     key="/review/applications"
@@ -137,7 +139,9 @@ const AppRouter = () => (
                 path="/company/registration/finish"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="To access this page you must be logged in and have a pending registration."
-                authorize={(user) => (user.company && !user.company.hasFinishedRegistration)}
+                authorize={(user) =>
+                    user.company && !user.company.hasFinishedRegistration
+                }
                 context={FinishCompanyRegistrationControllerContext}
                 controller={FinishCompanyRegistrationController}
             >
@@ -156,7 +160,7 @@ const AppRouter = () => (
                 path="/company/offers/manage"
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to access the My Offers page"
-                authorize={(user) => !!(user?.company)}
+                authorize={(user) => !!user?.company}
             >
                 <PageLayout
                     key="/company/offers/manage"
@@ -215,10 +219,16 @@ const AppRouter = () => (
                     <CreateOfferPage />
                 </PageLayout>
             </Route>
-            <Route
-                path="/error"
-                key="/error"
-            >
+            <Route exact path="/whats-new">
+                <PageLayout
+                    key="/whats-new"
+                    pageTitle="What's new?"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <ChangeLogPage />
+                </PageLayout>
+            </Route>
+            <Route path="/error" key="/error">
                 <PageLayout
                     key="/error"
                     forceDesktopLayout
