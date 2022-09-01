@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import {
@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Skeleton } from "@material-ui/lab";
 import { LocationCity } from "@material-ui/icons";
 import clsx from "clsx";
+import { recordOfferImpression } from "../../../../utils/analytics";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,6 +56,13 @@ const defaultLogo = require("./default_icon.svg");
 const OfferItem = ({ offer, offerIdx, selectedOfferIdx, setSelectedOfferIdx, loading }) => {
     const isCurrentlySelected = selectedOfferIdx === offerIdx;
     const classes = useStyles();
+
+    useEffect(() => {
+        if (offer && !loading) {
+            recordOfferImpression(offer._id, offer.title, offer.ownerName);
+        }
+    }, [offer, loading]);
+
     return (
         <div className={classes.itemWrapper}>
             {!loading && <div className={clsx(classes.hoverMask, { [classes.maskActive]: isCurrentlySelected })} />}
