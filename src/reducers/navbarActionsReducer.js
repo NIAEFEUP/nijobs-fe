@@ -21,6 +21,11 @@ export default (state = initialState, action) => {
                 ...state,
                 authModalPage: action.page,
             };
+        case NavbarActionTypes.SET_RECOVERY_TOKEN:
+            return {
+                ...state,
+                recoveryToken: action.token,
+            };
         default:
             return state;
     }

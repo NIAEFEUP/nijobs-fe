@@ -16,7 +16,7 @@ import {
 import useToggle from "../../../hooks/useToggle";
 import { submitPasswordRecoverRequest } from "../../../services/auth";
 
-const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinishPage }) => {
+const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage }) => {
     const classes = useAuthStyles();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
@@ -29,7 +29,10 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
 
     const [errorCleared, setErrorCleared] = useState(true);
 
-    const [requestError, setRequestError] = React.useState(null);
+    const [requestError, setRequestError] = useState(null);
+
+    const [success, setSuccess] = useState(false);
+
     const resetError = () => {
         if (!errorCleared) {
             setRequestError([]);
@@ -42,7 +45,7 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
         try {
             await submitPasswordRecoverRequest(data.email);
             toggleRequestPending();
-            setRecoveryFinishPage();
+            setSuccess(true);
         } catch (e) {
             toggleRequestPending();
             setRequestError("Unexpected Error. Please try again later.");
@@ -61,21 +64,29 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
         >
             <DialogTitle id="form-dialog-title">Recover Password</DialogTitle>
             <DialogContent>
-                <TextField
-                    id="email"
-                    name="email"
-                    label="Email"
-                    type="email"
-                    onChange={resetError}
-                    margin="normal"
-                    fullWidth
-                    inputProps={{ ...register("email") }}
-                    error={!!errors.email}
-                    helperText={errors.email ? errors.email.message : <span />}
-                />
-                <FormHelperText error={!!requestError}>
-                    {requestError || " "}
-                </FormHelperText>
+                {
+                    success
+                        ? "If you account is registered, you will receive an email containing the following steps"
+                        :
+                        <>
+                            <TextField
+                                id="email"
+                                name="email"
+                                label="Email"
+                                type="email"
+                                onChange={resetError}
+                                margin="normal"
+                                fullWidth
+                                inputProps={{ ...register("email") }}
+                                error={!!errors.email}
+                                helperText={errors.email ? errors.email.message : <span />}
+                            />
+                            <FormHelperText error={!!requestError}>
+                                {requestError || " "}
+                            </FormHelperText>
+                        </>
+                }
+
             </DialogContent>
             <DialogActions>
                 <Button
@@ -119,7 +130,6 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage, setRecoveryFinish
 PasswordRecoveryForm.propTypes = {
     toggleAuthModal: PropTypes.func.isRequired,
     setLoginPage: PropTypes.func.isRequired,
-    setRecoveryFinishPage: PropTypes.func.isRequired,
 };
 
 export default PasswordRecoveryForm;
