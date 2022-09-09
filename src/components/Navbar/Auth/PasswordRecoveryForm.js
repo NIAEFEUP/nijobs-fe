@@ -105,23 +105,27 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage }) => {
                 >
                         Cancel
                 </Button>
-                <div className={classes.loginBtnWrapper}>
-                    <Button
-                        type="submit"
-                        className={classes.loginBtn}
-                        color="primary"
-                        variant="contained"
-                        disabled={requestPending}
-                    >
+                {
+                    !success &&
+                    <div className={classes.loginBtnWrapper}>
+                        <Button
+                            type="submit"
+                            className={classes.loginBtn}
+                            color="primary"
+                            variant="contained"
+                            disabled={requestPending}
+                        >
                             Recover Password
-                    </Button>
-                    {requestPending &&
-                    <CircularProgress
-                        size={24}
-                        className={classes.loginProgressRed}
-                    />
-                    }
-                </div>
+                        </Button>
+                        {requestPending &&
+                        <CircularProgress
+                            size={24}
+                            className={classes.loginProgressRed}
+                        />
+                        }
+                    </div>
+                }
+
             </DialogActions>
         </form>
     );
