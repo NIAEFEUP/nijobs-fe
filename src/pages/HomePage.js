@@ -8,7 +8,8 @@ import { useDesktop } from "../utils/media-queries";
 import ProductDescription from "../components/HomePage/ProductPlacementArea/ProductDescription";
 import SearchResultsWidget from "../components/HomePage/SearchResultsArea/SearchResultsWidget/SearchResultsWidget";
 import { useDispatch } from "react-redux";
-import { toggleAuthModal } from "../actions/navbarActions";
+import { setRecoveryToken, toggleAuthModal } from "../actions/navbarActions";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = ({ isMobile, showSearchResults }) => makeStyles(() => (
     showSearchResults &&
@@ -36,6 +37,8 @@ export const HomePage = ({ openPasswordRecoveryModal }) => {
     const [showSearchResults, setShowSearchResults] = useState(false);
     const productDescriptionScrollBlock = useDesktop() ? "end" : "center";
     const dispatch = useDispatch();
+    const history = useHistory();
+    const { token } = useParams();
 
     // this will not trigger the scroll on subsequent submits, because the dependencies won't change after the first call
     useEffect(() => {
@@ -46,10 +49,12 @@ export const HomePage = ({ openPasswordRecoveryModal }) => {
     }, [searchResultsRef, showSearchResults]);
 
     useEffect(() => {
-        if (openPasswordRecoveryModal) {
+        if (openPasswordRecoveryModal && token) {
+            history.replace({ pathname: "/" });
             dispatch(toggleAuthModal(2));
+            dispatch(setRecoveryToken(token));
         }
-    }, [dispatch, openPasswordRecoveryModal]);
+    }, [dispatch, history, openPasswordRecoveryModal, token]);
 
 
     const classes = useStyles({ isMobile: !useDesktop(), showSearchResults })();

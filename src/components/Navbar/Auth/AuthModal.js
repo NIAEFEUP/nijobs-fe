@@ -8,8 +8,9 @@ import LoginForm from "./LoginForm";
 import PasswordRecoveryForm from "./PasswordRecoveryForm";
 import usePageSwitcher from "../../../hooks/usePageSwitcher";
 import PasswordRecoveryFinishForm from "./PasswordRecoveryFinishForm";
+import { connect } from "react-redux";
 
-const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar }) => {
+const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar, token }) => {
     const [
         [
             loginActive,
@@ -57,7 +58,8 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar }) =>
                 <PasswordRecoveryFinishForm
                     toggleAuthModal={toggleAuthModal}
                     setLoginPage={switchLogin}
-                    setRecoveryFinishPage={switchRecoveryFinish}
+                    token={token}
+                    setRecoveryRequestPage={switchRecoveryRequest}
                     addSnackbar={addSnackbar}
                 />}
         </Dialog>
@@ -66,9 +68,16 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar }) =>
 
 AuthModal.propTypes = {
     open: PropTypes.bool.isRequired,
+    token: PropTypes.string.isRequired,
     toggleAuthModal: PropTypes.func.isRequired,
     updateSessionInfo: PropTypes.func.isRequired,
     addSnackbar: PropTypes.func.isRequired,
 };
 
-export default AuthModal;
+const mapStateToProps = ({ navbar }) => ({
+    token: navbar.recoveryToken,
+});
+
+export const mapDispatchToProps = () => ({});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthModal);
