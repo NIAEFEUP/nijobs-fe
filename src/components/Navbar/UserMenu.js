@@ -57,14 +57,14 @@ const useStyles = makeStyles((theme) => ({
     dividerLabel: {
         padding: theme.spacing(1, 2),
     },
-    menuDivider: {
+    menuDivider: ({ sessionData }) => ({
         "&&": {
             margin: theme.spacing(1),
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
-            width: "80%",
+            width: sessionData?.isAdmin ? "77%" : "80%",
         },
-    },
+    }),
 }));
 
 const AdminMenuOptions = ({ isMobile }) => {
@@ -153,7 +153,7 @@ CompanyMenuOptions.propTypes = {
 };
 
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
-    const classes = useStyles({ isMobile });
+    const classes = useStyles({ isMobile, sessionData });
     return (
         <div className={classes.userMenuContent} ref={ref}>
             <Typography
@@ -170,7 +170,6 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.company && <CompanyMenuOptions isMobile={isMobile} sessionData={sessionData} />}
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
-
             </MenuList>
             <Divider className={classes.menuDivider} />
             <MenuList
