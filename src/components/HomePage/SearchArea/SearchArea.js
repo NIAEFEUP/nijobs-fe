@@ -37,8 +37,8 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
-    // TODO: make it so form is auto-submitted if searchValue present in query
-
+    // TODO: see if it is better to change the URL only when we are submitting the form
+    // TODO: make it so the URL can be copied to the clipboard
     const {
         queryParams,
         setJobType: actualSetJobType,
@@ -106,7 +106,6 @@ export const AdvancedSearchController = ({
 
         if (queryParams.searchValue) {
             setSearchValue(queryParams.searchValue);
-            // submitForm(); this line causes infinite requests
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
