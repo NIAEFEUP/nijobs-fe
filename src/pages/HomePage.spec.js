@@ -1,11 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 import HomePage from "./HomePage";
 import { renderWithStoreAndTheme, screen, fireEvent } from "../test-utils";
 import useSession from "../hooks/useSession";
 import AppTheme from "../AppTheme";
 import { SnackbarProvider } from "notistack";
 import Notifier from "../components/Notifications/Notifier";
+
+import qs from "qs";
 
 jest.mock("../hooks/useSession");
 
@@ -22,7 +24,8 @@ describe("HomePage", () => {
             showAuthModal: false,
         },
     };
-    useSession.mockImplementation(() => ({ isLoggedIn: false, revalidate: () => {} }));
+    useSession.mockImplementation(() => ({ isLoggedIn: false, revalidate: () => { } }));
+
     describe("render", () => {
 
         it("should render search area and info message", () => {
@@ -39,6 +42,7 @@ describe("HomePage", () => {
         });
 
     });
+
     describe("interaction", () => {
         it("should render search results after search submission", () => {
 
@@ -70,7 +74,7 @@ describe("HomePage", () => {
             useSession.mockImplementation(() => ({
                 isLoggedIn: true,
                 data: { company: { hasFinishedRegistration: false } },
-                revalidate: () => {},
+                revalidate: () => { },
             }));
 
             renderWithStoreAndTheme(
@@ -87,12 +91,12 @@ describe("HomePage", () => {
                 .toBeInTheDocument();
         });
 
-        it("should show finish registration notification", () => {
+        it("should not show finish registration notification", () => {
 
             useSession.mockImplementation(() => ({
                 isLoggedIn: true,
                 data: { company: { hasFinishedRegistration: true } },
-                revalidate: () => {},
+                revalidate: () => { },
             }));
 
             renderWithStoreAndTheme(
@@ -108,5 +112,102 @@ describe("HomePage", () => {
             expect(screen.queryByText("In order to fully use NIJobs, you still need to finish your registration."))
                 .not.toBeInTheDocument();
         });
+    });
+
+    describe("URL Search Params", () => {
+
+        test("Should auto-submit if valid search params present in the URL location", () => {
+
+            const params = {
+                searchValue: "test-search-value",
+                jobMinDuration: 2,
+                jobMaxDuration: 9,
+                fields: ["TEST-FIELD1", "TEST-FIELD2"],
+                technologies: ["TEST-TECH"],
+                jobType: "test-job-type",
+            };
+
+            const locationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
+
+            let submitted = false;
+
+            fetch.mockImplementation(() => {
+                submitted = true;
+
+                return { mockData: true };
+            });
+
+            renderWithStoreAndTheme(
+                <Router initialEntries={[`/${locationSearch}`]}>
+                    <HomePage />
+                </Router>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(submitted).toBe(true);
+        });
+
+        test("Should auto-submit if one valid search param present in the URL location", () => {
+
+            const params = {
+                searchValue: "test-search-value",
+                jobMinDurationr: 2,
+                jobMaxDurationy: 9,
+                fieldsu: ["TEST-FIELD1", "TEST-FIELD2"],
+                technologiest: ["TEST-TECH"],
+                jobTypeh: "test-job-type",
+            };
+
+            const locationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
+
+            let submitted = false;
+
+            fetch.mockImplementation(() => {
+                submitted = true;
+
+                return { mockData: true };
+            });
+
+            renderWithStoreAndTheme(
+                <Router initialEntries={[`/${locationSearch}`]}>
+                    <HomePage />
+                </Router>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(submitted).toBe(true);
+        });
+
+        test("Should not auto-submit if no valid search params present in the URL location", () => {
+
+            const params = {
+                searchValuez: "test-search-value",
+                jobMinDurationr: 2,
+                jobMaxDurationy: 9,
+                fieldsu: ["TEST-FIELD1", "TEST-FIELD2"],
+                technologiest: ["TEST-TECH"],
+                jobTypeh: "test-job-type",
+            };
+
+            const locationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
+
+            let submitted = false;
+
+            fetch.mockImplementation(() => {
+                submitted = true;
+
+                return { mockData: true };
+            });
+
+            renderWithStoreAndTheme(
+                <Router initialEntries={[`/${locationSearch}`]}>
+                    <HomePage />
+                </Router>,
+                { initialState, theme: AppTheme }
+            );
+
+            expect(submitted).toBe(false);
+        });
+
     });
 });
