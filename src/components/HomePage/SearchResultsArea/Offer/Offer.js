@@ -2,7 +2,7 @@ export default class Offer {
     constructor({
         _id, title, publishDate, publishEndDate, owner, ownerName, ownerLogo, location, jobStartDate, jobMinDuration, jobMaxDuration,
         description, contacts, isPaid, vacancies, jobType, fields, technologies, isHidden, hiddenReason, adminReason, requirements,
-    }) {
+        applyURL }) {
         this._id = _id;
         this.title = title;
         this.publishDate = publishDate;
@@ -25,5 +25,6 @@ export default class Offer {
         this.hiddenReason = hiddenReason;
         this.adminReason = adminReason;
         this.requirements = requirements;
+        this.applyURL = applyURL;
     }
 }

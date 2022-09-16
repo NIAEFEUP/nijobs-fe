@@ -232,6 +232,7 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
     location,
     coordinates,
     requirements,
+    applyURL,
 }) => {
 
     const data = {
@@ -253,6 +254,7 @@ export const newOffer = measureTime(TIMED_ACTIONS.OFFER_CREATE, async ({
         location,
         coordinates,
         requirements,
+        applyURL,
     };
 
     let isErrorRegistered = false;
@@ -319,6 +321,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     location,
     coordinates,
     requirements,
+    applyURL,
 }) => {
     const data = {
         title,
@@ -337,6 +340,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         location,
         coordinates,
         requirements,
+        applyURL,
     };
 
     let isErrorRegistered = false;

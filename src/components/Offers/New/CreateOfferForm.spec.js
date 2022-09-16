@@ -13,6 +13,7 @@ import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
 import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
+import { HumanValidationReasons } from "../../../utils";
 
 jest.mock("../../../hooks/useSession");
 jest.mock("../../../services/locationSearchService");
@@ -120,25 +121,6 @@ describe("Create Offer Form", () => {
             expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
         });
 
-        it("should not render owner id text field if company logged in", () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
-
-            renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <CreateOfferWrapper>
-                            <CreateOfferPage />
-                        </CreateOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            expect(screen.queryByText("Login")).not.toBeInTheDocument();
-            expect(screen.queryByText("Join us")).not.toBeInTheDocument();
-            expect(screen.queryByLabelText("Owner ID *")).not.toBeInTheDocument();
-        });
-
         it("should render enabled form", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true }));
 
@@ -166,6 +148,7 @@ describe("Create Offer Form", () => {
             expect(screen.getByLabelText("Hide offer")).toBeEnabled();
             expect(screen.getByTestId("contacts-selector")).toBeEnabled();
             expect(screen.getByTestId("requirements-selector")).toBeEnabled();
+            expect(screen.getByLabelText("Application URL")).toBeEnabled();
             expect(screen.getByText("Submit").parentNode).toBeEnabled();
         });
 
@@ -648,6 +631,40 @@ describe("Create Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("\u200B");
 
+        });
+
+        it("should fail validation if applyURL not following the regex", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            const input = screen.getByLabelText("Application URL");
+
+            await act(() => {
+                fireEvent.focus(input);
+                fireEvent.change(input, { target: { value: "invalid" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(input))
+                .toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+
+            await act(() =>  {
+                fireEvent.change(input, { target: { value: "https://valid.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
         });
 
         it("should be visible advanced settings if form error in these publication date", async () => {

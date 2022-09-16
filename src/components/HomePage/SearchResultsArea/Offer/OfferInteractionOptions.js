@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { Grid, Tooltip, Divider, Button } from "@material-ui/core";
 import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import OfferApplyButton from "./OfferApplyButton";
+import useToggle from "../../../../hooks/useToggle";
 
-const OfferVisibilityOptions = ({
+const OfferInteractionOptions = ({
     loading,
     sessionData,
     classes,
@@ -20,6 +22,7 @@ const OfferVisibilityOptions = ({
 }) => {
 
     const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
+    const [showRedirectDialog, toggleRedirectDialog, setClosedRedirectDialog] = useToggle(false);
 
     const handleOfferVisibility = async () => {
 
@@ -45,7 +48,20 @@ const OfferVisibilityOptions = ({
         }
     };
 
-    if (!loading && (sessionData?.isAdmin || sessionData?.company?._id === offer.owner))
+    const handleApplyURLRedirect = useCallback(() => {
+        setClosedRedirectDialog();
+        window.open(offer.applyURL, "_blank", "noopener");
+    }, [offer, setClosedRedirectDialog]);
+
+    const canChangeOfferVisibility = useMemo(() => (
+        visibilityState.isVisible ||
+            !visibilityState.isDisabled ||
+            sessionData?.company?._id === offer?.owner) &&
+        (sessionData?.company?._id === offer?.owner ||
+            sessionData?.isAdmin
+        ), [offer, sessionData, visibilityState.isDisabled, visibilityState.isVisible]);
+
+    if (!loading)
         return (
             <Grid item xs={12} md={3} className={classes.offerOptions}>
                 {
@@ -56,6 +72,18 @@ const OfferVisibilityOptions = ({
                         className={classes.verticalDivider}
                     />}
                 <div className={classes.offerOptionsButtons}>
+                    {
+                    offer?.applyURL &&
+                    <div className={classes.offerApplyButton}>
+                        <OfferApplyButton
+                            open={showRedirectDialog}
+                            handleAccept={handleApplyURLRedirect}
+                            handleToggle={toggleRedirectDialog}
+                            applyURL={offer.applyURL}
+                            title="You're being redirected to the following website:"
+                        />
+                    </div>
+                    }
                     {
                         (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&
                         <Tooltip title={"Edit Offer"}>
@@ -71,11 +99,7 @@ const OfferVisibilityOptions = ({
                         </Tooltip>
                     }
                     {
-                        (
-                            visibilityState.isVisible ||
-                            !visibilityState.isDisabled ||
-                            sessionData?.company?._id === offer.owner
-                        ) &&
+                        canChangeOfferVisibility &&
                         <Tooltip title={visibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
                             <span>
                                 <Button
@@ -110,4 +134,4 @@ const OfferVisibilityOptions = ({
         return null;
 };
 
-export default OfferVisibilityOptions;
+export default OfferInteractionOptions;

@@ -145,17 +145,21 @@ export default makeStyles((theme) => ({
         display: "inline",
         marginRight: theme.spacing(1),
     },
-    offerWidget: ({ isMobile, isPage }) => {
+    offerWidget: ({ isMobile, isPage, hasApplyButton }) => {
         let paddingValue = !isMobile ? theme.spacing(3) : 0;
         let paddingTopValue = 0;
+        let paddingBottomValue = paddingValue;
+
         if (isPage) {
             paddingValue = isMobile ? theme.spacing(3) : theme.spacing(10);
             paddingTopValue = !isMobile && theme.spacing(5);
+            if (!hasApplyButton) paddingBottomValue = paddingValue;
         }
+
         return {
             paddingTop: paddingTopValue,
             paddingRight: paddingValue,
-            paddingBottom: paddingValue,
+            paddingBottom: paddingBottomValue,
             paddingLeft: paddingValue,
             height: "100%",
         };
@@ -163,4 +167,7 @@ export default makeStyles((theme) => ({
     offerDescription: {
         marginTop: theme.spacing(3),
     },
+    offerApplyButton: () => ({
+        marginBottom: theme.spacing(1),
+    }),
 }));
