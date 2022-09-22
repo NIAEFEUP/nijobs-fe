@@ -3,15 +3,21 @@ import React from "react";
 import { login } from "../../../services/auth";
 
 import AuthModal from "./AuthModal";
-import { render, fireEvent, act } from "../../../test-utils";
+import { fireEvent, act, renderWithStoreAndTheme } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
+import { SnackbarProvider } from "notistack";
+import { createTheme } from "@material-ui/core";
 
 jest.mock("../../../services/auth");
 
 describe("Navbar - AuthModal - LoginForm", () => {
+    const theme = createTheme({});
     describe("render", () => {
         it("Should not appear as default", () => {
-            const wrapper = render(<AuthModal />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal />
+                </SnackbarProvider>, { initialState: {}, theme });
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).not.toBeInTheDocument();
         });
@@ -21,7 +27,10 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toogleAuthModal={toggleAuthModal} />
+                </SnackbarProvider>, { initialState: {}, theme });
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
 
@@ -34,7 +43,10 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toogleAuthModal={toggleAuthModal} />
+                </SnackbarProvider>, { initialState: {}, theme });
             fireEvent.click(wrapper.getByText("Lost password?"));
 
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
@@ -48,13 +60,15 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const { getByRole, getByLabelText } = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={toggleAuthModal}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const { getByRole, getByLabelText } = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={toggleAuthModal}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(getByLabelText("Email"), { target: { value: "asd@email.com" } });
@@ -71,13 +85,16 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
         it("Should not allow invalid email", async () => {
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
+
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "invalidemail" } });
@@ -109,13 +126,15 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
         it("Should require password", async () => {
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Password"), { target: { value: "" } });
@@ -135,13 +154,15 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             // const toggleAuthModal = jest.fn();
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });
