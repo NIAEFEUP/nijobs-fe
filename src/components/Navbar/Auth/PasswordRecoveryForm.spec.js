@@ -3,15 +3,22 @@ import React from "react";
 import { login, submitPasswordRecoverRequest } from "../../../services/auth";
 
 import AuthModal from "./AuthModal";
-import { render, fireEvent, act } from "../../../test-utils";
+import { render, fireEvent, act, renderWithStoreAndTheme } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
+import { SnackbarProvider } from "notistack";
+import { createTheme } from "@material-ui/core";
 
 jest.mock("../../../services/auth");
 
 describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
+    const theme = createTheme({})
     describe("render", () => {
         it("Should not appear as default", () => {
-            const wrapper = render(<AuthModal initialPage={1} />);
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal initialPage={1} />
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).not.toBeInTheDocument();
         });
@@ -21,7 +28,14 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />);
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
+
+            fireEvent.click(wrapper.getByText("Lost password?"));
+
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).toBeInTheDocument();
 
@@ -34,7 +48,15 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />);
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
+
+            fireEvent.click(wrapper.getByText("Lost password?"));
+
+
             fireEvent.click(wrapper.getByText("Login"));
 
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
@@ -48,38 +70,47 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const toggleAuthModal = jest.fn();
 
-            const { getByRole, getByLabelText, queryByRole } = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={toggleAuthModal}
-                    updateSessionInfo={() => {}}
-                    initialPage={1}
-                />);
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={toggleAuthModal}
+                        updateSessionInfo={() => {}}
+                    />  
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
+
+            fireEvent.click(wrapper.getByText("Lost password?"));
+
 
             await act(async () => {
-                await fireEvent.change(getByLabelText("Email"), { target: { value: "asd@email.com" } });
+                await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });
             });
             await act(async () => {
-                await fireEvent.click(getByRole("button", { name: "Recover Password" }));
+                await fireEvent.click(wrapper.getByRole("button", { name: "Recover Password" }));
             });
 
-            const dialogTitle = queryByRole("heading", { level: 2, name: "Recover Password" });
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).toBeInTheDocument();
 
-            const tokenField = getByLabelText("Token");
-            expect(tokenField).toBeInTheDocument();
+            const info = wrapper.getByText("If you account is registered, you will receive an email containing the following steps");
+            expect(info).toBeInTheDocument();
 
         });
 
         it("Should not allow invalid email", async () => {
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        updateSessionInfo={() => {}}
+                    />  
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    initialPage={1}
-                    updateSessionInfo={() => {}}
-                />);
+            fireEvent.click(wrapper.getByText("Lost password?"));
+ 
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "invalidemail" } });
@@ -115,15 +146,21 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
                 throw new Error();
             });
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                    initialPage={1}
-                />);
 
+            const wrapper = renderWithStoreAndTheme( 
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />  
+                </SnackbarProvider>, { initialState: {}, theme }
+            );
+
+            fireEvent.click(wrapper.getByText("Lost password?"));     
+
+                
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });
             });

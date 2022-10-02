@@ -32,14 +32,6 @@ const AuthModal = ({ open, toggleAuthModal, updateSessionInfo, addSnackbar, toke
         [toggleAuthModal],
     );
 
-    // Reset to login page on opening
-    // useEffect(() => {
-    //     if (open) {
-    //         reset();
-    //     }
-    // }, [open, reset, switchLogin]);
-
-
     return (
         <Dialog open={open} fullWidth aria-labelledby="form-dialog-title" onClose={onClose}>
             {loginActive &&
