@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
         overflowWrap: "anywhere",
     }),
     menuList: {
+        width: "80%",
         "& > *": {
             justifyContent: "flex-end",
         },
@@ -50,11 +51,20 @@ const useStyles = makeStyles((theme) => ({
     labelledDivider: {
         "&&": {
             marginTop: theme.spacing(2),
+            marginRight: theme.spacing(1),
         },
     },
     dividerLabel: {
         padding: theme.spacing(1, 2),
     },
+    menuDivider: ({ sessionData }) => ({
+        "&&": {
+            margin: theme.spacing(1),
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+            width: sessionData?.isAdmin ? "77%" : "80%",
+        },
+    }),
 }));
 
 const AdminMenuOptions = ({ isMobile }) => {
@@ -105,29 +115,29 @@ const CompanyMenuOptions = ({ isMobile, sessionData }) => {
     return (
         <>
             {
-            sessionData?.company?.hasFinishedRegistration ?
-                <>
-                    <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
-                    <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
-                </>
-                :
-                <MenuItem
-                    button
-                    className={classes.highlightedMenuItem}
-                    component={Link}
-                    to="/company/registration/finish"
-                    disableTouchRipple
-                >
-                    <Badge
-                        variant="dot"
-                        color="primary"
-                        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                sessionData?.company?.hasFinishedRegistration ?
+                    <>
+                        <MenuItem button component={Link} to="/company/offers/manage" disableTouchRipple>My Offers</MenuItem>
+                        <MenuItem button component={Link} to="/offers/new" disableTouchRipple>Create Offer</MenuItem>
+                    </>
+                    :
+                    <MenuItem
+                        button
+                        className={classes.highlightedMenuItem}
+                        component={Link}
+                        to="/company/registration/finish"
+                        disableTouchRipple
                     >
-                        <Box pl={2}>
-                        Finish Registration
-                        </Box>
-                    </Badge>
-                </MenuItem>
+                        <Badge
+                            variant="dot"
+                            color="primary"
+                            anchorOrigin={{ horizontal: "left", vertical: "top" }}
+                        >
+                            <Box pl={2}>
+                                Finish Registration
+                            </Box>
+                        </Badge>
+                    </MenuItem>
             }
         </>
     );
@@ -143,7 +153,7 @@ CompanyMenuOptions.propTypes = {
 };
 
 const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData, handleLogout }, ref) => {
-    const classes = useStyles({ isMobile });
+    const classes = useStyles({ isMobile, sessionData });
     return (
         <div className={classes.userMenuContent} ref={ref}>
             <Typography
@@ -152,15 +162,21 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
             >
                 {sessionData?.email}
             </Typography>
-            <Divider className={classes.divider} />
+            {sessionData?.company && <Divider className={classes.divider} />}
             <MenuList
                 className={classes.menuList}
                 autoFocusItem={open}
                 id="menu-list-grow"
             >
                 {sessionData?.company && <CompanyMenuOptions isMobile={isMobile} sessionData={sessionData} />}
-                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
                 {sessionData?.isAdmin && <AdminMenuOptions isMobile={isMobile} />}
+            </MenuList>
+            <Divider className={classes.menuDivider} />
+            <MenuList
+                className={classes.menuList}
+                autoFocusItem={open}
+            >
+                <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
         </div>
     );
@@ -245,7 +261,7 @@ const MobileUserMenu = ({ open, handleClose, sessionData, handleLogout }) => {
         <SwipeableDrawer
             anchor="bottom"
             open={open}
-            onOpen={() => {}}
+            onOpen={() => { }}
             onClose={handleClose}
             disableSwipeToOpen
             classes={{ paper: classes.userMenuPaper }}
