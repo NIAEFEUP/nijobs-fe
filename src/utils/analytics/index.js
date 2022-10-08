@@ -177,3 +177,25 @@ export const recordOfferImpression = (offerId, offerTitle, companyName) => {
         label: `${offerId}`,
     });
 };
+
+/**
+ * Records a click to an offer's Apply URL button
+ * @param {*} offerId ID of the offer
+ * @param {*} offerTitle Title of the offer
+ * @param {*} companyName Name of the company who owns the offer
+ * @returns
+ */
+export const recordApplyURLVisit = (offerId, offerTitle, companyName) => {
+    if (!offerId) return;
+
+    ReactGa.set({
+        [DIMENSION_IDS.companyName]: companyName,
+        [DIMENSION_IDS.offerTitle]: offerTitle,
+    });
+
+    ReactGa.event({
+        action: "Offer/applyURL",
+        category: "Success",
+        label: `${offerId}`,
+    });
+};

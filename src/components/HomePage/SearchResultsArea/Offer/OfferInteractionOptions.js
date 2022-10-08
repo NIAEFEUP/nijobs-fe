@@ -5,6 +5,7 @@ import { Visibility, VisibilityOff, Block, Edit } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import OfferApplyButton from "./OfferApplyButton";
 import useToggle from "../../../../hooks/useToggle";
+import { recordApplyURLVisit } from "../../../../utils/analytics";
 
 const OfferInteractionOptions = ({
     loading,
@@ -49,8 +50,10 @@ const OfferInteractionOptions = ({
     };
 
     const handleApplyURLRedirect = useCallback(() => {
+        if (!offer) return;
         setClosedRedirectDialog();
         window.open(offer.applyURL, "_blank", "noopener");
+        recordApplyURLVisit(offer._id, offer.title, offer.ownerName);
     }, [offer, setClosedRedirectDialog]);
 
     const canChangeOfferVisibility = useMemo(() => (
