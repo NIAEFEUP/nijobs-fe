@@ -43,6 +43,9 @@ const SearchURLWidget = () => {
         // TODO: figure out what to do here in order to notify the user
         dispatch(addSnackbar({
             message: "Copied to clipboard",
+            options: {
+                autoHideDuration: 1500,
+            },
         }));
     }, [dispatch, fullURL]);
 
