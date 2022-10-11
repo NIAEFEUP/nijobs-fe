@@ -40,7 +40,6 @@ const SearchURLWidget = () => {
     const copyToClipboard = useCallback(() => {
         navigator.clipboard.writeText(fullURL);
 
-        // TODO: figure out what to do here in order to notify the user
         dispatch(addSnackbar({
             message: "Copied to clipboard",
             options: {
