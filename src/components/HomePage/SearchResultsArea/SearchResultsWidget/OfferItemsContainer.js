@@ -9,7 +9,6 @@ import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
 import LoadingOfferItem from "./LoadingOfferItem";
 import Offer from "../Offer/Offer";
 import { SearchResultsConstants } from "./SearchResultsUtils";
-import SearchURLWidget from "./SearchURLWidget";
 
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
@@ -141,7 +140,6 @@ const OfferItemsContainer = ({
                     enabled={showSearchFilters}
                     onClick={() => toggleShowSearchFilters()}
                 />
-                <SearchURLWidget />
                 <div>
                     {offers?.map((offer, i) => (
                         <div key={offer._id}>

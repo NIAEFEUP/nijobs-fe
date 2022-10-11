@@ -1,45 +1,62 @@
 import React, { useCallback } from "react";
 
-import { ListItem, makeStyles } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { makeStyles, Button, Typography, Divider } from "@material-ui/core";
+
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 const useSearchURLWidgetStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: "100%",
-        padding: theme.spacing(3, "10%", 3, "10%"),
-        flexDirection: "column",
-        gap: theme.spacing(0.5),
+        paddingTop: theme.spacing(3),
     },
     label: {
         textAlign: "center",
     },
+    container: {
+        margin: "10px auto",
+        paddingBottom: "10px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: "10px",
+    },
     link: {
         width: "95%",
-        height: "40px",
-        cursor: "pointer",
         fontWeight: "bold",
         userSelect: "none",
         whiteSpace: "nowrap",
         overflowX: "scroll",
+        textAlign: "center",
     },
 }));
 
 const SearchURLWidget = () => {
 
     const classes = useSearchURLWidgetStyles();
+    const dispatch = useDispatch();
 
     const fullURL = window.location.href;
 
     const copyToClipboard = useCallback(() => {
         navigator.clipboard.writeText(fullURL);
-    }, [fullURL]);
+
+        // TODO: figure out what to do here in order to notify the user
+        dispatch(addSnackbar({
+            message: "Copied to clipboard",
+        }));
+    }, [dispatch, fullURL]);
 
     return (
-        <ListItem className={classes.root}>
-            <p className={classes.label}>Click this URL to copy it to your clipboard to share this search result:</p>
-            <p onClick={copyToClipboard} className={classes.link}>
-                {fullURL}
-            </p>
-        </ListItem>
+        <div className={classes.root}>
+            <Typography className={classes.label}>Copy this URL to share your search with other people:</Typography>
+            <div className={classes.container}>
+                <Typography className={classes.link}>
+                    {fullURL}
+                </Typography>
+                <Button color="primary" variant="contained" onClick={copyToClipboard}>Copy</Button>
+            </div>
+            <Divider />
+        </div>
     );
 };
 

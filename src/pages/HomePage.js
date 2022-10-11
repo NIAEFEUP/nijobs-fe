@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { makeStyles } from "@material-ui/core";
 import MainView from "../components/HomePage/MainView";
 import ApplicationMessagesNotifier from "../components/ApplicationMessages";
 import { smoothScrollToRef } from "../utils";
@@ -12,25 +11,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { AuthModalConstants } from "../components/Navbar/Auth/AuthModalConstants";
 import URLSearchParamsParser from "../components/HomePage/URLSearchParamsParser";
 import PropTypes from "prop-types";
-
-const useStyles = ({ isMobile, showSearchResults }) => makeStyles(() => (
-    showSearchResults &&
-    {
-        search: {
-            scrollSnapAlign: "start",
-        },
-        productDescription: {
-            scrollSnapAlign: isMobile ? "center" : "end",
-        },
-        searchResults: {
-            scrollSnapAlign: "start",
-
-            // don't apply snap scroll to the bottom of the search
-            // results, so that it's possible to see the footer
-            scrollMarginBottom: "100vh",
-        },
-    }
-));
 
 export const HomePage = ({ openPasswordRecoveryModal }) => {
 
@@ -58,10 +38,6 @@ export const HomePage = ({ openPasswordRecoveryModal }) => {
         }
     }, [dispatch, history, openPasswordRecoveryModal, token]);
 
-
-    // const classes = useStyles({ isMobile: !useDesktop(), showSearchResults })();
-    const classes = useStyles({ isMobile: !useDesktop(), showSearchResults: showSearchResultsWidget })();
-
     const showSearchResults = useCallback(() => {
         setShowSearchResultsWidget(true);
         if (searchResultsRef && searchResultsRef.current) smoothScrollToRef(searchResultsRef);
@@ -71,17 +47,17 @@ export const HomePage = ({ openPasswordRecoveryModal }) => {
         <React.Fragment>
             <ApplicationMessagesNotifier />
             <URLSearchParamsParser showSearchResults={showSearchResults} />
-            <div className={classes.search}>
+            <div>
                 <MainView
                     scrollToProductDescription={smoothScrollToRef.bind(null, productDescriptionRef, productDescriptionScrollBlock)}
                     showSearchResults={showSearchResults}
                 />
             </div>
-            <div className={classes.productDescription}>
+            <div>
                 <ProductDescription ref={productDescriptionRef} />
             </div>
             {showSearchResultsWidget &&
-                <div className={classes.searchResults}>
+                <div>
                     <SearchResultsWidget ref={searchResultsRef} />
                 </div>
             }
