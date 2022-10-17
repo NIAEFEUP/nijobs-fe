@@ -214,15 +214,17 @@ const OfferDetails = ({
                     </Tooltip>
                 </Grid>
                 {
-                    !loading && offer.vacancies &&
-                    <Grid item xs={12} md={6}>
-                        <Tooltip title="Vacancies" placement="left">
-                            <Typography display="inline" variant="body1" color="secondary">
-                                <FindInPage className={classes.iconStyle} />
-                                {`${offer.vacancies} ${offer.vacancies === 1 ? "vacancy" : "vacancies"}`}
-                            </Typography>
-                        </Tooltip>
-                    </Grid>
+                    !loading && (offer.vacancies > 0) &&
+                    (
+                        <Grid item xs={12} md={6}>
+                            <Tooltip title="Vacancies" placement="left">
+                                <Typography display="inline" variant="body1" color="secondary">
+                                    <FindInPage className={classes.iconStyle} />
+                                    {`${offer.vacancies} ${offer.vacancies === 1 ? "vacancy" : "vacancies"}`}
+                                </Typography>
+                            </Tooltip>
+                        </Grid>
+                    )
                 }
                 {
                     !loading && (offer.isPaid !== null && offer.isPaid !== undefined) &&
