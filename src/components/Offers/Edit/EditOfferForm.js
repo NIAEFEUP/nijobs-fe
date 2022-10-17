@@ -93,6 +93,7 @@ export const EditOfferController = () => {
 
     const handleSubmit = useCallback(
         (data) => {
+            console.log(data);
             setLoading(true);
             const [jobMinDuration, jobMaxDuration] = data.jobDuration;
             const publishDateChanged = data.publishDate.getTime() !== new Date(offer?.publishDate).getTime();
@@ -100,13 +101,13 @@ export const EditOfferController = () => {
             editOffer({
                 offerId: id,
                 ...data,
-                vacancies: data.vacancies || undefined,
+                vacancies: (data.vacancies === "") ? 0 : data.vacancies,
                 publishDate: publishDateChanged ? data.publishDate : undefined,
                 publishEndDate: publishEndDateChanged ? data.publishEndDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
                 requirements: data.requirements.map((val) => val.value),
-                isPaid: data.isPaid === "none" ? undefined : data.isPaid,
-                jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
+                isPaid: data.isPaid === "none" ? null : data.isPaid,
+                jobStartDate: !data.jobStartDate ? null : data.jobStartDate,
                 applyURL: data.applyURL || undefined,
                 jobMinDuration,
                 jobMaxDuration,
