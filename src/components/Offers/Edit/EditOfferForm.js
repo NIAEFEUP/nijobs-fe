@@ -93,7 +93,6 @@ export const EditOfferController = () => {
 
     const handleSubmit = useCallback(
         (data) => {
-            console.log(data);
             setLoading(true);
             const [jobMinDuration, jobMaxDuration] = data.jobDuration;
             const publishDateChanged = data.publishDate.getTime() !== new Date(offer?.publishDate).getTime();
