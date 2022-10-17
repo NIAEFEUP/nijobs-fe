@@ -20,5 +20,5 @@ export const validApplyURL = (val) => {
     const httpRegex = /^https?:\/\/\S+\.\S+$/;
     const emailRegex = /^mailto:(\S+@\S+)$/;
 
-    return httpRegex.test(val) || emailRegex.test(val);
+    return httpRegex.test(val) || emailRegex.test(val) || (val === "");
 };
