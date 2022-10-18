@@ -85,6 +85,7 @@ describe("Edit Offer Form", () => {
             "contact1",
             "contact2",
         ],
+        isPaid: null,
         applyURL: "https://www.test.com",
     });
 
