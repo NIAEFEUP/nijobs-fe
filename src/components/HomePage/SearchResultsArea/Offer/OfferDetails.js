@@ -214,7 +214,7 @@ const OfferDetails = ({
                     </Tooltip>
                 </Grid>
                 {
-                    !loading && (offer.vacancies > 0) &&
+                    !loading && offer.vacancies &&
                     (
                         <Grid item xs={12} md={6}>
                             <Tooltip title="Vacancies" placement="left">
