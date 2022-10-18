@@ -100,7 +100,7 @@ export const EditOfferController = () => {
             editOffer({
                 offerId: id,
                 ...data,
-                vacancies: (data.vacancies === "") ? 0 : data.vacancies,
+                vacancies: data.vacancies || null,
                 publishDate: publishDateChanged ? data.publishDate : undefined,
                 publishEndDate: publishEndDateChanged ? data.publishEndDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
