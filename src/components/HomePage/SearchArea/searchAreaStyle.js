@@ -88,4 +88,9 @@ export default makeStyles((theme) => ({
             marginLeft: theme.spacing(-1),
         },
     },
+    spaceBtwn: {
+        "& > *": {
+            justifyContent: "space-between",
+        },
+    },
 }));
