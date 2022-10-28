@@ -107,6 +107,9 @@ const AdvancedSearchDesktop = () => {
                         className: "chip-wrapper",
                     }}
                 />
+            </Collapse>
+            {advancedOptions &&
+            <div className={classes.spaceBtwn}>
                 <div className={classes.resetBtnWrapper}>
                     <Button
                         {...ResetButtonProps}
@@ -116,6 +119,13 @@ const AdvancedSearchDesktop = () => {
                     >
                         Reset Advanced Fields
                     </Button>
+                    {sessionData?.isAdmin &&
+                    <FormControlLabel
+                        className={classes.jobDurationSliderToggle}
+                        control={<Switch {...JobDurationSwitchProps} />}
+                        label={JobHiddenSwitchLabel}
+                    />
+                    }
                 </div>
                 {sessionData?.isAdmin &&
                     <FormControlLabel
@@ -130,7 +140,8 @@ const AdvancedSearchDesktop = () => {
 >>>>>>> feat: showHidden is already working
                     />
                 }
-            </Collapse>
+            </div>
+            }
         </React.Fragment>
     );
 };
