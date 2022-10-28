@@ -97,4 +97,9 @@ export default makeStyles((theme) => ({
         gridRowStart: 4,
         gridColumnStart: 2,
     },
+    spaceBtwn: {
+        "& > *": {
+            justifyContent: "space-between",
+        },
+    },
 }));
