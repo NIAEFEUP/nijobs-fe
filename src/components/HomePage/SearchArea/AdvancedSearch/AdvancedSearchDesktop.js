@@ -11,6 +11,7 @@ import {
     FormHelperText,
     Button,
 } from "@material-ui/core";
+import useSession from "../../../../hooks/useSession";
 
 import JobOptions from "../../../utils/offers/JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
@@ -40,11 +41,19 @@ JobDurationCollapse.propTypes = {
 
 const AdvancedSearchDesktop = () => {
 
+    const { data,
+        isValidating,
+        error,
+        isLoggedIn,
+    } = useSession();
+    const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
+
     const classes = useSearchAreaStyles();
 
     const {
         advancedOptions, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobHiddenSwitchLabel,
+        JobDurationSliderProps,
     } = useContext(AdvancedSearchControllerContext);
 
     return (
@@ -96,6 +105,7 @@ const AdvancedSearchDesktop = () => {
                 />
             </Collapse>
             {advancedOptions &&
+            <div className={classes.spaceBtwn}>
                 <div className={classes.resetBtnWrapper}>
                     <Button
                         {...ResetButtonProps}
@@ -105,7 +115,15 @@ const AdvancedSearchDesktop = () => {
                     >
                         Reset Advanced Fields
                     </Button>
+                    {sessionData?.isAdmin &&
+                    <FormControlLabel
+                        className={classes.jobDurationSliderToggle}
+                        control={<Switch {...JobDurationSwitchProps} />}
+                        label={JobHiddenSwitchLabel}
+                    />
+                    }
                 </div>
+            </div>
             }
         </React.Fragment>
     );
