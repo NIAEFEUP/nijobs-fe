@@ -37,8 +37,6 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
-    // TODO: see if it is better to change the URL only when we are submitting the form
-    // TODO: make it so the URL can be copied to the clipboard
     const {
         queryParams,
         setJobType: actualSetJobType,

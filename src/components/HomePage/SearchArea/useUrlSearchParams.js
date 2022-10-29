@@ -5,6 +5,8 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import { throttle } from "lodash";
 
+const HISTORY_REPLACE_THROTTLE_DELAY_MS = 350;
+
 /**
  * Injects into the Redux 'setXXXX' functions the ability to change the browser URL to reflect the specified change.
  */
@@ -41,12 +43,12 @@ export default ({
                 arrayFormat: "brackets",
             }),
         });
-    }, 350), [history]);
+    }, HISTORY_REPLACE_THROTTLE_DELAY_MS), [history]);
 
     const clearURLFilters = useCallback(
         throttle(
             (location) => history.replace({ ...location, search: "" }),
-            350
+            HISTORY_REPLACE_THROTTLE_DELAY_MS
         ), [history]);
 
     // destructure input here so mapDispatchToProps.setJobType is 'normalized' with respect to the other dispatch functions
