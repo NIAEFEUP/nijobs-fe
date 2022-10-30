@@ -2,11 +2,10 @@ import React from "react";
 
 import { submitFinishPasswordRecover, verifyPasswordRecoveryToken } from "../../../services/auth";
 
-import AuthModal from "./AuthModal";
-import { render, fireEvent, act, renderWithStoreAndTheme, waitFor } from "../../../test-utils";
+import { fireEvent, act, renderWithStoreAndTheme, waitFor } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
 import { SnackbarProvider } from "notistack";
-import { BrowserRouter, Router } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import HomePage from "../../../pages/HomePage";
 import Notifier from "../../Notifications/Notifier";
 import AppTheme from "../../../AppTheme";
@@ -23,18 +22,18 @@ jest.mock("react-router-dom", () => {
 
 describe("Navbar - AuthModal", () => {
     describe("interaction", () => {
-        const initialState = {}
+        const initialState = {};
         it("Should toggle the modal visibility when accessing the recovery link", async () => {
 
-            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            verifyPasswordRecoveryToken.mockImplementation(() => true);
             const wrapper = renderWithStoreAndTheme(
-                    <SnackbarProvider maxSnack={3}>
-                        <Notifier />
-                        <BrowserRouter>
-                            <HomePage openPasswordRecoveryModal />
-                            <Navbar></Navbar>
-                        </BrowserRouter>
-                    </SnackbarProvider>,
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <BrowserRouter>
+                        <HomePage openPasswordRecoveryModal />
+                        <Navbar />
+                    </BrowserRouter>
+                </SnackbarProvider>,
                 { initialState, theme: AppTheme }
             );
 
@@ -54,15 +53,15 @@ describe("Navbar - AuthModal", () => {
             // Making sure that the login service allows the login
             submitFinishPasswordRecover.mockImplementationOnce(() => true);
 
-            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            verifyPasswordRecoveryToken.mockImplementation(() => true);
             const wrapper = renderWithStoreAndTheme(
-                    <SnackbarProvider maxSnack={3}>
-                        <Notifier />
-                        <BrowserRouter>
-                            <HomePage openPasswordRecoveryModal />
-                            <Navbar />
-                        </BrowserRouter>
-                    </SnackbarProvider>,
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <BrowserRouter>
+                        <HomePage openPasswordRecoveryModal />
+                        <Navbar />
+                    </BrowserRouter>
+                </SnackbarProvider>,
                 { initialState, theme: AppTheme }
             );
 
@@ -86,15 +85,15 @@ describe("Navbar - AuthModal", () => {
         });
 
         it("should fail validation if invalid password", async () => {
-            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            verifyPasswordRecoveryToken.mockImplementation(() => true);
             const wrapper = renderWithStoreAndTheme(
-                    <SnackbarProvider maxSnack={3}>
-                        <Notifier />
-                        <BrowserRouter>
-                            <HomePage openPasswordRecoveryModal />
-                            <Navbar></Navbar>
-                        </BrowserRouter>
-                    </SnackbarProvider>,
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <BrowserRouter>
+                        <HomePage openPasswordRecoveryModal />
+                        <Navbar />
+                    </BrowserRouter>
+                </SnackbarProvider>,
                 { initialState, theme: AppTheme }
             );
 
@@ -103,7 +102,6 @@ describe("Navbar - AuthModal", () => {
                 const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
                 expect(title).toBeInTheDocument();
             });
-
 
 
             const input = wrapper.getByLabelText("New Password");
@@ -131,15 +129,15 @@ describe("Navbar - AuthModal", () => {
             });
 
 
-            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            verifyPasswordRecoveryToken.mockImplementation(() => true);
             const wrapper = renderWithStoreAndTheme(
-                    <SnackbarProvider maxSnack={3}>
-                        <Notifier />
-                        <BrowserRouter>
-                            <HomePage openPasswordRecoveryModal />
-                            <Navbar></Navbar>
-                        </BrowserRouter>
-                    </SnackbarProvider>,
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <BrowserRouter>
+                        <HomePage openPasswordRecoveryModal />
+                        <Navbar />
+                    </BrowserRouter>
+                </SnackbarProvider>,
                 { initialState, theme: AppTheme }
             );
 
@@ -148,7 +146,6 @@ describe("Navbar - AuthModal", () => {
                 const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
                 expect(title).toBeInTheDocument();
             });
-
 
 
             await act(async () => {
@@ -172,16 +169,16 @@ describe("Navbar - AuthModal", () => {
         it("Should show invalid token error on request fail due to invalid token, and clear on input change", async () => {
             verifyPasswordRecoveryToken.mockImplementation(() => {
                 throw [{ msg: "invalid-token" }];
-            })
+            });
 
             const wrapper = renderWithStoreAndTheme(
-                    <SnackbarProvider maxSnack={3}>
-                        <Notifier />
-                        <BrowserRouter>
-                            <HomePage openPasswordRecoveryModal />
-                            <Navbar></Navbar>
-                        </BrowserRouter>
-                    </SnackbarProvider>,
+                <SnackbarProvider maxSnack={3}>
+                    <Notifier />
+                    <BrowserRouter>
+                        <HomePage openPasswordRecoveryModal />
+                        <Navbar />
+                    </BrowserRouter>
+                </SnackbarProvider>,
                 { initialState, theme: AppTheme }
             );
 

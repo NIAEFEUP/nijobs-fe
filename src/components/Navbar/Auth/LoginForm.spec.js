@@ -23,18 +23,21 @@ describe("Navbar - AuthModal - LoginForm", () => {
         });
     });
     describe("interaction", () => {
-        it("Should toggle the modal visibility when clicking Cancel button", () => {
+        it("Should toggle the modal visibility when clicking Cancel button", async () => {
 
             const toggleAuthModal = jest.fn();
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toogleAuthModal={toggleAuthModal} />
+                    <AuthModal open toggleAuthModal={toggleAuthModal} />
                 </SnackbarProvider>, { initialState: {}, theme });
+
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
 
-            fireEvent.click(wrapper.getByText("Cancel"));
+            await act(async () => {
+                await fireEvent.click(wrapper.getByText("Cancel"));
+            });
 
             expect(toggleAuthModal).toHaveBeenCalledTimes(1);
         });
@@ -45,7 +48,7 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toogleAuthModal={toggleAuthModal} />
+                    <AuthModal open toggleAuthModal={toggleAuthModal} />
                 </SnackbarProvider>, { initialState: {}, theme });
             fireEvent.click(wrapper.getByText("Lost password?"));
 

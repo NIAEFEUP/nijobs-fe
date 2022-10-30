@@ -10,6 +10,7 @@ import SearchResultsWidget from "../components/HomePage/SearchResultsArea/Search
 import { useDispatch } from "react-redux";
 import { setRecoveryToken, toggleAuthModal } from "../actions/navbarActions";
 import { useHistory, useParams } from "react-router-dom";
+import { AuthModalConstants } from "../components/Navbar/Auth/AuthModalConstants";
 
 const useStyles = ({ isMobile, showSearchResults }) => makeStyles(() => (
     showSearchResults &&
@@ -51,7 +52,7 @@ export const HomePage = ({ openPasswordRecoveryModal }) => {
     useEffect(() => {
         if (openPasswordRecoveryModal && token) {
             history.replace({ pathname: "/" });
-            dispatch(toggleAuthModal(2));
+            dispatch(toggleAuthModal(AuthModalConstants.FINISH_PAGE));
             dispatch(setRecoveryToken(token));
         }
     }, [dispatch, history, openPasswordRecoveryModal, token]);
