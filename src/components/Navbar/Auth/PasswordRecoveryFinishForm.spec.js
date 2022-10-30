@@ -1,47 +1,52 @@
 import React from "react";
 
-import { submitFinishPasswordRecover } from "../../../services/auth";
+import { submitFinishPasswordRecover, verifyPasswordRecoveryToken } from "../../../services/auth";
 
 import AuthModal from "./AuthModal";
-import { render, fireEvent, act } from "../../../test-utils";
+import { render, fireEvent, act, renderWithStoreAndTheme, waitFor } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
+import { SnackbarProvider } from "notistack";
+import { BrowserRouter, Router } from "react-router-dom";
+import HomePage from "../../../pages/HomePage";
+import Notifier from "../../Notifications/Notifier";
+import AppTheme from "../../../AppTheme";
+import Navbar from "..";
 
 jest.mock("../../../services/auth");
+jest.mock("react-router-dom", () => {
+    const original = jest.requireActual("react-router-dom");
+    return {
+        ...original,
+        useParams: jest.fn().mockReturnValue({ token: "test123" }),
+    };
+});
 
 describe("Navbar - AuthModal", () => {
-    describe("render", () => {
-        it("Should not appear as default", () => {
-            const wrapper = render(<AuthModal initialPage={2} />);
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
-            expect(dialogTitle).not.toBeInTheDocument();
-        });
-    });
     describe("interaction", () => {
-        it("Should toggle the modal visibility when clicking Cancel button", () => {
+        const initialState = {}
+        it("Should toggle the modal visibility when accessing the recovery link", async () => {
 
-            const toggleAuthModal = jest.fn();
+            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            const wrapper = renderWithStoreAndTheme(
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <BrowserRouter>
+                            <HomePage openPasswordRecoveryModal />
+                            <Navbar></Navbar>
+                        </BrowserRouter>
+                    </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
 
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={2} />);
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
-            expect(dialogTitle).toBeInTheDocument();
 
-            const tokenField = wrapper.getByLabelText("Token");
-            expect(tokenField).toBeInTheDocument();
+            await waitFor(() => {
+                const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+                expect(title).toBeInTheDocument();
+            });
 
-            fireEvent.click(wrapper.getByText("Cancel"));
 
-            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
-        });
-
-        it("Should change to the login page when clicking Login button", () => {
-
-            const toggleAuthModal = jest.fn();
-
-            const wrapper = render(<AuthModal open toggleAuthModal={toggleAuthModal} initialPage={2} />);
-            fireEvent.click(wrapper.getByText("Login"));
-
-            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
-            expect(dialogTitle).toBeInTheDocument();
+            const passwordField = wrapper.getByLabelText("New Password");
+            expect(passwordField).toBeInTheDocument();
         });
 
         it("Should request correctly and change to login page", async () => {
@@ -49,45 +54,58 @@ describe("Navbar - AuthModal", () => {
             // Making sure that the login service allows the login
             submitFinishPasswordRecover.mockImplementationOnce(() => true);
 
-            const toggleAuthModal = jest.fn();
-            const addSnackbar = jest.fn();
+            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            const wrapper = renderWithStoreAndTheme(
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <BrowserRouter>
+                            <HomePage openPasswordRecoveryModal />
+                            <Navbar />
+                        </BrowserRouter>
+                    </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
 
-            const { getByRole, getByLabelText, queryByRole } = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={toggleAuthModal}
-                    updateSessionInfo={() => {}}
-                    initialPage={2}
-                    addSnackbar={addSnackbar}
-                />);
 
-            await act(async () => {
-                await fireEvent.change(getByLabelText("New Password"), { target: { value: "password123" } });
-            });
-            await act(async () => {
-                await fireEvent.change(getByLabelText("Token"), { target: { value: "some-token" } });
-            });
-            await act(async () => {
-                await fireEvent.click(getByRole("button", { name: "Recover Password" }));
+            await waitFor(() => {
+                const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+                expect(title).toBeInTheDocument();
             });
 
-            const dialogTitle = queryByRole("heading", { level: 2, name: "Login" });
+
+            await act(async () => {
+                await fireEvent.change(wrapper.getByLabelText("New Password"), { target: { value: "password123" } });
+            });
+
+            await act(async () => {
+                await fireEvent.click(wrapper.getByRole("button", { name: "Recover Password" }));
+            });
+
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
-
-            expect(addSnackbar).toHaveBeenCalledWith(expect.objectContaining({
-                message: "The password was updated",
-                key: "password-updated",
-            }));
         });
 
         it("should fail validation if invalid password", async () => {
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    initialPage={2}
-                    updateSessionInfo={() => {}}
-                />);
+            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            const wrapper = renderWithStoreAndTheme(
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <BrowserRouter>
+                            <HomePage openPasswordRecoveryModal />
+                            <Navbar></Navbar>
+                        </BrowserRouter>
+                    </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
+
+
+            await waitFor(() => {
+                const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+                expect(title).toBeInTheDocument();
+            });
+
+
+
             const input = wrapper.getByLabelText("New Password");
 
             // Invalid value
@@ -107,52 +125,36 @@ describe("Navbar - AuthModal", () => {
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("New Password"))).toHaveTextContent("\u200B");
         });
 
-        it("Should not allow empty token", async () => {
-
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    initialPage={2}
-                    updateSessionInfo={() => {}}
-                />);
-
-            await act(async () => {
-                await fireEvent.focus(wrapper.getByLabelText("Token"));
-                await fireEvent.blur(wrapper.getByLabelText("Token"));
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Token"))).toHaveTextContent("Required field.");
-
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("Token"), { target: { value: "12345" } });
-            });
-            await act(async () => {
-                await fireEvent.blur(wrapper.getByLabelText("Token"));
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Token"))).toHaveTextContent("\u200B");
-        });
-
         it("Should show general error on request fail, and clear on input change", async () => {
             submitFinishPasswordRecover.mockImplementationOnce(() => {
                 throw new Error();
             });
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    updateSessionInfo={() => {}}
-                    initialPage={2}
-                />);
+
+            verifyPasswordRecoveryToken.mockImplementation(() => true)
+            const wrapper = renderWithStoreAndTheme(
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <BrowserRouter>
+                            <HomePage openPasswordRecoveryModal />
+                            <Navbar></Navbar>
+                        </BrowserRouter>
+                    </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
+
+
+            await waitFor(() => {
+                const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+                expect(title).toBeInTheDocument();
+            });
+
+
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("New Password"), { target: { value: "password123" } });
             });
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("Token"), { target: { value: "some-token" } });
-            });
+
             await act(async () => {
                 await fireEvent.click(wrapper.getByRole("button", { name: "Recover Password" }));
             });
@@ -168,36 +170,29 @@ describe("Navbar - AuthModal", () => {
         });
 
         it("Should show invalid token error on request fail due to invalid token, and clear on input change", async () => {
-            submitFinishPasswordRecover.mockImplementationOnce(() => {
+            verifyPasswordRecoveryToken.mockImplementation(() => {
                 throw [{ msg: "invalid-token" }];
+            })
+
+            const wrapper = renderWithStoreAndTheme(
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <BrowserRouter>
+                            <HomePage openPasswordRecoveryModal />
+                            <Navbar></Navbar>
+                        </BrowserRouter>
+                    </SnackbarProvider>,
+                { initialState, theme: AppTheme }
+            );
+
+
+            await waitFor(() => {
+                const title = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+                expect(title).toBeInTheDocument();
             });
 
-            const wrapper = render(
-                <AuthModal
-                    open
-                    toggleAuthModal={() => {}}
-                    updateSessionInfo={() => {}}
-                    initialPage={2}
-                />);
-
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("New Password"), { target: { value: "password123" } });
-            });
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("Token"), { target: { value: "some-token" } });
-            });
-            await act(async () => {
-                await fireEvent.click(wrapper.getByRole("button", { name: "Recover Password" }));
-            });
 
             expect(await wrapper.queryByText("The token provided is invalid or has expired.")).toBeInTheDocument();
-
-
-            await act(async () => {
-                await fireEvent.change(wrapper.getByLabelText("New Password"), { target: { value: "password12" } });
-            });
-
-            expect(await wrapper.queryByText(Constants.UNEXPECTED_ERROR_MESSAGE)).not.toBeInTheDocument();
         });
     });
 });
