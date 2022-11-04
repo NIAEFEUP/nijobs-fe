@@ -4,7 +4,10 @@ import { toggleAuthModal } from "../actions/navbarActions";
 describe("Notifications Reducer", () => {
     it("should correctly initialize notifications state", () => {
         const state = navbarState(undefined, {});
-        expect(state).toEqual({ showAuthModal: false });
+        expect(state).toEqual({
+            showAuthModal: false,
+            authModalPage: 0,
+        });
     });
 
     it("should toggle login modal when toggleAuthModal action is called", () => {
