@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { toggleLoginModal } from "../../actions/navbarActions";
+import { toggleAuthModal } from "../../actions/navbarActions";
 
 import {
     AppBar,
@@ -14,9 +14,7 @@ import {
 import { Link } from "react-router-dom";
 
 import useSession from "../../hooks/useSession";
-import useToggle from "../../hooks/useToggle";
 import UserMenu from "./UserMenu";
-import LoginForm from "./LoginForm";
 
 import { useMobile } from "../../utils/media-queries";
 import { MenuRounded, Home } from "@material-ui/icons";
@@ -24,8 +22,11 @@ import { MenuRounded, Home } from "@material-ui/icons";
 
 import useNavbarStyles from "./navbarStyles";
 import { Wrap } from "../../utils";
+import AuthModal from "./Auth/AuthModal";
+import { addSnackbar } from "../../actions/notificationActions";
 
-const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, desktopLayout, title, position }) => {
+const Navbar = ({
+    showAuthModal, toggleAuthModal, showHomePageLink = true, desktopLayout, title, position, addSnackbar }) => {
 
     const { data,
         isValidating,
@@ -36,7 +37,6 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
     } = useSession({ revalidateOnMount: true });
 
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
-    const [loginPending, toggleLoginPending] = useToggle(false);
 
     const [userMenuOpen, setUserMenuOpen] = React.useState(false);
 
@@ -119,12 +119,11 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
                         resetSession().then(() => updateSessionInfo());
                     }}
                 />
-                <LoginForm
-                    open={showLoginModal}
+                <AuthModal
+                    open={showAuthModal}
                     updateSessionInfo={updateSessionInfo}
-                    loginPending={loginPending}
-                    toggleLoginModal={toggleLoginModal}
-                    toggleLoginPending={toggleLoginPending}
+                    toggleAuthModal={toggleAuthModal}
+                    addSnackbar={addSnackbar}
                 />
             </Toolbar>
         </AppBar>
@@ -132,20 +131,22 @@ const Navbar = ({ showLoginModal, toggleLoginModal, showHomePageLink = true, des
 };
 
 Navbar.propTypes = {
-    showLoginModal: PropTypes.bool.isRequired,
-    toggleLoginModal: PropTypes.func.isRequired,
+    showAuthModal: PropTypes.bool.isRequired,
+    toggleAuthModal: PropTypes.func.isRequired,
     showHomePageLink: PropTypes.bool,
     desktopLayout: PropTypes.bool,
     title: PropTypes.string,
     position: PropTypes.oneOf(["absolute", "fixed", "relative", "static", "sticky"]),
+    addSnackbar: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ navbar }) => ({
-    showLoginModal: navbar.showLoginModal,
+    showAuthModal: navbar.showAuthModal,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
-    toggleLoginModal: () => dispatch(toggleLoginModal()),
+    toggleAuthModal: () => dispatch(toggleAuthModal()),
+    addSnackbar: (notification) => dispatch(addSnackbar(notification)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

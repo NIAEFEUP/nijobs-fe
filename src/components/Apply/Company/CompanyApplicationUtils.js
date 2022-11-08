@@ -1,11 +1,9 @@
 import { validationRulesGenerator, generalHumanError } from "../../../utils";
+import { AuthConstants } from "../../Navbar/Auth/AuthUtils";
 
 
 export const CompanyApplicationConstants = {
-    password: {
-        minLength: 8,
-        hasNumber: /\d/,
-    },
+    password: AuthConstants.password,
     motivation: {
         minLength: 10,
         maxLength: 1500,

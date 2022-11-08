@@ -7,7 +7,6 @@ const { API_HOSTNAME } = config;
 
 const COMPLETE_REGISTRATION_METRIC_ID = "registration/complete";
 
-
 export const completeRegistration = measureTime(TIMED_ACTIONS.COMPLETE_REGISTRATION, async ({ logo, bio, contacts }) => {
 
     const formData  = new FormData();
