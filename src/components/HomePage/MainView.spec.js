@@ -7,6 +7,8 @@ import ShowMoreButton from "./ShowMoreButton";
 import { createTheme } from "@material-ui/core/styles";
 import { mountWithStore } from "../../test-utils";
 
+import { MemoryRouter } from "react-router-dom";
+
 describe("Main View", () => {
     let scrollToProductDescription, showSearchResults, wrapper;
     const theme = createTheme({});
@@ -24,10 +26,12 @@ describe("Main View", () => {
         showSearchResults = jest.fn();
 
         wrapper = mountWithStore(
-            <MainView
-                scrollToProductDescription={scrollToProductDescription}
-                showSearchResults={showSearchResults}
-            />,
+            <MemoryRouter initialEntries={["/"]}>
+                <MainView
+                    scrollToProductDescription={scrollToProductDescription}
+                    showSearchResults={showSearchResults}
+                />
+            </MemoryRouter>,
             initialState,
             theme
         );
@@ -59,7 +63,7 @@ describe("Main View", () => {
             fetch.mockResponse(JSON.stringify({ mockData: true }));
 
             wrapper.find("form#search_form").first().simulate("submit", {
-                preventDefault: () => {},
+                preventDefault: () => { },
             });
             expect(showSearchResults).toHaveBeenCalledTimes(1);
         });

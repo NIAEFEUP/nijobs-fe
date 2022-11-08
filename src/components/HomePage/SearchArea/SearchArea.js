@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { connect } from "react-redux";
@@ -27,6 +27,8 @@ import AdvancedSearchDesktop from "./AdvancedSearch/AdvancedSearchDesktop";
 import useComponentController from "../../../hooks/useComponentController";
 import useOffersSearcher from "../SearchResultsArea/SearchResultsWidget/useOffersSearcher";
 
+import useSearchParams from "./useUrlSearchParams";
+
 export const AdvancedSearchControllerContext = React.createContext({});
 
 export const AdvancedSearchController = ({
@@ -35,20 +37,38 @@ export const AdvancedSearchController = ({
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
 }) => {
 
+    const {
+        queryParams,
+        setJobType: actualSetJobType,
+        setJobDuration: actualSetJobDuration,
+        setFields: actualSetFields,
+        setShowJobDurationSlider: actualSetShowJobDurationSlider,
+        setTechs: actualSetTechs,
+        resetAdvancedSearchFields: actualResetAdvancedSearchFields,
+        setSearchValue: setUrlSearchValue,
+    } = useSearchParams({
+        setJobDuration,
+        setShowJobDurationSlider,
+        setJobType,
+        setFields,
+        setTechs,
+        resetAdvancedSearchFields,
+    });
+
     const advancedSearchProps = useAdvancedSearch({
         enableAdvancedSearchDefault,
         jobMinDuration,
         jobMaxDuration,
-        setJobDuration,
+        setJobDuration: actualSetJobDuration,
         showJobDurationSlider,
-        setShowJobDurationSlider,
+        setShowJobDurationSlider: actualSetShowJobDurationSlider,
         jobType,
-        setJobType,
+        setJobType: actualSetJobType,
         fields,
-        setFields,
+        setFields: actualSetFields,
         technologies,
-        setTechs,
-        resetAdvancedSearchFields,
+        setTechs: actualSetTechs,
+        resetAdvancedSearchFields: actualResetAdvancedSearchFields,
     });
 
     const { search: searchOffers } = useOffersSearcher({
@@ -60,12 +80,33 @@ export const AdvancedSearchController = ({
         technologies,
     });
 
-    const submitForm = useCallback((e) => {
+    const submitForm = useCallback((e, updateUrl = true) => {
         if (e) e.preventDefault();
         searchOffers(SearchResultsConstants.INITIAL_LIMIT);
 
+        if (updateUrl) setUrlSearchValue(searchValue);
+
         if (onSubmit) onSubmit();
-    }, [onSubmit, searchOffers]);
+    }, [onSubmit, searchOffers, searchValue, setUrlSearchValue]);
+
+    useEffect(() => {
+        if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
+            setShowJobDurationSlider(true);
+            setJobDuration(null, [
+                parseInt(queryParams.jobMinDuration, 10),
+                parseInt(queryParams.jobMaxDuration, 10),
+            ]);
+        }
+
+        if (queryParams.jobType) setJobType(queryParams.jobType);
+        if (queryParams.fields) setFields(queryParams.fields);
+        if (queryParams.technologies) setTechs(queryParams.technologies);
+
+        if (queryParams.searchValue) {
+            setSearchValue(queryParams.searchValue);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return {
         ...advancedSearchProps,
@@ -177,7 +218,7 @@ export const mapStateToProps = ({ offerSearch }) => ({
 export const mapDispatchToProps = (dispatch) => ({
     setSearchValue: (value) => dispatch(setSearchValue(value)),
     setJobDuration: (_, value) => dispatch(setJobDuration(...value)),
-    setJobType: (e) => dispatch(setJobType(e.target.value)),
+    setJobType: (jobType) => dispatch(setJobType(jobType)),
     setFields: (fields) => dispatch(setFields(fields)),
     setTechs: (technologies) => dispatch(setTechs(technologies)),
     setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
