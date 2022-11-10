@@ -9,8 +9,12 @@ export default makeStyles((theme) => ({
     mainLogo: ({ isMobile }) => ({
         textAlign: "center",
         paddingBottom: "3em",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         "& img": {
             width: isMobile ? "80%" : "50%",
+            maxHeight: isMobile ? "max(20vh, 6em)" : "unset",
         },
     }),
     mainLogoMobile: {
