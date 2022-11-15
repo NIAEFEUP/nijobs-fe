@@ -19,6 +19,8 @@ export default ({
     technologies,
     setTechs,
     resetAdvancedSearchFields,
+    showHidden,
+    setShowHidden,
 }) => {
 
     const jobDuration = [jobMinDuration, jobMaxDuration];
@@ -72,6 +74,15 @@ export default ({
     const FieldsSelectorProps = useFieldSelector(fields, setFields);
     const TechsSelectorProps = useTechSelector(technologies, setTechs);
 
+    const toggleShowHidden = useCallback(() => {
+        setShowHidden(!showHidden);
+    }, [setShowHidden, showHidden]);
+
+    const ShowHiddenSwitchProps = {
+        checked: showHidden,
+        onChange: toggleShowHidden,
+        value: "filterShowHiddenOffers",
+    };
 
     const advancedOptionsActive = showJobDurationSlider
     || (jobType !== INITIAL_JOB_TYPE)
@@ -104,5 +115,6 @@ export default ({
         JobDurationSliderProps,
         JobDurationSliderText,
         ResetButtonProps,
+        ShowHiddenSwitchProps,
     };
 };
