@@ -91,6 +91,7 @@ export default makeStyles((theme) => ({
         "& .chip-wrapper": {
             gridColumnStart: 2,
             gridRowStart: 4,
+<<<<<<< HEAD
         },
     },
     jobHiddenSliderToggle: {
@@ -100,6 +101,13 @@ export default makeStyles((theme) => ({
     spaceBtwn: {
         "& > *": {
             justifyContent: "space-between",
+=======
+>>>>>>> feat: inserted the reset advanced search and show hidden offers buttons inside of the advancedSearchContainer grid
         },
+    },
+    jobHiddenSliderToggle: {
+        gridRowStart: 4,
+        gridColumnStart: 2,
+        
     },
 }));
