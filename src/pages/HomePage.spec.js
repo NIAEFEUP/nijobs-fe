@@ -180,6 +180,7 @@ describe("HomePage", () => {
 
         test("Should not auto-submit if no valid search params present in the URL location", () => {
 
+            // TODO: if more invalid query params are added, update this object with those params, the rest of the test behaves as expected
             const params = {
                 searchValuez: "test-search-value",
                 jobMinDurationr: 2,
@@ -187,6 +188,10 @@ describe("HomePage", () => {
                 fieldsu: ["TEST-FIELD1", "TEST-FIELD2"],
                 technologiest: ["TEST-TECH"],
                 jobTypeh: "test-job-type",
+                error: "",
+                offers: [],
+                loading: false,
+                filterJobDuration: true,
             };
 
             const locationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
