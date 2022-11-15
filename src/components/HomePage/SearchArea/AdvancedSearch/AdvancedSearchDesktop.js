@@ -108,15 +108,15 @@ const AdvancedSearchDesktop = () => {
                     }}
                 />
                 <div className={classes.resetBtnWrapper}>
-                        <Button
-                            {...ResetButtonProps}
-                            _id="reset_btn"
-                            color="primary"
-                            onClick={resetAdvancedSearch}
-                        >
-                            Reset Advanced Fields
-                        </Button>
-                </div>          
+                    <Button
+                        {...ResetButtonProps}
+                        _id="reset_btn"
+                        color="primary"
+                        onClick={resetAdvancedSearch}
+                    >
+                        Reset Advanced Fields
+                    </Button>
+                </div>
                 {sessionData?.isAdmin &&
                     <FormControlLabel
 <<<<<<< HEAD
@@ -125,7 +125,7 @@ const AdvancedSearchDesktop = () => {
                         label={ShowHiddenSwitchLabel}
 =======
                         className={classes.jobHiddenSliderToggle}
-                        control={<Switch {...JobDurationSwitchProps} />}
+                        control={<Switch {...ShowHiddenSwitchProps} />}
                         label={JobHiddenSwitchLabel}
 >>>>>>> feat: showHidden is already working
                     />
