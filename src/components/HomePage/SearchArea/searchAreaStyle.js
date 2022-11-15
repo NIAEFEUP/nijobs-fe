@@ -96,6 +96,5 @@ export default makeStyles((theme) => ({
     jobHiddenSliderToggle: {
         gridRowStart: 4,
         gridColumnStart: 2,
-        
     },
 }));

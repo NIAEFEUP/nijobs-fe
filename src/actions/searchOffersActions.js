@@ -16,6 +16,7 @@ export const OfferSearchTypes = Object.freeze({
     DISABLE_OFFER: "DISABLE_OFFER",
     COMPANY_ENABLE_OFFER: "COMPANY_ENABLE_OFFER",
     ADMIN_ENABLE_OFFER: "ADMIN_ENABLE_OFFER",
+    SET_SHOW_HIDDEN: "SET_SHOW_HIDDEN",
 });
 
 export const setLoadingOffers = (loading) => ({
@@ -106,3 +107,8 @@ export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setFields([]));
     dispatch(setTechs([]));
 };
+
+export const setShowHidden = (showHidden) => ({
+    type: OfferSearchTypes.SET_SHOW_HIDDEN,
+    showHidden,
+});
