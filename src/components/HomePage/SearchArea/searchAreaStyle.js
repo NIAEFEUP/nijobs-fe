@@ -24,7 +24,7 @@ export default makeStyles((theme) => ({
     advancedSearchContainer: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr 0.7fr auto",
+        gridTemplateRows: "1fr 0.7fr 1fr 0.7fr",
         alignItems: "center",
         gridGap: "1em",
     },
@@ -82,15 +82,20 @@ export default makeStyles((theme) => ({
         gridColumnStart: 2,
     },
     resetBtnWrapper: {
-        display: "flex",
+        gridRowStart: 4,
+        gridColumnStart: 1,
         "& > *": {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(-1),
         },
-    },
-    spaceBtwn: {
-        "& > *": {
-            justifyContent: "space-between",
+        "& .chip-wrapper": {
+            gridColumnStart: 2,
+            gridRowStart: 4,
         },
+    },
+    jobHiddenSliderToggle: {
+        gridRowStart: 4,
+        gridColumnStart: 2,
+        
     },
 }));
