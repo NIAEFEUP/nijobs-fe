@@ -103,28 +103,24 @@ const AdvancedSearchDesktop = () => {
                         className: "chip-wrapper",
                     }}
                 />
-            </Collapse>
-            {advancedOptions &&
-            <div className={classes.spaceBtwn}>
                 <div className={classes.resetBtnWrapper}>
-                    <Button
-                        {...ResetButtonProps}
-                        _id="reset_btn"
-                        color="primary"
-                        onClick={resetAdvancedSearch}
-                    >
-                        Reset Advanced Fields
-                    </Button>
-                    {sessionData?.isAdmin &&
+                        <Button
+                            {...ResetButtonProps}
+                            _id="reset_btn"
+                            color="primary"
+                            onClick={resetAdvancedSearch}
+                        >
+                            Reset Advanced Fields
+                        </Button>
+                </div>          
+                {sessionData?.isAdmin &&
                     <FormControlLabel
-                        className={classes.jobDurationSliderToggle}
+                        className={classes.jobHiddenSliderToggle}
                         control={<Switch {...JobDurationSwitchProps} />}
                         label={JobHiddenSwitchLabel}
                     />
-                    }
-                </div>
-            </div>
-            }
+                }
+            </Collapse>
         </React.Fragment>
     );
 };
