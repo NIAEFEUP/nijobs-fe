@@ -157,9 +157,8 @@ export const SearchResultsWidget = React.forwardRef(({
     return (
         <ContextProvider {...contextProviderProps}>
             <Paper elevation={2} data-testid="Search Results Widget">
-                <SearchURLWidget />
+                <SearchURLWidget ref={ref} />
                 <Grid
-                    ref={ref}
                     className={classes.searchResults}
                     container
                     spacing={0}

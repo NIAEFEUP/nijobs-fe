@@ -30,7 +30,7 @@ const useSearchURLWidgetStyles = makeStyles((theme) => ({
     },
 }));
 
-const SearchURLWidget = () => {
+const SearchURLWidget = React.forwardRef((_, ref) => {
 
     const classes = useSearchURLWidgetStyles();
     const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const SearchURLWidget = () => {
         navigator.clipboard.writeText(fullURL);
 
         dispatch(addSnackbar({
-            message: "Copied to clipboard",
+            message: "Copied to clipboard.",
             options: {
                 autoHideDuration: 1500,
             },
@@ -49,7 +49,7 @@ const SearchURLWidget = () => {
     }, [dispatch, fullURL]);
 
     return (
-        <div className={classes.root}>
+        <div ref={ref} className={classes.root}>
             <Typography className={classes.label}>Copy this URL to share your search with other people:</Typography>
             <div className={classes.container}>
                 <Typography className={classes.link}>
@@ -60,6 +60,8 @@ const SearchURLWidget = () => {
             <Divider />
         </div>
     );
-};
+});
+
+SearchURLWidget.displayName = "SearchURLWidget";
 
 export default SearchURLWidget;
