@@ -16,9 +16,7 @@ const HumanReadableErrors = Object.freeze({
 
 export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
 
-export const validApplyURL = (val) => {
-    const httpRegex = /^https?:\/\/\S+\.\S+$/;
-    const emailRegex = /^mailto:(\S+@\S+)$/;
+export const HTTPRegex = /^https?:\/\/\S+\.\S+$/;
+export const MailRegex = /^mailto:(\S+@\S+)$/;
 
-    return httpRegex.test(val) || emailRegex.test(val) || (val === "") || (val === null);
-};
+export const validApplyURLRegex = new RegExp(`${HTTPRegex.source}|${MailRegex.source}`);
