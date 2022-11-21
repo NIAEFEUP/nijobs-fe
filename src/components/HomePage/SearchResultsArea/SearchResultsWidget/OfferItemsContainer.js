@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { Button, Divider, List, ListItem, makeStyles } from "@material-ui/core";
-import { Tune } from "@material-ui/icons";
+import { Button, Divider, List, ListItem, Dialog, makeStyles } from "@material-ui/core";
+import { Tune, Share } from "@material-ui/icons";
 
 import OfferItem from "../Offer/OfferItem";
 import useSearchResultsWidgetStyles from "./searchResultsWidgetStyles";
@@ -10,11 +10,13 @@ import LoadingOfferItem from "./LoadingOfferItem";
 import Offer from "../Offer/Offer";
 import { SearchResultsConstants } from "./SearchResultsUtils";
 
+import SearchURLWidget from "./SearchURLWidget";
+
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
     root: {
         top: "0",
         position: "sticky",
-        padding: theme.spacing(3, "25%", 3, "25%"),
+        padding: theme.spacing(3, "5%", 3, "5%"),
         zIndex: 1,
         backgroundColor: "white",
     },
@@ -45,6 +47,27 @@ const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
 ToggleFiltersButton.propTypes = {
     onClick: PropTypes.func.isRequired,
     enabled: PropTypes.bool,
+};
+
+const ShareURLModalButton = ({ onClick }) => {
+    const classes = useAdvancedSearchButtonStyles();
+    return (
+        <ListItem className={classes.root}>
+            <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                startIcon={<Share />}
+                onClick={onClick}
+            >
+                {"Share search results"}
+            </Button>
+        </ListItem>
+    );
+};
+
+ShareURLModalButton.propTypes = {
+    onClick: PropTypes.func.isRequired,
 };
 
 const OfferItemsContainer = ({
@@ -118,6 +141,8 @@ const OfferItemsContainer = ({
         setSelectedOfferIdx(...args);
     };
 
+    const [openShareUrlModal, setOpenShareUrlModal] = useState(false);
+
     if (initialOffersLoading)
         return (
             <div
@@ -135,11 +160,27 @@ const OfferItemsContainer = ({
             ref={refetchTriggerRef}
         >
             <List disablePadding>
-                <ToggleFiltersButton
-                    key="toggle-filters-button"
-                    enabled={showSearchFilters}
-                    onClick={() => toggleShowSearchFilters()}
-                />
+                <ListItem>
+                    <ToggleFiltersButton
+                        key="toggle-filters-button"
+                        enabled={showSearchFilters}
+                        onClick={() => toggleShowSearchFilters()}
+                    />
+                    <ShareURLModalButton
+                        key="show-url-share-modal"
+                        onClick={() => setOpenShareUrlModal(true)}
+                    />
+                </ListItem>
+                <Dialog
+                    open={openShareUrlModal}
+                    fullWidth
+                    aria-labelledby="url-share-dialog"
+                    onClose={() => {
+                        setOpenShareUrlModal(false);
+                    }}
+                >
+                    <SearchURLWidget />
+                </Dialog>
                 <div>
                     {offers?.map((offer, i) => (
                         <div key={offer._id}>
