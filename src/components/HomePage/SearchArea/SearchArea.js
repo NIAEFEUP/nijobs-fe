@@ -138,6 +138,7 @@ export const SearchArea = ({ onSubmit, searchValue,
                 </form>
                 <SubmitSearchButton
                     onClick={submitForm}
+                    searchValue={searchValue}
                 />
             </Paper>
         </ContextProvider>
