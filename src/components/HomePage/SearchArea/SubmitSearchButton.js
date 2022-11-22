@@ -6,7 +6,7 @@ import { Search } from "@material-ui/icons";
 
 import useSearchAreaStyle from "./searchAreaStyle";
 
-const ShowAdvancedOptionsButton = ({ onClick }) => {
+const ShowAdvancedOptionsButton = ({ onClick, searchValue }) => {
     const classes = useSearchAreaStyle();
     return (
         <div className={classes.submitSearchButtonWrapper}>
@@ -14,8 +14,9 @@ const ShowAdvancedOptionsButton = ({ onClick }) => {
                 color="primary"
                 aria-label="Search"
                 onClick={onClick}
+                variant="extended"
             >
-                <Search />
+                {searchValue === "" ? <span>Show All</span> : <Search /> }
             </Fab>
         </div>
     );
@@ -23,6 +24,7 @@ const ShowAdvancedOptionsButton = ({ onClick }) => {
 
 ShowAdvancedOptionsButton.propTypes = {
     onClick: PropTypes.func.isRequired,
+    searchValue: PropTypes.string.isRequired,
 };
 
 export default ShowAdvancedOptionsButton;
