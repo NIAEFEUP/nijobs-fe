@@ -28,6 +28,10 @@ const useSearchURLWidgetStyles = makeStyles((theme) => ({
         whiteSpace: "nowrap",
         overflowX: "scroll",
         textAlign: "center",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
     },
 }));
 
