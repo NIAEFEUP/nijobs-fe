@@ -2,12 +2,14 @@ import React from "react";
 import SearchResultsMobile from "./SearchResultsMobile";
 import Offer from "../Offer/Offer";
 import { createTheme } from "@material-ui/core/styles";
-import { render, renderWithStoreAndTheme, screen } from "../../../../test-utils";
+import { renderWithTheme, renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 import { BrowserRouter } from "react-router-dom";
+
+import AppTheme from "../../../../AppTheme";
 
 // eslint-disable-next-line react/prop-types
 const RouteWrappedContent = ({ children }) => (
@@ -50,12 +52,13 @@ describe("SearchResultsMobile", () => {
         it("Should render offers if present", () => {
 
             const context = { offers, loadMoreOffers: () => { } };
-            render(
+            renderWithTheme(
                 <RouteWrappedContent>
                     <SearchResultsControllerContext.Provider value={context}>
                         <SearchResultsMobile offers={offers} />
                     </SearchResultsControllerContext.Provider>
-                </RouteWrappedContent>
+                </RouteWrappedContent>,
+                { theme: AppTheme }
             );
             expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
             expect(screen.getByText("position1")).toBeInTheDocument();

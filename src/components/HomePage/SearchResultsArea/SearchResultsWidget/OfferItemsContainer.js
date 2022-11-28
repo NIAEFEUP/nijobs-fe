@@ -12,21 +12,23 @@ import { SearchResultsConstants } from "./SearchResultsUtils";
 
 import SearchURLWidget from "./SearchURLWidget";
 
+import { useMobile } from "../../../../utils/media-queries";
+
 const useAdvancedSearchButtonStyles = makeStyles((theme) => ({
-    root: {
+    root: (isMobile) => ({
         top: "0",
         position: "sticky",
-        padding: theme.spacing(3, "5%", 3, "5%"),
+        padding: theme.spacing(isMobile ? 1.5 : 3, "5%"),
         zIndex: 1,
         backgroundColor: "white",
-    },
+    }),
     filtersButtonEnabled: {
         backgroundColor: theme.palette.secondary.main,
     },
 }));
 
-const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
-    const classes = useAdvancedSearchButtonStyles();
+const ToggleFiltersButton = ({ onClick, isMobile, enabled, ...props }) => {
+    const classes = useAdvancedSearchButtonStyles(isMobile);
     return (
         <ListItem className={classes.root}>
             <Button
@@ -47,10 +49,11 @@ const ToggleFiltersButton = ({ onClick, enabled, ...props }) => {
 ToggleFiltersButton.propTypes = {
     onClick: PropTypes.func.isRequired,
     enabled: PropTypes.bool,
+    isMobile: PropTypes.bool,
 };
 
-const ShareURLModalButton = ({ onClick }) => {
-    const classes = useAdvancedSearchButtonStyles();
+const ShareURLModalButton = ({ onClick, isMobile }) => {
+    const classes = useAdvancedSearchButtonStyles(isMobile);
     return (
         <ListItem className={classes.root}>
             <Button
@@ -68,6 +71,7 @@ const ShareURLModalButton = ({ onClick }) => {
 
 ShareURLModalButton.propTypes = {
     onClick: PropTypes.func.isRequired,
+    isMobile: PropTypes.bool,
 };
 
 const OfferItemsContainer = ({
@@ -143,6 +147,10 @@ const OfferItemsContainer = ({
 
     const [openShareUrlModal, setOpenShareUrlModal] = useState(false);
 
+    const isMobile = useMobile();
+
+    const ButtonWrapper = isMobile ? React.Fragment : ListItem;
+
     if (initialOffersLoading)
         return (
             <div
@@ -160,7 +168,7 @@ const OfferItemsContainer = ({
             ref={refetchTriggerRef}
         >
             <List disablePadding>
-                <ListItem>
+                <ButtonWrapper>
                     <ToggleFiltersButton
                         key="toggle-filters-button"
                         enabled={showSearchFilters}
@@ -170,7 +178,7 @@ const OfferItemsContainer = ({
                         key="show-url-share-modal"
                         onClick={() => setOpenShareUrlModal(true)}
                     />
-                </ListItem>
+                </ButtonWrapper>
                 <Dialog
                     open={openShareUrlModal}
                     fullWidth
