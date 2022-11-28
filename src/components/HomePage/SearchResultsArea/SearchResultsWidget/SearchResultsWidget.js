@@ -24,7 +24,6 @@ import {
 } from "../../../../actions/searchOffersActions";
 import useOffersSearcher from "./useOffersSearcher";
 import { SearchResultsConstants } from "./SearchResultsUtils";
-import SearchURLWidget from "./SearchURLWidget";
 
 export const SearchResultsControllerContext = React.createContext({});
 
@@ -157,7 +156,6 @@ export const SearchResultsWidget = React.forwardRef(({
     return (
         <ContextProvider {...contextProviderProps}>
             <Paper elevation={2} data-testid="Search Results Widget">
-                <SearchURLWidget />
                 <Grid
                     ref={ref}
                     className={classes.searchResults}

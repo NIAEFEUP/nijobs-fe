@@ -60,7 +60,7 @@ describe("Search URL Widget", () => {
             renderWithStoreAndTheme(<SearchUrlWidget />, { initialState: {}, theme: AppTheme });
 
             act(() => {
-                fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+                fireEvent.click(screen.getByRole("button"));
             });
 
             expect(writeText).toHaveBeenCalledTimes(1);
@@ -74,7 +74,7 @@ describe("Search URL Widget", () => {
             renderWithStoreAndTheme(<SearchUrlWidget />, { initialState: {}, theme: AppTheme });
 
             act(() => {
-                fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+                fireEvent.click(screen.getByRole("button"));
             });
 
             expect(addSnackbar).toHaveBeenCalledTimes(1);

@@ -1,32 +1,37 @@
 import React, { useCallback } from "react";
 
 import { useDispatch } from "react-redux";
-import { makeStyles, Button, Typography, Divider } from "@material-ui/core";
+import { makeStyles, Typography, Icon, IconButton } from "@material-ui/core";
 
 import { addSnackbar } from "../../../../actions/notificationActions";
 
 const useSearchURLWidgetStyles = makeStyles((theme) => ({
     root: {
-        paddingTop: theme.spacing(3),
+        padding: theme.spacing(3),
     },
     label: {
         textAlign: "center",
     },
     container: {
         margin: "10px auto",
-        paddingBottom: "10px",
+        padding: "2px 10px",
         display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
         gap: "10px",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#eeeeee",
+        borderRadius: "4px",
     },
     link: {
-        width: "95%",
         fontWeight: "bold",
         userSelect: "none",
         whiteSpace: "nowrap",
         overflowX: "scroll",
         textAlign: "center",
+        scrollbarWidth: "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
     },
 }));
 
@@ -41,7 +46,7 @@ const SearchURLWidget = () => {
         navigator.clipboard.writeText(fullURL);
 
         dispatch(addSnackbar({
-            message: "Copied to clipboard",
+            message: "Copied to clipboard.",
             options: {
                 autoHideDuration: 1500,
             },
@@ -55,9 +60,13 @@ const SearchURLWidget = () => {
                 <Typography className={classes.link}>
                     {fullURL}
                 </Typography>
-                <Button color="primary" variant="contained" onClick={copyToClipboard}>Copy</Button>
+                <IconButton onClick={copyToClipboard}>
+                    <Icon color="primary">
+                        content_copy
+                    </Icon>
+                    <Typography variant="srOnly">Copy URL to clipboard</Typography>
+                </IconButton>
             </div>
-            <Divider />
         </div>
     );
 };

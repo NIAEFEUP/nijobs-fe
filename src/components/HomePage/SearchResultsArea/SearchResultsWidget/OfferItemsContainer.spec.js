@@ -1,20 +1,23 @@
 import { getByRole, getByText, screen } from "@testing-library/react";
 import React from "react";
-import { render } from "../../../../test-utils";
+import { renderWithTheme } from "../../../../test-utils";
 import Offer from "../Offer/Offer";
 import OfferItemsContainer from "./OfferItemsContainer";
+
+import AppTheme from "../../../../AppTheme";
 
 describe("OfferItemsContainer", () => {
 
     describe("render", () => {
         it("should show loading state when loading", () => {
-            render(
+            renderWithTheme(
                 <OfferItemsContainer
                     initialOffersLoading
-                    setSelectedOfferIdx={() => {}}
-                    toggleShowSearchFilters={() => {}}
-                    loadMoreOffers={() => {}}
-                />
+                    setSelectedOfferIdx={() => { }}
+                    toggleShowSearchFilters={() => { }}
+                    loadMoreOffers={() => { }}
+                />,
+                { theme: AppTheme }
             );
             expect(screen.getAllByTestId("offer-item-loading")).toHaveLength(3);
         });
@@ -45,14 +48,15 @@ describe("OfferItemsContainer", () => {
                 }),
             ];
 
-            render(
+            renderWithTheme(
                 <OfferItemsContainer
                     offers={offers}
                     initialOffersLoading={false}
-                    setSelectedOfferIdx={() => {}}
-                    toggleShowSearchFilters={() => {}}
-                    loadMoreOffers={() => {}}
-                />
+                    setSelectedOfferIdx={() => { }}
+                    toggleShowSearchFilters={() => { }}
+                    loadMoreOffers={() => { }}
+                />,
+                { theme: AppTheme }
             );
             const items = await screen.findAllByTestId("offer-item");
             expect(items).toHaveLength(2);
