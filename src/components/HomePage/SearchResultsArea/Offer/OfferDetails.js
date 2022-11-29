@@ -19,6 +19,7 @@ import useSession from "../../../../hooks/useSession";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import { RouterLink } from "../../../../utils";
 import { JOB_MAX_DURATION } from "../../../../reducers/searchOffersReducer";
+import { useChipsFieldSearch } from "./useChipsFieldSearch";
 
 const defaultLogo = require("./default_icon.svg");
 
@@ -52,6 +53,8 @@ const OfferDetails = ({
             "This offer was hidden by an admin so it won't show up in search results. "
             + "Please contact support for more information."
     ), [offer, sessionData]);
+
+    const { setFields, setTechs } = useChipsFieldSearch();
 
     const getHiddenOfferMessage = useCallback(() => {
         if (visibilityState.isDisabled)
@@ -248,11 +251,13 @@ const OfferDetails = ({
                         type="Technologies"
                         values={offer?.technologies}
                         loading={loading}
+                        onChipClick={setTechs}
                     />
                     <ChipList
                         type="Fields"
                         values={offer?.fields}
                         loading={loading}
+                        onChipClick={setFields}
                     />
                 </Grid>
             </Grid>

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const ChipList = ({ type, values, loading }) => {
+const ChipList = ({ type, values, loading, onChipClick }) => {
     const classes = useStyles();
     if (loading)
         return (
@@ -44,6 +44,7 @@ const ChipList = ({ type, values, loading }) => {
                             variant={type === "Technologies" ? "outlined" : "default"}
                             size="small"
                             className={classes.chip}
+                            onClick={onChipClick ? () => onChipClick(value) : null}
                         />
                     </li>
                 )}
