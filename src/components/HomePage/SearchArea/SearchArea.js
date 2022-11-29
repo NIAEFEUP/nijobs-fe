@@ -145,7 +145,7 @@ export const SearchArea = ({ onSubmit, searchValue,
         },
         AdvancedSearchControllerContext
     );
-
+    
     return (
         <ContextProvider {...contextProviderProps}>
             <Paper
@@ -179,7 +179,7 @@ export const SearchArea = ({ onSubmit, searchValue,
                 </form>
                 <SubmitSearchButton
                     onClick={submitForm}
-                    searchValue={searchValue}
+                    searchHasUserInput={searchValue !== "" || advancedOptionsActive}
                 />
             </Paper>
         </ContextProvider>
