@@ -106,7 +106,7 @@ export const AdvancedSearchController = ({
                 searchValue,
             );
             setLoadUrlFromFilters(false);
-            submitForm();
+            submitForm(null, false);
         } else {
             setShowJobDurationSlider(queryParams.jobMinDuration && queryParams.jobMaxDuration);
             setJobDuration(null, [
@@ -115,8 +115,8 @@ export const AdvancedSearchController = ({
             ]);
 
             setJobType(queryParams.jobType);
-            setFields(queryParams.fields || []);
-            setTechs(queryParams.technologies || []);
+            setFields(ensureArray(queryParams.fields ?? []));
+            setTechs(ensureArray(queryParams.technologies ?? []));
 
             setSearchValue(queryParams.searchValue);
         }
