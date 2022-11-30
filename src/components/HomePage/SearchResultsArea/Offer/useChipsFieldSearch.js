@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFields, setTechs } from "../../../../actions/searchOffersActions";
+import { setFields, setTechs, setLoadUrlFromFilters } from "../../../../actions/searchOffersActions";
 
 import useSearchParams from "../../SearchArea/useUrlSearchParams";
 import { SearchResultsConstants } from "../SearchResultsWidget/SearchResultsUtils";
@@ -26,6 +26,9 @@ export const useChipsFieldSearch = () => {
         technologies: techs,
     });
 
+    const addField = useCallback((value) => dispatch(setFields([...fields, value])), [dispatch, fields]);
+    const addTech = useCallback((value) => dispatch(setTechs([...techs, value])), [dispatch, techs]);
+
     const {
         setFields: urlSetFields,
         setTechs: urlSetTechs,
@@ -34,14 +37,14 @@ export const useChipsFieldSearch = () => {
         setTechs: (value) => dispatch(setTechs(value)),
     });
 
-    const actualSetFields = useCallback((value) => {
+    const setFieldsWithUrl = useCallback((value) => {
         if (!fields.includes(value)) {
             urlSetFields([...fields, value]);
             setSearch(true);
         }
     }, [fields, urlSetFields]);
 
-    const actualSetTechs = useCallback((value) => {
+    const setTechsWithUrl = useCallback((value) => {
         if (!techs.includes(value)) {
             urlSetTechs([...techs, value]);
             setSearch(true);
@@ -56,7 +59,10 @@ export const useChipsFieldSearch = () => {
     }, [searchOffers, fields, techs, search]);
 
     return {
-        setFields: actualSetFields,
-        setTechs: actualSetTechs,
+        setFields: addField,
+        setTechs: addTech,
+        setFieldsWithUrl,
+        setTechsWithUrl,
+        setLoadUrlFromFilters: (value) => dispatch(setLoadUrlFromFilters(value)),
     };
 };

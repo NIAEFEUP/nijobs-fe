@@ -58,6 +58,7 @@ ChipList.propTypes = {
     type: PropTypes.string,
     values: PropTypes.arrayOf(PropTypes.string),
     loading: PropTypes.bool,
+    onChipClick: PropTypes.func,
 };
 
 export default ChipList;

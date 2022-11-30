@@ -20,6 +20,7 @@ import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWi
 import { RouterLink } from "../../../../utils";
 import { JOB_MAX_DURATION } from "../../../../reducers/searchOffersReducer";
 import { useChipsFieldSearch } from "./useChipsFieldSearch";
+import { useHistory } from "react-router-dom";
 
 const defaultLogo = require("./default_icon.svg");
 
@@ -54,7 +55,29 @@ const OfferDetails = ({
             + "Please contact support for more information."
     ), [offer, sessionData]);
 
-    const { setFields, setTechs } = useChipsFieldSearch();
+    const { setFields, setTechs, setFieldsWithUrl, setTechsWithUrl, setLoadUrlFromFilters } = useChipsFieldSearch();
+
+    const handleChipSetFields = useCallback((values) => {
+        if (isPage) {
+            history.push("/");
+            setFields(values);
+            setLoadUrlFromFilters(true);
+        } else {
+            setFieldsWithUrl(values);
+        }
+    }, [history, isPage, setFields, setFieldsWithUrl, setLoadUrlFromFilters]);
+
+    const handleChipSetTechs = useCallback((values) => {
+        if (isPage) {
+            history.push("/");
+            setTechs(values);
+            setLoadUrlFromFilters(true);
+        } else {
+            setTechsWithUrl(values);
+        }
+    }, [history, isPage, setLoadUrlFromFilters, setTechs, setTechsWithUrl]);
+
+    const history = useHistory();
 
     const getHiddenOfferMessage = useCallback(() => {
         if (visibilityState.isDisabled)
@@ -251,13 +274,13 @@ const OfferDetails = ({
                         type="Technologies"
                         values={offer?.technologies}
                         loading={loading}
-                        onChipClick={setTechs}
+                        onChipClick={handleChipSetTechs}
                     />
                     <ChipList
                         type="Fields"
                         values={offer?.fields}
                         loading={loading}
-                        onChipClick={setFields}
+                        onChipClick={handleChipSetFields}
                     />
                 </Grid>
             </Grid>
