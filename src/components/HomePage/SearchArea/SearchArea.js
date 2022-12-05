@@ -90,21 +90,17 @@ export const AdvancedSearchController = ({
     }, [onSubmit, searchOffers, searchValue, setUrlSearchValue]);
 
     useEffect(() => {
-        if (queryParams.jobMinDuration && queryParams.jobMaxDuration) {
-            setShowJobDurationSlider(true);
-            setJobDuration(null, [
-                parseInt(queryParams.jobMinDuration, 10),
-                parseInt(queryParams.jobMaxDuration, 10),
-            ]);
-        }
+        setShowJobDurationSlider(!!queryParams.jobMinDuration && !!queryParams.jobMaxDuration);
+        setJobDuration(null, [
+            parseInt(queryParams.jobMinDuration, 10),
+            parseInt(queryParams.jobMaxDuration, 10),
+        ]);
 
-        if (queryParams.jobType) setJobType(queryParams.jobType);
-        if (queryParams.fields) setFields(queryParams.fields);
-        if (queryParams.technologies) setTechs(queryParams.technologies);
+        setJobType(queryParams.jobType);
+        setFields(queryParams.fields || []);
+        setTechs(queryParams.technologies || []);
 
-        if (queryParams.searchValue) {
-            setSearchValue(queryParams.searchValue);
-        }
+        setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

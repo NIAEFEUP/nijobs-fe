@@ -34,7 +34,17 @@ describe("SearchArea", () => {
         it("should render a Paper, a Form, a Search Bar, a Search Button and Advanced Options Button", () => {
             renderWithStoreAndTheme(
                 <RouteWrappedContent>
-                    <SearchArea onSubmit={onSubmit} fields={[]} technologies={[]} />
+                    <SearchArea
+                        onSubmit={onSubmit}
+                        fields={[]}
+                        technologies={[]}
+                        setShowJobDurationSlider={() => { }}
+                        setTechs={() => { }}
+                        setJobDuration={() => { }}
+                        setFields={() => { }}
+                        setJobType={() => { }}
+                        setSearchValue={() => { }}
+                    />
                 </RouteWrappedContent>,
                 { initialState, theme }
             );
@@ -64,6 +74,12 @@ describe("SearchArea", () => {
                         searchValue={searchValue}
                         setSearchValue={setSearchValue}
                         addSnackbar={addSnackbar}
+                        showJobDurationSlider={() => { }}
+                        setShowJobDurationSlider={() => { }}
+                        setTechs={() => { }}
+                        setJobDuration={() => { }}
+                        setFields={() => { }}
+                        setJobType={() => { }}
                         onSubmit={onSubmit}
                         fields={[]}
                         technologies={[]}
