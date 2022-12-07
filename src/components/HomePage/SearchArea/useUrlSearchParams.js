@@ -5,6 +5,8 @@ import { useLocation, useHistory } from "react-router-dom";
 
 import { throttle } from "lodash";
 
+import { ensureArray } from "../../../utils";
+
 const HISTORY_REPLACE_THROTTLE_DELAY_MS = 350;
 
 /**
@@ -55,6 +57,7 @@ export default ({
     const actualSetJobType = useCallback(({ target: { value: jobType } }) => {
         changeURLFilters(location, queryParams, { jobType });
 
+        /* istanbul ignore else */
         if (setJobType)
             setJobType(jobType);
 
@@ -66,6 +69,7 @@ export default ({
 
         changeURLFilters(location, queryParams, { jobMinDuration, jobMaxDuration });
 
+        /* istanbul ignore else */
         if (setJobDuration)
             setJobDuration(unused, duration);
 
@@ -75,6 +79,7 @@ export default ({
         if (!showJobDurationSlider)
             changeURLFilters(location, queryParams, { jobMinDuration: null, jobMaxDuration: null });
 
+        /* istanbul ignore else */
         if (setShowJobDurationSlider)
             setShowJobDurationSlider(showJobDurationSlider);
 
@@ -82,19 +87,25 @@ export default ({
 
     const actualSetFields = useCallback((fields) => {
 
-        changeURLFilters(location, queryParams, { fields });
+        const sanitizedFields = ensureArray(fields);
 
+        changeURLFilters(location, queryParams, { fields: sanitizedFields });
+
+        /* istanbul ignore else */
         if (setFields)
-            setFields(fields);
+            setFields(sanitizedFields);
 
     }, [changeURLFilters, location, queryParams, setFields]);
 
     const actualSetTechs = useCallback((technologies) => {
 
-        changeURLFilters(location, queryParams, { technologies });
+        const sanitizedTechnologies = ensureArray(technologies);
 
+        changeURLFilters(location, queryParams, { technologies: sanitizedTechnologies });
+
+        /* istanbul ignore else */
         if (setTechs)
-            setTechs(technologies);
+            setTechs(sanitizedTechnologies);
 
     }, [changeURLFilters, location, queryParams, setTechs]);
 
@@ -102,6 +113,7 @@ export default ({
 
         changeURLFilters(location, queryParams, { searchValue });
 
+        /* istanbul ignore else */
         if (setSearchValue)
             setSearchValue(searchValue);
 
@@ -110,6 +122,7 @@ export default ({
     const actualResetAdvancedSearchFields = useCallback(() => {
         clearURLFilters(location);
 
+        /* istanbul ignore else */
         if (resetAdvancedSearchFields)
             resetAdvancedSearchFields();
 

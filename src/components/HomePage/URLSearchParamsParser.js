@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import useOffersSearcher from "./SearchResultsArea/SearchResultsWidget/useOffersSearcher";
 import { SearchResultsConstants } from "./SearchResultsArea/SearchResultsWidget/SearchResultsUtils";
 
+import { ensureArray } from "../../utils";
+
 // offerSearch params that should NOT trigger an auto-submit
 const invalidParams = ["error", "offers", "loading", "filterJobDuration"];
 
@@ -31,8 +33,8 @@ const URLSearchParamsParser = ({ showSearchResults }) => {
         jobMaxDuration: queryParams.jobMaxDuration,
         jobMinDuration: queryParams.jobMinDuration,
         jobType: queryParams.jobType,
-        fields: queryParams.fields,
-        technologies: queryParams.technologies,
+        fields: ensureArray(queryParams.fields),
+        technologies: ensureArray(queryParams.technologies),
     });
 
     // we specifically want this to only run once to avoid infinite re-renders

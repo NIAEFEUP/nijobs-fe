@@ -193,6 +193,10 @@ describe("SearchArea", () => {
             const filterJobDuration = false;
             props.setShowJobDurationSlider(filterJobDuration);
             expect(dispatch).toHaveBeenCalledWith(setShowJobDurationSlider(false));
+
+            dispatch.mockClear();
+            props.resetAdvancedSearchFields();
+            expect(dispatch).toHaveBeenCalled();
         });
     });
 });

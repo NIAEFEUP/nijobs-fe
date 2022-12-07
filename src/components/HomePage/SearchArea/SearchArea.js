@@ -29,6 +29,8 @@ import useOffersSearcher from "../SearchResultsArea/SearchResultsWidget/useOffer
 
 import useSearchParams from "./useUrlSearchParams";
 
+import { ensureArray } from "../../../utils";
+
 export const AdvancedSearchControllerContext = React.createContext({});
 
 export const AdvancedSearchController = ({
@@ -97,8 +99,8 @@ export const AdvancedSearchController = ({
         ]);
 
         setJobType(queryParams.jobType);
-        setFields(queryParams.fields || []);
-        setTechs(queryParams.technologies || []);
+        setFields(ensureArray(queryParams.fields ?? []));
+        setTechs(ensureArray(queryParams.technologies ?? []));
 
         setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
