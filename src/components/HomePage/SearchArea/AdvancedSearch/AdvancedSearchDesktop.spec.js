@@ -14,9 +14,25 @@ import { createTheme } from "@material-ui/core/styles";
 import { MemoryRouter } from "react-router-dom";
 
 const AdvancedSearchWrapper = ({
-    children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
-    jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE, setJobDuration, setJobType, fields = [], setFields,
-    technologies = [], setTechs, resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+    children,
+    enableAdvancedSearchDefault,
+    showJobDurationSlider,
+    setShowJobDurationSlider = () => { },
+    jobMinDuration = INITIAL_JOB_DURATION,
+    jobMaxDuration = INITIAL_JOB_DURATION + 1,
+    jobType = INITIAL_JOB_TYPE,
+    setJobDuration = () => { },
+    setJobType = () => { },
+    fields = [],
+    setFields = () => { },
+    technologies = [],
+    setTechs = () => { },
+    resetAdvancedSearchFields,
+    onSubmit,
+    searchValue,
+    setSearchValue = () => { },
+    searchOffers,
+    onMobileClose,
 }) => {
     const {
         ContextProvider,
@@ -26,7 +42,7 @@ const AdvancedSearchWrapper = ({
         {
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
-            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
         },
         AdvancedSearchControllerContext
     );
@@ -181,9 +197,7 @@ describe("AdvancedSearchDesktop", () => {
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
-                    <AdvancedSearchWrapper
-                        enableAdvancedSearchDefault
-                    >
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
                         <AdvancedSearchDesktop />
                     </AdvancedSearchWrapper>
                 </RouteWrappedComponent>,
@@ -236,13 +250,13 @@ describe("AdvancedSearchDesktop", () => {
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[1] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(1, Object.keys(FieldOptions).slice(0, 2));
+            expect(setFieldsMock).toHaveBeenNthCalledWith(2, Object.keys(FieldOptions).slice(0, 2));
 
             // The state isn't actaully changing in this test. So, in the following scenario,
             // the only selected value is actually FieldOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[0] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setFieldsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -266,15 +280,18 @@ describe("AdvancedSearchDesktop", () => {
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
             expect(screen.getByTestId("chip-option", { name: Object.keys(TechOptions)[0] })).toBeInTheDocument();
 
+            // these tests should check for mock calls starting from the second one because the first mock call
+            // will be triggered by the "query params parsing" `useEffect`
+
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[1] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(1, Object.keys(TechOptions).slice(0, 2));
+            expect(setTechsMock).toHaveBeenNthCalledWith(2, Object.keys(TechOptions).slice(0, 2));
 
-            // The state isn't actaully changing in this test. So, in the following scenario,
+            // The state isn't actually changing in this test. So, in the following scenario,
             // the only selected value is actually TechOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[0] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setTechsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -285,11 +302,6 @@ describe("AdvancedSearchDesktop", () => {
                 <RouteWrappedComponent>
                     <AdvancedSearchWrapper
                         enableAdvancedSearchDefault
-                        setJobType={() => { }}
-                        setJobDuration={() => { }}
-                        setShowJobDurationSlider={() => { }}
-                        setFields={() => { }}
-                        setTechs={() => { }}
                         resetAdvancedSearchFields={resetFn}
                         technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
                     >
