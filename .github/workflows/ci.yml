@@ -40,6 +40,9 @@ jobs:
     - name: Test
       run: CI=true npm run test-ci
 
+    - name: Upload code coverage to Codecov
+      uses: codecov/codecov-action@v3
+
   audit:
 
     runs-on: ubuntu-latest
