@@ -38,10 +38,10 @@ export default ({
         };
 
         history.replace({
-            ...location, search: qs.stringify(newQueryParams, {
+            ...location, search: `?${qs.stringify(newQueryParams, {
                 skipNulls: true,
                 arrayFormat: "brackets",
-            }),
+            })}`,
         });
     }, HISTORY_REPLACE_THROTTLE_DELAY_MS), [history]);
 

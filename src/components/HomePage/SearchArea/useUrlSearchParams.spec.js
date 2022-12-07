@@ -11,13 +11,38 @@ const capitalizeFirstLetter = ([first, ...rest], locale = navigator.language) =>
 
 describe("useUrlSearchParams", () => {
 
+    it("should change Location's search param to include custom data", async () => {
+        let changeUrlFilters, location;
+        const queryParams = {};
+
+        testHook(() => {
+            changeUrlFilters = useUrlSearchParams().changeURLFilters;
+
+            location = useLocation();
+        }, MemoryRouter);
+
+        expect(location).toHaveProperty("search", "");
+
+        const changes = {
+            testParam: "testValue",
+        };
+
+        await act(() => {
+            changeUrlFilters(location, queryParams, changes);
+        });
+
+        const expectedLocationSearch = `?${qs.stringify(changes, { skipNulls: true, arrayFormat: "brackets" })}`;
+
+        expect(location).toHaveProperty("search", expectedLocationSearch);
+    });
+
     it.each([
         ["jobDuration", [1, 2], [1, 2]],
         ["jobType", { target: { value: "test-job-type" } }, "test-job-type"],
         ["searchValue", "test-search-value", "test-search-value"],
         ["fields", ["TEST-FIELD-1", "TEST-FIELD-2"], ["TEST-FIELD-1", "TEST-FIELD-2"]],
         ["techs", ["TEST-TECH-1", "TEST-TECH-2"], ["TEST-TECH-1", "TEST-TECH-2"]],
-    ])("should populate the Location's search property with %s", (fieldName, fieldValue, expectedValue) => {
+    ])("should populate the Location's search property with %s", async (fieldName, fieldValue, expectedValue) => {
 
         let location, searchParamsResult;
 
@@ -39,7 +64,7 @@ describe("useUrlSearchParams", () => {
 
         expect(location).toHaveProperty("search", "");
 
-        act(() => {
+        await act(() => {
             if (fieldName === "jobDuration")
                 hookedInTestFunction(null, fieldValue);
             else
@@ -69,7 +94,7 @@ describe("useUrlSearchParams", () => {
         expect(location).toHaveProperty("search", expectedLocationSearch);
     });
 
-    it("should clear the Location's search property", () => {
+    it("should clear the Location's search property", async () => {
         let location, searchParamsResult;
 
         const testFunction = jest.fn();
@@ -97,7 +122,7 @@ describe("useUrlSearchParams", () => {
 
         const { resetAdvancedSearchFields } = searchParamsResult;
 
-        act(() => {
+        await act(() => {
             resetAdvancedSearchFields();
         });
 
@@ -106,7 +131,7 @@ describe("useUrlSearchParams", () => {
         expect(location).toHaveProperty("search", "");
     });
 
-    it("should remove job duration information if slider is hidden by user", () => {
+    it("should remove job duration information if slider is hidden by user", async () => {
         let location, searchParamsResult;
 
         const testFunction = jest.fn();
@@ -134,7 +159,7 @@ describe("useUrlSearchParams", () => {
 
         const { setShowJobDurationSlider } = searchParamsResult;
 
-        act(() => {
+        await act(() => {
             setShowJobDurationSlider(false);
         });
 
