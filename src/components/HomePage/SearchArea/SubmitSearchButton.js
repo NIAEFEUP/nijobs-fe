@@ -15,8 +15,11 @@ const SubmitSearchButton = ({ onClick, searchHasUserInput }) => {
                 variant="extended"
                 onClick={onClick}
             >
-                { searchHasUserInput ? <span>Search</span>
-                    : <span>Search All</span> }
+                <span>
+                    {searchHasUserInput
+                        ? "Search"
+                        : "Show All"}
+                </span>
             </Fab>
         </div>
     );

@@ -1,5 +1,4 @@
 import React from "react";
-import { Search } from "@material-ui/icons";
 import { Fab } from "@material-ui/core";
 import SubmitSearchButton from "./SubmitSearchButton";
 
@@ -10,9 +9,6 @@ describe("SubmitSearchButton", () => {
                 shallow(<SubmitSearchButton />)
                     .find(Fab).exists()
             ).toBe(true);
-        });
-        it("should render 'search' icon", () => {
-            expect(shallow(<SubmitSearchButton />).find(Search).exists()).toBe(true);
         });
     });
 
