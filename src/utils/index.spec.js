@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { createMemoryHistory } from "history";
 import { Switch, Link, Router } from "react-router-dom";
-import { smoothScrollToRef, capitalize, Wrap, Route, ProtectedRoute } from ".";
+import { smoothScrollToRef, capitalize, Wrap, Route, ProtectedRoute, ensureArray } from ".";
 import { render, renderWithStore, screen, act, fireEvent } from "../test-utils";
 import useSession from "../hooks/useSession";
 
@@ -260,6 +260,17 @@ describe("utils", () => {
             );
 
             expect(screen.getByText("No match")).toBeInTheDocument();
+        });
+    });
+
+    describe("ensureArray", () => {
+        it("should return array value when receiving array-like value", () => {
+            expect(ensureArray([1])).toEqual([1]);
+            expect(ensureArray(Array.of(1, 2))).toEqual([1, 2]);
+        });
+        it("should return array value when receiving non-array-like value", () => {
+            expect(ensureArray(1)).toEqual([1]);
+            expect(ensureArray("test")).toEqual(["test"]);
         });
     });
 });

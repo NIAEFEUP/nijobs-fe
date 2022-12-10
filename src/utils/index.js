@@ -379,3 +379,9 @@ export const generalParseRequestErrors = (err, getHumanError) => {
         generalErrors,
     };
 };
+
+export const ensureArray = (val) => {
+    if (Array.isArray(val)) return val;
+
+    else return [val];
+};

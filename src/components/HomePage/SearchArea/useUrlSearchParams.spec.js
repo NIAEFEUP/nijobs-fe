@@ -6,8 +6,7 @@ import useUrlSearchParams from "./useUrlSearchParams";
 import { testHook } from "../../../test-utils";
 import { act } from "react-dom/test-utils";
 
-const capitalizeFirstLetter = ([first, ...rest], locale = navigator.language) =>
-    first === undefined ? "" : first.toLocaleUpperCase(locale) + rest.join("");
+import { capitalize } from "../../../utils";
 
 describe("useUrlSearchParams", () => {
 
@@ -46,7 +45,7 @@ describe("useUrlSearchParams", () => {
 
         let location, searchParamsResult;
 
-        const functionName = `set${capitalizeFirstLetter(fieldName)}`;
+        const functionName = `set${capitalize(fieldName)}`;
         const testFunction = jest.fn();
 
         testHook(() => {
@@ -85,6 +84,51 @@ describe("useUrlSearchParams", () => {
                 "jobMaxDuration": maxDuration,
             };
         } else if (fieldName === "techs")
+            params = {
+                "technologies": expectedValue,
+            };
+
+        const expectedLocationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
+
+        expect(location).toHaveProperty("search", expectedLocationSearch);
+    });
+
+    it.each([
+        ["fields", "TEST-FIELD", ["TEST-FIELD"]],
+        ["techs", "TEST-TECH", ["TEST-TECH"]],
+    ])("should parse array-like query value '%s' correctly", async (fieldName, fieldValue, expectedValue) => {
+
+        let location, searchParamsResult;
+
+        const functionName = `set${capitalize(fieldName)}`;
+        const testFunction = jest.fn();
+
+        testHook(() => {
+            searchParamsResult = useUrlSearchParams({
+                [functionName]: testFunction,
+            });
+
+            location = useLocation();
+        }, MemoryRouter);
+
+        const hookedInTestFunction = searchParamsResult[functionName];
+
+        // using fail(...) is not recommended as Jasmine globals will be removed from Jest
+        if (!hookedInTestFunction) throw Error(`No hooked-in test function found for ${functionName}`);
+
+        expect(location).toHaveProperty("search", "");
+
+        await act(() => {
+            hookedInTestFunction(fieldValue);
+        });
+
+        expect(testFunction).toHaveBeenCalled();
+
+        let params = {
+            [fieldName]: expectedValue,
+        };
+
+        if (fieldName === "techs")
             params = {
                 "technologies": expectedValue,
             };
