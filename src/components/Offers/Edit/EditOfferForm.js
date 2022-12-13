@@ -100,13 +100,14 @@ export const EditOfferController = () => {
             editOffer({
                 offerId: id,
                 ...data,
-                vacancies: data.vacancies || undefined,
+                vacancies: data.vacancies || null,
                 publishDate: publishDateChanged ? data.publishDate : undefined,
                 publishEndDate: publishEndDateChanged ? data.publishEndDate : undefined,
                 contacts: data.contacts.map((val) => val.value),
                 requirements: data.requirements.map((val) => val.value),
-                isPaid: data.isPaid === "none" ? undefined : data.isPaid,
-                jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
+                isPaid: data.isPaid === "none" ? null : data.isPaid,
+                jobStartDate: !data.jobStartDate ? null : data.jobStartDate,
+                applyURL: data.applyURL || null,
                 jobMinDuration,
                 jobMaxDuration,
             })

@@ -20,6 +20,7 @@ import JobOptions from "../../utils/offers/JobOptions";
 import FieldOptions from "../../utils/offers/FieldOptions";
 import TechOptions from "../../utils/offers/TechOptions";
 import { Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
+import { HumanValidationReasons } from "../../../utils";
 
 jest.mock("../../../hooks/useOffer");
 jest.mock("react-router-dom", () => {
@@ -84,6 +85,8 @@ describe("Edit Offer Form", () => {
             "contact1",
             "contact2",
         ],
+        isPaid: null,
+        applyURL: "https://www.test.com",
     });
 
     const initialState = {};
@@ -213,6 +216,7 @@ describe("Edit Offer Form", () => {
             expect(screen.getByLabelText("Publication End Date *")).toBeEnabled();
             expect(screen.getByTestId("contacts-selector")).toBeEnabled();
             expect(screen.getByTestId("requirements-selector")).toBeEnabled();
+            expect(screen.getByLabelText("Application URL")).toBeEnabled();
             expect(screen.getByText("Submit").parentNode).toBeEnabled();
         });
 
@@ -240,6 +244,7 @@ describe("Edit Offer Form", () => {
             offer.technologies.forEach((tech) => screen.findByText(TechOptions[tech]));
             offer.requirements.forEach((requirement) => expect(screen.getByDisplayValue(requirement)).toBeInTheDocument());
             offer.contacts.forEach((contact) => expect(screen.getByDisplayValue(contact)).toBeInTheDocument());
+            expect(screen.getByLabelText("Application URL").getAttribute("value")).toBe(offer.applyURL);
         });
 
         it("should not be visible advanced settings", () => {
@@ -323,6 +328,7 @@ describe("Edit Offer Form", () => {
                 technologies,
                 location,
                 requirements,
+                applyURL,
             } = offer;
 
             expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/edit\/test123/), expect.objectContaining({
@@ -340,6 +346,7 @@ describe("Edit Offer Form", () => {
                     technologies,
                     location,
                     requirements,
+                    applyURL,
                 }),
             }));
 
@@ -400,6 +407,7 @@ describe("Edit Offer Form", () => {
                 technologies,
                 location,
                 requirements,
+                applyURL,
             } = offer;
 
 
@@ -420,6 +428,7 @@ describe("Edit Offer Form", () => {
                     technologies,
                     location,
                     requirements,
+                    applyURL,
                 }),
             }));
 
@@ -603,6 +612,40 @@ describe("Edit Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("\u200B");
 
+        });
+
+        it("should fail validation if applyURL not following the regex", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+
+            const wrapper = renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <EditOfferWrapper>
+                            <EditOfferPage />
+                        </EditOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            const input = screen.getByLabelText("Application URL");
+
+            await act(() => {
+                fireEvent.focus(input);
+                fireEvent.change(input, { target: { value: "invalid" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(input))
+                .toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+
+            await act(() =>  {
+                fireEvent.change(input, { target: { value: "https://valid.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
         });
 
         it("should allow any compensation value", async () => {

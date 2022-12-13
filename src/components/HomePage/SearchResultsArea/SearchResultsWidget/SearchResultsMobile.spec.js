@@ -2,12 +2,21 @@ import React from "react";
 import SearchResultsMobile from "./SearchResultsMobile";
 import Offer from "../Offer/Offer";
 import { createTheme } from "@material-ui/core/styles";
-import { render, renderWithStoreAndTheme, screen } from "../../../../test-utils";
+import { renderWithTheme, renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { waitForElementToBeRemoved } from "@testing-library/dom";
 import { Simulate } from "react-dom/test-utils";
 import { SearchResultsControllerContext } from "./SearchResultsWidget";
 import { BrowserRouter } from "react-router-dom";
+
+import AppTheme from "../../../../AppTheme";
+
+// eslint-disable-next-line react/prop-types
+const RouteWrappedContent = ({ children }) => (
+    <BrowserRouter>
+        {children}
+    </BrowserRouter>
+);
 
 describe("SearchResultsMobile", () => {
 
@@ -42,11 +51,14 @@ describe("SearchResultsMobile", () => {
     describe("render", () => {
         it("Should render offers if present", () => {
 
-            const context = { offers, loadMoreOffers: () => {} };
-            render(
-                <SearchResultsControllerContext.Provider value={context}>
-                    <SearchResultsMobile offers={offers} />
-                </SearchResultsControllerContext.Provider>
+            const context = { offers, loadMoreOffers: () => { } };
+            renderWithTheme(
+                <RouteWrappedContent>
+                    <SearchResultsControllerContext.Provider value={context}>
+                        <SearchResultsMobile offers={offers} />
+                    </SearchResultsControllerContext.Provider>
+                </RouteWrappedContent>,
+                { theme: AppTheme }
             );
             expect(screen.getByRole("button", { name: "Adjust Filters" })).toBeInTheDocument();
             expect(screen.getByText("position1")).toBeInTheDocument();
@@ -69,10 +81,12 @@ describe("SearchResultsMobile", () => {
             const context = { noOffers: true };
 
             renderWithStoreAndTheme(
-                <SearchResultsControllerContext.Provider value={context}>
-                    <SearchResultsMobile />
-                </SearchResultsControllerContext.Provider>
-                , { initialState, theme });
+                <RouteWrappedContent>
+                    <SearchResultsControllerContext.Provider value={context}>
+                        <SearchResultsMobile />
+                    </SearchResultsControllerContext.Provider>
+                </RouteWrappedContent>,
+                { initialState, theme });
             expect(screen.getByText("No offers available.")).toBeInTheDocument();
             expect(screen.getByText("Try a different criteria.")).toBeInTheDocument();
             expect(screen.getByLabelText("Search", { selector: "input" })).toBeInTheDocument();
@@ -88,16 +102,16 @@ describe("SearchResultsMobile", () => {
                 offers,
                 setSelectedOfferIdx: setSelectedOfferIdxMock,
                 selectedOfferIdx: 0,
-                toggleShowSearchFilters: () => {},
-                loadMoreOffers: () => {},
+                toggleShowSearchFilters: () => { },
+                loadMoreOffers: () => { },
             };
 
             renderWithStoreAndTheme(
-                <BrowserRouter>
+                <RouteWrappedContent>
                     <SearchResultsControllerContext.Provider value={context}>
                         <SearchResultsMobile />
                     </SearchResultsControllerContext.Provider>
-                </BrowserRouter>,
+                </RouteWrappedContent>,
                 { theme }
             );
 

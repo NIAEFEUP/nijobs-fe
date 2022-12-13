@@ -1,4 +1,4 @@
-import { generalHumanError, HumanValidationReasons, validationRulesGenerator } from "../../../utils";
+import { generalHumanError, generalParseRequestErrors, HumanValidationReasons, validationRulesGenerator } from "../../../utils";
 import { DAY_IN_MS, MONTH_IN_MS, OFFER_MAX_LIFETIME_MONTHS } from "../../../utils/TimeUtils";
 import { MAX_FIELDS, MIN_FIELDS } from "../../utils/offers/FieldOptions";
 import { MAX_TECHNOLOGIES, MIN_TECHNOLOGIES } from "../../utils/offers/TechOptions";
@@ -53,16 +53,9 @@ const HumanReadableErrors = Object.freeze({
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
     "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
     "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
+    "invalid-apply-url": () => "Invalid application URL. Ensure your URL starts with 'http(s):' or 'mailto:'",
 });
 
 export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
 
-export const parseRequestErrors = (err) => {
-    const generalErrors = err.filter((error) => !error.param).map((error) => ({ message: getHumanError(error.msg) }));
-    const paramErrors = err.filter((error) => !!error.param)
-        .reduce((obj, cur) => ({ ...obj, [cur.param]: { message: getHumanError(cur.msg) } }), {});
-    return {
-        ...paramErrors,
-        generalErrors,
-    };
-};
+export const parseRequestErrors = (error) => generalParseRequestErrors(error, getHumanError);

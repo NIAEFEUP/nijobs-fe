@@ -9,6 +9,7 @@ import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
 import ReactGa from "react-ga";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
+import Constants from "./Constants";
 
 export const smoothScrollToRef = (ref, block = "start") => {
 
@@ -32,7 +33,7 @@ export const parseFiltersToURL = (filters) => Object.keys(filters)
         if (filters[key]) {
             if (Array.isArray(filters[key])) {
                 return filters[key]
-                    .map((val) => `${key}=${encodeURIComponent(val)}`)
+                    .map((val) => `${key}[]=${encodeURIComponent(val)}`)
                     .join("&");
             } else return `${key}=${encodeURIComponent(filters[key])}`;
         } else return "";
@@ -62,6 +63,7 @@ export const HumanValidationReasons = Object.freeze({
     LOCATION_FORMAT: () => "The location format must be <city>, <country>. Beware of extra spaces.",
     PUBLISH_END_DATE: () => `Publication end date should be after Publish Date but not 
                             over ${OFFER_MAX_LIFETIME_MONTHS} month(s) after that.`,
+    BAD_APPLY_URL: "Invalid application URL. Ensure your URL starts with 'http(s):' or 'mailto:'",
 });
 
 export const validationRulesGenerator = (rules) => (field, rule, reason) => {
@@ -354,12 +356,32 @@ export const buildCancelableRequest = (promiseFn) => (...args) => new Cancelable
 export { default as UndoableActionsHandlerProvider, UndoableActions } from "./UndoableActionsHandlerProvider";
 
 export const generalHumanError = (error, HumanReadableErrors) => {
+    if (!error) {
+        return Constants.UNEXPECTED_ERROR_MESSAGE;
+    }
     const [errorId, errorValue] = error.split(":");
     const rawError = HumanReadableErrors[errorId];
     if (typeof rawError === "string") {
         return rawError;
     } else if (typeof rawError === "function") {
-        return (!!rawError && rawError(errorValue)) || "An error occurred, please try again.";
+        return (!!rawError && rawError(errorValue)) || Constants.UNEXPECTED_ERROR_MESSAGE;
     }
-    return "An error occurred, please try again.";
+    return Constants.UNEXPECTED_ERROR_MESSAGE;
+};
+
+export const generalParseRequestErrors = (err, getHumanError) => {
+    const errors = Array.isArray(err) ? err : [err];
+    const generalErrors = errors.filter((error) => !error?.param).map((error) => ({ message: getHumanError(error?.msg) }));
+    const paramErrors = errors.filter((error) => !!error?.param)
+        .reduce((obj, cur) => ({ ...obj, [cur.param]: { message: getHumanError(cur.msg) } }), {});
+    return {
+        ...paramErrors,
+        generalErrors,
+    };
+};
+
+export const ensureArray = (val) => {
+    if (Array.isArray(val)) return val;
+
+    else return [val];
 };

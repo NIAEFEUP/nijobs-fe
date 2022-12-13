@@ -23,6 +23,7 @@ export const CreateOfferController = () => {
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || params.company,
+                applyURL: data.applyURL || undefined,
                 jobMinDuration,
                 jobMaxDuration,
             })

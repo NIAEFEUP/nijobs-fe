@@ -11,10 +11,28 @@ import TechOptions from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 import { createTheme } from "@material-ui/core/styles";
 
+import { MemoryRouter } from "react-router-dom";
+
 const AdvancedSearchWrapper = ({
-    children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
-    jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE, setJobDuration, setJobType, fields = [], setFields,
-    technologies = [], setTechs, resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+    children,
+    enableAdvancedSearchDefault,
+    showJobDurationSlider,
+    setShowJobDurationSlider = () => { },
+    jobMinDuration = INITIAL_JOB_DURATION,
+    jobMaxDuration = INITIAL_JOB_DURATION + 1,
+    jobType = INITIAL_JOB_TYPE,
+    setJobDuration = () => { },
+    setJobType = () => { },
+    fields = [],
+    setFields = () => { },
+    technologies = [],
+    setTechs = () => { },
+    resetAdvancedSearchFields,
+    onSubmit,
+    searchValue,
+    setSearchValue = () => { },
+    searchOffers,
+    onMobileClose,
 }) => {
     const {
         ContextProvider,
@@ -24,7 +42,7 @@ const AdvancedSearchWrapper = ({
         {
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
-            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose,
+            resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
         },
         AdvancedSearchControllerContext
     );
@@ -36,6 +54,12 @@ const AdvancedSearchWrapper = ({
     );
 };
 
+const RouteWrappedComponent = ({ children }) => (
+    <MemoryRouter initialEntries={["/"]}>
+        {children}
+    </MemoryRouter>
+);
+
 describe("AdvancedSearchDesktop", () => {
 
     const theme = createTheme();
@@ -45,9 +69,11 @@ describe("AdvancedSearchDesktop", () => {
         it("should render a job selector with all job types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -67,15 +93,17 @@ describe("AdvancedSearchDesktop", () => {
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    jobMinDuration={1}
-                    jobMaxDuration={2}
-                    showJobDurationSlider={false}
-                    setShowJobDurationSlider={setShowJobDurationSliderMock}
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        jobMinDuration={1}
+                        jobMaxDuration={2}
+                        showJobDurationSlider={false}
+                        setShowJobDurationSlider={setShowJobDurationSliderMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -89,15 +117,17 @@ describe("AdvancedSearchDesktop", () => {
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    jobMinDuration={1}
-                    jobMaxDuration={2}
-                    showJobDurationSlider={true}
-                    setShowJobDurationSlider={setShowJobDurationSliderMock}
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        jobMinDuration={1}
+                        jobMaxDuration={2}
+                        showJobDurationSlider={true}
+                        setShowJobDurationSlider={setShowJobDurationSliderMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -110,9 +140,11 @@ describe("AdvancedSearchDesktop", () => {
         it("should render a fields selector with all field types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -136,9 +168,11 @@ describe("AdvancedSearchDesktop", () => {
         it("should render a technologies selector with all technology types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -162,11 +196,11 @@ describe("AdvancedSearchDesktop", () => {
         it("should disable reset button if no advanced field is set", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -176,12 +210,14 @@ describe("AdvancedSearchDesktop", () => {
         it("should enable reset button if some advanced field is set", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    fields={[Object.keys(FieldOptions)[0]]}
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        fields={[Object.keys(FieldOptions)[0]]}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -197,13 +233,15 @@ describe("AdvancedSearchDesktop", () => {
             const setFieldsMock = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    fields={[Object.keys(FieldOptions)[0]]}
-                    setFields={setFieldsMock}
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        fields={[Object.keys(FieldOptions)[0]]}
+                        setFields={setFieldsMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -212,13 +250,13 @@ describe("AdvancedSearchDesktop", () => {
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[1] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(1, Object.keys(FieldOptions).slice(0, 2));
+            expect(setFieldsMock).toHaveBeenNthCalledWith(2, Object.keys(FieldOptions).slice(0, 2));
 
             // The state isn't actaully changing in this test. So, in the following scenario,
             // the only selected value is actually FieldOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[0] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setFieldsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -227,28 +265,33 @@ describe("AdvancedSearchDesktop", () => {
             const setTechsMock = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    technologies={[Object.keys(TechOptions)[0]]}
-                    setTechs={setTechsMock}
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        technologies={[Object.keys(TechOptions)[0]]}
+                        setTechs={setTechsMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
             expect(screen.getByTestId("chip-option", { name: Object.keys(TechOptions)[0] })).toBeInTheDocument();
 
+            // these tests should check for mock calls starting from the second one because the first mock call
+            // will be triggered by the "query params parsing" `useEffect`
+
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[1] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(1, Object.keys(TechOptions).slice(0, 2));
+            expect(setTechsMock).toHaveBeenNthCalledWith(2, Object.keys(TechOptions).slice(0, 2));
 
-            // The state isn't actaully changing in this test. So, in the following scenario,
+            // The state isn't actually changing in this test. So, in the following scenario,
             // the only selected value is actually TechOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[0] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setTechsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -256,18 +299,15 @@ describe("AdvancedSearchDesktop", () => {
             const resetFn = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    setJobType={() => {}}
-                    setJobDuration={() => {}}
-                    setShowJobDurationSlider={() => {}}
-                    setFields={() => {}}
-                    setTechs={() => {}}
-                    resetAdvancedSearchFields={resetFn}
-                    technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
-                >
-                    <AdvancedSearchDesktop />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        resetAdvancedSearchFields={resetFn}
+                        technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 

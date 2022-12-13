@@ -1,33 +1,59 @@
 import React from "react";
 
-import { login } from "../../services/auth";
+import { login } from "../../../services/auth";
 
-import LoginForm from "./LoginForm";
-import { render, fireEvent, act } from "../../test-utils";
-import Constants from "../../utils/Constants";
+import AuthModal from "./AuthModal";
+import { fireEvent, act, renderWithStoreAndTheme } from "../../../test-utils";
+import Constants from "../../../utils/Constants";
+import { SnackbarProvider } from "notistack";
+import { createTheme } from "@material-ui/core";
 
-jest.mock("../../services/auth");
+jest.mock("../../../services/auth");
 
-describe("Navbar - LoginForm", () => {
+describe("Navbar - AuthModal - LoginForm", () => {
+    const theme = createTheme({});
     describe("render", () => {
         it("Should not appear as default", () => {
-            const wrapper = render(<LoginForm />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal />
+                </SnackbarProvider>, { initialState: {}, theme });
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).not.toBeInTheDocument();
         });
     });
     describe("interaction", () => {
-        it("Should toggle the modal visibility when clicking Cancel button", () => {
+        it("Should toggle the modal visibility when clicking Cancel button", async () => {
 
-            const toggleLoginModal = jest.fn();
+            const toggleAuthModal = jest.fn();
 
-            const wrapper = render(<LoginForm open toggleLoginModal={toggleLoginModal} />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toggleAuthModal={toggleAuthModal} />
+                </SnackbarProvider>, { initialState: {}, theme });
+
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
             expect(dialogTitle).toBeInTheDocument();
 
-            fireEvent.click(wrapper.getByText("Cancel"));
+            await act(async () => {
+                await fireEvent.click(wrapper.getByText("Cancel"));
+            });
 
-            expect(toggleLoginModal).toHaveBeenCalledTimes(1);
+            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should change to the recovery page when clicking Lost Password button", () => {
+
+            const toggleAuthModal = jest.fn();
+
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal open toggleAuthModal={toggleAuthModal} />
+                </SnackbarProvider>, { initialState: {}, theme });
+            fireEvent.click(wrapper.getByText("Lost password?"));
+
+            const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
+            expect(dialogTitle).toBeInTheDocument();
         });
 
         it("Should login correctly and toggle Modal visibility", async () => {
@@ -35,15 +61,17 @@ describe("Navbar - LoginForm", () => {
             // Making sure that the login service allows the login
             login.mockImplementationOnce(() => true);
 
-            const toggleLoginModal = jest.fn();
+            const toggleAuthModal = jest.fn();
 
-            const { getByRole, getByLabelText } = render(
-                <LoginForm
-                    open
-                    toggleLoginModal={toggleLoginModal}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const { getByRole, getByLabelText } = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={toggleAuthModal}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(getByLabelText("Email"), { target: { value: "asd@email.com" } });
@@ -55,18 +83,21 @@ describe("Navbar - LoginForm", () => {
                 await fireEvent.click(getByRole("button", { name: "Login" }));
             });
 
-            expect(toggleLoginModal).toHaveBeenCalledTimes(1);
+            expect(toggleAuthModal).toHaveBeenCalledTimes(1);
         });
 
         it("Should not allow invalid email", async () => {
 
-            const wrapper = render(
-                <LoginForm
-                    open
-                    toggleLoginModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
+
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "invalidemail" } });
@@ -98,13 +129,15 @@ describe("Navbar - LoginForm", () => {
 
         it("Should require password", async () => {
 
-            const wrapper = render(
-                <LoginForm
-                    open
-                    toggleLoginModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Password"), { target: { value: "" } });
@@ -122,15 +155,17 @@ describe("Navbar - LoginForm", () => {
                 throw new Error();
             });
 
-            // const toggleLoginModal = jest.fn();
+            // const toggleAuthModal = jest.fn();
 
-            const wrapper = render(
-                <LoginForm
-                    open
-                    toggleLoginModal={() => {}}
-                    toggleLoginPending={() => {}}
-                    updateSessionInfo={() => {}}
-                />);
+            const wrapper = renderWithStoreAndTheme(
+                <SnackbarProvider maxSnack={3}>
+                    <AuthModal
+                        open
+                        toggleAuthModal={() => {}}
+                        toggleLoginPending={() => {}}
+                        updateSessionInfo={() => {}}
+                    />
+                </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });

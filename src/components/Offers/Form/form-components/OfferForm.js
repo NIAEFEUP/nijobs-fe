@@ -35,6 +35,7 @@ import useOfferFormStyles from "./offerStyles";
 import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
+import ApplyURLComponent from "./ApplyURLComponent";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -226,7 +227,7 @@ const OfferForm = ({ context, title }) => {
                                             control={control}
                                         />
                                     </Grid>
-                                    <Grid item xs={12} lg={6} className={classes.vacanciesGrid}>
+                                    <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth>
                                             <VacanciesComponent
                                                 disabled={formDisabled}
@@ -300,7 +301,16 @@ const OfferForm = ({ context, title }) => {
                                             </Grid>
                                         </Collapse>
                                     </Grid>
-                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
+                                        <ApplyURLComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                            classes={classes}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <MultiOptionTextField
                                             values={contacts}
                                             label="Contacts *"
@@ -315,7 +325,7 @@ const OfferForm = ({ context, title }) => {
                                             addEntryBtnTestId="contacts-selector"
                                         />
                                     </Grid>
-                                    <Grid item xs={12} className={classes.multiTextOptionGrid}>
+                                    <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <MultiOptionTextField
                                             values={requirements}
                                             label="Requirements *"

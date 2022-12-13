@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import * as yup from "yup";
 import { HumanValidationReasons } from "../../../utils";
 import { generateValidationRule, isValidPublishEndDate } from "../Form/OfferUtils";
+import { validApplyURLRegex } from "../../../utils/offer/OfferUtils";
 
 export default yup.object().shape({
     title: yup.string()
@@ -71,4 +72,10 @@ export default yup.object().shape({
         ),
     isHidden: yup.boolean(HumanValidationReasons.BOOLEAN),
     owner: yup.string(),
+    applyURL: yup.string()
+        .nullable(true)
+        .matches(validApplyURLRegex, {
+            message: HumanValidationReasons.BAD_APPLY_URL,
+            excludeEmptyString: true,
+        }),
 });

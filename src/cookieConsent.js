@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Button, Box, Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, makeStyles, Grid, Link } from "@material-ui/core";
+import { Button, Box, Snackbar, makeStyles, Link } from "@material-ui/core";
 import { DAY_IN_MS, MONTH_IN_MS } from "./utils/TimeUtils";
 import { clearAnalytics, initAnalytics } from "./utils/analytics";
 import PropTypes from "prop-types";
 import { RouterLink } from "./utils";
 import { useMobile } from "./utils/media-queries";
 import useToggle from "./hooks/useToggle";
+import { BaseDialog } from "./utils/Dialog/BaseDialog";
 
 export const COOKIE_ACCEPT_LIFETIME_MONTHS = 6;
 export const COOKIE_REJECT_LIFETIME_DAYS = 5;
@@ -13,6 +14,7 @@ export const COOKIE_REJECT_LIFETIME_DAYS = 5;
 const useStyles = (isMobile) => makeStyles((theme) => ({
     dialog: {
         padding: theme.spacing(2),
+        textAlign: "center",
     },
     buttonsArea: {
         display: "flex",
@@ -26,51 +28,27 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
     }) : ({}),
 }));
 
-const CookiesUsageDialog = ({ open, handleAccept, handleReject, handleToggle }) => {
-    const classes = useStyles()();
-    const isMobile = useMobile();
-
-    return (
-        <Dialog
-            open={open}
-            onClose={handleToggle}
-            classes={{ paper: classes.dialog }}
-        >
-            <DialogTitle>
-                Why do we use cookies?
-            </DialogTitle>
-            <DialogContent style={{ textAlign: "justify" }}>
-                <p>
-                    {"NIJobs uses cookies to collect usage to improve our product."}
-                </p>
-                <p>
-                    {"Regarding privacy issues, we simply collect search parameters and other \
+const CookiesUsageDialogContent = ({ handleToggle }) => (
+    <>
+        <p>
+            {"NIJobs uses cookies to collect usage to improve our product."}
+        </p>
+        <p>
+            {"Regarding privacy issues, we simply collect search parameters and other \
                         useful metrics without linking them to your identity."}
-                </p>
-                <p>
-                    {"For more information, consult our "}
-                    <Link component={RouterLink} to="/privacy-policy" onClick={handleToggle}>
-                        {"Privacy Policy"}
-                    </Link>
-                    {"!"}
-                </p>
-                <p>
-                    {"Thank you!"}
-                </p>
-            </DialogContent>
-            <DialogActions className={classes.buttonsArea}>
-                <Grid container spacing={2} justifyContent={!isMobile ? "flex-end" : "center"}>
-                    <Grid item xs={12} sm="auto" marginRight={2}>
-                        <Button onClick={handleReject}>Use only essential cookies</Button>
-                    </Grid>
-                    <Grid item xs={12} sm="auto">
-                        <Button color="primary" variant="contained" onClick={handleAccept}>Accept</Button>
-                    </Grid>
-                </Grid>
-            </DialogActions>
-        </Dialog>
-    );
-};
+        </p>
+        <p>
+            {"For more information, consult our "}
+            <Link component={RouterLink} to="/privacy-policy" onClick={handleToggle}>
+                {"Privacy Policy"}
+            </Link>
+            {"!"}
+        </p>
+        <p>
+            {"Thank you!"}
+        </p>
+    </>
+);
 
 export const CookieConsent = () => {
     const [open, toggleOpen, resetConsentOpeningState] = useToggle(false);
@@ -172,11 +150,16 @@ const CookieComponent = ({ open, showWhyModal, handleAccept, handleReject, handl
                 }}
                 action={action}
             />
-            <CookiesUsageDialog
+            <BaseDialog
                 open={showWhyModal}
                 handleAccept={handleAccept}
-                handleReject={handleReject}
                 handleToggle={handleToggle}
+                handleReject={handleReject}
+                content={<CookiesUsageDialogContent handleToggle={handleToggle} />}
+                title="Why do we use cookies?"
+                rejectButtonText="Use only essential cookies"
+                acceptButtonText="Accept"
+                wrapButtons={true}
             />
         </>);
 };
@@ -189,9 +172,6 @@ CookieComponent.propTypes = {
     handleToggle: PropTypes.func.isRequired,
 };
 
-CookiesUsageDialog.propTypes = {
-    open: PropTypes.bool.isRequired,
-    handleAccept: PropTypes.func.isRequired,
-    handleReject: PropTypes.func.isRequired,
+CookiesUsageDialogContent.propTypes = {
     handleToggle: PropTypes.func.isRequired,
 };

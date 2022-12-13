@@ -11,7 +11,7 @@ import { format, parseISO, formatDistanceToNowStrict } from "date-fns";
 import { Skeleton } from "@material-ui/lab";
 
 import Offer from "./Offer";
-import OfferVisibilityOptions from "./OfferVisibilityOptions";
+import OfferInteractionOptions from "./OfferInteractionOptions";
 import ChipList from "./ChipList";
 import OfferContentListItem from "./OfferContentListItem";
 import JOB_OPTIONS from "../../../utils/offers/JobOptions";
@@ -38,7 +38,7 @@ const OfferDetails = ({
 
     const { data, isValidating, error, isLoggedIn } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
-    const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading });
+    const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading, hasApplyButton: !!offer?.applyURL });
 
     const jobMaxDuration = `${offer?.jobMaxDuration}${offer?.jobMaxDuration === JOB_MAX_DURATION ? "+" : ""}`;
     const jobDurationText = offer?.jobMinDuration === offer?.jobMaxDuration ?
@@ -107,7 +107,7 @@ const OfferDetails = ({
                         }
                     </span>
                 </Grid>
-                <OfferVisibilityOptions
+                <OfferInteractionOptions
                     loading={loading}
                     sessionData={sessionData}
                     classes={classes}
@@ -215,14 +215,16 @@ const OfferDetails = ({
                 </Grid>
                 {
                     !loading && offer.vacancies &&
-                    <Grid item xs={12} md={6}>
-                        <Tooltip title="Vacancies" placement="left">
-                            <Typography display="inline" variant="body1" color="secondary">
-                                <FindInPage className={classes.iconStyle} />
-                                {`${offer.vacancies} ${offer.vacancies === 1 ? "vacancy" : "vacancies"}`}
-                            </Typography>
-                        </Tooltip>
-                    </Grid>
+                    (
+                        <Grid item xs={12} md={6}>
+                            <Tooltip title="Vacancies" placement="left">
+                                <Typography display="inline" variant="body1" color="secondary">
+                                    <FindInPage className={classes.iconStyle} />
+                                    {`${offer.vacancies} ${offer.vacancies === 1 ? "vacancy" : "vacancies"}`}
+                                </Typography>
+                            </Tooltip>
+                        </Grid>
+                    )
                 }
                 {
                     !loading && (offer.isPaid !== null && offer.isPaid !== undefined) &&

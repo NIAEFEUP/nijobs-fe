@@ -11,10 +11,28 @@ import TechOptions from "../../../utils/offers/TechOptions";
 import { renderWithStoreAndTheme, screen } from "../../../../test-utils";
 import { createTheme } from "@material-ui/core/styles";
 
+import { MemoryRouter } from "react-router-dom";
+
 const AdvancedSearchWrapper = ({
-    children, enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration = INITIAL_JOB_DURATION,
-    jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE, setJobDuration, setJobType, fields = [], setFields,
-    technologies = [], setTechs, resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
+    children,
+    enableAdvancedSearchDefault,
+    showJobDurationSlider,
+    setShowJobDurationSlider = () => { },
+    jobMinDuration = INITIAL_JOB_DURATION,
+    jobMaxDuration = INITIAL_JOB_DURATION + 1,
+    jobType = INITIAL_JOB_TYPE,
+    setJobDuration = () => { },
+    setJobType = () => { },
+    fields = [],
+    setFields = () => { },
+    technologies = [],
+    setTechs = () => { },
+    resetAdvancedSearchFields = () => { },
+    onSubmit,
+    searchValue,
+    searchOffers,
+    onMobileClose,
+    setSearchValue = () => { },
     submitForm,
 }) => {
     const {
@@ -38,6 +56,12 @@ const AdvancedSearchWrapper = ({
     );
 };
 
+const RouteWrappedComponent = ({ children }) => (
+    <MemoryRouter initialEntries={["/"]}>
+        {children}
+    </MemoryRouter>
+);
+
 describe("AdvancedSearchMobile", () => {
 
     const theme = createTheme();
@@ -47,9 +71,11 @@ describe("AdvancedSearchMobile", () => {
 
         it("should render a dialog title with a button to close", () => {
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -60,9 +86,11 @@ describe("AdvancedSearchMobile", () => {
 
         it("should render a SearchBar", () => {
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -72,9 +100,11 @@ describe("AdvancedSearchMobile", () => {
         it("should render a job selector with all job types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -94,15 +124,17 @@ describe("AdvancedSearchMobile", () => {
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    jobMinDuration={1}
-                    jobMaxDuration={2}
-                    showJobDurationSlider={false}
-                    setShowJobDurationSlider={setShowJobDurationSliderMock}
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        jobMinDuration={1}
+                        jobMaxDuration={2}
+                        showJobDurationSlider={false}
+                        setShowJobDurationSlider={setShowJobDurationSliderMock}
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -116,15 +148,17 @@ describe("AdvancedSearchMobile", () => {
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    jobMinDuration={1}
-                    jobMaxDuration={2}
-                    showJobDurationSlider={true}
-                    setShowJobDurationSlider={setShowJobDurationSliderMock}
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        jobMinDuration={1}
+                        jobMaxDuration={2}
+                        showJobDurationSlider={true}
+                        setShowJobDurationSlider={setShowJobDurationSliderMock}
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -137,9 +171,11 @@ describe("AdvancedSearchMobile", () => {
         it("should render a fields selector with all field types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -163,9 +199,11 @@ describe("AdvancedSearchMobile", () => {
         it("should render a technologies selector with all technology types", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper enableAdvancedSearchDefault>
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -189,11 +227,11 @@ describe("AdvancedSearchMobile", () => {
         it("should disable reset button if no advanced field is set", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper enableAdvancedSearchDefault>
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -203,12 +241,14 @@ describe("AdvancedSearchMobile", () => {
         it("should enable reset button if some advanced field is set", () => {
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    fields={[Object.keys(FieldOptions)[0]]}
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        fields={[Object.keys(FieldOptions)[0]]}
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -223,13 +263,15 @@ describe("AdvancedSearchMobile", () => {
             const setFieldsMock = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    fields={[Object.keys(FieldOptions)[0]]}
-                    setFields={setFieldsMock}
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        fields={[Object.keys(FieldOptions)[0]]}
+                        setFields={setFieldsMock}
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
@@ -238,13 +280,13 @@ describe("AdvancedSearchMobile", () => {
 
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[1] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(1, Object.keys(FieldOptions).slice(0, 2));
+            expect(setFieldsMock).toHaveBeenNthCalledWith(2, Object.keys(FieldOptions).slice(0, 2));
 
             // The state isn't actaully changing in this test. So, in the following scenario,
             // the only selected value is actually FieldOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Fields", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(FieldOptions)[0] }));
-            expect(setFieldsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setFieldsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -253,28 +295,33 @@ describe("AdvancedSearchMobile", () => {
             const setTechsMock = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    technologies={[Object.keys(TechOptions)[0]]}
-                    setTechs={setTechsMock}
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        technologies={[Object.keys(TechOptions)[0]]}
+                        setTechs={setTechsMock}
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
             expect(screen.getAllByTestId("chip-option", {})).toHaveLength(1);
             expect(screen.getByTestId("chip-option", { name: Object.keys(TechOptions)[0] })).toBeInTheDocument();
 
+            // these tests should check for mock calls starting from the second one because the first mock call
+            // will be triggered by the "query params parsing" `useEffect`
+
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[1] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(1, Object.keys(TechOptions).slice(0, 2));
+            expect(setTechsMock).toHaveBeenNthCalledWith(2, Object.keys(TechOptions).slice(0, 2));
 
-            // The state isn't actaully changing in this test. So, in the following scenario,
+            // The state isn't actually changing in this test. So, in the following scenario,
             // the only selected value is actually TechOptions[0]
             fireEvent.mouseDown(screen.getByLabelText("Technologies", { selector: "input" }));
             fireEvent.click(screen.getByRole("option", { name: Object.values(TechOptions)[0] }));
-            expect(setTechsMock).toHaveBeenNthCalledWith(2, []);
+            expect(setTechsMock).toHaveBeenNthCalledWith(3, []);
 
         });
 
@@ -282,19 +329,15 @@ describe("AdvancedSearchMobile", () => {
             const resetFn = jest.fn();
 
             renderWithStoreAndTheme(
-                <AdvancedSearchWrapper
-                    enableAdvancedSearchDefault
-                    setSearchValue={() => {}}
-                    setJobType={() => {}}
-                    setJobDuration={() => {}}
-                    setShowJobDurationSlider={() => {}}
-                    setFields={() => {}}
-                    setTechs={() => {}}
-                    resetAdvancedSearchFields={resetFn}
-                    technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
-                >
-                    <AdvancedSearchMobile />
-                </AdvancedSearchWrapper>,
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        resetAdvancedSearchFields={resetFn}
+                        technologies={[Object.keys(TechOptions)[0]]} // Must have something set to be able to click reset
+                    >
+                        <AdvancedSearchMobile />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
                 { initialState, theme }
             );
 
