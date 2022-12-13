@@ -139,7 +139,8 @@
     "collectCoverage": true,
     "coverageReporters": [
       "text",
-      "html"
+      "html",
+      "json"
     ],
     "coverageThreshold": {
       "global": {
