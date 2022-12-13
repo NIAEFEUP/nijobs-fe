@@ -33,8 +33,8 @@ const URLSearchParamsParser = ({ showSearchResults }) => {
         jobMaxDuration: queryParams.jobMaxDuration,
         jobMinDuration: queryParams.jobMinDuration,
         jobType: queryParams.jobType,
-        fields: ensureArray(queryParams.fields),
-        technologies: ensureArray(queryParams.technologies),
+        fields: ensureArray(queryParams.fields ?? []),
+        technologies: ensureArray(queryParams.technologies ?? []),
     });
 
     // we specifically want this to only run once to avoid infinite re-renders
