@@ -6,7 +6,7 @@ import useSearchParams from "../../SearchArea/useUrlSearchParams";
 import { SearchResultsConstants } from "../SearchResultsWidget/SearchResultsUtils";
 import useOffersSearcher from "../SearchResultsWidget/useOffersSearcher";
 
-export const useChipsFieldSearch = () => {
+export default () => {
     const dispatch = useDispatch();
     const fields = useSelector((state) => state.offerSearch.fields);
     const techs = useSelector((state) => state.offerSearch.technologies);
@@ -38,6 +38,7 @@ export const useChipsFieldSearch = () => {
     });
 
     const addFieldWithUrl = useCallback((value) => {
+        /* istanbul ignore else */
         if (!fields.includes(value)) {
             urlSetFields([...fields, value]);
             setSearch(true);
@@ -45,6 +46,7 @@ export const useChipsFieldSearch = () => {
     }, [fields, urlSetFields]);
 
     const addTechWithUrl = useCallback((value) => {
+        /* istanbul ignore else */
         if (!techs.includes(value)) {
             urlSetTechs([...techs, value]);
             setSearch(true);
@@ -52,6 +54,7 @@ export const useChipsFieldSearch = () => {
     }, [techs, urlSetTechs]);
 
     useEffect(() => {
+        /* istanbul ignore else */
         if (search) {
             searchOffers(SearchResultsConstants.INITIAL_LIMIT);
             setSearch(false);

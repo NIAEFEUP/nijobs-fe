@@ -19,7 +19,7 @@ import useSession from "../../../../hooks/useSession";
 import useSearchResultsWidgetStyles from "../SearchResultsWidget/searchResultsWidgetStyles";
 import { RouterLink } from "../../../../utils";
 import { JOB_MAX_DURATION } from "../../../../reducers/searchOffersReducer";
-import { useChipsFieldSearch } from "./useChipsFieldSearch";
+import useChipsFieldSearch from "./useChipsFieldSearch";
 import { useHistory } from "react-router-dom";
 
 const defaultLogo = require("./default_icon.svg");

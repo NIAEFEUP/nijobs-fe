@@ -5,26 +5,22 @@ import qs from "qs";
 
 import { renderWithStoreAndTheme, TestComponent } from "../../../../test-utils";
 import { act } from "react-dom/test-utils";
-import { useChipsFieldSearch } from "./useChipsFieldSearch";
+import useChipsFieldSearch from "./useChipsFieldSearch";
 import { createTheme } from "@material-ui/core";
-import { applyMiddleware, createStore } from "redux";
-import searchOffersReducer from "../../../../reducers/searchOffersReducer";
-import thunk from "redux-thunk";
-import { useSelector } from "react-redux";
 
-describe("useUrlSearchParams", () => {
+describe("useChipsFieldSearch", () => {
     const theme = createTheme({});
 
     it("should change fields's search param when adding fields", async () => {
         let addFieldWithUrl, location;
         const initialState = {
-            searchValue: "searchValue",
-            jobDuration: [1, 2],
-            fields: [],
-            technologies: [],
+            offerSearch: {
+                searchValue: "searchValue",
+                jobDuration: [1, 2],
+                fields: [],
+                technologies: [],
+            },
         };
-
-        const store = createStore(searchOffersReducer, initialState, applyMiddleware(...[thunk]),);
 
         const callback = () => {
             addFieldWithUrl = useChipsFieldSearch().addFieldWithUrl;
@@ -37,7 +33,7 @@ describe("useUrlSearchParams", () => {
             <MemoryRouter initialEntries={["/"]}>
                 <TestComponent callback={callback} />
             </MemoryRouter>,
-            { store, theme }
+            { initialState, theme }
         );
 
 
@@ -70,13 +66,13 @@ describe("useUrlSearchParams", () => {
     it("should change technologies's search param when adding fields", async () => {
         let addTechWithUrl, location;
         const initialState = {
-            searchValue: "searchValue",
-            jobDuration: [1, 2],
-            fields: [],
-            technologies: [],
+            offerSearch: {
+                searchValue: "searchValue",
+                jobDuration: [1, 2],
+                fields: [],
+                technologies: [],
+            },
         };
-
-        const store = createStore(searchOffersReducer, initialState, applyMiddleware(...[thunk]),);
 
         const callback = () => {
             addTechWithUrl = useChipsFieldSearch().addTechWithUrl;
@@ -89,7 +85,7 @@ describe("useUrlSearchParams", () => {
             <MemoryRouter initialEntries={["/"]}>
                 <TestComponent callback={callback} />
             </MemoryRouter>,
-            { store, theme }
+            { initialState, theme }
         );
 
 
