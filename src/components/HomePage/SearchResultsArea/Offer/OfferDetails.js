@@ -55,27 +55,27 @@ const OfferDetails = ({
             + "Please contact support for more information."
     ), [offer, sessionData]);
 
-    const { setFields, setTechs, setFieldsWithUrl, setTechsWithUrl, setLoadUrlFromFilters } = useChipsFieldSearch();
+    const { addField, addTech, addFieldWithUrl, addTechWithUrl, setLoadUrlFromFilters } = useChipsFieldSearch();
 
     const handleChipSetFields = useCallback((values) => {
         if (isPage) {
             history.push("/");
-            setFields(values);
+            addField(values);
             setLoadUrlFromFilters(true);
         } else {
-            setFieldsWithUrl(values);
+            addFieldWithUrl(values);
         }
-    }, [history, isPage, setFields, setFieldsWithUrl, setLoadUrlFromFilters]);
+    }, [history, isPage, addField, addFieldWithUrl, setLoadUrlFromFilters]);
 
     const handleChipSetTechs = useCallback((values) => {
         if (isPage) {
             history.push("/");
-            setTechs(values);
+            addTech(values);
             setLoadUrlFromFilters(true);
         } else {
-            setTechsWithUrl(values);
+            addTechWithUrl(values);
         }
-    }, [history, isPage, setLoadUrlFromFilters, setTechs, setTechsWithUrl]);
+    }, [history, isPage, setLoadUrlFromFilters, addTech, addTechWithUrl]);
 
     const history = useHistory();
 

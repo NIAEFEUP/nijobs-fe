@@ -108,7 +108,7 @@ export const AdvancedSearchController = ({
             setLoadUrlFromFilters(false);
             submitForm(null, false);
         } else {
-            setShowJobDurationSlider(queryParams.jobMinDuration && queryParams.jobMaxDuration);
+            setShowJobDurationSlider(!!queryParams.jobMinDuration && !!queryParams.jobMaxDuration);
             setJobDuration(null, [
                 parseInt(queryParams.jobMinDuration, 10),
                 parseInt(queryParams.jobMaxDuration, 10),

@@ -37,14 +37,14 @@ export const useChipsFieldSearch = () => {
         setTechs: (value) => dispatch(setTechs(value)),
     });
 
-    const setFieldsWithUrl = useCallback((value) => {
+    const addFieldWithUrl = useCallback((value) => {
         if (!fields.includes(value)) {
             urlSetFields([...fields, value]);
             setSearch(true);
         }
     }, [fields, urlSetFields]);
 
-    const setTechsWithUrl = useCallback((value) => {
+    const addTechWithUrl = useCallback((value) => {
         if (!techs.includes(value)) {
             urlSetTechs([...techs, value]);
             setSearch(true);
@@ -59,10 +59,10 @@ export const useChipsFieldSearch = () => {
     }, [searchOffers, fields, techs, search]);
 
     return {
-        setFields: addField,
-        setTechs: addTech,
-        setFieldsWithUrl,
-        setTechsWithUrl,
+        addField,
+        addTech,
+        addFieldWithUrl,
+        addTechWithUrl,
         setLoadUrlFromFilters: (value) => dispatch(setLoadUrlFromFilters(value)),
     };
 };
