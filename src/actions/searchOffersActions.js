@@ -106,6 +106,7 @@ export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setJobDuration(INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1));
     dispatch(setFields([]));
     dispatch(setTechs([]));
+    dispatch(setShowHidden(false));
 };
 
 export const setShowHidden = (showHidden) => ({
