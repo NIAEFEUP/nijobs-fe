@@ -38,7 +38,6 @@ export const AdvancedSearchController = ({
     enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
     jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
-    // eslint-disable-next-line no-unused-vars
     loadUrlFromFilters, setLoadUrlFromFilters,
 }) => {
 
