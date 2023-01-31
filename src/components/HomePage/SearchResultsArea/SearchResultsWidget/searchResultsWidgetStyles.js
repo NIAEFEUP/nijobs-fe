@@ -62,8 +62,6 @@ export default makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         width: "100%",
-        //height: "100%",
-        //overflow: "auto",
     },
     offerBodyContainer: {
         height: "100%",
