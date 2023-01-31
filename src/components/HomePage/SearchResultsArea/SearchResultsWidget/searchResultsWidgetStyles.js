@@ -13,7 +13,7 @@ export default makeStyles((theme) => ({
     fullWidth: {
         width: "100%",
     },
-    heightOffersList:{
+    heightOffersList: {
         height: "100%",
         overflow: "auto",
     },
