@@ -177,6 +177,10 @@ export const SearchArea = ({ onSubmit, searchValue,
                 </form>
                 <SubmitSearchButton
                     onClick={submitForm}
+                    searchHasUserInput={
+                        (searchValue !== "" && searchValue !== undefined)
+                        || advancedOptionsActive
+                    }
                 />
             </Paper>
         </ContextProvider>
