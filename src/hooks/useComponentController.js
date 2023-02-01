@@ -3,7 +3,7 @@ import React from "react";
 export const DefaultContext = React.createContext();
 
 /**
- * This is based on the pattern described here: https://angeloteixeira.me/blog/reactive-controller-pattern
+ * This is based on the pattern described here: https://angeloteixeira.eu/blog/reactive-controller-pattern
  * With it, components can abstract logic common to different view layouts (such as desktop/mobile) and both can read from the given Context
  *
  * @param controller - A function (can be a React Hook) that handles some logic.
