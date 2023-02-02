@@ -13,6 +13,10 @@ export default makeStyles((theme) => ({
     fullWidth: {
         width: "100%",
     },
+    heightOffersList: {
+        height: "100%",
+        overflow: "auto",
+    },
     searchResults: {
         boxSizing: "border-box",
         height: "100vh",
@@ -58,8 +62,6 @@ export default makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         width: "100%",
-        height: "100%",
-        overflow: "auto",
     },
     offerBodyContainer: {
         height: "100%",
@@ -69,7 +71,6 @@ export default makeStyles((theme) => ({
     offerHeader: {
         marginBottom: theme.spacing(1),
         alignItems: "flex-start",
-
     },
     verticalDivider: {
         "&&": {
