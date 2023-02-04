@@ -9,11 +9,11 @@ import { MailRegex } from "../../../utils/offer/OfferUtils";
 
 const parseApplyURL = (applyURL) => {
     if (!applyURL)
-        return null
+        return null;
     if (MailRegex.test(applyURL) && /^(?!mailto:)/.test(applyURL))
-        return 'mailto:' + applyURL
-    return applyURL
-}
+        return `mailto:${applyURL}`;
+    return applyURL;
+};
 
 export const CreateOfferControllerContext = React.createContext();
 
