@@ -665,6 +665,16 @@ describe("Create Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
                 .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+            
+        
+            await act(() => {
+                fireEvent.focus(input);
+                fireEvent.change(input, { target: { value: "valid@email.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(input))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
         });
 
         it("should be visible advanced settings if form error in these publication date", async () => {

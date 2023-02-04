@@ -25,7 +25,7 @@ const ApplyURLComponent = ({ disabled, errors, requestErrors, control, classes }
                     onChange={onChange}
                     helperText={
                         `${errors.applyURL?.message ||
-                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s):' or 'mailto:'."}`
+                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s):' or is a valid email."}`
                     }
                     fullWidth
                     disabled={disabled}

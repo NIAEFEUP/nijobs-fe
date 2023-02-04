@@ -8,6 +8,7 @@ import useOfferForm from "../../../hooks/useOfferForm";
 import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 import useSession from "../../../hooks/useSession";
 import EditOfferSchema from "./EditOfferSchema";
+import { MailRegex } from "../../../utils/offer/OfferUtils";
 
 export const EditOfferControllerContext = React.createContext();
 
@@ -28,6 +29,7 @@ const parseOfferForm = ({
     isPaid,
     vacancies,
     description,
+    applyURL,
     ...offer
 }) => ({
     jobDuration: [
@@ -41,8 +43,17 @@ const parseOfferForm = ({
     vacancies: vacancies || "",
     description,
     descriptionText: parseDescription(description),
+    applyURL: /^mailto:/.test(applyURL) ? applyURL.substring(7) : applyURL,
     ...offer,
 });
+
+const parseApplyURL = (applyURL) => {
+    if (!applyURL)
+        return null
+    if (MailRegex.test(applyURL) && /^(?!mailto:)/.test(applyURL))
+        return 'mailto:' + applyURL
+    return applyURL
+}
 
 export const EditOfferController = () => {
     const { id } = useParams();
@@ -107,7 +118,7 @@ export const EditOfferController = () => {
                 requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? null : data.isPaid,
                 jobStartDate: !data.jobStartDate ? null : data.jobStartDate,
-                applyURL: data.applyURL || null,
+                applyURL: parseApplyURL(data.applyURL),
                 jobMinDuration,
                 jobMaxDuration,
             })

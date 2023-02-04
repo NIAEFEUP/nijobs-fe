@@ -5,6 +5,15 @@ import { newOffer } from "../../../services/offerService";
 import useOfferForm from "../../../hooks/useOfferForm";
 import OfferForm from "../Form/form-components/OfferForm";
 import CreateOfferSchema from "./CreateOfferSchema";
+import { MailRegex } from "../../../utils/offer/OfferUtils";
+
+const parseApplyURL = (applyURL) => {
+    if (!applyURL)
+        return null
+    if (MailRegex.test(applyURL) && /^(?!mailto:)/.test(applyURL))
+        return 'mailto:' + applyURL
+    return applyURL
+}
 
 export const CreateOfferControllerContext = React.createContext();
 
@@ -23,7 +32,7 @@ export const CreateOfferController = () => {
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || params.company,
-                applyURL: data.applyURL || undefined,
+                applyURL: parseApplyURL(data.applyURL),
                 jobMinDuration,
                 jobMaxDuration,
             })
