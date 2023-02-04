@@ -38,6 +38,7 @@ import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import ChangeLogPage from "./pages/ChangeLogPage";
+import ValidationPage from "./pages/ValidationPage";
 
 /**
  *
@@ -133,6 +134,15 @@ const AppRouter = () => (
                     layout={LayoutType.DESKTOP}
                 >
                     <RulesPage />
+                </PageLayout>
+            </Route>
+            <Route exact path="/apply/validate/:token/confirm" key="/apply/validate/:token/confirm">
+                <PageLayout
+                    key="/apply/validate/:token/confirm"
+                    pageTitle="Validate"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <ValidationPage />
                 </PageLayout>
             </Route>
             <ProtectedRoute
