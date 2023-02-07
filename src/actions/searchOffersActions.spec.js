@@ -57,7 +57,11 @@ describe("Search Offers actions", () => {
 
     it("should return Set Show Hidden action", () => {
 
+<<<<<<< HEAD
         const showHidden = true;
+=======
+        const showHidden = "show_hidden";
+>>>>>>> tests: adds various tests to showHidden
         const expectedAction = {
             type: OfferSearchTypes.SET_SHOW_HIDDEN,
             showHidden,
