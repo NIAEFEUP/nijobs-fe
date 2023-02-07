@@ -113,8 +113,3 @@ export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setTechs([]));
     dispatch(setShowHidden(false));
 };
-
-export const setShowHidden = (showHidden) => ({
-    type: OfferSearchTypes.SET_SHOW_HIDDEN,
-    showHidden,
-});
