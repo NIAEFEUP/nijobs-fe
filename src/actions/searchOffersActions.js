@@ -100,6 +100,11 @@ export const adminEnableOffer = (offerIdx) => ({
     offerIdx,
 });
 
+export const setShowHidden = (showHidden) => ({
+    type: OfferSearchTypes.SET_SHOW_HIDDEN,
+    showHidden,
+});
+
 export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setJobType(INITIAL_JOB_TYPE));
     dispatch(setShowJobDurationSlider(false));
@@ -108,8 +113,3 @@ export const resetAdvancedSearchFields = () => (dispatch) => {
     dispatch(setTechs([]));
     dispatch(setShowHidden(false));
 };
-
-export const setShowHidden = (showHidden) => ({
-    type: OfferSearchTypes.SET_SHOW_HIDDEN,
-    showHidden,
-});

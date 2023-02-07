@@ -12,6 +12,7 @@ import {
     resetAdvancedSearchFields,
     setOffersFetchError,
     resetOffersFetchError,
+    setShowHidden,
 } from "./searchOffersActions";
 
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
@@ -52,6 +53,17 @@ describe("Search Offers actions", () => {
         };
 
         expect(setSearchValue(value)).toEqual(expectedAction);
+    });
+
+    it("should return Set Show Hidden action", () => {
+
+        const showHidden = "show_hidden";
+        const expectedAction = {
+            type: OfferSearchTypes.SET_SHOW_HIDDEN,
+            showHidden,
+        };
+
+        expect(setShowHidden(showHidden)).toEqual(expectedAction);
     });
 
     it("should return Set Job Duration action", () => {
