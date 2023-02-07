@@ -79,6 +79,15 @@ describe("SearchArea", () => {
                 <RouteWrappedContent>
                     <SearchAreaWrapper
                         onSubmit={onSubmit}
+                        fields={[]}
+                        technologies={[]}
+                        setShowJobDurationSlider={() => { }}
+                        setTechs={() => { }}
+                        setJobDuration={() => { }}
+                        setFields={() => { }}
+                        setJobType={() => { }}
+                        setSearchValue={() => { }}
+                        setShowHidden={() => { }}
                     />
                 </RouteWrappedContent>,
                 { initialState, theme }
@@ -197,6 +206,7 @@ describe("SearchArea", () => {
                         setJobDuration={() => { }}
                         setFields={() => { }}
                         setJobType={() => { }}
+                        setShowHidden={() => { }}
                         onSubmit={onSubmit}
                         fields={[]}
                         technologies={[]}
@@ -307,6 +317,7 @@ describe("SearchArea", () => {
                     jobDuration: [1, 2],
                     fields: ["field1", "field2"],
                     technologies: ["tech1", "tech2"],
+                    showHidden: true,
                 },
             };
             expect(mapStateToProps(mockState)).toEqual({
@@ -316,6 +327,7 @@ describe("SearchArea", () => {
                 jobMaxDuration: 2,
                 fields: ["field1", "field2"],
                 technologies: ["tech1", "tech2"],
+                showHidden: true,
             });
         });
 
