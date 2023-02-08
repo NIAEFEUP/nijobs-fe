@@ -1,19 +1,10 @@
 
 import React, { useCallback } from "react";
-import { parseRequestErrors } from "../Form/OfferUtils";
+import { parseApplyURL, parseRequestErrors } from "../Form/OfferUtils";
 import { newOffer } from "../../../services/offerService";
 import useOfferForm from "../../../hooks/useOfferForm";
 import OfferForm from "../Form/form-components/OfferForm";
 import CreateOfferSchema from "./CreateOfferSchema";
-import { MailRegex } from "../../../utils/offer/OfferUtils";
-
-const parseApplyURL = (applyURL) => {
-    if (!applyURL)
-        return null;
-    if (MailRegex.test(applyURL) && /^(?!mailto:)/.test(applyURL))
-        return `mailto:${applyURL}`;
-    return applyURL;
-};
 
 export const CreateOfferControllerContext = React.createContext();
 
