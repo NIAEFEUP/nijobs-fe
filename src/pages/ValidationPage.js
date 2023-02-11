@@ -6,6 +6,7 @@ import { CardContent, CircularProgress, makeStyles, Button } from "@material-ui/
 import { useMobile } from "../utils/media-queries";
 import { Redirect, useParams } from "react-router-dom";
 import { validateApplication } from "../services/companyApplicationService";
+import { getValidationError } from "../components/Apply/Company/CompanyApplicationUtils.js";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
@@ -27,7 +28,7 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 
     },
     button: {
-        background: "rgb(250,80,80)",
+        background: "rgb(250,70,70)",
         color: "white",
         marginTop: "3vh",
 
@@ -41,31 +42,44 @@ const ValidationPage = () => {
     const [loading, setLoading] = useState(true);
     const [success, setSuccess] = useState(false);
     const [buttonPressed, setButtonPressed] = useState(false);
-    const [err,setErr] = useState("");
+    const [error, setError] = useState("");
 
 
-    useEffect( () => {
-        try {
-            async function ola()
-            {
-                try {
-                    setLoading(false);
-                    setSuccess(true);
-                    await validateApplication(token);
-                } catch ( error){
-                    setLoading(false);
-                    setSuccess(false);
-                    setErr(error.message);
-                }
-
+    useEffect(() => {
+        async function validate() {
+            try {
+                setLoading(false);
+                setSuccess(true);
+                await validateApplication(token);
+            } catch (error_) {
+                setError(error_[0].msg);
+                setLoading(false);
+                setSuccess(false);
             }
-            ola();
-        } catch(error) {
-            setLoading(false);
-            setSuccess(false);
-            setErr(error.message);
+
         }
+        validate();
+
     }, [token]);
+    const errorMessage = (error) => {
+        const { title, text } = getValidationError(error);
+        return (
+            <CardContent className={classes.content}>
+                <h2 className={classes.title}>
+                    {title}
+                </h2>
+                <span className={classes.text}>
+                    {text}
+                    for more information contact us:
+                    <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
+                    !
+                </span>
+                <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
+                    Click here to go to Home page
+                </Button>
+            </CardContent>
+        );
+    };
 
     if (buttonPressed) {
         return <Redirect to="/" />;
@@ -83,30 +97,17 @@ const ValidationPage = () => {
                 <CardContent className={classes.content}>
                     <h2 className={classes.title}>Your application has been validated successfully! </h2>
                     <span className={classes.text}>
-                        We will now review your application, and in case you're approved,
-                         you will receive another email with further instructions in order to complete your registration.
+                        You should receive a confirmation email shortly. If not, please contact us:
+                         <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
                     </span>
                     <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
                         Click here to go to Home page
                     </Button>
                 </CardContent>
             );
-
+    } else {
+       return  errorMessage(error);
     }
 
-    return (
-        <CardContent className={classes.content}>
-            <h2 className={classes.title}> {err}! </h2>
-            <span className={classes.text}>
-                An error has occur when validating your application for more information contact
-                <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
-                !
-                </span>
-            <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
-                Click here to go to Home page
-            </Button>
-        </CardContent>
-    );
 };
-
 export default ValidationPage;

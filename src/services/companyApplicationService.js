@@ -75,15 +75,15 @@ export const validateApplication = async (token) => {
             credentials: "include",
 
         });
-        const json =  res.json();
-       if (! res.ok) {
+        const json = await res.json();
+        if (!res.ok) {
             throw json.errors;
         }
         return json;
 
     } catch (error) {
-        console.log(error);
-        const errorArray = Array.isArray(error) ? new Error(error.message) : new Error(Constants.UNEXPECTED_ERROR_MESSAGE);
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
         throw errorArray;
     }
 
