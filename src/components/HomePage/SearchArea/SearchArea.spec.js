@@ -7,6 +7,7 @@ import {
     setFields,
     setTechs,
     setShowJobDurationSlider,
+    setShowHidden,
 } from "../../../actions/searchOffersActions";
 import { createTheme } from "@material-ui/core";
 import { renderWithStoreAndTheme, screen, fireEvent, act } from "../../../test-utils";
@@ -28,7 +29,7 @@ const SearchAreaWrapper = ({
     searchValue = "", jobType = INITIAL_JOB_TYPE, jobDuration = [null, null], filterJobDuration = false,
     showJobDurationSlider = false, fields = [], technologies = [], setShowJobDurationSlider = () => { },
     setTechs = () => { }, setJobDuration = () => { }, setFields = () => { }, setJobType = () => { },
-    setSearchValue = () => { }, onSubmit = () => {},
+    setSearchValue = () => { }, onSubmit = () => {}, setShowHidden = () => { },
 }) => (
     <SearchArea
         searchValue={searchValue}
@@ -45,6 +46,7 @@ const SearchAreaWrapper = ({
         setJobType={setJobType}
         setSearchValue={setSearchValue}
         onSubmit={onSubmit}
+        setShowHidden={setShowHidden}
     />
 );
 
@@ -63,6 +65,7 @@ SearchAreaWrapper.propTypes = {
     setShowJobDurationSlider: PropTypes.func.isRequired,
     jobDuration: PropTypes.number,
     filterJobDuration: PropTypes.bool,
+    setShowHidden: PropTypes.bool,
 };
 
 describe("SearchArea", () => {
@@ -355,6 +358,10 @@ describe("SearchArea", () => {
             const filterJobDuration = false;
             props.setShowJobDurationSlider(filterJobDuration);
             expect(dispatch).toHaveBeenCalledWith(setShowJobDurationSlider(false));
+
+            const showHidden = true;
+            props.setShowHidden(showHidden);
+            expect(dispatch).toHaveBeenCalledWith(setShowHidden(true));
 
             dispatch.mockClear();
             props.resetAdvancedSearchFields();
