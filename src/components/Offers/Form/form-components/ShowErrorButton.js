@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types";
 
-import { Fab, IconButton, makeStyles } from "@material-ui/core"
+import { Fab, makeStyles } from "@material-ui/core"
 import { PriorityHigh } from "@material-ui/icons"
 
 const useStyles = makeStyles((theme) => ({

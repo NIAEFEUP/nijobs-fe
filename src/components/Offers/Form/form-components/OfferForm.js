@@ -10,7 +10,7 @@ import {
     Button,
     Fade,
 } from "@material-ui/core";
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useRef, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -29,6 +29,7 @@ import PublicationEndDateComponent from "./PublicationEndDateComponent";
 import IsHiddenComponent from "./IsHiddenComponent";
 import TextEditorComponent from "./TextEditorComponent";
 import {
+    ErrorSharp,
     KeyboardArrowDown,
     KeyboardArrowUp,
 } from "@material-ui/icons";
@@ -38,6 +39,7 @@ import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
 import ShowErrorButton from "./ShowErrorButton";
+import { smoothScrollToRef } from "../../../../utils";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -104,6 +106,70 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
+    const refs = {
+        title: useRef(null),
+        owner: useRef(null),
+        location: useRef(null),
+        jobType: useRef(null),
+        fields: useRef(null),
+        technologies: useRef(null),
+        jobStartDate: useRef(null),
+        jobDuration: useRef(null),
+        vacancies: useRef(null),
+        isPaid: useRef(null),
+        publishDate: useRef(null),
+        publishEndDate: useRef(null),
+        isHidden: useRef(null),
+        applyURL: useRef(null),
+        contacts: useRef(null),
+        requirements: useRef(null),
+        descriptionText: useRef(null),
+    };
+    const errorRef = useRef(null);
+
+    useEffect(() => {
+        if (errors.title || requestErrors.title)
+            errorRef.current = refs.title.current;
+        else if (errors.owner || requestErrors.owner)
+            errorRef.current = refs.owner.current;
+        else if (errors.location || requestErrors.location)
+            errorRef.current = refs.location.current;
+        else if (errors.jobType || requestErrors.jobType)
+            errorRef.current = refs.jobType.current;
+        else if (errors.fields || requestErrors.fields)
+            errorRef.current = refs.fields.current;
+        else if (errors.technologies || requestErrors.technologies)
+            errorRef.current = refs.technologies.current;
+        else if (errors.jobStartDate || requestErrors.jobStartDate)
+            errorRef.current = refs.jobStartDate.current;
+        else if (errors.jobDuration || errors.jobDuration)
+            errorRef.current = refs.jobDuration.current;
+        else if (errors.vacancies || requestErrors.vacancies)
+            errorRef.current = refs.vacancies.current;
+        else if (errors.isPaid || requestErrors.isPaid)
+            errorRef.current = refs.isPaid.current;
+        else if (errors.publishDate || requestErrors.publishDate)
+            errorRef.current = refs.publishDate.current;
+        else if (errors.publishEndDate || requestErrors.publishEndDate)
+            errorRef.current = refs.publishEndDate.current;
+        else if (errors.isHidden || requestErrors.isHidden)
+            errorRef.current = refs.isHidden.current;
+        else if (errors.applyURL || requestErrors.applyURL)
+            errorRef.current = refs.applyURL.current;
+        else if (errors.contacts || requestErrors.contacts)
+            errorRef.current = refs.contacts.current;
+        else if (errors.requirements || requestErrors.requirements)
+            errorRef.current = refs.requirements.current;
+        else if (errors.descriptionText || requestErrors.descriptionText)
+            errorRef.current = refs.descriptionText.current;
+        else
+            errorRef.current = null;
+    })
+
+    const showError = () => {
+        smoothScrollToRef(errorRef);
+    }
+
     return (
         success
             ? <Redirect to={`/offer/${offerId}`} push />
@@ -123,35 +189,143 @@ const OfferForm = ({ context, title }) => {
                             >
                                 <Grid container spacing={4}>
                                     <Grid item xs={12} lg={showOwnerComponent ? 6 : 12}>
-                                        <TitleComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                        />
-                                    </Grid>
-                                    {showOwnerComponent &&
-                                    <Grid item xs={12} lg={6}>
-                                        <OwnerComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                        />
-                                    </Grid>}
-                                    <Grid item xs={12} lg={6}>
-                                        <FormControl fullWidth margin="dense">
-                                            <LocationComponent
+                                        <div ref={refs.title}>
+                                            <TitleComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
                                             />
-                                        </FormControl>
+                                        </div>
+                                    </Grid>
+                                    {showOwnerComponent &&
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.owner}>
+                                            <OwnerComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </Grid>}
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.location}>
+                                            <FormControl fullWidth margin="dense">
+                                                <LocationComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                />
+                                            </FormControl>
+                                        </div>  
                                     </Grid>
                                     <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
-                                        <FormControl fullWidth margin="dense">
-                                            <JobTypeComponent
+                                        <div ref={refs.jobType}>
+                                            <FormControl fullWidth margin="dense">
+                                                <JobTypeComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                    textFieldProps={{
+                                                        ...SelectStylingProps,
+                                                    }}
+                                                />
+                                            </FormControl>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.fields}>
+                                            <Controller
+                                                name="fields"
+                                                render={(
+                                                    { field: {  onBlur, name } },
+                                                ) => (
+                                                    <MultiOptionAutocomplete
+                                                        name={name}
+                                                        onBlur={onBlur}
+                                                        error={errors.fields || requestErrors.fields}
+                                                        disabled={formDisabled}
+                                                        chipWrapperProps={{
+                                                            className: classes.autocompleteChipWrapper,
+                                                        }}
+                                                        textFieldProps={{
+                                                            margin: "none",
+                                                        }}
+                                                        {...fieldsSelectorProps}
+                                                        label="Fields *"
+                                                        placeholder="Fields *"
+                                                    />
+                                                )}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.technologies}>
+                                            <Controller
+                                                name="technologies"
+                                                render={(
+                                                    { field: { onBlur, name } },
+                                                ) => (
+                                                    <MultiOptionAutocomplete
+                                                        name={name}
+                                                        onBlur={onBlur}
+                                                        error={errors.technologies || requestErrors.technologies}
+                                                        disabled={formDisabled}
+                                                        chipWrapperProps={{
+                                                            className: classes.autocompleteChipWrapper,
+                                                        }}
+                                                        textFieldProps={{
+                                                            margin: "none",
+                                                        }}
+                                                        {...techSelectorProps}
+                                                        label="Technologies *"
+                                                        placeholder="Technologies *"
+                                                    />)}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.jobStartDate}>
+                                            <FormControl fullWidth>
+                                                <JobStartDateComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                />
+                                            </FormControl>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.jobDuration}>
+                                            <JobDurationComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                            />
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.vacancies}>
+                                            <FormControl fullWidth>
+                                                <VacanciesComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                />
+                                            </FormControl>
+                                        </div>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <div ref={refs.isPaid}>
+                                            <IsPaidComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
@@ -160,95 +334,7 @@ const OfferForm = ({ context, title }) => {
                                                     ...SelectStylingProps,
                                                 }}
                                             />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <Controller
-                                            name="fields"
-                                            render={(
-                                                { field: {  onBlur, name } },
-                                            ) => (
-                                                <MultiOptionAutocomplete
-                                                    name={name}
-                                                    onBlur={onBlur}
-                                                    error={errors.fields || requestErrors.fields}
-                                                    disabled={formDisabled}
-                                                    chipWrapperProps={{
-                                                        className: classes.autocompleteChipWrapper,
-                                                    }}
-                                                    textFieldProps={{
-                                                        margin: "none",
-                                                    }}
-                                                    {...fieldsSelectorProps}
-                                                    label="Fields *"
-                                                    placeholder="Fields *"
-                                                />
-                                            )}
-                                            control={control}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <Controller
-                                            name="technologies"
-                                            render={(
-                                                { field: { onBlur, name } },
-                                            ) => (
-                                                <MultiOptionAutocomplete
-                                                    name={name}
-                                                    onBlur={onBlur}
-                                                    error={errors.technologies || requestErrors.technologies}
-                                                    disabled={formDisabled}
-                                                    chipWrapperProps={{
-                                                        className: classes.autocompleteChipWrapper,
-                                                    }}
-                                                    textFieldProps={{
-                                                        margin: "none",
-                                                    }}
-                                                    {...techSelectorProps}
-                                                    label="Technologies *"
-                                                    placeholder="Technologies *"
-                                                />)}
-                                            control={control}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <FormControl fullWidth>
-                                            <JobStartDateComponent
-                                                disabled={formDisabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <JobDurationComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <FormControl fullWidth>
-                                            <VacanciesComponent
-                                                disabled={formDisabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <IsPaidComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                            textFieldProps={{
-                                                ...SelectStylingProps,
-                                            }}
-                                        />
+                                        </div>
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
                                         <Button
@@ -267,90 +353,104 @@ const OfferForm = ({ context, title }) => {
                                         <Collapse in={shouldShowAdvancedOptions()}>
                                             <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <PublicationDateComponent
-                                                        disabled={formDisabled}
-                                                        errors={errors}
-                                                        requestErrors={requestErrors}
-                                                        control={control}
-                                                        datePickerProps={{
-                                                            className: classes.advancedSettingsDatePicker,
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <PublicationEndDateComponent
-                                                        fields={fields}
-                                                        disabled={formDisabled}
-                                                        errors={errors}
-                                                        requestErrors={requestErrors}
-                                                        control={control}
-                                                        datePickerProps={{
-                                                            className: classes.advancedSettingsDatePicker,
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                {
-                                                    showHiddenField &&
-                                                    <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                        <IsHiddenComponent
+                                                    <div ref={refs.publishDate}>
+                                                        <PublicationDateComponent
                                                             disabled={formDisabled}
                                                             errors={errors}
                                                             requestErrors={requestErrors}
                                                             control={control}
+                                                            datePickerProps={{
+                                                                className: classes.advancedSettingsDatePicker,
+                                                            }}
                                                         />
+                                                    </div>
+                                                </Grid>
+                                                <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
+                                                    <div ref={refs.publishEndDate}>
+                                                        <PublicationEndDateComponent
+                                                            fields={fields}
+                                                            disabled={formDisabled}
+                                                            errors={errors}
+                                                            requestErrors={requestErrors}
+                                                            control={control}
+                                                            datePickerProps={{
+                                                                className: classes.advancedSettingsDatePicker,
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </Grid>
+                                                {
+                                                    showHiddenField &&
+                                                    <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
+                                                        <div ref={refs.isHidden}>
+                                                            <IsHiddenComponent
+                                                                disabled={formDisabled}
+                                                                errors={errors}
+                                                                requestErrors={requestErrors}
+                                                                control={control}
+                                                            />
+                                                        </div>
                                                     </Grid>
                                                 }
                                             </Grid>
                                         </Collapse>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <ApplyURLComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                            classes={classes}
-                                        />
+                                        <div ref={refs.applyURL}>
+                                            <ApplyURLComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                                classes={classes}
+                                            />
+                                        </div>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <MultiOptionTextField
-                                            values={contacts}
-                                            label="Contacts *"
-                                            itemLabelPrefix="Contact #"
-                                            controllerName="contacts"
-                                            onAdd={appendContact}
-                                            onRemove={removeContact}
-                                            getValues={getValues}
-                                            control={control}
-                                            errors={errors.contacts || requestErrors.contacts}
-                                            disabled={formDisabled}
-                                            addEntryBtnTestId="contacts-selector"
-                                        />
+                                        <div ref={refs.contacts}>
+                                            <MultiOptionTextField
+                                                values={contacts}
+                                                label="Contacts *"
+                                                itemLabelPrefix="Contact #"
+                                                controllerName="contacts"
+                                                onAdd={appendContact}
+                                                onRemove={removeContact}
+                                                getValues={getValues}
+                                                control={control}
+                                                errors={errors.contacts || requestErrors.contacts}
+                                                disabled={formDisabled}
+                                                addEntryBtnTestId="contacts-selector"
+                                            />
+                                        </div>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <MultiOptionTextField
-                                            values={requirements}
-                                            label="Requirements *"
-                                            itemLabelPrefix="Requirement #"
-                                            controllerName="requirements"
-                                            onAdd={appendRequirement}
-                                            onRemove={removeRequirement}
-                                            getValues={getValues}
-                                            control={control}
-                                            errors={errors.requirements || requestErrors.requirements}
-                                            disabled={formDisabled}
-                                            textFieldProps={{ multiline: true }}
-                                            addEntryBtnTestId="requirements-selector"
-                                        />
+                                        <div ref={refs.requirements}>
+                                            <MultiOptionTextField
+                                                values={requirements}
+                                                label="Requirements *"
+                                                itemLabelPrefix="Requirement #"
+                                                controllerName="requirements"
+                                                onAdd={appendRequirement}
+                                                onRemove={removeRequirement}
+                                                getValues={getValues}
+                                                control={control}
+                                                errors={errors.requirements || requestErrors.requirements}
+                                                disabled={formDisabled}
+                                                textFieldProps={{ multiline: true }}
+                                                addEntryBtnTestId="requirements-selector"
+                                            />
+                                        </div>
                                     </Grid>
                                 </Grid>
-                                <TextEditorComponent
-                                    fields={fields}
-                                    disabled={formDisabled}
-                                    errors={errors}
-                                    requestErrors={requestErrors}
-                                    control={control}
-                                />
+                                <div ref={refs.descriptionText}>
+                                    <TextEditorComponent
+                                        fields={fields}
+                                        disabled={formDisabled}
+                                        errors={errors}
+                                        requestErrors={requestErrors}
+                                        control={control}
+                                    />
+                                </div>
                                 {requestErrors.generalErrors ?
                                     requestErrors.generalErrors.map((error, idx) => (
                                         <FormHelperText key={`${error.message}-${idx}`} error>
@@ -378,9 +478,9 @@ const OfferForm = ({ context, title }) => {
                         </Grid>
                     </Grid>
                 </Content>
-                <Fade in={isAdvancedOpen}>
+                <Fade in={errorRef.current != null}>
                     <div>
-                        <ShowErrorButton />
+                        <ShowErrorButton onClick={showError} />
                     </div>
                 </Fade>
             </div>
