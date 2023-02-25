@@ -67,10 +67,10 @@ const Navbar = ({
             data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
-                <div className={ classes.homePageLink }>
+                <div>
                     {showHomePageLink &&
                         <Link to="/" className={classes.linkStyle}>
-                            <Home className={classes.homeIcon}  />
+                            <Home className={classes.homeIcon} />
                             {desktopLayout && "HOMEPAGE"}
                         </Link>
                     }
@@ -125,6 +125,27 @@ const Navbar = ({
                     toggleAuthModal={toggleAuthModal}
                     addSnackbar={addSnackbar}
                 />
+                <div className={classes.authArea}>
+                    <div className={classes.loginButton}>
+                        {showHomePageLink && !isLoggedIn &&
+                            <Button
+                                className={classes.linkStyle}
+                                variant="text"
+                                color="primary"
+                                onClick={toggleAuthModal}
+                            >
+                                {desktopLayout && "LOGIN"}
+                            </Button>
+                        }
+                    </div>
+                    <div>
+                        {showHomePageLink && !isLoggedIn &&
+                            <Link to="/apply/company" className={classes.linkStyle}>
+                                {desktopLayout && "JOIN US"}
+                            </Link>
+                        }
+                    </div>
+                </div>
             </Toolbar>
         </AppBar>
     );

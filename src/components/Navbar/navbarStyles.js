@@ -5,11 +5,17 @@ export default makeStyles((theme) => ({
     navbar: ({ isMobile }) => ({
         paddingTop: theme.spacing(isMobile ? 0 : 3),
     }),
-    toolbar: {
+    toolbar: ({ isMobile }) => ({
         display: "flex",
+        justifyContent: "space-between",
+        paddingInline: theme.spacing(isMobile ? 0 : 6),
+    }),
+    authArea: {
+        display: "flex",
+        alignItems: "center",
     },
-    homePageLink: ({ isMobile }) => ({
-        marginLeft: theme.spacing(isMobile ? 0 : 3),
+    loginButton: ({ isMobile }) => ({
+        paddingRight: theme.spacing(isMobile ? 0 : 3),
     }),
     linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",
