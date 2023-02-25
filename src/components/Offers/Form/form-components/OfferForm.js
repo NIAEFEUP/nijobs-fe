@@ -8,7 +8,6 @@ import {
     Typography,
     Collapse,
     Button,
-    Fade,
 } from "@material-ui/core";
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
@@ -38,7 +37,6 @@ import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
-import ShowErrorButton from "./ShowErrorButton";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -429,11 +427,6 @@ const OfferForm = ({ context, title }) => {
                         </Grid>
                     </Grid>
                 </Content>
-                <Fade in={true}>
-                    <div>
-                        <ShowErrorButton onClick={() => {}} />
-                    </div>
-                </Fade>
             </div>
     );
 };
