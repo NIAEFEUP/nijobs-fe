@@ -10,7 +10,7 @@ import {
     Button,
     Fade,
 } from "@material-ui/core";
-import React, { useState, useCallback, useContext, useRef, useEffect } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -39,7 +39,6 @@ import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
 import ShowErrorButton from "./ShowErrorButton";
-import { smoothScrollToRef } from "../../../../utils";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -106,72 +105,21 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
-    const refs = {
-        title: useRef(null),
-        owner: useRef(null),
-        location: useRef(null),
-        jobType: useRef(null),
-        fields: useRef(null),
-        technologies: useRef(null),
-        jobStartDate: useRef(null),
-        jobDuration: useRef(null),
-        vacancies: useRef(null),
-        isPaid: useRef(null),
-        publishDate: useRef(null),
-        publishEndDate: useRef(null),
-        isHidden: useRef(null),
-        applyURL: useRef(null),
-        contacts: useRef(null),
-        requirements: useRef(null),
-        descriptionText: useRef(null),
-    };
-    const errorRef = useRef(null);
-    const [existsError, setExistsError] = useState(false)
+    useEffect(() => {
+        if (Object.keys(errors).length != 0) {
+            document.getElementById(Object.keys(errors)[0])
+                ?.scrollIntoView({ behavior: "smooth" });
+            
+        }
+    }, [errors])
 
     useEffect(() => {
-        if (errors.title || requestErrors.title)
-            errorRef.current = refs.title.current;
-        else if (errors.owner || requestErrors.owner)
-            errorRef.current = refs.owner.current;
-        else if (errors.location || requestErrors.location)
-            errorRef.current = refs.location.current;
-        else if (errors.jobType || requestErrors.jobType)
-            errorRef.current = refs.jobType.current;
-        else if (errors.fields || requestErrors.fields)
-            errorRef.current = refs.fields.current;
-        else if (errors.technologies || requestErrors.technologies)
-            errorRef.current = refs.technologies.current;
-        else if (errors.jobStartDate || requestErrors.jobStartDate)
-            errorRef.current = refs.jobStartDate.current;
-        else if (errors.jobDuration || errors.jobDuration)
-            errorRef.current = refs.jobDuration.current;
-        else if (errors.vacancies || requestErrors.vacancies)
-            errorRef.current = refs.vacancies.current;
-        else if (errors.isPaid || requestErrors.isPaid)
-            errorRef.current = refs.isPaid.current;
-        else if (errors.publishDate || requestErrors.publishDate)
-            errorRef.current = refs.publishDate.current;
-        else if (errors.publishEndDate || requestErrors.publishEndDate)
-            errorRef.current = refs.publishEndDate.current;
-        else if (errors.isHidden || requestErrors.isHidden)
-            errorRef.current = refs.isHidden.current;
-        else if (errors.applyURL || requestErrors.applyURL)
-            errorRef.current = refs.applyURL.current;
-        else if (errors.contacts || requestErrors.contacts)
-            errorRef.current = refs.contacts.current;
-        else if (errors.requirements || requestErrors.requirements)
-            errorRef.current = refs.requirements.current;
-        else if (errors.descriptionText || requestErrors.descriptionText)
-            errorRef.current = refs.descriptionText.current;
-        else
-            errorRef.current = null;
-        
-        setExistsError(errorRef.current != null);
-    })
-
-    const showError = () => {
-        smoothScrollToRef(errorRef);
-    }
+        if (Object.keys(requestErrors).length != 0) {
+            document.getElementById(Object.keys(requestErrors)[0])
+                ?.scrollIntoView({ behavior: "smooth" });
+            
+        }
+    }, [requestErrors]);
 
     return (
         success
@@ -192,7 +140,7 @@ const OfferForm = ({ context, title }) => {
                             >
                                 <Grid container spacing={4}>
                                     <Grid item xs={12} lg={showOwnerComponent ? 6 : 12}>
-                                        <div ref={refs.title}>
+                                        <div id="title">
                                             <TitleComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
@@ -203,7 +151,7 @@ const OfferForm = ({ context, title }) => {
                                     </Grid>
                                     {showOwnerComponent &&
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.owner}>
+                                        <div id="owner">
                                             <OwnerComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
@@ -213,7 +161,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>}
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.location}>
+                                        <div id="location">
                                             <FormControl fullWidth margin="dense">
                                                 <LocationComponent
                                                     disabled={formDisabled}
@@ -225,7 +173,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>  
                                     </Grid>
                                     <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
-                                        <div ref={refs.jobType}>
+                                        <div id="jobType">
                                             <FormControl fullWidth margin="dense">
                                                 <JobTypeComponent
                                                     disabled={formDisabled}
@@ -240,7 +188,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.fields}>
+                                        <div id="fields">
                                             <Controller
                                                 name="fields"
                                                 render={(
@@ -267,7 +215,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.technologies}>
+                                        <div id="technologies">
                                             <Controller
                                                 name="technologies"
                                                 render={(
@@ -293,7 +241,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.jobStartDate}>
+                                        <div id="jobStartDate">
                                             <FormControl fullWidth>
                                                 <JobStartDateComponent
                                                     disabled={formDisabled}
@@ -305,7 +253,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.jobDuration}>
+                                        <div id="jobDuration">
                                             <JobDurationComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
@@ -315,7 +263,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.vacancies}>
+                                        <div id="vacancies">
                                             <FormControl fullWidth>
                                                 <VacanciesComponent
                                                     disabled={formDisabled}
@@ -327,7 +275,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6}>
-                                        <div ref={refs.isPaid}>
+                                        <div id="isPaid">
                                             <IsPaidComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
@@ -356,7 +304,7 @@ const OfferForm = ({ context, title }) => {
                                         <Collapse in={shouldShowAdvancedOptions()}>
                                             <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <div ref={refs.publishDate}>
+                                                    <div id="publishDate">
                                                         <PublicationDateComponent
                                                             disabled={formDisabled}
                                                             errors={errors}
@@ -369,7 +317,7 @@ const OfferForm = ({ context, title }) => {
                                                     </div>
                                                 </Grid>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <div ref={refs.publishEndDate}>
+                                                    <div id="publishEndDate">
                                                         <PublicationEndDateComponent
                                                             fields={fields}
                                                             disabled={formDisabled}
@@ -385,7 +333,7 @@ const OfferForm = ({ context, title }) => {
                                                 {
                                                     showHiddenField &&
                                                     <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                        <div ref={refs.isHidden}>
+                                                        <div id="isHidden">
                                                             <IsHiddenComponent
                                                                 disabled={formDisabled}
                                                                 errors={errors}
@@ -399,7 +347,7 @@ const OfferForm = ({ context, title }) => {
                                         </Collapse>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div ref={refs.applyURL}>
+                                        <div id="applyURL">
                                             <ApplyURLComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
@@ -410,7 +358,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div ref={refs.contacts}>
+                                        <div id="contacts">
                                             <MultiOptionTextField
                                                 values={contacts}
                                                 label="Contacts *"
@@ -427,7 +375,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div ref={refs.requirements}>
+                                        <div id="requirements">
                                             <MultiOptionTextField
                                                 values={requirements}
                                                 label="Requirements *"
@@ -445,7 +393,7 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                 </Grid>
-                                <div ref={refs.descriptionText}>
+                                <div id="descriptionText">
                                     <TextEditorComponent
                                         fields={fields}
                                         disabled={formDisabled}
@@ -481,9 +429,9 @@ const OfferForm = ({ context, title }) => {
                         </Grid>
                     </Grid>
                 </Content>
-                <Fade in={existsError}>
+                <Fade in={true}>
                     <div>
-                        <ShowErrorButton onClick={showError} />
+                        <ShowErrorButton onClick={() => {}} />
                     </div>
                 </Fade>
             </div>
