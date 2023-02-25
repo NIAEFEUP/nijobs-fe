@@ -28,7 +28,6 @@ import PublicationEndDateComponent from "./PublicationEndDateComponent";
 import IsHiddenComponent from "./IsHiddenComponent";
 import TextEditorComponent from "./TextEditorComponent";
 import {
-    ErrorSharp,
     KeyboardArrowDown,
     KeyboardArrowUp,
 } from "@material-ui/icons";
@@ -104,18 +103,18 @@ const OfferForm = ({ context, title }) => {
     };
 
     useEffect(() => {
-        if (Object.keys(errors).length != 0) {
-            document.getElementById(Object.keys(errors)[0])
-                ?.scrollIntoView({ behavior: "smooth" });
-            
+        if (Object.keys(errors).length !== 0) {
+            document
+                .getElementById(Object.keys(errors)[0])
+                .scrollIntoView({ behavior: "smooth" });
         }
-    }, [errors])
+    }, [errors]);
 
     useEffect(() => {
-        if (Object.keys(requestErrors).length != 0) {
-            document.getElementById(Object.keys(requestErrors)[0])
-                ?.scrollIntoView({ behavior: "smooth" });
-            
+        if (Object.keys(requestErrors).length !== 0) {
+            document
+                .getElementById(Object.keys(requestErrors)[0])
+                .scrollIntoView({ behavior: "smooth" });
         }
     }, [requestErrors]);
 
@@ -124,7 +123,7 @@ const OfferForm = ({ context, title }) => {
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                <CardHeader title={!isMobile && title } />
+                <CardHeader title={!isMobile && title} />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}
@@ -148,16 +147,16 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                     {showOwnerComponent &&
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="owner">
-                                            <OwnerComponent
-                                                disabled={formDisabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                            />
-                                        </div>
-                                    </Grid>}
+                                        <Grid item xs={12} lg={6}>
+                                            <div id="owner">
+                                                <OwnerComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                />
+                                            </div>
+                                        </Grid>}
                                     <Grid item xs={12} lg={6}>
                                         <div id="location">
                                             <FormControl fullWidth margin="dense">
@@ -168,7 +167,7 @@ const OfferForm = ({ context, title }) => {
                                                     control={control}
                                                 />
                                             </FormControl>
-                                        </div>  
+                                        </div>
                                     </Grid>
                                     <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
                                         <div id="jobType">
@@ -190,7 +189,7 @@ const OfferForm = ({ context, title }) => {
                                             <Controller
                                                 name="fields"
                                                 render={(
-                                                    { field: {  onBlur, name } },
+                                                    { field: { onBlur, name } },
                                                 ) => (
                                                     <MultiOptionAutocomplete
                                                         name={name}
@@ -418,7 +417,7 @@ const OfferForm = ({ context, title }) => {
                                     type="submit"
                                     data-testid="submit-offer"
                                 >
-                                        Submit
+                                    Submit
                                 </Button>
                                 <div className={classes.requiredFields}>
                                     <Typography>* Required fields</Typography>
