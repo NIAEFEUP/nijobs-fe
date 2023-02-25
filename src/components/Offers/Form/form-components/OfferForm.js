@@ -126,6 +126,7 @@ const OfferForm = ({ context, title }) => {
         descriptionText: useRef(null),
     };
     const errorRef = useRef(null);
+    const [existsError, setExistsError] = useState(false)
 
     useEffect(() => {
         if (errors.title || requestErrors.title)
@@ -164,6 +165,8 @@ const OfferForm = ({ context, title }) => {
             errorRef.current = refs.descriptionText.current;
         else
             errorRef.current = null;
+        
+        setExistsError(errorRef.current != null);
     })
 
     const showError = () => {
@@ -478,7 +481,7 @@ const OfferForm = ({ context, title }) => {
                         </Grid>
                     </Grid>
                 </Content>
-                <Fade in={errorRef.current != null}>
+                <Fade in={existsError}>
                     <div>
                         <ShowErrorButton onClick={showError} />
                     </div>
