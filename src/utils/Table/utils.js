@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { TableCell, makeStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import OfferEndDateQuickEdit from "../../components/Offers/Edit/OfferEndDateQuickEdit";
 
 export const getFieldValue = (row, column) => row.fields[column].value;
 
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 });
 
 export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
+    const [colValue, setColValue] = useState(fieldOptions?.value);
     const classes = useStyles();
 
     const linkDestination = fieldOptions?.linkDestination;
@@ -34,10 +36,19 @@ export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) =
                 id={id === 0 ? `${labelId}-label` : undefined}
                 align={fieldOptions.align || "right"}
             >
+
                 {fieldOptions?.linkDestination ?
                     <Link to={linkDestination} className={classes.fieldLink}>
-                        {fieldOptions?.value}
-                    </Link> : fieldOptions.value}
+                        {colValue}
+                    </Link> : ""}
+
+                {fieldId === "publishEndDate"
+                    ? <OfferEndDateQuickEdit 
+                        offerId={labelId.split("-")[2]} 
+                        setOfferId={setColValue}
+                        dateValue={colValue}
+                      />
+                    : colValue}
             </TableCell>
         );
     }

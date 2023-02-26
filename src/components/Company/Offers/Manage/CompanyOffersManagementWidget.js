@@ -70,7 +70,11 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const mobileCols = ["title", "publishStartDate", "actions"];
 
     useEffect(() => {
+        let isComponentUnmounted = false;
+
         if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
+            if (isComponentUnmounted) return;
+
             if (Array.isArray(offers)) {
                 const fetchedRows = offers.reduce((rows, row) => {
                     rows[row._id] = generateRow(row);
@@ -83,6 +87,8 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
             }
             setIsLoading(false);
         }).catch((err) => {
+            if (isComponentUnmounted) return;
+
             setError(err[0]);
             setIsLoading(false);
             addSnackbar({
@@ -90,6 +96,10 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                 key: `${Date.now()}-fetchOffersError`,
             });
         });
+
+        return () => {
+            isComponentUnmounted = true;
+        };
     }, [addSnackbar, data.company._id, isLoggedIn]);
 
     const RowContent = ({ rowKey, labelId }) => {
