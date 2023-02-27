@@ -7,15 +7,14 @@ export default makeStyles((theme) => ({
     }),
     toolbar: ({ isMobile }) => ({
         display: "flex",
-        justifyContent: "space-between",
-        paddingInline: theme.spacing(isMobile ? 0 : 6),
+        paddingInline: theme.spacing(isMobile ? 1 : 6),
     }),
     authArea: {
         display: "flex",
         alignItems: "center",
     },
     loginButton: ({ isMobile }) => ({
-        paddingRight: theme.spacing(isMobile ? 0 : 3),
+        marginRight: theme.spacing(isMobile ? 0 : 3),
     }),
     linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",
