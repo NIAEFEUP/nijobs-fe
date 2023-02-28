@@ -104,17 +104,19 @@ const OfferForm = ({ context, title }) => {
 
     useEffect(() => {
         if (Object.keys(errors).length !== 0) {
-            document
-                .getElementById(Object.keys(errors)[0])
-                .scrollIntoView({ behavior: "smooth" });
+            const element = document.getElementById(Object.keys(errors)[0]);
+            if (element?.scrollIntoView && element.focus) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
         }
     }, [errors]);
 
     useEffect(() => {
         if (Object.keys(requestErrors).length !== 0) {
-            document
-                .getElementById(Object.keys(requestErrors)[0])
-                .scrollIntoView({ behavior: "smooth" });
+            const element = document.getElementById(Object.keys(requestErrors)[0]);
+            if (element?.scrollIntoView) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
         }
     }, [requestErrors]);
 
@@ -137,143 +139,35 @@ const OfferForm = ({ context, title }) => {
                             >
                                 <Grid container spacing={4}>
                                     <Grid item xs={12} lg={showOwnerComponent ? 6 : 12}>
-                                        <div id="title">
-                                            <TitleComponent
-                                                disabled={formDisabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                            />
-                                        </div>
+                                        <TitleComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                        />
                                     </Grid>
                                     {showOwnerComponent &&
-                                        <Grid item xs={12} lg={6}>
-                                            <div id="owner">
-                                                <OwnerComponent
-                                                    disabled={formDisabled}
-                                                    errors={errors}
-                                                    requestErrors={requestErrors}
-                                                    control={control}
-                                                />
-                                            </div>
-                                        </Grid>}
                                     <Grid item xs={12} lg={6}>
-                                        <div id="location">
-                                            <FormControl fullWidth margin="dense">
-                                                <LocationComponent
-                                                    disabled={formDisabled}
-                                                    errors={errors}
-                                                    requestErrors={requestErrors}
-                                                    control={control}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
-                                        <div id="jobType">
-                                            <FormControl fullWidth margin="dense">
-                                                <JobTypeComponent
-                                                    disabled={formDisabled}
-                                                    errors={errors}
-                                                    requestErrors={requestErrors}
-                                                    control={control}
-                                                    textFieldProps={{
-                                                        ...SelectStylingProps,
-                                                    }}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                    </Grid>
+                                        <OwnerComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                        />
+                                    </Grid>}
                                     <Grid item xs={12} lg={6}>
-                                        <div id="fields">
-                                            <Controller
-                                                name="fields"
-                                                render={(
-                                                    { field: { onBlur, name } },
-                                                ) => (
-                                                    <MultiOptionAutocomplete
-                                                        name={name}
-                                                        onBlur={onBlur}
-                                                        error={errors.fields || requestErrors.fields}
-                                                        disabled={formDisabled}
-                                                        chipWrapperProps={{
-                                                            className: classes.autocompleteChipWrapper,
-                                                        }}
-                                                        textFieldProps={{
-                                                            margin: "none",
-                                                        }}
-                                                        {...fieldsSelectorProps}
-                                                        label="Fields *"
-                                                        placeholder="Fields *"
-                                                    />
-                                                )}
-                                                control={control}
-                                            />
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="technologies">
-                                            <Controller
-                                                name="technologies"
-                                                render={(
-                                                    { field: { onBlur, name } },
-                                                ) => (
-                                                    <MultiOptionAutocomplete
-                                                        name={name}
-                                                        onBlur={onBlur}
-                                                        error={errors.technologies || requestErrors.technologies}
-                                                        disabled={formDisabled}
-                                                        chipWrapperProps={{
-                                                            className: classes.autocompleteChipWrapper,
-                                                        }}
-                                                        textFieldProps={{
-                                                            margin: "none",
-                                                        }}
-                                                        {...techSelectorProps}
-                                                        label="Technologies *"
-                                                        placeholder="Technologies *"
-                                                    />)}
-                                                control={control}
-                                            />
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="jobStartDate">
-                                            <FormControl fullWidth>
-                                                <JobStartDateComponent
-                                                    disabled={formDisabled}
-                                                    errors={errors}
-                                                    requestErrors={requestErrors}
-                                                    control={control}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="jobDuration">
-                                            <JobDurationComponent
+                                        <FormControl fullWidth margin="dense">
+                                            <LocationComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
                                                 control={control}
                                             />
-                                        </div>
+                                        </FormControl>
                                     </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="vacancies">
-                                            <FormControl fullWidth>
-                                                <VacanciesComponent
-                                                    disabled={formDisabled}
-                                                    errors={errors}
-                                                    requestErrors={requestErrors}
-                                                    control={control}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <div id="isPaid">
-                                            <IsPaidComponent
+                                    <Grid item xs={12} lg={6} className={classes.jobTypeGrid}>
+                                        <FormControl fullWidth margin="dense">
+                                            <JobTypeComponent
                                                 disabled={formDisabled}
                                                 errors={errors}
                                                 requestErrors={requestErrors}
@@ -282,7 +176,97 @@ const OfferForm = ({ context, title }) => {
                                                     ...SelectStylingProps,
                                                 }}
                                             />
-                                        </div>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <Controller
+                                            name="fields"
+                                            render={(
+                                                { field: { onBlur, name } },
+                                            ) => (
+                                                <MultiOptionAutocomplete
+                                                    name={name}
+                                                    id={name}
+                                                    onBlur={onBlur}
+                                                    error={errors.fields || requestErrors.fields}
+                                                    disabled={formDisabled}
+                                                    chipWrapperProps={{
+                                                        className: classes.autocompleteChipWrapper,
+                                                    }}
+                                                    textFieldProps={{
+                                                        margin: "none",
+                                                    }}
+                                                    {...fieldsSelectorProps}
+                                                    label="Fields *"
+                                                    placeholder="Fields *"
+                                                />
+                                            )}
+                                            control={control}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <Controller
+                                            name="technologies"
+                                            render={(
+                                                { field: { onBlur, name } },
+                                            ) => (
+                                                <MultiOptionAutocomplete
+                                                    name={name}
+                                                    id={name}
+                                                    onBlur={onBlur}
+                                                    error={errors.technologies || requestErrors.technologies}
+                                                    disabled={formDisabled}
+                                                    chipWrapperProps={{
+                                                        className: classes.autocompleteChipWrapper,
+                                                    }}
+                                                    textFieldProps={{
+                                                        margin: "none",
+                                                    }}
+                                                    {...techSelectorProps}
+                                                    label="Technologies *"
+                                                    placeholder="Technologies *"
+                                                />)}
+                                            control={control}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <FormControl fullWidth>
+                                            <JobStartDateComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <JobDurationComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <FormControl fullWidth>
+                                            <VacanciesComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                            />
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12} lg={6}>
+                                        <IsPaidComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                            textFieldProps={{
+                                                ...SelectStylingProps,
+                                            }}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
                                         <Button
@@ -301,58 +285,50 @@ const OfferForm = ({ context, title }) => {
                                         <Collapse in={shouldShowAdvancedOptions()}>
                                             <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <div id="publishDate">
-                                                        <PublicationDateComponent
-                                                            disabled={formDisabled}
-                                                            errors={errors}
-                                                            requestErrors={requestErrors}
-                                                            control={control}
-                                                            datePickerProps={{
-                                                                className: classes.advancedSettingsDatePicker,
-                                                            }}
-                                                        />
-                                                    </div>
+                                                    <PublicationDateComponent
+                                                        disabled={formDisabled}
+                                                        errors={errors}
+                                                        requestErrors={requestErrors}
+                                                        control={control}
+                                                        datePickerProps={{
+                                                            className: classes.advancedSettingsDatePicker,
+                                                        }}
+                                                    />
                                                 </Grid>
                                                 <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <div id="publishEndDate">
-                                                        <PublicationEndDateComponent
-                                                            fields={fields}
-                                                            disabled={formDisabled}
-                                                            errors={errors}
-                                                            requestErrors={requestErrors}
-                                                            control={control}
-                                                            datePickerProps={{
-                                                                className: classes.advancedSettingsDatePicker,
-                                                            }}
-                                                        />
-                                                    </div>
+                                                    <PublicationEndDateComponent
+                                                        fields={fields}
+                                                        disabled={formDisabled}
+                                                        errors={errors}
+                                                        requestErrors={requestErrors}
+                                                        control={control}
+                                                        datePickerProps={{
+                                                            className: classes.advancedSettingsDatePicker,
+                                                        }}
+                                                    />
                                                 </Grid>
                                                 {
                                                     showHiddenField &&
                                                     <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                        <div id="isHidden">
-                                                            <IsHiddenComponent
-                                                                disabled={formDisabled}
-                                                                errors={errors}
-                                                                requestErrors={requestErrors}
-                                                                control={control}
-                                                            />
-                                                        </div>
+                                                        <IsHiddenComponent
+                                                            disabled={formDisabled}
+                                                            errors={errors}
+                                                            requestErrors={requestErrors}
+                                                            control={control}
+                                                        />
                                                     </Grid>
                                                 }
                                             </Grid>
                                         </Collapse>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div id="applyURL">
-                                            <ApplyURLComponent
-                                                disabled={formDisabled}
-                                                errors={errors}
-                                                requestErrors={requestErrors}
-                                                control={control}
-                                                classes={classes}
-                                            />
-                                        </div>
+                                        <ApplyURLComponent
+                                            disabled={formDisabled}
+                                            errors={errors}
+                                            requestErrors={requestErrors}
+                                            control={control}
+                                            classes={classes}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <div id="contacts">
@@ -390,15 +366,13 @@ const OfferForm = ({ context, title }) => {
                                         </div>
                                     </Grid>
                                 </Grid>
-                                <div id="descriptionText">
-                                    <TextEditorComponent
-                                        fields={fields}
-                                        disabled={formDisabled}
-                                        errors={errors}
-                                        requestErrors={requestErrors}
-                                        control={control}
-                                    />
-                                </div>
+                                <TextEditorComponent
+                                    fields={fields}
+                                    disabled={formDisabled}
+                                    errors={errors}
+                                    requestErrors={requestErrors}
+                                    control={control}
+                                />
                                 {requestErrors.generalErrors ?
                                     requestErrors.generalErrors.map((error, idx) => (
                                         <FormHelperText key={`${error.message}-${idx}`} error>
@@ -417,7 +391,7 @@ const OfferForm = ({ context, title }) => {
                                     type="submit"
                                     data-testid="submit-offer"
                                 >
-                                    Submit
+                                        Submit
                                 </Button>
                                 <div className={classes.requiredFields}>
                                     <Typography>* Required fields</Typography>

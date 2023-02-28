@@ -378,7 +378,7 @@ describe("Create Offer Form", () => {
             );
 
             // Should work with label but somehow it wasn't being targeted
-            const input = screen.getByTestId("tech-selector");
+            const input = screen.getByTestId("technologies");
 
             await act(async () => {
 
@@ -405,7 +405,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByTestId("tech-selector");
+            const input = screen.getByTestId("technologies");
             fireEvent.mouseDown(input);
 
             fireEvent.click(screen.getByText("React"));

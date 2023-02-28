@@ -19,6 +19,7 @@ const IsHiddenComponent = ({ disabled, control }) => (
                             checked={value}
                             onChange={onChange}
                             name={name}
+                            id={name}
                             onBlur={onBlur}
                             disabled={disabled}
                         />

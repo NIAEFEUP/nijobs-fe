@@ -13,7 +13,7 @@ const JobStartDateComponent = ({ disabled, errors, requestErrors, control }) => 
                 margin="dense"
                 value={value}
                 label="Job Start Date"
-                id="startDate-input"
+                id={name}
                 name={name}
                 onChange={(_, value) => (onChange(value))}
                 onBlur={onBlur}

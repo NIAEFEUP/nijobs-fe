@@ -13,7 +13,7 @@ const VacanciesComponent = ({ disabled, errors, requestErrors, control }) => (
                 name={name}
                 value={value}
                 label="Vacancies"
-                id="vacancies"
+                id={name}
                 disabled={disabled}
                 error={!!errors?.vacancies || !!requestErrors.vacancies}
                 helperText={
