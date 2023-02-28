@@ -74,7 +74,7 @@ const AdvancedSearchMobile = () => {
 
     const { advancedOptions, toggleAdvancedOptions, searchValue, submitForm,
         setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
-        JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobHiddenSwitchLabel,
+        JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, ShowHiddenSwitchLabel,
         JobDurationSliderProps, onMobileClose, ShowHiddenSwitchProps,
     } = useContext(AdvancedSearchControllerContext);
 
@@ -97,7 +97,6 @@ const AdvancedSearchMobile = () => {
     const handleExit = () => {
         if (shouldSubmitForm) submitForm();
         if (onMobileClose) onMobileClose();
-
     };
 
     const { data,
@@ -161,11 +160,11 @@ const AdvancedSearchMobile = () => {
                     />
                     {sessionData?.isAdmin &&
                     <FormControlLabel
-                        className={classes.jobHiddenSliderToggle}
+                        className={classes.showHiddenToggle}
                         control={<Switch {...ShowHiddenSwitchProps} />}
-                        label={JobHiddenSwitchLabel}
+                        label={ShowHiddenSwitchLabel}
                     />
-                }
+                    }
                 </FormGroup>
             </DialogContent>
             <DialogActions classes={{ root: classes.mobileAdvancedSearchActions  }}>
@@ -205,6 +204,8 @@ AdvancedSearchMobile.propTypes = {
     JobDurationSwitchLabel: PropTypes.string,
     JobDurationSliderProps: PropTypes.object,
     onMobileClose: PropTypes.func,
+    ShowHiddenSwitchProps: PropTypes.object,
+    ShowHiddenSwitchLabel: PropTypes.string,
 };
 
 export default AdvancedSearchMobile;

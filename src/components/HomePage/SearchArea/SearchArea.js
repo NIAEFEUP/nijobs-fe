@@ -53,6 +53,7 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
         setSearchValue: setUrlSearchValue,
         setUrlFilters,
+        setShowHidden: actualSetShowHidden,
     } = useSearchParams({
         setJobDuration,
         setShowJobDurationSlider,
@@ -60,6 +61,7 @@ export const AdvancedSearchController = ({
         setFields,
         setTechs,
         resetAdvancedSearchFields,
+        setShowHidden,
     });
 
     const advancedSearchProps = useAdvancedSearch({
@@ -78,7 +80,7 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
         hideOffer,
         showHidden,
-        setShowHidden,
+        setShowHidden: actualSetShowHidden,
     });
 
     const { search: searchOffers } = useOffersSearcher({
@@ -125,6 +127,9 @@ export const AdvancedSearchController = ({
 
             setSearchValue(queryParams.searchValue);
         }
+        setShowHidden(queryParams.showHidden === "false");
+
+        setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
