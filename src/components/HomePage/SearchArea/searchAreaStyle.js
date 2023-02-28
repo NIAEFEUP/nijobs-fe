@@ -19,7 +19,6 @@ export default makeStyles((theme) => ({
     },
     advancedSearchOuterWrapper: {
         gridColumn: "1 / span 2",
-
     },
     advancedSearchContainer: {
         display: "grid",

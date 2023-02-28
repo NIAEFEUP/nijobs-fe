@@ -15,7 +15,7 @@ const OffersList = ({
     toggleShowSearchFilters, offers, moreOffersLoading, loadMoreOffers, searchQueryToken,
 }) => (
     <Grid container className={classes.fullHeight}>
-        <Grid xs={12} item className={classes.offerItemsContainer}>
+        <Grid xs={12} item className={classes.heightOffersList}>
             {noOffers ?
                 <div id="no_offers_container" className={classes.noOffersColumn}>
                     <WorkOff className={classes.errorLoadingOffersIcon} />
@@ -45,6 +45,7 @@ OffersList.propTypes = {
     classes: PropTypes.shape({
         reviseCriteriaErrorMessage: PropTypes.string.isRequired,
         fullHeight: PropTypes.string.isRequired,
+        heightOffersList: PropTypes.string.isRequired,
         errorLoadingOffersIcon: PropTypes.string.isRequired,
         noOffersColumn: PropTypes.string.isRequired,
         offerItemsContainer: PropTypes.string.isRequired,
@@ -142,6 +143,7 @@ const SearchResultsMobile = () => {
         errorLoadingOffersIcon: classes.errorLoadingOffersIcon,
         reviseCriteriaErrorMessage: classes.reviseCriteriaErrorMessage,
         fullHeight: classes.fullHeight,
+        heightOffersList: classes.heightOffersList,
         offerItemsContainer: classes.offerItemsContainer,
     };
 
