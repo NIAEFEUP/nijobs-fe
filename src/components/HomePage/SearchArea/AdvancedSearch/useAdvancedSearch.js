@@ -32,7 +32,7 @@ export default ({
 
     const JobDurationSwitchLabel = "Filter Job Duration";
 
-    const JobHiddenSwitchLabel = "Show Hidden Offers";
+    const ShowHiddenSwitchLabel = "Show Hidden Offers";
 
     const [advancedOptions, toggleAdvancedOptions] = useToggle(enableAdvancedSearchDefault);
 
@@ -111,10 +111,10 @@ export default ({
         JobDurationSwitchProps,
         JobDurationCollapseProps,
         JobDurationSwitchLabel,
-        JobHiddenSwitchLabel,
         JobDurationSliderProps,
         JobDurationSliderText,
         ResetButtonProps,
         ShowHiddenSwitchProps,
+        ShowHiddenSwitchLabel,
     };
 };

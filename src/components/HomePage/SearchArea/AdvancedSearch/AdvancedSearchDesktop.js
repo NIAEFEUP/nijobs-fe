@@ -52,7 +52,7 @@ const AdvancedSearchDesktop = () => {
 
     const {
         advancedOptions, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobHiddenSwitchLabel,
+        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, ShowHiddenSwitchLabel,
         JobDurationSliderProps, ShowHiddenSwitchProps,
     } = useContext(AdvancedSearchControllerContext);
 
@@ -115,9 +115,9 @@ const AdvancedSearchDesktop = () => {
                 </div>
                 {sessionData?.isAdmin &&
                     <FormControlLabel
-                        className={classes.jobHiddenSliderToggle}
+                        className={classes.showHiddenToggle}
                         control={<Switch {...ShowHiddenSwitchProps} />}
-                        label={JobHiddenSwitchLabel}
+                        label={ShowHiddenSwitchLabel}
                     />
                 }
             </Collapse>
