@@ -129,6 +129,8 @@ export const AdvancedSearchController = ({
         }
         setShowHidden(queryParams.showHidden === "false");
 
+        setShowHidden(queryParams.showHidden === "false");
+
         setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
