@@ -105,8 +105,11 @@ const OfferForm = ({ context, title }) => {
     useEffect(() => {
         if (Object.keys(errors).length !== 0) {
             const element = document.getElementById(Object.keys(errors)[0]);
-            if (element?.scrollIntoView && element.focus) {
+            if (element?.scrollIntoView) {
                 element.scrollIntoView({ behavior: "smooth" });
+            }
+            if (element?.focus) {
+                element.focus();
             }
         }
     }, [errors]);
@@ -116,6 +119,9 @@ const OfferForm = ({ context, title }) => {
             const element = document.getElementById(Object.keys(requestErrors)[0]);
             if (element?.scrollIntoView) {
                 element.scrollIntoView({ behavior: "smooth" });
+            }
+            if (element?.focus) {
+                element.focus();
             }
         }
     }, [requestErrors]);
