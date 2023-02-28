@@ -24,6 +24,7 @@ import MultiOptionAutocomplete from "../../../utils/form/MultiOptionAutocomplete
 import JobOptions from "../../../utils/offers/JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
 import { AdvancedSearchControllerContext } from "../SearchArea";
+import useSession from "../../../../hooks/useSession";
 
 const JobDurationCollapse = ({ className, JobDurationCollapseProps, JobDurationSliderProps, sliderText }) => (
     <Collapse
@@ -73,8 +74,8 @@ const AdvancedSearchMobile = () => {
 
     const { advancedOptions, toggleAdvancedOptions, searchValue, submitForm,
         setSearchValue, FieldsSelectorProps, TechsSelectorProps, resetAdvancedSearch, JobDurationSliderText, ResetButtonProps,
-        JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
-        onMobileClose,
+        JobTypeSelectorProps, JobDurationSwitchProps, JobDurationCollapseProps, JobDurationSwitchLabel, JobHiddenSwitchLabel,
+        JobDurationSliderProps, onMobileClose, ShowHiddenSwitchProps,
     } = useContext(AdvancedSearchControllerContext);
 
     const handleResetClick = (e) => {
@@ -98,6 +99,13 @@ const AdvancedSearchMobile = () => {
         if (onMobileClose) onMobileClose();
 
     };
+
+    const { data,
+        isValidating,
+        error,
+        isLoggedIn,
+    } = useSession();
+    const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
 
     const classes = useSearchAreaStyles();
 
@@ -151,6 +159,13 @@ const AdvancedSearchMobile = () => {
                         JobDurationSliderProps={JobDurationSliderProps}
                         sliderText={JobDurationSliderText}
                     />
+                    {sessionData?.isAdmin &&
+                    <FormControlLabel
+                        className={classes.jobHiddenSliderToggle}
+                        control={<Switch {...ShowHiddenSwitchProps} />}
+                        label={JobHiddenSwitchLabel}
+                    />
+                }
                 </FormGroup>
             </DialogContent>
             <DialogActions classes={{ root: classes.mobileAdvancedSearchActions  }}>
