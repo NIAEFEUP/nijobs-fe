@@ -735,5 +735,34 @@ describe("Create Offer Form", () => {
             expect(screen.queryByText("Publication End Date *")).toBeVisible();
             expect(screen.queryByText("Hide offer")).toBeVisible();
         });
+
+        it("should scroll when a field has an error", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            const scrollIntoViewMock = jest.fn();
+            window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+
+            const titleInput = screen.getByLabelText("Offer Title *");
+            const submitButton = screen.getByTestId("submit-offer");
+
+            await act(async () => {
+                await fireEvent.focus(titleInput);
+                await fireEvent.blur(titleInput);
+                await fireEvent.click(submitButton);
+            });
+
+            expect(scrollIntoViewMock).toBeCalledWith({ behavior: "smooth" });
+        });
     });
 });
