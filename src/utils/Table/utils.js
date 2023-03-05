@@ -40,15 +40,12 @@ export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) =
                 {fieldOptions?.linkDestination ?
                     <Link to={linkDestination} className={classes.fieldLink}>
                         {colValue}
-                    </Link> : ""}
-
-                {fieldId === "publishEndDate"
-                    ? <OfferEndDateQuickEdit 
-                        offerId={labelId.split("-")[2]} 
-                        setOfferId={setColValue}
-                        dateValue={colValue}
-                      />
-                    : colValue}
+                    </Link> : fieldId === "publishEndDate" ?
+                        <OfferEndDateQuickEdit
+                            offerId={labelId.split("-")[2]}
+                            setOfferId={setColValue}
+                            dateValue={colValue}
+                        /> : colValue}
             </TableCell>
         );
     }
