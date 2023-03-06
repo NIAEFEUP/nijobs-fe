@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { editOffer } from "../../../services/offerService";
 import { DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
-import { CheckCircleOutline, Edit } from "@material-ui/icons";
+import { ArrowDownward, Edit } from "@material-ui/icons";
 import { Controller, useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
     datePicker: {
-        width: 100,
+        display: "none",
     },
     icon: {
         height: 18,
@@ -26,10 +26,10 @@ const OfferEndDateQuickEdit = ({ offerId, dateValue, setOfferId }) => {
     const [currentDate, setCurrentDate] = useState(dateValue);
     const { control } = useForm();
 
-    const changeOfferPublishEndDate = () => {
-        editOffer({ offerId: offerId, publishEndDate: "2023-04-20T00:00:00+01:00" })
+    const changeOfferPublishEndDateTo = (newPublishEndDate) => {
+        editOffer({ offerId: offerId, publishEndDate: newPublishEndDate })
             .then((obj) => {
-                console.log("Obj: ", obj.publishEndDate);
+                setCurrentDate(newPublishEndDate.split('T')[0]);
             })
             .catch((err) => {
                 console.log(err);
@@ -40,6 +40,10 @@ const OfferEndDateQuickEdit = ({ offerId, dateValue, setOfferId }) => {
 
     return (
         <>
+            <span id={`end-publish-date-${offerId}`}>
+                {currentDate.split('T')[0]}
+            </span>
+
             {isEditingDate ?
                 <Controller
                     name="quickEditPublishEndDate"
@@ -48,28 +52,33 @@ const OfferEndDateQuickEdit = ({ offerId, dateValue, setOfferId }) => {
                     ) =>  (
                         <>
                             <DatePicker
+                                open={isEditingDate}
                                 value={value}
                                 id="quickEditPublishEndDate-input"
                                 name={name}
                                 onChange={(event) => {
-                                    onChange(event);
+                                    changeOfferPublishEndDateTo(event.toISOString());
+                                    setEditingDate(false);
                                 }}
                                 onBlur={onBlur}
                                 variant="inline"
                                 autoOk
                                 format="yyyy-MM-dd"
+                                defaultValue={Date.parse(currentDate)}
                                 className={stylings.datePicker}
+                                PopoverProps={{
+                                    anchorEl: document.getElementById(`end-publish-date-${offerId}`),
+                                }}
                             />
-                            <CheckCircleOutline className={stylings.icon, stylings.submitEditIcon} onClick={changeOfferPublishEndDate} />
+                            <ArrowDownward
+                                className={stylings.icon}
+                            />
                         </>
                     )
                     }
                     control={control}
                 /> :
                 <>
-                    <span>
-                        {currentDate}
-                    </span>
                     <Edit
                         className={stylings.icon} onClick={() => {
                             setEditingDate(true);
