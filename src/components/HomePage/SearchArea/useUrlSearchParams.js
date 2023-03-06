@@ -88,7 +88,10 @@ export default ({
 
     const actualSetShowHidden = useCallback((showHiddenToggle) => {
 
-        changeURLFilters(location, queryParams, { showHidden: showHiddenToggle });
+        if(!showHiddenToggle)
+            clearURLFilters(location);
+        else
+            changeURLFilters(location, queryParams, { showHidden: showHiddenToggle });
 
         if (setShowHidden)
             setShowHidden(showHiddenToggle);

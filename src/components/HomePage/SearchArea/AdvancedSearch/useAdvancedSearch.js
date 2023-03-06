@@ -87,7 +87,8 @@ export default ({
     const advancedOptionsActive = showJobDurationSlider
     || (jobType !== INITIAL_JOB_TYPE)
     || fields.length !== 0
-    || technologies.length !== 0;
+    || technologies.length !== 0
+    || showHidden;
 
     const ResetButtonProps = {
         disabled: !advancedOptionsActive,
