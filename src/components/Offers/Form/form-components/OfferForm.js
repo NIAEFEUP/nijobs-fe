@@ -337,39 +337,37 @@ const OfferForm = ({ context, title }) => {
                                         />
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div id="contacts">
-                                            <MultiOptionTextField
-                                                values={contacts}
-                                                label="Contacts *"
-                                                itemLabelPrefix="Contact #"
-                                                controllerName="contacts"
-                                                onAdd={appendContact}
-                                                onRemove={removeContact}
-                                                getValues={getValues}
-                                                control={control}
-                                                errors={errors.contacts || requestErrors.contacts}
-                                                disabled={formDisabled}
-                                                addEntryBtnTestId="contacts-selector"
-                                            />
-                                        </div>
+                                        <MultiOptionTextField
+                                            values={contacts}
+                                            label="Contacts *"
+                                            id="contacts"
+                                            itemLabelPrefix="Contact #"
+                                            controllerName="contacts"
+                                            onAdd={appendContact}
+                                            onRemove={removeContact}
+                                            getValues={getValues}
+                                            control={control}
+                                            errors={errors.contacts || requestErrors.contacts}
+                                            disabled={formDisabled}
+                                            addEntryBtnTestId="contacts-selector"
+                                        />
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
-                                        <div id="requirements">
-                                            <MultiOptionTextField
-                                                values={requirements}
-                                                label="Requirements *"
-                                                itemLabelPrefix="Requirement #"
-                                                controllerName="requirements"
-                                                onAdd={appendRequirement}
-                                                onRemove={removeRequirement}
-                                                getValues={getValues}
-                                                control={control}
-                                                errors={errors.requirements || requestErrors.requirements}
-                                                disabled={formDisabled}
-                                                textFieldProps={{ multiline: true }}
-                                                addEntryBtnTestId="requirements-selector"
-                                            />
-                                        </div>
+                                        <MultiOptionTextField
+                                            values={requirements}
+                                            label="Requirements *"
+                                            id="requirements"
+                                            itemLabelPrefix="Requirement #"
+                                            controllerName="requirements"
+                                            onAdd={appendRequirement}
+                                            onRemove={removeRequirement}
+                                            getValues={getValues}
+                                            control={control}
+                                            errors={errors.requirements || requestErrors.requirements}
+                                            disabled={formDisabled}
+                                            textFieldProps={{ multiline: true }}
+                                            addEntryBtnTestId="requirements-selector"
+                                        />
                                     </Grid>
                                 </Grid>
                                 <TextEditorComponent
