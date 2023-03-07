@@ -43,6 +43,18 @@ export const PAID_OPTIONS = [
     { value: false, label: "Unpaid" },
 ];
 
+const scrollToError = (errorArray) => {
+    if (Object.keys(errorArray).length !== 0) {
+        const element = document.getElementById(Object.keys(errorArray)[0]);
+        if (element?.scrollIntoView) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+        if (element?.focus) {
+            element.focus();
+        }
+    }
+};
+
 const OfferForm = ({ context, title }) => {
     const {
         submit,
@@ -103,27 +115,11 @@ const OfferForm = ({ context, title }) => {
     };
 
     useEffect(() => {
-        if (Object.keys(errors).length !== 0) {
-            const element = document.getElementById(Object.keys(errors)[0]);
-            if (element?.scrollIntoView) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-            if (element?.focus) {
-                element.focus();
-            }
-        }
+        scrollToError(errors);
     }, [errors]);
 
     useEffect(() => {
-        if (Object.keys(requestErrors).length !== 0) {
-            const element = document.getElementById(Object.keys(requestErrors)[0]);
-            if (element?.scrollIntoView) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-            if (element?.focus) {
-                element.focus();
-            }
-        }
+        scrollToError(requestErrors);
     }, [requestErrors]);
 
     return (
