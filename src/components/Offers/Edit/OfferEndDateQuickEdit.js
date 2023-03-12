@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import { editOffer } from "../../../services/offerService";
 import { DatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 import { ArrowDownward, Edit } from "@material-ui/icons";
-import { Controller, useForm } from "react-hook-form";
+import { getHumanError } from "../Form/OfferUtils";
+import { useDispatch } from "react-redux";
+import { addSnackbar } from "../../../actions/notificationActions";
 
 const useStyles = makeStyles((theme) => ({
     datePicker: {
@@ -20,71 +22,77 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const OfferEndDateQuickEdit = ({ offerId, dateValue, setOfferId }) => {
+const OfferEndDateQuickEdit = ({ offerId, dateValue }) => {
     const stylings = useStyles();
     const [isEditingDate, setEditingDate] = useState(false);
     const [currentDate, setCurrentDate] = useState(dateValue);
-    const { control } = useForm();
+
+    const [editAbilityEnabled, setEditAbilityEnabled] = useState(true);
+
+    const dispatch = useDispatch();
+    const dispatchAddSnackbarAction = useCallback((notification) => {
+        dispatch(addSnackbar(notification));
+    }, [dispatch]);
 
     const changeOfferPublishEndDateTo = (newPublishEndDate) => {
         editOffer({ offerId: offerId, publishEndDate: newPublishEndDate })
-            .then((obj) => {
-                setCurrentDate(newPublishEndDate.split('T')[0]);
+            .then(() => {
+                setCurrentDate(newPublishEndDate.split("T")[0]);
             })
             .catch((err) => {
-                console.log(err);
+                dispatchAddSnackbarAction({
+                    message: `${getHumanError(err[0].msg)}`,
+                });
+            }).finally(() => {
+                setEditingDate(false);
+                setEditAbilityEnabled(true);
             });
+    };
 
-        setEditingDate(false);
+    const triggerStartChoosingDate = () => {
+        if (editAbilityEnabled) {
+            setEditingDate(true);
+            setEditAbilityEnabled(false);
+        }
     };
 
     return (
         <>
             <span id={`end-publish-date-${offerId}`}>
-                {currentDate.split('T')[0]}
+                {currentDate.split("T")[0]}
             </span>
 
             {isEditingDate ?
-                <Controller
-                    name="quickEditPublishEndDate"
-                    render={(
-                        { field: { onChange, onBlur, name, value } },
-                    ) =>  (
-                        <>
-                            <DatePicker
-                                open={isEditingDate}
-                                value={value}
-                                id="quickEditPublishEndDate-input"
-                                name={name}
-                                onChange={(event) => {
-                                    changeOfferPublishEndDateTo(event.toISOString());
-                                    setEditingDate(false);
-                                }}
-                                onBlur={onBlur}
-                                variant="inline"
-                                autoOk
-                                format="yyyy-MM-dd"
-                                defaultValue={Date.parse(currentDate)}
-                                className={stylings.datePicker}
-                                PopoverProps={{
-                                    anchorEl: document.getElementById(`end-publish-date-${offerId}`),
-                                }}
-                            />
-                            <ArrowDownward
-                                className={stylings.icon}
-                            />
-                        </>
-                    )
-                    }
-                    control={control}
-                /> :
                 <>
-                    <Edit
-                        className={stylings.icon} onClick={() => {
-                            setEditingDate(true);
+                    <DatePicker
+                        open={isEditingDate}
+                        value={Date.parse(currentDate)}
+                        data-testid="quickEditPublishEndDate-input"
+                        name="quickEditPublishEndDate-input"
+                        onChange={(event) => {
+                            changeOfferPublishEndDateTo(event.toISOString());
+                            setEditingDate(false);
+                        }}
+                        variant="inline"
+                        autoOk
+                        format="yyyy-MM-dd"
+                        className={stylings.datePicker}
+                        PopoverProps={{
+                            anchorEl: document.getElementById(`end-publish-date-${offerId}`),
                         }}
                     />
-                </>}
+                    <ArrowDownward
+                        className={stylings.icon}
+                    />
+                </> :
+                <>
+                    <Edit
+                        className={stylings.icon}
+                        onClick={triggerStartChoosingDate}
+                        data-testid="QuickEndDateEditIcon"
+                    />
+                </>
+            }
         </>
     );
 };

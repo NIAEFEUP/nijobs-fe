@@ -55,6 +55,7 @@ const HumanReadableErrors = Object.freeze({
     "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
     "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
     "invalid-apply-url": () => "Invalid application URL. Ensure your URL starts with 'http(s):' or is a valid email",
+    "must-be-before": () => HumanValidationReasons.PUBLISH_END_DATE(),
 });
 
 export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);

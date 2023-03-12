@@ -37,15 +37,19 @@ export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) =
                 align={fieldOptions.align || "right"}
             >
 
-                {fieldOptions?.linkDestination ?
-                    <Link to={linkDestination} className={classes.fieldLink}>
-                        {colValue}
-                    </Link> : fieldId === "publishEndDate" ?
-                        <OfferEndDateQuickEdit
-                            offerId={labelId.split("-")[2]}
-                            setOfferId={setColValue}
-                            dateValue={colValue}
-                        /> : colValue}
+                {  /* eslint-disable no-nested-ternary */
+                    fieldOptions?.linkDestination ?
+                        <Link to={linkDestination} className={classes.fieldLink}>
+                            {colValue}
+                        </Link> : fieldId === "publishEndDate" ?
+                            <OfferEndDateQuickEdit
+                                offerId={labelId.split("-")[2]}
+                                setOfferId={setColValue}
+                                dateValue={colValue}
+                            /> : colValue
+                    /* eslint-enable no-nested-ternary */
+                }
+
             </TableCell>
         );
     }

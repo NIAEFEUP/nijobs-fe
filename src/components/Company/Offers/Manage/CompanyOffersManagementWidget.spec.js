@@ -121,7 +121,7 @@ describe("App", () => {
                     const offerRow = screen.queryByText(offer.title).closest("tr");
 
                     expect(queryByText(offerRow, format(parseISO(offer.publishDate), "yyyy-MM-dd"))).toBeInTheDocument();
-                    // expect(queryByText(offerRow, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                    expect(queryByText(offerRow, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
                     expect(queryByText(offerRow, offer.location)).toBeInTheDocument();
 
                     expect(getByLabelText(offerRow, "Edit Offer")).toBeInTheDocument();
