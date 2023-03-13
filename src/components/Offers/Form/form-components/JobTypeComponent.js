@@ -13,7 +13,7 @@ const JobTypeComponent = ({ disabled, errors, requestErrors, control, textFieldP
             <TextField
                 name={name}
                 fullWidth
-                id="job_type"
+                id={name}
                 select
                 label="Job Type *"
                 value={value ? value : ""}

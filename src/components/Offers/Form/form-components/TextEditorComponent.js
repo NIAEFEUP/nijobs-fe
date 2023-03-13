@@ -7,7 +7,7 @@ const TextEditorComponent = ({  disabled, errors, requestErrors, control }) => (
     <Controller
         name="descriptionText"
         render={(
-            { field: { onChange: onChangeDescriptionText } },
+            { field: { onChange: onChangeDescriptionText, name } },
         ) => (
             <Controller
                 name="description"
@@ -15,6 +15,7 @@ const TextEditorComponent = ({  disabled, errors, requestErrors, control }) => (
                     { field: { onChange: onChangeDescription, value } },
                 ) => (
                     <TextEditor
+                        id={name}
                         onChangeDescription={onChangeDescription}
                         onChangeDescriptionText={onChangeDescriptionText}
                         error={!!errors?.descriptionText || !!requestErrors?.descriptionText}

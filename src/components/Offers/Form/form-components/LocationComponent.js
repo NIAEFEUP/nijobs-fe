@@ -16,6 +16,7 @@ const LocationComponent = ({ disabled, errors, requestErrors, control }) => (
                 onChange={(_e, value) => onChange(value)}
                 onBlur={onBlur}
                 name={name}
+                id={name}
                 error={errors.location || requestErrors.location}
                 disabled={disabled}
             />

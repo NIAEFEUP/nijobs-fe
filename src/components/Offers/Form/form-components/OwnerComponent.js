@@ -14,7 +14,7 @@ const OwnerComponent = ({ disabled, errors, requestErrors, control }) => (
                 name={name}
                 value={value}
                 label="Owner ID *"
-                id="owner"
+                id={name}
                 error={!!errors.owner || !!requestErrors.owner}
                 inputRef={ref}
                 onBlur={onBlur}

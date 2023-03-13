@@ -9,7 +9,7 @@ import {
     Collapse,
     Button,
 } from "@material-ui/core";
-import React, { useState, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -42,6 +42,18 @@ export const PAID_OPTIONS = [
     { value: true, label: "Paid" },
     { value: false, label: "Unpaid" },
 ];
+
+const scrollToError = (errorArray) => {
+    if (Object.keys(errorArray).length !== 0) {
+        const element = document.getElementById(Object.keys(errorArray)[0]);
+        if (element?.scrollIntoView) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+        if (element?.focus) {
+            element.focus();
+        }
+    }
+};
 
 const OfferForm = ({ context, title }) => {
     const {
@@ -102,12 +114,20 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
+    useEffect(() => {
+        scrollToError(errors);
+    }, [errors]);
+
+    useEffect(() => {
+        scrollToError(requestErrors);
+    }, [requestErrors]);
+
     return (
         success
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                <CardHeader title={!isMobile && title } />
+                <CardHeader title={!isMobile && title} />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}
@@ -164,10 +184,11 @@ const OfferForm = ({ context, title }) => {
                                         <Controller
                                             name="fields"
                                             render={(
-                                                { field: {  onBlur, name } },
+                                                { field: { onBlur, name } },
                                             ) => (
                                                 <MultiOptionAutocomplete
                                                     name={name}
+                                                    id={name}
                                                     onBlur={onBlur}
                                                     error={errors.fields || requestErrors.fields}
                                                     disabled={formDisabled}
@@ -193,6 +214,7 @@ const OfferForm = ({ context, title }) => {
                                             ) => (
                                                 <MultiOptionAutocomplete
                                                     name={name}
+                                                    id={name}
                                                     onBlur={onBlur}
                                                     error={errors.technologies || requestErrors.technologies}
                                                     disabled={formDisabled}
@@ -314,6 +336,7 @@ const OfferForm = ({ context, title }) => {
                                         <MultiOptionTextField
                                             values={contacts}
                                             label="Contacts *"
+                                            id="contacts"
                                             itemLabelPrefix="Contact #"
                                             controllerName="contacts"
                                             onAdd={appendContact}
@@ -329,6 +352,7 @@ const OfferForm = ({ context, title }) => {
                                         <MultiOptionTextField
                                             values={requirements}
                                             label="Requirements *"
+                                            id="requirements"
                                             itemLabelPrefix="Requirement #"
                                             controllerName="requirements"
                                             onAdd={appendRequirement}

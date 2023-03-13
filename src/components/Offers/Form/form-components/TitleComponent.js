@@ -12,9 +12,9 @@ const TitleComponent = ({ disabled, errors, requestErrors, control }) => (
         ) => (
             <TextField
                 name={name}
+                id={name}
                 value={value}
                 label="Offer Title *"
-                id="title"
                 error={!!errors.title || !!requestErrors.title}
                 inputRef={ref}
                 onBlur={onBlur}

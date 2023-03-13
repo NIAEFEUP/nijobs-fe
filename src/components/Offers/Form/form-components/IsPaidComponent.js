@@ -14,7 +14,7 @@ const IsPaidComponent = ({ disabled, errors, requestErrors, control, textFieldPr
             <TextField
                 name={name}
                 fullWidth
-                id="is-paid"
+                id={name}
                 select
                 label="Compensation"
                 value={value}
