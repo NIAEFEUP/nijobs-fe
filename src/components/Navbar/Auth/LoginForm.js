@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { login } from "../../../services/auth";
+import { RouterLink } from "../../../utils";
 import { useForm } from "react-hook-form";
+import { BrowserRouter } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoginSchema from "./LoginSchema";
 import useAuthStyles from "./authStyles";
@@ -91,6 +93,17 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                 </FormHelperText>
             </DialogContent>
             <DialogActions>
+                <BrowserRouter>
+                    <Button
+                        onClick={toggleAuthModal}
+                        variant="text"
+                        color="primary"
+                        component={RouterLink}
+                        to="/apply/company"
+                    >
+                        Join Us
+                    </Button>
+                </BrowserRouter>
                 <Button
                     onClick={setRecoveryRequestPage}
                     variant="text"

@@ -17,7 +17,7 @@ import useSession from "../../hooks/useSession";
 import UserMenu from "./UserMenu";
 
 import { useMobile } from "../../utils/media-queries";
-import { MenuRounded, Home, MeetingRoom } from "@material-ui/icons";
+import { MenuRounded, Home, ExitToApp } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
@@ -134,7 +134,7 @@ const Navbar = ({
                                 color="primary"
                                 onClick={toggleAuthModal}
                             >
-                                {!desktopLayout && <MeetingRoom />}
+                                {!desktopLayout && <ExitToApp />}
                                 {desktopLayout && "LOGIN"}
                             </Button>
                         }
