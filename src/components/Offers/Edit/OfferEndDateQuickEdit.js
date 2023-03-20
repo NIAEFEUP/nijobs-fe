@@ -7,13 +7,14 @@ import { ArrowDownward, Edit } from "@material-ui/icons";
 import { getHumanError } from "../Form/OfferUtils";
 import { useDispatch } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     datePicker: {
         display: "none",
     },
     icon: {
-        height: 18,
+        height: "0.55em",
         cursor: "pointer",
     },
     submitEditIcon: {
@@ -67,7 +68,7 @@ const OfferEndDateQuickEdit = ({ offerId, dateValue }) => {
                     <DatePicker
                         open={isEditingDate}
                         value={Date.parse(currentDate)}
-                        data-testid="quickEditPublishEndDate-input"
+                        data-testid={`quickEditPublishEndDate-input-${offerId}`}
                         name="quickEditPublishEndDate-input"
                         onChange={(event) => {
                             changeOfferPublishEndDateTo(event.toISOString());
