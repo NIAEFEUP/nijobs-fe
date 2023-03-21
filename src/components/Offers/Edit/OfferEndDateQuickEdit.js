@@ -7,7 +7,6 @@ import { ArrowDownward, Edit } from "@material-ui/icons";
 import { getHumanError } from "../Form/OfferUtils";
 import { useDispatch } from "react-redux";
 import { addSnackbar } from "../../../actions/notificationActions";
-import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     datePicker: {
