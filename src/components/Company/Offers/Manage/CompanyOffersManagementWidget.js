@@ -1,4 +1,4 @@
-import { Chip, Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles, Text, Tooltip, Typography, Chip } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -17,15 +17,37 @@ import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 
+const generateStatusChips = (isHidden, isArchived) => {
+    const chips = [];
+    if (isHidden)
+        chips.push(<Chip label="Hidden" />);
+    if (isArchived)
+        chips.push(<Chip label="Archived" />);
+
+    if (chips.length === 0)
+        return <Text>-</Text>;
+    return (
+        <>
+            {chips[0]}
+            {chips.splice(1).map((chip) => (
+                <>
+                    <span>&ensp;</span>
+                    {chip}
+                </>
+            ))}
+        </>
+    );
+};
+
 const generateRow = ({
     title, location, publishDate, publishEndDate,
-    ownerName, _id, ...args }) => ({
+    isHidden, isArchived, ownerName, _id, ...args }) => ({
     fields: {
         title: { value: title, align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
-        status: { value: <Chip label="hidden" size="small" /> },
+        status: { value: generateStatusChips(isHidden, isArchived) },
     },
     payload: {
         offer: new Offer({
