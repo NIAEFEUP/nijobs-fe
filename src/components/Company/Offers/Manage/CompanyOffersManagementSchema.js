@@ -3,5 +3,6 @@ export const columns = {
     publishStartDate: { align: "right", disablePadding: false, label: "Publish Date" },
     publishEndDate: { align: "right", disablePadding: false, label: "Publish End Date" },
     location: { align: "right", disablePadding: false, label: "Location" },
+    status: { align: "right", disablePadding: false, label: "Status" },
     actions: { align: "right", disablePadding: false, label: "", disableSorting: true },
 };

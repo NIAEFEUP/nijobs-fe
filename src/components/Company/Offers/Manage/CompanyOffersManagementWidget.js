@@ -1,4 +1,4 @@
-import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
+import { Chip, Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -25,6 +25,7 @@ const generateRow = ({
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
+        status: { value: <Chip label="hidden" size="small" /> },
     },
     payload: {
         offer: new Offer({
