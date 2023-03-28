@@ -1,4 +1,4 @@
-import { Divider, Grid, IconButton, makeStyles, Text, Tooltip, Typography, Chip } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography, Chip } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -25,7 +25,7 @@ const generateStatusChips = (isHidden, isArchived) => {
         chips.push(<Chip label="Archived" />);
 
     if (chips.length === 0)
-        return <Text>-</Text>;
+        return <span>---</span>;
     return (
         <>
             {chips[0]}
