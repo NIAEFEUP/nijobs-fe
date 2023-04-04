@@ -39,6 +39,17 @@ const CompanyOffersActions = ({
                                 </IconButton>
                             </Link>
                         </Tooltip>
+                        <Tooltip title="Quick Offer Edit Actions">
+                            <IconButton
+                                aria-label="More Actions"
+                                edge="end"
+                                onClick={(e) => {
+                                    e.stopPropagation(); toggleCollapse();
+                                }}
+                            >
+                                {!isCollapseOpen ? <ExpandMore /> : <ExpandLess />}
+                            </IconButton>
+                        </Tooltip>
                     </>
                 ) : (
                     <IconButton

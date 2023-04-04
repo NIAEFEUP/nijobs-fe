@@ -10,7 +10,24 @@ import useSession from "../../../../hooks/useSession";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
-import { alphabeticalSorter, GenerateTableCellFromField } from "../../../../utils/Table/utils";
+import {
+    alphabeticalSorter,
+    GenerateTableCellFromField,
+} from "../../../../utils/Table/utils";
+import { columns } from "./CompanyOffersManagementSchema";
+import PropTypes from "prop-types";
+import useSession from "../../../../hooks/useSession";
+import {
+    OfferTitleFilter,
+    PublishDateFilter,
+    PublishEndDateFilter,
+    LocationFilter,
+} from "../Filters/index";
+import { Edit as EditIcon } from "@material-ui/icons";
+import { Link } from "react-router-dom";
+import { addSnackbar } from "../../../../actions/notificationActions";
+import { connect } from "react-redux";
+import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 import { LocationFilter, OfferTitleFilter, PublishDateFilter, PublishEndDateFilter } from "../Filters/index";
@@ -18,6 +35,7 @@ import { RowActions } from "./CompanyOffersActions";
 import { columns } from "./CompanyOffersManagementSchema";
 import OfferTitle from "./CompanyOffersTitle";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
+import CollapsedQuickOfferEdit from "./CollapsedQuickOfferEdit";
 
 const generateRow = ({
     title, location, publishDate, publishEndDate, isHidden, isArchived, hiddenReason,
@@ -53,24 +71,34 @@ const sorters = {
 
 const filters = [
     { id: "offer-title-filter", render: OfferTitleFilter },
-    { id: "publish-date-filter",
+    {
+        id: "publish-date-filter",
         render: PublishDateFilter,
         props: {
             onChange: (date, filtersContext, setFiltersContext) => {
-                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+                setFiltersContext((filtersContext) => ({
+                    ...filtersContext,
+                    minDate: date,
+                }));
             },
         },
     },
-    { id: "publish-end-date-filter",
+    {
+        id: "publish-end-date-filter",
         render: PublishEndDateFilter,
         props: {
             onChange: (date, filtersContext, setFiltersContext) => {
-                setFiltersContext((filtersContext) => ({ ...filtersContext, minDate: date }));
+                setFiltersContext((filtersContext) => ({
+                    ...filtersContext,
+                    minDate: date,
+                }));
             },
         },
     },
     { id: "location-filter", render: LocationFilter },
 ];
+
+export const OfferManagementContext = React.createContext();
 
 const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const { data, isLoggedIn } = useSession();
@@ -176,47 +204,50 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         const offerRoute = `/offer/${rowKey}`;
         const mobileFieldKeys = ["location", "publishEndDate"];
 
-        return (
-            isMobile && (
-                <>
-                    <div className={classes.payloadSection}>
-                        <Grid container alignItems="center">
-                            <Grid item xs={6}>
-                                <Typography className={classes.collapsableTitles} variant="body1">
-                                    Actions
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6} justifyContent="center">
-                                <CompanyOffersVisibilityActions
-                                    offer={row?.payload.offer}
-                                    getOfferVisibility={row?.payload.getOfferVisibility}
-                                    setOfferVisibility={row?.payload.setOfferVisibility}
-                                    offerId={row?.payload.offerId}
-                                />
-                                <Tooltip title="Edit Offer">
-                                    <Link to={offerRoute}>
-                                        <IconButton aria-label="Edit Offer">
-                                            <EditIcon color="secondary" fontSize="medium" />
-                                        </IconButton>
-                                    </Link>
-                                </Tooltip>
-                            </Grid>
-                        </Grid>
-                    </div>
-
-                    {mobileFieldKeys.map((colKey) => (
-                        <div key={colKey} className={classes.payloadSection}>
-                            <Divider />
+        return !isMobile ? (
+            <CollapsedQuickOfferEdit
+                offerId={rowKey}
+                offers={offers}
+                setOffers={setOffers}
+            />
+        ) : (
+            <>
+                <div className={classes.payloadSection}>
+                    <Grid container alignItems="center">
+                        <Grid item xs={6}>
                             <Typography className={classes.collapsableTitles} variant="body1">
-                                {columns[colKey]?.label}
+                Actions
                             </Typography>
-                            <Typography variant="body2">
-                                {row.fields[colKey].value}
-                            </Typography>
-                        </div>
-                    ))}
-                </>
-            )
+                        </Grid>
+                        <Grid item xs={6} justifyContent="center">
+                            <CompanyOffersVisibilityActions offer={row?.payload.offer} />
+                            <Tooltip title="Edit Offer">
+                                <Link to={offerRoute}>
+                                    <IconButton aria-label="Edit Offer">
+                                        <EditIcon color="secondary" fontSize="medium" />
+                                    </IconButton>
+                                </Link>
+                            </Tooltip>
+                        </Grid>
+                    </Grid>
+                    <CollapsedQuickOfferEdit
+                        offerId={rowKey}
+                        isMobile={isMobile}
+                    />
+                </div>
+
+                {mobileFieldKeys.map((colKey) => (
+                    <div key={colKey} className={classes.payloadSection}>
+                        <Divider />
+                        <Typography className={classes.collapsableTitles} variant="body1">
+                            {columns[colKey]?.label}
+                        </Typography>
+                        <Typography variant="body2">
+                            {row.fields[colKey].value}
+                        </Typography>
+                    </div>
+                ))}
+            </>
         );
     }, [classes.collapsableTitles, classes.payloadSection, isMobile, offers]);
 
@@ -224,32 +255,33 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         rowKey: PropTypes.string.isRequired,
     };
 
-
     return (
-        <FilterableTable
-            title="Offers Management"
-            tableComponent={ControlledSortableSelectableTable}
-            defaultSort="publishStartDate"
-            defaultOrderAscending={false}
-            rows={offers}
-            setInitialRows={setOffers}
-            columns={columns}
-            sorters={sorters}
-            filters={filters}
-            RowActions={RowActions}
-            rowsPerPage={5}
-            stickyHeader
-            emptyMessage="No offers here."
-            RowContent={RowContent}
-            RowCollapseComponent={RowCollapseComponent}
-            handleSelect={() => {}}
-            handleSelectAll={() => {}}
-            isSelectableTable={false}
-            isLoading={isLoading}
-            error={error}
-            mobileColumns={mobileCols}
-            hasMaxHeight={false}
-        />
+        <OfferManagementContext.Provider value={{ offers, setOffers }}>
+            <FilterableTable
+                title="Offers Management"
+                tableComponent={ControlledSortableSelectableTable}
+                defaultSort="publishStartDate"
+                defaultOrderAscending={false}
+                rows={offers}
+                setInitialRows={setOffers}
+                columns={columns}
+                sorters={sorters}
+                filters={filters}
+                RowActions={RowActions}
+                rowsPerPage={5}
+                stickyHeader
+                emptyMessage="No offers here."
+                RowContent={RowContent}
+                RowCollapseComponent={RowCollapseComponent}
+                handleSelect={() => {}}
+                handleSelectAll={() => {}}
+                isSelectableTable={false}
+                isLoading={isLoading}
+                error={error}
+                mobileColumns={mobileCols}
+                hasMaxHeight={false}
+            />
+        </OfferManagementContext.Provider>
     );
 };
 
