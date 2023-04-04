@@ -55,6 +55,7 @@ const generateRow = ({
             ownerName, _id, ...args,
         }),
     },
+    extended: isHidden || isArchived,
 });
 
 const sorters = {
@@ -117,13 +118,14 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
+        const extended = offers[rowKey].extended;
 
         return (
             <>
                 {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, extended)
                 )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
-                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, extended)
                 ))}
             </>
         );

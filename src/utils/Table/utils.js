@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     },
 });
 
-export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) => {
+export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId, extended = false) => {
     const classes = useStyles();
 
     const linkDestination = fieldOptions?.linkDestination;
@@ -34,10 +34,12 @@ export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId) =
                 id={id === 0 ? `${labelId}-label` : undefined}
                 align={fieldOptions.align || "right"}
             >
-                {fieldOptions?.linkDestination ?
-                    <Link to={linkDestination} className={classes.fieldLink}>
-                        {fieldOptions?.value}
-                    </Link> : fieldOptions.value}
+                <div style={{ marginBlock: extended && "20px" }}>
+                    {fieldOptions?.linkDestination ?
+                        <Link to={linkDestination} className={classes.fieldLink}>
+                            {fieldOptions?.value}
+                        </Link> : fieldOptions.value}
+                </div>
             </TableCell>
         );
     }
