@@ -17,24 +17,24 @@ import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 
-const generateStatusChips = (isHidden, isArchived) => {
+const generateTitle = (title, isHidden, isArchived) => {
     const chips = [];
     if (isHidden)
-        chips.push(<Chip label="Hidden" />);
+        chips.push(<Chip label="Hidden" size="small" />);
     if (isArchived)
-        chips.push(<Chip label="Archived" />);
+        chips.push(<Chip label="Archived" size="small" />);
 
-    if (chips.length === 0)
-        return <span>---</span>;
     return (
         <>
-            {chips[0]}
-            {chips.splice(1).map((chip) => (
-                <>
-                    <span>&ensp;</span>
-                    {chip}
-                </>
-            ))}
+            {title}
+            <div style={{ position: "absolute" }}>
+                {chips.reduce((res, chip, index, chips) => {
+                    res.push(chip);
+                    if (index !== chips.length - 1)
+                        res.push(<span>&nbsp;</span>);
+                    return res;
+                }, [])}
+            </div>
         </>
     );
 };
@@ -43,11 +43,11 @@ const generateRow = ({
     title, location, publishDate, publishEndDate,
     isHidden, isArchived, ownerName, _id, ...args }) => ({
     fields: {
-        title: { value: title, align: "left", linkDestination: `/offer/${_id}` },
+        title: { value: generateTitle(title, isHidden, isArchived),
+            align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
-        status: { value: generateStatusChips(isHidden, isArchived) },
     },
     payload: {
         offer: new Offer({
