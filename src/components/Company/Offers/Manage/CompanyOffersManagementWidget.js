@@ -16,11 +16,14 @@ import { connect } from "react-redux";
 import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
+import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
-const generateTitle = (title, isHidden, isArchived) => {
+const generateTitle = (title, isHidden, isArchived, hiddenReason) => {
     const chips = [];
-    if (isHidden)
+    if (isHidden && hiddenReason === OfferConstants.COMPANY_REQUEST)
         chips.push(<Chip label="Hidden" size="small" />);
+    if (isHidden && hiddenReason === OfferConstants.ADMIN_REQUEST)
+        chips.push(<Chip label="Blocked" size="small" />);
     if (isArchived)
         chips.push(<Chip label="Archived" size="small" />);
 
@@ -40,10 +43,10 @@ const generateTitle = (title, isHidden, isArchived) => {
 };
 
 const generateRow = ({
-    title, location, publishDate, publishEndDate,
-    isHidden, isArchived, ownerName, _id, ...args }) => ({
+    title, location, publishDate, publishEndDate, isHidden,
+    isArchived, hiddenReason, ownerName, _id, ...args }) => ({
     fields: {
-        title: { value: generateTitle(title, isHidden, isArchived),
+        title: { value: generateTitle(title, isHidden, isArchived, hiddenReason),
             align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
