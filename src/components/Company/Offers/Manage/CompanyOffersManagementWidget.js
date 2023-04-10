@@ -21,13 +21,13 @@ import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 const generateTitle = (title, isHidden, isArchived, hiddenReason) => {
     const chips = [];
     if (!isHidden && !isArchived)
-        chips.push(<Chip label="Active" size="small" />);
+        chips.push(<Chip label="Active" size="small" style={{ backgroundColor: "#4CAF50" }} />);
     if (isHidden && hiddenReason === OfferConstants.COMPANY_REQUEST)
-        chips.push(<Chip label="Hidden" size="small" />);
+        chips.push(<Chip label="Hidden" size="small" style={{ backgroundColor: "#90A4AE" }} />);
     if (isHidden && hiddenReason === OfferConstants.ADMIN_REQUEST)
-        chips.push(<Chip label="Blocked" size="small" />);
+        chips.push(<Chip label="Blocked" size="small" style={{ backgroundColor: "#F44336" }} />);
     if (isArchived)
-        chips.push(<Chip label="Archived" size="small" />);
+        chips.push(<Chip label="Archived" size="small" style={{ backgroundColor: "#2196F3" }} />);
 
     return (
         <>
@@ -122,7 +122,6 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
-        const extended = offers[rowKey].extended;
 
         return (
             <>
