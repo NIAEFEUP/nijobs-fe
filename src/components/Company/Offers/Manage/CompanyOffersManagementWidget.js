@@ -1,4 +1,4 @@
-import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography, Chip } from "@material-ui/core";
+import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
 import React, { useState, useEffect } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
@@ -17,17 +17,18 @@ import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 import { OfferConstants } from "../../../Offers/Form/OfferUtils";
+import { statusChips } from "./CompanyOffersStatusChips";
 
 const generateTitle = (title, isHidden, isArchived, hiddenReason) => {
     const chips = [];
     if (!isHidden && !isArchived)
-        chips.push(<Chip label="Active" size="small" style={{ backgroundColor: "#4CAF50" }} />);
+        chips.push(statusChips.active);
     if (isHidden && hiddenReason === OfferConstants.COMPANY_REQUEST)
-        chips.push(<Chip label="Hidden" size="small" style={{ backgroundColor: "#90A4AE" }} />);
+        chips.push(statusChips.hidden);
     if (isHidden && hiddenReason === OfferConstants.ADMIN_REQUEST)
-        chips.push(<Chip label="Blocked" size="small" style={{ backgroundColor: "#F44336" }} />);
+        chips.push(statusChips.blocked);
     if (isArchived)
-        chips.push(<Chip label="Archived" size="small" style={{ backgroundColor: "#2196F3" }} />);
+        chips.push(statusChips.archived);
 
     return (
         <>
