@@ -57,8 +57,8 @@ const generateRow = ({
     },
     payload: {
         offer: new Offer({
-            title, location, publishDate, publishEndDate,
-            ownerName, _id, ...args,
+            title, location, publishDate, publishEndDate, isHidden,
+            isArchived, hiddenReason, ownerName, _id, ...args,
         }),
     },
 });
