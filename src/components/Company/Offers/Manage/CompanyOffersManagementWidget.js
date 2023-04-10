@@ -20,6 +20,8 @@ import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
 const generateTitle = (title, isHidden, isArchived, hiddenReason) => {
     const chips = [];
+    if (!isHidden && !isArchived)
+        chips.push(<Chip label="Active" size="small" />);
     if (isHidden && hiddenReason === OfferConstants.COMPANY_REQUEST)
         chips.push(<Chip label="Hidden" size="small" />);
     if (isHidden && hiddenReason === OfferConstants.ADMIN_REQUEST)
@@ -58,7 +60,6 @@ const generateRow = ({
             ownerName, _id, ...args,
         }),
     },
-    extended: isHidden || isArchived,
 });
 
 const sorters = {
@@ -126,9 +127,9 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         return (
             <>
                 {!isMobile ? Object.entries(fields).map(([fieldId, fieldOptions], i) => (
-                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, extended)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, true)
                 )) : Object.entries(fields).filter(([fieldId, _]) => mobileCols.includes(fieldId)).map(([fieldId, fieldOptions], i) => (
-                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, extended)
+                    GenerateTableCellFromField(i, fieldId, fieldOptions, labelId, true)
                 ))}
             </>
         );
