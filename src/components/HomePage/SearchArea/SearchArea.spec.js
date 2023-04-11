@@ -250,6 +250,7 @@ describe("SearchArea", () => {
                         setJobDuration={() => { }}
                         setFields={() => { }}
                         setJobType={() => { }}
+                        setShowHidden={() => { }}
                         onSubmit={onSubmit}
                         fields={[]}
                         technologies={[]}
