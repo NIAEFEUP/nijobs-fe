@@ -74,6 +74,11 @@ export default (state = initialState, action) => {
                 ...state,
                 technologies: action.technologies,
             };
+        case OfferSearchTypes.SET_LOAD_URL_FROM_FILTERS:
+            return {
+                ...state,
+                loadUrlFromFilters: action.value,
+            };
         case OfferSearchTypes.SET_JOB_DURATION_TOGGLE:
             return {
                 ...state,
