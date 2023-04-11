@@ -10,6 +10,7 @@ describe("useAdvancedSearch", () => {
     it("should return the correct props for job duration", () => {
 
         const showJobDurationSlider = false;
+        const showHidden = false;
         const setShowJobDurationSlider = () => {};
         const setJobDuration = jest.fn();
         const jobMinDuration = 0;
@@ -22,6 +23,7 @@ describe("useAdvancedSearch", () => {
                 setJobDuration,
                 showJobDurationSlider,
                 setShowJobDurationSlider,
+                showHidden,
             });
         });
 
@@ -105,6 +107,7 @@ describe("useAdvancedSearch", () => {
     it("should return the correct props for reset button", () => {
 
         const showJobDurationSlider = false;
+        const showHidden = false;
         const jobType = `${INITIAL_JOB_TYPE}a`;
         const fields = ["test"];
         const technologies = ["test"];
@@ -115,6 +118,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -126,6 +130,7 @@ describe("useAdvancedSearch", () => {
 
         // Initial Values - if this test fails remind yourself of checking if these are accurate
         let showJobDurationSlider = false;
+        let showHidden = false;
         let jobType = INITIAL_JOB_TYPE;
         let fields = [];
         let technologies = [];
@@ -136,6 +141,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -143,6 +149,7 @@ describe("useAdvancedSearch", () => {
         expect(advancedOptionsActive).toBe(false);
 
         showJobDurationSlider = true;
+        showHidden = false;
         jobType = INITIAL_JOB_TYPE;
         fields = [];
         technologies = [];
@@ -153,6 +160,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -160,6 +168,26 @@ describe("useAdvancedSearch", () => {
         expect(advancedOptionsActive).toBe(true);
 
         showJobDurationSlider = false;
+        showHidden = true;
+        jobType = INITIAL_JOB_TYPE;
+        fields = [];
+        technologies = [];
+
+        testHook(() => {
+            useAdvancedSearchProps = useAdvancedSearch({
+                showJobDurationSlider,
+                jobType,
+                fields,
+                technologies,
+                showHidden,
+            });
+        });
+
+        ({ advancedOptionsActive } = useAdvancedSearchProps);
+        expect(advancedOptionsActive).toBe(true);
+
+        showJobDurationSlider = false;
+        showHidden = false;
         jobType = `${INITIAL_JOB_TYPE}a`;
         fields = [];
         technologies = [];
@@ -170,6 +198,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -177,6 +206,7 @@ describe("useAdvancedSearch", () => {
         expect(advancedOptionsActive).toBe(true);
 
         showJobDurationSlider = false;
+        showHidden = false;
         jobType = INITIAL_JOB_TYPE;
         fields = ["test"];
         technologies = [];
@@ -187,6 +217,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -194,6 +225,7 @@ describe("useAdvancedSearch", () => {
         expect(advancedOptionsActive).toBe(true);
 
         showJobDurationSlider = false;
+        showHidden = false;
         jobType = INITIAL_JOB_TYPE;
         fields = [];
         technologies = ["test"];
@@ -204,6 +236,7 @@ describe("useAdvancedSearch", () => {
                 jobType,
                 fields,
                 technologies,
+                showHidden,
             });
         });
 
@@ -217,6 +250,7 @@ describe("useAdvancedSearch", () => {
             useAdvancedSearchProps = useAdvancedSearch({
                 setFields: () => {},
                 setTechs: () => {},
+                setShowHidden: () => {},
                 resetAdvancedSearchFields,
             });
         });
