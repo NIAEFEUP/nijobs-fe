@@ -44,10 +44,22 @@ export const TestComponent = ({ callback }) => {
 };
 
 export const testHook = (callback, Wrapper = React.Fragment, wrapperProps = {}) => {
-    mount(
+    defaultRender(
         <Wrapper {...wrapperProps}>
             <TestComponent callback={callback} />
         </Wrapper>
+    );
+};
+
+export const testHookWithStoreAndTheme = (callback, initialState, theme, Wrapper = React.Fragment, wrapperProps = {}) => {
+    renderWithStoreAndTheme(
+        <Wrapper {...wrapperProps}>
+            <TestComponent callback={callback} />
+        </Wrapper>,
+        {
+            initialState,
+            theme,
+        }
     );
 };
 

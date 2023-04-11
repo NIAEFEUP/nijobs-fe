@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React from "react";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import qs from "qs";
 
-import { renderWithStoreAndTheme, TestComponent } from "../../../../test-utils";
+import { testHookWithStoreAndTheme } from "../../../../test-utils";
 import { act } from "react-dom/test-utils";
 import useChipsFieldSearch from "./useChipsFieldSearch";
 import { createTheme } from "@material-ui/core";
@@ -28,14 +27,7 @@ describe("useChipsFieldSearch", () => {
             location = useLocation();
         };
 
-
-        renderWithStoreAndTheme(
-            <MemoryRouter initialEntries={["/"]}>
-                <TestComponent callback={callback} />
-            </MemoryRouter>,
-            { initialState, theme }
-        );
-
+        testHookWithStoreAndTheme(callback, initialState, theme, MemoryRouter);
 
         expect(location).toHaveProperty("search", "");
 
@@ -80,13 +72,7 @@ describe("useChipsFieldSearch", () => {
             location = useLocation();
         };
 
-
-        renderWithStoreAndTheme(
-            <MemoryRouter initialEntries={["/"]}>
-                <TestComponent callback={callback} />
-            </MemoryRouter>,
-            { initialState, theme }
-        );
+        testHookWithStoreAndTheme(callback, initialState, theme, MemoryRouter, { initialEntries: ["/"] });
 
 
         expect(location).toHaveProperty("search", "");
