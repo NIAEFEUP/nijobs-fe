@@ -15,24 +15,15 @@ import {
     GenerateTableCellFromField,
 } from "../../../../utils/Table/utils";
 import { columns } from "./CompanyOffersManagementSchema";
-import PropTypes from "prop-types";
-import useSession from "../../../../hooks/useSession";
 import {
     OfferTitleFilter,
     PublishDateFilter,
     PublishEndDateFilter,
     LocationFilter,
 } from "../Filters/index";
-import { Edit as EditIcon } from "@material-ui/icons";
-import { Link } from "react-router-dom";
-import { addSnackbar } from "../../../../actions/notificationActions";
-import { connect } from "react-redux";
-import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import { OfferConstants } from "../../../Offers/Form/OfferUtils";
-import { LocationFilter, OfferTitleFilter, PublishDateFilter, PublishEndDateFilter } from "../Filters/index";
 import { RowActions } from "./CompanyOffersActions";
-import { columns } from "./CompanyOffersManagementSchema";
 import OfferTitle from "./CompanyOffersTitle";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 import CollapsedQuickOfferEdit from "./CollapsedQuickOfferEdit";
@@ -220,7 +211,12 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                             </Typography>
                         </Grid>
                         <Grid item xs={6} justifyContent="center">
-                            <CompanyOffersVisibilityActions offer={row?.payload.offer} />
+                            <CompanyOffersVisibilityActions
+                                offer={row?.payload.offer}
+                                getOfferVisibility={row?.payload.getOfferVisibility}
+                                setOfferVisibility={row?.payload.setOfferVisibility}
+                                offerId={row?.payload.offerId}
+                            />
                             <Tooltip title="Edit Offer">
                                 <Link to={offerRoute}>
                                     <IconButton aria-label="Edit Offer">

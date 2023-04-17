@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import PublicationEndDateComponent from "../../../Offers/Form/form-components/PublicationEndDateComponent";
 import EditOfferSchema from "../../../Offers/Edit/EditOfferSchema";
@@ -14,12 +14,9 @@ export const QuickOfferEditForm = ({ offerId, showTitle = false }) => {
     const { offers, setOffers } = useContext(OfferManagementContext);
 
     const dispatch = useDispatch();
-    const dispatchAddSnackbarAction = useCallback(
-        (notification) => {
-            dispatch(addSnackbar(notification));
-        },
-        [dispatch],
-    );
+    const dispatchAddSnackbarAction = (notification) => {
+        dispatch(addSnackbar(notification));
+    };
 
     const { publishEndDate } = offers[offerId]["fields"];
 
@@ -27,33 +24,27 @@ export const QuickOfferEditForm = ({ offerId, showTitle = false }) => {
         publishEndDate: publishEndDate.value,
     });
 
-    const isObjectEmpty = useCallback(
-        (object) =>
-            Object.keys(object).length === 0 &&
-            Object.getPrototypeOf(object) === Object.prototype,
-        [],
-    );
+    const isObjectEmpty =
+        (object) => Object.keys(object).length === 0 &&
+            Object.getPrototypeOf(object) === Object.prototype;
 
-    const displaySuccessMessage = useCallback(() => {
+    const displaySuccessMessage = () => {
         dispatchAddSnackbarAction({
             message: "Successfully updated",
         });
-    }, [dispatchAddSnackbarAction]);
+    };
 
-    const displayErrorMessage = useCallback(
-        (err) => {
-            dispatchAddSnackbarAction({
-                message: `${parseRequestErrors(err).generalErrors[0].message}`,
-            });
-        },
-        [dispatchAddSnackbarAction],
-    );
+    const displayErrorMessage = (err) => {
+        dispatchAddSnackbarAction({
+            message: `${parseRequestErrors(err).generalErrors[0].message}`,
+        });
+    };
 
-    const changeOfferValues = useCallback(() => {
+    const changeOfferValues = () => {
         const newDate = fields.publishEndDate?.toISOString();
         publishEndDate.value = newDate.slice(0, newDate.indexOf("T"));
         setOffers({ ...offers });
-    }, [fields.publishEndDate, offers, publishEndDate.value, setOffers]);
+    };
 
     const onSubmit = (e) => {
         e.preventDefault();
