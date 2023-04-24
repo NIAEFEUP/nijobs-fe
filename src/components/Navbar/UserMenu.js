@@ -182,6 +182,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
     );
 });
 
+UserMenuContent.displayName = "UserMenuContent";
 UserMenuContent.propTypes = {
     open: PropTypes.bool.isRequired,
     isMobile: PropTypes.bool,

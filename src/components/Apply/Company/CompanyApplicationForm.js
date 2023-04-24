@@ -264,7 +264,7 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                             disabled={submittingApplication}
                             onClick={onResetButtonClick}
                         >
-                                Reset
+                            Reset
                         </Button>
                         <Button
                             type="submit"
@@ -272,7 +272,7 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
                             color="primary"
                             disabled={submittingApplication}
                         >
-                                Apply
+                            Apply
                         </Button>
                     </CardActions>
                 </div>

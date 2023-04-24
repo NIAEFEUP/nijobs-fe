@@ -58,8 +58,8 @@ const OfferInteractionOptions = ({
 
     const canChangeOfferVisibility = useMemo(() => (
         visibilityState.isVisible ||
-            !visibilityState.isDisabled ||
-            sessionData?.company?._id === offer?.owner) &&
+        !visibilityState.isDisabled ||
+        sessionData?.company?._id === offer?.owner) &&
         (sessionData?.company?._id === offer?.owner ||
             sessionData?.isAdmin
         ), [offer, sessionData, visibilityState.isDisabled, visibilityState.isVisible]);
@@ -76,16 +76,16 @@ const OfferInteractionOptions = ({
                     />}
                 <div className={classes.offerOptionsButtons}>
                     {
-                    offer?.applyURL &&
-                    <div className={classes.offerApplyButton}>
-                        <OfferApplyButton
-                            open={showRedirectDialog}
-                            handleAccept={handleApplyURLRedirect}
-                            handleToggle={toggleRedirectDialog}
-                            applyURL={offer.applyURL}
-                            title="You're being redirected to the following website:"
-                        />
-                    </div>
+                        offer?.applyURL &&
+                        <div className={classes.offerApplyButton}>
+                            <OfferApplyButton
+                                open={showRedirectDialog}
+                                handleAccept={handleApplyURLRedirect}
+                                handleToggle={toggleRedirectDialog}
+                                applyURL={offer.applyURL}
+                                title="You're being redirected to the following website:"
+                            />
+                        </div>
                     }
                     {
                         (sessionData?.company?._id === offer.owner || sessionData?.isAdmin) &&

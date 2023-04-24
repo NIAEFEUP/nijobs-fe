@@ -76,7 +76,7 @@ export const ProductDescription = React.forwardRef(({ toggleAuthModal }, ref) =>
                                 component={RouterLink}
                                 to="/offers/new"
                             >
-                            Create Offer
+                                Create Offer
                             </Button>
                         </Grid>
                         :
@@ -87,7 +87,7 @@ export const ProductDescription = React.forwardRef(({ toggleAuthModal }, ref) =>
                                     color="primary"
                                     onClick={toggleAuthModal}
                                 >
-                                Login
+                                    Login
                                 </Button>
                             }
                             <Button

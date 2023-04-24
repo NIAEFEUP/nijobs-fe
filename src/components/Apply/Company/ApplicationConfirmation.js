@@ -37,7 +37,7 @@ const ApplicationConfirmation = () => {
                 <RouterLink
                     to="/"
                 >
-                Go to Homepage
+                    Go to Homepage
                 </RouterLink>
             </CardActions>
         </>

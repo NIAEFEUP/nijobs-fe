@@ -139,7 +139,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                         <Grid container alignItems="center">
                             <Grid item xs={6}>
                                 <Typography className={classes.collapsableTitles} variant="body1">
-                                         Actions
+                                    Actions
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center">
