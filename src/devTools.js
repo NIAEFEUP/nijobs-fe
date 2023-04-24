@@ -69,7 +69,10 @@ const DevToolsController = () => {
 
     return (
         <div className={classes.bar}>
-            <Typography>⚠️ NIJobs Devtools</Typography>
+            <Typography>
+                <span>⚠️</span>
+                NIJobs Devtools
+            </Typography>
             <Typography display="inline">API Hostname</Typography>
             <TextField
                 InputProps={{
