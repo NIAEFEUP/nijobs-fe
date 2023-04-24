@@ -6,7 +6,7 @@ import { Button, makeStyles, TextField, Typography } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import AppTheme from "./AppTheme.js";
 
-import config, { INITIAL_API_HOSTNAME } from "./config.js";
+import config, { INITIAL_API_HOSTNAME, INITIAL_LOCATION_SERVICE_HOSTNAME } from "./config.js";
 
 export const loadDevTools = () => new Promise((resolve) => {
     // Allow dev tools in all envs but prod, unless it's explicitly enabled and not explicitly disabled
@@ -42,16 +42,26 @@ const useDevToolsStyle = makeStyles((theme) => ({
 }));
 
 const DevToolsController = () => {
+
+    // TODO: NIJobs devtools shoudl be better modularized in order to easily add new features
     const locallyStoredAPIHostname = localStorage.getItem("devTools.API_HOSTNAME");
     const [APIHostname, setAPIHostname] = useState(locallyStoredAPIHostname || config.API_HOSTNAME);
 
+    const locallyStoredLocationServiceHostname = localStorage.getItem("devTools.LOCATION_SERVICE_HOSTNAME");
+    const [
+        LocationServiceHostname,
+        setLocationServiceHostname,
+    ] = useState(locallyStoredLocationServiceHostname || config.LOCATION_SERVICE_HOSTNAME);
+
     const handleApply = () => {
         localStorage.setItem("devTools.API_HOSTNAME", APIHostname);
+        localStorage.setItem("devTools.LOCATION_SERVICE_HOSTNAME", LocationServiceHostname);
         window.location.reload();
     };
 
     const handleReset = () => {
         localStorage.setItem("devTools.API_HOSTNAME", INITIAL_API_HOSTNAME);
+        localStorage.setItem("devTools.LOCATION_SERVICE_HOSTNAME", INITIAL_LOCATION_SERVICE_HOSTNAME);
         window.location.reload();
     };
 
@@ -73,6 +83,20 @@ const DevToolsController = () => {
                     setAPIHostname(e.target.value);
                 }}
                 value={APIHostname}
+            />
+            <Typography display="inline">Location Service Hostname</Typography>
+            <TextField
+                InputProps={{
+                    classes: {
+                        root: classes.input,
+                    },
+                }}
+                className={classes.input}
+                placeholder="Location service to use. URL is in the format http(s)://host:port"
+                onChange={(e) => {
+                    setLocationServiceHostname(e.target.value);
+                }}
+                value={LocationServiceHostname}
             />
             <Button className={classes.button} onClick={handleApply}>Apply and Reload</Button>
             <Button className={classes.button} onClick={handleReset}>Reset and Reload</Button>

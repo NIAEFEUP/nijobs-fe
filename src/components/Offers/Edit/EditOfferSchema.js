@@ -59,8 +59,8 @@ export default yup.object().shape({
         .required(HumanValidationReasons.REQUIRED),
     location: yup.string()
         .nullable(true)
-        .matches(/^([a-zA-Z]+([\s-][a-zA-Z])*)+, ([a-zA-Z]+([\s-][a-zA-Z])*)+$/,
-            HumanValidationReasons.LOCATION_FORMAT)
+        // .matches(/^([a-zA-Z]+([\s-][a-zA-Z])*)+, ([a-zA-Z]+([\s-][a-zA-Z])*)+$/,
+        //     HumanValidationReasons.LOCATION_FORMAT)
         .required(HumanValidationReasons.REQUIRED),
     requirements: yup.array()
         .min(...generateValidationRule("requirements", "minLength", HumanValidationReasons.OPTIONS_TOO_SHORT))
