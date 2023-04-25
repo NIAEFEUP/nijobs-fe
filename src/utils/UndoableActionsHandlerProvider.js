@@ -98,7 +98,6 @@ const UndoableActionsHandlerProvider = ({ children }) => {
                 writable: true,
             });
 
-            // window.onbeforeunload =  () => "Some changes might have not taken effect yet...";
         } else if (!Object.keys(actions).length && closeLock) {
             setCloseLock(false);
 
@@ -106,7 +105,6 @@ const UndoableActionsHandlerProvider = ({ children }) => {
                 value: initialBeforeUnloadEventListener.current,
                 writable: true,
             });
-            // window.onbeforeunload = initialBeforeUnloadEventListener.current;
         }
 
     }, [actions, closeLock]);
