@@ -40,6 +40,7 @@ const SearchURLWidget = () => {
     const classes = useSearchURLWidgetStyles();
     const dispatch = useDispatch();
 
+    // TODO: See if this should come from the window browser object or from the router
     const fullURL = window.location.href;
 
     const copyToClipboard = useCallback(() => {
