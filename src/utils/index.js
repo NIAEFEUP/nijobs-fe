@@ -57,10 +57,8 @@ export const HumanValidationReasons = Object.freeze({
     HAVE_NUMBER: "Must contain at least a number.",
     ALREADY_EXISTS: (variable) => `${variable} already exists.`,
     DATE_EXPIRED: "Date must not be in the past.",
-    MUST_BE_AFTER: (variable) => `Date must be after ${variable}.`,
     FILE_TOO_BIG: (val) => `File size must be under ${val}.`,
     FILE_TYPE_ALLOWED: (vals) => `File type must be one of the following: ${vals.join(", ")}.`,
-    LOCATION_FORMAT: () => "The location format must be <city>, <country>. Beware of extra spaces.",
     PUBLISH_END_DATE: () => `Publication end date should be after Publish Date but not 
                             over ${OFFER_MAX_LIFETIME_MONTHS} month(s) after that.`,
     BAD_APPLY_URL: "Invalid application URL. Ensure your URL starts with 'http(s):' or 'mailto:'",
