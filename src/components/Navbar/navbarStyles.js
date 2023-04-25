@@ -9,13 +9,6 @@ export default makeStyles((theme) => ({
         display: "flex",
         paddingInline: theme.spacing(isMobile ? 1 : 6),
     }),
-    authArea: {
-        display: "flex",
-        alignItems: "center",
-    },
-    loginButton: ({ isMobile }) => ({
-        marginRight: theme.spacing(isMobile ? 0 : 3),
-    }),
     linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",
         color: !desktopLayout ? theme.palette.secondary.main : "white",

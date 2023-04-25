@@ -125,27 +125,18 @@ const Navbar = ({
                     toggleAuthModal={toggleAuthModal}
                     addSnackbar={addSnackbar}
                 />
-                <div className={classes.authArea}>
-                    <div className={classes.loginButton}>
-                        {showHomePageLink && !isLoggedIn &&
-                            <Button
-                                className={classes.linkStyle}
-                                variant="text"
-                                color="primary"
-                                onClick={toggleAuthModal}
-                            >
-                                {!desktopLayout && <ExitToApp />}
-                                {desktopLayout && "LOGIN"}
-                            </Button>
-                        }
-                    </div>
-                    <div>
-                        {showHomePageLink && !isLoggedIn &&
-                            <Link to="/apply/company" className={classes.linkStyle}>
-                                {desktopLayout && "JOIN US"}
-                            </Link>
-                        }
-                    </div>
+                <div>
+                    {showHomePageLink && !isLoggedIn &&
+                        <Button
+                            className={classes.linkStyle}
+                            variant="text"
+                            color="primary"
+                            onClick={toggleAuthModal}
+                        >
+                            {!desktopLayout && <ExitToApp />}
+                            {desktopLayout && "SIGN IN"}
+                        </Button>
+                    }
                 </div>
             </Toolbar>
         </AppBar>
