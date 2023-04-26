@@ -1,6 +1,6 @@
 import { Divider, Grid, IconButton, makeStyles, Tooltip, Typography } from "@material-ui/core";
 import { format, parseISO } from "date-fns";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { fetchCompanyOffers } from "../../../../services/companyOffersService";
 import ControlledSortableSelectableTable from "../../../../utils/Table/ControlledSortableSelectableTable";
 import FilterableTable from "../../../../utils/Table/FilterableTable";
@@ -16,41 +16,18 @@ import { connect } from "react-redux";
 import { RowActions } from "./CompanyOffersActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
 import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
+import OfferTitle from "./CompanyOffersTitle";
 import { OfferConstants } from "../../../Offers/Form/OfferUtils";
-import { statusChips } from "./CompanyOffersStatusChips";
-
-const generateTitle = (title, isHidden, isArchived, hiddenReason) => {
-    const chips = [];
-    if (!isHidden && !isArchived)
-        chips.push(statusChips.active);
-    if (isHidden && hiddenReason === OfferConstants.COMPANY_REQUEST)
-        chips.push(statusChips.hidden);
-    if (isHidden && hiddenReason === OfferConstants.ADMIN_REQUEST)
-        chips.push(statusChips.blocked);
-    if (isArchived)
-        chips.push(statusChips.archived);
-
-    return (
-        <>
-            {title}
-            <div style={{ position: "absolute" }}>
-                {chips.reduce((res, chip, index, chips) => {
-                    res.push(chip);
-                    if (index !== chips.length - 1)
-                        res.push(<span>&nbsp;</span>);
-                    return res;
-                }, [])}
-            </div>
-        </>
-    );
-};
 
 const generateRow = ({
-    title, location, publishDate, publishEndDate, isHidden,
-    isArchived, hiddenReason, ownerName, _id, ...args }) => ({
+    title, location, publishDate, publishEndDate, isHidden, isArchived, hiddenReason,
+    ownerName, _id, ...args }, offerVisibilityState, resetOfferVisibilityState) => ({
     fields: {
-        title: { value: generateTitle(title, isHidden, isArchived, hiddenReason),
-            align: "left", linkDestination: `/offer/${_id}` },
+        title: { value: (
+            <OfferTitle
+                title={title}
+                offerVisibilityState={offerVisibilityState}
+            />), align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
@@ -60,6 +37,8 @@ const generateRow = ({
             title, location, publishDate, publishEndDate, isHidden,
             isArchived, hiddenReason, ownerName, _id, ...args,
         }),
+        offerVisibilityState: offerVisibilityState,
+        resetOfferVisibilityState: resetOfferVisibilityState,
     },
 });
 
@@ -98,14 +77,22 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const [error, setError] = useState(null);
     const mobileCols = ["title", "publishStartDate", "actions"];
 
-    useEffect(() => {
+    const resetOffers = useCallback(() => {
         if (isLoggedIn) fetchCompanyOffers(data.company._id).then((offers) => {
             if (Array.isArray(offers)) {
-                const fetchedRows = offers.reduce((rows, row) => {
-                    rows[row._id] = generateRow(row);
+                const visibilityStates = offers.map((offer) => ({
+                    state: {
+                        isHidden: offer.isHidden && offer.hiddenReason === OfferConstants.COMPANY_REQUEST,
+                        isDisabled: offer.isHidden && offer.hiddenReason === OfferConstants.ADMIN_REQUEST,
+                        isVisible: !offer.isHidden && !offer.isArchived,
+                        isBlocked: offer.isHidden && offer.hiddenReason === OfferConstants.COMPANY_BLOCKED,
+                        isArchived: offer.isArchived,
+                    },
+                }));
+                const fetchedRows = offers.reduce((rows, row, i) => {
+                    rows[row._id] = generateRow(row, visibilityStates[i]?.state, resetOffers);
                     return rows;
                 }, {});
-
                 setOffers(fetchedRows);
             } else {
                 setOffers({});
@@ -120,6 +107,10 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
             });
         });
     }, [addSnackbar, data.company._id, isLoggedIn]);
+
+    useEffect(() => {
+        resetOffers();
+    }, [addSnackbar, data.company._id, isLoggedIn, resetOffers]);
 
     const RowContent = ({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
@@ -172,7 +163,11 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={6} justifyContent="center">
-                                <CompanyOffersVisibilityActions offer={row?.payload.offer} />
+                                <CompanyOffersVisibilityActions
+                                    offer={row?.payload.offer}
+                                    offerVisibilityState={row?.payload.offerVisibilityState}
+                                    resetOfferVisibilityState={row?.payload.resetOfferVisibilityState}
+                                />
                                 <Tooltip title="Edit Offer">
                                     <Link to={offerRoute}>
                                         <IconButton aria-label="Edit Offer">

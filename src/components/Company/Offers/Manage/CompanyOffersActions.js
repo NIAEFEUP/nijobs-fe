@@ -26,7 +26,11 @@ const CompanyOffersActions = ({
             <TableCell align="right">
                 { !isMobile ? (
                     <>
-                        <CompanyOffersVisibilityActions offer={row?.payload.offer} />
+                        <CompanyOffersVisibilityActions
+                            offer={row?.payload.offer}
+                            offerVisibilityState={row?.payload.offerVisibilityState}
+                            resetOfferVisibilityState={row?.payload.resetOfferVisibilityState}
+                        />
                         <Tooltip title="Edit Offer">
                             <Link to={editOfferRoute}>
                                 <IconButton aria-label="Edit Offer">

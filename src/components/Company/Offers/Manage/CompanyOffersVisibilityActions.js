@@ -16,62 +16,52 @@ import { getHumanError } from "../../../../utils/offer/OfferUtils";
 import { useDispatch } from "react-redux";
 import { addSnackbar as addSnackbarAction } from "../../../../actions/notificationActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
-import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
-const CompanyOffersVisibilityActions = ({ offer }) => {
+const CompanyOffersVisibilityActions = ({ offer, offerVisibilityState, resetOfferVisibilityState }) => {
 
     const dispatch = useDispatch();
     const addSnackbar = useCallback((notification) => dispatch(addSnackbarAction(notification)), [dispatch]);
 
-    const [offerVisibilityState, setOfferVisibilityState] = useState({
-        isVisible: undefined,
-        isDisabled: undefined,
-        isBlocked: undefined,
-    });
-
     const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
+    const [offerVisibilityButtonDisabled, setOfferVisibilityButtonDisabled] = useState(false);
 
     const isHiddenOffer = offer?.isHidden;
     const offerHiddenReason = offer?.hiddenReason;
 
     useEffect(() => {
-        setOfferVisibilityState({
-            isDisabled: isHiddenOffer && offerHiddenReason === OfferConstants.ADMIN_REQUEST,
-            isVisible: !isHiddenOffer,
-            isBlocked: isHiddenOffer && offerHiddenReason === OfferConstants.COMPANY_BLOCKED,
-        });
-    }, [isHiddenOffer, offerHiddenReason]);
+        setOfferVisibilityButtonDisabled(loadingOfferVisibility || offerVisibilityState?.isDisabled || offerVisibilityState?.isBlocked);
+    }, [isHiddenOffer, offerHiddenReason, offerVisibilityState, resetOfferVisibilityState, loadingOfferVisibility]);
 
 
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
         setLoadingOfferVisibility(true);
         hideOfferService(offer._id)
             .then(() => {
-                setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
                 addSnackbar({
                     message: "The offer was hidden",
                     key: `${Date.now()}-${offer._id}-hidden`,
                 });
+                resetOfferVisibilityState();
             })
             .catch((err) => {
                 if (onError) onError(err);
             }).finally(() => setLoadingOfferVisibility(false));
-    }, []);
+    }, [resetOfferVisibilityState]);
 
     const handleEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
         setLoadingOfferVisibility(true);
         enableOfferService(offer._id)
             .then(() => {
-                setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
                 addSnackbar({
                     message: "The offer was enabled",
                     key: `${Date.now()}-${offer._id}-enabled`,
                 });
+                resetOfferVisibilityState();
             })
             .catch((err) => {
                 if (onError) onError(err);
             }).finally(() => setLoadingOfferVisibility(false));
-    }, []);
+    }, [resetOfferVisibilityState]);
 
     const handleOfferVisibilityError = useCallback((err) => {
         if (Array.isArray(err) && err.length > 0) {
@@ -89,7 +79,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
     }, [addSnackbar, offer._id]);
 
     const handleOfferVisibility = () => {
-        if (offerVisibilityState.isVisible) {
+        if (offerVisibilityState?.isVisible) {
             handleHideOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
@@ -104,16 +94,14 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         }
     };
 
-    const offerVisibilityButtonDisabled = loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked;
-
     return (
-        <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
+        <Tooltip title={offerVisibilityState?.isVisible ? "Hide Offer" : "Enable Offer"}>
             <span>
                 <IconButton
                     onClick={handleOfferVisibility}
                     disabled={offerVisibilityButtonDisabled}
                 >
-                    {offerVisibilityState.isVisible ?
+                    {offerVisibilityState?.isVisible ?
                         <VisibilityOffIcon
                             data-testid="HideOffer"
                             color={offerVisibilityButtonDisabled ? undefined : "secondary"}
@@ -133,7 +121,9 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 };
 
 CompanyOffersVisibilityActions.propTypes = {
-    offer: PropTypes.instanceOf(Offer),
+    offer: PropTypes.instanceOf(Offer).isRequired,
+    offerVisibilityState: PropTypes.object.isRequired,
+    resetOfferVisibilityState: PropTypes.func.isRequired,
 };
 
 export default CompanyOffersVisibilityActions;
