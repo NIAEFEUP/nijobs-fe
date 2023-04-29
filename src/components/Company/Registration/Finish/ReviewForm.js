@@ -82,7 +82,7 @@ const ReviewInfo = () => {
                 </CardContent>
                 <CardContent>
                     <Typography variant="h6">
-                            Contacts
+                        Contacts
                     </Typography>
                     <ul>
                         {contacts.map((c, i) =>

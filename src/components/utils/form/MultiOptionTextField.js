@@ -86,7 +86,7 @@ const MultiOptionTextField = ({
                     onClick={() => onAdd()}
                     className={classes.addEntryBtn}
                 >
-                Add Entry
+                    Add Entry
                 </Button>
                 {errors ?
                     <FormHelperText error={!!errors}>

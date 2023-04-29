@@ -137,7 +137,7 @@ const PasswordRecoveryFinishForm = ({ token, toggleAuthModal, setLoginPage, setR
                     disabled={requestPending}
                     color="secondary"
                 >
-                        Login
+                    Login
                 </Button>
                 <Button
                     onClick={toggleAuthModal}
@@ -145,7 +145,7 @@ const PasswordRecoveryFinishForm = ({ token, toggleAuthModal, setLoginPage, setR
                     color="secondary"
                     disabled={requestPending}
                 >
-                        Cancel
+                    Cancel
                 </Button>
                 <div className={classes.loginBtnWrapper}>
                     {
@@ -158,7 +158,7 @@ const PasswordRecoveryFinishForm = ({ token, toggleAuthModal, setLoginPage, setR
                                     variant="contained"
                                     disabled={requestPending}
                                 >
-                            Recover Password
+                                    Recover Password
                                 </Button>
                                 {requestPending &&
                                 <CircularProgress
@@ -175,7 +175,7 @@ const PasswordRecoveryFinishForm = ({ token, toggleAuthModal, setLoginPage, setR
                                 disabled={requestPending}
                                 color="secondary"
                             >
-                        Lost password?
+                                Lost password?
                             </Button>
                         )
                     }

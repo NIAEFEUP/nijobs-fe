@@ -97,7 +97,7 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                     disabled={loginPending}
                     color="secondary"
                 >
-                        Lost password?
+                    Lost password?
                 </Button>
                 <Button
                     onClick={toggleAuthModal}
@@ -105,7 +105,7 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                     color="secondary"
                     disabled={loginPending}
                 >
-                        Cancel
+                    Cancel
                 </Button>
                 <div className={classes.loginBtnWrapper}>
                     <Button
@@ -115,13 +115,13 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                         variant="contained"
                         disabled={loginPending}
                     >
-                            Login
+                        Login
                     </Button>
                     {loginPending &&
-                    <CircularProgress
-                        size={24}
-                        className={classes.loginProgressRed}
-                    />
+                        <CircularProgress
+                            size={24}
+                            className={classes.loginProgressRed}
+                        />
                     }
                 </div>
             </DialogActions>

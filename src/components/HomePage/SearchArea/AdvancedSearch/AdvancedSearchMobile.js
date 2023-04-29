@@ -168,7 +168,7 @@ const AdvancedSearchMobile = () => {
                     color="primary"
                     onClick={handleSearchClick}
                 >
-                       Search
+                    Search
                 </Button>
             </DialogActions>
         </Dialog>

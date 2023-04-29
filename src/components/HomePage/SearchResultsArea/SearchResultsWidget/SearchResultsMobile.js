@@ -82,7 +82,7 @@ export const OfferViewer = ({
             >
                 <NavigateBefore />
             </IconButton>
-                    Offer Details
+            Offer Details
         </DialogTitle>
         <DialogContent>
             <div className={offerWidgetWrapperClassName}>

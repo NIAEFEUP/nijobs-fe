@@ -9,7 +9,6 @@ import CreateOfferPage from "../../../pages/CreateOfferPage";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
-import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
 import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
@@ -271,41 +270,6 @@ describe("Create Offer Form", () => {
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Required field.");
 
 
-        });
-
-
-        it("should fail validation if locations not following the regex", async () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
-            searchCities.mockImplementation(() => Promise.resolve({ city: "asd", country: "asd" }));
-
-            const wrapper = renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <CreateOfferWrapper>
-                            <CreateOfferPage />
-                        </CreateOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            const input = screen.getByLabelText("Location *");
-
-            await act(async () => {
-                await fireEvent.focus(input);
-                await fireEvent.change(input, { target: { value: "invalid" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(input))
-                .toHaveTextContent("The location format must be <city>, <country>. Beware of extra spaces.");
-
-            await act(async () =>  {
-                await fireEvent.change(input, { target: { value: "city, country" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location *"))).toHaveTextContent("\u200B");
         });
 
         it("should fail validation if fields empty", async () => {

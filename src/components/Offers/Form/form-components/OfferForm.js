@@ -391,7 +391,7 @@ const OfferForm = ({ context, title }) => {
                                     type="submit"
                                     data-testid="submit-offer"
                                 >
-                                        Submit
+                                    Submit
                                 </Button>
                                 <div className={classes.requiredFields}>
                                     <Typography>* Required fields</Typography>
