@@ -7,6 +7,7 @@ import { fireEvent, act, renderWithStoreAndTheme } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
 import { SnackbarProvider } from "notistack";
 import { createTheme } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
 
 jest.mock("../../../services/auth");
 
@@ -29,7 +30,9 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toggleAuthModal={toggleAuthModal} />
+                    <BrowserRouter>
+                        <AuthModal open toggleAuthModal={toggleAuthModal} />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
 
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Login" });
@@ -48,9 +51,11 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toggleAuthModal={toggleAuthModal} />
+                    <BrowserRouter>
+                        <AuthModal open toggleAuthModal={toggleAuthModal} />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).toBeInTheDocument();
@@ -65,12 +70,14 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const { getByRole, getByLabelText } = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={toggleAuthModal}
-                        toggleLoginPending={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={toggleAuthModal}
+                            toggleLoginPending={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
@@ -90,12 +97,14 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={() => {}}
-                        toggleLoginPending={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={() => {}}
+                            toggleLoginPending={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
 
 
@@ -131,12 +140,14 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={() => {}}
-                        toggleLoginPending={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={() => {}}
+                            toggleLoginPending={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {
@@ -159,12 +170,14 @@ describe("Navbar - AuthModal - LoginForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={() => {}}
-                        toggleLoginPending={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={() => {}}
+                            toggleLoginPending={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme });
 
             await act(async () => {

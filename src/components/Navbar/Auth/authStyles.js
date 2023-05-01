@@ -28,6 +28,6 @@ export default makeStyles((theme) => ({
         fontSize: "4px",
     },
     smallText: {
-        fontSize: "0.75rem",
+        fontSize: "0.85rem",
     },
 }));
