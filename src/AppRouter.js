@@ -139,7 +139,7 @@ const AppRouter = () => (
             <Route exact path="/apply/validate/:token/confirm" key="/apply/validate/:token/confirm">
                 <PageLayout
                     key="/apply/validate/:token/confirm"
-                    pageTitle="Validate"
+                    pageTitle="Validate Company Application"
                     layout={LayoutType.DESKTOP}
                 >
                     <ValidationPage />

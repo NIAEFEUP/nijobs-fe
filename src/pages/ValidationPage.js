@@ -2,8 +2,9 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable indent */
 import React, { useEffect, useState } from "react";
-import { CardContent, CircularProgress, makeStyles, Button } from "@material-ui/core";
+import {CardContent, CircularProgress, makeStyles, Button, Fab, Link, Typography} from "@material-ui/core";
 import { useMobile } from "../utils/media-queries";
+import { Link as RouteLink} from "react-router-dom";
 import { Redirect, useParams } from "react-router-dom";
 import { validateApplication } from "../services/companyApplicationService";
 import { getValidationError } from "../components/Apply/Company/CompanyApplicationUtils.js";
@@ -17,22 +18,23 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
         justifyContent: "center",
     },
     title: {
-        color: "rgb(80,80,80)",
-        fontSize: "23px",
+        fontWeight:500,
     },
     text: {
-        color: "rgb(100,100,100)",
-        fontSize: "15px",
+        fontSize: theme.typography.body1,
         maxWidth: isMobile ? "100%" : "80%",
         textAlign: "center",
 
     },
     button: {
-        background: "rgb(250,70,70)",
-        color: "white",
-        marginTop: "3vh",
-
+        background: theme.palette.primary.main,
+        color:theme.palette.dark.contrastText,
+        '&:hover':{
+            background: theme.palette.secondary.main,
+        }
     },
+
+    
 }));
 
 const ValidationPage = () => {
@@ -51,8 +53,8 @@ const ValidationPage = () => {
                 setLoading(false);
                 setSuccess(true);
                 await validateApplication(token);
-            } catch (error_) {
-                setError(error_[0].msg);
+            } catch (err) {
+                setError(err[0].msg);
                 setLoading(false);
                 setSuccess(false);
             }
@@ -65,24 +67,25 @@ const ValidationPage = () => {
         const { title, text } = getValidationError(error);
         return (
             <CardContent className={classes.content}>
-                <h2 className={classes.title}>
+               <Typography variant="h5" className={classes.title} gutterBottom>
                     {title}
-                </h2>
-                <span className={classes.text}>
+               </Typography>
+                <Typography variant="body1" gutterBottom align='center' >
                     {text}
                     for more information contact us:
                     <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
                     !
-                </span>
-                <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
-                    Click here to go to Home page
+                </Typography>
+
+                <Button color= "primary" variant= "extended" className={classes.button} component={RouteLink} to={'/'} >
+                  Click here to go to Home page
                 </Button>
             </CardContent>
         );
     };
 
     if (buttonPressed) {
-        return <Redirect to="/" />;
+        return <RouteLink to={"/"} ></RouteLink>;
     }
 
     if (loading) {
@@ -98,7 +101,7 @@ const ValidationPage = () => {
                     <h2 className={classes.title}>Your application has been validated successfully! </h2>
                     <span className={classes.text}>
                         You should receive a confirmation email shortly. If not, please contact us:
-                         <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
+                         <Link href="mailto:nijobs@aefeup.pt">nijobs@aefeup.pt</Link>
                     </span>
                     <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
                         Click here to go to Home page
