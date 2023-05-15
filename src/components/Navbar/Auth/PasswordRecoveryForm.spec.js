@@ -7,6 +7,7 @@ import { fireEvent, act, renderWithStoreAndTheme } from "../../../test-utils";
 import Constants from "../../../utils/Constants";
 import { SnackbarProvider } from "notistack";
 import { createTheme } from "@material-ui/core";
+import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
 
 jest.mock("../../../services/auth");
 
@@ -31,11 +32,13 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                    <BrowserRouter>
+                        <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme }
             );
 
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
             const dialogTitle = wrapper.queryByRole("heading", { level: 2, name: "Recover Password" });
             expect(dialogTitle).toBeInTheDocument();
@@ -51,11 +54,13 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                    <BrowserRouter>
+                        <AuthModal open toggleAuthModal={toggleAuthModal} initialPage={1} />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme }
             );
 
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
 
             fireEvent.click(wrapper.getByText("Login"));
@@ -73,15 +78,17 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={toggleAuthModal}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={toggleAuthModal}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme }
             );
 
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
 
             await act(async () => {
@@ -102,15 +109,17 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
         it("Should not allow invalid email", async () => {
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme }
             );
 
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
 
             await act(async () => {
@@ -151,16 +160,18 @@ describe("Navbar - AuthModal - PasswordRecoveryForm", () => {
 
             const wrapper = renderWithStoreAndTheme(
                 <SnackbarProvider maxSnack={3}>
-                    <AuthModal
-                        open
-                        toggleAuthModal={() => {}}
-                        toggleLoginPending={() => {}}
-                        updateSessionInfo={() => {}}
-                    />
+                    <BrowserRouter>
+                        <AuthModal
+                            open
+                            toggleAuthModal={() => {}}
+                            toggleLoginPending={() => {}}
+                            updateSessionInfo={() => {}}
+                        />
+                    </BrowserRouter>
                 </SnackbarProvider>, { initialState: {}, theme }
             );
 
-            fireEvent.click(wrapper.getByText("Lost password?"));
+            fireEvent.click(wrapper.getByText("Recover Password"));
 
             await act(async () => {
                 await fireEvent.change(wrapper.getByLabelText("Email"), { target: { value: "asd@email.com" } });

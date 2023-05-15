@@ -17,7 +17,7 @@ import useSession from "../../hooks/useSession";
 import UserMenu from "./UserMenu";
 
 import { useMobile } from "../../utils/media-queries";
-import { MenuRounded, Home } from "@material-ui/icons";
+import { MenuRounded, Home, ExitToApp } from "@material-ui/icons";
 
 
 import useNavbarStyles from "./navbarStyles";
@@ -67,10 +67,10 @@ const Navbar = ({
             data-testid="navbar"
         >
             <Toolbar className={classes.toolbar}>
-                <div className={ classes.homePageLink }>
+                <div>
                     {showHomePageLink &&
                         <Link to="/" className={classes.linkStyle}>
-                            <Home className={classes.homeIcon}  />
+                            <Home className={classes.homeIcon} />
                             {desktopLayout && "HOMEPAGE"}
                         </Link>
                     }
@@ -125,6 +125,19 @@ const Navbar = ({
                     toggleAuthModal={toggleAuthModal}
                     addSnackbar={addSnackbar}
                 />
+                <div>
+                    {showHomePageLink && !isLoggedIn &&
+                        <Button
+                            className={classes.linkStyle}
+                            variant="text"
+                            color="primary"
+                            onClick={toggleAuthModal}
+                        >
+                            {!desktopLayout && <ExitToApp />}
+                            {desktopLayout && "SIGN IN"}
+                        </Button>
+                    }
+                </div>
             </Toolbar>
         </AppBar>
     );
