@@ -1,4 +1,4 @@
-import ReactGa from "react-ga";
+import ReactGA from "react-ga4";
 import { EVENT_TYPES, TIMED_ACTIONS, DIMENSION_IDS, QUERY_VALUE_PARAMETER } from "./constants";
 
 /**
@@ -12,7 +12,7 @@ export const removeCookie = (cookie) => {
  * Initializes Google Analytics.
  */
 export const initAnalytics = () => {
-    ReactGa.initialize(process.env.ANALYTICS_ID, {
+    ReactGA.initialize(process.env.ANALYTICS_ID, {
         gaOptions: {
             siteSpeedSampleRate: 100,
         },
@@ -54,10 +54,12 @@ export const measureTime = (action = TIMED_ACTIONS.UNKNOWN, func, label) => asyn
  * @param label Optional label to describe the action.
  */
 export const recordTime = (action = TIMED_ACTIONS.UNKNOWN, t0, t1, label) => {
-    ReactGa.timing({
-        ...action,
-        value: t1 - t0,
-        label,
+    ReactGA.send({
+        hitType: "timing",
+        timingCategory: action.category,
+        timingVar: action.variable,
+        timingLabel: label,
+        timingValue: t1 - t0,
     });
 };
 
@@ -67,7 +69,7 @@ export const recordTime = (action = TIMED_ACTIONS.UNKNOWN, t0, t1, label) => {
  * @param event Type of event, from {@link EVENT_TYPES}.
  */
 export const createEvent = (event = EVENT_TYPES.OTHER) => {
-    ReactGa.event(event);
+    ReactGA.event(event);
 };
 
 /**
@@ -98,8 +100,8 @@ export const sendSearchReport = (filters, queryUrl) => {
     const searchDimensions = parseFiltersToDimensions(filters);
     const parsedUrl = parseSearchUrl(queryUrl);
 
-    ReactGa.set(searchDimensions);
-    ReactGa.pageview(parsedUrl);
+    ReactGA.set(searchDimensions);
+    ReactGA.send({ hitType: "pageview", page: parsedUrl });
 };
 
 /**
@@ -151,12 +153,12 @@ export const parseSearchUrl = (queryUrl) => {
 export const recordOfferVisit = (offerId, offerTitle, companyName) => {
     if (!offerId) return; // Invalid offer, do not set dimensions
 
-    ReactGa.set({
+    ReactGA.set({
         [DIMENSION_IDS.companyName]: companyName,
         [DIMENSION_IDS.offerTitle]: offerTitle,
     });
 
-    ReactGa.event({
+    ReactGA.event({
         action: "Offer/visit",
         category: "Success",
         label: `${offerId}`,
@@ -166,12 +168,12 @@ export const recordOfferVisit = (offerId, offerTitle, companyName) => {
 export const recordOfferImpression = (offerId, offerTitle, companyName) => {
     if (!offerId) return;
 
-    ReactGa.set({
+    ReactGA.set({
         [DIMENSION_IDS.companyName]: companyName,
         [DIMENSION_IDS.offerTitle]: offerTitle,
     });
 
-    ReactGa.event({
+    ReactGA.event({
         action: "Offer/impression",
         category: "Success",
         label: `${offerId}`,
@@ -188,12 +190,12 @@ export const recordOfferImpression = (offerId, offerTitle, companyName) => {
 export const recordApplyURLVisit = (offerId, offerTitle, companyName) => {
     if (!offerId) return;
 
-    ReactGa.set({
+    ReactGA.set({
         [DIMENSION_IDS.companyName]: companyName,
         [DIMENSION_IDS.offerTitle]: offerTitle,
     });
 
-    ReactGa.event({
+    ReactGA.event({
         action: "Offer/applyURL",
         category: "Success",
         label: `${offerId}`,
