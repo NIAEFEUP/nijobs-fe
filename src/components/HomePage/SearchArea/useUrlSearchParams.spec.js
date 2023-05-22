@@ -88,10 +88,6 @@ describe("useUrlSearchParams", () => {
             params = {
                 "technologies": expectedValue,
             };
-        } else if (fieldName === "showHidden") {
-            params = {
-                "showHidden": expectedValue,
-            };
         }
 
         const expectedLocationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;

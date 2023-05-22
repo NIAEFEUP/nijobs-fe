@@ -10,6 +10,7 @@ import FieldOptions from "../../../utils/offers/FieldOptions";
 import TechOptions from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 import { createTheme } from "@material-ui/core/styles";
+import useSession from "../../../../hooks/useSession";
 
 import { MemoryRouter } from "react-router-dom";
 
@@ -141,15 +142,16 @@ describe("AdvancedSearchDesktop", () => {
             fireEvent.click(screen.getByLabelText("Filter Job Duration"));
             expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(false);
         });
-        /*
+
+        jest.mock("../../../../hooks/useSession");
+
         it("should toggle show hidden (on)", () => {
             const setShowHiddenMock = jest.fn();
-            const sessionData = { isAdmin: true };
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
                     <AdvancedSearchWrapper
-                        sessionData={sessionData}
                         enableAdvancedSearchDefault
                         showHidden={false}
                         setShowHidden={setShowHiddenMock}
@@ -168,12 +170,11 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle show hidden (off)", () => {
             const setShowHiddenMock = jest.fn();
-            const sessionData = { isAdmin: true };
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
                     <AdvancedSearchWrapper
-                        sessionData={sessionData}
                         enableAdvancedSearchDefault
                         showHidden={true}
                         setShowHidden={setShowHiddenMock}
@@ -188,7 +189,7 @@ describe("AdvancedSearchDesktop", () => {
             expect(setShowHiddenMock).toHaveBeenCalledWith(false);
             // Can't test that element is visible now (after toggling), since we can't emulate redux logic, wihtout having the whole tree,
             // So, I'll just assert that when showJobDurationSlider=true, it shows correctly in the next test
-        });*/
+        });
 
 
         it("should render a fields selector with all field types", () => {
