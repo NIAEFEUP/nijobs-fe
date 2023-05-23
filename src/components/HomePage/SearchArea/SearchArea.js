@@ -110,6 +110,7 @@ export const AdvancedSearchController = ({
                 fields,
                 technologies,
                 jobType,
+                showHidden,
                 searchValue,
             );
             setLoadUrlFromFilters(false);
@@ -127,9 +128,7 @@ export const AdvancedSearchController = ({
 
             setSearchValue(queryParams.searchValue);
         }
-        setShowHidden(queryParams.showHidden === "false");
-
-        setShowHidden(queryParams.showHidden === "false");
+        setShowHidden(queryParams.showHidden);
 
         setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
