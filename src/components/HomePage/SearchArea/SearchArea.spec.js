@@ -27,7 +27,7 @@ const RouteWrappedContent = ({ children, url = "/" }) => (
 
 const SearchAreaWrapper = ({
     searchValue = "", jobType = INITIAL_JOB_TYPE, jobDuration = [null, null], filterJobDuration = false,
-    showJobDurationSlider = false, fields = [], technologies = [], showHidden = false, setShowJobDurationSlider = () => { },
+    showJobDurationSlider = false, fields = [], technologies = [], setShowJobDurationSlider = () => { },
     setTechs = () => { }, setJobDuration = () => { }, setFields = () => { }, setJobType = () => { },
     setSearchValue = () => { }, onSubmit = () => {}, setShowHidden = () => { },
 }) => (
@@ -39,7 +39,6 @@ const SearchAreaWrapper = ({
         fields={fields}
         technologies={technologies}
         showJobDurationSlider={showJobDurationSlider}
-        showHidden={showHidden}
         setShowJobDurationSlider={setShowJobDurationSlider}
         setTechs={setTechs}
         setJobDuration={setJobDuration}
