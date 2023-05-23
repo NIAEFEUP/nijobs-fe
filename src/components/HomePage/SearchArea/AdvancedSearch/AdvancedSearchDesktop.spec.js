@@ -14,6 +14,8 @@ import useSession from "../../../../hooks/useSession";
 
 import { MemoryRouter } from "react-router-dom";
 
+jest.mock("../../../../hooks/useSession");
+
 const AdvancedSearchWrapper = ({
     children,
     enableAdvancedSearchDefault,
@@ -71,6 +73,7 @@ describe("AdvancedSearchDesktop", () => {
 
     describe("render", () => {
         it("should render a job selector with all job types", () => {
+            useSession.mockImplementation(() => ({}));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
@@ -96,6 +99,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
+            useSession.mockImplementation(() => ({}));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
@@ -121,6 +125,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
+            useSession.mockImplementation(() => ({}));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
@@ -143,11 +148,10 @@ describe("AdvancedSearchDesktop", () => {
             expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(false);
         });
 
-        jest.mock("../../../../hooks/useSession");
 
         it("should toggle show hidden (on)", () => {
             const setShowHiddenMock = jest.fn();
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { isAdmin: true } }));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
@@ -170,7 +174,7 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle show hidden (off)", () => {
             const setShowHiddenMock = jest.fn();
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { email: "admin@admin.com", isAdmin: true } }));
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { isAdmin: true } }));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
