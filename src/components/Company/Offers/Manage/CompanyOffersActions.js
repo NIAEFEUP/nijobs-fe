@@ -28,8 +28,9 @@ const CompanyOffersActions = ({
                     <>
                         <CompanyOffersVisibilityActions
                             offer={row?.payload.offer}
-                            offerVisibilityState={row?.payload.offerVisibilityState}
-                            resetOfferVisibilityState={row?.payload.resetOfferVisibilityState}
+                            offersVisibility={row?.payload.offersVisibility}
+                            setOfferVisibility={row?.payload.setOfferVisibility}
+                            offerId={row?.payload.offerId}
                         />
                         <Tooltip title="Edit Offer">
                             <Link to={editOfferRoute}>

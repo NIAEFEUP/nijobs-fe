@@ -8,19 +8,22 @@ export const statusChips = {
     archived: <Chip label="Archived" size="small" style={{ backgroundColor: "#56A8D6" }} />,
 };
 
-const OfferTitle = ({ title, offerVisibilityState }) => {
+const OfferTitle = ({ title, offersVisibility, setOfferVisibility, offerId }) => {
     const [chips, setChips] = useState([]);
+    const isHidden = offersVisibility[offerId]?.isHidden;
+    const isBlocked = offersVisibility[offerId]?.isDisabled;
+    const isArchived = offersVisibility[offerId]?.isArchived;
 
     useEffect(() => {
         const tempChips = [];
-        if (offerVisibilityState?.isHidden)
+        if (isHidden)
             tempChips.push(statusChips.hidden);
-        if (offerVisibilityState?.isDisabled)
+        if (isBlocked)
             tempChips.push(statusChips.blocked);
-        if (offerVisibilityState?.isArchived)
+        if (isArchived)
             tempChips.push(statusChips.archived);
         setChips(tempChips);
-    }, [offerVisibilityState]);
+    }, [isArchived, isBlocked, isHidden, offerId, offersVisibility, setOfferVisibility]);
 
     return (
         <>
@@ -39,7 +42,9 @@ const OfferTitle = ({ title, offerVisibilityState }) => {
 
 OfferTitle.propTypes = {
     title: PropTypes.string.isRequired,
-    offerVisibilityState: PropTypes.object,
+    offersVisibility: PropTypes.array,
+    setOfferVisibility: PropTypes.func,
+    offerId: PropTypes.number,
 };
 
 export default OfferTitle;
