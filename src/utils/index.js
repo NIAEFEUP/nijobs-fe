@@ -7,7 +7,7 @@ import { addSnackbar } from "../actions/notificationActions";
 import { connect } from "react-redux";
 import useComponentController from "../hooks/useComponentController";
 import CancelablePromise from "cancelable-promise";
-import ReactGa from "react-ga";
+import ReactGA from "react-ga4";
 import { OFFER_MAX_LIFETIME_MONTHS } from "./TimeUtils";
 import Constants from "./Constants";
 
@@ -156,7 +156,7 @@ export const Route = ({
     ...props
 }) => {
     useEffect(() => {
-        ReactGa.pageview(window.location.pathname);
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname });
     }, []);
 
     return (
