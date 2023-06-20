@@ -7,7 +7,7 @@ import {
     FormControl,
     Typography,
     Collapse,
-    Button,
+    Button, makeStyles,
 } from "@material-ui/core";
 import React, { useState, useCallback, useContext } from "react";
 import { Redirect } from "react-router-dom";
@@ -36,12 +36,14 @@ import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
+import {Alert} from "../../../utils/alert";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
     { value: true, label: "Paid" },
     { value: false, label: "Unpaid" },
 ];
+
 
 const OfferForm = ({ context, title }) => {
     const {
@@ -102,11 +104,13 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
+
     return (
         success
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
+                <Alert type={"warning"} fontSize={1.2}>{"Your offers will stay hidden from the public until your account is approved!"}</Alert>
                 <CardHeader title={!isMobile && title } />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert

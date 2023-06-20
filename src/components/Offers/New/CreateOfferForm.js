@@ -1,4 +1,3 @@
-
 import React, { useCallback } from "react";
 import { parseRequestErrors } from "../Form/OfferUtils";
 import { newOffer } from "../../../services/offerService";
