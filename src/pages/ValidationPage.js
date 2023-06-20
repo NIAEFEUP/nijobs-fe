@@ -2,12 +2,12 @@
 /* eslint-disable react/jsx-closing-tag-location */
 /* eslint-disable indent */
 import React, { useEffect, useState } from "react";
-import {CardContent, CircularProgress, makeStyles, Button, Fab, Link, Typography} from "@material-ui/core";
+import {CardContent, CircularProgress, makeStyles, Button, Link, Typography} from "@material-ui/core";
 import { useMobile } from "../utils/media-queries";
-import { Link as RouteLink} from "react-router-dom";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { validateApplication } from "../services/companyApplicationService";
 import { getValidationError } from "../components/Apply/Company/CompanyApplicationUtils.js";
+import {RouterLink} from "../utils";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
@@ -16,6 +16,7 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        gap:"1em",
     },
     title: {
         fontWeight:500,
@@ -38,16 +39,16 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 }));
 
 const ValidationPage = () => {
+    const successMessage = {title: "Your application has been validated successfully!", text: "You should receive a confirmation email shortly. If not, please contact us:"};
     const isMobile = useMobile();
     const classes = useStyles(isMobile)();
     const { token } = useParams();
     const [loading, setLoading] = useState(true);
     const [success, setSuccess] = useState(false);
-    const [buttonPressed, setButtonPressed] = useState(false);
     const [error, setError] = useState("");
 
 
-    useEffect(() => {
+    useEffect( () => {
         async function validate() {
             try {
                 setLoading(false);
@@ -60,11 +61,14 @@ const ValidationPage = () => {
             }
 
         }
+
         validate();
 
     }, [token]);
-    const errorMessage = (error) => {
-        const { title, text } = getValidationError(error);
+
+    const getMessageCard = (error) => {
+
+        const { title, text } = success ? successMessage : getValidationError(error);
         return (
             <CardContent className={classes.content}>
                <Typography variant="h5" className={classes.title} gutterBottom>
@@ -73,20 +77,17 @@ const ValidationPage = () => {
                 <Typography variant="body1" gutterBottom align='center' >
                     {text}
                     for more information contact us:
-                    <a href="mailto:nijobs@aefeup.pt"> nijobs@aefeup.pt</a>
+                    <Link href={"mailto:nijobs@aefeup.pt"}> nijobs@aefeup.pt</Link>
                     !
                 </Typography>
 
-                <Button color= "primary" variant= "extended" className={classes.button} component={RouteLink} to={'/'} >
-                  Click here to go to Home page
+                <Button color="primary" variant="contained" className={classes.button} component={RouterLink} to="/">
+                    {"Click here to go to Home page"}
                 </Button>
+
             </CardContent>
         );
     };
-
-    if (buttonPressed) {
-        return <RouteLink to={"/"} ></RouteLink>;
-    }
 
     if (loading) {
         return (
@@ -95,21 +96,8 @@ const ValidationPage = () => {
                 <CircularProgress  />
             </CardContent>
         );
-    } else if (success) {
-            return  (
-                <CardContent className={classes.content}>
-                    <h2 className={classes.title}>Your application has been validated successfully! </h2>
-                    <span className={classes.text}>
-                        You should receive a confirmation email shortly. If not, please contact us:
-                         <Link href="mailto:nijobs@aefeup.pt">nijobs@aefeup.pt</Link>
-                    </span>
-                    <Button className={classes.button} variant="contained" onClick={() => setButtonPressed(true) }>
-                        Click here to go to Home page
-                    </Button>
-                </CardContent>
-            );
     } else {
-       return  errorMessage(error);
+       return  getMessageCard(error);
     }
 
 };
