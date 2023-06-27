@@ -1,8 +1,7 @@
-
-import {Alert as Alert_, AlertTitle} from "@material-ui/lab";
+import {Alert as MUI_Alert, AlertTitle} from "@material-ui/lab";
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useEffect, useState } from "react";
+import { Warning as WarningIcon } from "@material-ui/icons";
 
 const useStyles = (props) => makeStyles((theme) => ({
 
@@ -18,10 +17,10 @@ const useStyles = (props) => makeStyles((theme) => ({
 export const Alert = ({type, title, fontSize = 1, children}) => {
     const classes = useStyles({fontSize: fontSize})();
     return (
-        <Alert_ severity={type} className={classes.content}>
+        <MUI_Alert severity={type} className={classes.content} icon={<WarningIcon />}>
             {title ? <AlertTitle>{title}</AlertTitle> : null}
             {children}
-        </Alert_>
+        </MUI_Alert>
     )
 }
 

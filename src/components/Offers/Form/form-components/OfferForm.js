@@ -9,7 +9,7 @@ import {
     Collapse,
     Button, makeStyles,
 } from "@material-ui/core";
-import React, { useState, useCallback, useContext } from "react";
+import React, {useState, useCallback, useContext, useEffect} from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -36,7 +36,10 @@ import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
-import {Alert} from "../../../utils/alert";
+import { Alert } from "../../../utils/Alert";
+import { fetchCompanyApplication } from "../../../../services/companyService";
+import useSession from "../../../../hooks/useSession.js";
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
@@ -94,6 +97,27 @@ const OfferForm = ({ context, title }) => {
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
 
+    const [application, setApplication] = useState({state: "APPROVED"});
+    const session = useSession();
+
+    useEffect(() => {
+        if(!session.isValidating && session.isLoggedIn) {
+            const request = fetchCompanyApplication(session.data?.company?._id)
+                .then((application) => {
+                    setApplication(application);
+                })
+                .catch(() => {
+                    addSnackbar({
+                        message: "An unexpected error occurred, please try refreshing the browser window.",
+                        key: `${Date.now()}-fetchCompanyApplicationsError`,
+                    });
+                });
+            return () => {
+                request.cancel();
+            };
+        }
+    }, [addSnackbar, session.isValidating, session.isLoggedIn]);
+
     const showOwnerComponent = isAdmin && showCompanyField;
 
     const SelectStylingProps = {
@@ -104,14 +128,14 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
-
     return (
         success
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                <Alert type={"warning"} fontSize={1.2}>{"Your offers will stay hidden from the public until your account is approved!"}</Alert>
-                <CardHeader title={!isMobile && title } />
+                {(application.state !== "APPROVED") && session.isLoggedin && <Alert type={"warning"}
+                                                  fontSize={1.2}>{"This offer will stay hidden from the public until your account is approved!"}</Alert>}
+                <CardHeader title={!isMobile && title}/>
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}
@@ -168,7 +192,7 @@ const OfferForm = ({ context, title }) => {
                                         <Controller
                                             name="fields"
                                             render={(
-                                                { field: {  onBlur, name } },
+                                                { field: { onBlur, name } },
                                             ) => (
                                                 <MultiOptionAutocomplete
                                                     name={name}
