@@ -23,21 +23,21 @@ const HumanReadableErrors = Object.freeze({
 const ValidationErrors = Object.freeze({
     "invalid-token": {
         title: "Error! Application does not exist!",
-        text: "An error has occured while validating your application! The application you are trying to validate does not exist,",
+        text: "An error has occurred while validating your application! The application you are trying to validate does not exist.",
     },
     "expired-token": {
         title: "Error! Link has expired!",
-        text: "An error has occured while validating your application! The link sent to you has expired, \
-        you now need to create a new application,",
+        text: "An error has occurred while validating your application. The link that was sent to you has expired." +
+            " You will need to create a new application.",
     },
     "application-already-validated": {
         title: "Application is already validated!",
-        text: "This application is already validated",
+        text: "This application is already validated. ",
     },
 });
 
 export const getValidationError = (error) => {
-    const errorMsg = { title: "Unexpected Error!", text: "An unexpected error has occured while validating your application, " };
+    const errorMsg = { title: "Unexpected Error!", text: "An unexpected error has occurred while validating your application. " };
     if (!error) {
         return errorMsg;
     }

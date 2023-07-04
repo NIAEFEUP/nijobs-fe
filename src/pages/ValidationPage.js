@@ -39,7 +39,7 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 }));
 
 const ValidationPage = () => {
-    const successMessage = {title: "Your application has been validated successfully!", text: "You should receive a confirmation email shortly. If not, please contact us:"};
+    const successMessage = {title: "Your application has been validated successfully!", text: "You should receive a confirmation email shortly. If not, please contact us at "};
     const isMobile = useMobile();
     const classes = useStyles(isMobile)();
     const { token } = useParams();
@@ -76,7 +76,7 @@ const ValidationPage = () => {
                </Typography>
                 <Typography variant="body1" gutterBottom align='center' >
                     {text}
-                    for more information contact us:
+                    {!success ? "For more information contact us at " : ""}
                     <Link href={"mailto:nijobs@aefeup.pt"}> nijobs@aefeup.pt</Link>
                     !
                 </Typography>
