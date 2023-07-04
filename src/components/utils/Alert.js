@@ -2,6 +2,7 @@ import {Alert as MUI_Alert, AlertTitle} from "@material-ui/lab";
 import {makeStyles} from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Warning as WarningIcon } from "@material-ui/icons";
+import React from 'react';
 
 const useStyles = (props) => makeStyles((theme) => ({
 

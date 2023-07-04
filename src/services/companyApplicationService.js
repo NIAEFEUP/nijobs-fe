@@ -70,7 +70,7 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(
 
 export const validateApplication = async (token) => {
     try {
-        const res = await fetch(`${API_HOSTNAME}/apply/company/validate/${token}/confirm`, {
+        const res = await fetch(`${API_HOSTNAME}/apply/company/${token}/validate`, {
             method: "POST",
             credentials: "include",
 

@@ -37,7 +37,7 @@ import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
 import { Alert } from "../../../utils/Alert";
-import { fetchCompanyApplication } from "../../../../services/companyService";
+import { fetchCompanyApplicationState } from "../../../../services/companyService";
 import useSession from "../../../../hooks/useSession.js";
 import { addSnackbar } from "../../../../actions/notificationActions";
 
@@ -97,14 +97,14 @@ const OfferForm = ({ context, title }) => {
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
 
-    const [application, setApplication] = useState({state: "APPROVED"});
+    const [state, setState] = useState( "APPROVED");
     const session = useSession();
 
     useEffect(() => {
         if(!session.isValidating && session.isLoggedIn) {
-            const request = fetchCompanyApplication(session.data?.company?._id)
-                .then((application) => {
-                    setApplication(application);
+            const request = fetchCompanyApplicationState(session.data?.company?._id)
+                .then((state) => {
+                    setState(state);
                 })
                 .catch(() => {
                     addSnackbar({
@@ -133,7 +133,7 @@ const OfferForm = ({ context, title }) => {
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                {(application.state !== "APPROVED") && session.isLoggedin && <Alert type={"warning"}
+                {(state !== "APPROVED") && session.isLoggedIn && <Alert type={"warning"}
                                                   fontSize={1.2}>{"This offer will stay hidden from the public until your account is approved!"}</Alert>}
                 <CardHeader title={!isMobile && title}/>
                 <Content className={classes.formContent}>

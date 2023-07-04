@@ -3,7 +3,7 @@ import CompanyOffersManagementWidget from "../components/Company/Offers/Manage/C
 import { CardContent, makeStyles } from "@material-ui/core";
 import { useMobile } from "../utils/media-queries";
 import { Alert } from "../components/utils/Alert";
-import { fetchCompanyApplication } from "../services/companyService";
+import { fetchCompanyApplicationState } from "../services/companyService";
 import useSession from "../hooks/useSession";
 import { addSnackbar } from "../actions/notificationActions";
 
@@ -17,14 +17,19 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 const CompanyOffersManagementPage = () => {
     const isMobile = useMobile();
     const classes = useStyles(isMobile)();
-    const [application, setApplication] = useState({state: "APPROVED"});
+    const [state, setState_] = useState( "APPROVED");
     const session = useSession();
 
     useEffect(() => {
         if(!session.isValidating && session.isLoggedIn) {
-            const request = fetchCompanyApplication(session.data?.company?._id)
-                .then((application) => {
-                    setApplication(application);
+            const request = fetchCompanyApplicationState(session.data?.company?._id)
+                .then((state_) => {
+                    console.log(state_);
+                    console.log("Tipo");
+                    console.log(typeof state_);
+                    setState_(state_);
+                    console.log(state);
+
                 })
                 .catch(() => {
                     addSnackbar({
@@ -40,7 +45,7 @@ const CompanyOffersManagementPage = () => {
 
     return (
         <CardContent className={classes.content}>
-            {(application.state !== "APPROVED") && session.isLoggedIn && <Alert type={"warning"}
+            {(state !== "APPROVED") && session.isLoggedIn && <Alert type={"warning"}
                                               fontSize={1.2}>{"Your offers will stay hidden from the public until your account is approved!"}</Alert>}
             <CompanyOffersManagementWidget isMobile={isMobile}/>
         </CardContent>
