@@ -21,12 +21,12 @@ import CompanyOffersVisibilityActions from "./CompanyOffersVisibilityActions";
 
 const generateRow = ({
     title, location, publishDate, publishEndDate, isHidden, isArchived, hiddenReason,
-    ownerName, offersVisibility, setOfferVisibility, offerId, _id, ...args }) => ({
+    ownerName, getOfferVisibility, setOfferVisibility, offerId, _id, ...args }) => ({
     fields: {
         title: { value: (
             <OfferTitle
                 title={title}
-                offersVisibility={offersVisibility}
+                getOfferVisibility={getOfferVisibility}
                 setOfferVisibility={setOfferVisibility}
                 offerId={offerId}
             />), align: "left", linkDestination: `/offer/${_id}` },
@@ -39,7 +39,7 @@ const generateRow = ({
             title, location, publishDate, publishEndDate, isHidden,
             isArchived, hiddenReason, ownerName, _id, ...args,
         }),
-        offersVisibility: offersVisibility,
+        getOfferVisibility: getOfferVisibility,
         setOfferVisibility: setOfferVisibility,
         offerId: offerId,
     },
@@ -82,9 +82,14 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const mobileCols = ["title", "publishStartDate", "actions"];
     const [offerVisibilityStates, setOfferVisibilityStates] = useState([]);
 
-    const setOfferVisibilityState = useCallback((offerId, state) => {
+    const getOfferVisibilityState = useCallback(
+        (offerId) => offerVisibilityStates[offerId],
+        [offerVisibilityStates]
+    );
+
+    const setOfferVisibilityState = useCallback((offerId, stateFunc) => {
         const newVisibilityStates = [...offerVisibilityStates];
-        newVisibilityStates[offerId] = state;
+        newVisibilityStates[offerId] = stateFunc(newVisibilityStates[offerId]);
         setOfferVisibilityStates(newVisibilityStates);
     }, [offerVisibilityStates, setOfferVisibilityStates]);
 
@@ -123,13 +128,13 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         if (Array.isArray(fetchedOffers)) {
             const fetchedRows = fetchedOffers.reduce((rows, row, i) => {
                 rows[row._id] = generateRow(
-                    { ...row, offersVisibility: offerVisibilityStates, setOfferVisibility: setOfferVisibilityState, offerId: i }
+                    { ...row, getOfferVisibility: getOfferVisibilityState, setOfferVisibility: setOfferVisibilityState, offerId: i }
                 );
                 return rows;
             }, {});
             setOffers(fetchedRows);
         }
-    }, [offerVisibilityStates, setOffers, setOfferVisibilityState, fetchedOffers]);
+    }, [setOffers, setOfferVisibilityState, fetchedOffers, getOfferVisibilityState]);
 
     const RowContent = useCallback(({ rowKey, labelId }) => {
         const fields = offers[rowKey].fields;
@@ -185,7 +190,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                             <Grid item xs={6} justifyContent="center">
                                 <CompanyOffersVisibilityActions
                                     offer={row?.payload.offer}
-                                    offersVisibility={row?.payload.offersVisibility}
+                                    getOfferVisibility={row?.payload.getOfferVisibility}
                                     setOfferVisibility={row?.payload.setOfferVisibility}
                                     offerId={row?.payload.offerId}
                                 />

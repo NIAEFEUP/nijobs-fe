@@ -1,40 +1,43 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Chip } from "@material-ui/core";
+import { Chip, makeStyles } from "@material-ui/core";
 
-export const statusChips = {
+const statusChips = {
     hidden: <Chip label="Hidden" size="small" style={{ backgroundColor: "#90A4AE" }} />,
     blocked: <Chip label="Blocked" size="small" style={{ backgroundColor: "#DC4338" }} />,
     archived: <Chip label="Archived" size="small" style={{ backgroundColor: "#56A8D6" }} />,
 };
 
-const OfferTitle = ({ title, offersVisibility, setOfferVisibility, offerId }) => {
+const useStyles = makeStyles(() => ({
+    chips: {
+        position: "absolute",
+    },
+}));
+
+const OfferTitle = ({ title, getOfferVisibility, setOfferVisibility, offerId }) => {
     const [chips, setChips] = useState([]);
-    const isHidden = offersVisibility[offerId]?.isHidden;
-    const isBlocked = offersVisibility[offerId]?.isDisabled;
-    const isArchived = offersVisibility[offerId]?.isArchived;
+    const isHidden = getOfferVisibility(offerId)?.isHidden;
+    const isBlocked = getOfferVisibility(offerId)?.isDisabled;
+    const isArchived = getOfferVisibility(offerId)?.isArchived;
+
+    const classes = useStyles();
 
     useEffect(() => {
         const tempChips = [];
         if (isHidden)
-            tempChips.push(statusChips.hidden);
+            tempChips.push(statusChips.hidden, <span>&nbsp;</span>);
         if (isBlocked)
-            tempChips.push(statusChips.blocked);
+            tempChips.push(statusChips.blocked, <span>&nbsp;</span>);
         if (isArchived)
-            tempChips.push(statusChips.archived);
+            tempChips.push(statusChips.archived, <span>&nbsp;</span>);
         setChips(tempChips);
-    }, [isArchived, isBlocked, isHidden, offerId, offersVisibility, setOfferVisibility]);
+    }, [isArchived, isBlocked, isHidden, setOfferVisibility]);
 
     return (
         <>
             {title}
-            <div style={{ position: "absolute" }}>
-                {chips.reduce((res, chip, index, chips) => {
-                    res.push(chip);
-                    if (index !== chips.length - 1)
-                        res.push(<span>&nbsp;</span>);
-                    return res;
-                }, [])}
+            <div className={classes.chips}>
+                {chips}
             </div>
         </>
     );
@@ -42,9 +45,9 @@ const OfferTitle = ({ title, offersVisibility, setOfferVisibility, offerId }) =>
 
 OfferTitle.propTypes = {
     title: PropTypes.string.isRequired,
-    offersVisibility: PropTypes.array,
-    setOfferVisibility: PropTypes.func,
-    offerId: PropTypes.number,
+    getOfferVisibility: PropTypes.func.isRequired,
+    setOfferVisibility: PropTypes.func.isRequired,
+    offerId: PropTypes.number.isRequired,
 };
 
 export default OfferTitle;

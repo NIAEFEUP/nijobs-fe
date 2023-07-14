@@ -34,7 +34,7 @@ export const GenerateTableCellFromField = (id, fieldId, fieldOptions, labelId, e
                 id={id === 0 ? `${labelId}-label` : undefined}
                 align={fieldOptions.align || "right"}
             >
-                <div style={{ marginBlock: extended && "20px" }}>
+                <div style={{ marginBlock: extended ? "20px" : undefined }}>
                     {fieldOptions?.linkDestination ?
                         <Link to={linkDestination} className={classes.fieldLink}>
                             {fieldOptions?.value}

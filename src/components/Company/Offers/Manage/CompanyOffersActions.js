@@ -28,7 +28,7 @@ const CompanyOffersActions = ({
                     <>
                         <CompanyOffersVisibilityActions
                             offer={row?.payload.offer}
-                            offersVisibility={row?.payload.offersVisibility}
+                            getOfferVisibility={row?.payload.getOfferVisibility}
                             setOfferVisibility={row?.payload.setOfferVisibility}
                             offerId={row?.payload.offerId}
                         />
