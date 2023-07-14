@@ -213,8 +213,6 @@ describe("App", () => {
     });
 
     it("Should render mobile collapsable content on mobile device", async () => {
-        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
-
         const MOBILE_WIDTH_PX = 360;
         window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
 
@@ -258,6 +256,7 @@ describe("App", () => {
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve([offer])
         ));
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
         hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
         enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
 
@@ -298,6 +297,7 @@ describe("App", () => {
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve([offer])
         ));
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
         hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
         enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
 

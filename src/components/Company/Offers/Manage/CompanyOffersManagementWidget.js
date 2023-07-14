@@ -83,7 +83,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
     const [offerVisibilityStates, setOfferVisibilityStates] = useState([]);
 
     const setOfferVisibilityState = useCallback((offerId, state) => {
-        const newVisibilityStates = offerVisibilityStates;
+        const newVisibilityStates = [...offerVisibilityStates];
         newVisibilityStates[offerId] = state;
         setOfferVisibilityStates(newVisibilityStates);
     }, [offerVisibilityStates, setOfferVisibilityStates]);

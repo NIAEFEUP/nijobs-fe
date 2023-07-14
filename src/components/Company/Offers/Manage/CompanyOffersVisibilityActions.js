@@ -35,11 +35,11 @@ const CompanyOffersVisibilityActions = ({ offer, offersVisibility, setOfferVisib
         setLoadingOfferVisibility(true);
         hideOfferService(offer._id)
             .then(() => {
+                setOfferVisibility(offerId, { ...offersVisibility[offerId], isVisible: false, isHidden: true });
                 addSnackbar({
                     message: "The offer was hidden",
                     key: `${Date.now()}-${offer._id}-hidden`,
                 });
-                setOfferVisibility(offerId, { ...offersVisibility[offerId], isVisible: false, isHidden: true });
             })
             .catch((err) => {
                 if (onError) onError(err);
@@ -50,11 +50,11 @@ const CompanyOffersVisibilityActions = ({ offer, offersVisibility, setOfferVisib
         setLoadingOfferVisibility(true);
         enableOfferService(offer._id)
             .then(() => {
+                setOfferVisibility(offerId, { ...offersVisibility[offerId], isVisible: true, isHidden: false });
                 addSnackbar({
                     message: "The offer was enabled",
                     key: `${Date.now()}-${offer._id}-enabled`,
                 });
-                setOfferVisibility(offerId, { ...offersVisibility[offerId], isVisible: true, isHidden: false });
             })
             .catch((err) => {
                 if (onError) onError(err);
