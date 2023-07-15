@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Chip, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     hiddenChip: {
         backgroundColor: "#90A4AE",
-        marginRight: "5px",
+        marginRight: theme.spacing(.5),
     },
     blockedChip: {
         backgroundColor: "#DC4338",
-        marginRight: "5px",
+        marginRight: theme.spacing(.5),
     },
     archivedChip: {
         backgroundColor: "#56A8D6",
-        marginRight: "5px",
+        marginRight: theme.spacing(.5),
     },
     chips: {
         position: "absolute",
