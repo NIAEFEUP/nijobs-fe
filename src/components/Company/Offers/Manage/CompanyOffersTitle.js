@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import { Chip, makeStyles } from "@material-ui/core";
 
 const statusChips = {
-    hidden: <Chip label="Hidden" size="small" style={{ backgroundColor: "#90A4AE" }} />,
-    blocked: <Chip label="Blocked" size="small" style={{ backgroundColor: "#DC4338" }} />,
-    archived: <Chip label="Archived" size="small" style={{ backgroundColor: "#56A8D6" }} />,
+    hidden: <Chip label="Hidden" size="small" data-testid="HiddenChip" style={{ backgroundColor: "#90A4AE" }} />,
+    blocked: <Chip label="Blocked" size="small" data-testid="BlockedChip" style={{ backgroundColor: "#DC4338" }} />,
+    archived: <Chip label="Archived" size="small"  data-testid="ArchivedChip" style={{ backgroundColor: "#56A8D6" }} />,
 };
 
 const useStyles = makeStyles(() => ({
