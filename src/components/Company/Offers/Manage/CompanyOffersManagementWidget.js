@@ -27,7 +27,6 @@ const generateRow = ({
             <OfferTitle
                 title={title}
                 getOfferVisibility={getOfferVisibility}
-                setOfferVisibility={setOfferVisibility}
                 offerId={offerId}
             />), align: "left", linkDestination: `/offer/${_id}` },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
