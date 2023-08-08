@@ -49,7 +49,7 @@ const generateApplications = (n, forceState) => {
     for (let i = 0; i < n; i++) {
         applications.push(generateApplication(
             i,
-            forceState || STATES[i % 3]
+            forceState || STATES[(i) % 4]
         ));
     }
     return applications;
@@ -805,6 +805,8 @@ describe("Application Review Widget", () => {
 
     it("Should reset filters", async () => {
         const applications = generateApplications(5);
+        console.log("Hello");
+        console.log(applications);
 
         fetch.mockResponse(JSON.stringify({ applications }));
 
@@ -820,13 +822,13 @@ describe("Application Review Widget", () => {
 
         fireEvent.click(screen.getByLabelText("Filter list"));
 
-        fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "0" } });
+        fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "1" } });
 
         fireEvent.change(screen.getByLabelText("Date From..."), { target: { value:
-            format(new Date(applications[0].submittedAt), "yyyy-MM-dd"),
+            format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
         } });
         fireEvent.change(screen.getByLabelText("Date To..."), { target: { value:
-            format(new Date(applications[0].submittedAt), "yyyy-MM-dd"),
+            format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
         } });
 
         await userEvent.click(screen.getByLabelText("State"));
@@ -837,7 +839,7 @@ describe("Application Review Widget", () => {
 
         expect(screen.getAllByTestId("application-row")
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual([applications[0].companyName]);
+        ).toStrictEqual([applications[1].companyName]);
 
         fireEvent.click(screen.getByLabelText("Filter list"));
 

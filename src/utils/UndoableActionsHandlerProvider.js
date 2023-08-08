@@ -86,16 +86,25 @@ const ActionNotification = connect(mapStateToProps, mapDispatchToProps)(BaseActi
 const UndoableActionsHandlerProvider = ({ children }) => {
     const [actions, setActions] = useState({});
     const [closeLock, setCloseLock] = useState(false);
-    const initialBeforeUnloadEventListener = useRef();
+    const initialBeforeUnloadEventListener = useRef(window.onbeforeunload);
 
     useEffect(() => {
         if (Object.keys(actions).length && !closeLock) {
             setCloseLock(true);
             initialBeforeUnloadEventListener.current = window.onbeforeunload;
-            window.onbeforeunload =  () => "Some changes might have not taken effect yet...";
+
+            Object.defineProperty(window, "onbeforeunload", {
+                value: () => "Some changes might have not taken effect yet...",
+                writable: true,
+            });
+
         } else if (!Object.keys(actions).length && closeLock) {
             setCloseLock(false);
-            window.onbeforeunload = initialBeforeUnloadEventListener.current;
+
+            Object.defineProperty(window, "onbeforeunload", {
+                value: initialBeforeUnloadEventListener.current,
+                writable: true,
+            });
         }
 
     }, [actions, closeLock]);

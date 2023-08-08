@@ -23,7 +23,7 @@ describe("Search URL Widget", () => {
 
             const testString = "test-url";
 
-            global.window = Object.create(window);
+            // global.window = Object.create(window);
             Object.defineProperty(window, "location", {
                 value: {
                     href: testString,
@@ -49,7 +49,7 @@ describe("Search URL Widget", () => {
 
             const testString = "test-string";
 
-            global.window = Object.create(window);
+            //global.window = Object.create(window);
             Object.defineProperty(window, "location", {
                 value: {
                     href: testString,
