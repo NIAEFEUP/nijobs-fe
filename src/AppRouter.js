@@ -38,6 +38,7 @@ import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import ChangeLogPage from "./pages/ChangeLogPage";
+import CompanyProfilePage from "./pages/CompanyProfilePage";
 
 /**
  *
@@ -170,6 +171,19 @@ const AppRouter = () => (
                     context={FinishCompanyRegistrationControllerContext}
                 >
                     <FinishCompanyRegistrationPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                key="/company/:id"
+                path="/company/:id"
+            >
+                <PageLayout
+                    key="/company/:id"
+                    pageTitle="Company Profile"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <CompanyProfilePage />
                 </PageLayout>
             </ProtectedRoute>
             <ProtectedRoute

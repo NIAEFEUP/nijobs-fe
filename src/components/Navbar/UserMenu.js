@@ -176,6 +176,19 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                 className={classes.menuList}
                 autoFocusItem={open}
             >
+                {
+                    sessionData?.company?.hasFinishedRegistration
+                        ? (
+                            <MenuItem
+                                button
+                                disableTouchRipple
+                                component={Link}
+                                to={`company/${sessionData.company._id}`}
+                            >
+                                My Profile
+                            </MenuItem>
+                        ) : <></>
+                }
                 <MenuItem button disableTouchRipple onClick={handleLogout}>Logout</MenuItem>
             </MenuList>
         </div>
