@@ -272,6 +272,25 @@ describe("Application Review Widget", () => {
             .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/reject`, { credentials: "include", method: "POST" });
     });
 
+    it("Should not have approve and reject buttons in unverified applications", async () => {
+        const applications = generateApplications(1, "UNVERIFIED");
+
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () =>
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
+        );
+        
+        expect(screen.queryByLabelText("Approve Application")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Reject Application")).not.toBeInTheDocument();
+    })
+
     it("Should maintain state filter after rejecting an application", async () => {
         const applications = generateApplications(1, "PENDING");
 
