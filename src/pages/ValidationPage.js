@@ -6,7 +6,7 @@ import {CardContent, CircularProgress, makeStyles, Button, Link, Typography} fro
 import { useMobile } from "../utils/media-queries";
 import { useParams } from "react-router-dom";
 import { validateApplication } from "../services/companyApplicationService";
-import { getValidationError } from "../components/Apply/Company/CompanyApplicationUtils.js";
+import { getValidationMessage } from "../components/Apply/Company/CompanyApplicationUtils.js";
 import {RouterLink} from "../utils";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
@@ -39,7 +39,7 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 }));
 
 const ValidationPage = () => {
-    const successMessage = {title: "Your application has been validated successfully!", text: "You should receive a confirmation email shortly. If not, please contact us at "};
+    const successMessage = getValidationMessage("success");
     const isMobile = useMobile();
     const classes = useStyles(isMobile)();
     const { token } = useParams();

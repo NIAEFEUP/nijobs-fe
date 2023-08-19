@@ -20,7 +20,11 @@ const HumanReadableErrors = Object.freeze({
     "company-application-recently-created": "There is an application created less than 10 minutes ago associated with this email.",
 });
 
-const ValidationErrors = Object.freeze({
+const ValidationMessages = Object.freeze({
+    "success": {
+        title: "Your application has been validated successfully!",
+        text: "You should receive a confirmation email shortly. If not, please contact us at ",
+    },
     "invalid-token": {
         title: "Error! Application does not exist!",
         text: "An error has occurred while validating your application! The application you are trying to validate does not exist.",
@@ -41,8 +45,8 @@ export const getValidationError = (error) => {
     if (!error) {
         return errorMsg;
     }
-    if (typeof ValidationErrors[error] === "object") {
-        return ValidationErrors[error];
+    if (typeof ValidationMessages[description] === "object") {
+        return ValidationMessages[description];
     }
     return errorMsg;
 };
