@@ -18,7 +18,7 @@ const useStyles = (props) => makeStyles((theme) => ({
 export const Alert = ({type, title, fontSize = 1, children}) => {
     const classes = useStyles({fontSize: fontSize})();
     return (
-        <MUI_Alert severity={type} className={classes.content} icon={<WarningIcon />}>
+        <MUI_Alert severity={type} className={classes.content} icon={<WarningIcon />} data-testid="Alert">
             {title ? <AlertTitle>{title}</AlertTitle> : null}
             {children}
         </MUI_Alert>

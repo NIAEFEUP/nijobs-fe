@@ -112,9 +112,6 @@ const OfferForm = ({ context, title }) => {
                         key: `${Date.now()}-fetchCompanyApplicationsError`,
                     });
                 });
-            return () => {
-                request.cancel();
-            };
         }
     }, [addSnackbar, session.isValidating, session.isLoggedIn]);
 

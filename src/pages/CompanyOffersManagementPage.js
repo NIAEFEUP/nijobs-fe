@@ -37,9 +37,6 @@ const CompanyOffersManagementPage = () => {
                         key: `${Date.now()}-fetchCompanyApplicationsError`,
                     });
                 });
-            return () => {
-                request.cancel();
-            };
         }
     }, [addSnackbar, session.isLoggedIn, session.isValidating]);
 
