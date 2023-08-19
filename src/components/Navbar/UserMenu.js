@@ -183,7 +183,7 @@ const UserMenuContent = React.forwardRef(({ open, isMobile = false, sessionData,
                                 button
                                 disableTouchRipple
                                 component={Link}
-                                to={`company/${sessionData.company._id}`}
+                                to={`/company/${sessionData.company._id}`}
                             >
                                 My Profile
                             </MenuItem>
