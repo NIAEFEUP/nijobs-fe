@@ -44,13 +44,14 @@ const MultiOptionTextField = ({
     id,
 }) => {
     const classes = useMultiOptionTextFieldStyle();
+
     return (
         <>
             <Typography variant="h6">
                 {label}
             </Typography>
             <Box id={id} display="flex" flexDirection="column">
-                {values.map(({ id }, i) => (
+                {values.map(({ id, value }, i) => (
                     <Controller
                         key={id}
                         name={`${controllerName}.${i}.value`}
@@ -75,7 +76,7 @@ const MultiOptionTextField = ({
                                 {...textFieldProps}
                             />)}
                         control={control}
-                        defaultValue={getValues(`${controllerName}.${i}.value`) || ""}
+                        defaultValue={getValues ? (getValues(`${controllerName}.${i}.value`) || "") : value}
                     />
                 ))}
                 <Button

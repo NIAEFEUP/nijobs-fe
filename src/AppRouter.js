@@ -38,6 +38,8 @@ import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import ChangeLogPage from "./pages/ChangeLogPage";
+import EditCompanyProfilePage from "./pages/EditCompanyProfilePage";
+import { EditCompanyController } from "./components/Company/Edit/EditCompanyProfileForm";
 
 /**
  *
@@ -186,6 +188,23 @@ const AppRouter = () => (
                     layout={LayoutType.DESKTOP}
                 >
                     <CompanyOffersManagementPage />
+                </PageLayout>
+            </ProtectedRoute>
+            <ProtectedRoute
+                exact
+                key="/company/:id/edit"
+                path="/company/:id/edit"
+                unauthorizedRedirectPath="/"
+                unauthorizedRedirectMessage="You are not allowed to edit this company"
+                authorize={(user) => !!(user?.company || user?.isAdmin)}
+                // controller={EditCompanyController}
+            >
+                <PageLayout
+                    key="/company/:id/edit"
+                    pageTitle="Edit Profile"
+                    layout={LayoutType.DESKTOP}
+                >
+                    <EditCompanyProfilePage />
                 </PageLayout>
             </ProtectedRoute>
             <ProtectedRoute

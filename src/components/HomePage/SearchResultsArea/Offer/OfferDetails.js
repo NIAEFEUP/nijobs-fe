@@ -38,6 +38,8 @@ const OfferDetails = ({
     handleError,
 }) => {
 
+    console.log("fds: ", offer.ownerLogo);
+
     const { data, isValidating, error, isLoggedIn } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading, hasApplyButton: !!offer?.applyURL });

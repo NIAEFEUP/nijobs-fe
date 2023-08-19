@@ -5,7 +5,6 @@ import { Controller, useWatch } from "react-hook-form";
 import { FinishCompanyRegistrationConstants } from "./FinishCompanyRegistrationUtils";
 
 export const useBio = ({ control }) => {
-
     const bio = useWatch({
         name: "bio",
         control,
@@ -15,8 +14,8 @@ export const useBio = ({ control }) => {
     return {
         validateStep,
     };
-
 };
+
 const BioForm = () => {
     const { control, errors } = useContext(FinishCompanyRegistrationControllerContext);
     return (
