@@ -35,7 +35,7 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
         }
     },
 
-    
+
 }));
 
 const ValidationPage = () => {
@@ -68,7 +68,7 @@ const ValidationPage = () => {
 
     const getMessageCard = (error) => {
 
-        const { title, text } = success ? successMessage : getValidationError(error);
+        const { title, text } = success ? successMessage : getValidationMessage(error);
         return (
             <CardContent className={classes.content}>
                <Typography variant="h5" className={classes.title} gutterBottom>

@@ -40,9 +40,9 @@ const ValidationMessages = Object.freeze({
     },
 });
 
-export const getValidationError = (error) => {
+export const getValidationMessage = (description) => {
     const errorMsg = { title: "Unexpected Error!", text: "An unexpected error has occurred while validating your application. " };
-    if (!error) {
+    if (!description) {
         return errorMsg;
     }
     if (typeof ValidationMessages[description] === "object") {
