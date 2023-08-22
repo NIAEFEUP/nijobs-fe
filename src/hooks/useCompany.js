@@ -25,13 +25,13 @@ export default  (id) => {
         }
     };
 
-    const { data, error, isLoading, mutate } = useSWR(`${API_HOSTNAME}/company/${id}`, getCompany);
+    const { data, error, mutate } = useSWR(`${API_HOSTNAME}/company/${id}`, getCompany);
     const company = useMemo(() => data ? data.company : null, [data]);
 
     return {
         company,
         error,
-        loading: isLoading,
+        loading: !data,
         mutate,
     };
 };
