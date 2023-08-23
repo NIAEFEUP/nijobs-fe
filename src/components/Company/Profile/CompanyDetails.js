@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Avatar, Grid, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import useProfileStyles from "./ProfileWidgetStyles";
+import useProfileStyles from "./ProfileStyles";
 
 
 const CompanyDetails = ({ company, loading }) => {
@@ -11,7 +11,7 @@ const CompanyDetails = ({ company, loading }) => {
     return (
         <div className={classes.companyDetails}>
             <Grid container spacing={4} alignItems="center">
-                <Grid item xs={8} className={classes.companyDescription}>
+                <Grid item /* xs={8} */ xs={12} className={classes.companyDescription}>
                     {
                         loading ?
                             <>
@@ -44,17 +44,17 @@ const CompanyDetails = ({ company, loading }) => {
                             </>
                     }
                 </Grid>
-                <Grid item xs={4}>
+                {/* <Grid item xs={4}>
                     {
                         loading ?
                             <Skeleton variant="rect" height="50px" />
                             :
-                            <>
+                            <div className={classes.companyContacts}>
                                 <Typography variant="h6">
                                     Contacts:
                                 </Typography>
                                 <Typography variant="body1">
-                                    <ul className={classes.companyContacts}>
+                                    <ul>
                                         {company.contacts.map((contact) =>
                                             <li key={contact}>
                                                 {contact}
@@ -62,9 +62,9 @@ const CompanyDetails = ({ company, loading }) => {
                                         )}
                                     </ul>
                                 </Typography>
-                            </>
+                            </div>
                     }
-                </Grid>
+                </Grid> */}
             </Grid>
         </div>
     );
