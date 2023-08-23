@@ -37,12 +37,26 @@ export default makeStyles((theme) => ({
         display: "absolute",
     },
     companyContacts: {
-        marginBottom: "8px",
-        marginTop: "8px",
+        "& ul": {
+            marginBottom: "8px",
+            marginTop: "8px",
+        },
+        paddingBlock: theme.spacing(2),
     },
     divider: {
         "&&": {
             margin: 0,
         },
+    },
+    textButton: {
+        width: "100%",
+        alignItems: "center",
+    },
+    profileActions: {
+        paddingTop: theme.spacing(1),
+        paddingBottom: theme.spacing(1),
+    },
+    actionsHeader: {
+        paddingBottom: theme.spacing(1),
     },
 }));

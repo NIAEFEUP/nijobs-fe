@@ -1,11 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CompanyDetails from "./CompanyDetails";
-import useProfileWidgetsStyles from "./ProfileWidgetStyles";
-import { Divider } from "@material-ui/core";
+import useProfileStyles from "./ProfileStyles";
+import ProfileActions from "./ProfileActions";
 
 const ProfileWidget = ({ company, loading }) => {
-    const classes = useProfileWidgetsStyles();
+    const classes = useProfileStyles();
 
     return (
         <div className={classes.profileWidget}>
@@ -13,7 +13,9 @@ const ProfileWidget = ({ company, loading }) => {
                 company={company}
                 loading={loading}
             />
-            <Divider className={classes.divider} />
+            <ProfileActions
+                company={company}
+            />
         </div>
     );
 };
