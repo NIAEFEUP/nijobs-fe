@@ -286,10 +286,10 @@ describe("Application Review Widget", () => {
                     </SnackbarProvider>
                 </MuiPickersUtilsProvider>, { initialState: {}, theme })
         );
-        
+
         expect(screen.queryByLabelText("Approve Application")).not.toBeInTheDocument();
         expect(screen.queryByLabelText("Reject Application")).not.toBeInTheDocument();
-    })
+    });
 
     it("Should maintain state filter after rejecting an application", async () => {
         const applications = generateApplications(1, "PENDING");

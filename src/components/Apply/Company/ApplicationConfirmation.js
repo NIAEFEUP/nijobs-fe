@@ -23,7 +23,8 @@ const ApplicationConfirmation = () => {
             <CardContent className={classes.content}>
                 <Typography variant="body2">
                     Application Submitted: You should receive an email containing a confirmation link for your application.
-                    Please confirm it within 10 minutes; otherwise, the link will expire. If you have not received an email, please contact us at
+                    Please confirm it within 10 minutes; otherwise, the link will expire. If you have not received an email,
+                    please contact us at
                     {" "}
                     <Link color="secondary" href={`mailto:${Constants.CONTACT_US_EMAIL}`}>
                         {Constants.CONTACT_US_EMAIL}

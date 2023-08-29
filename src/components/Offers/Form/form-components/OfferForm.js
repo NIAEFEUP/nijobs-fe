@@ -7,9 +7,9 @@ import {
     FormControl,
     Typography,
     Collapse,
-    Button, makeStyles,
+    Button,
 } from "@material-ui/core";
-import React, {useState, useCallback, useContext, useEffect} from "react";
+import React, { useState, useCallback, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -37,7 +37,7 @@ import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
 import { Alert } from "../../../utils/Alert";
-import { fetchCompanyApplicationState } from "../../../../services/companyService";
+import { fetchCompanyApplication } from "../../../../services/companyService";
 import useSession from "../../../../hooks/useSession.js";
 import { addSnackbar } from "../../../../actions/notificationActions";
 
@@ -97,14 +97,14 @@ const OfferForm = ({ context, title }) => {
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
 
-    const [state, setState] = useState( "APPROVED");
+    const [state, setState] = useState("APPROVED");
     const session = useSession();
 
     useEffect(() => {
-        if(!session.isValidating && session.isLoggedIn) {
-            const request = fetchCompanyApplicationState(session.data?.company?._id)
-                .then((state) => {
-                    setState(state);
+        if (!session.isValidating && session.isLoggedIn) {
+            fetchCompanyApplication(session.data?.company?._id)
+                .then((application) => {
+                    setState(application.state);
                 })
                 .catch(() => {
                     addSnackbar({
@@ -113,7 +113,7 @@ const OfferForm = ({ context, title }) => {
                     });
                 });
         }
-    }, [addSnackbar, session.isValidating, session.isLoggedIn]);
+    }, [session.isValidating, session.isLoggedIn, session.data.company._id]);
 
     const showOwnerComponent = isAdmin && showCompanyField;
 
@@ -130,9 +130,17 @@ const OfferForm = ({ context, title }) => {
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
-                {(state !== "APPROVED") && session.isLoggedIn && <Alert type={"warning"}
-                                                  fontSize={1.2}>{"This offer will stay hidden from the public until your account is approved!"}</Alert>}
-                <CardHeader title={!isMobile && title}/>
+                {(state !== "APPROVED") && session.isLoggedIn &&
+                <Alert
+                    type={"warning"}
+                    fontSize={1.2}
+                >
+                    {
+                        "This offer will stay hidden from the public until your account is approved!"
+                    }
+                </Alert>
+                }
+                <CardHeader title={!isMobile && title} />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
                         isLoggedIn={isLoggedIn}

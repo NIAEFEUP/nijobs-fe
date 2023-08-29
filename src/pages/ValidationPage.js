@@ -1,13 +1,10 @@
-/* eslint-disable react/jsx-indent */
-/* eslint-disable react/jsx-closing-tag-location */
-/* eslint-disable indent */
 import React, { useEffect, useState } from "react";
-import {CardContent, CircularProgress, makeStyles, Button, Link, Typography} from "@material-ui/core";
+import { CardContent, CircularProgress, makeStyles, Button, Link, Typography } from "@material-ui/core";
 import { useMobile } from "../utils/media-queries";
 import { useParams } from "react-router-dom";
 import { validateApplication } from "../services/companyApplicationService";
 import { getValidationMessage } from "../components/Apply/Company/CompanyApplicationUtils.js";
-import {RouterLink} from "../utils";
+import { RouterLink } from "../utils";
 
 const useStyles = (isMobile) => makeStyles((theme) => ({
     content: {
@@ -16,10 +13,10 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap:"1em",
+        gap: "1em",
     },
     title: {
-        fontWeight:500,
+        fontWeight: 500,
     },
     text: {
         fontSize: theme.typography.body1,
@@ -29,10 +26,10 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
     },
     button: {
         background: theme.palette.primary.main,
-        color:theme.palette.dark.contrastText,
-        '&:hover':{
+        color: theme.palette.dark.contrastText,
+        "&:hover": {
             background: theme.palette.secondary.main,
-        }
+        },
     },
 
 
@@ -48,7 +45,7 @@ const ValidationPage = () => {
     const [error, setError] = useState("");
 
 
-    useEffect( () => {
+    useEffect(() => {
         async function validate() {
             try {
                 setLoading(false);
@@ -71,10 +68,10 @@ const ValidationPage = () => {
         const { title, text } = success ? successMessage : getValidationMessage(error);
         return (
             <CardContent className={classes.content}>
-               <Typography variant="h5" className={classes.title} gutterBottom>
+                <Typography variant="h5" className={classes.title} gutterBottom>
                     {title}
-               </Typography>
-                <Typography variant="body1" gutterBottom align='center' >
+                </Typography>
+                <Typography variant="body1" gutterBottom align="center">
                     {text}
                     {!success ? "For more information contact us at " : ""}
                     <Link href={"mailto:nijobs@aefeup.pt"}> nijobs@aefeup.pt</Link>
@@ -97,7 +94,7 @@ const ValidationPage = () => {
             </CardContent>
         );
     } else {
-       return  getMessageCard(error);
+        return  getMessageCard(error);
     }
 
 };

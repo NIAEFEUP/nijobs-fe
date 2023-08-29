@@ -1,6 +1,6 @@
-import {buildCancelableRequest} from "../utils";
-import {createErrorEvent, createEvent, measureTime} from "../utils/analytics";
-import {EVENT_TYPES, TIMED_ACTIONS} from "../utils/analytics/constants";
+import { buildCancelableRequest } from "../utils";
+import { createErrorEvent, createEvent, measureTime } from "../utils/analytics";
+import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import ErrorTypes from "../utils/ErrorTypes";
 import Constants from "../utils/Constants";
 import config from "../config";
@@ -8,16 +8,15 @@ import config from "../config";
 const COMPANY_APPLICATION_FETCH_METRIC_ID = "company_application/fetch";
 const { API_HOSTNAME } = config;
 
-export const fetchCompanyApplicationState = buildCancelableRequest(measureTime(TIMED_ACTIONS.COMPANY_APPLICATION_FETCH, async (companyId) => {
+export const fetchCompanyApplication = buildCancelableRequest(measureTime(TIMED_ACTIONS.COMPANY_APPLICATION_FETCH, async (companyId) => {
 
     let isErrorRegistered = false;
     try {
-        const res = await fetch(`${API_HOSTNAME}/company/${companyId}/state`, {
+        const res = await fetch(`${API_HOSTNAME}/company/${companyId}/application`, {
             method: "GET",
             credentials: "include",
         });
         const json = await res.json();
-        console.log(json);
 
         if (!res.ok) {
 

@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import CompanyOffersManagementWidget from "../components/Company/Offers/Manage/CompanyOffersManagementWidget";
 import { CardContent, makeStyles } from "@material-ui/core";
 import { useMobile } from "../utils/media-queries";
 import { Alert } from "../components/utils/Alert";
-import { fetchCompanyApplicationState } from "../services/companyService";
+import { fetchCompanyApplication } from "../services/companyService";
 import useSession from "../hooks/useSession";
 import { addSnackbar } from "../actions/notificationActions";
 
@@ -17,19 +17,14 @@ const useStyles = (isMobile) => makeStyles((theme) => ({
 const CompanyOffersManagementPage = () => {
     const isMobile = useMobile();
     const classes = useStyles(isMobile)();
-    const [state, setState_] = useState( "APPROVED");
+    const [state, setState_] = useState("APPROVED");
     const session = useSession();
 
     useEffect(() => {
-        if(!session.isValidating && session.isLoggedIn) {
-            const request = fetchCompanyApplicationState(session.data?.company?._id)
-                .then((state_) => {
-                    console.log(state_);
-                    console.log("Tipo");
-                    console.log(typeof state_);
-                    setState_(state_);
-                    console.log(state);
-
+        if (!session.isValidating && session.isLoggedIn) {
+            fetchCompanyApplication(session.data?.company?._id)
+                .then((application) => {
+                    setState_(application.state);
                 })
                 .catch(() => {
                     addSnackbar({
@@ -38,13 +33,20 @@ const CompanyOffersManagementPage = () => {
                     });
                 });
         }
-    }, [addSnackbar, session.isLoggedIn, session.isValidating]);
+    }, [session.data.company._id, session.isLoggedIn, session.isValidating]);
 
     return (
         <CardContent className={classes.content}>
-            {(state !== "APPROVED") && session.isLoggedIn && <Alert type={"warning"}
-                                              fontSize={1.2}>{"Your offers will stay hidden from the public until your account is approved!"}</Alert>}
-            <CompanyOffersManagementWidget isMobile={isMobile}/>
+            {
+                (state !== "APPROVED") && session.isLoggedIn &&
+                <Alert
+                    type={"warning"}
+                    fontSize={1.2}
+                >
+                    {"Your offers will stay hidden from the public until your account is approved!"}
+                </Alert>
+            }
+            <CompanyOffersManagementWidget isMobile={isMobile} />
         </CardContent>
     );
 };

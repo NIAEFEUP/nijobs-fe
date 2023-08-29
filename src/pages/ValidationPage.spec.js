@@ -25,53 +25,58 @@ describe("Validation Page", () => {
         const page = await render(
             <BrowserRouter>
                 <ThemeProvider theme={AppTheme}>
-                    <ValidationPage></ValidationPage>
+                    <ValidationPage />
                 </ThemeProvider>
             </BrowserRouter>,
         );
 
-        const {title, text} = getValidationMessage("success");
+        const { title } = getValidationMessage("success");
 
         expect(page.queryByText(title)).toBeInTheDocument();
     });
 
     it("Should show error message if token does not exist", async () => {
-        validateApplication.mockImplementation(() =>{ throw [{ msg: "invalid-token" }]});
+        validateApplication.mockImplementation(() => {
+            throw [{ msg: "invalid-token" }];
+        });
         const page = await render(
             <BrowserRouter>
                 <ThemeProvider theme={AppTheme}>
-                    <ValidationPage></ValidationPage>
+                    <ValidationPage />
                 </ThemeProvider>
             </BrowserRouter>,
         );
-        const {title, text} = getValidationMessage("invalid-token");
+        const { title } = getValidationMessage("invalid-token");
         expect(page.queryByText(title)).toBeInTheDocument();
     });
 
     it("Should show error message if token has expired", async () => {
-        validateApplication.mockImplementation(() =>{ throw [{ msg: "expired-token" }]});
+        validateApplication.mockImplementation(() => {
+            throw [{ msg: "expired-token" }];
+        });
         const page = await render(
             <BrowserRouter>
                 <ThemeProvider theme={AppTheme}>
-                    <ValidationPage></ValidationPage>
+                    <ValidationPage />
                 </ThemeProvider>
             </BrowserRouter>,
         );
-        const {title, text} = getValidationMessage("expired-token");
+        const { title } = getValidationMessage("expired-token");
         expect(page.queryByText(title)).toBeInTheDocument();
     });
 
     it("Should show error message if application is already validated", async () => {
-        validateApplication.mockImplementation(() =>{ throw [{ msg: "application-already-validated" }]});
+        validateApplication.mockImplementation(() => {
+            throw [{ msg: "application-already-validated" }];
+        });
         const page = await render(
             <BrowserRouter>
                 <ThemeProvider theme={AppTheme}>
-                    <ValidationPage></ValidationPage>
+                    <ValidationPage />
                 </ThemeProvider>
             </BrowserRouter>,
         );
-        const {title, text} = getValidationMessage("application-already-validated");
+        const { title } = getValidationMessage("application-already-validated");
         expect(page.queryByText(title)).toBeInTheDocument();
     });
 });
-

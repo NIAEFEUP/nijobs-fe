@@ -73,12 +73,12 @@ export default (isMobile) => makeStyles((theme) => ({
         paddingTop: theme.spacing(2),
         marginTop: theme.spacing(2),
     },
-    warning:{
-        fontSize:"1.2em",
+    warning: {
+        fontSize: "1.2em",
         "& .MuiAlert-icon": {
-            fontSize: "1.5em"
+            fontSize: "1.5em",
         },
-        marginBottom:"1em"
+        marginBottom: "1em",
 
 
     },
