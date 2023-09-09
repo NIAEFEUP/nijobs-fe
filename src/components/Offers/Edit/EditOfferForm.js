@@ -51,6 +51,7 @@ export const EditOfferController = () => {
     const { id } = useParams();
     const { offer, error: errorOffer, loading: loadingOffer } = useOffer(id);
     const { data: user, isValidating } = useSession();
+    let canEditRaceControl = false;
 
     // This portion of code is used to remove race conditions between useState of canEdit and useEffect
     // If the value of useState is false by default, this condition will be wrongly verified, resulting in unwanted redirects
@@ -145,6 +146,7 @@ export const EditOfferController = () => {
                 user,
                 isValidating,
                 canEdit,
+                canEditRaceControl,
             },
         },
     };
@@ -156,6 +158,7 @@ const EditOfferForm = () => {
         errorOffer,
         redirectProps,
         canEdit,
+        canEditRaceControl,
     } = useContext(EditOfferControllerContext);
 
     if (canEdit === undefined)

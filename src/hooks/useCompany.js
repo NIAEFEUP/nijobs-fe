@@ -31,7 +31,7 @@ export default  (id) => {
     return {
         company,
         error,
-        loading: isLoading,
+        loading: !data,
         mutate,
     };
 };

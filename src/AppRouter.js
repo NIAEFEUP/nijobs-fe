@@ -32,14 +32,14 @@ import {
 import { CookieConsent } from "./cookieConsent";
 import {
     EditOfferController,
-    EditOfferControllerContext,
+    EditOfferControllerContext
 } from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
 import ChangeLogPage from "./pages/ChangeLogPage";
 import EditCompanyProfilePage from "./pages/EditCompanyProfilePage";
-import { EditCompanyController } from "./components/Company/Edit/EditCompanyProfileForm";
+import { EditCompanyController, EditCompanyControllerContext } from "./components/Company/Edit/EditCompanyProfileForm";
 
 /**
  *
@@ -197,7 +197,8 @@ const AppRouter = () => (
                 unauthorizedRedirectPath="/"
                 unauthorizedRedirectMessage="You are not allowed to edit this company"
                 authorize={(user) => !!(user?.company || user?.isAdmin)}
-                // controller={EditCompanyController}
+                context={EditCompanyControllerContext}
+                controller={EditCompanyController}
             >
                 <PageLayout
                     key="/company/:id/edit"

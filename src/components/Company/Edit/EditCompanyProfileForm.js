@@ -20,7 +20,7 @@ import useOffer from "../../../hooks/useOffer";
 import { Controller, useForm } from "react-hook-form";
 import useCompany from "../../../hooks/useCompany";
 import useSession from "../../../hooks/useSession";
-import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { Redirect, useLocation, useParams } from "react-router-dom/cjs/react-router-dom.min";
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditCompanySchema from "./EditCompanySchema";
 import MultiOptionTextField from "../../utils/form/MultiOptionTextField";
@@ -36,17 +36,65 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const EditCompanyController = () => {
+    const { id } = useParams();
+    const { company, error: companyError, loading: loadingCompany } = useCompany(id);
+    const { data: user, isValidating } = useSession();
+    let canEditRaceControl = false;
 
+    const shouldRevalidateEditingPermissions = useCallback(() => {
+        return user?.isAdmin || user?.company?._id === id;
+    }, [company, user]);
+
+    const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
+
+    useEffect(() => {
+        setCanEdit(shouldRevalidateEditingPermissions());
+        if (!loadingCompany && !isValidating) {
+            canEditRaceControl = true;
+        }
+    }, [shouldRevalidateEditingPermissions, loadingCompany, company, user]);
+
+    const location = useLocation();
+    const redirectProps = {
+        to: {
+            pathname: "/",
+            state: {
+                from: location,
+                message: "You are not authorized to edit this company.",
+            },
+        },
+    };
+
+    return {
+        controllerOptions: {
+            initialValue: {
+                canEdit,
+                company,
+                redirectProps,
+                loadingCompany,
+                companyError,
+                isValidating,
+                canEditRaceControl,
+            }
+        },
+    };
 };
 
 const EditCompanyProfileForm = ({ title }) => {
     const isMobile = useMobile();
     const formCardClasses = useOfferFormStyles(isMobile)();
 
-    const classes = useStyles();
+    const {
+        company,
+        loadingCompany,
+        companyError,
+        canEdit,
+        redirectProps,
+        isValidating,
+        canEditRaceControl,
+    } = useContext(EditCompanyControllerContext);
 
-    const { id } = useParams();
-    const { company } = useCompany(id);
+    const classes = useStyles();
 
     const { control } = useForm({
         mode: "all",
@@ -73,6 +121,10 @@ const EditCompanyProfileForm = ({ title }) => {
     }, [company]);
 
     const Content = isMobile ? DialogContent : CardContent;
+
+    if (companyError || (!loadingCompany && !isValidating && !canEdit && canEditRaceControl)) {
+        return <Redirect {...redirectProps} />;
+    }
 
     return <>
         <div className={formCardClasses.formCard}>
