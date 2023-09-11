@@ -22,6 +22,7 @@ import { createTheme } from "@material-ui/core";
 import { SnackbarProvider } from "notistack";
 import Notifier from "../../../Notifications/Notifier";
 import { format, parseISO } from "date-fns";
+import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
 jest.mock("../../../../hooks/useSession");
 jest.mock("../../../../services/companyOffersService");
@@ -55,6 +56,7 @@ describe("App", () => {
             publishEndDate: "2021-09",
             description: "Offer description 2",
             isHidden: true,
+            hiddenReason: OfferConstants.COMPANY_REQUEST,
         },
         {
             _id: "random uuid6",
@@ -67,7 +69,8 @@ describe("App", () => {
             publishEndDate: "2021-09",
             description: "Offer description 3",
             isHidden: true,
-            hiddenReason: "ADMIN_REQUEST",
+            hiddenReason: OfferConstants.ADMIN_REQUEST,
+            isArchived: true,
         },
     ];
 
@@ -213,8 +216,6 @@ describe("App", () => {
     });
 
     it("Should render mobile collapsable content on mobile device", async () => {
-        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
-
         const MOBILE_WIDTH_PX = 360;
         window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
 
@@ -258,6 +259,7 @@ describe("App", () => {
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve([offer])
         ));
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
         hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
         enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
 
@@ -282,6 +284,7 @@ describe("App", () => {
 
         expect(queryByTestId(offerRow, "HideOffer")).not.toBeInTheDocument();
         expect(getByTestId(offerRow, "EnableOffer")).toBeInTheDocument();
+        expect(getByTestId(offerRow, "HiddenChip")).toBeInTheDocument();
 
         visibilityButton = getByTestId(offerRow, "EnableOffer");
 
@@ -291,6 +294,7 @@ describe("App", () => {
 
         expect(getByTestId(offerRow, "HideOffer")).toBeInTheDocument();
         expect(queryByTestId(offerRow, "EnableOffer")).not.toBeInTheDocument();
+        expect(queryByTestId(offerRow, "HiddenChip")).not.toBeInTheDocument();
     });
 
     it("Should disable hide/enable offer button when the offer is disabled by an admin", async () => {
@@ -298,6 +302,7 @@ describe("App", () => {
         companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
             resolve([offer])
         ));
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
         hideOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
         enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
 
@@ -354,5 +359,36 @@ describe("App", () => {
         });
 
         expect(addSnackbar).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should generate the right offer status chips", async () => {
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
+            resolve(MOCK_OFFERS)
+        ));
+
+        await act(() =>
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CompanyOffersManagementWidget />
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>, { initialState: {}, theme }
+            )
+        );
+
+        let offerRow = screen.queryByText(MOCK_OFFERS[0].title).closest("tr");
+        expect(queryByTestId(offerRow, "HiddenChip")).not.toBeInTheDocument();
+        expect(queryByTestId(offerRow, "BlockedChip")).not.toBeInTheDocument();
+        expect(queryByTestId(offerRow, "ArchivedChip")).not.toBeInTheDocument();
+
+        offerRow = screen.queryByText(MOCK_OFFERS[1].title).closest("tr");
+        expect(getByTestId(offerRow, "HiddenChip")).toBeInTheDocument();
+        expect(queryByTestId(offerRow, "BlockedChip")).not.toBeInTheDocument();
+        expect(queryByTestId(offerRow, "ArchivedChip")).not.toBeInTheDocument();
+
+        offerRow = screen.queryByText(MOCK_OFFERS[2].title).closest("tr");
+        expect(queryByTestId(offerRow, "HiddenChip")).not.toBeInTheDocument();
+        expect(getByTestId(offerRow, "BlockedChip")).toBeInTheDocument();
+        expect(getByTestId(offerRow, "ArchivedChip")).toBeInTheDocument();
     });
 });
