@@ -579,7 +579,8 @@ describe("Edit Offer Form", () => {
         });
 
         it("should fail validation if applyURL not following the regex", async () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>

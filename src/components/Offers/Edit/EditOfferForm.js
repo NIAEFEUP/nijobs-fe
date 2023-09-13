@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { OfferConstants, parseApplyURL, parseRequestErrors } from "../Form/OfferUtils";
+import { OfferConstants, parseRequestErrors } from "../Form/OfferUtils";
 import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
 import { Redirect, useLocation, useParams } from "react-router-dom";
@@ -28,7 +28,6 @@ const parseOfferForm = ({
     isPaid,
     vacancies,
     description,
-    applyURL,
     ...offer
 }) => ({
     jobDuration: [
@@ -42,7 +41,6 @@ const parseOfferForm = ({
     vacancies: vacancies || "",
     description,
     descriptionText: parseDescription(description),
-    applyURL: applyURL.startsWith("mailto:") ? applyURL.substring(7) : applyURL,
     ...offer,
 });
 
@@ -59,11 +57,11 @@ export const EditOfferController = () => {
             (offer?.owner === user?.company?._id) || user?.isAdmin);
     }, [offer, user]);
 
-    const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
+    const [canEdit, setCanEdit] = useState(undefined);
 
     useEffect(() => {
-        setCanEdit(shouldRevalidateEditingPermissions());
-    }, [shouldRevalidateEditingPermissions, loadingOffer, offer, user]);
+        if (!isValidating && !loadingOffer) setCanEdit(shouldRevalidateEditingPermissions());
+    }, [isValidating, loadingOffer, shouldRevalidateEditingPermissions]);
 
     const location = useLocation();
 
@@ -109,7 +107,7 @@ export const EditOfferController = () => {
                 requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? null : data.isPaid,
                 jobStartDate: !data.jobStartDate ? null : data.jobStartDate,
-                applyURL: parseApplyURL(data.applyURL),
+                applyURL: data.applyURL || null,
                 jobMinDuration,
                 jobMaxDuration,
             })
@@ -154,11 +152,12 @@ const EditOfferForm = () => {
         loadingOffer,
         errorOffer,
         redirectProps,
-        isValidating,
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (errorOffer || (!loadingOffer && !isValidating && canEdit === false)) {
+    if (canEdit === undefined) return null;
+
+    if (errorOffer || canEdit === false) {
         return <Redirect {...redirectProps} />;
     }
 
