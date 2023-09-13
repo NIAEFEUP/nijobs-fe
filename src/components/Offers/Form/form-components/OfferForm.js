@@ -149,14 +149,14 @@ const OfferForm = ({ context, title }) => {
                                         />
                                     </Grid>
                                     {showOwnerComponent &&
-                                    <Grid item xs={12} lg={6}>
-                                        <OwnerComponent
-                                            disabled={formDisabled}
-                                            errors={errors}
-                                            requestErrors={requestErrors}
-                                            control={control}
-                                        />
-                                    </Grid>}
+                                        <Grid item xs={12} lg={6}>
+                                            <OwnerComponent
+                                                disabled={formDisabled}
+                                                errors={errors}
+                                                requestErrors={requestErrors}
+                                                control={control}
+                                            />
+                                        </Grid>}
                                     <Grid item xs={12} lg={6}>
                                         <FormControl fullWidth margin="dense">
                                             <LocationComponent

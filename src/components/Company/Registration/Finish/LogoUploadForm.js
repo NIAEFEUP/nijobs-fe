@@ -33,7 +33,7 @@ export const useLogoUpload = ({ watch }) => {
     useEffect(() => {
         if (!logoInput) {
             setLogoPreview(undefined);
-            return () => {};
+            return () => { };
         } else {
 
             const objectUrl = URL.createObjectURL(logoInput);
@@ -180,10 +180,10 @@ const LogoUploadForm = () => {
             >
                 <Grid item xs={12} sm={4}>
                     {logoPreview &&
-                    <LogoPreview
-                        img={logoPreview}
-                        setCroppedAreaPixels={setCroppedAreaPixels}
-                    /> }
+                        <LogoPreview
+                            img={logoPreview}
+                            setCroppedAreaPixels={setCroppedAreaPixels}
+                        />}
                 </Grid>
             </Grid>
             <Typography

@@ -51,7 +51,7 @@ const MultiOptionTextField = ({
                 {label}
             </Typography>
             <Box id={id} display="flex" flexDirection="column">
-                {values.map(({ id, value }, i) => (
+                {values.map(({ id }, i) => (
                     <Controller
                         key={id}
                         name={`${controllerName}.${i}.value`}
@@ -70,13 +70,14 @@ const MultiOptionTextField = ({
                                 onChange={onChange}
                                 InputProps={{
                                     endAdornment:
-    <RemoveLineButton i={i} items={values} onClick={() => onRemove(i)} /> }}
+    <RemoveLineButton i={i} items={values} onClick={() => onRemove(i)} />,
+                                }}
                                 margin="normal"
                                 helperText={errors?.[i]?.value?.message || ""}
                                 {...textFieldProps}
                             />)}
                         control={control}
-                        defaultValue={getValues ? (getValues(`${controllerName}.${i}.value`) || "") : value}
+                        defaultValue={getValues(`${controllerName}.${i}.value` || "")}
                     />
                 ))}
                 <Button

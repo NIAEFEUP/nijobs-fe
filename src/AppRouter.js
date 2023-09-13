@@ -32,7 +32,7 @@ import {
 import { CookieConsent } from "./cookieConsent";
 import {
     EditOfferController,
-    EditOfferControllerContext
+    EditOfferControllerContext,
 } from "./components/Offers/Edit/EditOfferForm";
 import EditOfferPage from "./pages/EditOfferPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";

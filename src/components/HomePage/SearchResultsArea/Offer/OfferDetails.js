@@ -38,8 +38,6 @@ const OfferDetails = ({
     handleError,
 }) => {
 
-    console.log("fds: ", offer.ownerLogo);
-
     const { data, isValidating, error, isLoggedIn } = useSession();
     const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
     const classes = useSearchResultsWidgetStyles({ isMobile, isPage, loading, hasApplyButton: !!offer?.applyURL });
@@ -101,7 +99,7 @@ const OfferDetails = ({
                 <Grid item xs={12} md={9}>
                     <Typography variant="h4" gutterBottom className={classes.offerTitle}>
                         {
-                        // eslint-disable-next-line no-nested-ternary
+                            // eslint-disable-next-line no-nested-ternary
                             loading ? <Skeleton /> :
                                 isPage ?
                                     offer.title
@@ -195,32 +193,32 @@ const OfferDetails = ({
                     </Tooltip>
                 </Grid>
                 {!loading && (offer.jobMinDuration || offer.jobStartDate) &&
-                <Grid item xs={12} md={6}>
-                    <Tooltip title="Start Date • Duration" placement="left">
-                        <span>
-                            <Typography display="inline" variant="body1" color="secondary">
-                                <DateRange className={classes.iconStyle} />
-                            </Typography>
-                            {
-                                offer.jobStartDate &&
+                    <Grid item xs={12} md={6}>
+                        <Tooltip title="Start Date • Duration" placement="left">
+                            <span>
                                 <Typography display="inline" variant="body1" color="secondary">
-                                    {format(parseISO(offer.jobStartDate), "dd-MM-yyyy")}
+                                    <DateRange className={classes.iconStyle} />
                                 </Typography>
-                            }
-                            {
-                                offer.jobMinDuration &&
-                                <>
+                                {
+                                    offer.jobStartDate &&
                                     <Typography display="inline" variant="body1" color="secondary">
-                                        {offer.jobStartDate && " • "}
+                                        {format(parseISO(offer.jobStartDate), "dd-MM-yyyy")}
                                     </Typography>
-                                    <Typography display="inline" variant="body1" color="secondary">
-                                        {jobDurationText}
-                                    </Typography>
-                                </>
-                            }
-                        </span>
-                    </Tooltip>
-                </Grid>
+                                }
+                                {
+                                    offer.jobMinDuration &&
+                                    <>
+                                        <Typography display="inline" variant="body1" color="secondary">
+                                            {offer.jobStartDate && " • "}
+                                        </Typography>
+                                        <Typography display="inline" variant="body1" color="secondary">
+                                            {jobDurationText}
+                                        </Typography>
+                                    </>
+                                }
+                            </span>
+                        </Tooltip>
+                    </Grid>
                 }
                 <Grid item xs={12} md={6}>
                     <Tooltip title="Publish Date" placement="left" disableHoverListener={loading}>
@@ -233,8 +231,8 @@ const OfferDetails = ({
                                     {formatDistanceToNowStrict(parseISO(offer.publishDate), { addSuffix: true })}
                                     {
                                         offer.publishEndDate &&
-                                    (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
-                                    ` • until ${format(parseISO(offer.publishEndDate), "dd-MM-yyyy")}`
+                                        (sessionData?.isAdmin || sessionData?.company?._id === offer.owner) &&
+                                        ` • until ${format(parseISO(offer.publishEndDate), "dd-MM-yyyy")}`
                                     }
                                 </>
                             }

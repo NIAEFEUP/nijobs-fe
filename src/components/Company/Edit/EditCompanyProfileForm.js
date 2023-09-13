@@ -15,9 +15,9 @@ import {
 } from "@material-ui/core";
 import { useMobile } from "../../../utils/media-queries";
 import useOfferFormStyles from "../../../components/Offers/Form/form-components/offerStyles";
+import { editCompany } from "../../../services/companyEditService";
 import TextEditorComponent from "../../Offers/Form/form-components/TextEditorComponent";
-import useOffer from "../../../hooks/useOffer";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import useCompany from "../../../hooks/useCompany";
 import useSession from "../../../hooks/useSession";
 import { Redirect, useLocation, useParams } from "react-router-dom/cjs/react-router-dom.min";
@@ -29,11 +29,37 @@ import { useContacts } from "../Registration/Finish/ContactsForm";
 
 export const EditCompanyControllerContext = React.createContext();
 
+const EditImage = ({ style, image, imageAlt }) => {
+    return (<Avatar
+        alt={imageAlt}
+        src={image}
+        style={style}
+    />);
+};
+
 const useStyles = makeStyles((theme) => ({
     submitBtn: {
-        marginTop: theme.spacing(2)
-    }
+        marginTop: theme.spacing(2),
+    },
 }));
+
+const getParsedCompanyContacts = (contacts) => {
+    const newContacts = [];
+    for (const contact of contacts) {
+        newContacts.push(contact.value);
+    }
+
+    return newContacts;
+};
+
+const parseCompany = ({
+    contacts,
+    ...company
+}) => ({
+    contacts: contacts.map((value) => ({ value })),
+    ...company,
+    logo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.1SzV5xZOzNbaUOENWpw9vwHaHa%26pid%3DApi&f=1&ipt=36ec7cc75953554a84897bc0aaa6402e9267a031b8618c412927094349aca538&ipo=images"
+});
 
 export const EditCompanyController = () => {
     const { id } = useParams();
@@ -41,9 +67,21 @@ export const EditCompanyController = () => {
     const { data: user, isValidating } = useSession();
     let canEditRaceControl = false;
 
-    const shouldRevalidateEditingPermissions = useCallback(() => {
-        return user?.isAdmin || user?.company?._id === id;
-    }, [company, user]);
+    const { handleSubmit, control, reset, getValues } = useForm({
+        mode: "all",
+        resolver: yupResolver(EditCompanySchema),
+        defaultValues: {
+            logo: "",
+            name: "",
+            contacts: [],
+            bio: "",
+        },
+        reValidateMode: "onChange",
+    });
+
+    const fields = useWatch({ control });
+
+    const shouldRevalidateEditingPermissions = useCallback(() => user?.isAdmin || user?.company?._id === id, [id, user]);
 
     const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
 
@@ -53,6 +91,12 @@ export const EditCompanyController = () => {
             canEditRaceControl = true;
         }
     }, [shouldRevalidateEditingPermissions, loadingCompany, company, user]);
+
+    useEffect(() => {
+        if (company && !isValidating && canEdit) {
+            reset(parseCompany(company));
+        }
+    }, [canEdit, isValidating, company, reset]);
 
     const location = useLocation();
     const redirectProps = {
@@ -65,6 +109,15 @@ export const EditCompanyController = () => {
         },
     };
 
+    const submit = (data) => {
+        const contacts = getParsedCompanyContacts(data.contacts);
+        editCompany({ ...data, contacts: contacts }).then(() => {
+
+        }).catch((err) => {
+
+        });
+    };
+
     return {
         controllerOptions: {
             initialValue: {
@@ -75,7 +128,11 @@ export const EditCompanyController = () => {
                 companyError,
                 isValidating,
                 canEditRaceControl,
-            }
+                control,
+                fields,
+                getValues,
+                submit: handleSubmit(submit),
+            },
         },
     };
 };
@@ -92,33 +149,14 @@ const EditCompanyProfileForm = ({ title }) => {
         redirectProps,
         isValidating,
         canEditRaceControl,
+        control,
+        getValues,
+        submit,
     } = useContext(EditCompanyControllerContext);
 
     const classes = useStyles();
 
-    const { control } = useForm({
-        mode: "all",
-        resolver: yupResolver(EditCompanySchema),
-        reValidateMode: "onChange",
-    });
-
-    const { fields, append, remove } = useContacts({ control });
-
-    const getContacts = useCallback(() => {
-        if (!company) return [{}];
-
-        const contacts = company.contacts;
-
-        const result = [];
-        for (let i = 0; i < contacts.length; i++) {
-            result.push({
-                id: i,
-                value: contacts[i],
-            });
-        }
-
-        return result;
-    }, [company]);
+    const { fields: contacts, append, remove } = useContacts({ control });
 
     const Content = isMobile ? DialogContent : CardContent;
 
@@ -130,81 +168,106 @@ const EditCompanyProfileForm = ({ title }) => {
         <div className={formCardClasses.formCard}>
             <CardHeader title={title} />
             <Content className={formCardClasses.formContent}>
-                <Grid container spacing={4} className={formCardClasses.formArea}>
+                <Grid container className={formCardClasses.formArea}>
                     <Grid item xs={12}>
-                        <Box
-                            display="flex"
-                            justifyContent="center"
+                        <form
+                            onSubmit={submit}
                         >
-                            <Avatar
-                                alt={`${company?.name}'s logo`}
-                                src={company?.logo}
-                                style={{ height: '5em', width: '5em' }}
-                            />
-                        </Box>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Name"
-                            value={company?.name}
-                            fullWidth
-                            required
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MultiOptionTextField
-                            control={control}
-                            controllerName="contacts"
-                            values={getContacts()}
-                            onAdd={append}
-                            onRemove={remove}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Controller
-                            name="bio"
-                            render={(
-                                { field: { onChange, onBlur, ref, name, value } },
-                            ) => (
-                                <TextField
-                                    name={name}
-                                    value={value}
-                                    label="Company Bio"
-                                    id="bio"
-                                    // error={!!errors.bio}
-                                    inputRef={ref}
-                                    onBlur={onBlur}
-                                    onChange={onChange}
-                                    multiline
-                                    // helperText={
-                                    //     `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength} ${errors.bio?.message || ""}`
-                                    // }
-                                    rows={5}
-                                    variant="outlined"
-                                    FormHelperTextProps={{
-                                        style: {
-                                            marginLeft: 0,
-                                        },
-                                    }}
-                                    fullWidth
-                                />)}
-                            control={control}
-                        />
+                            <Grid container spacing={4}>
+                                <Grid item xs={12}>
+                                    <Box
+                                        display="flex"
+                                        justifyContent="center"
+                                    >
+                                        <EditImage
+                                            image={company?.logo}
+                                            style={{ height: "5em", width: "5em" }}
+                                            imageAlt={`${company?.name}'s logo`}
+                                        />
+                                    </Box>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Controller
+                                        name="name"
+                                        render={(
+                                            { field: {
+                                                onChange, onBlur, ref, name, value,
+                                            } }
+                                        ) => (
+                                            <TextField
+                                                label="Name"
+                                                name={name}
+                                                id={name}
+                                                inputRef={ref}
+                                                onBlur={onBlur}
+                                                value={value}
+                                                fullWidth
+                                                required
+                                                autoFocus
+                                                onChange={onChange}
+                                            />
+                                        )}
+                                        control={control}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <MultiOptionTextField
+                                        values={contacts}
+                                        control={control}
+                                        controllerName="contacts"
+                                        getValues={getValues}
+                                        onAdd={append}
+                                        onRemove={remove}
+                                        itemLabelPrefix="Contact #"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Controller
+                                        name="bio"
+                                        render={(
+                                            { field: { onChange, onBlur, ref, name, value } },
+                                        ) => (
+                                            <TextField
+                                                name={name}
+                                                value={value}
+                                                label="Company Bio"
+                                                id="bio"
+                                                // error={!!errors.bio}
+                                                inputRef={ref}
+                                                onBlur={onBlur}
+                                                onChange={onChange}
+                                                multiline
+                                                // helperText={
+                                                //     `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength} ${errors.bio?.message || ""}`
+                                                // }
+                                                rows={5}
+                                                variant="outlined"
+                                                FormHelperTextProps={{
+                                                    style: {
+                                                        marginLeft: 0,
+                                                    },
+                                                }}
+                                                fullWidth
+                                            />)}
+                                        control={control}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                // disabled={loading || formDisabled}
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                className={classes.submitBtn}
+                            >
+                                Submit
+                            </Button>
+                            <div className={formCardClasses.requiredFields}>
+                                <Typography>* Required fields</Typography>
+                            </div>
+                        </form>
                     </Grid>
                 </Grid>
-                <Button
-                    // disabled={loading || formDisabled}
-                    variant="contained"
-                    color="primary"
-                    type="submit"
-                    className={classes.submitBtn}
-                >
-                    Submit
-                </Button>
-                <div className={formCardClasses.requiredFields}>
-                    <Typography>* Required fields</Typography>
-                </div>
             </Content>
         </div>
 
@@ -212,7 +275,7 @@ const EditCompanyProfileForm = ({ title }) => {
 };
 
 EditCompanyProfileForm.propTypes = {
-    title: PropTypes.string
-}
+    title: PropTypes.string,
+};
 
 export default EditCompanyProfileForm;
