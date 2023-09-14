@@ -44,19 +44,23 @@ export default makeStyles((theme) => ({
         paddingBlock: theme.spacing(2),
     },
     divider: {
-        "&&": {
-            margin: 0,
-        },
+        marginTop: "4px",
     },
     textButton: {
-        width: "100%",
         alignItems: "center",
+        padding: theme.spacing(1),
+        marginInline: theme.spacing(1),
+        "& .MuiTypography-root": {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+        },
     },
     profileActions: {
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(1),
     },
     actionsHeader: {
-        paddingBottom: theme.spacing(1),
+        paddingBottom: theme.spacing(0.4),
     },
 }));
