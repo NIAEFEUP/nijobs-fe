@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { OfferConstants, parseRequestErrors } from "../Form/OfferUtils";
+import { OfferConstants, parseApplyURL, parseRequestErrors } from "../Form/OfferUtils";
 import OfferForm from "../Form/form-components/OfferForm";
 import { editOffer } from "../../../services/offerService";
 import { Redirect, useLocation, useParams } from "react-router-dom";
@@ -29,6 +29,7 @@ const parseOfferForm = ({
     isPaid,
     vacancies,
     description,
+    applyURL,
     ...offer
 }) => ({
     jobDuration: [
@@ -42,6 +43,7 @@ const parseOfferForm = ({
     vacancies: vacancies || "",
     description,
     descriptionText: parseDescription(description),
+    applyURL: applyURL?.startsWith("mailto:") ? applyURL.substring(7) : applyURL,
     ...offer,
 });
 
@@ -108,7 +110,7 @@ export const EditOfferController = () => {
                 requirements: data.requirements.map((val) => val.value),
                 isPaid: data.isPaid === "none" ? null : data.isPaid,
                 jobStartDate: !data.jobStartDate ? null : data.jobStartDate,
-                applyURL: data.applyURL || null,
+                applyURL: parseApplyURL(data.applyURL),
                 jobMinDuration,
                 jobMaxDuration,
             })
