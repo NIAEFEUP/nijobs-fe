@@ -5,11 +5,9 @@ export default makeStyles((theme) => ({
     navbar: ({ isMobile }) => ({
         paddingTop: theme.spacing(isMobile ? 0 : 3),
     }),
-    toolbar: {
+    toolbar: ({ isMobile }) => ({
         display: "flex",
-    },
-    homePageLink: ({ isMobile }) => ({
-        marginLeft: theme.spacing(isMobile ? 0 : 3),
+        paddingInline: theme.spacing(isMobile ? 1 : 6),
     }),
     linkStyle: ({ desktopLayout }) => ({
         textDecoration: "none",

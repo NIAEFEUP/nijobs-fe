@@ -50,7 +50,7 @@ const FilterMenu = ({ anchorEl, onClose, filters,
             }}
         >
             <Typography variant="h6" color="primary">
-            Filter
+                Filter
             </Typography>
             {
                 filters.map((filter) => {

@@ -8,12 +8,12 @@ export default (value, setValues) => {
         placeholder: "Fields",
         multiple: true,
         options: Object.keys(FIELD_OPTIONS),
-        id: "fields-selector",
+        id: "fields",
         getOptionLabel: (option) => FIELD_OPTIONS[option],
         onChange: useCallback((e, value) => value && setValues(value), [setValues]),
         value: value,
         inputProps: {
-            "data-testid": "fields-selector",
+            "data-testid": "fields",
         },
     };
 

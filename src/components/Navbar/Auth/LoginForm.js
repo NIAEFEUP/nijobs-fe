@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { login } from "../../../services/auth";
+import { RouterLink } from "../../../utils";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoginSchema from "./LoginSchema";
@@ -13,11 +14,16 @@ import {
     DialogActions,
     Button,
     FormHelperText,
+    Typography,
 } from "@material-ui/core";
+
+import { useMobile } from "../../../utils/media-queries";
+
 import useToggle from "../../../hooks/useToggle";
 
 const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage }) => {
-    const classes = useAuthStyles();
+    const isMobile = useMobile();
+    const classes = useAuthStyles({ isMobile });
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: "onBlur",
@@ -90,22 +96,43 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                     {loginError || " "}
                 </FormHelperText>
             </DialogContent>
-            <DialogActions>
+            <div className={classes.modalOptions}>
+                <Typography className={classes.smallText}>
+                    Lost your password?
+                </Typography>
                 <Button
+                    className={classes.smallText}
                     onClick={setRecoveryRequestPage}
                     variant="text"
                     disabled={loginPending}
-                    color="secondary"
+                    color="primary"
                 >
-                        Lost password?
+                    Recover Password
                 </Button>
+            </div>
+            <div className={classes.modalOptions}>
+                <Typography className={classes.smallText}>
+                    Don&apos;t have an account?
+                </Typography>
+                <Button
+                    className={classes.smallText}
+                    onClick={toggleAuthModal}
+                    variant="text"
+                    color="primary"
+                    component={RouterLink}
+                    to="/apply/company"
+                >
+                    Join Us
+                </Button>
+            </div>
+            <DialogActions>
                 <Button
                     onClick={toggleAuthModal}
                     variant="text"
                     color="secondary"
                     disabled={loginPending}
                 >
-                        Cancel
+                    Cancel
                 </Button>
                 <div className={classes.loginBtnWrapper}>
                     <Button
@@ -115,13 +142,13 @@ const LoginForm = ({ toggleAuthModal, updateSessionInfo, setRecoveryRequestPage 
                         variant="contained"
                         disabled={loginPending}
                     >
-                            Login
+                        Login
                     </Button>
                     {loginPending &&
-                    <CircularProgress
-                        size={24}
-                        className={classes.loginProgressRed}
-                    />
+                        <CircularProgress
+                            size={24}
+                            className={classes.loginProgressRed}
+                        />
                     }
                 </div>
             </DialogActions>

@@ -30,6 +30,7 @@ const JobDurationComponent = ({ disabled, control }) => {
                     >
                         <Slider
                             name={name}
+                            id={name}
                             value={value}
                             onChange={(_e, values) => onChange(values)}
                             onBlur={onBlur}

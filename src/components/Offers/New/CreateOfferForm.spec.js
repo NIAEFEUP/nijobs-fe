@@ -9,7 +9,6 @@ import CreateOfferPage from "../../../pages/CreateOfferPage";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
-import { searchCities } from "../../../services/locationSearchService";
 import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
 import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
@@ -314,41 +313,6 @@ describe("Create Offer Form", () => {
 
         });
 
-
-        it("should fail validation if locations not following the regex", async () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
-            searchCities.mockImplementation(() => Promise.resolve({ city: "asd", country: "asd" }));
-
-            const wrapper = renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <CreateOfferWrapper>
-                            <CreateOfferPage />
-                        </CreateOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            const input = screen.getByLabelText("Location *");
-
-            await act(async () => {
-                await fireEvent.focus(input);
-                await fireEvent.change(input, { target: { value: "invalid" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(input))
-                .toHaveTextContent("The location format must be <city>, <country>. Beware of extra spaces.");
-
-            await act(async () =>  {
-                await fireEvent.change(input, { target: { value: "city, country" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location *"))).toHaveTextContent("\u200B");
-        });
-
         it("should fail validation if fields empty", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
 
@@ -419,7 +383,7 @@ describe("Create Offer Form", () => {
             );
 
             // Should work with label but somehow it wasn't being targeted
-            const input = screen.getByTestId("tech-selector");
+            const input = screen.getByTestId("technologies");
 
             await act(async () => {
 
@@ -446,7 +410,7 @@ describe("Create Offer Form", () => {
                 { initialState, theme }
             );
 
-            const input = screen.getByTestId("tech-selector");
+            const input = screen.getByTestId("technologies");
             fireEvent.mouseDown(input);
 
             fireEvent.click(screen.getByText("React"));
@@ -706,6 +670,15 @@ describe("Create Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
                 .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+
+            await act(() => {
+                fireEvent.focus(input);
+                fireEvent.change(input, { target: { value: "valid@email.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(input))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
         });
 
         it("should be visible advanced settings if form error in these publication date", async () => {
@@ -766,6 +739,35 @@ describe("Create Offer Form", () => {
             expect(screen.queryByText("Publication Date *")).toBeVisible();
             expect(screen.queryByText("Publication End Date *")).toBeVisible();
             expect(screen.queryByText("Hide offer")).toBeVisible();
+        });
+
+        it("should scroll when a field has an error", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+
+            renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+
+            const scrollIntoViewMock = jest.fn();
+            window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+
+            const titleInput = screen.getByLabelText("Offer Title *");
+            const submitButton = screen.getByTestId("submit-offer");
+
+            await act(async () => {
+                await fireEvent.focus(titleInput);
+                await fireEvent.blur(titleInput);
+                await fireEvent.click(submitButton);
+            });
+
+            expect(scrollIntoViewMock).toBeCalledWith({ behavior: "smooth" });
         });
     });
 });

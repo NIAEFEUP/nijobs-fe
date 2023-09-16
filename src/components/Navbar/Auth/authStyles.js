@@ -20,4 +20,14 @@ export default makeStyles((theme) => ({
         composes: "$loginProgress",
         color: theme.palette.primary.main,
     },
+    modalOptions: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        marginLeft: theme.spacing(3),
+        fontSize: "4px",
+    },
+    smallText: {
+        fontSize: "0.85rem",
+    },
 }));

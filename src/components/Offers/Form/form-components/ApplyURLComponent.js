@@ -18,14 +18,14 @@ const ApplyURLComponent = ({ disabled, errors, requestErrors, control, classes }
                     className={classes.applyURLInput}
                     value={value}
                     label="Application URL"
-                    id="applyURL"
+                    id={name}
                     error={!!errors?.applyURL || !!requestErrors.applyURL}
                     inputRef={ref}
                     onBlur={onBlur}
                     onChange={onChange}
                     helperText={
                         `${errors.applyURL?.message ||
-                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s):' or 'mailto:'."}`
+                        requestErrors.applyURL?.message || "Ensure your URL starts with 'http(s):' or is a valid email."}`
                     }
                     fullWidth
                     disabled={disabled}

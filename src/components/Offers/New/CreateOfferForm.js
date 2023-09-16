@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { parseRequestErrors } from "../Form/OfferUtils";
+import { parseApplyURL, parseRequestErrors } from "../Form/OfferUtils";
 import { newOffer } from "../../../services/offerService";
 import useOfferForm from "../../../hooks/useOfferForm";
 import OfferForm from "../Form/form-components/OfferForm";
@@ -22,7 +22,7 @@ export const CreateOfferController = () => {
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || params.company,
-                applyURL: data.applyURL || undefined,
+                applyURL: parseApplyURL(data.applyURL),
                 jobMinDuration,
                 jobMaxDuration,
             })

@@ -16,7 +16,7 @@ const PublicationDateComponent = ({ disabled, errors, requestErrors, control, da
                     margin="dense"
                     value={value}
                     label="Publication Date *"
-                    id="publishDate-input"
+                    id={name}
                     name={name}
                     disabled={disabled}
                     onChange={(_, value) => onChange(value)}

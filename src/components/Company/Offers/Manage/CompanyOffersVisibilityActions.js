@@ -16,38 +16,30 @@ import { getHumanError } from "../../../../utils/offer/OfferUtils";
 import { useDispatch } from "react-redux";
 import { addSnackbar as addSnackbarAction } from "../../../../actions/notificationActions";
 import Offer from "../../../HomePage/SearchResultsArea/Offer/Offer";
-import { OfferConstants } from "../../../Offers/Form/OfferUtils";
 
-const CompanyOffersVisibilityActions = ({ offer }) => {
+const CompanyOffersVisibilityActions = ({ offer, getOfferVisibility, setOfferVisibility, offerId }) => {
 
     const dispatch = useDispatch();
     const addSnackbar = useCallback((notification) => dispatch(addSnackbarAction(notification)), [dispatch]);
 
-    const [offerVisibilityState, setOfferVisibilityState] = useState({
-        isVisible: undefined,
-        isDisabled: undefined,
-        isBlocked: undefined,
-    });
+    const offerVisible = getOfferVisibility(offerId)?.isVisible;
+    const offerDisabled = getOfferVisibility(offerId)?.isDisabled;
+    const offerBlocked = getOfferVisibility(offerId)?.isBlocked;
 
     const [loadingOfferVisibility, setLoadingOfferVisibility] = useState(false);
-
-    const isHiddenOffer = offer?.isHidden;
-    const offerHiddenReason = offer?.hiddenReason;
+    const [offerVisibilityButtonDisabled, setOfferVisibilityButtonDisabled] = useState(false);
 
     useEffect(() => {
-        setOfferVisibilityState({
-            isDisabled: isHiddenOffer && offerHiddenReason === OfferConstants.ADMIN_REQUEST,
-            isVisible: !isHiddenOffer,
-            isBlocked: isHiddenOffer && offerHiddenReason === OfferConstants.COMPANY_BLOCKED,
-        });
-    }, [isHiddenOffer, offerHiddenReason]);
-
+        setOfferVisibilityButtonDisabled(loadingOfferVisibility
+            || offerDisabled
+            || offerBlocked);
+    }, [loadingOfferVisibility, offerBlocked, offerDisabled, offerId]);
 
     const handleHideOffer = useCallback(({ offer, addSnackbar, onError }) => {
         setLoadingOfferVisibility(true);
         hideOfferService(offer._id)
             .then(() => {
-                setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: false }));
+                setOfferVisibility(offerId, (state) => ({ ...state, isVisible: false, isHidden: true }));
                 addSnackbar({
                     message: "The offer was hidden",
                     key: `${Date.now()}-${offer._id}-hidden`,
@@ -56,13 +48,13 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             .catch((err) => {
                 if (onError) onError(err);
             }).finally(() => setLoadingOfferVisibility(false));
-    }, []);
+    }, [offerId, setOfferVisibility]);
 
     const handleEnableOffer = useCallback(({ offer, addSnackbar, onError }) => {
         setLoadingOfferVisibility(true);
         enableOfferService(offer._id)
             .then(() => {
-                setOfferVisibilityState((offerVisibilityState) => ({ ...offerVisibilityState, isVisible: true }));
+                setOfferVisibility(offerId, (state) => ({ ...state, isVisible: true, isHidden: false }));
                 addSnackbar({
                     message: "The offer was enabled",
                     key: `${Date.now()}-${offer._id}-enabled`,
@@ -71,7 +63,7 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
             .catch((err) => {
                 if (onError) onError(err);
             }).finally(() => setLoadingOfferVisibility(false));
-    }, []);
+    }, [offerId, setOfferVisibility]);
 
     const handleOfferVisibilityError = useCallback((err) => {
         if (Array.isArray(err) && err.length > 0) {
@@ -88,8 +80,8 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
         }
     }, [addSnackbar, offer._id]);
 
-    const handleOfferVisibility = () => {
-        if (offerVisibilityState.isVisible) {
+    const handleOfferVisibility = useCallback(() => {
+        if (offerVisible) {
             handleHideOffer({
                 offer: offer,
                 addSnackbar: addSnackbar,
@@ -102,18 +94,16 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
                 onError: handleOfferVisibilityError,
             });
         }
-    };
-
-    const offerVisibilityButtonDisabled = loadingOfferVisibility || offerVisibilityState.isDisabled || offerVisibilityState.isBlocked;
+    }, [offerVisible, handleHideOffer, offer, addSnackbar, handleOfferVisibilityError, handleEnableOffer]);
 
     return (
-        <Tooltip title={offerVisibilityState.isVisible ? "Hide Offer" : "Enable Offer"}>
+        <Tooltip title={offerVisible ? "Hide Offer" : "Enable Offer"}>
             <span>
                 <IconButton
                     onClick={handleOfferVisibility}
                     disabled={offerVisibilityButtonDisabled}
                 >
-                    {offerVisibilityState.isVisible ?
+                    {offerVisible ?
                         <VisibilityOffIcon
                             data-testid="HideOffer"
                             color={offerVisibilityButtonDisabled ? undefined : "secondary"}
@@ -133,7 +123,10 @@ const CompanyOffersVisibilityActions = ({ offer }) => {
 };
 
 CompanyOffersVisibilityActions.propTypes = {
-    offer: PropTypes.instanceOf(Offer),
+    offer: PropTypes.instanceOf(Offer).isRequired,
+    getOfferVisibility: PropTypes.func.isRequired,
+    setOfferVisibility: PropTypes.func.isRequired,
+    offerId: PropTypes.number.isRequired,
 };
 
 export default CompanyOffersVisibilityActions;

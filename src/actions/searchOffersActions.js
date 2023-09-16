@@ -6,6 +6,7 @@ export const OfferSearchTypes = Object.freeze({
     SET_JOB_TYPE: "SET_JOB_TYPE",
     SET_JOB_FIELDS: "SET_JOB_FIELDS",
     SET_JOB_TECHS: "SET_JOB_TECHS",
+    SET_LOAD_URL_FROM_FILTERS: "SET_LOAD_URL_FROM_FILTERS",
     SET_OFFERS_SEARCH_RESULT: "SET_OFFERS_SEARCH_RESULT",
     SET_SEARCH_QUERY_TOKEN: "SET_SEARCH_QUERY_TOKEN",
     SET_OFFERS_LOADING: "SET_OFFERS_LOADING",
@@ -65,6 +66,11 @@ export const setFields = (fields) => ({
 export const setTechs = (technologies) => ({
     type: OfferSearchTypes.SET_JOB_TECHS,
     technologies,
+});
+
+export const setLoadUrlFromFilters = (value) => ({
+    type: OfferSearchTypes.SET_LOAD_URL_FROM_FILTERS,
+    value,
 });
 
 export const setShowJobDurationSlider = (filterJobDuration) => ({

@@ -1,26 +1,25 @@
-import React from "react";
-import { createTheme } from "@material-ui/core/styles";
-import useComponentController from "../../../hooks/useComponentController";
-import { BrowserRouter } from "react-router-dom";
-import { screen, renderWithStoreAndTheme } from "../../../test-utils";
-import useSession from "../../../hooks/useSession";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { format } from "date-fns";
-import { searchCities } from "../../../services/locationSearchService";
+import { createTheme } from "@material-ui/core/styles";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { fireEvent } from "@testing-library/dom";
 import { act } from "@testing-library/react";
+import { format } from "date-fns";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
+import useComponentController from "../../../hooks/useComponentController";
+import useOffer from "../../../hooks/useOffer";
+import useSession from "../../../hooks/useSession";
+import EditOfferPage from "../../../pages/EditOfferPage";
+import { renderWithStoreAndTheme, screen } from "../../../test-utils";
+import { HumanValidationReasons } from "../../../utils";
 import { DAY_IN_MS, MONTH_IN_MS } from "../../../utils/TimeUtils";
+import Offer from "../../HomePage/SearchResultsArea/Offer/Offer";
+import FieldOptions from "../../utils/offers/FieldOptions";
+import JobOptions from "../../utils/offers/JobOptions";
+import TechOptions from "../../utils/offers/TechOptions";
 import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
 import { EditOfferController, EditOfferControllerContext } from "./EditOfferForm";
-import EditOfferPage from "../../../pages/EditOfferPage";
-import useOffer from "../../../hooks/useOffer";
-import Offer from "../../HomePage/SearchResultsArea/Offer/Offer";
-import { fireEvent } from "@testing-library/dom";
-import JobOptions from "../../utils/offers/JobOptions";
-import FieldOptions from "../../utils/offers/FieldOptions";
-import TechOptions from "../../utils/offers/TechOptions";
-import { Route, Switch } from "react-router-dom/cjs/react-router-dom.min";
-import { HumanValidationReasons } from "../../../utils";
 
 jest.mock("../../../hooks/useOffer");
 jest.mock("react-router-dom", () => {
@@ -114,7 +113,7 @@ describe("Edit Offer Form", () => {
                             key="/"
                         >
                             <div>
-                            Test Redirect
+                                Test Redirect
                             </div>
                         </Route>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -143,7 +142,7 @@ describe("Edit Offer Form", () => {
                             key="/"
                         >
                             <div>
-                            Test Redirect
+                                Test Redirect
                             </div>
                         </Route>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -172,7 +171,7 @@ describe("Edit Offer Form", () => {
                             key="/"
                         >
                             <div>
-                            Test Redirect
+                                Test Redirect
                             </div>
                         </Route>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -499,41 +498,6 @@ describe("Edit Offer Form", () => {
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Required field.");
         });
 
-        it("should fail validation if locations not following the regex", async () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            searchCities.mockImplementation(() => Promise.resolve({ city: "asd", country: "asd" }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
-
-            const wrapper = renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <EditOfferWrapper>
-                            <EditOfferPage />
-                        </EditOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            const input = screen.getByLabelText("Location *");
-
-            await act(async () => {
-                await fireEvent.focus(input);
-                await fireEvent.change(input, { target: { value: "invalid" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(input))
-                .toHaveTextContent("The location format must be <city>, <country>. Beware of extra spaces.");
-
-            await act(async () =>  {
-                await fireEvent.change(input, { target: { value: "city, country" } });
-                await fireEvent.blur(input);
-            });
-
-            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Location *"))).toHaveTextContent("\u200B");
-        });
-
         it("should allow only numbers in vacancies", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
             useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
@@ -641,6 +605,14 @@ describe("Edit Offer Form", () => {
 
             await act(() =>  {
                 fireEvent.change(input, { target: { value: "https://valid.com" } });
+                fireEvent.blur(input);
+            });
+
+            expect(await wrapper.findDescriptionOf(wrapper.getByLabelText("Application URL")))
+                .not.toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
+
+            await act(() => {
+                fireEvent.change(input, { target: { value: "valid@email.com" } });
                 fireEvent.blur(input);
             });
 

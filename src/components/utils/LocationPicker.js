@@ -17,7 +17,7 @@ const asyncThrottle = (func, wait) => {
         });
 };
 
-const LocationPicker = ({ name, label, value, onChange, onBlur,  error, disabled }) => {
+const LocationPicker = ({ name, id, label, value, onChange, onBlur,  error, disabled }) => {
     const [inputValue, setInputValue] = useState("");
     const [options, setOptions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -106,6 +106,7 @@ const LocationPicker = ({ name, label, value, onChange, onBlur,  error, disabled
             value={value}
             inputValue={inputValue}
             name={name}
+            id={id}
             disabled={disabled}
             onBlur={onBlur}
             onChange={(e, newValue) => {
@@ -149,12 +150,12 @@ const LocationPicker = ({ name, label, value, onChange, onBlur,  error, disabled
 LocationPicker.propTypes = {
     name: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
+    id: PropTypes.string,
     value: PropTypes.any,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     error: PropTypes.any,
     disabled: PropTypes.bool,
-
 };
 
 export default LocationPicker;

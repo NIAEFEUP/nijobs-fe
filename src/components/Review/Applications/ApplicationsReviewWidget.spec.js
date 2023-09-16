@@ -824,8 +824,6 @@ describe("Application Review Widget", () => {
 
     it("Should reset filters", async () => {
         const applications = generateApplications(5);
-        console.log("Hello");
-        console.log(applications);
 
         fetch.mockResponse(JSON.stringify({ applications }));
 

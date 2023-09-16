@@ -80,7 +80,7 @@ const TableToolbar = ({ numSelected, selectedRows, title, filterable, filters, f
                                     <Tune />
                                 }
                             >
-                            Filter
+                                Filter
                             </Button>
                         </Badge>
                     </Tooltip>

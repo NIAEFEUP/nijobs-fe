@@ -1,4 +1,5 @@
 import { generalHumanError, generalParseRequestErrors, HumanValidationReasons, validationRulesGenerator } from "../../../utils";
+import { MailRegex } from "../../../utils/offer/OfferUtils";
 import { DAY_IN_MS, MONTH_IN_MS, OFFER_MAX_LIFETIME_MONTHS } from "../../../utils/TimeUtils";
 import { MAX_FIELDS, MIN_FIELDS } from "../../utils/offers/FieldOptions";
 import { MAX_TECHNOLOGIES, MIN_TECHNOLOGIES } from "../../utils/offers/TechOptions";
@@ -53,9 +54,17 @@ const HumanReadableErrors = Object.freeze({
     "company-disabled": () => "Company is disabled. Please enable it or contact the team for help.",
     "must-be-ISO8601-date": () => HumanValidationReasons.DATE,
     "date-already-past": () => HumanValidationReasons.DATE_EXPIRED,
-    "invalid-apply-url": () => "Invalid application URL. Ensure your URL starts with 'http(s):' or 'mailto:'",
+    "invalid-apply-url": () => "Invalid application URL. Ensure your URL starts with 'http(s):' or is a valid email",
 });
 
 export const getHumanError = (error) => generalHumanError(error, HumanReadableErrors);
 
 export const parseRequestErrors = (error) => generalParseRequestErrors(error, getHumanError);
+
+export const parseApplyURL = (applyURL) => {
+    if (!applyURL)
+        return null;
+    if (MailRegex.test(applyURL) && !applyURL.startsWith("mailto:"))
+        return `mailto:${applyURL}`;
+    return applyURL;
+};

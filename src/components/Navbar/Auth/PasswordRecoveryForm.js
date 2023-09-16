@@ -95,7 +95,7 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage }) => {
                     disabled={requestPending}
                     color="secondary"
                 >
-                        Login
+                    Login
                 </Button>
                 <Button
                     onClick={toggleAuthModal}
@@ -103,7 +103,7 @@ const PasswordRecoveryForm = ({ toggleAuthModal, setLoginPage }) => {
                     color="secondary"
                     disabled={requestPending}
                 >
-                        Cancel
+                    Cancel
                 </Button>
                 {
                     !success &&

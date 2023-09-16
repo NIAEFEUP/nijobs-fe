@@ -128,6 +128,39 @@ export default ({
 
     }, [clearURLFilters, location, resetAdvancedSearchFields]);
 
+    const setUrlFilters = useCallback((
+        jobMinDuration,
+        jobMaxDuration,
+        fields,
+        technologies,
+        jobType,
+        searchValue,
+    ) => {
+        let currFilters = {};
+
+        if (jobMinDuration && jobMaxDuration) {
+            currFilters = { ...currFilters, jobMinDuration, jobMaxDuration };
+        }
+
+        if (fields) {
+            currFilters = { ...currFilters, fields };
+        }
+
+        if (technologies) {
+            currFilters = { ...currFilters, technologies };
+        }
+
+        if (jobType) {
+            currFilters = { ...currFilters, jobType };
+        }
+
+        if (searchValue) {
+            currFilters = { ...currFilters, searchValue };
+        }
+
+        changeURLFilters(location, {}, currFilters);
+    }, [changeURLFilters, location]);
+
     return {
         queryParams,
         changeURLFilters,
@@ -138,5 +171,6 @@ export default ({
         setTechs: actualSetTechs,
         setSearchValue: actualSetSearchValue,
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
+        setUrlFilters,
     };
 };

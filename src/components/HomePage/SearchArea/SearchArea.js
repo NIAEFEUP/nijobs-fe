@@ -11,6 +11,7 @@ import {
     setFields,
     setShowJobDurationSlider,
     setTechs,
+    setLoadUrlFromFilters,
 } from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 
@@ -37,6 +38,7 @@ export const AdvancedSearchController = ({
     enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
     jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
+    loadUrlFromFilters, setLoadUrlFromFilters,
 }) => {
 
     const {
@@ -48,6 +50,7 @@ export const AdvancedSearchController = ({
         setTechs: actualSetTechs,
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
         setSearchValue: setUrlSearchValue,
+        setUrlFilters,
     } = useSearchParams({
         setJobDuration,
         setShowJobDurationSlider,
@@ -92,17 +95,30 @@ export const AdvancedSearchController = ({
     }, [onSubmit, searchOffers, searchValue, setUrlSearchValue]);
 
     useEffect(() => {
-        setShowJobDurationSlider(!!queryParams.jobMinDuration && !!queryParams.jobMaxDuration);
-        setJobDuration(null, [
-            parseInt(queryParams.jobMinDuration, 10),
-            parseInt(queryParams.jobMaxDuration, 10),
-        ]);
+        if (loadUrlFromFilters) {
+            setUrlFilters(
+                jobMinDuration,
+                jobMaxDuration,
+                fields,
+                technologies,
+                jobType,
+                searchValue,
+            );
+            setLoadUrlFromFilters(false);
+            submitForm(null, false);
+        } else {
+            setShowJobDurationSlider(!!queryParams.jobMinDuration && !!queryParams.jobMaxDuration);
+            setJobDuration(null, [
+                parseInt(queryParams.jobMinDuration, 10),
+                parseInt(queryParams.jobMaxDuration, 10),
+            ]);
 
-        setJobType(queryParams.jobType);
-        setFields(ensureArray(queryParams.fields ?? []));
-        setTechs(ensureArray(queryParams.technologies ?? []));
+            setJobType(queryParams.jobType);
+            setFields(ensureArray(queryParams.fields ?? []));
+            setTechs(ensureArray(queryParams.technologies ?? []));
 
-        setSearchValue(queryParams.searchValue);
+            setSearchValue(queryParams.searchValue);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -124,7 +140,8 @@ export const AdvancedSearchController = ({
 export const SearchArea = ({ onSubmit, searchValue,
     jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
     fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
-    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose }) => {
+    setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose,
+    loadUrlFromFilters, setLoadUrlFromFilters }) => {
 
     const classes = useSearchAreaStyles();
     const {
@@ -140,6 +157,7 @@ export const SearchArea = ({ onSubmit, searchValue,
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
             resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
+            loadUrlFromFilters, setLoadUrlFromFilters,
         },
         AdvancedSearchControllerContext
     );
@@ -196,6 +214,8 @@ SearchArea.propTypes = {
     setSearchValue: PropTypes.func.isRequired,
     setJobDuration: PropTypes.func.isRequired,
     setJobType: PropTypes.func.isRequired,
+    setLoadUrlFromFilters: PropTypes.func.isRequired,
+    loadUrlFromFilters: PropTypes.bool,
     resetAdvancedSearchFields: PropTypes.func.isRequired,
     fields: PropTypes.array.isRequired,
     technologies: PropTypes.array.isRequired,
@@ -215,6 +235,7 @@ export const mapStateToProps = ({ offerSearch }) => ({
     fields: offerSearch.fields,
     technologies: offerSearch.technologies,
     showJobDurationSlider: offerSearch.filterJobDuration,
+    loadUrlFromFilters: offerSearch.loadUrlFromFilters,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
@@ -225,6 +246,7 @@ export const mapDispatchToProps = (dispatch) => ({
     setTechs: (technologies) => dispatch(setTechs(technologies)),
     setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
+    setLoadUrlFromFilters: (value) => dispatch(setLoadUrlFromFilters(value)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchArea);

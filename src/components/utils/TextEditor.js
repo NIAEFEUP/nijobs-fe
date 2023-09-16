@@ -122,7 +122,7 @@ EditorToolbar.propTypes =  {
     disabled: PropTypes.bool,
 };
 
-const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText, disabled }) => {
+const TextEditor = ({ id, content, onChangeDescription, onChangeDescriptionText, error, helperText: additionalHelperText, disabled }) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -177,7 +177,7 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
             {!!editor &&
             <FormControl margin="dense" fullWidth>
                 <EditorToolbar editor={editor} disabled={disabled} />
-                <EditorContent editor={editor} />
+                <EditorContent editor={editor} id={id} />
                 <FormHelperText error={error}>
                     {helperText}
                 </FormHelperText>
@@ -188,6 +188,7 @@ const TextEditor = ({ content, onChangeDescription, onChangeDescriptionText, err
 };
 
 TextEditor.propTypes = {
+    id: PropTypes.string,
     content: PropTypes.any.isRequired,
     onChangeDescription: PropTypes.func.isRequired,
     onChangeDescriptionText: PropTypes.func.isRequired,

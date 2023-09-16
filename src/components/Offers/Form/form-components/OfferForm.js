@@ -48,6 +48,19 @@ export const PAID_OPTIONS = [
 ];
 
 
+const scrollToError = (errorArray) => {
+    if (Object.keys(errorArray).length !== 0) {
+        const element = document.getElementById(Object.keys(errorArray)[0]);
+        if (element?.scrollIntoView) {
+            element.scrollIntoView({ behavior: "smooth" });
+        }
+        if (element?.focus) {
+            element.focus();
+        }
+    }
+};
+
+
 const OfferForm = ({ context, title }) => {
     const {
         submit,
@@ -126,11 +139,20 @@ const OfferForm = ({ context, title }) => {
         },
     };
 
+    useEffect(() => {
+        scrollToError(errors);
+    }, [errors]);
+
+    useEffect(() => {
+        scrollToError(requestErrors);
+    }, [requestErrors]);
+
     return (
         success
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
+
                 {(state !== "APPROVED") && session.isLoggedIn &&
                 <Alert
                     type={"warning"}
@@ -141,6 +163,7 @@ const OfferForm = ({ context, title }) => {
                     }
                 </Alert>
                 }
+
                 <CardHeader title={!isMobile && title} />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert
@@ -202,6 +225,7 @@ const OfferForm = ({ context, title }) => {
                                             ) => (
                                                 <MultiOptionAutocomplete
                                                     name={name}
+                                                    id={name}
                                                     onBlur={onBlur}
                                                     error={errors.fields || requestErrors.fields}
                                                     disabled={formDisabled}
@@ -227,6 +251,7 @@ const OfferForm = ({ context, title }) => {
                                             ) => (
                                                 <MultiOptionAutocomplete
                                                     name={name}
+                                                    id={name}
                                                     onBlur={onBlur}
                                                     error={errors.technologies || requestErrors.technologies}
                                                     disabled={formDisabled}
@@ -348,6 +373,7 @@ const OfferForm = ({ context, title }) => {
                                         <MultiOptionTextField
                                             values={contacts}
                                             label="Contacts *"
+                                            id="contacts"
                                             itemLabelPrefix="Contact #"
                                             controllerName="contacts"
                                             onAdd={appendContact}
@@ -363,6 +389,7 @@ const OfferForm = ({ context, title }) => {
                                         <MultiOptionTextField
                                             values={requirements}
                                             label="Requirements *"
+                                            id="requirements"
                                             itemLabelPrefix="Requirement #"
                                             controllerName="requirements"
                                             onAdd={appendRequirement}
@@ -401,7 +428,7 @@ const OfferForm = ({ context, title }) => {
                                     type="submit"
                                     data-testid="submit-offer"
                                 >
-                                        Submit
+                                    Submit
                                 </Button>
                                 <div className={classes.requiredFields}>
                                     <Typography>* Required fields</Typography>

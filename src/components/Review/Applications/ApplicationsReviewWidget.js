@@ -193,7 +193,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
                             <Grid container alignItems="center">
                                 <Grid item xs={5}>
                                     <Typography className={classes.collapsableTitles} variant="body1">
-                                         Actions
+                                        Actions
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={7} justifyContent="center">
@@ -214,7 +214,7 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
                     <div className={classes.payloadSection}>
                         {showActions && <Divider />}
                         <Typography className={classes.collapsableTitles} variant="body1">
-                        Requested At
+                            Requested At
                         </Typography>
                         <Typography variant="body2">
                             {row.fields.date.value}

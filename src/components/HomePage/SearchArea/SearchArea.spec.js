@@ -214,6 +214,41 @@ describe("SearchArea", () => {
             expect(onSubmit).toHaveBeenCalledTimes(1);
         });
 
+        it("should call onSubmit callback on search button click", () => {
+            const searchValue = "test";
+            const setSearchValue = () => { };
+
+            const onSubmit = jest.fn();
+            const addSnackbar = () => { };
+
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
+
+            renderWithStoreAndTheme(
+                <RouteWrappedContent>
+                    <SearchArea
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                        addSnackbar={addSnackbar}
+                        loadUrlFromFilters={true}
+                        showJobDurationSlider={() => { }}
+                        setShowJobDurationSlider={() => { }}
+                        setTechs={() => { }}
+                        setJobDuration={() => { }}
+                        setFields={() => { }}
+                        setJobType={() => { }}
+                        onSubmit={onSubmit}
+                        fields={[]}
+                        technologies={[]}
+                        setLoadUrlFromFilters={() => { }}
+                    />
+                </RouteWrappedContent>,
+                { initialState, theme }
+            );
+
+            expect(onSubmit).toHaveBeenCalledTimes(1);
+        });
+
         it("should fill in search filters if they are present in the URL", () => {
 
             const urlParams = {

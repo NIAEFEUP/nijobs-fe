@@ -41,6 +41,7 @@ const MultiOptionTextField = ({
     disabled,
     textFieldProps,
     addEntryBtnTestId,
+    id,
 }) => {
     const classes = useMultiOptionTextFieldStyle();
     return (
@@ -48,7 +49,7 @@ const MultiOptionTextField = ({
             <Typography variant="h6">
                 {label}
             </Typography>
-            <Box display="flex" flexDirection="column">
+            <Box id={id} display="flex" flexDirection="column">
                 {values.map(({ id }, i) => (
                     <Controller
                         key={id}
@@ -85,7 +86,7 @@ const MultiOptionTextField = ({
                     onClick={() => onAdd()}
                     className={classes.addEntryBtn}
                 >
-                Add Entry
+                    Add Entry
                 </Button>
                 {errors ?
                     <FormHelperText error={!!errors}>
@@ -114,6 +115,7 @@ MultiOptionTextField.propTypes = {
     disabled: PropTypes.bool,
     textFieldProps: PropTypes.object,
     addEntryBtnTestId: PropTypes.string,
+    id: PropTypes.string,
 };
 
 export default MultiOptionTextField;

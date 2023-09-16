@@ -167,7 +167,7 @@ const LogoUploadForm = () => {
                             color="primary"
                             startIcon={<CloudUpload />}
                         >
-                    Upload
+                            Upload
                         </Button>
                     </label>
                 </Grid>

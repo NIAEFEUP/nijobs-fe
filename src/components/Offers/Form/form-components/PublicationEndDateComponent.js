@@ -16,7 +16,7 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                     margin="dense"
                     value={value}
                     label="Publication End Date *"
-                    id="publishEndDate-input"
+                    id={name}
                     name={name}
                     disabled={disabled}
                     onChange={(_, value) => {

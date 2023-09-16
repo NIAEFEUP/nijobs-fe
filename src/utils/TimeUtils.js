@@ -1,13 +1,5 @@
-const MONTH_IN_MS = 1000 * 3600 * 24 * 30.42;
-const DAY_IN_MS = 1000 * 3600 * 24;
-const HOUR_IN_MS = 1000 * 3600;
-const MINUTE_IN_MS = 1000 * 3600;
-const OFFER_MAX_LIFETIME_MONTHS = 6;
-
-module.exports = {
-    MONTH_IN_MS,
-    HOUR_IN_MS,
-    DAY_IN_MS,
-    MINUTE_IN_MS,
-    OFFER_MAX_LIFETIME_MONTHS,
-};
+export const MONTH_IN_MS = 1000 * 3600 * 24 * 30.42;
+export const DAY_IN_MS = 1000 * 3600 * 24;
+export const HOUR_IN_MS = 1000 * 3600;
+export const MINUTE_IN_MS = 1000 * 60;
+export const OFFER_MAX_LIFETIME_MONTHS = 6;
