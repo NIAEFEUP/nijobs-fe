@@ -8,6 +8,7 @@ import useOfferForm from "../../../hooks/useOfferForm";
 import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 import useSession from "../../../hooks/useSession";
 import EditOfferSchema from "./EditOfferSchema";
+import { CardContent, CircularProgress, Grid } from "@material-ui/core";
 
 export const EditOfferControllerContext = React.createContext();
 
@@ -155,7 +156,20 @@ const EditOfferForm = () => {
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (canEdit === undefined) return null;
+    if (canEdit === undefined)
+        return (
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+            >
+                <Grid item xs={3}>
+                    <CardContent>
+                        <CircularProgress  />
+                    </CardContent>
+                </Grid>
+            </Grid>
+        );
 
     if (errorOffer || canEdit === false) {
         return <Redirect {...redirectProps} />;
