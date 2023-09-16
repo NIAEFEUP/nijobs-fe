@@ -79,4 +79,19 @@ describe("Validation Page", () => {
         const { title } = getValidationMessage("application-already-validated");
         expect(page.queryByText(title)).toBeInTheDocument();
     });
+
+    it("Should show error message if there is an account with the same email of the application", async () => {
+        validateApplication.mockImplementation(() => {
+            throw [{ msg: "account-already-using-email" }];
+        });
+        const page = await render(
+            <BrowserRouter>
+                <ThemeProvider theme={AppTheme}>
+                    <ValidationPage />
+                </ThemeProvider>
+            </BrowserRouter>,
+        );
+        const { title } = getValidationMessage("account-already-using-email");
+        expect(page.queryByText(title)).toBeInTheDocument();
+    });
 });

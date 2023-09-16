@@ -19,10 +19,10 @@ const CompanyOffersManagementPage = () => {
     const classes = useStyles(isMobile)();
     const [state, setState_] = useState("APPROVED");
     const session = useSession();
-
+    const companyId = session.data?.company?._id;
     useEffect(() => {
         if (!session.isValidating && session.isLoggedIn) {
-            fetchCompanyApplication(session.data?.company?._id)
+            fetchCompanyApplication(companyId)
                 .then((application) => {
                     setState_(application.state);
                 })
@@ -33,7 +33,7 @@ const CompanyOffersManagementPage = () => {
                     });
                 });
         }
-    }, [session.data.company._id, session.isLoggedIn, session.isValidating]);
+    }, [companyId, session.isLoggedIn, session.isValidating]);
 
     return (
         <CardContent className={classes.content}>

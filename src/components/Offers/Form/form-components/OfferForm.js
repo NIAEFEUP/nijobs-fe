@@ -99,10 +99,11 @@ const OfferForm = ({ context, title }) => {
 
     const [state, setState] = useState("APPROVED");
     const session = useSession();
-
+    const companyId = session.data?.company?._id;
     useEffect(() => {
+        if (isAdmin) return;
         if (!session.isValidating && session.isLoggedIn) {
-            fetchCompanyApplication(session.data?.company?._id)
+            fetchCompanyApplication(companyId)
                 .then((application) => {
                     setState(application.state);
                 })
@@ -113,7 +114,7 @@ const OfferForm = ({ context, title }) => {
                     });
                 });
         }
-    }, [session.isValidating, session.isLoggedIn, session.data.company._id]);
+    }, [session.isValidating, session.isLoggedIn, isAdmin, companyId]);
 
     const showOwnerComponent = isAdmin && showCompanyField;
 

@@ -35,8 +35,12 @@ const ValidationMessages = Object.freeze({
             " You will need to create a new application.",
     },
     "application-already-validated": {
-        title: "Application is already validated!",
-        text: "This application is already validated. ",
+        title: "Application was already validated!",
+        text: "This application was already validated. ",
+    },
+    "account-already-using-email": {
+        title: "Error! Duplicated Email",
+        text: "There is already an account with this email, please create an application with another email. ",
     },
 });
 
