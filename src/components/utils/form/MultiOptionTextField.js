@@ -77,7 +77,7 @@ const MultiOptionTextField = ({
                                 {...textFieldProps}
                             />)}
                         control={control}
-                        defaultValue={getValues(`${controllerName}.${i}.value` || "")}
+                        defaultValue={getValues(`${controllerName}.${i}.value`) || ""}
                     />
                 ))}
                 <Button

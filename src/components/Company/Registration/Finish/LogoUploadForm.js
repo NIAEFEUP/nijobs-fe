@@ -15,6 +15,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const turnImgIntoFile = (imageLink) => {
+    fetch(imageLink).then(async (res) => {
+        const imageBlob = res.blob();
+
+        return new File([imageBlob]);
+    });
+};
+
 export const useLogoUpload = ({ watch }) => {
     const [logoPreview, setLogoPreview] = useState(null);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -31,11 +39,10 @@ export const useLogoUpload = ({ watch }) => {
     }, [logoInput]);
 
     useEffect(() => {
-        if (!logoInput) {
+        if (!logoInput || typeof watch("logo") !== "object") {
             setLogoPreview(undefined);
             return () => { };
         } else {
-
             const objectUrl = URL.createObjectURL(logoInput);
             setLogoPreview(objectUrl);
 
@@ -43,7 +50,7 @@ export const useLogoUpload = ({ watch }) => {
             return () => URL.revokeObjectURL(objectUrl);
         }
 
-    }, [logoInput, setLogoPreview]);
+    }, [logoInput, setLogoPreview, watch]);
 
     const onCropComplete = (_, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
@@ -116,7 +123,7 @@ LogoPreview.propTypes = {
     img: PropTypes.string,
 };
 
-const LogoUploadForm = () => {
+const LogoUploadForm = ({ InfoText }) => {
 
     const {
         logoUploadOptions,
@@ -139,17 +146,7 @@ const LogoUploadForm = () => {
                 alignItems="center"
             >
                 <Grid item xs={12}>
-                    <Typography variant="h6">
-                        {"Upload your Company's logo."}
-                    </Typography>
-                    <Typography variant="caption" gutterBottom paragraph>
-                        {"A picture is worth a thousand words. Is there any better way to represent your brand than your Company's logo?"}
-                    </Typography>
-                    <Box marginY={1} fontStyle="italic">
-                        <Typography variant="caption" gutterBottom paragraph>
-                            {"It should be a PNG or JPG file, with no more than 10MB."}
-                        </Typography>
-                    </Box>
+                    <InfoText />
                 </Grid>
                 <Grid item xs="auto">
                     <input

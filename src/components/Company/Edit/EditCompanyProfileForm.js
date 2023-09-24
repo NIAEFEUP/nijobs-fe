@@ -24,24 +24,72 @@ import { Redirect, useLocation, useParams } from "react-router-dom/cjs/react-rou
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditCompanySchema from "./EditCompanySchema";
 import MultiOptionTextField from "../../utils/form/MultiOptionTextField";
-import LogoUploadForm from "../Registration/Finish/LogoUploadForm";
+import LogoUploadForm, { turnImgIntoFile } from "../Registration/Finish/LogoUploadForm";
 import { useContacts } from "../Registration/Finish/ContactsForm";
-
-export const EditCompanyControllerContext = React.createContext();
-
-const EditImage = ({ style, image, imageAlt }) => {
-    return (<Avatar
-        alt={imageAlt}
-        src={image}
-        style={style}
-    />);
-};
+import { FinishCompanyRegistrationController, FinishCompanyRegistrationControllerContext } from "../Registration/Finish/FinishCompanyRegistrationWidget";
+import { useLogoUpload } from "../Registration/Finish/LogoUploadForm";
+import { CloudUpload, Edit } from "@material-ui/icons";
+import getCroppedImg from "../../utils/image/cropImage";
 
 const useStyles = makeStyles((theme) => ({
     submitBtn: {
         marginTop: theme.spacing(2),
     },
+    avatar: {
+        marginBottom: theme.spacing(1),
+        height: "5em",
+        width: "5em",
+    },
 }));
+
+export const EditCompanyControllerContext = React.createContext();
+
+const EditImageText = () => <>
+    <Box
+        marginY={2}
+    >
+        <Typography align="center" variant="h6">
+            {"Upload your Company's logo."}
+        </Typography>
+    </Box>
+</>;
+
+const EditImage = ({ classname, image, imageAlt }) => {
+    const {
+        logoUploadOptions,
+        register,
+        errors,
+    } = useContext(EditCompanyControllerContext);
+
+    const [editingImage, setEditingImage] = useState(false);
+
+    return editingImage ?
+        <FinishCompanyRegistrationControllerContext.Provider value={{ logoUploadOptions, register, errors }}>
+            <LogoUploadForm InfoText={EditImageText} />
+        </FinishCompanyRegistrationControllerContext.Provider>
+        :
+        (<>
+            <Box
+                align="center"
+            >
+                <Avatar
+                    alt={imageAlt}
+                    src={image}
+                    className={classname}
+                />
+                <Button
+                    onClick={() => setEditingImage(true)}
+                    variant="contained"
+                    component="span"
+                    color="primary"
+                    startIcon={<Edit />}
+                >
+                    Edit
+                </Button>
+            </Box>
+        </>
+        );
+};
 
 const getParsedCompanyContacts = (contacts) => {
     const newContacts = [];
@@ -58,8 +106,13 @@ const parseCompany = ({
 }) => ({
     contacts: contacts.map((value) => ({ value })),
     ...company,
-    logo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.1SzV5xZOzNbaUOENWpw9vwHaHa%26pid%3DApi&f=1&ipt=36ec7cc75953554a84897bc0aaa6402e9267a031b8618c412927094349aca538&ipo=images"
 });
+
+const getCorrectEditedImage = (logoUploadOptions, logo) => {
+    if (!logoUploadOptions.logoPreview) {
+
+    }
+};
 
 export const EditCompanyController = () => {
     const { id } = useParams();
@@ -67,11 +120,11 @@ export const EditCompanyController = () => {
     const { data: user, isValidating } = useSession();
     let canEditRaceControl = false;
 
-    const { handleSubmit, control, reset, getValues } = useForm({
+    const { handleSubmit, control, reset, getValues, register, watch, formState: { errors } } = useForm({
         mode: "all",
         resolver: yupResolver(EditCompanySchema),
         defaultValues: {
-            logo: "",
+            logo: undefined,
             name: "",
             contacts: [],
             bio: "",
@@ -109,14 +162,25 @@ export const EditCompanyController = () => {
         },
     };
 
-    const submit = (data) => {
+    const submit = async (data) => {
         const contacts = getParsedCompanyContacts(data.contacts);
-        editCompany({ ...data, contacts: contacts }).then(() => {
+
+        const croppedImage = logoUploadOptions.logoPreview ? await
+            getCroppedImg(
+                logoUploadOptions.logoPreview,
+                logoUploadOptions.croppedAreaPixels,
+                0
+            ) : undefined;
+
+        editCompany({ ...data, contacts: contacts, logo: croppedImage }).then(() => {
 
         }).catch((err) => {
 
         });
+
     };
+
+    const logoUploadOptions = useLogoUpload({ control, watch });
 
     return {
         controllerOptions: {
@@ -131,6 +195,9 @@ export const EditCompanyController = () => {
                 control,
                 fields,
                 getValues,
+                logoUploadOptions,
+                register,
+                errors,
                 submit: handleSubmit(submit),
             },
         },
@@ -152,6 +219,8 @@ const EditCompanyProfileForm = ({ title }) => {
         control,
         getValues,
         submit,
+        register,
+        errors,
     } = useContext(EditCompanyControllerContext);
 
     const classes = useStyles();
@@ -175,16 +244,11 @@ const EditCompanyProfileForm = ({ title }) => {
                         >
                             <Grid container spacing={4}>
                                 <Grid item xs={12}>
-                                    <Box
-                                        display="flex"
-                                        justifyContent="center"
-                                    >
-                                        <EditImage
-                                            image={company?.logo}
-                                            style={{ height: "5em", width: "5em" }}
-                                            imageAlt={`${company?.name}'s logo`}
-                                        />
-                                    </Box>
+                                    <EditImage
+                                        image={company?.logo}
+                                        imageAlt={`${company?.name}'s logo`}
+                                        classname={classes.avatar}
+                                    />
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Controller
@@ -254,7 +318,7 @@ const EditCompanyProfileForm = ({ title }) => {
                                 </Grid>
                             </Grid>
                             <Button
-                                // disabled={loading || formDisabled}
+                                disabled={loadingCompany}
                                 variant="contained"
                                 color="primary"
                                 type="submit"

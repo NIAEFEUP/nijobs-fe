@@ -22,14 +22,20 @@ export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         logo,
     };
 
+    const formData = new FormData();
+
+    if (logo) formData.append("logo", logo);
+    formData.append("name", name);
+    contacts.forEach((contact) => {
+        formData.append("contacts", contact);
+    });
+    formData.append("bio", bio);
+
     try {
         const res = await fetch(`${API_HOSTNAME}/company/${id}/edit`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            body: formData,
             credentials: "include",
-            body: JSON.stringify(updatedCompany),
         });
         const json = await res.json();
 
