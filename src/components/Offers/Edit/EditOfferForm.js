@@ -8,6 +8,7 @@ import useOfferForm from "../../../hooks/useOfferForm";
 import { INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 import useSession from "../../../hooks/useSession";
 import EditOfferSchema from "./EditOfferSchema";
+import { CardContent, CircularProgress, Grid } from "@material-ui/core";
 
 export const EditOfferControllerContext = React.createContext();
 
@@ -42,7 +43,7 @@ const parseOfferForm = ({
     vacancies: vacancies || "",
     description,
     descriptionText: parseDescription(description),
-    applyURL: applyURL.startsWith("mailto:") ? applyURL.substring(7) : applyURL,
+    applyURL: applyURL?.startsWith("mailto:") ? applyURL.substring(7) : applyURL,
     ...offer,
 });
 
@@ -59,11 +60,11 @@ export const EditOfferController = () => {
             (offer?.owner === user?.company?._id) || user?.isAdmin);
     }, [offer, user]);
 
-    const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
+    const [canEdit, setCanEdit] = useState(undefined);
 
     useEffect(() => {
-        setCanEdit(shouldRevalidateEditingPermissions());
-    }, [shouldRevalidateEditingPermissions, loadingOffer, offer, user]);
+        if (!isValidating && !loadingOffer) setCanEdit(shouldRevalidateEditingPermissions());
+    }, [isValidating, loadingOffer, shouldRevalidateEditingPermissions]);
 
     const location = useLocation();
 
@@ -154,11 +155,25 @@ const EditOfferForm = () => {
         loadingOffer,
         errorOffer,
         redirectProps,
-        isValidating,
         canEdit,
     } = useContext(EditOfferControllerContext);
 
-    if (errorOffer || (!loadingOffer && !isValidating && canEdit === false)) {
+    if (canEdit === undefined)
+        return (
+            <Grid
+                container
+                direction="column"
+                alignItems="center"
+            >
+                <Grid item xs={3}>
+                    <CardContent>
+                        <CircularProgress  />
+                    </CardContent>
+                </Grid>
+            </Grid>
+        );
+
+    if (errorOffer || canEdit === false) {
         return <Redirect {...redirectProps} />;
     }
 

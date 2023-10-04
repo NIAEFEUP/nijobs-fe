@@ -15,6 +15,7 @@ export const CreateOfferController = () => {
         (data) => {
             params.setLoading(true);
             const [jobMinDuration, jobMaxDuration] = data.jobDuration;
+            const parsedApplyURL = parseApplyURL(data.applyURL);
             newOffer({
                 ...data,
                 vacancies: data.vacancies || undefined,
@@ -23,7 +24,7 @@ export const CreateOfferController = () => {
                 isPaid: data.isPaid === "none" ? undefined : data.isPaid,
                 jobStartDate: !data.jobStartDate ? undefined : data.jobStartDate,
                 owner: data.owner || params.company,
-                applyURL: parseApplyURL(data.applyURL),
+                applyURL: !parsedApplyURL ? undefined : parsedApplyURL,
                 jobMinDuration,
                 jobMaxDuration,
             })
