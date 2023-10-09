@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Box, Button, Card, Grid, makeStyles, Slider, Typography } from "@material-ui/core";
+import { Button, Card, Grid, makeStyles, Slider, Typography } from "@material-ui/core";
 import Cropper from "react-easy-crop";
 import { CloudUpload } from "@material-ui/icons";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
@@ -14,14 +14,6 @@ const useStyles = makeStyles((theme) => ({
         height: "200px",
     },
 }));
-
-const turnImgIntoFile = (imageLink) => {
-    fetch(imageLink).then(async (res) => {
-        const imageBlob = res.blob();
-
-        return new File([imageBlob]);
-    });
-};
 
 export const useLogoUpload = ({ watch }) => {
     const [logoPreview, setLogoPreview] = useState(null);
@@ -192,6 +184,12 @@ const LogoUploadForm = ({ InfoText }) => {
             </Typography>
         </>
     );
+};
+
+LogoUploadForm.propTypes = {
+    InfoText: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+    children: PropTypes.element.isRequired,
+    on: PropTypes.bool.isRequired,
 };
 
 export default LogoUploadForm;

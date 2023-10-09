@@ -1,10 +1,7 @@
-import Offer from "../components/HomePage/SearchResultsArea/Offer/Offer";
 import config from "../config";
-import { parseFiltersToURL, buildCancelableRequest } from "../utils";
-import { createEvent, measureTime, sendSearchReport, createErrorEvent } from "../utils/analytics";
-import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 import Constants from "../utils/Constants";
-import ErrorTypes from "../utils/ErrorTypes";
+import { measureTime } from "../utils/analytics";
+import { TIMED_ACTIONS } from "../utils/analytics/constants";
 const { API_HOSTNAME } = config;
 
 export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
@@ -14,14 +11,6 @@ export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     bio,
     logo,
 }) => {
-    const updatedCompany = {
-        id,
-        name,
-        contacts,
-        bio,
-        logo,
-    };
-
     const formData = new FormData();
 
     if (logo) formData.append("logo", logo);
@@ -45,6 +34,9 @@ export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
 
         return json;
     } catch (error) {
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
 
+        throw errorArray;
     }
 });

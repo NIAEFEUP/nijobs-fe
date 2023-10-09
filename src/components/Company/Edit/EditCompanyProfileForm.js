@@ -5,7 +5,6 @@ import {
     CardContent,
     DialogContent,
     Grid,
-    FormControl,
     Typography,
     Button,
     TextField,
@@ -16,7 +15,6 @@ import {
 import { useMobile } from "../../../utils/media-queries";
 import useOfferFormStyles from "../../../components/Offers/Form/form-components/offerStyles";
 import { editCompany } from "../../../services/companyEditService";
-import TextEditorComponent from "../../Offers/Form/form-components/TextEditorComponent";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import useCompany from "../../../hooks/useCompany";
 import useSession from "../../../hooks/useSession";
@@ -24,11 +22,10 @@ import { Redirect, useLocation, useParams } from "react-router-dom/cjs/react-rou
 import { yupResolver } from "@hookform/resolvers/yup";
 import EditCompanySchema from "./EditCompanySchema";
 import MultiOptionTextField from "../../utils/form/MultiOptionTextField";
-import LogoUploadForm, { turnImgIntoFile } from "../Registration/Finish/LogoUploadForm";
 import { useContacts } from "../Registration/Finish/ContactsForm";
-import { FinishCompanyRegistrationController, FinishCompanyRegistrationControllerContext } from "../Registration/Finish/FinishCompanyRegistrationWidget";
-import { useLogoUpload } from "../Registration/Finish/LogoUploadForm";
-import { CloudUpload, Edit } from "@material-ui/icons";
+import { FinishCompanyRegistrationControllerContext } from "../Registration/Finish/FinishCompanyRegistrationWidget";
+import LogoUploadForm, { useLogoUpload } from "../Registration/Finish/LogoUploadForm";
+import { Edit } from "@material-ui/icons";
 import getCroppedImg from "../../utils/image/cropImage";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,15 +41,16 @@ const useStyles = makeStyles((theme) => ({
 
 export const EditCompanyControllerContext = React.createContext();
 
-const EditImageText = () => <>
-    <Box
-        marginY={2}
-    >
-        <Typography align="center" variant="h6">
-            {"Upload your Company's logo."}
-        </Typography>
-    </Box>
-</>;
+const EditImageText = () =>
+    <>
+        <Box
+            marginY={2}
+        >
+            <Typography align="center" variant="h6">
+                {"Upload your Company's logo."}
+            </Typography>
+        </Box>
+    </>;
 
 const EditImage = ({ classname, image, imageAlt }) => {
     const {
@@ -68,27 +66,34 @@ const EditImage = ({ classname, image, imageAlt }) => {
             <LogoUploadForm InfoText={EditImageText} />
         </FinishCompanyRegistrationControllerContext.Provider>
         :
-        (<>
-            <Box
-                align="center"
-            >
-                <Avatar
-                    alt={imageAlt}
-                    src={image}
-                    className={classname}
-                />
-                <Button
-                    onClick={() => setEditingImage(true)}
-                    variant="contained"
-                    component="span"
-                    color="primary"
-                    startIcon={<Edit />}
+        (
+            <>
+                <Box
+                    align="center"
                 >
-                    Edit
-                </Button>
-            </Box>
-        </>
+                    <Avatar
+                        alt={imageAlt}
+                        src={image}
+                        className={classname}
+                    />
+                    <Button
+                        onClick={() => setEditingImage(true)}
+                        variant="contained"
+                        component="span"
+                        color="primary"
+                        startIcon={<Edit />}
+                    >
+                        Edit
+                    </Button>
+                </Box>
+            </>
         );
+};
+
+EditImage.propTypes = {
+    classname: PropTypes.string,
+    image: PropTypes.string,
+    imageAlt: PropTypes.string,
 };
 
 const getParsedCompanyContacts = (contacts) => {
@@ -108,19 +113,12 @@ const parseCompany = ({
     ...company,
 });
 
-const getCorrectEditedImage = (logoUploadOptions, logo) => {
-    if (!logoUploadOptions.logoPreview) {
-
-    }
-};
-
 export const EditCompanyController = () => {
     const { id } = useParams();
     const { company, error: companyError, loading: loadingCompany } = useCompany(id);
     const { data: user, isValidating } = useSession();
-    let canEditRaceControl = false;
 
-    const { handleSubmit, control, reset, getValues, register, watch, formState: { errors } } = useForm({
+    const { setSuccess, setLoading, handleSubmit, control, reset, getValues, register, watch, formState: { errors } } = useForm({
         mode: "all",
         resolver: yupResolver(EditCompanySchema),
         defaultValues: {
@@ -136,14 +134,11 @@ export const EditCompanyController = () => {
 
     const shouldRevalidateEditingPermissions = useCallback(() => user?.isAdmin || user?.company?._id === id, [id, user]);
 
-    const [canEdit, setCanEdit] = useState(shouldRevalidateEditingPermissions());
+    const [canEdit, setCanEdit] = useState(undefined);
 
     useEffect(() => {
-        setCanEdit(shouldRevalidateEditingPermissions());
-        if (!loadingCompany && !isValidating) {
-            canEditRaceControl = true;
-        }
-    }, [shouldRevalidateEditingPermissions, loadingCompany, company, user]);
+        if (!isValidating && !loadingCompany) setCanEdit(shouldRevalidateEditingPermissions());
+    }, [isValidating, loadingCompany, shouldRevalidateEditingPermissions]);
 
     useEffect(() => {
         if (company && !isValidating && canEdit) {
@@ -165,17 +160,18 @@ export const EditCompanyController = () => {
     const submit = async (data) => {
         const contacts = getParsedCompanyContacts(data.contacts);
 
-        const croppedImage = logoUploadOptions.logoPreview ? await
-            getCroppedImg(
+        const croppedImage = logoUploadOptions.logoPreview ?
+            await getCroppedImg(
                 logoUploadOptions.logoPreview,
                 logoUploadOptions.croppedAreaPixels,
                 0
             ) : undefined;
 
         editCompany({ ...data, contacts: contacts, logo: croppedImage }).then(() => {
-
-        }).catch((err) => {
-
+            setLoading(false);
+            setSuccess(true);
+        }).catch(() => {
+            setLoading(false);
         });
 
     };
@@ -191,7 +187,6 @@ export const EditCompanyController = () => {
                 loadingCompany,
                 companyError,
                 isValidating,
-                canEditRaceControl,
                 control,
                 fields,
                 getValues,
@@ -214,13 +209,9 @@ const EditCompanyProfileForm = ({ title }) => {
         companyError,
         canEdit,
         redirectProps,
-        isValidating,
-        canEditRaceControl,
         control,
         getValues,
         submit,
-        register,
-        errors,
     } = useContext(EditCompanyControllerContext);
 
     const classes = useStyles();
@@ -229,113 +220,115 @@ const EditCompanyProfileForm = ({ title }) => {
 
     const Content = isMobile ? DialogContent : CardContent;
 
-    if (companyError || (!loadingCompany && !isValidating && !canEdit && canEditRaceControl)) {
+    if (companyError || !canEdit) {
         return <Redirect {...redirectProps} />;
     }
 
-    return <>
-        <div className={formCardClasses.formCard}>
-            <CardHeader title={title} />
-            <Content className={formCardClasses.formContent}>
-                <Grid container className={formCardClasses.formArea}>
-                    <Grid item xs={12}>
-                        <form
-                            onSubmit={submit}
-                        >
-                            <Grid container spacing={4}>
-                                <Grid item xs={12}>
-                                    <EditImage
-                                        image={company?.logo}
-                                        imageAlt={`${company?.name}'s logo`}
-                                        classname={classes.avatar}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Controller
-                                        name="name"
-                                        render={(
-                                            { field: {
-                                                onChange, onBlur, ref, name, value,
-                                            } }
-                                        ) => (
-                                            <TextField
-                                                label="Name"
-                                                name={name}
-                                                id={name}
-                                                inputRef={ref}
-                                                onBlur={onBlur}
-                                                value={value}
-                                                fullWidth
-                                                required
-                                                autoFocus
-                                                onChange={onChange}
-                                            />
-                                        )}
-                                        control={control}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <MultiOptionTextField
-                                        values={contacts}
-                                        control={control}
-                                        controllerName="contacts"
-                                        getValues={getValues}
-                                        onAdd={append}
-                                        onRemove={remove}
-                                        itemLabelPrefix="Contact #"
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Controller
-                                        name="bio"
-                                        render={(
-                                            { field: { onChange, onBlur, ref, name, value } },
-                                        ) => (
-                                            <TextField
-                                                name={name}
-                                                value={value}
-                                                label="Company Bio"
-                                                id="bio"
-                                                // error={!!errors.bio}
-                                                inputRef={ref}
-                                                onBlur={onBlur}
-                                                onChange={onChange}
-                                                multiline
-                                                // helperText={
-                                                //     `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength} ${errors.bio?.message || ""}`
-                                                // }
-                                                rows={5}
-                                                variant="outlined"
-                                                FormHelperTextProps={{
-                                                    style: {
-                                                        marginLeft: 0,
-                                                    },
-                                                }}
-                                                fullWidth
-                                            />)}
-                                        control={control}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                disabled={loadingCompany}
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                className={classes.submitBtn}
+    return (
+        <>
+            <div className={formCardClasses.formCard}>
+                <CardHeader title={title} />
+                <Content className={formCardClasses.formContent}>
+                    <Grid container className={formCardClasses.formArea}>
+                        <Grid item xs={12}>
+                            <form
+                                onSubmit={submit}
                             >
-                                Submit
-                            </Button>
-                            <div className={formCardClasses.requiredFields}>
-                                <Typography>* Required fields</Typography>
-                            </div>
-                        </form>
+                                <Grid container spacing={4}>
+                                    <Grid item xs={12}>
+                                        <EditImage
+                                            image={company?.logo}
+                                            imageAlt={`${company?.name}'s logo`}
+                                            classname={classes.avatar}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Controller
+                                            name="name"
+                                            render={(
+                                                { field: {
+                                                    onChange, onBlur, ref, name, value,
+                                                } }
+                                            ) => (
+                                                <TextField
+                                                    label="Name"
+                                                    name={name}
+                                                    id={name}
+                                                    inputRef={ref}
+                                                    onBlur={onBlur}
+                                                    value={value}
+                                                    fullWidth
+                                                    required
+                                                    autoFocus
+                                                    onChange={onChange}
+                                                />
+                                            )}
+                                            control={control}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <MultiOptionTextField
+                                            values={contacts}
+                                            control={control}
+                                            controllerName="contacts"
+                                            getValues={getValues}
+                                            onAdd={append}
+                                            onRemove={remove}
+                                            itemLabelPrefix="Contact #"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Controller
+                                            name="bio"
+                                            render={(
+                                                { field: { onChange, onBlur, ref, name, value } },
+                                            ) => (
+                                                <TextField
+                                                    name={name}
+                                                    value={value}
+                                                    label="Company Bio"
+                                                    id="bio"
+                                                    // error={!!errors.bio}
+                                                    inputRef={ref}
+                                                    onBlur={onBlur}
+                                                    onChange={onChange}
+                                                    multiline
+                                                    // helperText={
+                                                    //     `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength}
+                                                    //      ${errors.bio?.message || ""}`
+                                                    // }
+                                                    rows={5}
+                                                    variant="outlined"
+                                                    FormHelperTextProps={{
+                                                        style: {
+                                                            marginLeft: 0,
+                                                        },
+                                                    }}
+                                                    fullWidth
+                                                />)}
+                                            control={control}
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button
+                                    disabled={loadingCompany}
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    className={classes.submitBtn}
+                                >
+                                    Submit
+                                </Button>
+                                <div className={formCardClasses.requiredFields}>
+                                    <Typography>* Required fields</Typography>
+                                </div>
+                            </form>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Content>
-        </div>
+                </Content>
+            </div>
 
-    </>;
+        </>);
 };
 
 EditCompanyProfileForm.propTypes = {

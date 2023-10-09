@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import config from "../config";
 const { API_HOSTNAME } = config;
 
-export default  (id) => {
+export default (id) => {
     const getCompany = async (key) => {
         try {
             const res = await fetch(key, {
@@ -25,7 +25,7 @@ export default  (id) => {
         }
     };
 
-    const { data, error, isLoading, mutate } = useSWR(`${API_HOSTNAME}/company/${id}`, getCompany);
+    const { data, error, mutate } = useSWR(`${API_HOSTNAME}/company/${id}`, getCompany);
     const company = useMemo(() => data ? data.company : null, [data]);
 
     return {

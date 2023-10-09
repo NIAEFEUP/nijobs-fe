@@ -30,19 +30,20 @@ import useSession from "../../../../hooks/useSession";
 import useFinishCompanyRegistrationStyles from "./finishCompanyRegistrationStyles";
 import Constants from "../../../../utils/Constants";
 
-const ImageUploadText = () => <>
-    <Typography variant="h6">
-        {"Upload your Company's logo."}
-    </Typography>
-    <Typography variant="caption" gutterBottom paragraph>
-        {"A picture is worth a thousand words. Is there any better way to represent your brand than your Company's logo?"}
-    </Typography>
-    <Box marginY={1} fontStyle="italic">
-        <Typography variant="caption" gutterBottom paragraph>
-            {"It should be a PNG or JPG file, with no more than 10MB."}
+const ImageUploadText = () =>
+    <>
+        <Typography variant="h6">
+            {"Upload your Company's logo."}
         </Typography>
-    </Box>
-</>;
+        <Typography variant="caption" gutterBottom paragraph>
+            {"A picture is worth a thousand words. Is there any better way to represent your brand than your Company's logo?"}
+        </Typography>
+        <Box marginY={1} fontStyle="italic">
+            <Typography variant="caption" gutterBottom paragraph>
+                {"It should be a PNG or JPG file, with no more than 10MB."}
+            </Typography>
+        </Box>
+    </>;
 
 function getStepContent(step) {
     switch (step) {
