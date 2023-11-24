@@ -27,14 +27,13 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         alignItems: "flex-end",
         flexDirection: "column",
-        
     }),
     accountName: ({ isMobile }) => ({
         margin: isMobile ? theme.spacing(1) : theme.spacing(3, 2),
         marginBottom: theme.spacing(1),
-        overflow: "hidden",       
-        textOverflow: "ellipsis",  
-        maxWidth: "90%",   
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        maxWidth: "90%",
     }),
     menuList: {
         width: "80%",

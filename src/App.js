@@ -7,7 +7,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 const App = () => (
     <Provider store={store}>
-    
+
         <React.Fragment>
             <CssBaseline />
             <Notifier />
