@@ -6,10 +6,9 @@ import {
     Grid,
     FormControl,
     Typography,
-    Collapse,
     Button,
 } from "@material-ui/core";
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 import MultiOptionTextField from "../../../utils/form/MultiOptionTextField";
@@ -27,10 +26,6 @@ import PublicationDateComponent from "./PublicationDateComponent";
 import PublicationEndDateComponent from "./PublicationEndDateComponent";
 import IsHiddenComponent from "./IsHiddenComponent";
 import TextEditorComponent from "./TextEditorComponent";
-import {
-    KeyboardArrowDown,
-    KeyboardArrowUp,
-} from "@material-ui/icons";
 import useOfferFormStyles from "./offerStyles";
 import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
@@ -84,22 +79,6 @@ const OfferForm = ({ context, title }) => {
     const isMobile = useMobile();
 
     const formDisabled = !isLoggedIn || companyUnfinishedRegistration;
-
-    const [isAdvancedOpen, setAdvancedOpen] = useState(false);
-
-    const shouldShowAdvancedOptions = useCallback(() => (
-        isAdvancedOpen ||
-        !!errors.publishDate || !!requestErrors.publishDate ||
-        !!errors.publishEndDate || !!requestErrors.publishEndDate ||
-        !!errors.isHidden
-    ), [
-        errors.isHidden,
-        errors.publishDate,
-        errors.publishEndDate,
-        isAdvancedOpen,
-        requestErrors.publishDate,
-        requestErrors.publishEndDate,
-    ]);
 
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
@@ -271,57 +250,42 @@ const OfferForm = ({ context, title }) => {
                                         />
                                     </Grid>
                                     <Grid item xs={12} lg={12}>
-                                        <Button
-                                            onClick={() => setAdvancedOpen(!isAdvancedOpen)}
-                                            size="small"
-                                            margin="dense"
-                                            endIcon={
-                                                shouldShowAdvancedOptions()
-                                                    ? <KeyboardArrowUp />
-                                                    : <KeyboardArrowDown />}
-                                        >
-                                            <Typography>Advanced Settings</Typography>
-                                        </Button>
-                                    </Grid>
-                                    <Grid item xs={12} lg={12}>
-                                        <Collapse in={shouldShowAdvancedOptions()}>
-                                            <Grid container spacing={4} className={classes.advancedSettingsCollapse}>
-                                                <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <PublicationDateComponent
-                                                        disabled={formDisabled}
-                                                        errors={errors}
-                                                        requestErrors={requestErrors}
-                                                        control={control}
-                                                        datePickerProps={{
-                                                            className: classes.advancedSettingsDatePicker,
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                    <PublicationEndDateComponent
-                                                        fields={fields}
-                                                        disabled={formDisabled}
-                                                        errors={errors}
-                                                        requestErrors={requestErrors}
-                                                        control={control}
-                                                        datePickerProps={{
-                                                            className: classes.advancedSettingsDatePicker,
-                                                        }}
-                                                    />
-                                                </Grid>
-                                                {
-                                                    showHiddenField &&
-                                                    <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
-                                                        <IsHiddenComponent
-                                                            disabled={formDisabled}
-                                                            errors={errors}
-                                                            requestErrors={requestErrors}
-                                                            control={control}
-                                                        />
-                                                    </Grid>
-                                                }
+                                        <Grid container spacing={4}>
+                                            <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
+                                                <PublicationDateComponent
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                    datePickerProps={{
+                                                        className: classes.publicationDatePicker,
+                                                    }}
+                                                />
                                             </Grid>
-                                        </Collapse>
+                                            <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
+                                                <PublicationEndDateComponent
+                                                    fields={fields}
+                                                    disabled={formDisabled}
+                                                    errors={errors}
+                                                    requestErrors={requestErrors}
+                                                    control={control}
+                                                    datePickerProps={{
+                                                        className: classes.publicationDatePicker,
+                                                    }}
+                                                />
+                                            </Grid>
+                                            {
+                                                showHiddenField &&
+                                                <Grid item xs={12} lg={6} className={classes.gridWithInfo}>
+                                                    <IsHiddenComponent
+                                                        disabled={formDisabled}
+                                                        errors={errors}
+                                                        requestErrors={requestErrors}
+                                                        control={control}
+                                                    />
+                                                </Grid>
+                                            }
+                                        </Grid>
                                     </Grid>
                                     <Grid item xs={12} className={classes.highlightOptionGrid}>
                                         <ApplyURLComponent

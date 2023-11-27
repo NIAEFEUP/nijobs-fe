@@ -44,7 +44,7 @@ export default (isMobile) => makeStyles((theme) => ({
     autocompleteChipWrapper: {
         minHeight: "40px",
     },
-    advancedSettingsDatePicker: {
+    publicationDatePicker: {
         width: "100%",
         marginRight: theme.spacing(2),
     },
@@ -55,9 +55,6 @@ export default (isMobile) => makeStyles((theme) => ({
     },
     vacanciesGrid: {
         marginBottom: theme.spacing(5),
-    },
-    advancedSettingsCollapse: {
-        marginBottom: theme.spacing(4),
     },
     jobTypeGrid: {
         marginBottom: theme.spacing(4),
