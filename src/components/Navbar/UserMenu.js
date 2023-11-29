@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
         overflow: "hidden",
         textOverflow: "ellipsis",
+        alignSelf: "center",
         maxWidth: "90%",
     }),
     menuList: {
