@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import useProfileStyles from "./ProfileStyles";
 import { Button, Divider, Typography } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+import CompanyOffersWidget from "./CompanyOffersWidget";
 import { Contacts, Work } from "@material-ui/icons";
 
 const Actions = {
@@ -15,9 +16,9 @@ const getExtraContent = (action, classes, company) => {
     switch (action) {
         case Actions.ShowOffers:
             return (
-                <span>
-                    Offers
-                </span>
+                <CompanyOffersWidget
+                    company={company}
+                />
             );
         case Actions.ShowContacts:
             return (
