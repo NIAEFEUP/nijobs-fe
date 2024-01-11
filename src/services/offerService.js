@@ -346,7 +346,7 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     let isErrorRegistered = false;
 
     try {
-        const res = await fetch(`${API_HOSTNAME}/offers/edit/${offerId}`, {
+        const res = await fetch(`${API_HOSTNAME}/offers/${offerId}/edit`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -355,7 +355,6 @@ export const editOffer = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
             body: JSON.stringify(data),
         });
         const json = await res.json();
-
         if (!res.ok) {
             createErrorEvent(
                 OFFER_EDIT_METRIC_ID,
