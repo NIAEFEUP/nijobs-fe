@@ -132,7 +132,9 @@ export const EditCompanyController = () => {
 
     const fields = useWatch({ control });
 
-    const shouldRevalidateEditingPermissions = useCallback(() => user?.isAdmin || user?.company?._id === id, [id, user]);
+    const shouldRevalidateEditingPermissions = useCallback(() => {
+        return user?.isAdmin || user?.company?._id === id;
+    }, [id, user]);
 
     const [canEdit, setCanEdit] = useState(undefined);
 
@@ -220,7 +222,7 @@ const EditCompanyProfileForm = ({ title }) => {
 
     const Content = isMobile ? DialogContent : CardContent;
 
-    if (companyError || !canEdit) {
+    if (companyError || canEdit === false) {
         return <Redirect {...redirectProps} />;
     }
 
