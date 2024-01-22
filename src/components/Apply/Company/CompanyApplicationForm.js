@@ -66,9 +66,9 @@ const CompanyApplicationForm = ({ submitCompanyApplication, submittingApplicatio
     }, [reset, resetCompanyApplicationSubmissionError]);
 
 
-    const classes = useCompanyApplicationStyles(useMobile())();
-
     const isMobile = useMobile();
+
+    const classes = useCompanyApplicationStyles(isMobile)();
 
     return (
         <React.Fragment>
