@@ -27,6 +27,8 @@ import { FinishCompanyRegistrationControllerContext } from "../Registration/Fini
 import LogoUploadForm, { useLogoUpload } from "../Registration/Finish/LogoUploadForm";
 import { Edit } from "@material-ui/icons";
 import getCroppedImg from "../../utils/image/cropImage";
+import { parseRequestErrors } from "../../Offers/Form/OfferUtils";
+import { FinishCompanyRegistrationConstants } from "../Registration/Finish/FinishCompanyRegistrationUtils";
 
 const useStyles = makeStyles((theme) => ({
     submitBtn: {
@@ -118,7 +120,10 @@ export const EditCompanyController = () => {
     const { company, error: companyError, loading: loadingCompany } = useCompany(id);
     const { data: user, isValidating } = useSession();
 
-    const { setSuccess, setLoading, handleSubmit, control, reset, getValues, register, watch, formState: { errors } } = useForm({
+    const [success, setSuccess] = React.useState(false);
+    const [requestErrors, setRequestErrors] = React.useState({});
+
+    const { handleSubmit, control, reset, getValues, register, watch, formState: { errors } } = useForm({
         mode: "all",
         resolver: yupResolver(EditCompanySchema),
         defaultValues: {
@@ -132,9 +137,7 @@ export const EditCompanyController = () => {
 
     const fields = useWatch({ control });
 
-    const shouldRevalidateEditingPermissions = useCallback(() => {
-        return user?.isAdmin || user?.company?._id === id;
-    }, [id, user]);
+    const shouldRevalidateEditingPermissions = useCallback(() => user?.isAdmin || user?.company?._id === id, [id, user]);
 
     const [canEdit, setCanEdit] = useState(undefined);
 
@@ -170,10 +173,11 @@ export const EditCompanyController = () => {
             ) : undefined;
 
         editCompany({ ...data, contacts: contacts, logo: croppedImage }).then(() => {
-            setLoading(false);
             setSuccess(true);
-        }).catch(() => {
-            setLoading(false);
+        }).catch((err) => {
+            const reqErrors = parseRequestErrors(err);
+            setRequestErrors(reqErrors);
+
         });
 
     };
@@ -184,6 +188,7 @@ export const EditCompanyController = () => {
         controllerOptions: {
             initialValue: {
                 canEdit,
+                success,
                 company,
                 redirectProps,
                 loadingCompany,
@@ -191,6 +196,7 @@ export const EditCompanyController = () => {
                 isValidating,
                 control,
                 fields,
+                requestErrors,
                 getValues,
                 logoUploadOptions,
                 register,
@@ -211,7 +217,10 @@ const EditCompanyProfileForm = ({ title }) => {
         companyError,
         canEdit,
         redirectProps,
+        requestErrors,
+        errors,
         control,
+        success,
         getValues,
         submit,
     } = useContext(EditCompanyControllerContext);
@@ -226,7 +235,7 @@ const EditCompanyProfileForm = ({ title }) => {
         return <Redirect {...redirectProps} />;
     }
 
-    return (
+    return success ? <Redirect to={`/company/${company._id}`} /> : (
         <>
             <div className={formCardClasses.formCard}>
                 <CardHeader title={title} />
@@ -263,6 +272,7 @@ const EditCompanyProfileForm = ({ title }) => {
                                                     required
                                                     autoFocus
                                                     onChange={onChange}
+                                                    requestErrors={requestErrors}
                                                 />
                                             )}
                                             control={control}
@@ -277,6 +287,7 @@ const EditCompanyProfileForm = ({ title }) => {
                                             onAdd={append}
                                             onRemove={remove}
                                             itemLabelPrefix="Contact #"
+                                            requestErrors={requestErrors}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -290,15 +301,16 @@ const EditCompanyProfileForm = ({ title }) => {
                                                     value={value}
                                                     label="Company Bio"
                                                     id="bio"
-                                                    // error={!!errors.bio}
+                                                    error={!!errors.bio}
+                                                    requestErrors={requestErrors}
                                                     inputRef={ref}
                                                     onBlur={onBlur}
                                                     onChange={onChange}
                                                     multiline
-                                                    // helperText={
-                                                    //     `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength}
-                                                    //      ${errors.bio?.message || ""}`
-                                                    // }
+                                                    helperText={
+                                                        `${value?.length}/${FinishCompanyRegistrationConstants.bio.maxLength}
+                                                         ${errors.bio?.message || ""}`
+                                                    }
                                                     rows={5}
                                                     variant="outlined"
                                                     FormHelperTextProps={{
