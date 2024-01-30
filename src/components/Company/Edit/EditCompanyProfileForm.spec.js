@@ -14,6 +14,7 @@ import { renderWithStoreAndTheme, screen } from "../../../test-utils";
 import Company from "../Company";
 import EditCompanyProfileForm, { EditCompanyController, EditCompanyControllerContext } from "./EditCompanyProfileForm";
 
+jest.mock("../../../hooks/useCompany");
 jest.mock("react-router-dom", () => {
     const original = jest.requireActual("react-router-dom");
     return {
@@ -22,7 +23,7 @@ jest.mock("react-router-dom", () => {
     };
 });
 jest.mock("../../../hooks/useSession");
-jest.mock("../../../hooks/useCompany");
+jest.mock("../../../services/locationSearchService");
 
 // eslint-disable-next-line react/prop-types
 const EditCompanyWrapper = ({ children }) => {
@@ -56,24 +57,24 @@ describe("Edit Company Profile Form", () => {
         logo: ""
     });
 
-    console.log("COMPANY IS: ", company);
-
     const initialState = {};
     const theme = createTheme({});
 
-    describe("It should render form components if company is the correct one", () => {
+    describe("Should render form components if company is the correct one", () => {
 
-        it("Should render the form is the user's company is the correct one", () => {
+        it("Should render the form if the user's company is the correct one", () => {
             useSession.mockImplementationOnce(() => ({ company: company }));
-            useCompany.mockImplementationOnce(() => ({ "company": company, error: null, loading: false }));
+            useCompany.mockImplementationOnce(() => { return { company: company }; });
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <EditCompanyWrapper>
-                            <EditCompanyProfileForm />
-                        </EditCompanyWrapper>
-                    </MuiPickersUtilsProvider>
+                    <Switch>
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <EditCompanyWrapper>
+                                <EditCompanyProfileForm />
+                            </EditCompanyWrapper>
+                        </MuiPickersUtilsProvider>
+                    </Switch>
                 </BrowserRouter>,
                 { initialState, theme }
             );
