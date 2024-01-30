@@ -44,6 +44,7 @@ const MultiOptionTextField = ({
     id,
 }) => {
     const classes = useMultiOptionTextFieldStyle();
+
     return (
         <>
             <Typography variant="h6">
@@ -69,7 +70,8 @@ const MultiOptionTextField = ({
                                 onChange={onChange}
                                 InputProps={{
                                     endAdornment:
-    <RemoveLineButton i={i} items={values} onClick={() => onRemove(i)} /> }}
+    <RemoveLineButton i={i} items={values} onClick={() => onRemove(i)} />,
+                                }}
                                 margin="normal"
                                 helperText={errors?.[i]?.value?.message || ""}
                                 {...textFieldProps}

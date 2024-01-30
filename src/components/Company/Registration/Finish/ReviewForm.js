@@ -8,7 +8,7 @@ import getCroppedImg from "../../../utils/image/cropImage";
 import { getHumanError } from "./FinishCompanyRegistrationUtils";
 import { FinishCompanyRegistrationControllerContext } from "./FinishCompanyRegistrationWidget";
 
-const useStyles = (isMobile) => makeStyles((theme) => ({
+export const useStyles = (isMobile) => makeStyles((theme) => ({
     companyCard: {
         display: "flex",
         width: isMobile ? "90vw" : "600px",

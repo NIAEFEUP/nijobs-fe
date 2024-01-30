@@ -19,6 +19,10 @@ export const EVENT_TYPES = Object.freeze({
 });
 
 export const TIMED_ACTIONS = Object.freeze({
+    COMPANY_EDIT: {
+        category: "company",
+        variable: "company/edit",
+    },
     OFFER_CREATE: {
         category: "offer",
         variable: "offer/create",
