@@ -1,10 +1,13 @@
 import config from "../config";
 import Constants from "../utils/Constants";
-import { measureTime } from "../utils/analytics";
-import { TIMED_ACTIONS } from "../utils/analytics/constants";
+import ErrorTypes from "../utils/ErrorTypes";
+import { createErrorEvent, createEvent, measureTime } from "../utils/analytics";
+import { EVENT_TYPES, TIMED_ACTIONS } from "../utils/analytics/constants";
 const { API_HOSTNAME } = config;
 
-export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
+const COMPANY_EDIT_METRIC_ID = "company/edit";
+
+export const editCompany = measureTime(TIMED_ACTIONS.COMPANY_EDIT, async ({
     _id: id,
     name,
     contacts,
@@ -20,6 +23,7 @@ export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
     });
     formData.append("bio", bio);
 
+    let isErrorRegistered = false;
     try {
         const res = await fetch(`${API_HOSTNAME}/company/${id}/edit`, {
             method: "PUT",
@@ -29,13 +33,30 @@ export const editCompany = measureTime(TIMED_ACTIONS.OFFER_EDIT, async ({
         const json = await res.json();
 
         if (!res.ok) {
+            createErrorEvent(
+                COMPANY_EDIT_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                res.status
+            );
+            isErrorRegistered = true;
+
             throw json.errors;
         }
 
+        createEvent(EVENT_TYPES.SUCCESS(COMPANY_EDIT_METRIC_ID));
         return json;
     } catch (error) {
         const errorArray = Array.isArray(error) ? error :
             [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+
+        if (!isErrorRegistered) {
+            createErrorEvent(
+                COMPANY_EDIT_METRIC_ID,
+                ErrorTypes.BAD_RESPONSE,
+                errorArray
+            );
+        }
+        isErrorRegistered = true;
 
         throw errorArray;
     }
