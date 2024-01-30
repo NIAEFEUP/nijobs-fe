@@ -102,7 +102,7 @@ describe("Edit Offer Form", () => {
 
         it("should be redirected to home if not logged in", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: false }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -131,7 +131,7 @@ describe("Edit Offer Form", () => {
 
         it("should be redirected to home if offer does not exist", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: true, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: true, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -160,7 +160,7 @@ describe("Edit Offer Form", () => {
 
         it("should be redirected to home if company not owner", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "other_company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: true, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: true, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -188,7 +188,7 @@ describe("Edit Offer Form", () => {
         });
         it("should show circular progress bar while data is being fetch", () => {
             useSession.mockImplementation(() => ({ isValidating: true, isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -206,7 +206,7 @@ describe("Edit Offer Form", () => {
 
         it("should render enabled form", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -238,7 +238,7 @@ describe("Edit Offer Form", () => {
 
         it("should have offer values", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -265,7 +265,7 @@ describe("Edit Offer Form", () => {
 
         it("should not be visible advanced settings", () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -285,7 +285,7 @@ describe("Edit Offer Form", () => {
         it("should be visible advanced settings after clicking the button", async () => {
 
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -308,7 +308,7 @@ describe("Edit Offer Form", () => {
 
         it("should not submit dates if not edited", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
             fetch.mockResponse(JSON.stringify(offer));
 
             renderWithStoreAndTheme(
@@ -370,7 +370,7 @@ describe("Edit Offer Form", () => {
 
         it("should submit dates if edited", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
             fetch.mockResponse(JSON.stringify(offer));
 
             renderWithStoreAndTheme(
@@ -455,7 +455,7 @@ describe("Edit Offer Form", () => {
     describe("Should validate Form", () => {
         it("should fail validation if empty title", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -491,7 +491,7 @@ describe("Edit Offer Form", () => {
 
         it("should fail validation if empty location", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -517,7 +517,7 @@ describe("Edit Offer Form", () => {
 
         it("should allow only numbers in vacancies", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -552,7 +552,7 @@ describe("Edit Offer Form", () => {
 
         it("should fail validation if invalid jobStartDate", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -576,7 +576,7 @@ describe("Edit Offer Form", () => {
 
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Must be a valid ISO8601 date.");
 
-            await act (async () => {
+            await act(async () => {
                 await fireEvent.focus(input);
                 await fireEvent.change(input, { target: { value: format(Date.now() - DAY_IN_MS, "yyyyMMdd") } });
                 await fireEvent.blur(input);
@@ -585,7 +585,7 @@ describe("Edit Offer Form", () => {
             expect(await wrapper.findDescriptionOf(input)).toHaveTextContent("Date must not be in the past.");
 
 
-            await act (async () => {
+            await act(async () => {
                 await fireEvent.focus(input);
                 await fireEvent.change(input, { target: { value: format(Date.now(), "yyyyMMdd") } });
                 await fireEvent.blur(input);
@@ -597,7 +597,7 @@ describe("Edit Offer Form", () => {
 
         it("should fail validation if applyURL not following the regex", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -621,7 +621,7 @@ describe("Edit Offer Form", () => {
             expect(await wrapper.findDescriptionOf(input))
                 .toHaveTextContent(HumanValidationReasons.BAD_APPLY_URL);
 
-            await act(() =>  {
+            await act(() => {
                 fireEvent.change(input, { target: { value: "https://valid.com" } });
                 fireEvent.blur(input);
             });
@@ -640,7 +640,7 @@ describe("Edit Offer Form", () => {
 
         it("should allow any compensation value", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -691,7 +691,7 @@ describe("Edit Offer Form", () => {
 
         it("should be visible advanced settings if form error in these publication date", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>
@@ -721,7 +721,7 @@ describe("Edit Offer Form", () => {
 
         it("should be visible advanced settings if form error in these publication end date", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
+            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => { } }));
 
             const wrapper = renderWithStoreAndTheme(
                 <BrowserRouter>

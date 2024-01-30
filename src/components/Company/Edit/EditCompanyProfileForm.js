@@ -225,6 +225,8 @@ const EditCompanyProfileForm = ({ title }) => {
         submit,
     } = useContext(EditCompanyControllerContext);
 
+    console.log("Company is: ", company);
+
     const classes = useStyles();
 
     const { fields: contacts, append, remove } = useContacts({ control });
