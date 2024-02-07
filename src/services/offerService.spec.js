@@ -1,6 +1,6 @@
 import config from "../config";
 
-import {hideOffer, disableOffer, enableOffer, editOffer} from "./offerService";
+import { hideOffer, disableOffer, enableOffer, editOffer } from "./offerService";
 import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
@@ -59,10 +59,10 @@ describe("Offer Service", () => {
 
     it("Should send a POST request to edit a specific offer", async () => {
 
-        //Simulate request success
-        fetch.mockResponse(JSON.stringify({mockData: true }));
+        // Simulate request success
+        fetch.mockResponse(JSON.stringify({ mockData: true }));
 
-        await editOffer({offerId:id}, data);
+        await editOffer({ offerId: id }, data);
 
         expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/offers/${id}/edit`, {
             method: "POST",
