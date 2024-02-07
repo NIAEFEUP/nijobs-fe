@@ -45,12 +45,16 @@ const filters = [
     },
 ];
 
-const generateRejectReason = (rejectReason) => {
-    return {value: rejectReason, label: "Reject Reason"};
-};
-const generateRejectedAt = (rejectedAt) => {
-    return {value: rejectedAt ? format(rejectedAt, "yyyy-MM-dd") : "", label: "Rejected At"};
-};
+const generateRejectReason = (rejectReason) => ({
+    value: rejectReason,
+    label: "Reject Reason",
+});
+
+const generateRejectedAt = (rejectedAt) => ({
+    value: rejectedAt ? format(rejectedAt, "yyyy-MM-dd") : "",
+    label: "Rejected At",
+});
+
 const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation, email, rejectedAt }) => ({
     fields: {
         name: { value: companyName, align: "left" },
