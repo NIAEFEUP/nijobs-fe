@@ -347,7 +347,7 @@ describe("Edit Offer Form", () => {
                 applyURL,
             } = offer;
 
-            expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/edit\/test123/), expect.objectContaining({
+            expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/test123\/edit/), expect.objectContaining({
                 body: JSON.stringify({
                     title,
                     jobMinDuration,
@@ -427,7 +427,7 @@ describe("Edit Offer Form", () => {
             } = offer;
 
 
-            expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/edit\/test123/), expect.objectContaining({
+            expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/.*\/offers\/test123\/edit/), expect.objectContaining({
                 body: JSON.stringify({
                     title,
                     publishDate: new Date(newPublishDate.setHours(0, 0, 0, 0)).toISOString(),

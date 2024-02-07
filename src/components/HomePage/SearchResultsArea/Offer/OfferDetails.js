@@ -57,6 +57,8 @@ const OfferDetails = ({
 
     const { addField, addTech, addFieldWithUrl, addTechWithUrl, setLoadUrlFromFilters } = useChipsFieldSearch();
 
+    const history = useHistory();
+
     const handleChipSetFields = useCallback((values) => {
         if (isPage) {
             history.push("/");
@@ -76,8 +78,6 @@ const OfferDetails = ({
             addTechWithUrl(values);
         }
     }, [history, isPage, setLoadUrlFromFilters, addTech, addTechWithUrl]);
-
-    const history = useHistory();
 
     const getHiddenOfferMessage = useCallback(() => {
         if (visibilityState.isDisabled)
