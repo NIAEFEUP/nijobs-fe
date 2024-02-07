@@ -1,6 +1,6 @@
 import config from "../config";
 
-import { hideOffer, disableOffer, enableOffer } from "./offerService";
+import {hideOffer, disableOffer, enableOffer, editOffer} from "./offerService";
 import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
@@ -8,6 +8,7 @@ describe("Offer Service", () => {
 
     const id = "60f16140fb2b9800321e2ca1";
     const adminReason = "This offer is offensive.";
+    const data = { };
 
     beforeEach(() => {
         fetch.resetMocks();
@@ -56,6 +57,23 @@ describe("Offer Service", () => {
         });
     });
 
+    it("Should send a POST request to edit a specific offer", async () => {
+
+        //Simulate request success
+        fetch.mockResponse(JSON.stringify({mockData: true }));
+
+        await editOffer({offerId:id}, data);
+
+        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/offers/${id}/edit`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify(data),
+        });
+    });
+
     it("Should handle non successful requests", async () => {
         const errors = [{ msg: "error1" }, { msg: "error2" }];
 
@@ -76,6 +94,12 @@ describe("Offer Service", () => {
 
         try {
             await enableOffer(id);
+        } catch (e) {
+            expect(e).toStrictEqual(errors);
+        }
+
+        try {
+            await editOffer(id);
         } catch (e) {
             expect(e).toStrictEqual(errors);
         }
@@ -100,6 +124,12 @@ describe("Offer Service", () => {
 
         try {
             await enableOffer(id);
+        } catch (e) {
+            expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
+        }
+
+        try {
+            await editOffer(id);
         } catch (e) {
             expect(e).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
         }
