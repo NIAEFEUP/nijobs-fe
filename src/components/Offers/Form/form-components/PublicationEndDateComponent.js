@@ -34,9 +34,9 @@ const PublicationEndDateComponent = ({
                     format="yyyy-MM-dd"
                     minDate={fields?.publishDate}
                     error={!!errors?.publishEndDate ||
-                            !!requestErrors?.publishEndDate}
+                        !!requestErrors?.publishEndDate}
                     helperText={errors?.publishEndDate?.message ||
-                            requestErrors?.publishEndDate?.message || " "}
+                        requestErrors?.publishEndDate?.message || " "}
                     {...datePickerProps}
                 />)}
             control={control}

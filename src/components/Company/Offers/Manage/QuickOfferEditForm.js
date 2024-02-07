@@ -18,10 +18,11 @@ export const QuickOfferEditForm = ({ offerId, showTitle = false }) => {
         dispatch(addSnackbar(notification));
     };
 
-    const { publishEndDate } = offers[offerId]["fields"];
+    const { publishStartDate, publishEndDate } = offers[offerId]["fields"];
 
     const { control, fields, errors } = useOfferForm(EditOfferSchema, {
         publishEndDate: publishEndDate.value,
+        publishDate: publishStartDate.value,
     });
 
     const isObjectEmpty =

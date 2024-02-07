@@ -32,12 +32,14 @@ const generateRow = ({
     title, location, publishDate, publishEndDate, isHidden, isArchived, hiddenReason,
     ownerName, getOfferVisibility, setOfferVisibility, offerId, _id, ...args }) => ({
     fields: {
-        title: { value: (
-            <OfferTitle
-                title={title}
-                getOfferVisibility={getOfferVisibility}
-                offerId={offerId}
-            />), align: "left", linkDestination: `/offer/${_id}` },
+        title: {
+            value: (
+                <OfferTitle
+                    title={title}
+                    getOfferVisibility={getOfferVisibility}
+                    offerId={offerId}
+                />), align: "left", linkDestination: `/offer/${_id}`,
+        },
         publishStartDate: { value: format(parseISO(publishDate), "yyyy-MM-dd") },
         publishEndDate: { value: format(parseISO(publishEndDate), "yyyy-MM-dd") },
         location: { value: location },
@@ -198,8 +200,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
         return !isMobile ? (
             <CollapsedQuickOfferEdit
                 offerId={rowKey}
-                offers={offers}
-                setOffers={setOffers}
+                isMobile={isMobile}
             />
         ) : (
             <>
@@ -207,7 +208,7 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                     <Grid container alignItems="center">
                         <Grid item xs={6}>
                             <Typography className={classes.collapsableTitles} variant="body1">
-                Actions
+                                Actions
                             </Typography>
                         </Grid>
                         <Grid item xs={6} justifyContent="center">
@@ -269,8 +270,8 @@ const CompanyOffersManagementWidget = ({ addSnackbar, isMobile }) => {
                 emptyMessage="No offers here."
                 RowContent={RowContent}
                 RowCollapseComponent={RowCollapseComponent}
-                handleSelect={() => {}}
-                handleSelectAll={() => {}}
+                handleSelect={() => { }}
+                handleSelectAll={() => { }}
                 isSelectableTable={false}
                 isLoading={isLoading}
                 error={error}

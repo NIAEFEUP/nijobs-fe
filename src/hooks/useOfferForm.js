@@ -14,7 +14,7 @@ export default (schema, overrideDefaultValues) => {
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
-            publishDate: defaultDates.getPublishDate(),
+            publishDate: overrideDefaultValues?.publishDate ?? defaultDates.getPublishDate(),
             publishEndDate: overrideDefaultValues?.publishEndDate ?? defaultDates.getPublishEndDate(),
             jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
             jobStartDate: null,
