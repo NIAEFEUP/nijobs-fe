@@ -31,7 +31,10 @@ const useStyles = makeStyles((theme) => ({
     accountName: ({ isMobile }) => ({
         margin: isMobile ? theme.spacing(1) : theme.spacing(3, 2),
         marginBottom: theme.spacing(1),
-        overflowWrap: "anywhere",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        alignSelf: "center",
+        maxWidth: "90%",
     }),
     menuList: {
         width: "80%",
