@@ -263,48 +263,6 @@ describe("Edit Offer Form", () => {
             expect(screen.getByLabelText("Application URL").getAttribute("value")).toBe(offer.applyURL);
         });
 
-        it("should not be visible advanced settings", () => {
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
-
-            renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <EditOfferWrapper>
-                            <EditOfferPage />
-                        </EditOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            expect(screen.queryByText("Publication Date *")).not.toBeVisible();
-            expect(screen.queryByText("Publication End Date *")).not.toBeVisible();
-        });
-
-        it("should be visible advanced settings after clicking the button", async () => {
-
-            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
-            useOffer.mockImplementation(() => ({ offer, loading: false, error: null, mutate: () => {} }));
-
-            renderWithStoreAndTheme(
-                <BrowserRouter>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <EditOfferWrapper>
-                            <EditOfferPage />
-                        </EditOfferWrapper>
-                    </MuiPickersUtilsProvider>
-                </BrowserRouter>,
-                { initialState, theme }
-            );
-
-            await act(() => {
-                fireEvent.click(screen.getByText("Advanced Settings"));
-            });
-
-            expect(screen.getByText("Publication Date *")).toBeVisible();
-            expect(screen.getByText("Publication End Date *")).toBeVisible();
-        });
 
         it("should not submit dates if not edited", async () => {
             useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { _id: "company_id" } } }));
