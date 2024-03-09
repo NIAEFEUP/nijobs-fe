@@ -13,9 +13,11 @@ import { act } from "@testing-library/react";
 import { DAY_IN_MS } from "../../../utils/TimeUtils";
 import { PAID_OPTIONS } from "../Form/form-components/OfferForm";
 import { HumanValidationReasons } from "../../../utils";
+import { fetchCompanyApplication } from "../../../services/companyService";
 
 jest.mock("../../../hooks/useSession");
 jest.mock("../../../services/locationSearchService");
+jest.mock("../../../services/companyService");
 
 // eslint-disable-next-line react/prop-types
 const CreateOfferWrapper = ({ children }) => {
@@ -39,6 +41,8 @@ describe("Create Offer Form", () => {
 
     const initialState = {};
     const theme = createTheme({});
+    // eslint-disable-next-line require-await
+    fetchCompanyApplication.mockImplementation(async () => "APPROVED");
 
     // it("Should edit description", () => {
     // As of today, it is not possible to test contenteditable elements (such as the awesome description editor)
@@ -215,6 +219,43 @@ describe("Create Offer Form", () => {
                 expect(element).toHaveAttribute("data-value");
                 expect(element).toBeVisible();
             });
+        });
+
+        it("Should render alert if company is not approved", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+            // eslint-disable-next-line require-await
+            fetchCompanyApplication.mockImplementation(async () => ({ state: "PENDING" }));
+
+            await renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+            expect(screen.queryByTestId("Alert")).toBeInTheDocument();
+
+        });
+
+        it("Should not render alert if company is approved", async () => {
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { company: { name: "Company Name" } } }));
+            // eslint-disable-next-line require-await
+            fetchCompanyApplication.mockImplementation(async () => ({ state: "APPROVED" }));
+
+            await renderWithStoreAndTheme(
+                <BrowserRouter>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <CreateOfferWrapper>
+                            <CreateOfferPage />
+                        </CreateOfferWrapper>
+                    </MuiPickersUtilsProvider>
+                </BrowserRouter>,
+                { initialState, theme }
+            );
+            expect(await screen.queryByTestId("Alert")).not.toBeInTheDocument();
         });
     });
 

@@ -86,7 +86,7 @@ const ActionNotification = connect(mapStateToProps, mapDispatchToProps)(BaseActi
 const UndoableActionsHandlerProvider = ({ children }) => {
     const [actions, setActions] = useState({});
     const [closeLock, setCloseLock] = useState(false);
-    const initialBeforeUnloadEventListener = useRef();
+    const initialBeforeUnloadEventListener = useRef(window.onbeforeunload);
 
     useEffect(() => {
         if (Object.keys(actions).length && !closeLock) {

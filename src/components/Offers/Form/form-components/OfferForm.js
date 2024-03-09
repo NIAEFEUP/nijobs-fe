@@ -36,12 +36,17 @@ import { Controller } from "react-hook-form";
 import { useMobile } from "../../../../utils/media-queries";
 import "../editor.css";
 import ApplyURLComponent from "./ApplyURLComponent";
+import { Alert } from "../../../utils/Alert";
+import { fetchCompanyApplication } from "../../../../services/companyService";
+import useSession from "../../../../hooks/useSession.js";
+import { addSnackbar } from "../../../../actions/notificationActions";
 
 export const PAID_OPTIONS = [
     { value: "none", label: "Unspecified" },
     { value: true, label: "Paid" },
     { value: false, label: "Unpaid" },
 ];
+
 
 const scrollToError = (errorArray) => {
     if (Object.keys(errorArray).length !== 0) {
@@ -54,6 +59,7 @@ const scrollToError = (errorArray) => {
         }
     }
 };
+
 
 const OfferForm = ({ context, title }) => {
     const {
@@ -104,6 +110,25 @@ const OfferForm = ({ context, title }) => {
     const Content = isMobile ? DialogContent : CardContent;
     const classes = useOfferFormStyles(isMobile)();
 
+    const [state, setState] = useState("APPROVED");
+    const session = useSession();
+    const companyId = session.data?.company?._id;
+    useEffect(() => {
+        if (isAdmin) return;
+        if (!session.isValidating && session.isLoggedIn) {
+            fetchCompanyApplication(companyId)
+                .then((application) => {
+                    setState(application.state);
+                })
+                .catch(() => {
+                    addSnackbar({
+                        message: "An unexpected error occurred, please try refreshing the browser window.",
+                        key: `${Date.now()}-fetchCompanyApplicationsError`,
+                    });
+                });
+        }
+    }, [session.isValidating, session.isLoggedIn, isAdmin, companyId]);
+
     const showOwnerComponent = isAdmin && showCompanyField;
 
     const SelectStylingProps = {
@@ -127,6 +152,18 @@ const OfferForm = ({ context, title }) => {
             ? <Redirect to={`/offer/${offerId}`} push />
             :
             <div className={classes.formCard}>
+
+                {(state !== "APPROVED") && session.isLoggedIn &&
+                <Alert
+                    type={"warning"}
+                    fontSize={1.2}
+                >
+                    {
+                        "This offer will stay hidden from the public until your account is approved!"
+                    }
+                </Alert>
+                }
+
                 <CardHeader title={!isMobile && title} />
                 <Content className={classes.formContent}>
                     <ConnectedLoginAlert

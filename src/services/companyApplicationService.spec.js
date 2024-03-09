@@ -1,6 +1,6 @@
 import config from "../config";
 
-import { submitCompanyApplication } from "./companyApplicationService";
+import { submitCompanyApplication, validateApplication } from "./companyApplicationService";
 import {
     setCompanyApplicationSending,
     setCompanyApplicationSubmissionError,
@@ -10,65 +10,109 @@ import Constants from "../utils/Constants";
 const { API_HOSTNAME } = config;
 
 describe("Company Application Service", () => {
-    it("should POST the API with the form data in JSON format and dispatch the correct actions", async () => {
+    describe("Submit Application", () => {
+        it("should POST the API with the form data in JSON format and dispatch the correct actions", async () => {
 
-        // Simulate request success
-        fetch.mockResponse(JSON.stringify({ mockData: true }));
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({ mockData: true }));
 
-        const dispatchMock = jest.fn();
+            const dispatchMock = jest.fn();
 
-        const formData = { field1: 1, field2: 2 };
-        await submitCompanyApplication(formData)(dispatchMock);
+            const formData = { field1: 1, field2: 2 };
+            await submitCompanyApplication(formData)(dispatchMock);
 
-        expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/apply/company`, expect.objectContaining({
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-        }));
+            expect(fetch).toHaveBeenCalledWith(`${API_HOSTNAME}/apply/company`, expect.objectContaining({
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            }));
 
 
-        expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
-        expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
-        expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplication({ mockData: true }));
-        expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
+            expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
+            expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
+            expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplication({ mockData: true }));
+            expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
+        });
+
+        it("should handle network error", async () => {
+
+            // Simulate network failure
+            fetch.mockAbort();
+
+            const dispatchMock = jest.fn();
+
+            const formData = { field1: 1, field2: 2 };
+            await submitCompanyApplication(formData)(dispatchMock);
+
+
+            expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
+            expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
+            expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError([
+                { msg: Constants.UNEXPECTED_ERROR_MESSAGE },
+            ]));
+            expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
+        });
+
+        it("should handle not-ok response from API", async () => {
+
+            const errors = [{ msg: "error1" }, { msg: "error2" }];
+
+            // Simulate request error
+            fetch.mockResponse(JSON.stringify({ errors }), { status: 422 });
+
+            const dispatchMock = jest.fn();
+
+            const formData = { field1: 1, field2: 2 };
+            await submitCompanyApplication(formData)(dispatchMock);
+
+            expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
+            expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
+            expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError(errors));
+            expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
+        });
     });
+    describe("Validate Application", () => {
+        it("should POST the API to validate application ", async () => {
 
-    it("should handle network error", async () => {
+            // Simulate request success
+            fetch.mockResponse(JSON.stringify({}));
 
-        // Simulate network failure
-        fetch.mockAbort();
+            await validateApplication(0);
+            expect(fetch).toHaveBeenCalledWith(
+                `${API_HOSTNAME}/apply/company/${0}/validate`,
+                {
+                    method: "POST",
+                    credentials: "include",
+                }
+            );
+        });
 
-        const dispatchMock = jest.fn();
+        it("should handle network error", async () => {
 
-        const formData = { field1: 1, field2: 2 };
-        await submitCompanyApplication(formData)(dispatchMock);
+            // Simulate network failure
+            fetch.mockAbort();
+            try {
+                await validateApplication(0);
 
+            } catch (err) {
+                expect(err).toStrictEqual([{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }]);
+            }
+        });
 
-        expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
-        expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
-        expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError([
-            { msg: Constants.UNEXPECTED_ERROR_MESSAGE },
-        ]));
-        expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
-    });
+        it("should handle not-ok response from API", async () => {
 
-    it("should handle not-ok response from API", async () => {
+            const errors = [{ msg: "error1" }, { msg: "error2" }];
 
-        const errors = [{ msg: "error1" }, { msg: "error2" }];
+            // Simulate request error
+            fetch.mockResponse(JSON.stringify({ errors }), { status: 422 });
 
-        // Simulate request error
-        fetch.mockResponse(JSON.stringify({ errors }), { status: 422 });
-
-        const dispatchMock = jest.fn();
-
-        const formData = { field1: 1, field2: 2 };
-        await submitCompanyApplication(formData)(dispatchMock);
-
-        expect(dispatchMock).toHaveBeenNthCalledWith(1, setCompanyApplicationSending(true));
-        expect(dispatchMock).toHaveBeenNthCalledWith(2, setCompanyApplicationSubmissionError([]));
-        expect(dispatchMock).toHaveBeenNthCalledWith(3, setCompanyApplicationSubmissionError(errors));
-        expect(dispatchMock).toHaveBeenNthCalledWith(4, setCompanyApplicationSending(false));
+            try {
+                await validateApplication(0);
+            } catch (e) {
+                expect(e).toStrictEqual(errors);
+            }
+        });
     });
 });

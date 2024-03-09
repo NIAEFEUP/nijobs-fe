@@ -6,7 +6,9 @@ export const columns = {
 };
 
 export const ApplicationStateLabel = Object.freeze({
+    UNVERIFIED: "Unverified",
     APPROVED: "Approved",
     PENDING: "Pending",
     REJECTED: "Rejected",
+
 });

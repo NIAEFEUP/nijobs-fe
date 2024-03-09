@@ -49,7 +49,7 @@ const generateApplications = (n, forceState) => {
     for (let i = 0; i < n; i++) {
         applications.push(generateApplication(
             i,
-            forceState || STATES[i % 3]
+            forceState || STATES[(i) % 4]
         ));
     }
     return applications;
@@ -270,6 +270,25 @@ describe("Application Review Widget", () => {
 
         expect(fetch.mock.calls[1][0])
             .toEqual(`${API_HOSTNAME}/applications/company/${applications[0].id}/reject`, { credentials: "include", method: "POST" });
+    });
+
+    it("Should not have approve and reject buttons in unverified applications", async () => {
+        const applications = generateApplications(1, "UNVERIFIED");
+
+        fetch.mockResponse(JSON.stringify({ applications }));
+
+        await act(async () =>
+            renderWithStoreAndTheme(
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnack={3}>
+                        <Notifier />
+                        <ApplicationsReviewWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>, { initialState: {}, theme })
+        );
+
+        expect(screen.queryByLabelText("Approve Application")).not.toBeInTheDocument();
+        expect(screen.queryByLabelText("Reject Application")).not.toBeInTheDocument();
     });
 
     it("Should maintain state filter after rejecting an application", async () => {
@@ -820,13 +839,13 @@ describe("Application Review Widget", () => {
 
         fireEvent.click(screen.getByLabelText("Filter list"));
 
-        fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "0" } });
+        fireEvent.change(screen.getByLabelText("Company Name"), { target: { value: "1" } });
 
         fireEvent.change(screen.getByLabelText("Date From..."), { target: { value:
-            format(new Date(applications[0].submittedAt), "yyyy-MM-dd"),
+            format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
         } });
         fireEvent.change(screen.getByLabelText("Date To..."), { target: { value:
-            format(new Date(applications[0].submittedAt), "yyyy-MM-dd"),
+            format(new Date(applications[1].submittedAt), "yyyy-MM-dd"),
         } });
 
         await userEvent.click(screen.getByLabelText("State"));
@@ -837,7 +856,7 @@ describe("Application Review Widget", () => {
 
         expect(screen.getAllByTestId("application-row")
             .map((el) => el.querySelector("td:nth-child(2)").textContent)
-        ).toStrictEqual([applications[0].companyName]);
+        ).toStrictEqual([applications[1].companyName]);
 
         fireEvent.click(screen.getByLabelText("Filter list"));
 

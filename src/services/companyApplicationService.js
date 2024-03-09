@@ -67,3 +67,24 @@ export const submitCompanyApplication = (formData) => buildCancelableRequest(
         }
     })
 );
+
+export const validateApplication = async (token) => {
+    try {
+        const res = await fetch(`${API_HOSTNAME}/apply/company/${token}/validate`, {
+            method: "POST",
+            credentials: "include",
+
+        });
+        const json = await res.json();
+        if (!res.ok) {
+            throw json.errors;
+        }
+        return json;
+
+    } catch (error) {
+        const errorArray = Array.isArray(error) ? error :
+            [{ msg: Constants.UNEXPECTED_ERROR_MESSAGE }];
+        throw errorArray;
+    }
+
+};
