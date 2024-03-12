@@ -34,6 +34,8 @@ const AdvancedSearchWrapper = ({
     onMobileClose,
     setSearchValue = () => { },
     submitForm,
+    showHidden,
+    setShowHidden = () => { },
 }) => {
     const {
         ContextProvider,
@@ -44,7 +46,7 @@ const AdvancedSearchWrapper = ({
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
             resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
-            submitForm,
+            submitForm, showHidden, setShowHidden,
         },
         AdvancedSearchControllerContext
     );

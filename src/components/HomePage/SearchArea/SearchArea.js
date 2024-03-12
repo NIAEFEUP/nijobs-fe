@@ -12,6 +12,8 @@ import {
     setShowJobDurationSlider,
     setTechs,
     setLoadUrlFromFilters,
+    hideOffer,
+    setShowHidden,
 } from "../../../actions/searchOffersActions";
 import { INITIAL_JOB_TYPE, INITIAL_JOB_DURATION } from "../../../reducers/searchOffersReducer";
 
@@ -38,7 +40,7 @@ export const AdvancedSearchController = ({
     enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
     jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
     resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
-    loadUrlFromFilters, setLoadUrlFromFilters,
+    loadUrlFromFilters, setLoadUrlFromFilters, showHidden, setShowHidden,
 }) => {
 
     const {
@@ -51,6 +53,7 @@ export const AdvancedSearchController = ({
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
         setSearchValue: setUrlSearchValue,
         setUrlFilters,
+        setShowHidden: actualSetShowHidden,
     } = useSearchParams({
         setJobDuration,
         setShowJobDurationSlider,
@@ -58,6 +61,7 @@ export const AdvancedSearchController = ({
         setFields,
         setTechs,
         resetAdvancedSearchFields,
+        setShowHidden,
     });
 
     const advancedSearchProps = useAdvancedSearch({
@@ -74,6 +78,9 @@ export const AdvancedSearchController = ({
         technologies,
         setTechs: actualSetTechs,
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
+        hideOffer,
+        showHidden,
+        setShowHidden: actualSetShowHidden,
     });
 
     const { search: searchOffers } = useOffersSearcher({
@@ -83,6 +90,7 @@ export const AdvancedSearchController = ({
         jobType,
         fields,
         technologies,
+        showHidden,
     });
 
     const submitForm = useCallback((e, updateUrl = true) => {
@@ -102,6 +110,7 @@ export const AdvancedSearchController = ({
                 fields,
                 technologies,
                 jobType,
+                showHidden,
                 searchValue,
             );
             setLoadUrlFromFilters(false);
@@ -119,6 +128,9 @@ export const AdvancedSearchController = ({
 
             setSearchValue(queryParams.searchValue);
         }
+        setShowHidden(queryParams.showHidden);
+
+        setSearchValue(queryParams.searchValue);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -141,7 +153,7 @@ export const SearchArea = ({ onSubmit, searchValue,
     jobMinDuration = INITIAL_JOB_DURATION, jobMaxDuration = INITIAL_JOB_DURATION + 1, jobType = INITIAL_JOB_TYPE,
     fields, technologies, showJobDurationSlider, setShowJobDurationSlider, advanced: enableAdvancedSearchDefault = false,
     setSearchValue, setJobDuration, setJobType, setFields, setTechs, resetAdvancedSearchFields, onMobileClose,
-    loadUrlFromFilters, setLoadUrlFromFilters }) => {
+    loadUrlFromFilters, setLoadUrlFromFilters, showHidden, setShowHidden }) => {
 
     const classes = useSearchAreaStyles();
     const {
@@ -157,7 +169,7 @@ export const SearchArea = ({ onSubmit, searchValue,
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
             resetAdvancedSearchFields, onSubmit, searchValue, setSearchValue, onMobileClose,
-            loadUrlFromFilters, setLoadUrlFromFilters,
+            hideOffer, loadUrlFromFilters, setLoadUrlFromFilters, showHidden, setShowHidden,
         },
         AdvancedSearchControllerContext
     );
@@ -224,6 +236,8 @@ SearchArea.propTypes = {
     setTechs: PropTypes.func.isRequired,
     setShowJobDurationSlider: PropTypes.func.isRequired,
     onMobileClose: PropTypes.func,
+    showHidden: PropTypes.bool,
+    setShowHidden: PropTypes.func,
     advanced: PropTypes.bool,
 };
 
@@ -236,6 +250,7 @@ export const mapStateToProps = ({ offerSearch }) => ({
     technologies: offerSearch.technologies,
     showJobDurationSlider: offerSearch.filterJobDuration,
     loadUrlFromFilters: offerSearch.loadUrlFromFilters,
+    showHidden: offerSearch.showHidden,
 });
 
 export const mapDispatchToProps = (dispatch) => ({
@@ -245,6 +260,7 @@ export const mapDispatchToProps = (dispatch) => ({
     setFields: (fields) => dispatch(setFields(fields)),
     setTechs: (technologies) => dispatch(setTechs(technologies)),
     setShowJobDurationSlider: (val) => dispatch(setShowJobDurationSlider(val)),
+    setShowHidden: (val) => dispatch(setShowHidden(val)),
     resetAdvancedSearchFields: () => dispatch(resetAdvancedSearchFields()),
     setLoadUrlFromFilters: (value) => dispatch(setLoadUrlFromFilters(value)),
 });

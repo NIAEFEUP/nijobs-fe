@@ -37,6 +37,7 @@ describe("useUrlSearchParams", () => {
 
     it.each([
         ["jobDuration", [1, 2], [1, 2]],
+        ["showHidden", true, true],
         ["jobType", { target: { value: "test-job-type" } }, "test-job-type"],
         ["searchValue", "test-search-value", "test-search-value"],
         ["fields", ["TEST-FIELD-1", "TEST-FIELD-2"], ["TEST-FIELD-1", "TEST-FIELD-2"]],
@@ -83,10 +84,11 @@ describe("useUrlSearchParams", () => {
                 "jobMinDuration": minDuration,
                 "jobMaxDuration": maxDuration,
             };
-        } else if (fieldName === "techs")
+        } else if (fieldName === "techs") {
             params = {
                 "technologies": expectedValue,
             };
+        }
 
         const expectedLocationSearch = `?${qs.stringify(params, { skipNulls: true, arrayFormat: "brackets" })}`;
 
@@ -147,6 +149,7 @@ describe("useUrlSearchParams", () => {
             searchValue: "test-search-value",
             jobMinDuration: 2,
             jobMaxDuration: 9,
+            showHidden: true,
             fields: ["TEST-FIELD1", "TEST-FIELD2"],
             technologies: ["TEST-TECH"],
             jobType: "test-job-type",
@@ -184,6 +187,7 @@ describe("useUrlSearchParams", () => {
             searchValue: "test-search-value",
             jobMinDuration: 2,
             jobMaxDuration: 9,
+            showHidden: true,
             fields: ["TEST-FIELD1", "TEST-FIELD2"],
             technologies: ["TEST-TECH"],
             jobType: "test-job-type",

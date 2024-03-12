@@ -20,6 +20,7 @@ export default ({
     setTechs,
     setSearchValue,
     resetAdvancedSearchFields,
+    setShowHidden,
 } = {}) => {
 
     const location = useLocation();
@@ -84,6 +85,18 @@ export default ({
             setShowJobDurationSlider(showJobDurationSlider);
 
     }, [changeURLFilters, location, queryParams, setShowJobDurationSlider]);
+
+    const actualSetShowHidden = useCallback((showHiddenToggle) => {
+
+        if (!showHiddenToggle)
+            changeURLFilters(location, queryParams, { showHidden: null });
+        else
+            changeURLFilters(location, queryParams, { showHidden: showHiddenToggle });
+
+        if (setShowHidden)
+            setShowHidden(showHiddenToggle);
+
+    }, [changeURLFilters, location, queryParams, setShowHidden]);
 
     const actualSetFields = useCallback((fields) => {
 
@@ -172,5 +185,6 @@ export default ({
         setSearchValue: actualSetSearchValue,
         resetAdvancedSearchFields: actualResetAdvancedSearchFields,
         setUrlFilters,
+        setShowHidden: actualSetShowHidden,
     };
 };

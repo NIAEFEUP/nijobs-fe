@@ -11,6 +11,7 @@ import {
     FormHelperText,
     Button,
 } from "@material-ui/core";
+import useSession from "../../../../hooks/useSession";
 
 import JobOptions from "../../../utils/offers/JobOptions";
 import useSearchAreaStyles from "../searchAreaStyle";
@@ -40,11 +41,19 @@ JobDurationCollapse.propTypes = {
 
 const AdvancedSearchDesktop = () => {
 
+    const { data,
+        isValidating,
+        error,
+        isLoggedIn,
+    } = useSession();
+    const sessionData = (!isValidating && !error && isLoggedIn) ? data : null;
+
     const classes = useSearchAreaStyles();
 
     const {
         advancedOptions, resetAdvancedSearch, FieldsSelectorProps, TechsSelectorProps, JobTypeSelectorProps, JobDurationSwitchProps,
-        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, JobDurationSliderProps,
+        ResetButtonProps, JobDurationSliderText, JobDurationCollapseProps, JobDurationSwitchLabel, ShowHiddenSwitchLabel,
+        JobDurationSliderProps, ShowHiddenSwitchProps,
     } = useContext(AdvancedSearchControllerContext);
 
     return (
@@ -94,8 +103,6 @@ const AdvancedSearchDesktop = () => {
                         className: "chip-wrapper",
                     }}
                 />
-            </Collapse>
-            {advancedOptions &&
                 <div className={classes.resetBtnWrapper}>
                     <Button
                         {...ResetButtonProps}
@@ -106,7 +113,14 @@ const AdvancedSearchDesktop = () => {
                         Reset Advanced Fields
                     </Button>
                 </div>
-            }
+                {sessionData?.isAdmin &&
+                    <FormControlLabel
+                        className={classes.showHiddenToggle}
+                        control={<Switch {...ShowHiddenSwitchProps} />}
+                        label={ShowHiddenSwitchLabel}
+                    />
+                }
+            </Collapse>
         </React.Fragment>
     );
 };

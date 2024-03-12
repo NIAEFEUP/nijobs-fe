@@ -10,8 +10,11 @@ import FieldOptions from "../../../utils/offers/FieldOptions";
 import TechOptions from "../../../utils/offers/TechOptions";
 import { INITIAL_JOB_DURATION, INITIAL_JOB_TYPE } from "../../../../reducers/searchOffersReducer";
 import { createTheme } from "@material-ui/core/styles";
+import useSession from "../../../../hooks/useSession";
 
 import { MemoryRouter } from "react-router-dom";
+
+jest.mock("../../../../hooks/useSession");
 
 const AdvancedSearchWrapper = ({
     children,
@@ -25,6 +28,8 @@ const AdvancedSearchWrapper = ({
     setJobType = () => { },
     fields = [],
     setFields = () => { },
+    showHidden,
+    setShowHidden = () => { },
     technologies = [],
     setTechs = () => { },
     resetAdvancedSearchFields,
@@ -43,6 +48,7 @@ const AdvancedSearchWrapper = ({
             enableAdvancedSearchDefault, showJobDurationSlider, setShowJobDurationSlider, jobMinDuration,
             jobMaxDuration, setJobDuration, jobType, setJobType, fields, setFields, technologies, setTechs,
             resetAdvancedSearchFields, onSubmit, searchValue, searchOffers, onMobileClose, setSearchValue,
+            showHidden, setShowHidden,
         },
         AdvancedSearchControllerContext
     );
@@ -67,6 +73,7 @@ describe("AdvancedSearchDesktop", () => {
 
     describe("render", () => {
         it("should render a job selector with all job types", () => {
+            useSession.mockImplementation(() => ({}));
 
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
@@ -92,6 +99,8 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (on)", () => {
             const setShowJobDurationSliderMock = jest.fn();
+            useSession.mockImplementation(() => ({}));
+
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
                     <AdvancedSearchWrapper
@@ -116,6 +125,8 @@ describe("AdvancedSearchDesktop", () => {
 
         it("should toggle job duration slider (off)", () => {
             const setShowJobDurationSliderMock = jest.fn();
+            useSession.mockImplementation(() => ({}));
+
             renderWithStoreAndTheme(
                 <RouteWrappedComponent>
                     <AdvancedSearchWrapper
@@ -136,6 +147,54 @@ describe("AdvancedSearchDesktop", () => {
             fireEvent.click(screen.getByLabelText("Filter Job Duration"));
             expect(setShowJobDurationSliderMock).toHaveBeenCalledWith(false);
         });
+
+
+        it("should toggle show hidden (on)", () => {
+            const setShowHiddenMock = jest.fn();
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { isAdmin: true } }));
+
+            renderWithStoreAndTheme(
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        showHidden={false}
+                        setShowHidden={setShowHiddenMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
+                { initialState, theme }
+            );
+
+            fireEvent.click(screen.getByLabelText("Show Hidden Offers"));
+            expect(setShowHiddenMock).toHaveBeenCalledWith(true);
+            // Can't test that element is visible now (after toggling), since we can't emulate redux logic, wihtout having the whole tree,
+            // So, I'll just assert that when showJobDurationSlider=true, it shows correctly in the next test
+        });
+
+        it("should toggle show hidden (off)", () => {
+            const setShowHiddenMock = jest.fn();
+            useSession.mockImplementation(() => ({ isLoggedIn: true, data: { isAdmin: true } }));
+
+            renderWithStoreAndTheme(
+                <RouteWrappedComponent>
+                    <AdvancedSearchWrapper
+                        enableAdvancedSearchDefault
+                        showHidden={true}
+                        setShowHidden={setShowHiddenMock}
+                    >
+                        <AdvancedSearchDesktop />
+                    </AdvancedSearchWrapper>
+                </RouteWrappedComponent>,
+                { initialState, theme }
+            );
+
+            fireEvent.click(screen.getByLabelText("Show Hidden Offers"));
+            expect(setShowHiddenMock).toHaveBeenCalledWith(false);
+            // Can't test that element is visible now (after toggling), since we can't emulate redux logic, wihtout having the whole tree,
+            // So, I'll just assert that when showJobDurationSlider=true, it shows correctly in the next test
+        });
+
 
         it("should render a fields selector with all field types", () => {
 

@@ -14,6 +14,7 @@ import {
     disableOffer,
     companyEnableOffer,
     adminEnableOffer,
+    setShowHidden,
 } from "../actions/searchOffersActions";
 
 describe("Search Offers Reducer", () => {
@@ -26,8 +27,10 @@ describe("Search Offers Reducer", () => {
             offers: [],
             fields: [],
             technologies: [],
+            showHidden: false,
             loading: false,
-            error: null });
+            error: null,
+        });
     });
 
     it("should set offers when setSearchOffers action is called", () => {
@@ -109,6 +112,17 @@ describe("Search Offers Reducer", () => {
         );
 
         expect(state.fields).toStrictEqual(["test1", "test2"]);
+    });
+
+    it("should set advanced search fields when setShowHidden action is called", () => {
+        const state = searchOffersState(
+            {
+                showHidden: false,
+            },
+            setShowHidden(true)
+        );
+
+        expect(state.showHidden).toBe(true);
     });
 
     it("should set advanced search technologies when setTechs action is called", () => {

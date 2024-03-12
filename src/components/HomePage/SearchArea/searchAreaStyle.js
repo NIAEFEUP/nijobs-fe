@@ -19,12 +19,11 @@ export default makeStyles((theme) => ({
     },
     advancedSearchOuterWrapper: {
         gridColumn: "1 / span 2",
-
     },
     advancedSearchContainer: {
         display: "grid",
         gridTemplateColumns: "1fr 1fr",
-        gridTemplateRows: "1fr 0.7fr auto",
+        gridTemplateRows: "1fr 0.7fr 1fr 0.7fr",
         alignItems: "center",
         gridGap: "1em",
     },
@@ -82,10 +81,24 @@ export default makeStyles((theme) => ({
         gridColumnStart: 2,
     },
     resetBtnWrapper: {
-        display: "flex",
+        gridRowStart: 4,
+        gridColumnStart: 1,
         "& > *": {
             marginTop: theme.spacing(2),
             marginLeft: theme.spacing(-1),
+        },
+        "& .chip-wrapper": {
+            gridColumnStart: 2,
+            gridRowStart: 4,
+        },
+    },
+    showHiddenToggle: {
+        gridRowStart: 4,
+        gridColumnStart: 2,
+    },
+    spaceBtwn: {
+        "& > *": {
+            justifyContent: "space-between",
         },
     },
 }));
