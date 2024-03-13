@@ -64,15 +64,16 @@ describe("Edit Company Profile Form", () => {
 
         it("Should render the form if the user's company is the correct one", () => {
             useSession.mockImplementationOnce(() => ({ company: company }));
-            useCompany.mockImplementationOnce(() => { return { company: company }; });
+
+            console.log("COMPANY 1: ", company);
+            useCompany.mockImplementationOnce(() => { return { "company": JSON.stringify(company) }; });
+            console.log("COMPANY 2: ", company);
 
             renderWithStoreAndTheme(
                 <BrowserRouter>
                     <Switch>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <EditCompanyWrapper>
-                                <EditCompanyProfileForm />
-                            </EditCompanyWrapper>
+                            <EditCompanyProfileForm />
                         </MuiPickersUtilsProvider>
                     </Switch>
                 </BrowserRouter>,

@@ -1,5 +1,5 @@
 export default class Company {
-    construct({
+    constructor({
         _id, name, bio, contacts, hasFinishedRegistration,
         isBlocked, isDisabled, logo
     }) {
