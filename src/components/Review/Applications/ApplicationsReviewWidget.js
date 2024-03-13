@@ -45,6 +45,16 @@ const filters = [
     },
 ];
 
+const generateRejectReason = (rejectReason) => ({
+    value: rejectReason,
+    label: "Reject Reason",
+});
+
+const generateRejectedAt = (rejectedAt) => ({
+    value: rejectedAt ? format(rejectedAt, "yyyy-MM-dd") : "",
+    label: "Rejected At",
+});
+
 const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation, email, rejectedAt }) => ({
     fields: {
         name: { value: companyName, align: "left" },
@@ -54,8 +64,8 @@ const generateRow = ({ companyName, submittedAt, state, rejectReason, motivation
     payload: {
         email: { value: email, label: "Email" },
         motivation: { value: motivation, label: "Motivation" },
-        rejectReason: { value: rejectReason, label: "Reject Reason" },
-        rejectedAt: { value: rejectedAt ? format(parseISO(rejectedAt), "yyyy-MM-dd") : "", label: "Rejected At" },
+        rejectReason: generateRejectReason(rejectReason),
+        rejectedAt: generateRejectedAt(rejectedAt ? parseISO(rejectedAt) : null),
     },
 });
 
@@ -108,8 +118,8 @@ const ApplicationsReviewWidget = ({ addSnackbar, isMobile = false }) => {
                 fields: { ...fields, state: { value: ApplicationStateLabel.REJECTED } },
                 payload: {
                     ...payload,
-                    rejectReason,
-                    rejectedAt: format(Date.now(), "yyyy-MM-dd"),
+                    rejectReason: generateRejectReason(rejectReason),
+                    rejectedAt: generateRejectedAt(Date.now()),
                 },
             } }));
     }, [setRows]);
