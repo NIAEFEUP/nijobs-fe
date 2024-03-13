@@ -6,6 +6,7 @@ import useMultiOptionTextFieldStyle from "./multiOptionTextFieldStyle";
 import PropTypes from "prop-types";
 
 const RemoveLineButton = ({ onClick, items, i }) => {
+    const classes = useMultiOptionTextFieldStyle();
     const disabled = Object.keys(items).length <= 1;
     return (
         <FormControl>
@@ -13,6 +14,7 @@ const RemoveLineButton = ({ onClick, items, i }) => {
                 <IconButton
                     aria-label={`Remove Entry ${i}`}
                     onClick={onClick}
+                    className={classes.buttom}
                     disabled={disabled}
                 >
                     <RemoveCircle />

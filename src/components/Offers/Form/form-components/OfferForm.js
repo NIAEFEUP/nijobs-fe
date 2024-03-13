@@ -361,7 +361,6 @@ const OfferForm = ({ context, title }) => {
                                             control={control}
                                             errors={errors.requirements || requestErrors.requirements}
                                             disabled={formDisabled}
-                                            textFieldProps={{ multiline: true }}
                                             addEntryBtnTestId="requirements-selector"
                                         />
                                     </Grid>
