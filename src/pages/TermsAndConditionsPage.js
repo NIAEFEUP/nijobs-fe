@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         color: "rgba(0, 0, 0, 0.54)",
     },
     content: ({ isMobile }) => ({
-        padding: isMobile ? theme.spacing(0, 1) : theme.spacing(10),
+        padding: isMobile ? theme.spacing(2, 3) : theme.spacing(10),
     }),
 }));
 
