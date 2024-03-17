@@ -1,7 +1,7 @@
 import React from "react";
 import {
     screen, waitFor, queryByText, getByLabelText,
-    fireEvent, act, getByTestId, queryByTestId,
+    fireEvent, act, getByTestId, queryByTestId, queryByTitle,
 } from "@testing-library/react";
 
 import CompanyOffersManagementWidget from "./CompanyOffersManagementWidget";
@@ -12,10 +12,11 @@ import * as companyOffersService from "../../../../services/companyOffersService
 import {
     hideOffer as hideOfferService,
     enableOffer as enableOfferService,
+    editOffer as editOfferService,
 } from "../../../../services/offerService";
 import useSession from "../../../../hooks/useSession";
 import { BrowserRouter } from "react-router-dom";
-import { addSnackbar } from "../../../../actions/notificationActions";
+import { addSnackbar, NotificationTypes } from "../../../../actions/notificationActions";
 import { createMatchMedia } from "../../../../utils/media-queries";
 import { columns } from "./CompanyOffersManagementSchema";
 import { createTheme } from "@material-ui/core";
@@ -75,7 +76,10 @@ describe("App", () => {
     ];
 
     beforeEach(() => {
-        useSession.mockReturnValue({ data: { company: { name: "company1", _id: "company_id" } }, isLoggedIn: true });
+        useSession.mockReturnValue({
+            data: { company: { name: "company1", _id: "company_id" } },
+            isLoggedIn: true,
+        });
     });
 
     afterEach(() => {
@@ -83,12 +87,15 @@ describe("App", () => {
     });
 
     it("Renders Loading", () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise(() => { }));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise(() => { }),
+        );
 
         renderWithStoreAndTheme(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <CompanyOffersManagementWidget />
-            </MuiPickersUtilsProvider>, { initialState: {}, theme }
+            </MuiPickersUtilsProvider>,
+            { initialState: {}, theme },
         );
 
         // Use getBy by default when element should be available
@@ -101,9 +108,9 @@ describe("App", () => {
     });
 
     it("Loads Valid Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
-            resolve(MOCK_OFFERS)
-        ));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve(MOCK_OFFERS)),
+        );
 
         // By waiting for act it executes all the async code at once
         // Need to wrap with BrowserRouter since there is a Link inside
@@ -112,74 +119,296 @@ describe("App", () => {
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <CompanyOffersManagementWidget />
                 </MuiPickersUtilsProvider>
-            </BrowserRouter>, { initialState: {}, theme }
+            </BrowserRouter>,
+            { initialState: {}, theme },
         );
 
         // wait for the wrapped assertions to pass within a certain timeout window (wait for all updates to complete)
-        await waitFor(() => {
-            expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        await waitFor(
+            () => {
+                expect(screen.getByText("Offers Management")).toBeInTheDocument();
 
-            for (const offer of MOCK_OFFERS) {
-                try {
-                    const offerRow = screen.queryByText(offer.title).closest("tr");
+                for (const offer of MOCK_OFFERS) {
+                    try {
+                        const offerRow = screen.queryByText(offer.title).closest("tr");
 
-                    expect(queryByText(offerRow, format(parseISO(offer.publishDate), "yyyy-MM-dd"))).toBeInTheDocument();
-                    expect(queryByText(offerRow, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
-                    expect(queryByText(offerRow, offer.location)).toBeInTheDocument();
+                        expect(
+                            queryByText(
+                                offerRow,
+                                format(parseISO(offer.publishDate), "yyyy-MM-dd"),
+                            ),
+                        ).toBeInTheDocument();
+                        expect(
+                            queryByText(
+                                offerRow,
+                                format(parseISO(offer.publishEndDate), "yyyy-MM-dd"),
+                            ),
+                        ).toBeInTheDocument();
+                        expect(queryByText(offerRow, offer.location)).toBeInTheDocument();
 
-                    expect(getByLabelText(offerRow, "Edit Offer")).toBeInTheDocument();
-                } catch (e) {
-                    throw new Error(`Failed checking Offer ${offer.title}\n\n${e}`);
+                        expect(
+                            queryByTitle(offerRow, "Quick Offer Edit Actions"),
+                        ).toBeInTheDocument();
+                    } catch (e) {
+                        throw new Error(`Failed checking Offer ${offer.title}\n\n${e}`);
+                    }
                 }
-            }
-        }, {
-            timeout: 1000,
-        });
+            },
+            {
+                timeout: 1000,
+            },
+        );
     });
 
-    it("Loads Empty Offers", async () => {
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
-            resolve([])
-        ));
-        // By waiting for act it executes all the async code at once
-        renderWithStoreAndTheme(
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <CompanyOffersManagementWidget />
-            </MuiPickersUtilsProvider>, { initialState: {}, theme }
+    it("Should show quick edit offer actions menu upon clicking on collapsable", async () => {
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve([MOCK_OFFERS[0]])),
         );
 
-        await waitFor(() => {
-            expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        renderWithStoreAndTheme(
+            <BrowserRouter>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider>
+                        <CompanyOffersManagementWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>
+            </BrowserRouter>,
+            { initialState: {}, theme },
+        );
 
-            expect(screen.getByText("No offers here.")).toBeInTheDocument();
-        }, {
-            timeout: 1000,
+        await waitFor(
+            async () => {
+                const quickOfferEditCollapsableButton = screen.getByTitle(
+                    "Quick Offer Edit Actions",
+                );
+
+                await fireEvent.click(quickOfferEditCollapsableButton);
+
+                expect(screen.getByText("Quick Edit Offer")).toBeInTheDocument();
+            },
+            {
+                timeout: 1000,
+            },
+        );
+    });
+
+    it("Should change the value of the publish end date through the quick offer actions menu", async () => {
+        addSnackbar.mockImplementationOnce(() => ({ type: "" }));
+
+        editOfferService.mockImplementationOnce(
+            () => new Promise((resolve) => resolve({})),
+        );
+
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve([MOCK_OFFERS[0]])),
+        );
+
+        renderWithStoreAndTheme(
+            <BrowserRouter>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider>
+                        <CompanyOffersManagementWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>
+            </BrowserRouter>,
+            { initialState: {}, theme },
+        );
+
+        const newPublishEndDateString = "2020-08-20T22:59:59.000Z";
+        const newPublishEndDate = new Date(Date.parse(newPublishEndDateString));
+
+        let quickOfferEditCollapsableButton;
+        await waitFor(
+            () => {
+                quickOfferEditCollapsableButton = screen.getByTitle(
+                    "Quick Offer Edit Actions",
+                );
+            },
+            {
+                timeout: 1000,
+            },
+        );
+
+        await act(() => {
+            fireEvent.click(quickOfferEditCollapsableButton);
         });
+
+        const publishEndDateInput = screen.getByLabelText("Publication End Date *");
+        await act(() => {
+            fireEvent.focus(publishEndDateInput);
+            fireEvent.change(publishEndDateInput, {
+                target: { value: format(newPublishEndDate, "yyyyMMdd") },
+            });
+            fireEvent.blur(publishEndDateInput);
+        });
+
+        expect(
+            screen.getByDisplayValue(newPublishEndDateString.split("T")[0]),
+        ).not.toBeNull();
+
+        const submitButton = screen.getByTestId("submit-offer");
+        await act(() => {
+            fireEvent.click(submitButton);
+        });
+
+        expect(editOfferService).toHaveBeenCalledWith(
+            expect.objectContaining({
+                offerId: MOCK_OFFERS[0]["_id"],
+                publishEndDate: new Date(newPublishEndDate.setHours(23, 59, 59, 0)),
+            }),
+        );
+
+        expect(addSnackbar).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should display a snackbar with an error if a company quick edits one hidden offer with five offers not hidden", async () => {
+        addSnackbar.mockImplementationOnce((notification) => ({
+            type: NotificationTypes.ADD_SNACKBAR,
+            notification: {
+                key: Date.now() + Math.random(),
+                ...notification,
+            },
+        }));
+
+        editOfferService.mockImplementationOnce(
+            () => new Promise((resolve) => resolve({})),
+        );
+
+        const offers = [...MOCK_OFFERS, {
+            _id: "random uuid7",
+            owner: "company_id",
+            title: "Offer title 4",
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
+            location: "Porto",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
+            description: "Offer description 4",
+            isHidden: false,
+        },
+        {
+            _id: "random uuid8",
+            owner: "company_id",
+            title: "Offer title 5",
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
+            location: "Porto",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
+            description: "Offer description 5",
+            isHidden: false,
+        },
+        {
+            _id: "random uuid9",
+            owner: "company_id",
+            title: "Offer title 6",
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
+            location: "Porto",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
+            description: "Offer description 6",
+            isHidden: false,
+        },
+        {
+            _id: "random uuid10",
+            owner: "company_id",
+            title: "Offer title 7",
+            ownerName: "Reddit",
+            ownerLogo: "logo.com",
+            location: "Porto",
+            publishDate: "2019-06",
+            publishEndDate: "2020-09",
+            description: "Offer description 7",
+            isHidden: false,
+        }];
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve(offers)),
+        );
+
+        renderWithStoreAndTheme(
+            <BrowserRouter>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <SnackbarProvider maxSnak={3}>
+                        <CompanyOffersManagementWidget />
+                    </SnackbarProvider>
+                </MuiPickersUtilsProvider>
+            </BrowserRouter>,
+            { initialState: {}, theme },
+        );
+
+        const newPublishEndDateString = "2020-08-20T22:59:59.000Z";
+        const newPublishEndDate = new Date(Date.parse(newPublishEndDateString));
+
+        let quickOfferEditCollapsableButtons;
+        await waitFor(
+            () => {
+                quickOfferEditCollapsableButtons = screen.getAllByTitle(
+                    "Quick Offer Edit Actions",
+                );
+            },
+            {
+                timeout: 1000,
+            },
+        );
+
+        const hiddenOfferQuickEditButton = quickOfferEditCollapsableButtons[1];
+
+        await act(() => {
+            fireEvent.click(hiddenOfferQuickEditButton);
+        });
+
+        const publishEndDateInput = screen.getByLabelText("Publication End Date *");
+        await act(() => {
+            fireEvent.focus(publishEndDateInput);
+            fireEvent.change(publishEndDateInput, {
+                target: { value: format(newPublishEndDate, "yyyyMMdd") },
+            });
+            fireEvent.blur(publishEndDateInput);
+        });
+
+        expect(
+            screen.getByDisplayValue(newPublishEndDateString.split("T")[0]),
+        ).not.toBeNull();
+
+        const submitButton = screen.getByTestId("submit-offer");
+        await act(() => {
+            fireEvent.click(submitButton);
+        });
+
+        expect(addSnackbar).toHaveBeenCalledTimes(1);
     });
 
     it("Error fetching offers", async () => {
         addSnackbar.mockImplementationOnce(() => ({ type: "" }));
 
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve, reject) =>
-            reject([{ msg: "Error fetching offers" }])
-        ));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () =>
+                new Promise((resolve, reject) =>
+                    reject([{ msg: "Error fetching offers" }]),
+                ),
+        );
 
         // By waiting for act it executes all the async code at once
         renderWithStoreAndTheme(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <CompanyOffersManagementWidget />
-            </MuiPickersUtilsProvider>, { initialState: {}, theme }
+            </MuiPickersUtilsProvider>,
+            { initialState: {}, theme },
         );
 
-        await waitFor(() => {
-            expect(screen.getByText("Offers Management")).toBeInTheDocument();
+        await waitFor(
+            () => {
+                expect(screen.getByText("Offers Management")).toBeInTheDocument();
 
-            expect(screen.getByText("No offers here.")).toBeInTheDocument();
+                expect(screen.getByText("No offers here.")).toBeInTheDocument();
 
-            expect(addSnackbar).toHaveBeenCalledTimes(1);
-        }, {
-            timeout: 1000,
-        });
+                expect(addSnackbar).toHaveBeenCalledTimes(1);
+            },
+            {
+                timeout: 1000,
+            },
+        );
     });
 
     it("Should only render mobile columns on mobile device", async () => {
@@ -188,9 +417,9 @@ describe("App", () => {
         const MOBILE_WIDTH_PX = 360;
         window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
 
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
-            resolve(MOCK_OFFERS)
-        ));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve(MOCK_OFFERS)),
+        );
 
         renderWithStoreAndTheme(
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -198,31 +427,38 @@ describe("App", () => {
                     <Notifier />
                     <CompanyOffersManagementWidget isMobile={true} />
                 </SnackbarProvider>
-            </MuiPickersUtilsProvider>, { initialState: {}, theme }
+            </MuiPickersUtilsProvider>,
+            { initialState: {}, theme },
         );
 
         const mobileCols = ["title", "publishStartDate", "actions"];
-        await waitFor(() => {
-            for (const [col, val] of Object.entries(columns)) {
-                if (mobileCols.includes(col)) {
-                    expect(screen.getByRole("button", { name: val.label })).toBeInTheDocument();
-                } else {
-                    expect(screen.queryByRole("button", { name: val.label })).not.toBeInTheDocument();
+        await waitFor(
+            () => {
+                for (const [col, val] of Object.entries(columns)) {
+                    if (mobileCols.includes(col)) {
+                        expect(
+                            screen.getByRole("button", { name: val.label }),
+                        ).toBeInTheDocument();
+                    } else {
+                        expect(
+                            screen.queryByRole("button", { name: val.label }),
+                        ).not.toBeInTheDocument();
+                    }
                 }
-            }
-        }, {
-            timeout: 1000,
-        });
+            },
+            {
+                timeout: 1000,
+            },
+        );
     });
 
     it("Should render mobile collapsable content on mobile device", async () => {
         const MOBILE_WIDTH_PX = 360;
         window.matchMedia = createMatchMedia(MOBILE_WIDTH_PX);
 
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
-            resolve(MOCK_OFFERS)
-        ));
-
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve(MOCK_OFFERS)),
+        );
 
         await act(() =>
             renderWithStoreAndTheme(
@@ -233,25 +469,40 @@ describe("App", () => {
                             <CompanyOffersManagementWidget isMobile={true} />
                         </SnackbarProvider>
                     </MuiPickersUtilsProvider>
-                </BrowserRouter>, { initialState: {}, theme })
+                </BrowserRouter>,
+                { initialState: {}, theme },
+            ),
         );
 
         for (const offer of MOCK_OFFERS) {
             try {
                 const offerRow = screen.queryByText(offer.title)?.closest("tr");
 
-                expect(queryByText(offerRow, format(parseISO(offer.publishDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                expect(
+                    queryByText(
+                        offerRow,
+                        format(parseISO(offer.publishDate), "yyyy-MM-dd"),
+                    ),
+                ).toBeInTheDocument();
 
                 fireEvent.click(getByLabelText(offerRow, "More Actions"));
 
-                expect(getByLabelText(offerRow.nextElementSibling, "Edit Offer")).toBeInTheDocument();
-                expect(queryByText(offerRow.nextElementSibling, offer.location)).toBeInTheDocument();
-                expect(queryByText(offerRow.nextElementSibling, format(parseISO(offer.publishEndDate), "yyyy-MM-dd"))).toBeInTheDocument();
+                expect(
+                    getByLabelText(offerRow.nextElementSibling, "Edit Offer"),
+                ).toBeInTheDocument();
+                expect(
+                    queryByText(offerRow.nextElementSibling, offer.location),
+                ).toBeInTheDocument();
+                expect(
+                    queryByText(
+                        offerRow.nextElementSibling,
+                        format(parseISO(offer.publishEndDate), "yyyy-MM-dd"),
+                    ),
+                ).toBeInTheDocument();
             } catch (e) {
                 throw new Error(`Failed checking Offer ${offer.title}\n\n${e}`);
             }
         }
-
     });
 
     it("Should hide/enable offer when clicking the hide/enable offer button", async () => {
@@ -269,8 +520,9 @@ describe("App", () => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <CompanyOffersManagementWidget />
                     </MuiPickersUtilsProvider>
-                </BrowserRouter>, { initialState: {}, theme }
-            )
+                </BrowserRouter>,
+                { initialState: {}, theme },
+            ),
         );
 
         const offerRow = screen.queryByText(offer.title).closest("tr");
@@ -312,8 +564,9 @@ describe("App", () => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <CompanyOffersManagementWidget />
                     </MuiPickersUtilsProvider>
-                </BrowserRouter>, { initialState: {}, theme }
-            )
+                </BrowserRouter>,
+                { initialState: {}, theme },
+            ),
         );
 
         const offerRow = screen.queryByText(offer.title).closest("tr");
@@ -333,14 +586,19 @@ describe("App", () => {
         addSnackbar.mockImplementationOnce(() => ({ type: "" }));
 
         const offer = MOCK_OFFERS[0];
-        companyOffersService.fetchCompanyOffers.mockImplementationOnce(() => new Promise((resolve) =>
-            resolve([offer])
-        ));
+        companyOffersService.fetchCompanyOffers.mockImplementationOnce(
+            () => new Promise((resolve) => resolve([offer])),
+        );
 
-        hideOfferService.mockImplementationOnce(() => new Promise((resolve, reject) =>
-            reject([{ msg: "Error fetching offers" }])
-        ));
-        enableOfferService.mockImplementation(() => new Promise((resolve) => resolve()));
+        hideOfferService.mockImplementationOnce(
+            () =>
+                new Promise((resolve, reject) =>
+                    reject([{ msg: "Error fetching offers" }]),
+                ),
+        );
+        enableOfferService.mockImplementation(
+            () => new Promise((resolve) => resolve()),
+        );
 
         await act(() =>
             renderWithStoreAndTheme(
@@ -348,8 +606,9 @@ describe("App", () => {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <CompanyOffersManagementWidget />
                     </MuiPickersUtilsProvider>
-                </BrowserRouter>, { initialState: {}, theme }
-            )
+                </BrowserRouter>,
+                { initialState: {}, theme },
+            ),
         );
 
         const offerRow = screen.queryByText(offer.title).closest("tr");

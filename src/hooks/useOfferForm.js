@@ -7,15 +7,15 @@ import useTechSelector from "../components/utils/offers/useTechSelector";
 import { INITIAL_JOB_DURATION } from "../reducers/searchOffersReducer";
 import useSession from "./useSession";
 
-export default (schema) => {
+export default (schema, overrideDefaultValues) => {
     const { handleSubmit, formState, control, setValue, getValues, clearErrors, reset } = useForm({
         mode: "all",
         resolver: yupResolver(schema),
         reValidateMode: "onChange",
         defaultValues: {
             title: "",
-            publishDate: defaultDates.getPublishDate(),
-            publishEndDate: defaultDates.getPublishEndDate(),
+            publishDate: overrideDefaultValues?.publishDate ?? defaultDates.getPublishDate(),
+            publishEndDate: overrideDefaultValues?.publishEndDate ?? defaultDates.getPublishEndDate(),
             jobDuration: [INITIAL_JOB_DURATION, INITIAL_JOB_DURATION + 1],
             jobStartDate: null,
             description: "",

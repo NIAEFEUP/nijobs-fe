@@ -5,7 +5,9 @@ import { KeyboardDatePicker } from "@material-ui/pickers";
 import { Tooltip } from "@material-ui/core";
 import { Info } from "@material-ui/icons";
 
-const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, control, datePickerProps }) => (
+const PublicationEndDateComponent = ({
+    fields, disabled, errors, requestErrors, control, datePickerProps, showInfoTooltip = true,
+}) => (
     <>
         <Controller
             name="publishEndDate"
@@ -30,21 +32,25 @@ const PublicationEndDateComponent = ({ fields, disabled, errors, requestErrors, 
                     variant="inline"
                     autoOk
                     format="yyyy-MM-dd"
-                    minDate={fields.publishDate}
+                    minDate={fields?.publishDate}
                     error={!!errors?.publishEndDate ||
-                            !!requestErrors.publishEndDate}
-                    helperText={errors.publishEndDate?.message ||
-                            requestErrors.publishEndDate?.message || " "}
+                        !!requestErrors?.publishEndDate}
+                    helperText={errors?.publishEndDate?.message ||
+                        requestErrors?.publishEndDate?.message || " "}
                     {...datePickerProps}
                 />)}
             control={control}
         />
-        <Tooltip
-            title="The offer will only be visible until this date"
-            placement="top"
-        >
-            <Info fontSize="small" />
-        </Tooltip>
+        {showInfoTooltip ?
+            <Tooltip
+                title="The offer will only be visible until this date"
+                placement="top"
+            >
+                <Info fontSize="small" />
+            </Tooltip>
+
+            : ""
+        }
     </>
 );
 
@@ -55,6 +61,7 @@ PublicationEndDateComponent.propTypes = {
     requestErrors: PropTypes.object,
     control: PropTypes.object.isRequired,
     datePickerProps: PropTypes.object,
+    showInfoTooltip: PropTypes.bool,
 };
 
 export default PublicationEndDateComponent;
